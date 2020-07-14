@@ -85,7 +85,8 @@ public enum Icons {
 	CHARLIE,
 	CUBE_CODE,
 	PURIGRO,
-	ARCNOR;
+	ARCNOR,
+    BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN;
 
 	public Image get() {
 		return get( this );
@@ -235,6 +236,9 @@ public enum Icons {
 			icon.frame( icon.texture.uvRect( 101, 39, 128, 69 ) );
 			icon.scale.set(PixelScene.align(0.49f));
 			break;
+            case BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN:
+                icon.frame( icon.texture.uvRect( 84, 74, 113, 92 ) );
+                break;
 
 		}
 		return icon;

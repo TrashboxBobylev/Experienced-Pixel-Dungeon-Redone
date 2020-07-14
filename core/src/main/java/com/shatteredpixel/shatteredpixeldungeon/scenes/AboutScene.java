@@ -172,6 +172,20 @@ public class AboutScene extends PixelScene {
 		purigro.setRect(arcnor.right()+2, arcnor.top(), colWidth/2f, 0);
 		content.add(purigro);
 
+        CreditsBlock bob = new CreditsBlock(true, 0x3C9EFA,
+                "Experienced Pixel Dungeon:",
+                Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(),
+                "Trashbox Bobylev",
+                "reddit.com/u/TrashboxBobylev",
+                "https://reddit.com/u/TrashboxBobylev");
+        if (landscape()){
+           bob.setRect(gdx.left(), gdx.bottom() + 8, colWidth, 0);
+        } else {
+            bob.setRect(gdx.left(), arcnor.bottom() + 8, colWidth, 0);
+        }
+        content.add(bob);
+        addLine(bob.top() - 4, content);
+
 		//*** Transifex Credits ***
 
 		CreditsBlock transifex = new CreditsBlock(true,
@@ -181,7 +195,7 @@ public class AboutScene extends PixelScene {
 				"ShatteredPD is community-translated via _Transifex_! Thank you so much to all of Shattered's volunteer translators!",
 				"www.transifex.com/shattered-pixel/",
 				"https://www.transifex.com/shattered-pixel/shattered-pixel-dungeon/");
-		transifex.setRect((Camera.main.width - colWidth)/2f, purigro.bottom() + 8, colWidth, 0);
+		transifex.setRect((Camera.main.width - colWidth)/2f, bob.bottom() + 8, colWidth, 0);
 		content.add(transifex);
 
 		addLine(transifex.top() - 4, content);
