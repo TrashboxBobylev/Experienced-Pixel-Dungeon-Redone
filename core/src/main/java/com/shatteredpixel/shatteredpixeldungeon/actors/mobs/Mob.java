@@ -99,7 +99,7 @@ public abstract class Mob extends Char {
 	protected int defenseSkill = 0;
 	
 	public int EXP = 1;
-	public int maxLvl = Hero.MAX_LEVEL;
+	public int maxLvl = Integer.MAX_VALUE;
 	
 	protected Char enemy;
 	protected boolean enemySeen;
@@ -667,6 +667,10 @@ public abstract class Mob extends Char {
 				Dungeon.level.drop(loot, pos).sprite.drop();
 			}
 		}
+
+		if (Dungeon.hero.grinding && Random.Float() < 0.20f){
+            Dungeon.level.drop(Generator.random(), pos).sprite.drop();
+        }
 		
 		//ring of wealth logic
 		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {

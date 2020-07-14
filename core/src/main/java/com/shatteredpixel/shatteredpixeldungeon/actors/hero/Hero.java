@@ -175,6 +175,9 @@ public class Hero extends Char {
 	
 	public int lvl = 1;
 	public int exp = 0;
+	public int totalExp = 0;
+
+	public boolean grinding = false;
 	
 	public int HTBoost = 0;
 	
@@ -230,7 +233,9 @@ public class Hero extends Char {
 	private static final String STRENGTH	= "STR";
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
+    private static final String TOTAL_EXPERIENCE	= "totalExp";
 	private static final String HTBOOST     = "htboost";
+	private static final String GRINDING = "grinding";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -247,8 +252,11 @@ public class Hero extends Char {
 		
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
+		bundle.put(TOTAL_EXPERIENCE, totalExp);
 		
 		bundle.put( HTBOOST, HTBoost );
+
+		bundle.put(GRINDING, grinding);
 
 		belongings.storeInBundle( bundle );
 	}
@@ -267,8 +275,11 @@ public class Hero extends Char {
 		
 		lvl = bundle.getInt( LEVEL );
 		exp = bundle.getInt( EXPERIENCE );
+		totalExp = bundle.getInt(TOTAL_EXPERIENCE);
 		
 		HTBoost = bundle.getInt(HTBOOST);
+
+		grinding = bundle.getBoolean(GRINDING);
 		
 		belongings.restoreFromBundle( bundle );
 	}
@@ -1344,6 +1355,7 @@ public class Hero extends Char {
 	public void earnExp( int exp, Class source ) {
 		
 		this.exp += exp;
+		this.totalExp += exp;
 		float percent = exp/(float)maxExp();
 
 		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
@@ -1362,6 +1374,10 @@ public class Hero extends Char {
 			for (Item i : belongings) {
 				i.onHeroGainExp(percent, this);
 			}
+
+			if (totalExp % 100 == 0 && grinding){
+                Dungeon.level.drop( new ScrollOfUpgrade(), pos ).sprite.drop();
+            }
 		}
 		
 		boolean levelUp = false;
