@@ -144,7 +144,7 @@ public class DistortionTrap extends Trap{
 				continue;
 			}
 
-			mob.maxLvl = Hero.MAX_LEVEL;
+			mob.maxLvl = Integer.MAX_VALUE;
 			mob.state = mob.WANDERING;
 			mob.pos = point;
 			GameScene.add(mob, DELAY);
