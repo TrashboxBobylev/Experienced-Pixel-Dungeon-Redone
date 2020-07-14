@@ -54,6 +54,8 @@ public class PsycheChest extends Item {
         ArrayList<String> actions = super.actions( hero );
         if (!hero.grinding) actions.add( AC_ACTIVATE );
         else actions.add( AC_DEACTIVATE);
+        actions.remove(AC_DROP);
+        actions.remove(AC_THROW);
         return actions;
     }
 
@@ -70,10 +72,12 @@ public class PsycheChest extends Item {
             hero.grinding = false;
             GLog.w( Messages.get(this, "deactivated") );
         }
-        if (action.contains(AC_RESET)){
+        if (action.contains(AC_RESET) && (hero.HP > hero.HT / 2)){
             InterlevelScene.mode = InterlevelScene.Mode.RESET;
             if (hero.HP > hero.HT / 2) hero.HP -= hero.HT / 2;
             Game.switchScene(InterlevelScene.class);
+        } else {
+            GLog.w( Messages.get(this, "no_reset") );
         }
     }
 
