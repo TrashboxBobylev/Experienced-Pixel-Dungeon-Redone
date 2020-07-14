@@ -114,6 +114,7 @@ public class ItemSpriteSheet {
 	public static final int LOCKED_CHEST    = CONTAINERS+5;
 	public static final int CRYSTAL_CHEST   = CONTAINERS+6;
 	public static final int EBONY_CHEST     = CONTAINERS+7;
+	public static final int PSYCHE_CHEST = CONTAINERS+8;
 	static{
 		assignItemRect(BONES,           14, 11);
 		assignItemRect(REMAINS,         14, 11);
@@ -123,6 +124,7 @@ public class ItemSpriteSheet {
 		assignItemRect(LOCKED_CHEST,    16, 14);
 		assignItemRect(CRYSTAL_CHEST,   16, 14);
 		assignItemRect(EBONY_CHEST,     16, 14);
+        assignItemRect(PSYCHE_CHEST,     16, 14);
 	}
 
 	private static final int SINGLE_USE     =                               xy(1, 4);   //16 slots

@@ -619,12 +619,11 @@ public abstract class Mob extends Char {
 				Statistics.enemiesSlain++;
 				Badges.validateMonstersSlain();
 				Statistics.qualifiedForNoKilling = false;
-				
-				int exp = Dungeon.hero.lvl <= maxLvl ? EXP : 0;
-				if (exp > 0) {
-					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+
+                if (EXP > 0) {
+					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", EXP));
 				}
-				Dungeon.hero.earnExp(exp, getClass());
+				Dungeon.hero.earnExp(EXP, getClass());
 			}
 		}
 	}
@@ -655,7 +654,6 @@ public abstract class Mob extends Char {
 	}
 	
 	public void rollToDropLoot(){
-		if (Dungeon.hero.lvl > maxLvl + 2) return;
 		
 		float lootChance = this.lootChance;
 		lootChance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );

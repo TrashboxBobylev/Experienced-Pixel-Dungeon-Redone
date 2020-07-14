@@ -137,13 +137,11 @@ import java.util.Collections;
 
 public class Hero extends Char {
 
-	{
-		actPriority = HERO_PRIO;
-		
-		alignment = Alignment.ALLY;
-	}
-	
-	public static final int MAX_LEVEL = 30;
+    {
+        actPriority = HERO_PRIO;
+
+        alignment = Alignment.ALLY;
+    }
 
 	public static final int STARTING_STR = 10;
 	
@@ -1366,28 +1364,18 @@ public class Hero extends Char {
 		boolean levelUp = false;
 		while (this.exp >= maxExp()) {
 			this.exp -= maxExp();
-			if (lvl < MAX_LEVEL) {
-				lvl++;
-				levelUp = true;
-				
-				if (buff(ElixirOfMight.HTBoost.class) != null){
-					buff(ElixirOfMight.HTBoost.class).onLevelUp();
-				}
-				
-				updateHT( true );
-				attackSkill++;
-				defenseSkill++;
+            lvl++;
+            levelUp = true;
 
-			} else {
-				Buff.prolong(this, Bless.class, Bless.DURATION);
-				this.exp = 0;
+            if (buff(ElixirOfMight.HTBoost.class) != null){
+                buff(ElixirOfMight.HTBoost.class).onLevelUp();
+            }
 
-				GLog.newLine();
-				GLog.p( Messages.get(this, "level_cap"));
-				Sample.INSTANCE.play( Assets.Sounds.LEVELUP );
-			}
-			
-		}
+            updateHT( true );
+            attackSkill++;
+            defenseSkill++;
+
+        }
 		
 		if (levelUp) {
 			
@@ -1474,7 +1462,7 @@ public class Hero extends Char {
 		}
 
 		if (ankh != null && ankh.isBlessed()) {
-			this.HP = HT/4;
+			this.HP = HT;
 
 			//ensures that you'll get to act first in almost any case, to prevent reviving and then instantly dieing again.
 			PotionOfHealing.cure(this);
