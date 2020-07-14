@@ -28,10 +28,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.watabou.noosa.Game;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,7 @@ public class PsycheChest extends Item {
 
     private static final String AC_ACTIVATE = "ACTIVATE";
     private static final String AC_DEACTIVATE = "DEACTIVATE";
+    private static final String AC_RESET = "RESET";
 
     private static final ItemSprite.Glowing BLOODY = new ItemSprite.Glowing( 0x550000 );
 
@@ -66,6 +69,11 @@ public class PsycheChest extends Item {
         if (action.contains(AC_DEACTIVATE)){
             hero.grinding = false;
             GLog.w( Messages.get(this, "deactivated") );
+        }
+        if (action.contains(AC_RESET)){
+            InterlevelScene.mode = InterlevelScene.Mode.RESET;
+            if (hero.HP > hero.HT / 2) hero.HP -= hero.HT / 2;
+            Game.switchScene(InterlevelScene.class);
         }
     }
 
