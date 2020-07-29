@@ -315,8 +315,12 @@ public class Ghost extends NPC {
 				} else {
 					itemLevel = 3;
 				}
+                switch (Dungeon.cycle){
+                    case 1: itemLevel += 5;
+                }
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
+
 
 				//10% to be enchanted
 				if (Random.Int(10) == 0){

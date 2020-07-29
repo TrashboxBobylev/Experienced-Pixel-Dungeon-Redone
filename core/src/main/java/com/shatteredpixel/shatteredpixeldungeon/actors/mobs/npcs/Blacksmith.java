@@ -241,7 +241,7 @@ public class Blacksmith extends NPC {
 		if (first instanceof Weapon && ((Weapon) first).curseInfusionBonus) level--;
 		if (first instanceof Armor && ((Armor) first).curseInfusionBonus) level--;
 		if (first instanceof Wand && ((Wand) first).curseInfusionBonus) level--;
-		first.level(level+1); //prevents on-upgrade effects like enchant/glyph removal
+		first.level(level+second.level()+1); //prevents on-upgrade effects like enchant/glyph removal
 		if (first instanceof MissileWeapon && !Dungeon.hero.belongings.contains(first)) {
 			if (!first.collect()){
 				Dungeon.level.drop( first, Dungeon.hero.pos );

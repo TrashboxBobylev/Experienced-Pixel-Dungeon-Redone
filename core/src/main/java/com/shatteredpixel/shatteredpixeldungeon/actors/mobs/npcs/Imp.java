@@ -235,6 +235,9 @@ public class Imp extends NPC {
 					reward = (Ring)Generator.random( Generator.Category.RING );
 				} while (reward.cursed);
 				reward.upgrade( 2 );
+                switch (Dungeon.cycle){
+                    case 1: reward.upgrade(5); break;
+                }
 				reward.cursed = true;
 			}
 		}
