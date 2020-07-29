@@ -1374,11 +1374,14 @@ public class Hero extends Char {
 			for (Item i : belongings) {
 				i.onHeroGainExp(percent, this);
 			}
-
-			if (totalExp % 100 == 0 && grinding){
-                Dungeon.level.drop( new ScrollOfUpgrade(), pos ).sprite.drop();
-            }
 		}
+
+        if (totalExp >= 50 && grinding){
+            while (totalExp >= 50) {
+                totalExp -= 50;
+                Dungeon.level.drop(new ScrollOfUpgrade(), pos).sprite.drop();
+            }
+        }
 		
 		boolean levelUp = false;
 		while (this.exp >= maxExp()) {
