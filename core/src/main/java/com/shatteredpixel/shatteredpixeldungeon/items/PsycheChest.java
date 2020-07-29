@@ -41,6 +41,7 @@ public class PsycheChest extends Item {
     {
         image = ItemSpriteSheet.PSYCHE_CHEST;
         unique = true;
+        identify();
     }
 
     private static final String AC_ACTIVATE = "ACTIVATE";
@@ -58,6 +59,16 @@ public class PsycheChest extends Item {
         actions.remove(AC_DROP);
         actions.remove(AC_THROW);
         return actions;
+    }
+
+    @Override
+    public boolean isIdentified() {
+        return true;
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
     }
 
     @Override
