@@ -67,6 +67,11 @@ public class Pylon extends Mob {
 
 		state = PASSIVE;
 		alignment = Alignment.NEUTRAL;
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 450;
+                break;
+        }
 	}
 
 	private int targetNeighbor = Random.Int(8);
@@ -111,7 +116,7 @@ public class Pylon extends Mob {
 	private void shockChar( Char ch ){
 		if (ch != null && !(ch instanceof NewDM300)){
 			ch.sprite.flash();
-			ch.damage(Random.NormalIntRange(10, 20), new Electricity());
+			ch.damage(Random.NormalIntRange(10, 20) + Dungeon.cycle * 60, new Electricity());
 
 			if (ch == Dungeon.hero && !ch.isAlive()){
 				Dungeon.fail(NewDM300.class);
@@ -165,9 +170,9 @@ public class Pylon extends Mob {
 		if (alignment == Alignment.NEUTRAL){
 			return;
 		}
-		if (dmg >= 15){
+		if (dmg >= 15 + Dungeon.cycle * 60){
 			//takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
-			dmg = 14 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
+			dmg = 14 + Dungeon.cycle * 60 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
 		}
 		super.damage(dmg, src);
 	}

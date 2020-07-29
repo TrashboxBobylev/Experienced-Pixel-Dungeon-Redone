@@ -58,12 +58,22 @@ public class GnollTrickster extends Gnoll {
 		lootChance = 1f;
 
 		properties.add(Property.MINIBOSS);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 190;
+                defenseSkill = 27;
+                EXP = 21;
+                break;
+        }
 	}
 
 	private int combo = 0;
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 55;
+        }
 		return 16;
 	}
 

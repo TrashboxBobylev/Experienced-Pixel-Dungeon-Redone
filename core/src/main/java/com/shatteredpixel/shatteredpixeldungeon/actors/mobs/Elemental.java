@@ -62,20 +62,37 @@ public abstract class Elemental extends Mob {
 		maxLvl = 20;
 		
 		flying = true;
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 715;
+                defenseSkill = 69;
+                EXP = 65;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(64, 83);
+
+        }
 		return Random.NormalIntRange( 16, 26 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 102;
+        }
 		return 25;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(24, 50);
+        }
 		return Random.NormalIntRange(0, 5);
 	}
 	
@@ -222,6 +239,15 @@ public abstract class Elemental extends Mob {
 			lootChance = 1f;
 			
 			properties.add(Property.MINIBOSS);
+
+            switch (Dungeon.cycle){
+                case 1:
+                    HT = 715;
+                    HP = 357;
+                    defenseSkill = 36;
+                    EXP = 33;
+                    break;
+            }
 		}
 
 		@Override
@@ -328,7 +354,7 @@ public abstract class Elemental extends Mob {
 	}
 	
 	public static Class<? extends Elemental> random(){
-		if (Random.Int( 50 ) == 0){
+		if (Random.Int( 10 ) == 0){
 			return ChaosElemental.class;
 		}
 		

@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -41,6 +42,13 @@ public class Albino extends Rat {
 		
 		loot = new MysteryMeat();
 		lootChance = 1f;
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 128;
+                defenseSkill = 28;
+                EXP = 17;
+                break;
+        }
 	}
 	
 	@Override

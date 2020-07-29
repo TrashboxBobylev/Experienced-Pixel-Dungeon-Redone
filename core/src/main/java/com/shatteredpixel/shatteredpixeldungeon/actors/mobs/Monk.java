@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -54,15 +55,29 @@ public class Monk extends Mob {
 		lootChance = 0.083f;
 
 		properties.add(Property.UNDEAD);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 825;
+                defenseSkill = 89;
+                EXP = 71;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(62, 78);
+
+        }
 		return Random.NormalIntRange( 12, 25 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 134;
+        }
 		return 30;
 	}
 	
@@ -73,6 +88,9 @@ public class Monk extends Mob {
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(20, 30);
+        }
 		return Random.NormalIntRange(0, 2);
 	}
 	

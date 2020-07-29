@@ -58,20 +58,37 @@ public class DM200 extends Mob {
 		properties.add(Property.LARGE);
 
 		HUNTING = new Hunting();
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 780;
+                defenseSkill = 40;
+                EXP = 49;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(60, 79);
+
+        }
 		return Random.NormalIntRange( 10, 25 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 85;
+        }
 		return 20;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(30, 47);
+        }
 		return Random.NormalIntRange(0, 8);
 	}
 

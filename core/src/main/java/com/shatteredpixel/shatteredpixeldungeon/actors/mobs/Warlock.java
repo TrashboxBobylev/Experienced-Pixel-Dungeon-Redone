@@ -59,20 +59,37 @@ public class Warlock extends Mob implements Callback {
 		lootChance = 0.5f;
 
 		properties.add(Property.UNDEAD);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 840;
+                defenseSkill = 71;
+                EXP = 76;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(60, 74);
+
+        }
 		return Random.NormalIntRange( 12, 18 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 115;
+        }
 		return 25;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(30, 59);
+        }
 		return Random.NormalIntRange(0, 8);
 	}
 	
@@ -112,7 +129,11 @@ public class Warlock extends Mob implements Callback {
 				Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
 			
-			int dmg = Random.NormalIntRange( 12, 18 );
+			int dmg = Random.NormalIntRange( 50, 69 );
+            switch (Dungeon.cycle) {
+                case 1: dmg = Random.NormalIntRange(64, 83); break;
+
+            }
 			enemy.damage( dmg, new DarkBolt() );
 			
 			if (enemy == Dungeon.hero && !enemy.isAlive()) {

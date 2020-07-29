@@ -68,6 +68,13 @@ public abstract class YogFist extends Mob {
 
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 3750;
+                defenseSkill = 89;
+                EXP = 150;
+                break;
+        }
 	}
 
 	private float rangedCooldown;
@@ -137,16 +144,26 @@ public abstract class YogFist extends Mob {
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 160;
+        }
 		return 36;
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(86, 121);
+
+        }
 		return Random.NormalIntRange( 18, 36 );
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(50, 89);
+        }
 		return Random.NormalIntRange(0, 15);
 	}
 
@@ -400,6 +417,10 @@ public abstract class YogFist extends Mob {
 
 		@Override
 		public int damageRoll() {
+            switch (Dungeon.cycle) {
+                case 1: return Random.NormalIntRange(121, 145);
+
+            }
 			return Random.NormalIntRange( 22, 44 );
 		}
 
@@ -445,7 +466,11 @@ public abstract class YogFist extends Mob {
 
 			if (hit( this, enemy, true )) {
 
-				enemy.damage( Random.NormalIntRange(10, 20), new LightBeam() );
+                int dmg = Random.NormalIntRange(10, 20);
+                switch (Dungeon.cycle){
+                    case 1: dmg = Random.NormalIntRange(90, 131); break;
+                }
+                enemy.damage(dmg, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
 
 				if (!enemy.isAlive() && enemy == Dungeon.hero) {
@@ -508,7 +533,11 @@ public abstract class YogFist extends Mob {
 
 			if (hit( this, enemy, true )) {
 
-				enemy.damage( Random.NormalIntRange(10, 20), new DarkBolt() );
+                int dmg = Random.NormalIntRange(10, 20);
+                switch (Dungeon.cycle){
+                    case 1: dmg = Random.NormalIntRange(90, 131); break;
+                }
+                enemy.damage(dmg, new DarkBolt() );
 
 				Light l = enemy.buff(Light.class);
 				if (l != null){

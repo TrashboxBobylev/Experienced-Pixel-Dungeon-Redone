@@ -73,6 +73,13 @@ public class YogDzewa extends Mob {
 		properties.add(Property.BOSS);
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.DEMONIC);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 13000;
+                defenseSkill = 0;
+                EXP = 1500;
+                break;
+        }
 	}
 
 	private int phase = 0;
@@ -158,7 +165,11 @@ public class YogDzewa extends Mob {
 					Dungeon.observe();
 				}
 				for (Char ch : affected) {
-					ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
+                    int dmg = Random.NormalIntRange(20, 30);
+                    switch (Dungeon.cycle){
+                        case 1: dmg = Random.NormalIntRange(120, 175); break;
+                    }
+                    ch.damage(dmg, new Eye.DeathGaze());
 
 					if (Dungeon.level.heroFOV[pos]) {
 						ch.sprite.flash();
@@ -287,8 +298,11 @@ public class YogDzewa extends Mob {
 
 		if (phase < 4) {
 			HP = Math.max(HP, HT - 300 * phase);
+            switch (Dungeon.cycle){
+                case 1: HP = Math.max(HP, HT - 3900 * phase); break;
+            }
 		} else if (phase == 4) {
-			HP = Math.max(HP, 100);
+			HP = Math.max(HP, 1300);
 		}
 		int dmgTaken = preHP - HP;
 
@@ -297,7 +311,7 @@ public class YogDzewa extends Mob {
 			summonCooldown -= dmgTaken / 10f;
 		}
 
-		if (phase < 4 && HP <= HT - 300*phase){
+		if (phase < 4 && HP <= HT - HT / 3 *phase){
 
 			Dungeon.level.viewDistance = Math.max(1, Dungeon.level.viewDistance-1);
 			if (Dungeon.hero.buff(Light.class) == null){
@@ -478,20 +492,37 @@ public class YogDzewa extends Mob {
 			maxLvl = -2;
 
 			properties.add(Property.DEMONIC);
+            switch (Dungeon.cycle){
+                case 1:
+                    HP = HT = 345;
+                    defenseSkill = 67;
+                    EXP = 34;
+                    break;
+            }
 		}
 
 		@Override
 		public int attackSkill( Char target ) {
+            switch (Dungeon.cycle){
+                case 1: return 160;
+            }
 			return 30;
 		}
 
 		@Override
 		public int damageRoll() {
+            switch (Dungeon.cycle) {
+                case 1: return Random.NormalIntRange(70, 91);
+
+            }
 			return Random.NormalIntRange( 15, 25 );
 		}
 
 		@Override
 		public int drRoll() {
+            switch (Dungeon.cycle){
+                case 1: return Random.NormalIntRange(40, 63);
+            }
 			return Random.NormalIntRange(0, 4);
 		}
 

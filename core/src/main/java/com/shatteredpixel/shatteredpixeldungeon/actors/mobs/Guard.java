@@ -63,10 +63,21 @@ public class Guard extends Mob {
 		properties.add(Property.UNDEAD);
 		
 		HUNTING = new Hunting();
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 380;
+                defenseSkill = 38;
+                EXP = 29;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(40, 57);
+
+        }
 		return Random.NormalIntRange(4, 12);
 	}
 
@@ -122,11 +133,17 @@ public class Guard extends Mob {
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 52;
+        }
 		return 12;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(15, 30);
+        }
 		return Random.NormalIntRange(0, 7);
 	}
 

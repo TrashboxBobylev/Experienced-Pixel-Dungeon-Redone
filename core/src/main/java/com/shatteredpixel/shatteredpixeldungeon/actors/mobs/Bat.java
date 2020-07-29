@@ -48,27 +48,44 @@ public class Bat extends Mob {
 		
 		loot = new PotionOfHealing();
 		lootChance = 0.1667f; //by default, see rollToDropLoot()
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 320;
+                defenseSkill = 48;
+                EXP = 34;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(50, 65);
+
+        }
 		return Random.NormalIntRange( 5, 15 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 68;
+        }
 		return 16;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(13, 28);
+        }
 		return Random.NormalIntRange(0, 4);
 	}
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
-		int reg = Math.min( damage - 4, HT - HP );
+		int reg = Math.min( damage - 4 - Dungeon.cycle * 60, HT - HP );
 		
 		if (reg > 0) {
 			HP += reg;

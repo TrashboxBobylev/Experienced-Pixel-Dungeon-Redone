@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Random;
@@ -37,20 +38,38 @@ public class Rat extends Mob {
 		defenseSkill = 2;
 		
 		maxLvl = 5;
+
+		switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 100;
+                defenseSkill = 26;
+                EXP = 15;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 4 );
+	    switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(25, 31);
+
+        }
+        return Random.NormalIntRange(1, 4);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+	    switch (Dungeon.cycle){
+            case 1: return 38;
+        }
 		return 8;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(5, 15);
+        }
 		return Random.NormalIntRange(0, 1);
 	}
 }

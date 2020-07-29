@@ -54,10 +54,22 @@ public class Skeleton extends Mob {
 
 		properties.add(Property.UNDEAD);
 		properties.add(Property.INORGANIC);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 225;
+                defenseSkill = 34;
+                EXP = 23;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(34, 50);
+
+        }
 		return Random.NormalIntRange( 2, 10 );
 	}
 	
@@ -107,11 +119,17 @@ public class Skeleton extends Mob {
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 50;
+        }
 		return 12;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(10, 24);
+        }
 		return Random.NormalIntRange(0, 5);
 	}
 

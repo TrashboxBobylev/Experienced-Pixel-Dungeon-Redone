@@ -54,20 +54,37 @@ public class Spinner extends Mob {
 		lootChance = 0.125f;
 
 		FLEEING = new Fleeing();
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 530;
+                defenseSkill = 60;
+                EXP = 44;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(58, 73);
+
+        }
 		return Random.NormalIntRange(10, 25);
 	}
 
 	@Override
 	public int attackSkill(Char target) {
+        switch (Dungeon.cycle){
+            case 1: return 90;
+        }
 		return 22;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(20, 39);
+        }
 		return Random.NormalIntRange(0, 6);
 	}
 

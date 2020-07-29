@@ -51,12 +51,19 @@ public class RotLasher extends Mob {
 
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.MINIBOSS);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 365;
+                defenseSkill = 0;
+                EXP = 15;
+                break;
+        }
 	}
 
 	@Override
 	protected boolean act() {
 		if (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos)) {
-			HP = Math.min(HT, HP + 3);
+			HP = Math.min(HT, HP + 3 + Dungeon.cycle * 25);
 		}
 		return super.act();
 	}
@@ -95,16 +102,26 @@ public class RotLasher extends Mob {
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(45, 63);
+
+        }
 		return Random.NormalIntRange(8, 15);
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 60;
+        }
 		return 15;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(14, 34);
+        }
 		return Random.NormalIntRange(0, 8);
 	}
 	

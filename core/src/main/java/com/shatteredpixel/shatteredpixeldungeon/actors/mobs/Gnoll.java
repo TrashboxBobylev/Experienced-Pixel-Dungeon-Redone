@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
@@ -42,20 +43,38 @@ public class Gnoll extends Mob {
 		
 		loot = Gold.class;
 		lootChance = 0.5f;
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 115;
+                defenseSkill = 27;
+                EXP = 17;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(28, 40);
+
+        }
 		return Random.NormalIntRange( 1, 6 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 42;
+        }
 		return 10;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(6, 17);
+        }
 		return Random.NormalIntRange(0, 2);
 	}
 }

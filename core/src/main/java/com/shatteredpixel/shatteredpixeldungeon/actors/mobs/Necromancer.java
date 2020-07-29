@@ -64,6 +64,13 @@ public class Necromancer extends Mob {
 		properties.add(Property.UNDEAD);
 		
 		HUNTING = new Hunting();
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 350;
+                defenseSkill = 43;
+                EXP = 31;
+                break;
+        }
 	}
 	
 	public boolean summoning = false;
@@ -88,6 +95,9 @@ public class Necromancer extends Mob {
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 28);
+        }
 		return Random.NormalIntRange(0, 5);
 	}
 	
@@ -168,7 +178,7 @@ public class Necromancer extends Mob {
 				sprite.parent.add(new Beam.HealthRay(sprite.center(), mySkeleton.sprite.center()));
 			}
 			
-			mySkeleton.HP = Math.min(mySkeleton.HP + 5, mySkeleton.HT);
+			mySkeleton.HP = Math.min(mySkeleton.HP + 5 + Dungeon.cycle * 20, mySkeleton.HT);
 			mySkeleton.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			
 			//otherwise give it adrenaline
@@ -350,6 +360,11 @@ public class Necromancer extends Mob {
 			
 			//20/25 health to start
 			HP = 20;
+            switch (Dungeon.cycle){
+                case 1:
+                    HP =  180;
+                    break;
+            }
 		}
 
 		@Override

@@ -245,6 +245,15 @@ public class Dungeon {
         Game.switchScene( InterlevelScene.class );
     }
 
+    //as we don't increase depth when cycling, we will return virtual depth difficulty
+    public static int escalatingDepth(){
+	    switch (cycle){
+            case 0: return depth;
+            case 1: return depth +31;
+        }
+        return depth;
+    }
+
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
 	}

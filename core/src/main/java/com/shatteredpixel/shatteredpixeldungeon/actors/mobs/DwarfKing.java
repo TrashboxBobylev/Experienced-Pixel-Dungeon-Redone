@@ -75,20 +75,36 @@ public class DwarfKing extends Mob {
 
 		properties.add(Property.BOSS);
 		properties.add(Property.UNDEAD);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 3850;
+                defenseSkill = 89;
+                EXP = 725;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(71, 83);
+        }
 		return Random.NormalIntRange( 15, 25 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 127;
+        }
 		return 26;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(38, 65);
+        }
 		return Random.NormalIntRange(0, 10);
 	}
 
@@ -189,7 +205,7 @@ public class DwarfKing extends Mob {
 				spend(3*TICK);
 				summonsMade++;
 				return true;
-			} else if (shielding() <= 200 && summonsMade < 8){
+			} else if (shielding() <= HT * 2 /3 && summonsMade < 8){
 				if (summonsMade == 4){
 					sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.4f, 2 );
 					Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
@@ -203,7 +219,7 @@ public class DwarfKing extends Mob {
 				summonsMade++;
 				spend(TICK);
 				return true;
-			} else if (shielding() <= 100 && summonsMade < 12) {
+			} else if (shielding() <= HT / 3 && summonsMade < 12) {
 				sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.4f, 2 );
 				Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
 				yell(Messages.get(this, "wave_3"));
@@ -379,8 +395,8 @@ public class DwarfKing extends Mob {
 			int dmgTaken = preHP - HP;
 			abilityCooldown -= dmgTaken/8f;
 			summonCooldown -= dmgTaken/8f;
-			if (HP <= 50) {
-				HP = 50;
+			if (HP <= HT / 6) {
+				HP = HT / 6;
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 				ScrollOfTeleportation.appear(this, NewCityBossLevel.throne);
 				properties.add(Property.IMMOVABLE);
@@ -404,7 +420,7 @@ public class DwarfKing extends Mob {
 			sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.4f, 2 );
 			Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
 			yell(  Messages.get(this, "enraged", Dungeon.hero.name()) );
-		} else if (phase == 3 && preHP > 20 && HP < 20){
+		} else if (phase == 3 && preHP > HT /15 && HP < HT / 15){
 			yell( Messages.get(this, "losing") );
 		}
 	}
@@ -536,7 +552,7 @@ public class DwarfKing extends Mob {
 					}
 				} else {
 					Char ch = Actor.findChar(pos);
-					ch.damage(Random.NormalIntRange(20, 40), summon);
+					ch.damage(Random.NormalIntRange(20, 40) + Dungeon.escalatingDepth(), summon);
 					if (((DwarfKing)target).phase == 2){
 						target.damage(target.HT/12, new KingDamager());
 					}

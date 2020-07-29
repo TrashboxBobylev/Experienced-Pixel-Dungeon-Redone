@@ -58,6 +58,14 @@ public class Swarm extends Mob {
 
 		loot = new PotionOfHealing();
 		lootChance = 0.1667f; //by default, see rollToDropLoot()
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 400;
+                defenseSkill = 30;
+                EXP = 18;
+                break;
+        }
 	}
 	
 	private static final float SPLIT_DELAY	= 1f;
@@ -81,6 +89,10 @@ public class Swarm extends Mob {
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(25, 31);
+
+        }
 		return Random.NormalIntRange( 1, 4 );
 	}
 	
@@ -119,6 +131,9 @@ public class Swarm extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 42;
+        }
 		return 10;
 	}
 	

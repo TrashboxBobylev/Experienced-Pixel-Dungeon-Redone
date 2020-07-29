@@ -65,20 +65,37 @@ public class Eye extends Mob {
 		lootChance = 1f;
 
 		properties.add(Property.DEMONIC);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 1093;
+                defenseSkill = 85;
+                EXP = 93;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(86, 106);
+
+        }
 		return Random.NormalIntRange(20, 30);
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 143;
+        }
 		return 30;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(40, 74);
+        }
 		return Random.NormalIntRange(0, 10);
 	}
 	
@@ -178,7 +195,11 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-				ch.damage( Random.NormalIntRange( 30, 50 ), new DeathGaze() );
+                int dmg = Random.NormalIntRange(30, 50);
+                switch (Dungeon.cycle){
+                    case 1: dmg = Random.NormalIntRange(168, 231); break;
+                }
+                ch.damage(dmg, new DeathGaze() );
 
 				if (Dungeon.level.heroFOV[pos]) {
 					ch.sprite.flash();

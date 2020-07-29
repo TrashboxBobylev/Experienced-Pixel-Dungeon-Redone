@@ -59,20 +59,37 @@ public class Ghoul extends Mob {
 		lootChance = 0.2f;
 		
 		properties.add(Property.UNDEAD);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 430;
+                defenseSkill = 61;
+                EXP = 30;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(64, 79);
+
+        }
 		return Random.NormalIntRange( 16, 22 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 95;
+        }
 		return 24;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(22, 43);
+        }
 		return Random.NormalIntRange(0, 4);
 	}
 

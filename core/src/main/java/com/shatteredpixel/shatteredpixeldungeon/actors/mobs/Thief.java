@@ -62,6 +62,14 @@ public class Thief extends Mob {
 		FLEEING = new Fleeing();
 
 		properties.add(Property.UNDEAD);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 190;
+                defenseSkill = 39;
+                EXP = 24;
+                break;
+        }
 	}
 
 	private static final String ITEM = "item";
@@ -86,6 +94,10 @@ public class Thief extends Mob {
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(32, 47);
+
+        }
 		return Random.NormalIntRange( 1, 10 );
 	}
 
@@ -116,11 +128,17 @@ public class Thief extends Mob {
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 50;
+        }
 		return 12;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 20);
+        }
 		return Random.NormalIntRange(0, 3);
 	}
 

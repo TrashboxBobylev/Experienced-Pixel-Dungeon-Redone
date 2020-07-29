@@ -55,20 +55,38 @@ public class DM100 extends Mob implements Callback {
 		
 		properties.add(Property.ELECTRIC);
 		properties.add(Property.INORGANIC);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 300;
+                defenseSkill = 36;
+                EXP = 26;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(31, 45);
+
+        }
 		return Random.NormalIntRange( 2, 8 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 53;
+        }
 		return 11;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 24);
+        }
 		return Random.NormalIntRange(0, 4);
 	}
 	
@@ -97,6 +115,9 @@ public class DM100 extends Mob implements Callback {
 			
 			if (hit( this, enemy, true )) {
 				int dmg = Random.NormalIntRange(3, 10);
+                switch (Dungeon.cycle){
+                    case 1: dmg = Random.NormalIntRange(32, 48); break;
+                }
 				enemy.damage( dmg, new LightningBolt() );
 				
 				enemy.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );

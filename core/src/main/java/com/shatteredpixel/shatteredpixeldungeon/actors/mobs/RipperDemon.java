@@ -62,6 +62,13 @@ public class RipperDemon extends Mob {
 
 		properties.add(Property.DEMONIC);
 		properties.add(Property.UNDEAD);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 724;
+                defenseSkill = 86;
+                EXP = 65;
+                break;
+        }
 	}
 
 	@Override
@@ -71,11 +78,18 @@ public class RipperDemon extends Mob {
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(79, 91);
+
+        }
 		return Random.NormalIntRange( 12, 25 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 120;
+        }
 		return 30;
 	}
 
@@ -86,6 +100,9 @@ public class RipperDemon extends Mob {
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(34, 64);
+        }
 		return Random.NormalIntRange(0, 4);
 	}
 

@@ -53,20 +53,37 @@ public abstract class Shaman extends Mob {
 		
 		loot = Generator.Category.WAND;
 		lootChance = 0.03f; //initially, see rollToDropLoot
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 375;
+                defenseSkill = 55;
+                EXP = 41;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(43, 58);
+
+        }
 		return Random.NormalIntRange( 5, 10 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 75;
+        }
 		return 18;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(18, 36);
+        }
 		return Random.NormalIntRange(0, 6);
 	}
 	
@@ -121,6 +138,10 @@ public abstract class Shaman extends Mob {
 			}
 			
 			int dmg = Random.NormalIntRange( 6, 15 );
+            switch (Dungeon.cycle) {
+                case 1: dmg = Random.NormalIntRange(48, 62);
+
+            }
 			enemy.damage( dmg, new EarthenBolt() );
 			
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {

@@ -86,20 +86,37 @@ public class NewDM300 extends Mob {
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
 		properties.add(Property.LARGE);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 1600;
+                defenseSkill = 60;
+                EXP = 310;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(67, 86);
+
+        }
 		return Random.NormalIntRange( 15, 25 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 89;
+        }
 		return 20;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(38, 53);
+        }
 		return Random.NormalIntRange(0, 10);
 	}
 

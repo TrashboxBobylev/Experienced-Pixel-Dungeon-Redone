@@ -51,6 +51,13 @@ public class GreatCrab extends Crab {
 		state = WANDERING;
 
 		properties.add(Property.MINIBOSS);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 200;
+                defenseSkill = 0;
+                EXP = 21;
+                break;
+        }
 	}
 
 	private int moving = 0;

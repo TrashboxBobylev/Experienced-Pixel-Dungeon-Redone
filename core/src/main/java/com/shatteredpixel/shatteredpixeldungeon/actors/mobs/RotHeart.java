@@ -53,6 +53,14 @@ public class RotHeart extends Mob {
 
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.MINIBOSS);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 900;
+                defenseSkill = 0;
+                EXP = 35;
+                break;
+        }
 	}
 
 	@Override
@@ -116,6 +124,9 @@ public class RotHeart extends Mob {
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 28);
+        }
 		return Random.NormalIntRange(0, 5);
 	}
 	

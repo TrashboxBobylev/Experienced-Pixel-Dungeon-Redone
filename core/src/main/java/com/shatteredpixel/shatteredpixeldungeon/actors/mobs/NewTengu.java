@@ -94,6 +94,14 @@ public class NewTengu extends Mob {
 		properties.add(Property.BOSS);
 		
 		viewDistance = 12;
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 1000;
+                defenseSkill = 43;
+                EXP = 120;
+                break;
+        }
 	}
 	
 	@Override
@@ -105,20 +113,34 @@ public class NewTengu extends Mob {
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(42, 60);
+
+        }
 		return Random.NormalIntRange( 6, 12 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+
 		if (Dungeon.level.adjacent(pos, target.pos)){
+            switch (Dungeon.cycle){
+                case 1: return 54;
+            }
 			return 12;
 		} else {
+            switch (Dungeon.cycle){
+                case 1: return 60;
+            }
 			return 18;
 		}
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(10, 24);
+        }
 		return Random.NormalIntRange(0, 5);
 	}
 
@@ -138,7 +160,7 @@ public class NewTengu extends Mob {
 
 		NewPrisonBossLevel.State state = ((NewPrisonBossLevel)Dungeon.level).state();
 		
-		int hpBracket = 20;
+		int hpBracket = 20 + 200 * Dungeon.cycle;
 		
 		int beforeHitHP = HP;
 		super.damage(dmg, src);
@@ -636,7 +658,7 @@ public class NewTengu extends Mob {
 							
 							Char ch = Actor.findChar(cell);
 							if (ch != null && !(ch instanceof NewTengu)){
-								int dmg = Random.NormalIntRange(5 + Dungeon.depth, 10 + Dungeon.depth*2);
+								int dmg = Random.NormalIntRange(5 + Dungeon.escalatingDepth(), 10 + Dungeon.escalatingDepth()*2);
 								dmg -= ch.drRoll();
 								
 								if (dmg > 0) {
@@ -1024,7 +1046,7 @@ public class NewTengu extends Mob {
 							
 							Char ch = Actor.findChar(cell);
 							if (ch != null && !(ch instanceof NewTengu)){
-								ch.damage(2 + Dungeon.depth, new Electricity());
+								ch.damage(2 + Dungeon.escalatingDepth(), new Electricity());
 								
 								if (ch == Dungeon.hero && !ch.isAlive()) {
 									Dungeon.fail(NewTengu.class);

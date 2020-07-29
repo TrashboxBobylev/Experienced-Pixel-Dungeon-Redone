@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
@@ -48,15 +49,29 @@ public class FetidRat extends Rat {
 
 		properties.add(Property.MINIBOSS);
 		properties.add(Property.DEMONIC);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 190;
+                defenseSkill = 27;
+                EXP = 20;
+                break;
+        }
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 46;
+        }
 		return 12;
 	}
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 20);
+        }
 		return Random.NormalIntRange(0, 2);
 	}
 

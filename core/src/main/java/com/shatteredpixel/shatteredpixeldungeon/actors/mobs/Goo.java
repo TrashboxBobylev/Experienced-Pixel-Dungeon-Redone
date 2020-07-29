@@ -64,6 +64,14 @@ public class Goo extends Mob {
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);
 		properties.add(Property.ACIDIC);
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 800;
+                defenseSkill = 36;
+                EXP = 65;
+                break;
+        }
 	}
 
 	private int pumpedUp = 0;
@@ -71,7 +79,14 @@ public class Goo extends Mob {
 	@Override
 	public int damageRoll() {
 		int min = 1;
+
 		int max = (HP*2 <= HT) ? 12 : 8;
+        switch (Dungeon.cycle){
+            case 1:
+                min = 30;
+                max = (HP*2 <= HT) ? 64 : 48;
+                break;
+        }
 		if (pumpedUp > 0) {
 			pumpedUp = 0;
 			PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
@@ -90,6 +105,12 @@ public class Goo extends Mob {
 	public int attackSkill( Char target ) {
 		int attack = 10;
 		if (HP*2 <= HT) attack = 15;
+        switch (Dungeon.cycle){
+            case 1:
+                attack = 50;
+                if (HP*2 <= HT) attack = 60;
+                break;
+        }
 		if (pumpedUp > 0) attack *= 2;
 		return attack;
 	}
@@ -101,6 +122,9 @@ public class Goo extends Mob {
 
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 15);
+        }
 		return Random.NormalIntRange(0, 2);
 	}
 

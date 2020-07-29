@@ -45,23 +45,38 @@ public class Slime extends Mob {
 		maxLvl = 9;
 		
 		lootChance = 0.2f; //by default, see rollToDropLoot()
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 200;
+                defenseSkill = 30;
+                EXP = 22;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(32, 38);
+
+        }
+	    return Random.NormalIntRange( 2, 5 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 46;
+        }
 		return 12;
 	}
 	
 	@Override
 	public void damage(int dmg, Object src) {
-		if (dmg >= 5){
+		if (dmg >= 20){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
-			dmg = 4 + (int)(Math.sqrt(8*(dmg - 4) + 1) - 1)/2;
+			dmg = 19 + (int)(Math.sqrt(8*(dmg - 4) + 1) - 1)/2;
 		}
 		super.damage(dmg, src);
 	}

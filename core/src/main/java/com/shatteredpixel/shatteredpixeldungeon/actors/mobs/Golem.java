@@ -57,20 +57,37 @@ public class Golem extends Mob {
 
 		WANDERING = new Wandering();
 		HUNTING = new Hunting();
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 1095;
+                defenseSkill = 67;
+                EXP = 78;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(69, 96);
+
+        }
 		return Random.NormalIntRange( 15, 35 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 124;
+        }
 		return 28;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(40, 68);
+        }
 		return Random.NormalIntRange(0, 12);
 	}
 

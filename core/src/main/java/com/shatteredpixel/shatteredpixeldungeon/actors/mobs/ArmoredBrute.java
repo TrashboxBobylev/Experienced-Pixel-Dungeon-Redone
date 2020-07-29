@@ -47,6 +47,9 @@ public class ArmoredBrute extends Brute {
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(30, 58);
+        }
 		return Random.NormalIntRange(6, 10);
 	}
 	
@@ -79,7 +82,7 @@ public class ArmoredBrute extends Brute {
 				return true;
 			}
 			
-			absorbDamage( 1 );
+			absorbDamage( 1 + Dungeon.cycle * 5 );
 			
 			if (shielding() <= 0){
 				target.die(null);

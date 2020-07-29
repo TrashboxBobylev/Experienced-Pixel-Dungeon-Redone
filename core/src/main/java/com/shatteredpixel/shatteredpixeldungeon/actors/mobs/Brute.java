@@ -51,12 +51,25 @@ public class Brute extends Mob {
 		
 		loot = Gold.class;
 		lootChance = 0.5f;
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 420;
+                defenseSkill = 53;
+                EXP = 38;
+                break;
+        }
 	}
 	
 	protected boolean hasRaged = false;
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return buff(BruteRage.class) != null ?
+                    Random.NormalIntRange( 70, 123 ) :
+                    Random.NormalIntRange( 58, 70 );
+
+        }
 		return buff(BruteRage.class) != null ?
 			Random.NormalIntRange( 15, 40 ) :
 			Random.NormalIntRange( 5, 25 );
@@ -64,11 +77,17 @@ public class Brute extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 80;
+        }
 		return 20;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(20, 39);
+        }
 		return Random.NormalIntRange(0, 8);
 	}
 
@@ -130,7 +149,7 @@ public class Brute extends Mob {
 				return true;
 			}
 			
-			absorbDamage( 4 );
+			absorbDamage( 4 + Dungeon.cycle * 30 );
 			
 			if (shielding() <= 0){
 				target.die(null);

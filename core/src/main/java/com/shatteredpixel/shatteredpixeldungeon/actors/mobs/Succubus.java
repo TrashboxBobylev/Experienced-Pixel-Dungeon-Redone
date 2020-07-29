@@ -67,10 +67,21 @@ public class Succubus extends Mob {
 		lootChance = 0.33f;
 
 		properties.add(Property.DEMONIC);
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 938;
+                defenseSkill = 90;
+                EXP = 85;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(80, 101);
+
+        }
 		return Random.NormalIntRange( 22, 30 );
 	}
 	
@@ -146,11 +157,17 @@ public class Succubus extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 139;
+        }
 		return 40;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(40, 63);
+        }
 		return Random.NormalIntRange(0, 10);
 	}
 

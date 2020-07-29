@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrabSprite;
@@ -43,20 +44,38 @@ public class Crab extends Mob {
 		
 		loot = new MysteryMeat();
 		lootChance = 0.167f;
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 140;
+                defenseSkill = 30;
+                EXP = 20;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(30, 45);
+
+        }
 		return Random.NormalIntRange( 1, 7 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+        switch (Dungeon.cycle){
+            case 1: return 46;
+        }
 		return 12;
 	}
 	
 	@Override
 	public int drRoll() {
+        switch (Dungeon.cycle){
+            case 1: return Random.NormalIntRange(8, 20);
+        }
 		return Random.NormalIntRange(0, 4);
 	}
 }

@@ -45,10 +45,21 @@ public class DM201 extends DM200 {
 		properties.add(Property.IMMOVABLE);
 
 		HUNTING = new Mob.Hunting();
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 900;
+                EXP = 52;
+                break;
+        }
 	}
 
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(69, 91);
+
+        }
 		return Random.NormalIntRange( 15, 25 );
 	}
 

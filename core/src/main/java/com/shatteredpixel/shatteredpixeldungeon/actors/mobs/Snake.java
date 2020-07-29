@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -45,16 +46,31 @@ public class Snake extends Mob {
 		
 		loot = Generator.Category.SEED;
 		lootChance = 0.25f;
+
+        switch (Dungeon.cycle){
+            case 1:
+                HP = HT = 55;
+                defenseSkill = 82;
+                EXP = 16;
+                break;
+        }
 	}
 	
 	@Override
 	public int damageRoll() {
+        switch (Dungeon.cycle) {
+            case 1: return Random.NormalIntRange(21, 36);
+
+        }
 		return Random.NormalIntRange( 1, 4 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 10;
+        switch (Dungeon.cycle){
+            case 1: return 40;
+        }
+	    return 10;
 	}
 
 	private static int dodges = 0;
