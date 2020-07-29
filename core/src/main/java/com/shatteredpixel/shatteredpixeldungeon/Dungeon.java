@@ -66,6 +66,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
@@ -162,6 +164,7 @@ public class Dungeon {
 	
 	public static int depth;
 	public static int gold;
+	public static int cycle;
 	
 	public static HashSet<Integer> chapters;
 
@@ -223,6 +226,24 @@ public class Dungeon {
 		
 		GamesInProgress.selectedClass.initHero( hero );
 	}
+
+	public static void goForNewCycle(){
+        Statistics.deepestFloor = 0;
+        depth = 0;
+        Ghost.Quest.reset();
+        Wandmaker.Quest.reset();
+        Blacksmith.Quest.reset();
+        Imp.Quest.reset();
+        droppedItems = new SparseArray<>();
+        portedItems = new SparseArray<>();
+        for (LimitedDrops a : LimitedDrops.values())
+            a.count = 0;
+        Notes.reset();
+        cycle += 1;
+        GameLog.wipe();
+        InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+        Game.switchScene( InterlevelScene.class );
+    }
 
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
@@ -489,6 +510,7 @@ public class Dungeon {
 	private static final String HERO		= "hero";
 	private static final String GOLD		= "gold";
 	private static final String DEPTH		= "depth";
+    private static final String CYCLE		= "cycle";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
@@ -508,6 +530,7 @@ public class Dungeon {
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
+			bundle.put( CYCLE, cycle);
 
 			for (int d : droppedItems.keyArray()) {
 				bundle.put(Messages.format(DROPPED, d), droppedItems.get(d));
@@ -663,6 +686,7 @@ public class Dungeon {
 		
 		gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
+		cycle = bundle.getInt( CYCLE);
 		
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
