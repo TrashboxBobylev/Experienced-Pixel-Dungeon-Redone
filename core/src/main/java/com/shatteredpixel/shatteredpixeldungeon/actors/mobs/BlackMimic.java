@@ -63,13 +63,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel.mainArena;
+
 public class BlackMimic extends Mob {
 
 	{
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 1000;
+		HP = HT = 3000;
 		EXP = 2000;
 		defenseSkill = 20;
 
@@ -80,7 +82,7 @@ public class BlackMimic extends Mob {
 		properties.add(Property.LARGE);
         switch (Dungeon.cycle){
             case 1:
-                HP = HT = 5000;
+                HP = HT = 15000;
                 defenseSkill = 125;
                 EXP = 6000;
                 break;
@@ -120,7 +122,7 @@ public class BlackMimic extends Mob {
 	private int abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 
 	private static final int MIN_COOLDOWN = 1;
-	private static final int MAX_COOLDOWN = 2;
+	private static final int MAX_COOLDOWN = 1;
 
 	private int lastAbility = 0;
 	private static final int NONE = 0;
@@ -170,10 +172,7 @@ public class BlackMimic extends Mob {
 		GameScene.add(Blob.seed(pos, 0, FallingRocks.class));
 		GameScene.add(Blob.seed(pos, 0, CorrosiveGas.class));
 
-		if (Random.Float() < 0.5f){
-		    List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, SmokeScreen.class);
-            GameScene.add(Blob.seed(Dungeon.level.randomDestination(this), 500, Random.element(blobs)));
-        }
+
 
 		//ability logic only triggers if DM is not supercharged
 		if (!supercharged){
@@ -285,7 +284,9 @@ public class BlackMimic extends Mob {
                         } else {
                             GLog.w(Messages.get(this, "summon"));
                             DistortionTrap trap = new DistortionTrap();
-                            trap.pos = Dungeon.level.randomDestination(this);
+                            do {
+                                trap.pos = Dungeon.level.pointToCell(Random.element(mainArena.getPoints()));
+                            } while (!Dungeon.level.openSpace[trap.pos] || Dungeon.level.map[trap.pos] == Terrain.EMPTY_SP);
                             trap.activate();
 
                             return true;
@@ -379,16 +380,16 @@ public class BlackMimic extends Mob {
 		Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
 		for (int i : trajectory.subPath(0, trajectory.dist)){
-			GameScene.add(Blob.seed(i, 200, CorrosiveGas.class).setStrength(Dungeon.escalatingDepth()));
+			GameScene.add(Blob.seed(i, 200, CorrosoGas.class).setStrength(Dungeon.escalatingDepth()));
 			gasVented += 20;
 		}
 
-		GameScene.add(Blob.seed(trajectory.collisionPos, 290, CorrosiveGas.class).setStrength(Dungeon.escalatingDepth()));
+		GameScene.add(Blob.seed(trajectory.collisionPos, 290, CorrosoGas.class).setStrength(Dungeon.escalatingDepth()));
 
 		if (gasVented < 250){
 			int toVentAround = (int)Math.ceil((250 - gasVented)/8f);
 			for (int i : PathFinder.NEIGHBOURS8){
-				GameScene.add(Blob.seed(pos+i, toVentAround, CorrosiveGas.class).setStrength(Dungeon.escalatingDepth()));
+				GameScene.add(Blob.seed(pos+i, toVentAround, CorrosoGas.class).setStrength(Dungeon.escalatingDepth()));
 			}
 
 		}
@@ -439,7 +440,7 @@ public class BlackMimic extends Mob {
 					safeCell = rockCenter + PathFinder.NEIGHBOURS8[Random.Int(8)];
 				} while (safeCell == pos
 						|| (Dungeon.level.solid[safeCell] && Random.Int(2) == 0)
-						|| (Blob.volumeAt(safeCell, NewCavesBossLevel.PylonEnergy.class) > 0 && Random.Int(2) == 0));
+						|| (Blob.volumeAt(safeCell, BlackMimicLevel.PylonEnergy.class) > 0 && Random.Int(2) == 0));
 
 				int start = rockCenter - Dungeon.level.width() * 3 - 3;
 				int pos;
@@ -470,7 +471,6 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public void damage(int dmg, Object src) {
-	    dmg = dmg / 3;
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
 			return;
@@ -499,7 +499,7 @@ public class BlackMimic extends Mob {
 
 	public void supercharge(){
 		supercharged = true;
-		((NewCavesBossLevel)Dungeon.level).activatePylon();
+		((BlackMimicLevel)Dungeon.level).activatePylon();
 		pylonsActivated++;
 
 		spend(3f);
@@ -629,6 +629,7 @@ public class BlackMimic extends Mob {
 
 	{
 		immunities.add(Sleep.class);
+		immunities.add(CorrosoGas.class);
 
 		resistances.add(Terror.class);
 		resistances.add(Charm.class);
@@ -695,4 +696,8 @@ public class BlackMimic extends Mob {
 			return Messages.get(this, "desc");
 		}
 	}
+
+	private static class CorrosoGas extends CorrosiveGas{
+
+    }
 }

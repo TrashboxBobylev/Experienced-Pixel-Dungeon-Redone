@@ -28,8 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
@@ -40,8 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PylonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -50,6 +51,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class Pylon extends Mob {
 
@@ -88,6 +92,10 @@ public class Pylon extends Mob {
 			} while (!Dungeon.level.passable[n] && !Dungeon.level.avoid[n]);
 			Dungeon.level.drop( heap.pickUp(), n ).sprite.drop( pos );
 		}
+        if (Random.Float() < 0.5f){
+            List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, SmokeScreen.class);
+            GameScene.add(Blob.seed(pos, 500, Random.element(blobs)));
+        }
 
 		if (alignment == Alignment.NEUTRAL){
 			return true;
@@ -114,12 +122,12 @@ public class Pylon extends Mob {
 	}
 
 	private void shockChar( Char ch ){
-		if (ch != null && !(ch instanceof NewDM300)){
+		if (ch != null && !(ch instanceof BlackMimic)){
 			ch.sprite.flash();
 			ch.damage(Random.NormalIntRange(10, 20) + Dungeon.cycle * 60, new Electricity());
 
 			if (ch == Dungeon.hero && !ch.isAlive()){
-				Dungeon.fail(NewDM300.class);
+				Dungeon.fail(BlackMimic.class);
 				GLog.n( Messages.get(Electricity.class, "ondeath") );
 			}
 		}
@@ -180,7 +188,7 @@ public class Pylon extends Mob {
 	@Override
 	public void die(Object cause) {
 		super.die(cause);
-		((NewCavesBossLevel)Dungeon.level).eliminatePylon();
+		((BlackMimicLevel)Dungeon.level).eliminatePylon();
 	}
 
 	private static final String ALIGNMENT = "alignment";
