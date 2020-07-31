@@ -107,6 +107,7 @@ public class Armor extends EquipableItem {
 	private BrokenSeal seal;
 	
 	public int tier;
+	public int visibleTier;
 	
 	private static final int USES_TO_ID = 10;
 	private int usesLeftToID = USES_TO_ID;
@@ -114,6 +115,7 @@ public class Armor extends EquipableItem {
 	
 	public Armor( int tier ) {
 		this.tier = tier;
+		this.visibleTier = tier;
 	}
 	
 	private static final String USES_LEFT_TO_ID = "uses_left_to_id";
@@ -122,6 +124,7 @@ public class Armor extends EquipableItem {
 	private static final String CURSE_INFUSION_BONUS = "curse_infusion_bonus";
 	private static final String SEAL            = "seal";
 	private static final String AUGMENT			= "augment";
+    private static final String TIER            = "tier";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -132,6 +135,7 @@ public class Armor extends EquipableItem {
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( SEAL, seal);
 		bundle.put( AUGMENT, augment);
+		bundle.put( TIER, tier);
 	}
 
 	@Override
@@ -150,6 +154,7 @@ public class Armor extends EquipableItem {
 		}
 		
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+		tier = bundle.getInt(TIER);
 	}
 
 	@Override
@@ -500,6 +505,7 @@ public class Armor extends EquipableItem {
 		} else if (effectRoll >= 0.85f){
 			inscribe();
 		}
+		tier += Dungeon.cycle * 5;
 
 		return this;
 	}

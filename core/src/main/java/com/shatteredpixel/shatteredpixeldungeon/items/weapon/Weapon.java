@@ -268,6 +268,7 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 		}
 		level(n);
+
 		
 		//30% chance to be cursed
 		//10% chance to be enchanted

@@ -332,7 +332,7 @@ public class Hero extends Char {
 	}
 	
 	public int tier() {
-		return belongings.armor == null ? 0 : belongings.armor.tier;
+		return belongings.armor == null ? 0 : belongings.armor.visibleTier;
 	}
 	
 	public boolean shoot( Char enemy, MissileWeapon wep ) {
