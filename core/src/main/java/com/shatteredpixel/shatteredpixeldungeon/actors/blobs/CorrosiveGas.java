@@ -37,7 +37,7 @@ import com.watabou.utils.Bundle;
 public class CorrosiveGas extends Blob {
 
 	//FIXME should have strength per-cell
-	private int strength = 0;
+    protected int strength = 0;
 
 	@Override
 	protected void evolve() {

@@ -78,6 +78,10 @@ public abstract class Mob extends Char {
 		
 		alignment = Alignment.ENEMY;
 	}
+
+    {
+        immunities.add(BlackMimic.CorrosoGas.class);
+    }
 	
 	private static final String	TXT_DIED	= "You hear something died in the distance";
 	
