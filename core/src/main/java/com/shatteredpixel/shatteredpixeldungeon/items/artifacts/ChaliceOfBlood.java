@@ -147,7 +147,7 @@ public class ChaliceOfBlood extends Artifact {
 	
 	@Override
 	public void charge(Hero target) {
-		target.HP = Math.min( target.HT, target.HP + 1 + Dungeon.depth/5);
+		target.HP = Math.min( target.HT, target.HP + 1 + Dungeon.escalatingDepth()/5);
 	}
 	
 	@Override

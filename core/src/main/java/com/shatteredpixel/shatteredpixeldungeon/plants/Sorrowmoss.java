@@ -49,7 +49,7 @@ public class Sorrowmoss extends Plant {
 		}
 		
 		if (ch != null) {
-			Buff.affect( ch, Poison.class ).set( 5 + Math.round(2*Dungeon.depth / 3f) );
+			Buff.affect( ch, Poison.class ).set( 5 + Math.round(2*Dungeon.escalatingDepth() / 3f) );
 		}
 		
 		if (Dungeon.level.heroFOV[pos]) {

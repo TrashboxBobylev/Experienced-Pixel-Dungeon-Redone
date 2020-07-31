@@ -68,7 +68,7 @@ public class Fadeleaf extends Plant {
 				if (buff != null) buff.detach();
 				
 				InterlevelScene.mode = InterlevelScene.Mode.RETURN;
-				InterlevelScene.returnDepth = Math.max(1, (Dungeon.depth - 1));
+				InterlevelScene.returnDepth = Math.max(1, (Dungeon.escalatingDepth() - 1));
 				InterlevelScene.returnPos = -2;
 				Game.switchScene( InterlevelScene.class );
 				

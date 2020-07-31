@@ -94,7 +94,7 @@ public class Statue extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return (int)((9 + Dungeon.depth) * weapon.accuracyFactor(this));
+		return (int)((9 + Dungeon.escalatingDepth()) * weapon.accuracyFactor(this));
 	}
 	
 	@Override
@@ -109,7 +109,7 @@ public class Statue extends Mob {
 
 	@Override
 	public int drRoll() {
-		return Random.NormalIntRange(0, Dungeon.depth + weapon.defenseFactor(this));
+		return Random.NormalIntRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this));
 	}
 	
 	@Override

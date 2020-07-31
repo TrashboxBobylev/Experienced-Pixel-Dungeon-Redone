@@ -215,7 +215,7 @@ public class CursedWand {
 				if (target != null) {
 					cursedFX(user, bolt, new Callback() {
 						public void call() {
-							int damage = Dungeon.depth * 2;
+							int damage = Dungeon.escalatingDepth() * 2;
 							Char toHeal, toDamage;
 							
 							switch (Random.Int(2)) {

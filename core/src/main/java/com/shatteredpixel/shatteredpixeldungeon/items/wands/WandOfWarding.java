@@ -270,7 +270,7 @@ public class WandOfWarding extends Wand {
 		@Override
 		public int defenseSkill(Char enemy) {
 			if (tier > 3){
-				defenseSkill = 4 + Dungeon.depth;
+				defenseSkill = 4 + Dungeon.escalatingDepth();
 			}
 			return super.defenseSkill(enemy);
 		}
@@ -278,7 +278,7 @@ public class WandOfWarding extends Wand {
 		@Override
 		public int drRoll() {
 			if (tier > 3){
-				return Math.round(Random.NormalIntRange(0, 3 + Dungeon.depth/2) / (7f - tier));
+				return Math.round(Random.NormalIntRange(0, 3 + Dungeon.escalatingDepth()/2) / (7f - tier));
 			} else {
 				return 0;
 			}
