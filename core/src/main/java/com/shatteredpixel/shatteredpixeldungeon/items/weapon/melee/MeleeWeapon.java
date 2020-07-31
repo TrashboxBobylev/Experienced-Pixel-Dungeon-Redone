@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
@@ -119,8 +120,14 @@ public class MeleeWeapon extends Weapon {
 	public String statsInfo(){
 		return Messages.get(this, "stats_desc");
 	}
-	
-	@Override
+
+    @Override
+    public Item random() {
+        tier += Dungeon.cycle * 5;
+        return super.random();
+    }
+
+    @Override
 	public int price() {
 		int price = 20 * tier;
 		if (hasGoodEnchant()) {

@@ -192,6 +192,8 @@ abstract public class MissileWeapon extends Weapon {
 				quantity++;
 			}
 		}
+
+		tier += Dungeon.cycle * 5;
 		return this;
 	}
 	
