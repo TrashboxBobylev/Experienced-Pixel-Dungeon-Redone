@@ -668,7 +668,7 @@ public abstract class Mob extends Char {
 			}
 		}
 
-		if (Dungeon.hero.grinding && Random.Float() < 0.5f){
+		if (Dungeon.hero.grinding && Random.Float() < 0.33f){
             Dungeon.level.drop(Generator.random(), pos).sprite.drop();
         }
 		
