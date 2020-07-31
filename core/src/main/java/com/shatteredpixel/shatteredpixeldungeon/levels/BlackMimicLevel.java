@@ -31,10 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewDM300;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OldDM300;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -270,7 +267,7 @@ public class BlackMimicLevel extends Level {
 		Camera.main.shake( 3, 0.7f );
 		Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 
-		NewDM300 boss = new NewDM300();
+		BlackMimic boss = new BlackMimic();
 		boss.state = boss.WANDERING;
 		do {
 			boss.pos = pointToCell(Random.element(mainArena.getPoints()));
@@ -767,7 +764,7 @@ public class BlackMimicLevel extends Level {
 					if (off[cell] > 0){
 
 						Char ch = Actor.findChar(cell);
-						if (ch != null && !(ch instanceof NewDM300)) {
+						if (ch != null && !(ch instanceof BlackMimic)) {
 							Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 							ch.damage( Random.NormalIntRange(6, 12), Electricity.class);
 							ch.sprite.flash();
