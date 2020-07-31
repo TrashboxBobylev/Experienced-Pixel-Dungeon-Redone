@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class MeleeWeapon extends Weapon {
@@ -136,5 +137,16 @@ public class MeleeWeapon extends Weapon {
 		}
 		return price;
 	}
+    private static final String TIER = "tier";
+    @Override
+    public void storeInBundle( Bundle bundle ) {
+        super.storeInBundle(bundle);
+        bundle.put(TIER, tier);
+    }
 
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        tier = bundle.getInt(TIER);
+    }
 }

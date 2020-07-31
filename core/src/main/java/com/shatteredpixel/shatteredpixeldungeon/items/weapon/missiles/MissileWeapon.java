@@ -373,11 +373,13 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	private static final String DURABILITY = "durability";
+    private static final String TIER = "tier";
 	
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put(DURABILITY, durability);
+		bundle.put(TIER, tier);
 	}
 	
 	private static boolean bundleRestoring = false;
@@ -388,5 +390,6 @@ abstract public class MissileWeapon extends Weapon {
 		super.restoreFromBundle(bundle);
 		bundleRestoring = false;
 		durability = bundle.getInt(DURABILITY);
+		tier = bundle.getInt(TIER);
 	}
 }
