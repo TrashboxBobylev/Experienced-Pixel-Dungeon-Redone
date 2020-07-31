@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -180,7 +181,10 @@ public class Blacksmith extends NPC {
 			return Messages.get(Blacksmith.class, "same_item");
 		}
 
-		if (item1.getClass() != item2.getClass()) {
+		if ((item1 instanceof Weapon && !(item2 instanceof Weapon)) ||
+                (item1 instanceof Armor && !(item2 instanceof Armor)) ||
+                (item1 instanceof Wand && !(item2 instanceof Wand)) ||
+                (item1 instanceof Ring && !(item2 instanceof Ring))) {
 			return Messages.get(Blacksmith.class, "diff_type");
 		}
 		

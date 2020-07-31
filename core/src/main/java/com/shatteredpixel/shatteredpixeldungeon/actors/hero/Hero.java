@@ -1376,10 +1376,13 @@ public class Hero extends Char {
 			}
 		}
 
-        if (totalExp >= 50 && grinding){
-            while (totalExp >= 50) {
-                totalExp -= 50;
-                Dungeon.level.drop(new ScrollOfUpgrade(), pos).sprite.drop();
+        if (totalExp >= 100 + Dungeon.cycle * 25 && grinding){
+            while (totalExp >= 100 + Dungeon.cycle * 25 ) {
+                totalExp -= 100 + Dungeon.cycle * 25;
+                ScrollOfUpgrade sou = new ScrollOfUpgrade();
+                if (!sou.collect()){
+                    Dungeon.level.drop(sou, pos);
+                }
             }
         }
 		
