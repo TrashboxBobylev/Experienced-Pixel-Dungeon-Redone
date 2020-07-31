@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Game;
@@ -75,6 +76,16 @@ public class BlackPsycheChest extends Item {
 
         if (action.equals(AC_RESET) || action.equals(AC_ACCESS)){
             detach(Dungeon.hero.belongings.backpack);
+        }
+    }
+
+    @Override
+    public String desc() {
+        String desc;
+        if (Dungeon.cycle  < 3){
+            return Messages.get(BlackPsycheChest.class, "desc" + Dungeon.cycle) + "\n\n" + super.desc();
+        } else {
+            return Messages.get(BlackPsycheChest.class, "desc" + 3) + "\n\n" + super.desc();
         }
     }
 }
