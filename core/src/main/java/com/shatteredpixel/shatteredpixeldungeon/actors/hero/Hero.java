@@ -1380,8 +1380,11 @@ public class Hero extends Char {
             while (totalExp >= 100 + Dungeon.cycle * 25 ) {
                 totalExp -= 100 + Dungeon.cycle * 25;
                 ScrollOfUpgrade sou = new ScrollOfUpgrade();
+                new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
                 if (!sou.collect()){
                     Dungeon.level.drop(sou, pos);
+                } else {
+                    GLog.p( Messages.get(this, "you_now_have", sou.name()) );
                 }
             }
         }
