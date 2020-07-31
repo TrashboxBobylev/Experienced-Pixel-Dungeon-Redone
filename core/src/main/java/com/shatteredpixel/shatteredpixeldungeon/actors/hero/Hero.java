@@ -935,7 +935,7 @@ public class Hero extends Char {
 		//TODO this is slightly brittle, it assumes there are no disjointed sets of entrance tiles
 		} else if (Dungeon.level.map[pos] == Terrain.ENTRANCE) {
 			
-			if (Dungeon.depth == 1) {
+			if (Dungeon.depth == 27 || Dungeon.depth == 1) {
 				
 				if (belongings.getItem( Amulet.class ) == null) {
 					Game.runOnRenderThread(new Callback() {

@@ -781,24 +781,27 @@ public class DriedRose extends Artifact {
 		}
 		
 		public void sayBoss(){
-			int depth = (Dungeon.depth - 1) / 5;
+			int depth = Dungeon.depth;
 			
 			switch(depth){
-				case 0:
+				case 5:
 					yell( Messages.get( this, "seen_goo_" + Random.IntRange(1, 3) ));
 					break;
-				case 1:
+				case 10:
 					yell( Messages.get( this, "seen_tengu_" + Random.IntRange(1, 3) ));
 					break;
-				case 2:
+				case 15:
 					yell( Messages.get( this, "seen_dm300_" + Random.IntRange(1, 3) ));
 					break;
-				case 3:
+				case 20:
 					yell( Messages.get( this, "seen_king_" + Random.IntRange(1, 3) ));
 					break;
-				case 4: default:
+				case 25: default:
 					yell( Messages.get( this, "seen_yog_" + Random.IntRange(1, 3) ));
 					break;
+                case 27:
+                    yell( Messages.get( this, "seen_mimic_" + Random.IntRange(1, 3) ));
+                    break;
 			}
 			Sample.INSTANCE.play( Assets.Sounds.GHOST );
 		}
