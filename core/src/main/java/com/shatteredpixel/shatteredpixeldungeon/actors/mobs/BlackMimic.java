@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -117,12 +118,13 @@ public class BlackMimic extends Mob {
 	public int pylonsActivated = 0;
 	public boolean supercharged = false;
 	public boolean chargeAnnounced = false;
+	public boolean isCopy = false;
 
 	private int turnsSinceLastAbility = -1;
 	private int abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 
 	private static final int MIN_COOLDOWN = 1;
-	private static final int MAX_COOLDOWN = 1;
+	private static final int MAX_COOLDOWN = 6;
 
 	private int lastAbility = 0;
 	private static final int NONE = 0;
@@ -130,6 +132,7 @@ public class BlackMimic extends Mob {
 	private static final int ROCKS = 2;
 	private static final int BOMB = 3;
     private static final int SUMMON = 4;
+    private static final int MIRROR = 5;
 
 	private static final String PYLONS_ACTIVATED = "pylons_activated";
 	private static final String SUPERCHARGED = "supercharged";
@@ -139,6 +142,7 @@ public class BlackMimic extends Mob {
 	private static final String ABILITY_COOLDOWN = "ability_cooldown";
 
 	private static final String LAST_ABILITY = "last_ability";
+    private static final String COPY = "fool";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
@@ -149,6 +153,7 @@ public class BlackMimic extends Mob {
 		bundle.put(TURNS_SINCE_LAST_ABILITY, turnsSinceLastAbility);
 		bundle.put(ABILITY_COOLDOWN, abilityCooldown);
 		bundle.put(LAST_ABILITY, lastAbility);
+		bundle.put(COPY, isCopy);
 	}
 
 	@Override
@@ -160,6 +165,7 @@ public class BlackMimic extends Mob {
 		turnsSinceLastAbility = bundle.getInt(TURNS_SINCE_LAST_ABILITY);
 		abilityCooldown = bundle.getInt(ABILITY_COOLDOWN);
 		lastAbility = bundle.getInt(LAST_ABILITY);
+		isCopy = bundle.getBoolean(COPY);
 
 		if (turnsSinceLastAbility != -1){
 			BossHealthBar.assignBoss(this);
@@ -175,7 +181,7 @@ public class BlackMimic extends Mob {
 
 
 		//ability logic only triggers if DM is not supercharged
-		if (!supercharged){
+		if (!supercharged || isCopy){
 			if (turnsSinceLastAbility >= 0) turnsSinceLastAbility++;
 
 			//in case DM-300 hasn't been able to act yet
@@ -233,15 +239,15 @@ public class BlackMimic extends Mob {
 
 						if (lastAbility == NONE) {
 							//50/50 either ability
-							lastAbility = Random.IntRange(1, 4);
+							lastAbility = Random.IntRange(1, 5);
 						} else if (lastAbility == GAS) {
 							//more likely to use rocks
-							lastAbility = Random.IntRange(2, 4);
+							lastAbility = Random.IntRange(2, 5);
 						} else if (lastAbility == ROCKS){
 							//more likely to use gas
-							lastAbility = Random.IntRange(3, 4);
+							lastAbility = Random.IntRange(3, 5);
 						} else {
-                            lastAbility = Random.IntRange(0, 4);
+                            lastAbility = Random.IntRange(0, 5);
                         }
 
 						//doesn't spend a turn if enemy is at a distance
@@ -281,7 +287,7 @@ public class BlackMimic extends Mob {
                                 NewTengu.throwBomb(this, Dungeon.hero);
                                 return true;
                             }
-                        } else {
+                        } else if (lastAbility == SUMMON) {
                             GLog.w(Messages.get(this, "summon"));
                             DistortionTrap trap = new DistortionTrap();
                             do {
@@ -290,6 +296,30 @@ public class BlackMimic extends Mob {
                             trap.activate();
 
                             return true;
+                        } else {
+                            ArrayList<Integer> respawnPoints = new ArrayList<>();
+
+                            for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+                                int p = pos + PathFinder.NEIGHBOURS8[i];
+                                if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+                                    respawnPoints.add( p );
+                                }
+                            }
+                            if (!respawnPoints.isEmpty()) {
+                                if (Random.Float() < 0.5f) {
+                                    BlackMimic mimic = new BlackMimic();
+                                    int index = Random.index( respawnPoints );
+                                    mimic.isCopy = true;
+                                    GameScene.add( mimic );
+                                    ScrollOfTeleportation.appear( mimic, respawnPoints.get( index ) );
+                                } else {
+                                    GoldenMimic mimic = new GoldenMimic();
+                                    mimic.setLevel( Dungeon.escalatingDepth() );
+                                    int index = Random.index( respawnPoints );
+                                    GameScene.add( mimic );
+                                    ScrollOfTeleportation.appear( mimic, respawnPoints.get( index ) );
+                                }
+                            }
                         }
 					}
 				}
@@ -494,6 +524,7 @@ public class BlackMimic extends Mob {
 			invulnWarned = true;
 			GLog.w(Messages.get(this, "charging_hint"));
 		}
+		if (isCopy) return true;
 		return supercharged;
 	}
 
@@ -544,6 +575,12 @@ public class BlackMimic extends Mob {
 		if (beacon != null) {
 			beacon.upgrade();
 		}
+
+        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+                if (mob.isAlive()) {
+                    mob.die(Dungeon.hero);
+                }
+            }
 
 		yell( Messages.get(this, "defeated") );
 	}

@@ -227,7 +227,7 @@ public class BlackMimicLevel extends Level {
 		int gatePos = pointToCell(new Point(gate.left, gate.top));
 		if (ch == Dungeon.hero && !locked && solid[gatePos]){
 			for (int pos : pylonPositions){
-				if (Dungeon.level.distance(ch.pos, pos) <= 3){
+				if (Dungeon.level.distance(ch.pos, pos) <= 5){
 					seal();
 					break;
 				}
@@ -331,8 +331,9 @@ public class BlackMimicLevel extends Level {
 		customArenaVisuals.updateState();
 		int pylonsRemaining = 0;
 		for (Mob m : mobs){
-			if (m instanceof NewDM300){
-				((NewDM300) m).loseSupercharge();
+			if (m instanceof NewDM300 || m instanceof BlackMimic){
+				if (m instanceof NewDM300) ((NewDM300) m).loseSupercharge();
+				else ((BlackMimic) m).loseSupercharge();
 				PylonEnergy.energySourceSprite = m.sprite;
 			} else if (m instanceof Pylon){
 				pylonsRemaining++;

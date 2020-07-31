@@ -92,8 +92,8 @@ public class Pylon extends Mob {
 			} while (!Dungeon.level.passable[n] && !Dungeon.level.avoid[n]);
 			Dungeon.level.drop( heap.pickUp(), n ).sprite.drop( pos );
 		}
-        if (Random.Float() < 0.5f){
-            List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, SmokeScreen.class);
+        if (Random.Float() < 0.5f && Dungeon.depth > 26){
+            List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, Web.class);
             GameScene.add(Blob.seed(pos, 500, Random.element(blobs)));
         }
 
@@ -122,12 +122,12 @@ public class Pylon extends Mob {
 	}
 
 	private void shockChar( Char ch ){
-		if (ch != null && !(ch instanceof BlackMimic)){
+		if (ch != null && !(ch instanceof BlackMimic || ch instanceof NewDM300)){
 			ch.sprite.flash();
 			ch.damage(Random.NormalIntRange(10, 20) + Dungeon.cycle * 60, new Electricity());
 
 			if (ch == Dungeon.hero && !ch.isAlive()){
-				Dungeon.fail(BlackMimic.class);
+				Dungeon.fail(NewDM300.class);
 				GLog.n( Messages.get(Electricity.class, "ondeath") );
 			}
 		}
@@ -188,7 +188,9 @@ public class Pylon extends Mob {
 	@Override
 	public void die(Object cause) {
 		super.die(cause);
-		((BlackMimicLevel)Dungeon.level).eliminatePylon();
+		if (Dungeon.depth == 15)
+		((NewCavesBossLevel)Dungeon.level).eliminatePylon();
+		else ((BlackMimicLevel)Dungeon.level).eliminatePylon();
 	}
 
 	private static final String ALIGNMENT = "alignment";
@@ -215,6 +217,7 @@ public class Pylon extends Mob {
 		immunities.add( ToxicGas.class );
 		immunities.add( Terror.class );
 		immunities.add( Vertigo.class );
+		if (Dungeon.depth == 27) immunities.add(Fire.class);
 	}
 
 }
