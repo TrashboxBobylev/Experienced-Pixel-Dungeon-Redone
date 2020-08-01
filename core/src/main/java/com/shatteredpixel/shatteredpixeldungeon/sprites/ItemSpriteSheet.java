@@ -195,8 +195,15 @@ public class ItemSpriteSheet {
 		assignItemRect(SHRAPNEL_BOMB,   10, 13);
 	}
 
-	
-	                                                                                    //16 free slots
+	private static final int FISHING_HOOKS = xy(1, 6);
+	public static final int BASIC_HOOK = FISHING_HOOKS+0;
+	public static final int GOLDEN_HOOK = FISHING_HOOKS+1;
+	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS+2;
+	public static final int AVARITIA_HOOK = FISHING_HOOKS+3;
+	static {
+        for (int i = FISHING_HOOKS; i < FISHING_HOOKS+4; i++)
+            assignItemRect(i, 14, 13);
+    }
 
 	private static final int WEP_TIER1      =                               xy(1, 7);   //8 slots
 	public static final int WORN_SHORTSWORD = WEP_TIER1+0;

@@ -654,7 +654,6 @@ public abstract class Mob extends Char {
 	public void rollToDropLoot(){
 		
 		float lootChance = this.lootChance;
-		lootChance *= RingOfWealth.dropChanceMultiplier( Dungeon.hero );
 		
 		if (Random.Float() < lootChance) {
 			Item loot = createLoot();
@@ -670,17 +669,17 @@ public abstract class Mob extends Char {
             }
         }
 		
-		//ring of wealth logic
-		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {
-			int rolls = 1;
-			if (properties.contains(Property.BOSS)) rolls = 15;
-			else if (properties.contains(Property.MINIBOSS)) rolls = 5;
-			ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(Dungeon.hero, rolls);
-			if (bonus != null && !bonus.isEmpty()) {
-				for (Item b : bonus) Dungeon.level.drop(b, pos).sprite.drop();
-				RingOfWealth.showFlareForBonusDrop(sprite);
-			}
-		}
+//		//ring of wealth logic
+//		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {
+//			int rolls = 1;
+//			if (properties.contains(Property.BOSS)) rolls = 15;
+//			else if (properties.contains(Property.MINIBOSS)) rolls = 5;
+//			ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(Dungeon.hero, rolls);
+//			if (bonus != null && !bonus.isEmpty()) {
+//				for (Item b : bonus) Dungeon.level.drop(b, pos).sprite.drop();
+//				RingOfWealth.showFlareForBonusDrop(sprite);
+//			}
+//		}
 		
 		//lucky enchant logic
 		if (Dungeon.hero.lvl <= maxLvl && buff(Lucky.LuckProc.class) != null){

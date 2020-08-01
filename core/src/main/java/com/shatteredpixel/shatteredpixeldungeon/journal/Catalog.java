@@ -218,7 +218,6 @@ public enum Catalog {
 		RINGS.seen.put( RingOfMight.class,                  false);
 		RINGS.seen.put( RingOfSharpshooting.class,          false);
 		RINGS.seen.put( RingOfTenacity.class,               false);
-		RINGS.seen.put( RingOfWealth.class,                 false);
 	
 		ARTIFACTS.seen.put( AlchemistsToolkit.class,        false);
 		//ARTIFACTS.seen.put( CapeOfThorns.class,             false);

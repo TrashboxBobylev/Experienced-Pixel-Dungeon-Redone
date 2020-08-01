@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
@@ -58,58 +59,23 @@ public class RingOfWealth extends Ring {
 	{
 		icon = ItemSpriteSheet.Icons.RING_WEALTH;
 	}
-
-	private float triesToDrop = Float.MIN_VALUE;
-	private int dropsToRare = Integer.MIN_VALUE;
-	
-	public String statsInfo() {
-		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.##").format(100f * (Math.pow(1.25f, soloBuffedBonus()) - 1f)));
-		} else {
-			return Messages.get(this, "typical_stats", new DecimalFormat("#.##").format(25f));
-		}
-	}
-
-	private static final String TRIES_TO_DROP = "tries_to_drop";
-	private static final String DROPS_TO_RARE = "drops_to_rare";
-
-	@Override
-	public void storeInBundle(Bundle bundle) {
-		super.storeInBundle(bundle);
-		bundle.put(TRIES_TO_DROP, triesToDrop);
-		bundle.put(DROPS_TO_RARE, dropsToRare);
-	}
-
-	@Override
-	public void restoreFromBundle(Bundle bundle) {
-		super.restoreFromBundle(bundle);
-		triesToDrop = bundle.getFloat(TRIES_TO_DROP);
-		dropsToRare = bundle.getInt(DROPS_TO_RARE);
-	}
-
-	@Override
-	protected RingBuff buff( ) {
-		return new Wealth();
-	}
-	
-	public static float dropChanceMultiplier( Char target ){
-		return (float)Math.pow(1.25, getBuffedBonus(target, Wealth.class));
-	}
 	
 	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
-		int bonus = getBuffedBonus(target, Wealth.class);
+		Wealth wealth = target.buff(Wealth.class);
 
-		if (bonus <= 0) return null;
+		if (wealth == null) return null;
 		
 		HashSet<Wealth> buffs = target.buffs(Wealth.class);
 		float triesToDrop = Float.MIN_VALUE;
 		int dropsToEquip = Integer.MIN_VALUE;
+		int level = 0;
 		
 		//find the largest count (if they aren't synced yet)
 		for (Wealth w : buffs){
 			if (w.triesToDrop() > triesToDrop){
 				triesToDrop = w.triesToDrop();
 				dropsToEquip = w.dropsToRare();
+				level = w.level;
 			}
 		}
 
@@ -127,14 +93,14 @@ public class RingOfWealth extends Ring {
 			if (dropsToEquip <= 0){
 				Item i;
 				do {
-					i = genEquipmentDrop(bonus - 1);
+					i = genEquipmentDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
 				dropsToEquip = Random.NormalIntRange(5, 10);
 			} else {
 				Item i;
 				do {
-					i = genConsumableDrop(bonus - 1);
+					i = genConsumableDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
 				dropsToEquip--;
@@ -285,7 +251,43 @@ public class RingOfWealth extends Ring {
 		return result;
 	}
 
-	public class Wealth extends RingBuff {
+	public static class Wealth extends Buff {
+
+        public final String TRIES_TO_DROP = "tries_to_drop";
+        public final String DROPS_TO_RARE = "drops_to_rare";
+        public final String LEVEL = "level";
+
+        public Wealth(int level){
+            level = level;
+        }
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(TRIES_TO_DROP, triesToDrop);
+            bundle.put(DROPS_TO_RARE, dropsToRare);
+            bundle.put(LEVEL, level);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            triesToDrop = bundle.getFloat(TRIES_TO_DROP);
+            dropsToRare = bundle.getInt(DROPS_TO_RARE);
+            level = bundle.getInt(LEVEL);
+        }
+
+        @Override
+        public boolean act() {
+
+            spend( TICK );
+
+            return true;
+        }
+
+        public float triesToDrop = Float.MIN_VALUE;
+        public int dropsToRare = Integer.MIN_VALUE;
+        public int level = 0;
 		
 		private void triesToDrop( float val ){
 			triesToDrop = val;

@@ -58,7 +58,6 @@ public class Ring extends KindofMisc {
 		RingOfMight.class,
 		RingOfSharpshooting.class,
 		RingOfTenacity.class,
-		RingOfWealth.class,
 	};
 
 	private static final HashMap<String, Integer> gems = new HashMap<String, Integer>() {
@@ -68,7 +67,6 @@ public class Ring extends KindofMisc {
 			put("topaz",ItemSpriteSheet.RING_TOPAZ);
 			put("emerald",ItemSpriteSheet.RING_EMERALD);
 			put("onyx",ItemSpriteSheet.RING_ONYX);
-			put("opal",ItemSpriteSheet.RING_OPAL);
 			put("tourmaline",ItemSpriteSheet.RING_TOURMALINE);
 			put("sapphire",ItemSpriteSheet.RING_SAPPHIRE);
 			put("amethyst",ItemSpriteSheet.RING_AMETHYST);
@@ -338,14 +336,14 @@ public class Ring extends KindofMisc {
 	}
 
 	public class RingBuff extends Buff {
-		
-		@Override
-		public boolean act() {
-			
-			spend( TICK );
-			
-			return true;
-		}
+
+        @Override
+        public boolean act() {
+
+            spend( TICK );
+
+            return true;
+        }
 
 		public int level(){
 			return Ring.this.soloBonus();
