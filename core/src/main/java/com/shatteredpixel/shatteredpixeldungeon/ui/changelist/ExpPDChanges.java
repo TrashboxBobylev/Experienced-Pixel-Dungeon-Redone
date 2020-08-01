@@ -69,7 +69,7 @@ public class ExpPDChanges {
 
         changes.addButton( new ChangeButton(new Image(Assets.Interfaces.BUFFS_LARGE, 80, 32, 16, 16), "Experience changes",
                 "All limits are removed, you can farm EXP forever!" ));
-        changes.addButton( new ChangeButton(new ItemSprite(new PsycheChest()), "Grind Switcher",
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.PSYCHE_CHEST, null), "Grind Switcher",
                 "Added new item into starting inventory - Fate Lock. It allows to toggle 'grinding' mode, where you get SoU from experience, and mobs drop random items.\n\n" +
                         "Also it allows to reset the level for new loot with exchange of 50% max HP."));
         changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.POTION_GOLDEN, null), new PotionOfExperience().trueName(),
