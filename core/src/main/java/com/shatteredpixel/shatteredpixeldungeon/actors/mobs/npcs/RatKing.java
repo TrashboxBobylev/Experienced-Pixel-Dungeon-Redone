@@ -24,17 +24,22 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -71,6 +76,7 @@ public class RatKing extends NPC {
 	
 	@Override
 	public void add( Buff buff ) {
+	    if (buff instanceof Barter || buff instanceof Viscosity.DeferedDamage) super.add(buff);
 	}
 	
 	@Override
@@ -106,20 +112,21 @@ public class RatKing extends NPC {
 			}
 		}
         Heap heap = Dungeon.level.heaps.get(pos );
+        Barter barter = Buff.affect(this, Barter.class);
 		if (heap != null){
 		    Item item = heap.pickUp();
-		    Barter barter = Buff.affect(this, Barter.class);
 		    barter.stick(item);
+            CellEmitter.get( pos ).burst( Speck.factory( Speck.WOOL ), 6 );
+            Sample.INSTANCE.play( Assets.Sounds.PUFF );
         }
-
-		Barter barter = Buff.affect(this, Barter.class);
-		if (!barter.items.isEmpty()){
-		    if (buff(Viscosity.DeferedDamage.class) == null){
-                Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
-            } else if (buff(Viscosity.DeferedDamage.class).damage < 2){
+		if (barter.items.size() > 0){
 		        barter.items.remove(barter.items.size() - 1);
-                Generator.random().cast(this, Dungeon.hero.pos);
-            }
+            Item item;
+            do {
+		            item = Generator.random();
+                } while (item instanceof Gold);
+                item.cast(this, Dungeon.hero.pos);
+                spend(2f);
         }
 		return super.act();
 	}
@@ -151,7 +158,7 @@ public class RatKing extends NPC {
 				: super.description();
 	}
 
-    public class Barter extends Buff {
+    public static class Barter extends Buff {
 
         private ArrayList<Item> items = new ArrayList<>();
 
@@ -185,5 +192,7 @@ public class RatKing extends NPC {
             items = new ArrayList<>((Collection<Item>) ((Collection<?>) bundle.getCollection(ITEMS)));
             super.restoreFromBundle( bundle );
         }
+
+
     }
 }
