@@ -22,23 +22,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
+package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
 
-public class PotionOfHolyFuror extends ExoticPotion {
+public class Overload extends FlavourBuff {
+	
+	public static final float DURATION	= 200f;
 	
 	{
-		icon = ItemSpriteSheet.Icons.POTION_HOLYFUROR;
+		type = buffType.POSITIVE;
+		announced = true;
 	}
-	
+
 	@Override
-	public void apply( Hero hero ) {
-		setKnown();
-		Buff.prolong(hero, Overload.class, 200);
+	public int icon() {
+		return BuffIndicator.BLESS;
 	}
-	
+
+	@Override
+	public float iconFadePercent() {
+		return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+	}
+
+    @Override
+    public void tintIcon(Image icon) {
+        icon.hardlight(1f, 1f, 0f);
+    }
+
+	@Override
+	public String toString() {
+		return Messages.get(this, "name");
+	}
+
+	@Override
+	public String desc() {
+		return Messages.get(this, "desc", dispTurns());
+	}
 }

@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -622,6 +623,18 @@ public abstract class Mob extends Char {
 					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", EXP));
 				}
 				Dungeon.hero.earnExp(EXP, getClass());
+
+                if (Dungeon.hero.buff(Overload.class) != null) {
+                    Mob mob = Dungeon.level.createMob();
+                    mob.state = mob.WANDERING;
+                    mob.pos = Dungeon.level.randomRespawnCell(mob);
+                    if (Dungeon.hero.isAlive() && mob.pos != -1 && Dungeon.level.distance(Dungeon.hero.pos, mob.pos) >= 4) {
+                        GameScene.add(mob);
+                        if (Statistics.amuletObtained) {
+                            mob.beckon(Dungeon.hero.pos);
+                        }
+                    }
+                }
 			}
 		}
 	}
