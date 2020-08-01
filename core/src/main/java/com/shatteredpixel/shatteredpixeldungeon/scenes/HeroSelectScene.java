@@ -190,12 +190,7 @@ public class HeroSelectScene extends PixelScene {
 		challengeButton.setRect(heroBtnleft + 16, Camera.main.height-HeroBtn.HEIGHT-16, 21, 21);
 		challengeButton.visible = false;
 
-		if (DeviceCompat.isDebug() || Badges.isUnlocked(Badges.Badge.VICTORY)){
 			add(challengeButton);
-		} else {
-			Dungeon.challenges = 0;
-			SPDSettings.challenges(0);
-		}
 
 		btnExit = new ExitButton();
 		btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
