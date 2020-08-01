@@ -568,8 +568,9 @@ public class Item implements Bundlable {
         throwSound();
 
         Char enemy = Actor.findChar( cell );
-
+        Item itLink = this;
         if (enemy != null) {
+
             ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
                     reset(user.sprite,
                             enemy.sprite,
@@ -577,7 +578,7 @@ public class Item implements Bundlable {
                             new Callback() {
                                 @Override
                                 public void call() {
-                                    onThrow(cell);
+                                    Dungeon.level.drop(itLink, cell).sprite.drop(cell);
                                     user.next();
                                 }
                             });
@@ -589,7 +590,7 @@ public class Item implements Bundlable {
                             new Callback() {
                                 @Override
                                 public void call() {
-                                    onThrow(cell);
+                                    Dungeon.level.drop(itLink, cell).sprite.drop(cell);
                                     user.next();
                                 }
                             });
