@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -184,11 +185,10 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( new Torch() );
 			break;
 		}
-		w.enchant(null);
 		w.cursed = false;
-		w.level(0);
 		w.identify();
 		itemsToSpawn.add(w);
+		itemsToSpawn.add(new PotionOfExperience());
 		
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
@@ -201,6 +201,8 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( new PotionOfHealing() );
 		itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
 		itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
+        itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.STONE ) );
+        itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.STONE ) );
 
 		itemsToSpawn.add( new ScrollOfIdentify() );
 		itemsToSpawn.add( new ScrollOfRemoveCurse() );
@@ -211,6 +213,8 @@ public class ShopRoom extends SpecialRoom {
 					Generator.randomUsingDefaults( Generator.Category.POTION ) :
 					Generator.randomUsingDefaults( Generator.Category.SCROLL ) );
 
+        itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.SEED ) );
+        itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.SEED ) );
 
 		itemsToSpawn.add( new SmallRation() );
 		itemsToSpawn.add( new SmallRation() );
@@ -256,21 +260,27 @@ public class ShopRoom extends SpecialRoom {
 		Item rare;
 		switch (Random.Int(10)){
 			case 0:
+            case 1:
+            case 2:
 				rare = Generator.random( Generator.Category.WAND );
 				rare.level( 0 );
 				break;
-			case 1:
+			case 3:
+            case 4:
+            case 5:
 				rare = Generator.random(Generator.Category.RING);
 				rare.level( 0 );
 				break;
-			case 2:
+			case 6:
+            case 7:
+            case 8:
 				rare = Generator.random( Generator.Category.ARTIFACT );
 				break;
 			default:
 				rare = new Stylus();
 		}
 		rare.cursed = false;
-		rare.cursedKnown = true;
+		rare.identify();
 		itemsToSpawn.add( rare );
 
 		//hard limit is 63 items + 1 shopkeeper, as shops can't be bigger than 8x8=64 internally
