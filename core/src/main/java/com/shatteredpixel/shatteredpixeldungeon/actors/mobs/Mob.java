@@ -617,7 +617,7 @@ public abstract class Mob extends Char {
 				Statistics.enemiesSlain++;
 				Badges.validateMonstersSlain();
 				Statistics.qualifiedForNoKilling = false;
-
+                if (Dungeon.hero.buff(Bless.class) != null) EXP *= 2;
                 if (EXP > 0) {
 					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", EXP));
 				}

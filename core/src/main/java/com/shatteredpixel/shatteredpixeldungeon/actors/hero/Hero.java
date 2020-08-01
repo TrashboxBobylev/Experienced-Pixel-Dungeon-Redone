@@ -1354,7 +1354,7 @@ public class Hero extends Char {
 	
 	public void earnExp( int exp, Class source ) {
 
-        if (buff(Bless.class) != null) exp *= 2;
+
 
 		this.exp += exp;
 		this.totalExp += exp;
