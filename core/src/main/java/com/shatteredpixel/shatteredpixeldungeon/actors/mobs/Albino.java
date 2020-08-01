@@ -53,6 +53,11 @@ public class Albino extends Rat {
                 defenseSkill = 126;
                 EXP = 131;
                 break;
+            case 3:
+                HP = HT = 20000;
+                defenseSkill = 340;
+                EXP = 910;
+                break;
         }
 	}
 	

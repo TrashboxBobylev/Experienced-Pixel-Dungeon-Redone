@@ -97,6 +97,11 @@ public class NewDM300 extends Mob {
                 defenseSkill = 222;
                 EXP = 7000;
                 break;
+            case 3:
+                HP = HT = 900000;
+                defenseSkill = 624;
+                EXP = 110000;
+                break;
         }
 	}
 
@@ -105,7 +110,7 @@ public class NewDM300 extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(67, 86);
             case 2: return Random.NormalIntRange(340, 445);
-
+            case 3: return Random.NormalIntRange(1500, 1943);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -115,6 +120,7 @@ public class NewDM300 extends Mob {
         switch (Dungeon.cycle){
             case 1: return 89;
             case 2: return 375;
+            case 3: return 835;
         }
 		return 20;
 	}
@@ -124,6 +130,7 @@ public class NewDM300 extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(38, 53);
             case 2: return Random.NormalIntRange(120, 275);
+            case 3: return Random.NormalIntRange(562, 1310);
         }
 		return Random.NormalIntRange(0, 10);
 	}

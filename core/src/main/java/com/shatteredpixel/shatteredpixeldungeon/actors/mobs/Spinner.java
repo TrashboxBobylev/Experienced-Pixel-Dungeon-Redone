@@ -65,6 +65,11 @@ public class Spinner extends Mob {
                 defenseSkill = 231;
                 EXP = 437;
                 break;
+            case 3:
+                HP = HT = 130000;
+                defenseSkill = 550;
+                EXP = 4200;
+                break;
         }
 	}
 
@@ -73,7 +78,7 @@ public class Spinner extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(58, 73);
             case 2: return Random.NormalIntRange(260, 371);
-
+            case 3: return Random.NormalIntRange(1200, 1468);
         }
 		return Random.NormalIntRange(10, 25);
 	}
@@ -83,6 +88,7 @@ public class Spinner extends Mob {
         switch (Dungeon.cycle){
             case 1: return 90;
             case 2: return 321;
+            case 3: return 760;
         }
 		return 22;
 	}
@@ -92,6 +98,7 @@ public class Spinner extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(20, 39);
             case 2: return Random.NormalIntRange(80, 219);
+            case 3: return Random.NormalIntRange(480, 840);
         }
 		return Random.NormalIntRange(0, 6);
 	}

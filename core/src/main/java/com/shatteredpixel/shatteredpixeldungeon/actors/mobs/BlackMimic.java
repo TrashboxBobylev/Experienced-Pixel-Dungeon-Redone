@@ -92,6 +92,11 @@ public class BlackMimic extends Mob {
                 defenseSkill = 360;
                 EXP = 500000;
                 break;
+            case 3:
+                HP = HT = 30000000;
+                defenseSkill = 1300;
+                EXP = 25000000;
+                break;
         }
 	}
 
@@ -100,6 +105,7 @@ public class BlackMimic extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(100, 156);
             case 2: return Random.NormalIntRange(524, 731);
+            case 3: return Random.NormalIntRange(3400, 6124);
         }
 		return Random.NormalIntRange( 29, 49 );
 	}
@@ -109,6 +115,7 @@ public class BlackMimic extends Mob {
         switch (Dungeon.cycle){
             case 1: return 160;
             case 2: return 564;
+            case 3: return 1500;
         }
 		return 38;
 	}
@@ -118,6 +125,7 @@ public class BlackMimic extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(60, 100);
             case 2: return Random.NormalIntRange(300, 520);
+            case 3: return Random.NormalIntRange(2000, 3600);
         }
 		return Random.NormalIntRange(0, 20);
 	}

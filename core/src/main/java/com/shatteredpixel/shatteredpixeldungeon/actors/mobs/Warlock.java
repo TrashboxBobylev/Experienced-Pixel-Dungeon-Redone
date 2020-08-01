@@ -70,6 +70,11 @@ public class Warlock extends Mob implements Callback {
                 defenseSkill = 291;
                 EXP = 625;
                 break;
+            case 3:
+                HP = HT = 325000;
+                defenseSkill = 735;
+                EXP = 7100;
+                break;
         }
 	}
 	
@@ -78,6 +83,7 @@ public class Warlock extends Mob implements Callback {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(60, 74);
             case 2: return Random.NormalIntRange(240, 389);
+            case 3: return Random.NormalIntRange(1800, 2300);
 
         }
 		return Random.NormalIntRange( 12, 18 );
@@ -88,6 +94,7 @@ public class Warlock extends Mob implements Callback {
         switch (Dungeon.cycle){
             case 1: return 115;
             case 2: return 392;
+            case 3: return 960;
         }
 		return 25;
 	}
@@ -97,6 +104,7 @@ public class Warlock extends Mob implements Callback {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(30, 59);
             case 2: return Random.NormalIntRange(112, 276);
+            case 3: return Random.NormalIntRange(900, 1600);
         }
 		return Random.NormalIntRange(0, 8);
 	}
@@ -141,6 +149,7 @@ public class Warlock extends Mob implements Callback {
             switch (Dungeon.cycle) {
                 case 1: dmg = Random.NormalIntRange(64, 83); break;
                 case 2: dmg = Random.NormalIntRange(276, 400); break;
+                case 3: dmg = Random.NormalIntRange(1400, 1621); break;
 
             }
 			enemy.damage( dmg, new DarkBolt() );

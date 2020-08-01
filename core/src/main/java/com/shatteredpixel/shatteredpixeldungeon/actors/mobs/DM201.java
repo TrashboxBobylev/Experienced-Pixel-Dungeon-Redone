@@ -56,6 +56,11 @@ public class DM201 extends DM200 {
                 defenseSkill = 190;
                 EXP = 529;
                 break;
+            case 3:
+                HP = HT = 260000;
+                defenseSkill = 590;
+                EXP = 5400;
+                break;
         }
 	}
 
@@ -64,6 +69,7 @@ public class DM201 extends DM200 {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(69, 91);
             case 2: return Random.NormalIntRange(321, 412);
+            case 3: return Random.NormalIntRange(1400, 1794);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}

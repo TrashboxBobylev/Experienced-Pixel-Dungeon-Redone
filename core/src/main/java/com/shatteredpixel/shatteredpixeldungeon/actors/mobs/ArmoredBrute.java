@@ -50,6 +50,7 @@ public class ArmoredBrute extends Brute {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(30, 58);
             case 2: return Random.NormalIntRange(160, 280);
+            case 3: return Random.NormalIntRange(570, 1000);
         }
 		return Random.NormalIntRange(6, 10);
 	}

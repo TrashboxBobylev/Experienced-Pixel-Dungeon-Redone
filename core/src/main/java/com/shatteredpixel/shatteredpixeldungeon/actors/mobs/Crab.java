@@ -56,6 +56,11 @@ public class Crab extends Mob {
                 defenseSkill = 140;
                 EXP = 175;
                 break;
+            case 3:
+                HP = HT = 35000;
+                defenseSkill = 390;
+                EXP = 1280;
+                break;
         }
 	}
 	
@@ -64,6 +69,7 @@ public class Crab extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(30, 45);
             case 2: return Random.NormalIntRange(150, 184);
+            case 3: return Random.NormalIntRange(540, 721);
         }
 		return Random.NormalIntRange( 1, 7 );
 	}
@@ -73,6 +79,7 @@ public class Crab extends Mob {
         switch (Dungeon.cycle){
             case 1: return 46;
             case 2: return 210;
+            case 3: return 560;
         }
 		return 12;
 	}
@@ -82,6 +89,7 @@ public class Crab extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
             case 2: return Random.NormalIntRange(76, 150);
+            case 3: return Random.NormalIntRange(300, 550);
         }
 		return Random.NormalIntRange(0, 4);
 	}

@@ -66,7 +66,11 @@ public class Skeleton extends Mob {
                 defenseSkill = 161;
                 EXP = 221;
                 break;
-
+            case 3:
+                HP = HT = 50000;
+                defenseSkill = 435;
+                EXP = 1700;
+                break;
         }
 	}
 	
@@ -75,6 +79,7 @@ public class Skeleton extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(34, 50);
             case 2: return Random.NormalIntRange(180, 231);
+            case 3: return Random.NormalIntRange(600, 850);
         }
 		return Random.NormalIntRange( 2, 10 );
 	}
@@ -128,6 +133,7 @@ public class Skeleton extends Mob {
         switch (Dungeon.cycle){
             case 1: return 50;
             case 2: return 224;
+            case 3: return 600;
         }
 		return 12;
 	}
@@ -137,6 +143,7 @@ public class Skeleton extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(10, 24);
             case 2: return Random.NormalIntRange(95, 170);
+            case 3: return Random.NormalIntRange(360, 625);
         }
 		return Random.NormalIntRange(0, 5);
 	}

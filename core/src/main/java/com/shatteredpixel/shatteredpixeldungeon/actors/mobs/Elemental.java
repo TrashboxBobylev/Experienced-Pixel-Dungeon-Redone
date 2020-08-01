@@ -73,6 +73,11 @@ public abstract class Elemental extends Mob {
                 defenseSkill = 278;
                 EXP = 571;
                 break;
+            case 3:
+                HP = HT = 231900;
+                defenseSkill = 624;
+                EXP = 5890;
+                break;
         }
 	}
 	
@@ -81,6 +86,7 @@ public abstract class Elemental extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(64, 83);
             case 2: return Random.NormalIntRange(291, 434);
+            case 3: return Random.NormalIntRange(1650, 2100);
         }
 		return Random.NormalIntRange( 16, 26 );
 	}
@@ -90,6 +96,7 @@ public abstract class Elemental extends Mob {
         switch (Dungeon.cycle){
             case 1: return 102;
             case 2: return 355;
+            case 3: return 930;
         }
 		return 25;
 	}
@@ -99,6 +106,7 @@ public abstract class Elemental extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(24, 50);
             case 2: return Random.NormalIntRange(121, 243);
+            case 3: return Random.NormalIntRange(700, 1321);
         }
 		return Random.NormalIntRange(0, 5);
 	}

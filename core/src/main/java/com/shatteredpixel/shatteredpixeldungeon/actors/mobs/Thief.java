@@ -74,6 +74,11 @@ public class Thief extends Mob {
                 defenseSkill = 179;
                 EXP = 237;
                 break;
+            case 3:
+                HP = HT = 52000;
+                defenseSkill = 450;
+                EXP = 2000;
+                break;
         }
 	}
 
@@ -102,6 +107,7 @@ public class Thief extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(32, 47);
             case 2: return Random.NormalIntRange(160, 208);
+            case 3: return Random.NormalIntRange(550, 901);
         }
 		return Random.NormalIntRange( 1, 10 );
 	}
@@ -136,6 +142,7 @@ public class Thief extends Mob {
         switch (Dungeon.cycle){
             case 1: return 50;
             case 2: return 238;
+            case 3: return 660;
         }
 		return 12;
 	}
@@ -145,6 +152,7 @@ public class Thief extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
             case 2: return Random.NormalIntRange(60, 137);
+            case 3: return Random.NormalIntRange(380, 625);
         }
 		return Random.NormalIntRange(0, 3);
 	}

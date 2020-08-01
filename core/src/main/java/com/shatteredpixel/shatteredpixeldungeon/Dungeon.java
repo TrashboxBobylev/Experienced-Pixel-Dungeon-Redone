@@ -217,8 +217,10 @@ public class Dungeon {
 	public static void goForNewCycle(){
         Statistics.deepestFloor = 0;
         depth = 0;
-        Ghost.Quest.reset();
-        Wandmaker.Quest.reset();
+        if (Dungeon.cycle < 2) {
+            Ghost.Quest.reset();
+            Wandmaker.Quest.reset();
+        }
         Blacksmith.Quest.reset();
         Imp.Quest.reset();
         droppedItems = new SparseArray<>();

@@ -51,6 +51,7 @@ public class Senior extends Monk {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(71, 83);
             case 2: return Random.NormalIntRange(313, 431);
+            case 3: return Random.NormalIntRange(1800, 2340);
         }
 		return Random.NormalIntRange( 16, 25 );
 	}

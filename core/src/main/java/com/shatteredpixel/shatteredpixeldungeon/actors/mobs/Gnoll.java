@@ -55,6 +55,11 @@ public class Gnoll extends Mob {
                 defenseSkill = 126;
                 EXP = 140;
                 break;
+            case 3:
+                HP = HT = 22000;
+                defenseSkill = 360;
+                EXP = 934;
+                break;
         }
 	}
 	
@@ -63,7 +68,7 @@ public class Gnoll extends Mob {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(28, 40);
             case 2: return Random.NormalIntRange(130, 167);
-
+            case 3: return Random.NormalIntRange(512, 644);
         }
 		return Random.NormalIntRange( 1, 6 );
 	}
@@ -73,6 +78,7 @@ public class Gnoll extends Mob {
         switch (Dungeon.cycle){
             case 1: return 42;
             case 2: return 190;
+            case 3: return 540;
         }
 		return 10;
 	}
@@ -82,6 +88,7 @@ public class Gnoll extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(6, 17);
             case 2: return Random.NormalIntRange(69, 130);
+            case 3: return Random.NormalIntRange(275, 500);
         }
 		return Random.NormalIntRange(0, 2);
 	}
