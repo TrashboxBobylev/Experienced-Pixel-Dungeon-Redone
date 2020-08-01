@@ -25,14 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.BlackPsycheChest;
-import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -46,26 +41,17 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-		
-		ChangeInfo changes = new ChangeInfo( "v0.1.X", true, "");
-		changes.hardlight( Window.TITLE_COLOR);
-		changeInfos.add(changes);
 
-		add_v0_1_0_Changes(changeInfos);
-	}
-	
-	public static void add_v0_1_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-		
-		ChangeInfo changes = new ChangeInfo("ExpPD-2.0", false, "");
-		changes.hardlight(Window.TITLE_COLOR);
-		changeInfos.add(changes);
-		
-		changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
-				"_-_ Released August 2th, 2020\n" +
-				"_-_ 286 days after ExperiencedPixel Dungeon v1.3\n" +
-				"_-_ 34 days after ShPD 0.8.1 source release\n" +
-				"\n" +
-				"Dev commentary will be added here in the future."));
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.0", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 2th, 2020\n" +
+                "_-_ 286 days after ExperiencedPixel Dungeon v1.3\n" +
+                "_-_ 34 days after ShPD 0.8.1 source release\n" +
+                "\n" +
+                "Dev commentary will be added here in the future."));
 
         changes.addButton( new ChangeButton(new Image(Assets.Interfaces.BUFFS_LARGE, 80, 32, 16, 16), "Experience changes",
                 "All limits are removed, you can farm EXP forever!" ));
@@ -100,6 +86,6 @@ public class ExpPDChanges {
                 "_-_ Increased hero's backpack size.\n\n" +
                         "_-_ Removed Patreon and languages buttons.\n\n" +
                         "_-_ Removed hero and challenge locks."));
-	}
-	
+    }
+
 }

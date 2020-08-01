@@ -44,7 +44,7 @@ import java.util.ArrayList;
 
 public class ChangesScene extends PixelScene {
 	
-	public static int changesSelected = 0;
+	public static int changesSelected = 4;
 	
 	@Override
 	public void create() {
@@ -80,7 +80,7 @@ public class ChangesScene extends PixelScene {
 		add( panel );
 		
 		final ArrayList<ChangeInfo> changeInfos = new ArrayList<>();
-		
+
 		switch (changesSelected){
 			case 0: default:
 				v0_8_X_Changes.addAllChanges(changeInfos);

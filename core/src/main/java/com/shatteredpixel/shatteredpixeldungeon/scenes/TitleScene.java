@@ -161,7 +161,7 @@ public class TitleScene extends PixelScene {
 		TitleButton btnChanges = new TitleButton(Messages.get(this, "changes")){
 			@Override
 			protected void onClick() {
-				ChangesScene.changesSelected = 0;
+				ChangesScene.changesSelected = 4;
 				ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 			}
 		};
