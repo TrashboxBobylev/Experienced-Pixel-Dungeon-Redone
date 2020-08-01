@@ -202,7 +202,7 @@ public class WndTradeItem extends WndInfoItem {
 	}
 	
 	private int price( Item item ) {
-		int price = item.price() * 5 * (Dungeon.depth / 5 + 1);
+		int price = item.price() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
 		return price;
 	}
 	

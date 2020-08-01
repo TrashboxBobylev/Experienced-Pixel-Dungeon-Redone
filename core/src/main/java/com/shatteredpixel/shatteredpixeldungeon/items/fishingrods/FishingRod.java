@@ -180,4 +180,9 @@ public abstract class FishingRod extends Item {
         desc += "\n\n" + Messages.get(FishingRod.class, "basics");
         return desc;
     }
+
+    @Override
+    public int price() {
+        return 60 * level();
+    }
 }
