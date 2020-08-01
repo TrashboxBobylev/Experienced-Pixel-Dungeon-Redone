@@ -27,8 +27,18 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
+import com.watabou.utils.Bundle;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class RatKing extends NPC {
 
@@ -36,6 +46,8 @@ public class RatKing extends NPC {
 		spriteClass = RatKingSprite.class;
 		
 		state = SLEEPING;
+
+		HP = HT = 2000;
 	}
 	
 	@Override
@@ -93,6 +105,22 @@ public class RatKing extends NPC {
 				target = Dungeon.level.entrance;
 			}
 		}
+        Heap heap = Dungeon.level.heaps.get(pos );
+		if (heap != null){
+		    Item item = heap.pickUp();
+		    Barter barter = Buff.affect(this, Barter.class);
+		    barter.stick(item);
+        }
+
+		Barter barter = Buff.affect(this, Barter.class);
+		if (!barter.items.isEmpty()){
+		    if (buff(Viscosity.DeferedDamage.class) == null){
+                Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
+            } else if (buff(Viscosity.DeferedDamage.class).damage < 2){
+		        barter.items.remove(barter.items.size() - 1);
+                Generator.random().cast(this, Dungeon.hero.pos);
+            }
+        }
 		return super.act();
 	}
 
@@ -122,4 +150,40 @@ public class RatKing extends NPC {
 				Messages.get(this, "desc_festive")
 				: super.description();
 	}
+
+    public class Barter extends Buff {
+
+        private ArrayList<Item> items = new ArrayList<>();
+
+        public void stick(Item heh){
+            for (Item item : items){
+                if (item.isSimilar(heh)){
+                    item.merge(heh);
+                    return;
+                }
+            }
+            items.add(heh);
+        }
+
+        @Override
+        public void detach() {
+            for (Item item : items)
+                Dungeon.level.drop( item, target.pos).sprite.drop();
+            super.detach();
+        }
+
+        private static final String ITEMS = "items";
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            bundle.put( ITEMS , items );
+            super.storeInBundle(bundle);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            items = new ArrayList<>((Collection<Item>) ((Collection<?>) bundle.getCollection(ITEMS)));
+            super.restoreFromBundle( bundle );
+        }
+    }
 }

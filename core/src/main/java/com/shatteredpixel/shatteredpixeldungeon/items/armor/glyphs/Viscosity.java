@@ -87,8 +87,8 @@ public class Viscosity extends Glyph {
 		{
 			type = buffType.NEGATIVE;
 		}
-		
-		protected int damage = 0;
+
+        public int damage = 0;
 		
 		private static final String DAMAGE	= "damage";
 		

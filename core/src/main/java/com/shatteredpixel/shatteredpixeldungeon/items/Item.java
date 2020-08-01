@@ -507,7 +507,7 @@ public class Item implements Bundlable {
 		}
 	}
 
-	public int throwPos( Hero user, int dst){
+	public int throwPos( Char user, int dst){
 		return new Ballistica( user.pos, dst, Ballistica.PROJECTILE ).collisionPos;
 	}
 
@@ -556,6 +556,41 @@ public class Item implements Bundlable {
 					});
 		}
 	}
+
+    public void cast( final Char user, final int dst ) {
+
+        final int cell = throwPos( user, dst );
+
+        throwSound();
+
+        Char enemy = Actor.findChar( cell );
+
+        if (enemy != null) {
+            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                    reset(user.sprite,
+                            enemy.sprite,
+                            this,
+                            new Callback() {
+                                @Override
+                                public void call() {
+                                    onThrow(cell);
+                                    user.next();
+                                }
+                            });
+        } else {
+            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                    reset(user.sprite,
+                            cell,
+                            this,
+                            new Callback() {
+                                @Override
+                                public void call() {
+                                    onThrow(cell);
+                                    user.next();
+                                }
+                            });
+        }
+    }
 	
 	public float castDelay( Char user, int dst ){
 		return TIME_TO_THROW;
