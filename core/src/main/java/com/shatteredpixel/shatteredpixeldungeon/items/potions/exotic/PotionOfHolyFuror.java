@@ -24,9 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class PotionOfHolyFuror extends ExoticPotion {
@@ -38,7 +38,10 @@ public class PotionOfHolyFuror extends ExoticPotion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-		Buff.prolong(hero, Bless.class, Bless.DURATION*4f);
+		Buff.prolong(hero, Adrenaline.class, Adrenaline.DURATION*4f);
+        Buff.prolong(hero, Haste.class, Haste.DURATION*4f);
+        Buff.affect(hero, ElixirOfMight.HTBoost.class).reset();
+        hero.updateHT( true );
 	}
 	
 }

@@ -1353,7 +1353,9 @@ public class Hero extends Char {
 	}
 	
 	public void earnExp( int exp, Class source ) {
-		
+
+        if (buff(Bless.class) != null) exp *= 2;
+
 		this.exp += exp;
 		this.totalExp += exp;
 		float percent = exp/(float)maxExp();
@@ -1369,6 +1371,8 @@ public class Hero extends Char {
 		
 		Berserk berserk = buff(Berserk.class);
 		if (berserk != null) berserk.recover(percent);
+
+
 		
 		if (source != PotionOfExperience.class) {
 			for (Item i : belongings) {
