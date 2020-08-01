@@ -98,7 +98,8 @@ public class ExpPDChanges {
                 "Black Mimic holds the Amulet and will not give it back without tedious and dangerous fight! Can you beat the ultimate mob, which uses abilities of every Shattered boss?" ));
         changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
                 "_-_ Increased hero's backpack size.\n\n" +
-                        "_-_ Removed Patreon and languages buttons."));
+                        "_-_ Removed Patreon and languages buttons.\n\n" +
+                        "_-_ Removed hero and challenge locks."));
 	}
 	
 }
