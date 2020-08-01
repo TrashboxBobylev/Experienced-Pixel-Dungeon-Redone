@@ -511,6 +511,10 @@ public class Item implements Bundlable {
 		return new Ballistica( user.pos, dst, Ballistica.PROJECTILE ).collisionPos;
 	}
 
+    public int throwPos( Hero user, int dst){
+        return new Ballistica( user.pos, dst, Ballistica.PROJECTILE ).collisionPos;
+    }
+
 	public void throwSound(){
 		Sample.INSTANCE.play(Assets.Sounds.MISS, 0.6f, 0.6f, 1.5f);
 	}
