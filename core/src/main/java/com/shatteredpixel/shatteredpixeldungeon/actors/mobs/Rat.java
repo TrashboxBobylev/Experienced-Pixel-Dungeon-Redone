@@ -50,6 +50,11 @@ public class Rat extends Mob {
                 defenseSkill = 120;
                 EXP = 120;
                 break;
+            case 3:
+                HP = HT = 18900;
+                defenseSkill = 340;
+                EXP = 878;
+                break;
         }
 	}
 	
@@ -58,6 +63,7 @@ public class Rat extends Mob {
 	    switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(25, 31);
             case 2: return Random.NormalIntRange(110, 145);
+            case 3: return Random.NormalIntRange(475, 589);
         }
         return Random.NormalIntRange(1, 4);
 	}
@@ -67,6 +73,7 @@ public class Rat extends Mob {
 	    switch (Dungeon.cycle){
             case 1: return 38;
             case 2: return 175;
+            case 3: return 520;
         }
 		return 8;
 	}
@@ -76,6 +83,7 @@ public class Rat extends Mob {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(5, 15);
             case 2: return Random.NormalIntRange(60, 100);
+            case 3: return Random.NormalIntRange(250, 434);
         }
 		return Random.NormalIntRange(0, 1);
 	}
