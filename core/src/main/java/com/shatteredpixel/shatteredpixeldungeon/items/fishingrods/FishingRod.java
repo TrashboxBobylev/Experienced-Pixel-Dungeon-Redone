@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -55,6 +56,10 @@ import java.util.ArrayList;
 public abstract class FishingRod extends Item {
     private static final String AC_CAST = "CAST";
     private static final String AC_UNCAST = "UNCAST";
+
+    {
+        identify();
+    }
 
     @Override
     public ArrayList<String> actions(Hero hero) {
@@ -89,18 +94,17 @@ public abstract class FishingRod extends Item {
 
         if (action.equals(AC_CAST) && !hook){
             GameScene.selectCell(caster);
-        } else if (hook){
-            GLog.w(Messages.get(FishingRod.class, "hook_here"));
         }
         if (action.equals(AC_UNCAST) && hook){
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 if (Dungeon.level.heroFOV[mob.pos] && mob instanceof Hook) {
                     for (Item b : ((Hook) mob).items) b.cast(mob, hero.pos);
+                    mob.remove(mob.buff(RingOfWealth.Wealth.class));
                     mob.die(new Doom());
+                    hook = false;
+                    defaultAction = AC_CAST;
                 }
             }
-        } else {
-            GLog.w(Messages.get(FishingRod.class, "no_hook_here"));
         }
     }
 
@@ -135,13 +139,13 @@ public abstract class FishingRod extends Item {
                         hook.power = (int) fishingPower();
                         GameScene.add(hook);
                         ScrollOfTeleportation.appear(hook, target);
-
+                        defaultAction = AC_UNCAST;
                     }
                 });
 
 
 
-            } else {
+            } else if (target != null && !(Dungeon.level.heroFOV[target])){
                 GLog.w(Messages.get(FishingRod.class, "cant_see"));
             }
 
@@ -171,6 +175,8 @@ public abstract class FishingRod extends Item {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         hook = bundle.getBoolean("hook");
+        if (hook) defaultAction = AC_UNCAST;
+        else defaultAction = AC_CAST;
         fishingStr = bundle.getInt("amp");
     }
 

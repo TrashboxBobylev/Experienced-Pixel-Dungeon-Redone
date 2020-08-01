@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.watabou.noosa.Game;
@@ -76,7 +77,7 @@ public class HookSprite extends CharSprite{
 
         if (ch == null) return;
 
-        updateTier( ((WandOfWarding.Ward)ch).tier );
+        updateTier( ((Hook)ch).tier );
 
     }
 

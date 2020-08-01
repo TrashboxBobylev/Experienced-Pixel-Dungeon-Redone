@@ -42,7 +42,7 @@ import java.util.Collection;
 
 public class Hook extends NPC {
     public int tries;
-    public ArrayList<Item> items;
+    public ArrayList<Item> items = new ArrayList<>();
     public int tier = 1;
     public int power = 0;
 
@@ -86,7 +86,6 @@ public class Hook extends NPC {
     @Override
     protected void onAdd() {
         add(new Wealth(power));
-        ((HookSprite)sprite).updateTier(tier);
         super.onAdd();
     }
 
