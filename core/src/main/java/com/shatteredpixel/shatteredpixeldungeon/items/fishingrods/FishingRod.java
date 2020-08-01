@@ -72,7 +72,7 @@ public abstract class FishingRod extends Item {
     }
 
     public float amplifier = 1f;
-    public int fishingStr = 3;
+    public int fishingStr = 1;
     public int tier;
     public boolean hook;
 
