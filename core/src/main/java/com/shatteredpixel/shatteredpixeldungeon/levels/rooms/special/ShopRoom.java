@@ -165,10 +165,10 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( new LeatherArmor().identify() );
 
 			switch (Dungeon.cycle){
-                case 0: itemsToSpawn.add(new BasicFishingRod());
-                case 1: itemsToSpawn.add(new GoldenFishingRod());
-                case 2: itemsToSpawn.add(new NeutroniumFishingRod());
-                case 3: itemsToSpawn.add(new AvaritiaFishingRod());
+                case 0: itemsToSpawn.add(new BasicFishingRod()); break;
+                case 1: itemsToSpawn.add(new GoldenFishingRod()); break;
+                case 2: itemsToSpawn.add(new NeutroniumFishingRod()); break;
+                case 3: itemsToSpawn.add(new AvaritiaFishingRod()); break;
             }
 			break;
 			

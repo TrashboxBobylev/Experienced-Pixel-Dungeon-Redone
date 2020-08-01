@@ -59,6 +59,8 @@ public abstract class FishingRod extends Item {
 
     {
         identify();
+        defaultAction = AC_CAST;
+        unique = false;
     }
 
     @Override
@@ -69,8 +71,8 @@ public abstract class FishingRod extends Item {
         return actions;
     }
 
-    public float amplifier = 0.75f;
-    public int fishingStr = 5;
+    public float amplifier = 1f;
+    public int fishingStr = 3;
     public int tier;
     public boolean hook;
 
@@ -181,6 +183,16 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
+    public int visiblyUpgraded() {
+        return level();
+    }
+
+    @Override
+    public int buffedVisiblyUpgraded() {
+        return level();
+    }
+
+    @Override
     public String desc() {
         String desc = super.desc();
         desc += "\n\n" + Messages.get(FishingRod.class, "basics");
@@ -189,6 +201,6 @@ public abstract class FishingRod extends Item {
 
     @Override
     public int price() {
-        return 60 * level();
+        return 60 * Dungeon.escalatingDepth() / 5;
     }
 }

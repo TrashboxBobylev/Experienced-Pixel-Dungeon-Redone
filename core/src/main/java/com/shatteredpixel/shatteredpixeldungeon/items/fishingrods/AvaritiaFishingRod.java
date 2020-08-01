@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class AvaritiaFishingRod extends FishingRod{
     {
         image = ItemSpriteSheet.AVARITIA_HOOK;
-        amplifier = 50;
+        amplifier = 150;
         tier = 4;
         fishingStr = 60;
     }

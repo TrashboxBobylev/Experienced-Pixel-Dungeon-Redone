@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class GoldenFishingRod extends FishingRod{
     {
         image = ItemSpriteSheet.GOLDEN_HOOK;
-        amplifier = 4;
+        amplifier = 6;
         tier = 2;
         fishingStr = 10;
     }

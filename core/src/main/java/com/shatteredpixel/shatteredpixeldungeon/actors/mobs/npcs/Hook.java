@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
@@ -93,6 +94,7 @@ public class Hook extends NPC {
     protected boolean act() {
         if (!items.isEmpty()) {
             items.clear();
+            new Flare(6, 20).color(0xFF0000, true).show(sprite, 3f);
             Sample.INSTANCE.play( Assets.Sounds.DEGRADE );
         }
         ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(this, tries);
@@ -101,7 +103,7 @@ public class Hook extends NPC {
             RingOfWealth.showFlareForBonusDrop(sprite);
             Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
             sprite.showStatus( CharSprite.POSITIVE, "!!!");
-            spend(2f);
+            spend(1f);
         }
         return super.act();
     }

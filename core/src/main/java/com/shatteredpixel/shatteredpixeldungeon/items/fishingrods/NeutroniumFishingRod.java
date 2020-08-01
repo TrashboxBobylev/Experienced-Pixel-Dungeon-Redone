@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class NeutroniumFishingRod extends FishingRod{
     {
         image = ItemSpriteSheet.NEUTRONIUM_HOOK;
-        amplifier = 10;
+        amplifier = 29;
         tier = 3;
         fishingStr = 18;
     }
