@@ -34,15 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.ChangeInfo;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_1_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_2_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_3_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_4_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_5_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_6_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_7_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_8_X_Changes;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.*;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.NinePatch;
 import com.watabou.noosa.audio.Music;
@@ -106,6 +98,10 @@ public class ChangesScene extends PixelScene {
 				v0_2_X_Changes.addAllChanges(changeInfos);
 				v0_1_X_Changes.addAllChanges(changeInfos);
 				break;
+            case 4:
+                ExpPDChanges.addAllChanges(changeInfos);
+                break;
+
 		}
 
 		ScrollPane list = new ScrollPane( new Component() ){
@@ -160,6 +156,20 @@ public class ChangesScene extends PixelScene {
 				panel.innerHeight() + 2);
 		list.scrollTo(0, 0);
 
+        RedButton btnEXP = new RedButton("ExpPD"){
+            @Override
+            protected void onClick() {
+                super.onClick();
+                if (changesSelected != 4) {
+                    changesSelected = 4;
+                    ShatteredPixelDungeon.seamlessResetScene();
+                }
+            }
+        };
+        if (changesSelected == 4) btnEXP.textColor(Window.TITLE_COLOR);
+        btnEXP.setRect(list.left()-4f, list.bottom()+5, 27, 14);
+        add(btnEXP);
+
 		RedButton btn0_8 = new RedButton("v0.8"){
 			@Override
 			protected void onClick() {
@@ -171,7 +181,7 @@ public class ChangesScene extends PixelScene {
 			}
 		};
 		if (changesSelected == 0) btn0_8.textColor(Window.TITLE_COLOR);
-		btn0_8.setRect(list.left()-4f, list.bottom()+5, 32, 14);
+		btn0_8.setRect(btnEXP.right() + 1, btnEXP.top(), 27, 14);
 		add(btn0_8);
 		
 		RedButton btn0_7 = new RedButton("v0.7"){
@@ -185,7 +195,7 @@ public class ChangesScene extends PixelScene {
 			}
 		};
 		if (changesSelected == 1) btn0_7.textColor(Window.TITLE_COLOR);
-		btn0_7.setRect(btn0_8.right() + 1, btn0_8.top(), 32, 14);
+		btn0_7.setRect(btn0_8.right() + 1, btn0_8.top(), 27, 14);
 		add(btn0_7);
 		
 		RedButton btn0_6 = new RedButton("v0.6"){
@@ -199,7 +209,7 @@ public class ChangesScene extends PixelScene {
 			}
 		};
 		if (changesSelected == 2) btn0_6.textColor(Window.TITLE_COLOR);
-		btn0_6.setRect(btn0_7.right() + 1, btn0_8.top(), 32, 14);
+		btn0_6.setRect(btn0_7.right() + 1, btn0_8.top(), 27, 14);
 		add(btn0_6);
 		
 		RedButton btnOld = new RedButton("v0.5-0.1"){
@@ -213,7 +223,7 @@ public class ChangesScene extends PixelScene {
 			}
 		};
 		if (changesSelected == 3) btnOld.textColor(Window.TITLE_COLOR);
-		btnOld.setRect(btn0_6.right() + 1, btn0_8.top(), 42, 14);
+		btnOld.setRect(btn0_6.right() + 1, btn0_8.top(), 33, 14);
 		add(btnOld);
 
 		Archs archs = new Archs();
