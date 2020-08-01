@@ -69,6 +69,11 @@ public class DemonSpawner extends Mob {
                 defenseSkill = 0;
                 EXP = 400;
                 break;
+            case 2:
+                HP = HT = 45000;
+                defenseSkill = 0;
+                EXP = 9000;
+                break;
         }
 	}
 
@@ -76,6 +81,7 @@ public class DemonSpawner extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(48, 73);
+            case 2: return Random.NormalIntRange(185, 365);
         }
 		return Random.NormalIntRange(0, 12);
 	}
@@ -135,7 +141,7 @@ public class DemonSpawner extends Mob {
 
 	@Override
 	public void damage(int dmg, Object src) {
-		if (dmg >= 20 + Dungeon.cycle * 300){
+		if (dmg >= 20 + Dungeon.cycle * 300 && Dungeon.cycle < 2){
 			//takes 20/21/22/23/24/25/26/27/28/29/30 dmg
 			// at   20/22/25/29/34/40/47/55/64/74/85 incoming dmg
 			dmg = 19 + Dungeon.cycle * 300 + (int)(Math.sqrt(8*(dmg - 19) + 1) - 1)/2;

@@ -63,6 +63,11 @@ public class Golem extends Mob {
                 defenseSkill = 67;
                 EXP = 78;
                 break;
+            case 2:
+                HP = HT = 17980;
+                defenseSkill = 240;
+                EXP = 687;
+                break;
         }
 	}
 
@@ -70,6 +75,7 @@ public class Golem extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(69, 96);
+            case 2: return Random.NormalIntRange(300, 519);
 
         }
 		return Random.NormalIntRange( 15, 35 );
@@ -79,6 +85,7 @@ public class Golem extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 124;
+            case 2: return 400;
         }
 		return 28;
 	}
@@ -87,6 +94,7 @@ public class Golem extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 68);
+            case 2: return Random.NormalIntRange(160, 333);
         }
 		return Random.NormalIntRange(0, 12);
 	}

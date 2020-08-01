@@ -69,6 +69,11 @@ public class Thief extends Mob {
                 defenseSkill = 39;
                 EXP = 24;
                 break;
+            case 2:
+                HP = HT = 2031;
+                defenseSkill = 179;
+                EXP = 237;
+                break;
         }
 	}
 
@@ -96,7 +101,7 @@ public class Thief extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(32, 47);
-
+            case 2: return Random.NormalIntRange(160, 208);
         }
 		return Random.NormalIntRange( 1, 10 );
 	}
@@ -130,6 +135,7 @@ public class Thief extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 50;
+            case 2: return 238;
         }
 		return 12;
 	}
@@ -138,6 +144,7 @@ public class Thief extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
+            case 2: return Random.NormalIntRange(60, 137);
         }
 		return Random.NormalIntRange(0, 3);
 	}

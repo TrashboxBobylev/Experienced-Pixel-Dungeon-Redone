@@ -61,6 +61,11 @@ public class Scorpio extends Mob {
                 defenseSkill = 96;
                 EXP = 100;
                 break;
+            case 2:
+                HP = HT = 16763;
+                defenseSkill = 324;
+                EXP = 831;
+                break;
         }
 	}
 	
@@ -68,7 +73,7 @@ public class Scorpio extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(100, 123);
-
+            case 2: return Random.NormalIntRange(450, 564);
         }
 		return Random.NormalIntRange( 26, 36 );
 	}
@@ -77,6 +82,7 @@ public class Scorpio extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 160;
+            case 2: return 500;
         }
 		return 36;
 	}
@@ -85,6 +91,7 @@ public class Scorpio extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(50, 89);
+            case 2: return Random.NormalIntRange(240, 400);
         }
 		return Random.NormalIntRange(0, 16);
 	}

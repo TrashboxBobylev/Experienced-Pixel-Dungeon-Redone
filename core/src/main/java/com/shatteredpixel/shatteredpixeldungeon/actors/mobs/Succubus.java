@@ -73,6 +73,11 @@ public class Succubus extends Mob {
                 defenseSkill = 90;
                 EXP = 85;
                 break;
+            case 2:
+                HP = HT = 14675;
+                defenseSkill = 300;
+                EXP = 738;
+                break;
         }
 	}
 	
@@ -80,7 +85,7 @@ public class Succubus extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(80, 101);
-
+            case 2: return Random.NormalIntRange(420, 533);
         }
 		return Random.NormalIntRange( 22, 30 );
 	}
@@ -159,6 +164,7 @@ public class Succubus extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 139;
+            case 2: return 480;
         }
 		return 40;
 	}
@@ -167,6 +173,7 @@ public class Succubus extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 63);
+            case 2: return Random.NormalIntRange(150, 300);
         }
 		return Random.NormalIntRange(0, 10);
 	}

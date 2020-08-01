@@ -57,6 +57,11 @@ public class GreatCrab extends Crab {
                 defenseSkill = 0;
                 EXP = 21;
                 break;
+            case 2:
+                HP = HT = 2100;
+                defenseSkill = 0;
+                EXP = 204;
+                break;
         }
 	}
 

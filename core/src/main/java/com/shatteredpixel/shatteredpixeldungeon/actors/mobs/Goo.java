@@ -71,6 +71,11 @@ public class Goo extends Mob {
                 defenseSkill = 36;
                 EXP = 65;
                 break;
+            case 2:
+                HP = HT = 12450;
+                defenseSkill = 170;
+                EXP = 1200;
+                break;
         }
 	}
 
@@ -85,6 +90,10 @@ public class Goo extends Mob {
             case 1:
                 min = 30;
                 max = (HP*2 <= HT) ? 64 : 48;
+                break;
+            case 2:
+                min = 190;
+                max = (HP*2 <= HT) ? 289 : 224;
                 break;
         }
 		if (pumpedUp > 0) {
@@ -110,6 +119,10 @@ public class Goo extends Mob {
                 attack = 50;
                 if (HP*2 <= HT) attack = 60;
                 break;
+            case 2:
+                attack = 225;
+                if (HP*2 <= HT) attack = 275;
+                break;
         }
 		if (pumpedUp > 0) attack *= 2;
 		return attack;
@@ -124,6 +137,7 @@ public class Goo extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 15);
+            case 2: return Random.NormalIntRange(130, 178);
         }
 		return Random.NormalIntRange(0, 2);
 	}

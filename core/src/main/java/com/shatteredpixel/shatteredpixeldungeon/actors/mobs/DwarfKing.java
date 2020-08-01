@@ -81,6 +81,11 @@ public class DwarfKing extends Mob {
                 defenseSkill = 89;
                 EXP = 725;
                 break;
+            case 2:
+                HP = HT = 60215;
+                defenseSkill = 324;
+                EXP = 25000;
+                break;
         }
 	}
 
@@ -88,6 +93,7 @@ public class DwarfKing extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(71, 83);
+            case 2: return Random.NormalIntRange(297, 455);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -96,6 +102,7 @@ public class DwarfKing extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 127;
+            case 2: return 387;
         }
 		return 26;
 	}
@@ -104,6 +111,7 @@ public class DwarfKing extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(38, 65);
+            case 2: return Random.NormalIntRange(140, 295);
         }
 		return Random.NormalIntRange(0, 10);
 	}

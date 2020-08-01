@@ -51,6 +51,11 @@ public class DM201 extends DM200 {
                 HP = HT = 900;
                 EXP = 52;
                 break;
+            case 2:
+                HP = HT = 9845;
+                defenseSkill = 190;
+                EXP = 529;
+                break;
         }
 	}
 
@@ -58,7 +63,7 @@ public class DM201 extends DM200 {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(69, 91);
-
+            case 2: return Random.NormalIntRange(321, 412);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}

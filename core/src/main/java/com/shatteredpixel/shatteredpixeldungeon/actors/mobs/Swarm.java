@@ -65,6 +65,11 @@ public class Swarm extends Mob {
                 defenseSkill = 30;
                 EXP = 18;
                 break;
+            case 2:
+                HP = HT = 6000;
+                defenseSkill = 140;
+                EXP = 167;
+                break;
         }
 	}
 	
@@ -91,7 +96,7 @@ public class Swarm extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(25, 31);
-
+            case 2: return Random.NormalIntRange(129, 176);
         }
 		return Random.NormalIntRange( 1, 4 );
 	}
@@ -133,6 +138,7 @@ public class Swarm extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 42;
+            case 2: return 180;
         }
 		return 10;
 	}

@@ -57,6 +57,11 @@ public class RotLasher extends Mob {
                 defenseSkill = 0;
                 EXP = 15;
                 break;
+            case 2:
+                HP = HT = 4895;
+                defenseSkill = 0;
+                EXP = 128;
+                break;
         }
 	}
 
@@ -104,7 +109,7 @@ public class RotLasher extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(45, 63);
-
+            case 2: return Random.NormalIntRange(250, 324);
         }
 		return Random.NormalIntRange(8, 15);
 	}
@@ -113,6 +118,7 @@ public class RotLasher extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 60;
+            case 2: return 280;
         }
 		return 15;
 	}
@@ -121,6 +127,7 @@ public class RotLasher extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(14, 34);
+            case 2: return Random.NormalIntRange(140, 234);
         }
 		return Random.NormalIntRange(0, 8);
 	}

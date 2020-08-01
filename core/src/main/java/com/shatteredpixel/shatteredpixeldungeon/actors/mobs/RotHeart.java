@@ -60,6 +60,12 @@ public class RotHeart extends Mob {
                 defenseSkill = 0;
                 EXP = 35;
                 break;
+            case 2:
+                HP = HT = 11345;
+                defenseSkill = 0;
+                EXP = 300;
+                break;
+
         }
 	}
 
@@ -126,6 +132,7 @@ public class RotHeart extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 28);
+            case 2: return Random.NormalIntRange(100, 184);
         }
 		return Random.NormalIntRange(0, 5);
 	}

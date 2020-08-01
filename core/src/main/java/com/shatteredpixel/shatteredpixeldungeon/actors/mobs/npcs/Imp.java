@@ -237,6 +237,7 @@ public class Imp extends NPC {
 				reward.upgrade( 2 );
                 switch (Dungeon.cycle){
                     case 1: reward.upgrade(5); break;
+                    case 2: reward.upgrade(29); break;
                 }
 				reward.cursed = true;
 			}

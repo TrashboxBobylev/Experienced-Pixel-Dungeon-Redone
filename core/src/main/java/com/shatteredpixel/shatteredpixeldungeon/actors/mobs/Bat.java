@@ -54,6 +54,11 @@ public class Bat extends Mob {
                 defenseSkill = 48;
                 EXP = 34;
                 break;
+            case 2:
+                HP = HT = 4600;
+                defenseSkill = 225;
+                EXP = 321;
+                break;
         }
 	}
 	
@@ -61,7 +66,7 @@ public class Bat extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(50, 65);
-
+            case 2: return Random.NormalIntRange(240, 312);
         }
 		return Random.NormalIntRange( 5, 15 );
 	}
@@ -70,6 +75,7 @@ public class Bat extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 68;
+            case 2: return 260;
         }
 		return 16;
 	}
@@ -78,6 +84,7 @@ public class Bat extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(13, 28);
+            case 2: return Random.NormalIntRange(70, 170);
         }
 		return Random.NormalIntRange(0, 4);
 	}

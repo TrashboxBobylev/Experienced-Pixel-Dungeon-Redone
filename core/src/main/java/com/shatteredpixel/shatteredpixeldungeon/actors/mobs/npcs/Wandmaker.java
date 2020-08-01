@@ -304,6 +304,7 @@ public class Wandmaker extends NPC {
 				wand1.upgrade();
                 switch (Dungeon.cycle){
                     case 1: wand1.upgrade(4); break;
+                    case 2: wand1.upgrade(35); break;
                 }
 
 				do {
@@ -313,6 +314,7 @@ public class Wandmaker extends NPC {
 				wand2.upgrade();
                 switch (Dungeon.cycle){
                     case 1: wand2.upgrade(4); break;
+                    case 2: wand2.upgrade(35); break;
                 }
 				
 			}

@@ -71,6 +71,11 @@ public class Eye extends Mob {
                 defenseSkill = 85;
                 EXP = 93;
                 break;
+            case 2:
+                HP = HT = 18965;
+                defenseSkill = 280;
+                EXP = 780;
+                break;
         }
 	}
 
@@ -78,7 +83,7 @@ public class Eye extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(86, 106);
-
+            case 2: return Random.NormalIntRange(360, 487);
         }
 		return Random.NormalIntRange(20, 30);
 	}
@@ -87,6 +92,7 @@ public class Eye extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 143;
+            case 2: return 450;
         }
 		return 30;
 	}
@@ -95,6 +101,7 @@ public class Eye extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 74);
+            case 2: return Random.NormalIntRange(178, 334);
         }
 		return Random.NormalIntRange(0, 10);
 	}
@@ -198,6 +205,7 @@ public class Eye extends Mob {
                 int dmg = Random.NormalIntRange(30, 50);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(168, 231); break;
+                    case 2: dmg = Random.NormalIntRange(510, 824); break;
                 }
                 ch.damage(dmg, new DeathGaze() );
 

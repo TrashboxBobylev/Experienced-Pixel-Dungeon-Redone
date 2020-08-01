@@ -74,6 +74,11 @@ public abstract class YogFist extends Mob {
                 defenseSkill = 89;
                 EXP = 150;
                 break;
+            case 2:
+                HP = HT = 50000;
+                defenseSkill = 324;
+                EXP = 1800;
+                break;
         }
 	}
 
@@ -146,6 +151,7 @@ public abstract class YogFist extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 160;
+            case 2: return 525;
         }
 		return 36;
 	}
@@ -154,7 +160,7 @@ public abstract class YogFist extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(86, 121);
-
+            case 2: return Random.NormalIntRange(375, 580);
         }
 		return Random.NormalIntRange( 18, 36 );
 	}
@@ -163,6 +169,7 @@ public abstract class YogFist extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(50, 89);
+            case 2: return Random.NormalIntRange(250, 430);
         }
 		return Random.NormalIntRange(0, 15);
 	}
@@ -419,7 +426,7 @@ public abstract class YogFist extends Mob {
 		public int damageRoll() {
             switch (Dungeon.cycle) {
                 case 1: return Random.NormalIntRange(121, 145);
-
+                case 2: return Random.NormalIntRange(489, 675);
             }
 			return Random.NormalIntRange( 22, 44 );
 		}
@@ -469,6 +476,7 @@ public abstract class YogFist extends Mob {
                 int dmg = Random.NormalIntRange(10, 20);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(90, 131); break;
+                    case 2: dmg = Random.NormalIntRange(200, 389); break;
                 }
                 enemy.damage(dmg, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
@@ -536,6 +544,7 @@ public abstract class YogFist extends Mob {
                 int dmg = Random.NormalIntRange(10, 20);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(90, 131); break;
+                    case 2: dmg = Random.NormalIntRange(200, 389); break;
                 }
                 enemy.damage(dmg, new DarkBolt() );
 

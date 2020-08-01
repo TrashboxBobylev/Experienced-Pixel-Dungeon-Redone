@@ -101,6 +101,11 @@ public class NewTengu extends Mob {
                 defenseSkill = 43;
                 EXP = 120;
                 break;
+            case 2:
+                HP = HT = 18000;
+                defenseSkill = 210;
+                EXP = 4100;
+                break;
         }
 	}
 	
@@ -115,7 +120,7 @@ public class NewTengu extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(42, 60);
-
+            case 2: return Random.NormalIntRange(225, 312);
         }
 		return Random.NormalIntRange( 6, 12 );
 	}
@@ -126,11 +131,13 @@ public class NewTengu extends Mob {
 		if (Dungeon.level.adjacent(pos, target.pos)){
             switch (Dungeon.cycle){
                 case 1: return 54;
+                case 2: return 275;
             }
 			return 12;
 		} else {
             switch (Dungeon.cycle){
                 case 1: return 60;
+                case 2: return 294;
             }
 			return 18;
 		}
@@ -140,6 +147,7 @@ public class NewTengu extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(10, 24);
+            case 2: return Random.NormalIntRange(80, 195);
         }
 		return Random.NormalIntRange(0, 5);
 	}
@@ -160,7 +168,7 @@ public class NewTengu extends Mob {
 
 		NewPrisonBossLevel.State state = ((NewPrisonBossLevel)Dungeon.level).state();
 		
-		int hpBracket = 20 + 200 * Dungeon.cycle;
+		int hpBracket = 20 + 200 * Dungeon.cycle * 4;
 		
 		int beforeHitHP = HP;
 		super.damage(dmg, src);

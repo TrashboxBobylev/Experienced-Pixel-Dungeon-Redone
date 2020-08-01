@@ -53,6 +53,11 @@ public class Snake extends Mob {
                 defenseSkill = 82;
                 EXP = 16;
                 break;
+            case 2:
+                HP = HT = 985;
+                defenseSkill = 550;
+                EXP = 136;
+                break;
         }
 	}
 	
@@ -60,7 +65,7 @@ public class Snake extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(21, 36);
-
+            case 2: return Random.NormalIntRange(120, 160);
         }
 		return Random.NormalIntRange( 1, 4 );
 	}
@@ -69,6 +74,7 @@ public class Snake extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 40;
+            case 2: return 180;
         }
 	    return 10;
 	}

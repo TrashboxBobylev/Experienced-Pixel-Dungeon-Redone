@@ -79,6 +79,11 @@ public class YogDzewa extends Mob {
                 defenseSkill = 0;
                 EXP = 1500;
                 break;
+            case 2:
+                HP = HT = 180000;
+                defenseSkill = 0;
+                EXP = 125000;
+                break;
         }
 	}
 
@@ -168,6 +173,7 @@ public class YogDzewa extends Mob {
                     int dmg = Random.NormalIntRange(20, 30);
                     switch (Dungeon.cycle){
                         case 1: dmg = Random.NormalIntRange(120, 175); break;
+                        case 2: dmg = Random.NormalIntRange(370, 502); break;
                     }
                     ch.damage(dmg, new Eye.DeathGaze());
 
@@ -495,6 +501,11 @@ public class YogDzewa extends Mob {
                     defenseSkill = 67;
                     EXP = 34;
                     break;
+                case 2:
+                    HP = HT = 8000;
+                    defenseSkill = 300;
+                    EXP = 600;
+                    break;
             }
 		}
 
@@ -502,6 +513,7 @@ public class YogDzewa extends Mob {
 		public int attackSkill( Char target ) {
             switch (Dungeon.cycle){
                 case 1: return 160;
+                case 2: return 500;
             }
 			return 30;
 		}
@@ -510,7 +522,7 @@ public class YogDzewa extends Mob {
 		public int damageRoll() {
             switch (Dungeon.cycle) {
                 case 1: return Random.NormalIntRange(70, 91);
-
+                case 2: return Random.NormalIntRange(325, 440);
             }
 			return Random.NormalIntRange( 15, 25 );
 		}
@@ -519,6 +531,7 @@ public class YogDzewa extends Mob {
 		public int drRoll() {
             switch (Dungeon.cycle){
                 case 1: return Random.NormalIntRange(40, 63);
+                case 2: return Random.NormalIntRange(125, 248);
             }
 			return Random.NormalIntRange(0, 4);
 		}

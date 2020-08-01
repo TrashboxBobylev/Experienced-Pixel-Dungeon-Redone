@@ -50,6 +50,7 @@ public class Senior extends Monk {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(71, 83);
+            case 2: return Random.NormalIntRange(313, 431);
         }
 		return Random.NormalIntRange( 16, 25 );
 	}

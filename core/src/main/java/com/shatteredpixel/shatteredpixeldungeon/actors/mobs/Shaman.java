@@ -59,6 +59,11 @@ public abstract class Shaman extends Mob {
                 defenseSkill = 55;
                 EXP = 41;
                 break;
+            case 2:
+                HP = HT = 5121;
+                defenseSkill = 221;
+                EXP = 412;
+                break;
         }
 	}
 	
@@ -66,7 +71,7 @@ public abstract class Shaman extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(43, 58);
-
+            case 2: return Random.NormalIntRange(235, 265);
         }
 		return Random.NormalIntRange( 5, 10 );
 	}
@@ -75,6 +80,7 @@ public abstract class Shaman extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 75;
+            case 2: return 275;
         }
 		return 18;
 	}
@@ -83,6 +89,7 @@ public abstract class Shaman extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(18, 36);
+            case 2: return Random.NormalIntRange(70, 198);
         }
 		return Random.NormalIntRange(0, 6);
 	}
@@ -139,8 +146,8 @@ public abstract class Shaman extends Mob {
 			
 			int dmg = Random.NormalIntRange( 6, 15 );
             switch (Dungeon.cycle) {
-                case 1: dmg = Random.NormalIntRange(48, 62);
-
+                case 1: dmg = Random.NormalIntRange(48, 62); break;
+                case 2: dmg = Random.NormalIntRange(250, 324); break;
             }
 			enemy.damage( dmg, new EarthenBolt() );
 			

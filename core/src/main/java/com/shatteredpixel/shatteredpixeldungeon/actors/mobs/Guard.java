@@ -69,6 +69,11 @@ public class Guard extends Mob {
                 defenseSkill = 38;
                 EXP = 29;
                 break;
+            case 2:
+                HP = HT = 5123;
+                defenseSkill = 186;
+                EXP = 268;
+                break;
         }
 	}
 
@@ -76,6 +81,7 @@ public class Guard extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(40, 57);
+            case 2: return Random.NormalIntRange(200, 278);
 
         }
 		return Random.NormalIntRange(4, 12);
@@ -135,6 +141,7 @@ public class Guard extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 52;
+            case 2: return 245;
         }
 		return 12;
 	}
@@ -143,6 +150,7 @@ public class Guard extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(15, 30);
+            case 2: return Random.NormalIntRange(120, 198);
         }
 		return Random.NormalIntRange(0, 7);
 	}

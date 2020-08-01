@@ -57,6 +57,11 @@ public class Brute extends Mob {
                 defenseSkill = 53;
                 EXP = 38;
                 break;
+            case 2:
+                HP = HT = 5645;
+                defenseSkill = 200;
+                EXP = 360;
+                break;
         }
 	}
 	
@@ -68,6 +73,9 @@ public class Brute extends Mob {
             case 1: return buff(BruteRage.class) != null ?
                     Random.NormalIntRange( 70, 123 ) :
                     Random.NormalIntRange( 58, 70 );
+            case 2: return buff(BruteRage.class) != null ?
+                    Random.NormalIntRange( 340, 541 ) :
+                    Random.NormalIntRange( 240, 368 );
 
         }
 		return buff(BruteRage.class) != null ?
@@ -79,6 +87,7 @@ public class Brute extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 80;
+            case 2: return 300;
         }
 		return 20;
 	}
@@ -87,6 +96,7 @@ public class Brute extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(20, 39);
+            case 2: return Random.NormalIntRange(120, 231);
         }
 		return Random.NormalIntRange(0, 8);
 	}

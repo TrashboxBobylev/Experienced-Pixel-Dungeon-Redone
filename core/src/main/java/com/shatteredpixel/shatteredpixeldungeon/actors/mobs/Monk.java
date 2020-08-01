@@ -61,6 +61,11 @@ public class Monk extends Mob {
                 defenseSkill = 89;
                 EXP = 71;
                 break;
+            case 2:
+                HP = HT = 12678;
+                defenseSkill = 345;
+                EXP = 600;
+                break;
         }
 	}
 	
@@ -68,6 +73,7 @@ public class Monk extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(62, 78);
+            case 2: return Random.NormalIntRange(270, 400);
 
         }
 		return Random.NormalIntRange( 12, 25 );
@@ -77,6 +83,7 @@ public class Monk extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 134;
+            case 2: return 440;
         }
 		return 30;
 	}
@@ -90,6 +97,7 @@ public class Monk extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(20, 30);
+            case 2: return Random.NormalIntRange(60, 193);
         }
 		return Random.NormalIntRange(0, 2);
 	}

@@ -70,6 +70,11 @@ public class Necromancer extends Mob {
                 defenseSkill = 43;
                 EXP = 31;
                 break;
+            case 2:
+                HP = HT = 4123;
+                defenseSkill = 195;
+                EXP = 291;
+                break;
         }
 	}
 	
@@ -97,6 +102,7 @@ public class Necromancer extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 28);
+            case 2: return Random.NormalIntRange(75, 180);
         }
 		return Random.NormalIntRange(0, 5);
 	}
@@ -363,6 +369,9 @@ public class Necromancer extends Mob {
             switch (Dungeon.cycle){
                 case 1:
                     HP =  180;
+                    break;
+                case 2:
+                    HP =  1800;
                     break;
             }
 		}

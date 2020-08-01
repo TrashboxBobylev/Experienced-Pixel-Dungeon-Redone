@@ -316,7 +316,8 @@ public class Ghost extends NPC {
 					itemLevel = 3;
 				}
                 switch (Dungeon.cycle){
-                    case 1: itemLevel += 5;
+                    case 1: itemLevel += 5; break;
+                    case 2: itemLevel += 25;
                 }
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);

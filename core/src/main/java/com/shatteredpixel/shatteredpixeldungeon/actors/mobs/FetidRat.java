@@ -56,6 +56,11 @@ public class FetidRat extends Rat {
                 defenseSkill = 27;
                 EXP = 20;
                 break;
+            case 2:
+                HP = HT = 1580;
+                defenseSkill = 129;
+                EXP = 150;
+                break;
         }
 	}
 
@@ -63,6 +68,7 @@ public class FetidRat extends Rat {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 46;
+            case 2: return 200;
         }
 		return 12;
 	}
@@ -71,6 +77,7 @@ public class FetidRat extends Rat {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
+            case 2: return Random.NormalIntRange(60, 125);
         }
 		return Random.NormalIntRange(0, 2);
 	}

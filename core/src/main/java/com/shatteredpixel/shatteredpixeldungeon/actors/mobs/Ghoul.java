@@ -65,6 +65,11 @@ public class Ghoul extends Mob {
                 defenseSkill = 61;
                 EXP = 30;
                 break;
+            case 2:
+                HP = HT = 7843;
+                defenseSkill = 267;
+                EXP = 273;
+                break;
         }
 	}
 
@@ -72,7 +77,7 @@ public class Ghoul extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(64, 79);
-
+            case 2: return Random.NormalIntRange(276, 400);
         }
 		return Random.NormalIntRange( 16, 22 );
 	}
@@ -81,6 +86,7 @@ public class Ghoul extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 95;
+            case 2: return 338;
         }
 		return 24;
 	}
@@ -89,6 +95,7 @@ public class Ghoul extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(22, 43);
+            case 2: return Random.NormalIntRange(100, 211);
         }
 		return Random.NormalIntRange(0, 4);
 	}

@@ -52,6 +52,11 @@ public class Slime extends Mob {
                 defenseSkill = 30;
                 EXP = 22;
                 break;
+            case 2:
+                HP = HT = 2135;
+                defenseSkill = 150;
+                EXP = 196;
+                break;
         }
 	}
 	
@@ -59,6 +64,7 @@ public class Slime extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(32, 38);
+            case 2: return Random.NormalIntRange(164, 189);
 
         }
 	    return Random.NormalIntRange( 2, 5 );
@@ -68,15 +74,16 @@ public class Slime extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 46;
+            case 2: return 225;
         }
 		return 12;
 	}
 	
 	@Override
 	public void damage(int dmg, Object src) {
-		if (dmg >= 20){
+		if (dmg >= 5 + Dungeon.cycle * 75){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
-			dmg = 19 + (int)(Math.sqrt(8*(dmg - 4) + 1) - 1)/2;
+			dmg = 4 + Dungeon.cycle * 75 + (int)(Math.sqrt(8*(dmg - 4) + 1) - 1)/2;
 		}
 		super.damage(dmg, src);
 	}

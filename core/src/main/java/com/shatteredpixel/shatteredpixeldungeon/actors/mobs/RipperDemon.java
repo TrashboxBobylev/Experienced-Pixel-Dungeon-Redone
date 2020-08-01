@@ -68,6 +68,11 @@ public class RipperDemon extends Mob {
                 defenseSkill = 86;
                 EXP = 65;
                 break;
+            case 2:
+                HP = HT = 12100;
+                defenseSkill = 300;
+                EXP = 622;
+                break;
         }
 	}
 
@@ -80,7 +85,7 @@ public class RipperDemon extends Mob {
 	public int damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(79, 91);
-
+            case 2: return Random.NormalIntRange(270, 440);
         }
 		return Random.NormalIntRange( 12, 25 );
 	}
@@ -89,6 +94,7 @@ public class RipperDemon extends Mob {
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
             case 1: return 120;
+            case 2: return 430;
         }
 		return 30;
 	}
@@ -102,6 +108,7 @@ public class RipperDemon extends Mob {
 	public int drRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(34, 64);
+            case 2: return Random.NormalIntRange(100, 217);
         }
 		return Random.NormalIntRange(0, 4);
 	}

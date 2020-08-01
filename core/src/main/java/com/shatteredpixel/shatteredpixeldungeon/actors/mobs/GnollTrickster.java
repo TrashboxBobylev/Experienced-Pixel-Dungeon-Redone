@@ -64,6 +64,11 @@ public class GnollTrickster extends Gnoll {
                 defenseSkill = 27;
                 EXP = 21;
                 break;
+            case 2:
+                HP = HT = 1780;
+                defenseSkill = 138;
+                EXP = 168;
+                break;
         }
 	}
 
