@@ -55,7 +55,7 @@ import java.util.ArrayList;
 
 public abstract class FishingRod extends Item {
     private static final String AC_CAST = "CAST";
-    private static final String AC_UNCAST = "UNCAST";
+    public static final String AC_UNCAST = "UNCAST";
 
     {
         identify();

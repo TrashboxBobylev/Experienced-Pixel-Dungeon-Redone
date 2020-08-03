@@ -114,6 +114,8 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod.AC_UNCAST;
+
 public class Hero extends Char {
 
     {
@@ -1113,6 +1115,7 @@ public class Hero extends Char {
 		        for (Item it : belongings.backpack){
 		            if (it instanceof FishingRod){
 		                ((FishingRod) it).hook = false;
+		                it.defaultAction = AC_UNCAST;
                     }
                 }
             }
