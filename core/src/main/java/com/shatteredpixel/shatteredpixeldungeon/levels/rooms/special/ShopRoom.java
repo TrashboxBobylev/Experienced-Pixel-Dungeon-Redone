@@ -196,7 +196,7 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( new MerchantsBeacon() );
 
 
-		itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
+		if (Dungeon.cycle == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
 
 
 		itemsToSpawn.add( new PotionOfHealing() );
