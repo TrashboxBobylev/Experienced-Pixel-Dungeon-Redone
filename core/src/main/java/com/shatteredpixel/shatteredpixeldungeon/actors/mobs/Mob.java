@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
@@ -62,6 +64,8 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+
+import static com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod.AC_UNCAST;
 
 public abstract class Mob extends Char {
 
@@ -968,6 +972,17 @@ public abstract class Mob extends Char {
 				level.mobs.remove( mob );
 				heldAllies.add(mob);
 			}
+
+			if (mob instanceof Hook){
+                mob.remove(mob.buff(RingOfWealth.Wealth.class));
+                mob.die(new com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom());
+                for (Item it : Dungeon.hero.belongings.backpack){
+                    if (it instanceof FishingRod){
+                        ((FishingRod) it).hook = false;
+                        it.defaultAction = AC_UNCAST;
+                    }
+                }
+            }
 		}
 	}
 	
