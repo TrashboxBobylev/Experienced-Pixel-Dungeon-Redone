@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -44,7 +45,8 @@ public class ExpGenerator extends NPC {
     }
 
     @Override
-    public void rollToDropLoot() {
+    public void die(Object cause) {
+        super.die(cause);
         Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator(), pos).sprite.drop();
     }
 
