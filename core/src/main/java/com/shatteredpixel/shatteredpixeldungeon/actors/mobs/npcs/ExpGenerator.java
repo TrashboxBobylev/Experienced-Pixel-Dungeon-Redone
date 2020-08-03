@@ -67,9 +67,15 @@ public class ExpGenerator extends NPC {
     }
 
     @Override
+    protected void onAdd() {
+        super.onAdd();
+        spend(3f);
+    }
+
+    @Override
     protected boolean act() {
-        spend(5f);
-        Dungeon.hero.earnExp(1, this.getClass());
+        spend(1f);
+        Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
         if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", 1));
         return super.act();
     }
