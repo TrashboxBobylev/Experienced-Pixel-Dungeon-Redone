@@ -233,9 +233,11 @@ public class NewTengu extends Mob {
 	@Override
 	public void die( Object cause ) {
 		
-		if (Dungeon.hero.subClass == HeroSubClass.NONE) {
+		if (Dungeon.LimitedDrops.TOME_OF_MASTERY.count == 0) {
 			Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
+            Dungeon.LimitedDrops.TOME_OF_MASTERY.count++;
 		}
+
 		
 		GameScene.bossSlain();
 		super.die( cause );

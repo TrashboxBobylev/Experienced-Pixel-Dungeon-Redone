@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
@@ -461,9 +462,15 @@ public class DwarfKing extends Mob {
 				}
 				h.destroy();
 			}
-			Dungeon.level.drop(new ArmorKit(), pos + Dungeon.level.width()).sprite.drop(pos);
+			if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
+                Dungeon.level.drop(new ArmorKit(), pos + Dungeon.level.width()).sprite.drop(pos);
+                Dungeon.LimitedDrops.ARMOR_KIT.count++;
+            }
 		} else {
-			Dungeon.level.drop(new ArmorKit(), pos).sprite.drop();
+            if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
+                Dungeon.level.drop(new ArmorKit(), pos).sprite.drop();
+                Dungeon.LimitedDrops.ARMOR_KIT.count++;
+            }
 		}
 
 		Badges.validateBossSlain();
