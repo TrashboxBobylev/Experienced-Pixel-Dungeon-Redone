@@ -53,4 +53,9 @@ public class ExpGenerator extends Item {
             ScrollOfTeleportation.appear(generator, cell);
         }
     }
+
+    @Override
+    public int price() {
+        return 120 * quantity;
+    }
 }
