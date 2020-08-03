@@ -26,8 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth.Wealth;
@@ -82,6 +85,35 @@ public class Hook extends NPC {
         super.updateSpriteState();
         ((HookSprite)sprite).updateTier(tier);
         sprite.place(pos);
+    }
+
+    @Override
+    public int defenseSkill( Char enemy ) {
+        return INFINITE_EVASION;
+    }
+
+    @Override
+    public float speed() {
+        return 2f;
+    }
+
+    @Override
+    protected Char chooseEnemy() {
+        return null;
+    }
+
+    @Override
+    public void damage( int dmg, Object src ) {
+    }
+
+    @Override
+    public void add( Buff buff ) {
+        if (buff instanceof RatKing.Barter || buff instanceof Viscosity.DeferedDamage) super.add(buff);
+    }
+
+    @Override
+    public boolean reset() {
+        return true;
     }
 
     @Override
