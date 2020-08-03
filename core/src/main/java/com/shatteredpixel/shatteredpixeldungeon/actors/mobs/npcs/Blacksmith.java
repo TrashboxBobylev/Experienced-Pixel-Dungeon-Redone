@@ -255,8 +255,6 @@ public class Blacksmith extends NPC {
 		Badges.validateItemLevelAquired( first );
 		Item.updateQuickslot();
 		
-		Quest.reforged = true;
-		
 		Notes.remove( Notes.Landmark.TROLL );
 	}
 	
