@@ -335,7 +335,8 @@ public class Blacksmith extends NPC {
 				
 				rooms.add(new BlacksmithRoom());
 				spawned = true;
-				alternative = Random.Int( 2 ) == 0;
+                alternative = Dungeon.cycle == 0 && Random.Int(2) == 0;
+
 				
 				given = false;
 				
