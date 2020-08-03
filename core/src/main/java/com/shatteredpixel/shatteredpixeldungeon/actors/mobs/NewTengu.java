@@ -176,7 +176,7 @@ public class NewTengu extends Mob {
 
 		NewPrisonBossLevel.State state = ((NewPrisonBossLevel)Dungeon.level).state();
 		
-		int hpBracket = 20 + 200 * Dungeon.cycle * 100;
+		int hpBracket = HT / 8;
 		
 		int beforeHitHP = HP;
 		super.damage(dmg, src);
@@ -299,7 +299,7 @@ public class NewTengu extends Mob {
 				if (level.heroFOV[newPos]) CellEmitter.get( newPos ).burst( Speck.factory( Speck.WOOL ), 6 );
 				Sample.INSTANCE.play( Assets.Sounds.PUFF );
 				
-				float fill = 0.9f - 0.5f*((HP-80)/80f);
+				float fill = 0.9f - 0.5f*((HP-HT/2)/(HT/2));
 				level.placeTrapsInTenguCell(fill);
 				
 			//otherwise, jump in a larger possible area, as the room is bigger
