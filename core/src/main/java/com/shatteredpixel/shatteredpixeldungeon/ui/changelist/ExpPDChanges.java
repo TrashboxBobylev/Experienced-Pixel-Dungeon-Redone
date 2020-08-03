@@ -26,8 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.items.BlackPsycheChest;
+import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -42,7 +46,56 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.0", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 4th, 2020\n" +
+                        "_-_ 2 days after Experienced Pixel Dungeon 2.0\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.KING, 0, 0, 16, 16), "Dwarf King",
+                "Fixed rounding error, when Dwarf King didn'tget damaged enough to progress boss fight." ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new BasicFishingRod()), "Fishing",
+                "_-_ Hook will disappear after leaving the depth or field of view properly (the bug was when you can't cast new hook).\n\n" +
+                        "_-_ Hook can't be casted into walls.\n\n" +
+                        "_-_ Now you can get some equipment (maybe).\n\n" +
+                        "_-_ Fishing rods now give experience if enough rare item is caught."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ARTIFACT_HOLDER, null), "Artifacts",
+                "Upgrading past +10 should work for more than one upgrade."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new ExpGenerator()), "EXP Generator",
+                "Added power plant for passive experience generation. Can be bought at shops."));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.KEEPER, 0, 0, 13, 16), "Blacksmith",
+                "_-_ Removed the limit for reforging.\n\n" +
+                        "_-_ (was in previous update but whatever) Blacksmith can transfer upgrades with items of same equipment type.\n\n" +
+                        "_-_ Bat quest can't appear on dungeon's cycles." ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new WandOfMagicMissile()), "Wands",
+                "_-_ Removed the limitation for wand charges.\n\n" +
+                        "_-_ Mage's Staff gives 33% additional charges instead of just one.\n\n" +
+                        "_-_ Magic Charge buff now adds levels to all wands rather than overriding them."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SWORD, new ItemSprite.Glowing( 0x8844CC )), "Enchanting",
+                "_-_ Removed the erasure mechanic, so enchantments stay forever on equipment.\n\n" +
+                        "_-_ As result, Magical Infusion is no longer obtainable."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new VelvetPouch()), "Dungeon's Cycles changes",
+                "_-_ Armor kit and Tome of Mastery can be reobtained on dungeon's cycles.\n\n" +
+                        "_-_ Armor on dungeon's cycles shouldn't crash the game with wrong tier images.\n\n" +
+                        "_-_ Storage bags cannot reappear on dungeon's cycles, their capacity is increased to 40.\n\n" +
+                        "_-_ Sad Ghost gives correctly tiered items on dungeon's cycles.\n\n" +
+                        "_-_ Darts now respond to dungeon's cycles overall empowerment; Crossbow is now viable weapon for mid-game."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.INFO), "Updates",
+                "Added GitHub powered updates."));
+
+        changes = new ChangeInfo("ExpPD-2.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
