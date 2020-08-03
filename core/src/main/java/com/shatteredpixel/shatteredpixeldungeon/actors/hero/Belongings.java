@@ -116,7 +116,7 @@ public class Belongings implements Iterable<Item> {
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		if (bundle.contains( ARMOR )){
-			info.armorTier = ((Armor)bundle.get( ARMOR )).tier;
+			info.armorTier = ((Armor)bundle.get( ARMOR )).visibleTier;
 		} else {
 			info.armorTier = 0;
 		}
