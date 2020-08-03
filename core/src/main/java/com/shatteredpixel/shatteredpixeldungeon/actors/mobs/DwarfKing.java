@@ -77,12 +77,12 @@ public class DwarfKing extends Mob {
 		properties.add(Property.UNDEAD);
         switch (Dungeon.cycle){
             case 1:
-                HP = HT = 3850;
+                HP = HT = 3876;
                 defenseSkill = 89;
                 EXP = 725;
                 break;
             case 2:
-                HP = HT = 60270;
+                HP = HT = 60300;
                 defenseSkill = 324;
                 EXP = 25000;
                 break;
