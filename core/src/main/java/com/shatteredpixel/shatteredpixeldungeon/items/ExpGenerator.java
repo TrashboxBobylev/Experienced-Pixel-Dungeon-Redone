@@ -40,6 +40,7 @@ public class ExpGenerator extends Item {
     {
         image = ItemSpriteSheet.MAGIC_INFUSE;
         defaultAction = AC_THROW;
+        identify();
     }
 
     @Override

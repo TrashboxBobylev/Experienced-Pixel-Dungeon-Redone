@@ -71,7 +71,7 @@ public class ExpPDChanges {
         changes.addButton( new ChangeButton(new ItemSprite(new ExpGenerator()), "EXP Generator",
                 "Added power plant for passive experience generation. Can be bought at shops."));
 
-        changes.addButton( new ChangeButton(new Image(Assets.Sprites.KEEPER, 0, 0, 13, 16), "Blacksmith",
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.TROLL, 0, 0, 13, 16), "Blacksmith",
                 "_-_ Removed the limit for reforging.\n\n" +
                         "_-_ (was in previous update but whatever) Blacksmith can transfer upgrades with items of same equipment type.\n\n" +
                         "_-_ Bat quest can't appear on dungeon's cycles." ));

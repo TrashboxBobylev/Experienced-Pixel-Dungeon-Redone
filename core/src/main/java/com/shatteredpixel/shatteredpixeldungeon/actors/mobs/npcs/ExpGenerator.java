@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -38,22 +39,13 @@ public class ExpGenerator extends NPC {
     }
 
     @Override
-    public int defenseSkill( Char enemy ) {
-        return INFINITE_EVASION;
-    }
-
-    @Override
-    public float speed() {
-        return 2f;
-    }
-
-    @Override
     protected Char chooseEnemy() {
         return null;
     }
 
     @Override
-    public void damage( int dmg, Object src ) {
+    public void rollToDropLoot() {
+        Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator(), pos).sprite.drop();
     }
 
     @Override
@@ -76,7 +68,7 @@ public class ExpGenerator extends NPC {
     protected boolean act() {
         spend(1f);
         Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
-        if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", 1));
+        if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()/5));
         return super.act();
     }
 }
