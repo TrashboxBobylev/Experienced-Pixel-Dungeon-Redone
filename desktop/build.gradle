@@ -22,7 +22,7 @@ task debug(dependsOn: classes, type: JavaExec) {
     systemProperty 'Implementation-Version', appVersionCode
 
     dependencies {
-        debugImplementation project(':services:updates:debugUpdates')
+        debugImplementation project(':services:updates:githubUpdates')
     }
 }
 
