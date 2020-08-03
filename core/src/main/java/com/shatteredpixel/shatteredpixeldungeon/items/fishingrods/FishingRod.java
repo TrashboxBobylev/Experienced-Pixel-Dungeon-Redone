@@ -105,6 +105,7 @@ public abstract class FishingRod extends Item {
                     mob.die(new Doom());
                     hook = false;
                     defaultAction = AC_CAST;
+                    if (RingOfWealth.latestDropTier >= 2) hero.earnExp(Dungeon.escalatingDepth(), this.getClass());
                 }
             }
         }

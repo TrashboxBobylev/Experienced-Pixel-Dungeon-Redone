@@ -120,7 +120,7 @@ public class RingOfWealth extends Ring {
 	//used for visuals
 	// 1/2/3 used for low/mid/high tier consumables
 	// 3 used for +0-1 equips, 4 used for +2 or higher equips
-	private static int latestDropTier = 0;
+    public static int latestDropTier = 0;
 
 	public static void showFlareForBonusDrop( Visual vis ){
 		switch (latestDropTier){
