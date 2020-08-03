@@ -49,7 +49,7 @@ public class MagicalHolster extends Bag {
 	}
 
 	public int capacity(){
-		return 19;
+		return 40;
 	}
 	
 	@Override
