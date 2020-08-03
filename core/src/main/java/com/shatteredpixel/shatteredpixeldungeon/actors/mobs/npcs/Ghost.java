@@ -321,7 +321,8 @@ public class Ghost extends NPC {
                 }
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
-
+                ((MeleeWeapon)weapon).tier += Dungeon.cycle * 5;
+                armor.tier += Dungeon.cycle * 5;
 
 				//10% to be enchanted
 				if (Random.Int(10) == 0){
