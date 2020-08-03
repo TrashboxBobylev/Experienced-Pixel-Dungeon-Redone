@@ -620,7 +620,7 @@ public class ItemSpriteSheet {
 		assignItemRect(RECLAIM_TRAP,    11, 11);
 		
 		assignItemRect(CURSE_INFUSE,    10, 15);
-		assignItemRect(MAGIC_INFUSE,    10, 15);
+		assignItemRect(MAGIC_INFUSE,    12, 12);
 		assignItemRect(ALCHEMIZE,       10, 15);
 		assignItemRect(RECYCLE,         10, 15);
 	}
