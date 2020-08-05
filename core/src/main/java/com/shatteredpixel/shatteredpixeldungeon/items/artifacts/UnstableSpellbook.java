@@ -281,6 +281,7 @@ public class UnstableSpellbook extends Artifact {
 			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
 				partialCharge += 1 / (120f - (chargeCap - charge)*5f);
+				if (partialCharge <= 0) partialCharge = 1;
 
 				if (partialCharge >= 1) {
 					partialCharge --;

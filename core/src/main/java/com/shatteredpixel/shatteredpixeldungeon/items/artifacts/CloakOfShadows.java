@@ -52,9 +52,9 @@ public class CloakOfShadows extends Artifact {
 		exp = 0;
 		levelCap = 10;
 
-		charge = Math.min(level()+3, 10);
+		charge = level()+3;
 		partialCharge = 0;
-		chargeCap = Math.min(level()+3, 10);
+		chargeCap = level()+3;
 
 		defaultAction = AC_STEALTH;
 
@@ -152,7 +152,7 @@ public class CloakOfShadows extends Artifact {
 	
 	@Override
 	public Item upgrade() {
-		chargeCap = Math.min(chargeCap + 1, 10);
+		chargeCap = chargeCap+1;
 		return super.upgrade();
 	}
 
@@ -184,6 +184,7 @@ public class CloakOfShadows extends Artifact {
 					float missing = (chargeCap - charge);
 					if (level() > 7) missing += 5*(level() - 7)/3f;
 					float turnsToCharge = (45 - missing);
+					if (turnsToCharge <= 0) turnsToCharge = 1;
 					partialCharge += (1f / turnsToCharge);
 				}
 

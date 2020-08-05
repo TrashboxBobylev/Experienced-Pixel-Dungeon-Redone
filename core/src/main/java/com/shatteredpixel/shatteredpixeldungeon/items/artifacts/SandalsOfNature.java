@@ -110,7 +110,7 @@ public class SandalsOfNature extends Artifact {
 
 	@Override
 	public String desc() {
-		String desc = Messages.get(this, "desc_" + (level()+1));
+		String desc = Messages.get(this, "desc_" + (Math.min(level()+1, 4)));
 
 		if ( isEquipped ( Dungeon.hero ) ){
 			desc += "\n\n";

@@ -304,6 +304,7 @@ public class TalismanOfForesight extends Artifact {
 			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
 				partialCharge += 0.05f+(level()*0.005f);
+                if (partialCharge <= 0) partialCharge = 1;
 
 				if (partialCharge > 1 && charge < chargeCap) {
 					partialCharge--;
