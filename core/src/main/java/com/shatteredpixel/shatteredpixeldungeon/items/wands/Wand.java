@@ -227,7 +227,7 @@ public abstract class Wand extends Item {
 	}
 
 	public String statsDesc(){
-		return Messages.get(this, "stats_desc");
+		return Messages.get(this, "stats_desc") + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
 	}
 	
 	@Override
@@ -238,7 +238,7 @@ public abstract class Wand extends Item {
 	@Override
 	public String status() {
 		if (levelKnown) {
-			return (curChargeKnown ? curCharges : "?") + "/" + maxCharges;
+			return (curChargeKnown ? Messages.format( "%d%%",  Math.round((curCharges / maxCharges) * 100f)) : "?");
 		} else {
 			return null;
 		}
