@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -58,8 +59,14 @@ public class TomeOfMastery extends Item {
 		actions.add( AC_READ );
 		return actions;
 	}
-	
-	@Override
+
+    @Override
+    public String name() {
+        if (Dungeon.cycle > 0) return Messages.get(this, "new_name");
+        return super.name();
+    }
+
+    @Override
 	public void execute( Hero hero, String action ) {
 
 		super.execute( hero, action );
