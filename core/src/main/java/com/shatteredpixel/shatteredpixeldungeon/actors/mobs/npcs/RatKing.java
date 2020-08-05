@@ -47,6 +47,8 @@ import java.util.Collection;
 
 public class RatKing extends NPC {
 
+    public boolean ghastly = false;
+
 	{
 		spriteClass = RatKingSprite.class;
 		
@@ -76,7 +78,7 @@ public class RatKing extends NPC {
 	
 	@Override
 	public void add( Buff buff ) {
-	    if (buff instanceof Barter || buff instanceof Viscosity.DeferedDamage) super.add(buff);
+	    if (buff instanceof Barter || buff instanceof MirrorImage.MirrorInvis) super.add(buff);
 	}
 	
 	@Override
@@ -89,28 +91,30 @@ public class RatKing extends NPC {
 	@Override
 	protected void onAdd() {
 		super.onAdd();
-		if (Dungeon.depth != 5){
+		if (Dungeon.depth != 5 && !ghastly){
 			yell(Messages.get(this, "confused"));
 		}
 	}
 
 	@Override
 	protected boolean act() {
-		if (Dungeon.depth < 5){
-			if (pos == Dungeon.level.exit){
-				destroy();
-				sprite.killAndErase();
-			} else {
-				target = Dungeon.level.exit;
-			}
-		} else if (Dungeon.depth > 5){
-			if (pos == Dungeon.level.entrance){
-				destroy();
-				sprite.killAndErase();
-			} else {
-				target = Dungeon.level.entrance;
-			}
-		}
+        if (!ghastly) {
+            if (Dungeon.depth < 5){
+                if (pos == Dungeon.level.exit){
+                    destroy();
+                    sprite.killAndErase();
+                } else {
+                    target = Dungeon.level.exit;
+                }
+            } else if (Dungeon.depth > 5){
+                if (pos == Dungeon.level.entrance){
+                    destroy();
+                    sprite.killAndErase();
+                } else {
+                    target = Dungeon.level.entrance;
+                }
+            }
+        }
         Heap heap = Dungeon.level.heaps.get(pos );
         Barter barter = Buff.affect(this, Barter.class);
 		if (heap != null){
@@ -140,14 +144,15 @@ public class RatKing extends NPC {
 		if (c != Dungeon.hero){
 			return super.interact(c);
 		}
-
-		if (state == SLEEPING) {
-			notice();
-			yell( Messages.get(this, "not_sleeping") );
-			state = WANDERING;
-		} else {
-			yell( Messages.get(this, "what_is_it") );
-		}
+        if (!ghastly) {
+            if (state == SLEEPING) {
+                notice();
+                yell(Messages.get(this, "not_sleeping"));
+                state = WANDERING;
+            } else {
+                yell(Messages.get(this, "what_is_it"));
+            }
+        }
 		return true;
 	}
 	
@@ -155,7 +160,7 @@ public class RatKing extends NPC {
 	public String description() {
 		return ((RatKingSprite)sprite).festive ?
 				Messages.get(this, "desc_festive")
-				: super.description();
+				: ghastly ? Messages.get(this, "ghastly") : super.description();
 	}
 
     public static class Barter extends Buff {
@@ -194,5 +199,17 @@ public class RatKing extends NPC {
         }
 
 
+    }
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put("h", ghastly);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        ghastly = bundle.getBoolean("h");
     }
 }

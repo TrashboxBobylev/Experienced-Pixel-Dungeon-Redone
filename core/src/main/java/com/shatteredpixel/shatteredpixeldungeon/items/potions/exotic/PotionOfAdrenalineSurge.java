@@ -24,10 +24,19 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class PotionOfAdrenalineSurge extends ExoticPotion {
 	
@@ -38,7 +47,21 @@ public class PotionOfAdrenalineSurge extends ExoticPotion {
 	@Override
 	public void apply(Hero hero) {
 		setKnown();
-		Buff.affect(hero, AdrenalineSurge.class).reset(2, 800f);
+        ArrayList<Integer> respawnPoints = new ArrayList<>();
+
+        for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+            int p = hero.pos + PathFinder.NEIGHBOURS8[i];
+            if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+                respawnPoints.add( p );
+            }
+        }
+
+        if (respawnPoints.size() > 0){
+            RatKing ourPreciousAndUltimateGod_theRatKing = new RatKing();
+            ourPreciousAndUltimateGod_theRatKing.ghastly = true;
+            GameScene.add( ourPreciousAndUltimateGod_theRatKing );
+            ScrollOfTeleportation.appear( ourPreciousAndUltimateGod_theRatKing, respawnPoints.get(Random.index( respawnPoints )) );
+        }
 	}
 	
 }
