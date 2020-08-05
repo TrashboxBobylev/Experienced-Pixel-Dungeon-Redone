@@ -201,8 +201,8 @@ public class Ghost extends NPC {
 
 		private static boolean given;
 		private static boolean processed;
-		
-		private static int depth;
+
+        public static int depth;
 		
 		public static Weapon weapon;
 		public static Armor armor;

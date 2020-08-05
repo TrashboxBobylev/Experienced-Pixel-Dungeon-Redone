@@ -26,6 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
@@ -85,6 +90,28 @@ public class PsycheChest extends Item {
             GLog.w( Messages.get(this, "deactivated") );
         }
         if (action.contains(AC_RESET) && (hero.HP > hero.HT / 2)){
+            switch (Dungeon.depth){
+                case 2: case 3: case 4:
+                    for (Mob m: Dungeon.level.mobs){
+                        if (m instanceof Ghost) Ghost.Quest.reset();
+                    }
+                     break;
+                case 7: case 8: case 9:
+                    for (Mob m: Dungeon.level.mobs){
+                        if (m instanceof Wandmaker) Wandmaker.Quest.reset();
+                    }
+                    break;
+                case 12: case 13: case 14:
+                    for (Mob m: Dungeon.level.mobs){
+                        if (m instanceof Blacksmith) Blacksmith.Quest.reset();
+                    }
+                    break;
+                case 17: case 18: case 19:
+                    for (Mob m: Dungeon.level.mobs){
+                        if (m instanceof Imp) Imp.Quest.reset();
+                    }
+                    break;
+            }
             InterlevelScene.mode = InterlevelScene.Mode.RESET;
             if (hero.HP > hero.HT / 2) hero.HP -= hero.HT / 2;
             Game.switchScene(InterlevelScene.class);
