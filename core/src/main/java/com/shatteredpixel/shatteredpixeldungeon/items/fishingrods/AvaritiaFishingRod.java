@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.fishingrods;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class AvaritiaFishingRod extends FishingRod{
@@ -32,5 +33,10 @@ public class AvaritiaFishingRod extends FishingRod{
         amplifier = 150;
         tier = 4;
         fishingStr = 60;
+    }
+
+    @Override
+    public int price() {
+        return 50 * Dungeon.escalatingDepth() / 8;
     }
 }
