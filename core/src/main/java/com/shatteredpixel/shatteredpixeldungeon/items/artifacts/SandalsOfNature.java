@@ -137,7 +137,7 @@ public class SandalsOfNature extends Artifact {
 		else if (level() == 0)  image = ItemSpriteSheet.ARTIFACT_SHOES;
 		else if (level() == 1)  image = ItemSpriteSheet.ARTIFACT_BOOTS;
 		else if (level() >= 2)  image = ItemSpriteSheet.ARTIFACT_GREAVES;
-		name = Messages.get(this, "name_" + (level()+1));
+		name = Messages.get(this, "name_" +  (Math.min(level()+1, 4)));
 		return super.upgrade();
 	}
 
