@@ -167,7 +167,7 @@ public class WandOfWarding extends Wand {
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", level()+2);
+			return Messages.get(this, "stats_desc", level()+2) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
 		else
 			return Messages.get(this, "stats_desc", 2);
 	}

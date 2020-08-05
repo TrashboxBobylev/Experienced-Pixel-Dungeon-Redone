@@ -238,7 +238,7 @@ public class WandOfRegrowth extends Wand {
 
 	@Override
 	public String statsDesc() {
-		return Messages.get(this, "stats_desc", chargesPerCast());
+		return Messages.get(this, "stats_desc", chargesPerCast()) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
 	}
 
 	@Override

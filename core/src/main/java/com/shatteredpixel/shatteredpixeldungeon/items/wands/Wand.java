@@ -238,7 +238,7 @@ public abstract class Wand extends Item {
 	@Override
 	public String status() {
 		if (levelKnown) {
-			return (curChargeKnown ? Messages.format( "%d%%",  Math.round((curCharges / maxCharges) * 100f)) : "?");
+			return (curChargeKnown ? Messages.format( "%d%%",  Math.round(((curCharges * 1f) / (maxCharges * 1f)) * 100f)) : "?");
 		} else {
 			return null;
 		}

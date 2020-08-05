@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -46,7 +48,33 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 6th, 2020\n" +
+                        "_-_ 2 days after Experienced Pixel Dungeon 2.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.SCROLL_TIWAZ, null), new ScrollOfUpgrade().trueName(),
+                "The whole stack of SoU can be applied at once with special action."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.EXOTIC_CRIMSON, null), new PotionOfAdrenalineSurge().trueName(),
+                "This potion replaces Adrenaline Surge and allows to spawn Rat King on any depth."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Added escalation data for cycle 3.\n" +
+                        "_-_ Fixed artifacts not charging at very high levels.\n" +
+                        "_-_ Fixed fishing not working entirely.\n" +
+                        "_-_ Fixed transmutation crash for high-tier items.\n" +
+                        "_-_ Tome of Mastery on rebeating Tengu is named Tome of Remastery.\n" +
+                        "_-_ Adjusted inventory space and window.\n" +
+                        "_-_ Blacksmith now transfers upgrades to higher tiered items.\n" +
+                        "_-_ Power Plants are stackable now.\n" +
+                        "_-_ Wand's charges are shown in percentage when in inventory, but exact charges are shown in description\n" +
+                        "_-_ Fixed Mage's Staff ignoring his charge bonus."));
+
+
+        changes = new ChangeInfo("ExpPD-2.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
