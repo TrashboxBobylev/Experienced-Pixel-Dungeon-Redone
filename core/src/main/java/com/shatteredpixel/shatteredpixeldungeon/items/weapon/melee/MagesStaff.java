@@ -292,7 +292,7 @@ public class MagesStaff extends MeleeWeapon {
 		super.restoreFromBundle(bundle);
 		wand = (Wand) bundle.get(WAND);
 		if (wand != null) {
-			wand.maxCharges = Math.min(wand.maxCharges + 1, 10);
+            wand.maxCharges = Math.round(wand.maxCharges * 1.33f);
 			name = Messages.get(wand, "staff_name");
 		}
 	}
