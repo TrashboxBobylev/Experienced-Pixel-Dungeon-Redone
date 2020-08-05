@@ -108,7 +108,7 @@ public class Hook extends NPC {
 
     @Override
     public void add( Buff buff ) {
-        if (buff instanceof RatKing.Barter || buff instanceof Viscosity.DeferedDamage) super.add(buff);
+        if (buff instanceof Wealth) super.add(buff);
     }
 
     @Override
