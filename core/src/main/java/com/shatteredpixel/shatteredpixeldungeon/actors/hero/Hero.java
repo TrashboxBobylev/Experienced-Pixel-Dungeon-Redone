@@ -258,6 +258,8 @@ public class Hero extends Char {
 		HTBoost = bundle.getInt(HTBOOST);
 
 		grinding = bundle.getBoolean(GRINDING);
+
+		if (HP < 0) updateHT(true);
 		
 		belongings.restoreFromBundle( bundle );
 	}
