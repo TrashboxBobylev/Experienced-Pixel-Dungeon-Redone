@@ -289,13 +289,13 @@ public class TitleScene extends PixelScene {
 						if (index == 0) {
 							Updates.launchUpdate(Updates.updateData());
 						} else if (index == 1){
-							ChangesScene.changesSelected = 0;
+							ChangesScene.changesSelected = 4;
 							ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 						}
 					}
 				});
 			} else {
-				ChangesScene.changesSelected = 0;
+				ChangesScene.changesSelected = 4;
 				ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 			}
 		}
@@ -336,7 +336,7 @@ public class TitleScene extends PixelScene {
 
 		public SupportButton( Chrome.Type type, String label ){
 			super(type, label);
-			icon(Icons.get(Icons.GOLD));
+			icon(Icons.get(Icons.INFO));
 			textColor(Window.TITLE_COLOR);
 		}
 

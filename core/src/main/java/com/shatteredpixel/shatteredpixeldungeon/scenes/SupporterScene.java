@@ -81,15 +81,11 @@ public class SupporterScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				super.onClick();
-				String link = "https://www.patreon.com/ShatteredPixel";
-				//tracking codes, so that the website knows where this pageview came from
-				link += "?utm_source=shatteredpd";
-				link += "&utm_medium=android";
-				link += "&utm_campaign=supporter_page";
+				String link = "mailto:trashbox.bobylev@gmail.com";
 				DeviceCompat.openURI(link);
 			}
 		};
-		link.icon(Icons.get(Icons.GOLD));
+		link.icon(Icons.get(Icons.NEWS));
 		link.textColor(Window.TITLE_COLOR);
 		link.setSize(elementWidth, BTN_HEIGHT);
 		add(link);
@@ -125,10 +121,8 @@ public class SupporterScene extends PixelScene {
 
 			String message = Messages.get(this, "intro");
 			message += "\n\n" + Messages.get(this, "patreon_msg");
-			if (Messages.lang() != Languages.ENGLISH) {
 				message += "\n" + Messages.get(this, "patreon_english");
-			}
-			message += "\n\n- Evan";
+			message += "\n\n- TrashboxBobylev";
 
 			text = PixelScene.renderTextBlock(message, 6);
 			add(text);
