@@ -59,30 +59,22 @@ public class RingOfWealth extends Ring {
 	{
 		icon = ItemSpriteSheet.Icons.RING_WEALTH;
 	}
+
+    public static float triesToDrop = Float.MIN_VALUE;
+    public static int dropsToRare = Integer.MIN_VALUE;
+    public static int level = 0;
 	
 	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
 		Wealth wealth = target.buff(Wealth.class);
 
 		if (wealth == null) return null;
 		
-		HashSet<Wealth> buffs = target.buffs(Wealth.class);
-		float triesToDrop = Float.MIN_VALUE;
-		int dropsToEquip = Integer.MIN_VALUE;
-		int level = 0;
-		
-		//find the largest count (if they aren't synced yet)
-		for (Wealth w : buffs){
-			if (w.triesToDrop() > triesToDrop){
-				triesToDrop = w.triesToDrop();
-				dropsToEquip = w.dropsToRare();
-				level = w.level;
-			}
-		}
+
 
 		//reset (if needed), decrement, and store counts
 		if (triesToDrop == Float.MIN_VALUE) {
 			triesToDrop = Random.NormalIntRange(0, 30);
-			dropsToEquip = Random.NormalIntRange(5, 10);
+			dropsToRare = Random.NormalIntRange(5, 10);
 		}
 
 		//now handle reward logic
@@ -90,28 +82,22 @@ public class RingOfWealth extends Ring {
 
 		triesToDrop -= tries;
 		while ( triesToDrop <= 0 ){
-			if (dropsToEquip <= 0){
+			if (dropsToRare <= 0){
 				Item i;
 				do {
 					i = genEquipmentDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
-				dropsToEquip = Random.NormalIntRange(5, 10);
+				dropsToRare = Random.NormalIntRange(5, 10);
 			} else {
 				Item i;
 				do {
 					i = genConsumableDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
-				dropsToEquip--;
+				dropsToRare--;
 			}
 			triesToDrop += Random.NormalIntRange(0, 30);
-		}
-
-		//store values back into rings
-		for (Wealth w : buffs){
-			w.triesToDrop(triesToDrop);
-			w.dropsToRare(dropsToEquip);
 		}
 		
 		return drops;
@@ -250,6 +236,23 @@ public class RingOfWealth extends Ring {
 		return result;
 	}
 
+    public static final String TRIES_TO_DROP = "tries_to_drop";
+    public static final String DROPS_TO_RARE = "drops_to_rare";
+    public static final String LEVEL = "level";
+
+
+    public static void store(Bundle bundle) {
+        bundle.put(TRIES_TO_DROP, triesToDrop);
+        bundle.put(DROPS_TO_RARE, dropsToRare);
+        bundle.put(LEVEL, level);
+    }
+
+    public static void restore(Bundle bundle) {
+        triesToDrop = bundle.getFloat(TRIES_TO_DROP);
+        dropsToRare = bundle.getInt(DROPS_TO_RARE);
+        level = bundle.getInt(LEVEL);
+    }
+
 	public static class Wealth extends Buff {
 
         public final String TRIES_TO_DROP = "tries_to_drop";
@@ -284,9 +287,7 @@ public class RingOfWealth extends Ring {
             return true;
         }
 
-        public float triesToDrop = Float.MIN_VALUE;
-        public int dropsToRare = Integer.MIN_VALUE;
-        public int level = 0;
+
 		
 		private void triesToDrop( float val ){
 			triesToDrop = val;

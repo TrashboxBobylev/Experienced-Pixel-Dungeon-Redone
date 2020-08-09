@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -577,6 +578,8 @@ public class Dungeon {
 			Potion.save( bundle );
 			Ring.save( bundle );
 
+            RingOfWealth.store(bundle);
+
 			Actor.storeNextID( bundle );
 			
 			Bundle badges = new Bundle();
@@ -635,6 +638,8 @@ public class Dungeon {
 		Scroll.restore( bundle );
 		Potion.restore( bundle );
 		Ring.restore( bundle );
+
+		RingOfWealth.restore(bundle);
 
 		quickslot.restorePlaceholders( bundle );
 		

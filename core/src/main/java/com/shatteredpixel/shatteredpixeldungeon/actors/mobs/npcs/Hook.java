@@ -118,7 +118,7 @@ public class Hook extends NPC {
 
     @Override
     protected void onAdd() {
-        add(new Wealth(power));
+        RingOfWealth.level = power;
         super.onAdd();
     }
 
