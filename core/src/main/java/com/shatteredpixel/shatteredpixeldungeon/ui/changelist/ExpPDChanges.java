@@ -48,7 +48,48 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 10th, 2020\n" +
+                        "_-_ 4 days after Experienced Pixel Dungeon 2.2\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.NEWS), "Guide",
+                "Added in-game guide, which you can access in title menu."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered 0.8.2 changes",
+                "_-_ New title screen.\n" +
+                        "_-_ New settings window.\n" +
+                        "_-_ 3rd accessory (misc) slot.\n" +
+                        "_-_ Questgivers are added to journal, when hero firstly sees them.\n" +
+                        "_-_ Disintegration's range benefits from magic charge.\n" +
+                        "_-_ Artifacts benefit from Ring of Energy.\n" +
+                        "_-_ Knockback effects closing door only on melee attacks.\n\n" +
+                        "Fixes:\n" +
+                        "_-_ Tengu's freezing the game when jumping.\n" +
+                        "_-_ Boss drop enemies softlocking the game on death.\n"+
+                        "_-_ Bees refusing to retarget when target is invulnerable\n" +
+                        "_-_ Potion splashes cleaning fire/ooze from enemies.\n" +
+                        "_-_ Blast wave attempting to throw enemies that move after being damaged.\n" +
+                        "_-_ Corrupting enchant attempting to corrupt dead enemies.\n" +
+                        "_-_ Magic missile charge buff not visually applying to the mage's staff.\n" +
+                        "_-_ Specific cases where using an item wouldn't cancel the current cell selector.\n" +
+                        "_-_ Large enemies rarely appearing in enclosed spaces due to levelgen.\n" +
+                        "_-_ Lotus vfx persisting after the sprite is destroyed in rare case.\n"
+                        ));
+
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.RING_RUBY, null), "Rings",
+                "Ring's scaling is extremely nerfed to somewhat negate their power creep."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new ExpGenerator()), "EXP Generator",
+                "Exp generators now drain your satiety and interrupt your sleep when possible."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "Number of traps, items and mobs now is much lower on dungeon's cycles."));
+
+
+        changes = new ChangeInfo("ExpPD-2.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
@@ -72,6 +113,8 @@ public class ExpPDChanges {
                         "_-_ Power Plants are stackable now.\n" +
                         "_-_ Wand's charges are shown in percentage when in inventory, but exact charges are shown in description\n" +
                         "_-_ Fixed Mage's Staff ignoring his charge bonus."));
+
+
 
 
         changes = new ChangeInfo("ExpPD-2.1", true, "");
