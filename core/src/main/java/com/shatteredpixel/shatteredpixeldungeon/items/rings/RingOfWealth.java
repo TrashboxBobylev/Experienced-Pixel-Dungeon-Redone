@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
@@ -160,7 +161,7 @@ public class RingOfWealth extends Ring {
 	}
 
 	private static Item genMidValueConsumable(){
-		switch (Random.Int(6)){
+		switch (Random.Int(7)){
 			case 0: default:
 				Item i = genLowValueConsumable();
 				return i.quantity(i.quantity()*2);
@@ -176,6 +177,8 @@ public class RingOfWealth extends Ring {
 				return new Bomb();
 			case 5:
 				return new Honeypot();
+            case 6:
+                return new Food();
 		}
 	}
 

@@ -86,7 +86,8 @@ public class ExpPDChanges {
                 "Exp generators now drain your satiety and interrupt your sleep when possible."));
 
         changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
-                "Number of traps, items and mobs now is much lower on dungeon's cycles."));
+                "_-_ Number of traps, items and mobs now is much lower on dungeon's cycles.\n\n" +
+                        "_-_ Fishing is fully fixed, also drops food."));
 
 
         changes = new ChangeInfo("ExpPD-2.2", true, "");
