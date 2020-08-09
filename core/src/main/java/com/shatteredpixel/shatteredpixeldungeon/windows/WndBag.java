@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -102,6 +103,12 @@ public class WndBag extends WndTabbed {
 	
 	protected static final int SLOT_WIDTH	= 19;
 	protected static final int SLOT_HEIGHT	= 19;
+	protected static int SLOT_WIDTH_P   = 24;
+	protected static int SLOT_WIDTH_L   = 28;
+
+	protected static int SLOT_HEIGHT_P	= 28;
+	protected static int SLOT_HEIGHT_L	= 24;
+
 	protected static final int SLOT_MARGIN	= 1;
 	
 	protected static final int TITLE_HEIGHT	= 14;
@@ -111,6 +118,9 @@ public class WndBag extends WndTabbed {
 	private String title;
 
 	private int nCols;
+
+	private int slotWidth;
+	private int slotHeight;
 
 	protected int count;
 	protected int col;
@@ -135,14 +145,17 @@ public class WndBag extends WndTabbed {
 		lastMode = mode;
 		lastBag = bag;
 
+		slotWidth = PixelScene.landscape() ? SLOT_WIDTH_L : SLOT_WIDTH_P;
+		slotHeight = PixelScene.landscape() ? SLOT_HEIGHT_L : SLOT_HEIGHT_P;
+
 		nCols = PixelScene.landscape() ? COLS_L : COLS_P;
-		int slotsWidth = SLOT_WIDTH * nCols + SLOT_MARGIN * (nCols - 1);
+		int slotsWidth = slotWidth * nCols + SLOT_MARGIN * (nCols - 1);
 
 		placeTitle( bag, slotsWidth );
 		
 		placeItems( bag );
 
-		int slotsHeight = SLOT_HEIGHT * row + SLOT_MARGIN * (row - 1);
+		int slotsHeight = slotHeight * row + SLOT_MARGIN * (row - 1);
 
 		resize( slotsWidth, slotsHeight + TITLE_HEIGHT );
 
@@ -220,8 +233,9 @@ public class WndBag extends WndTabbed {
 		Belongings stuff = Dungeon.hero.belongings;
 		placeItem( stuff.weapon != null ? stuff.weapon : new Placeholder( ItemSpriteSheet.WEAPON_HOLDER ) );
 		placeItem( stuff.armor != null ? stuff.armor : new Placeholder( ItemSpriteSheet.ARMOR_HOLDER ) );
-		placeItem( stuff.misc1 != null ? stuff.misc1 : new Placeholder( ItemSpriteSheet.RING_HOLDER ) );
-		placeItem( stuff.misc2 != null ? stuff.misc2 : new Placeholder( ItemSpriteSheet.RING_HOLDER ) );
+		placeItem( stuff.artifact != null ? stuff.artifact : new Placeholder( ItemSpriteSheet.ARTIFACT_HOLDER ) );
+		placeItem( stuff.misc != null ? stuff.misc : new Placeholder( ItemSpriteSheet.SOMETHING ) );
+		placeItem( stuff.ring != null ? stuff.ring : new Placeholder( ItemSpriteSheet.RING_HOLDER ) );
 
 		//the container itself if it's not the root backpack
 		if (container != Dungeon.hero.belongings.backpack){
@@ -239,7 +253,7 @@ public class WndBag extends WndTabbed {
 		}
 		
 		// Free Space
-		while ((count - 4) < container.capacity()) {
+		while ((count - 5) < container.capacity()) {
 			placeItem( null );
 		}
 	}
@@ -248,8 +262,8 @@ public class WndBag extends WndTabbed {
 
 		count++;
 		
-		int x = col * (SLOT_WIDTH + SLOT_MARGIN);
-		int y = TITLE_HEIGHT + row * (SLOT_HEIGHT + SLOT_MARGIN);
+		int x = col * (slotWidth + SLOT_MARGIN);
+		int y = TITLE_HEIGHT + row * (slotHeight + SLOT_MARGIN);
 		
 		add( new ItemButton( item ).setPos( x, y ) );
 		
@@ -360,13 +374,13 @@ public class WndBag extends WndTabbed {
 				bg.visible = false;
 			}
 			
-			width = SLOT_WIDTH;
-			height = SLOT_HEIGHT;
+			width = slotWidth;
+			height = slotHeight;
 		}
 		
 		@Override
 		protected void createChildren() {
-			bg = new ColorBlock( SLOT_WIDTH, SLOT_HEIGHT, NORMAL );
+			bg = new ColorBlock( 1, 1, NORMAL );
 			add( bg );
 			
 			super.createChildren();
@@ -374,6 +388,7 @@ public class WndBag extends WndTabbed {
 		
 		@Override
 		protected void layout() {
+			bg.size(width, height);
 			bg.x = x;
 			bg.y = y;
 			

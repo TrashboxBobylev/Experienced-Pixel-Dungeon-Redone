@@ -26,6 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -39,10 +41,28 @@ public abstract class KindofMisc extends EquipableItem {
 	@Override
 	public boolean doEquip(final Hero hero) {
 
-		if (hero.belongings.misc1 != null && hero.belongings.misc2 != null) {
+		boolean equipFull = false;
+		if ( this instanceof Artifact
+				&& hero.belongings.artifact != null
+				&& hero.belongings.misc != null){
+			equipFull = true;
+		} else if (this instanceof Ring
+				&& hero.belongings.misc != null
+				&& hero.belongings.ring != null){
+			equipFull = true;
+		}
 
-			final KindofMisc m1 = hero.belongings.misc1;
-			final KindofMisc m2 = hero.belongings.misc2;
+		if (equipFull) {
+
+			final KindofMisc m1;
+			final KindofMisc m2;
+			if (this instanceof Artifact){
+				m1 = hero.belongings.artifact;
+				m2 = hero.belongings.misc;
+			} else {
+				m1 = hero.belongings.misc;
+				m2 = hero.belongings.ring;
+			}
 
 			GameScene.show(
 					new WndOptions(Messages.get(KindofMisc.class, "unequip_title"),
@@ -69,10 +89,12 @@ public abstract class KindofMisc extends EquipableItem {
 
 		} else {
 
-			if (hero.belongings.misc1 == null) {
-				hero.belongings.misc1 = this;
-			} else {
-				hero.belongings.misc2 = this;
+			if (this instanceof Artifact){
+				if (hero.belongings.artifact == null)   hero.belongings.artifact = (Artifact) this;
+				else                                    hero.belongings.misc = (Artifact) this;
+			} else if (this instanceof Ring){
+				if (hero.belongings.ring == null)   hero.belongings.ring = (Ring) this;
+				else                                hero.belongings.misc = (Ring) this;
 			}
 
 			detach( hero.belongings.backpack );
@@ -96,10 +118,12 @@ public abstract class KindofMisc extends EquipableItem {
 	public boolean doUnequip(Hero hero, boolean collect, boolean single) {
 		if (super.doUnequip(hero, collect, single)){
 
-			if (hero.belongings.misc1 == this) {
-				hero.belongings.misc1 = null;
-			} else {
-				hero.belongings.misc2 = null;
+			if (hero.belongings.artifact == this) {
+				hero.belongings.artifact = null;
+			} else if (hero.belongings.misc == this) {
+				hero.belongings.misc = null;
+			} else if (hero.belongings.ring == this){
+				hero.belongings.ring = null;
 			}
 
 			return true;
@@ -113,7 +137,9 @@ public abstract class KindofMisc extends EquipableItem {
 
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.misc1 == this || hero.belongings.misc2 == this;
+		return hero.belongings.artifact == this
+				|| hero.belongings.misc == this
+				|| hero.belongings.ring == this;
 	}
 
 }

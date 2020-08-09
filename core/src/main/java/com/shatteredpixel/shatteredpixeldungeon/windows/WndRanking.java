@@ -241,11 +241,14 @@ public class WndRanking extends WndTabbed {
 			if (stuff.armor != null) {
 				addItem( stuff.armor );
 			}
-			if (stuff.misc1 != null) {
-				addItem( stuff.misc1);
+			if (stuff.artifact != null) {
+				addItem( stuff.artifact );
 			}
-			if (stuff.misc2 != null) {
-				addItem( stuff.misc2);
+			if (stuff.misc != null) {
+				addItem( stuff.misc );
+			}
+			if (stuff.ring != null) {
+				addItem( stuff.ring );
 			}
 
 			pos = 0;
@@ -253,14 +256,14 @@ public class WndRanking extends WndTabbed {
 				if (Dungeon.quickslot.getItem(i) != null){
 					QuickSlotButton slot = new QuickSlotButton(Dungeon.quickslot.getItem(i));
 
-					slot.setRect( pos, 116, 28, 28 );
+					slot.setRect( pos, 120, 28, 23 );
 
 					add(slot);
 
 				} else {
-					ColorBlock bg = new ColorBlock( 28, 28, 0x9953564D );
+					ColorBlock bg = new ColorBlock( 28, 23, 0x9953564D );
 					bg.x = pos;
-					bg.y = 116;
+					bg.y = 120;
 					add(bg);
 				}
 				pos += 29;
@@ -289,10 +292,10 @@ public class WndRanking extends WndTabbed {
 			list.setSize( WIDTH, HEIGHT );
 		}
 	}
-	
+
 	private class ItemButton extends Button {
 		
-		public static final int HEIGHT	= 28;
+		public static final int HEIGHT	= 23;
 		
 		private Item item;
 		
@@ -319,7 +322,7 @@ public class WndRanking extends WndTabbed {
 		@Override
 		protected void createChildren() {
 			
-			bg = new ColorBlock( HEIGHT, HEIGHT, 0x9953564D );
+			bg = new ColorBlock( 28, HEIGHT, 0x9953564D );
 			add( bg );
 			
 			slot = new ItemSlot();
@@ -336,7 +339,7 @@ public class WndRanking extends WndTabbed {
 			bg.x = x;
 			bg.y = y;
 			
-			slot.setRect( x, y, HEIGHT, HEIGHT );
+			slot.setRect( x, y, 28, HEIGHT );
 			PixelScene.align(slot);
 			
 			name.maxWidth((int)(width - slot.width() - 2));
@@ -368,7 +371,7 @@ public class WndRanking extends WndTabbed {
 
 	private class QuickSlotButton extends ItemSlot{
 
-		public static final int HEIGHT	= 28;
+		public static final int HEIGHT	= 23;
 
 		private Item item;
 		private ColorBlock bg;
@@ -380,7 +383,7 @@ public class WndRanking extends WndTabbed {
 
 		@Override
 		protected void createChildren() {
-			bg = new ColorBlock( HEIGHT, HEIGHT, 0x9953564D );
+			bg = new ColorBlock( 28, HEIGHT, 0x9953564D );
 			add( bg );
 
 			super.createChildren();
