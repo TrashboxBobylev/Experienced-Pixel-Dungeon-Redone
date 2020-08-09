@@ -208,7 +208,7 @@ public class Dungeon {
 		Blacksmith.Quest.reset();
 		Imp.Quest.reset();
 
-		Generator.reset();
+		Generator.fullReset();
 		hero = new Hero();
 		hero.live();
 		

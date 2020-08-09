@@ -176,7 +176,7 @@ public enum Rankings {
 		Actor.clear();
 		Dungeon.hero = null;
 		Dungeon.level = null;
-		Generator.reset();
+		Generator.fullReset();
 		Notes.reset();
 		Dungeon.quickslot.reset();
 		QuickSlotButton.reset();
