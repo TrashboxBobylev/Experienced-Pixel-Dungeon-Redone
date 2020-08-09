@@ -43,7 +43,7 @@ public enum Icons {
 	CLOSE,
 	ARROW,
 	DISPLAY,
-	//TODO UI,
+	DATA,
 	AUDIO,
 	
 	//ingame UI icons
@@ -72,6 +72,7 @@ public enum Icons {
 	GOLD,
 	RANKINGS,
 	BADGES,
+	NEWS,
 	CHANGES,
 	SHPX,
 	
@@ -129,10 +130,12 @@ public enum Icons {
 			icon.frame( icon.texture.uvRect( 32, 16, 45, 32 ) );
 			break;
 		//TODO UI icon?
-		case AUDIO:
-			icon.frame( icon.texture.uvRect( 64, 16, 77, 28 ) );
+		case DATA:
+			icon.frame( icon.texture.uvRect( 48, 16, 64, 31 ) );
 			break;
-			
+		case AUDIO:
+			icon.frame( icon.texture.uvRect( 64, 16, 78, 30 ) );
+			break;
 		case SKULL:
 			icon.frame( icon.texture.uvRect( 0, 32, 8, 40 ) );
 			break;
@@ -187,22 +190,25 @@ public enum Icons {
 			break;
 		
 		case ENTER:
-			icon.frame( icon.texture.uvRect( 0, 64, 17, 81 ) );
+			icon.frame( icon.texture.uvRect( 0, 64, 16, 80 ) );
 			break;
 		case RANKINGS:
-			icon.frame( icon.texture.uvRect( 17, 64, 34, 81 ) );
+			icon.frame( icon.texture.uvRect( 17, 64, 34, 80 ) );
 			break;
 		case BADGES:
-			icon.frame( icon.texture.uvRect( 34, 64, 51, 81 ) );
+			icon.frame( icon.texture.uvRect( 34, 64, 50, 80 ) );
+			break;
+		case NEWS:
+			icon.frame( icon.texture.uvRect( 51, 64, 67, 79 ) );
 			break;
 		case CHANGES:
-			icon.frame( icon.texture.uvRect( 51, 64, 68, 79 ) );
+			icon.frame( icon.texture.uvRect( 68, 64, 83, 79 ) );
 			break;
 		case SHPX:
-			icon.frame( icon.texture.uvRect( 68, 64, 84, 80 ) );
+			icon.frame( icon.texture.uvRect( 85, 64, 101, 80 ) );
 			break;
 		case GOLD:
-			icon.frame( icon.texture.uvRect( 85, 64, 102, 80 ) );
+			icon.frame( icon.texture.uvRect( 102, 64, 119, 80 ) );
 			break;
 		
 		case LIBGDX:
@@ -233,7 +239,7 @@ public enum Icons {
 			icon.scale.set(PixelScene.align(0.49f));
 			break;
 		case CUBE_CODE:
-			icon.frame( icon.texture.uvRect( 101, 39, 128, 69 ) );
+			icon.frame( icon.texture.uvRect( 101, 32, 128, 62 ) );
 			icon.scale.set(PixelScene.align(0.49f));
 			break;
             case BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN:

@@ -24,6 +24,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.updates;
 
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+
+import java.util.Date;
+
 public class Updates {
 
 	public static UpdateService service;
@@ -32,25 +36,28 @@ public class Updates {
 		return service != null;
 	}
 
-	private static boolean updateChecked = false;
+	private static Date lastCheck = null;
+	private static final long CHECK_DELAY = 1000*60*60; //1 hour
 
 	public static void checkForUpdate(){
-		if (!supportsUpdates() || updateChecked) return;
-		service.checkForUpdate(new UpdateService.UpdateResultCallback() {
+		if (!supportsUpdates()) return;
+		if (lastCheck != null && (new Date().getTime() - lastCheck.getTime()) < CHECK_DELAY) return;
+
+		service.checkForUpdate(!SPDSettings.WiFi(), new UpdateService.UpdateResultCallback() {
 			@Override
 			public void onUpdateAvailable(AvailableUpdateData update) {
-				updateChecked = true;
+				lastCheck = new Date();
 				updateData = update;
 			}
 
 			@Override
 			public void onNoUpdateFound() {
-				updateChecked = true;
+				lastCheck = new Date();
 			}
 
 			@Override
 			public void onConnectionFailed() {
-				updateChecked = false;
+				lastCheck = null;
 			}
 		});
 	}
@@ -67,6 +74,11 @@ public class Updates {
 
 	public static AvailableUpdateData updateData(){
 		return updateData;
+	}
+
+	public static void clearUpdate(){
+		updateData = null;
+		lastCheck = null;
 	}
 
 }

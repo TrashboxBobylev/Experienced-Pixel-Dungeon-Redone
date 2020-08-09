@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2020 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -22,18 +22,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.services.updates;
+package com.shatteredpixel.shatteredpixeldungeon.services.news;
 
-public abstract class UpdateService {
+import java.util.Date;
 
-	public static abstract class UpdateResultCallback {
-		public abstract void onUpdateAvailable( AvailableUpdateData update );
-		public abstract void onNoUpdateFound();
-		public abstract void onConnectionFailed();
-	}
+public class NewsArticle {
 
-	public abstract void checkForUpdate( boolean useMetered, UpdateResultCallback callback );
+	public String title;
+	public Date date;
+	public String summary;
 
-	public abstract void initializeUpdate( AvailableUpdateData update );
+	public String URL;
 
+	//the icon is stored as a string here so it can be decoded to an image later
+	//See News.java for supported formats
+	public String icon;
 }

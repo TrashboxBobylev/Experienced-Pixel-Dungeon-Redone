@@ -104,11 +104,5 @@ public class WelcomeScene extends PixelScene {
 		
 		SPDSettings.version(ShatteredPixelDungeon.versionCode);
 	}
-
-	private void placeTorch( float x, float y ) {
-		Fireball fb = new Fireball();
-		fb.setPos( x, y );
-		add( fb );
-	}
 	
 }

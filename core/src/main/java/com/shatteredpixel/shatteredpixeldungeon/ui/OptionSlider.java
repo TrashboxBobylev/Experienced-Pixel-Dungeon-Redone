@@ -123,7 +123,7 @@ public abstract class OptionSlider extends Component {
 					sliderNode.resetColor();
 					
 					//sets the selected value
-					selectedVal = minVal + Math.round(sliderNode.x / tickDist);
+					selectedVal = minVal + Math.round((sliderNode.x - x) / tickDist);
 					sliderNode.x = x + tickDist * (selectedVal - minVal);
 					PixelScene.align(sliderNode);
 					onChange();

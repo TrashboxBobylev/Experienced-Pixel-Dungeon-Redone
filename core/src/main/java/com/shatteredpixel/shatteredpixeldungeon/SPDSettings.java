@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.GameSettings;
@@ -255,7 +256,50 @@ public class SPDSettings extends GameSettings {
 	public static boolean systemFont(){
 		return getBoolean(KEY_SYSTEMFONT, false);
 	}
-	
+
+	//Connectivity
+
+	public static final String KEY_NEWS     = "news";
+	public static final String KEY_UPDATES	= "updates";
+	public static final String KEY_WIFI     = "wifi";
+
+	public static final String KEY_NEWS_LAST_READ = "news_last_read";
+
+	public static void news(boolean value){
+		put(KEY_NEWS, value);
+	}
+
+	public static boolean news(){
+		return getBoolean(KEY_NEWS, true);
+	}
+
+	public static void updates(boolean value){
+		put(KEY_UPDATES, value);
+	}
+
+	public static boolean updates(){
+		return getBoolean(KEY_UPDATES, true);
+	}
+
+	public static void WiFi(boolean value){
+		put(KEY_WIFI, value);
+	}
+
+	public static boolean WiFi(){
+		return getBoolean(KEY_WIFI, true);
+	}
+
+
+
+	public static void newsLastRead(long lastRead){
+		put(KEY_NEWS_LAST_READ, lastRead);
+	}
+
+	public static long newsLastRead(){
+		//returns the current time when none is stored, so historical news isn't seen as unread
+		return getLong(KEY_NEWS_LAST_READ, Game.realTime);
+	}
+
 	//Window management (desktop only atm)
 
 	public static final String KEY_WINDOW_WIDTH     = "window_width";

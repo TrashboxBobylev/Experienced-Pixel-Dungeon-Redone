@@ -107,6 +107,10 @@ public class StyledButton extends Button {
 		text.text( value );
 		layout();
 	}
+
+	public String text(){
+		return text.text();
+	}
 	
 	public void textColor( int value ) {
 		text.hardlight( value );

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2020 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -22,18 +22,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.services.updates;
+package com.shatteredpixel.shatteredpixeldungeon.services.news;
 
-public abstract class UpdateService {
+import java.util.ArrayList;
 
-	public static abstract class UpdateResultCallback {
-		public abstract void onUpdateAvailable( AvailableUpdateData update );
-		public abstract void onNoUpdateFound();
+public abstract class NewsService {
+
+	public static abstract class NewsResultCallback {
+		public abstract void onArticlesFound(ArrayList<NewsArticle> articles);
 		public abstract void onConnectionFailed();
 	}
 
-	public abstract void checkForUpdate( boolean useMetered, UpdateResultCallback callback );
-
-	public abstract void initializeUpdate( AvailableUpdateData update );
+	public abstract void checkForArticles(boolean useMetered, boolean forceHTTPS, NewsResultCallback callback);
 
 }
