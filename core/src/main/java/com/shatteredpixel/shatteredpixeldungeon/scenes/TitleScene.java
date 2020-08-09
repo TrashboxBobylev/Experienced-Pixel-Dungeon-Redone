@@ -40,8 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.LanguageButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.PrefsButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -224,7 +222,7 @@ public class TitleScene extends PixelScene {
 
 		public NewsButton(Chrome.Type type, String label ){
 			super(type, label);
-			if (SPDSettings.news()) News.checkForNews();
+			News.checkForNews();
 		}
 
 		int unreadCount = -1;

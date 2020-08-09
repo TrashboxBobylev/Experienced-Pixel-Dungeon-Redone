@@ -25,8 +25,8 @@ android {
             applicationIdSuffix ".indev"
             versionNameSuffix '-INDEV'
             dependencies {
-                debugImplementation project(':services:updates:debugUpdates')
-                debugImplementation project(':services:news:debugNews')
+                debugImplementation project(':services:updates:githubUpdates')
+                debugImplementation project(':services:news:ingameNews')
             }
         }
         release {
@@ -41,7 +41,7 @@ android {
 
             dependencies {
                 releaseImplementation project(':services:updates:githubUpdates')
-                releaseImplementation project(':services:news:shatteredNews')
+                releaseImplementation project(':services:news:ingameNews')
             }
         }
     }

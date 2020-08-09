@@ -144,18 +144,6 @@ public class NewsScene extends PixelScene {
 			top += 20;
 		}
 
-		StyledButton btnSite = new StyledButton(Chrome.Type.GREY_BUTTON_TR, Messages.get(this, "read_more")){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				DeviceCompat.openURI("https://ShatteredPixel.com/");
-			}
-		};
-		btnSite.icon(Icons.get(Icons.NEWS));
-		btnSite.textColor(Window.TITLE_COLOR);
-		btnSite.setRect(left, top, fullWidth, BTN_HEIGHT);
-		add(btnSite);
-
 	}
 
 	@Override
@@ -264,15 +252,6 @@ public class NewsScene extends PixelScene {
 			this.article = article;
 
 			icon(News.parseArticleIcon(article));
-			if (article.date.getTime() > SPDSettings.newsLastRead()) textColor(Window.SHPX_COLOR);
-
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(article.date);
-			date = new BitmapText( News.parseArticleDate(article), pixelFont);
-			date.scale.set(PixelScene.align(0.5f));
-			date.hardlight( 0x888888 );
-			date.measure();
-			add(date);
 		}
 
 		@Override
@@ -296,9 +275,6 @@ public class NewsScene extends PixelScene {
 		protected void onClick() {
 			super.onClick();
 			textColor(Window.WHITE);
-			if (article.date.getTime() > SPDSettings.newsLastRead()){
-				SPDSettings.newsLastRead(article.date.getTime());
-			}
 			ShatteredPixelDungeon.scene().addToFront(new WndArticle(article));
 		}
 	}
@@ -307,25 +283,7 @@ public class NewsScene extends PixelScene {
 
 		public WndArticle(NewsArticle article ) {
 			super(News.parseArticleIcon(article), article.title, article.summary);
-
-			RedButton link = new RedButton(Messages.get(NewsScene.class, "read_more")){
-				@Override
-				protected void onClick() {
-					super.onClick();
-					String link = article.URL;
-					//tracking codes, so that the website knows where this pageview came from
-					link += "?utm_source=shatteredpd";
-					link += "&utm_medium=android";
-					link += "&utm_campaign=news_page";
-					DeviceCompat.openURI(link);
-				}
-			};
-			link.setRect(0, height + 2, width, BTN_HEIGHT);
-			add(link);
-			resize(width, (int) link.bottom());
 		}
-
-
 	}
 
 }

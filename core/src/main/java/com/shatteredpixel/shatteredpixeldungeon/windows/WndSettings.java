@@ -519,6 +519,8 @@ public class WndSettings extends WndTabbed {
 
 	}
 
+
+
 	private static class DataTab extends Component{
 
 		RenderedTextBlock title;
@@ -535,17 +537,6 @@ public class WndSettings extends WndTabbed {
 
 			sep1 = new ColorBlock(1, 1, 0xFF000000);
 			add(sep1);
-
-			chkNews = new CheckBox(Messages.get(this, "news")){
-				@Override
-				protected void onClick() {
-					super.onClick();
-					SPDSettings.news(checked());
-					News.clearArticles();
-				}
-			};
-			chkNews.checked(SPDSettings.news());
-			add(chkNews);
 
 			chkUpdates = new CheckBox(Messages.get(this, "updates")){
 				@Override
@@ -578,11 +569,9 @@ public class WndSettings extends WndTabbed {
 			sep1.y = title.bottom() + 2*GAP;
 
 			if (width > 200){
-				chkNews.setRect(0, sep1.y + 1 + GAP, width/2-1, BTN_HEIGHT);
-				chkUpdates.setRect(chkNews.right() + GAP, chkNews.top(), width/2-1, BTN_HEIGHT);
+				chkUpdates.setRect(0, sep1.y + 1 + GAP, width-1, BTN_HEIGHT);
 			} else {
-				chkNews.setRect(0, sep1.y + 1 + GAP, width, BTN_HEIGHT);
-				chkUpdates.setRect(0, chkNews.bottom()+ GAP, width, BTN_HEIGHT);
+				chkUpdates.setRect(0, sep1.y + 1 + GAP, width, BTN_HEIGHT);
 			}
 
 			float pos = chkUpdates.bottom();

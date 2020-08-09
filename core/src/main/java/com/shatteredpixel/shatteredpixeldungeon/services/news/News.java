@@ -82,11 +82,7 @@ public class News {
 	}
 
 	public static int unreadArticles(Date lastRead){
-		int unread = 0;
-		for (NewsArticle article : articles){
-			if (article.date.after(lastRead)) unread++;
-		}
-		return unread;
+		return 0;
 	}
 
 	public static void clearArticles(){
@@ -120,14 +116,6 @@ public class News {
 			if (article.icon != null) ShatteredPixelDungeon.reportException(e);
 			return Icons.get(Icons.NEWS);
 		}
-	}
-
-	public static String parseArticleDate(NewsArticle article){
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(article.date);
-		return cal.get(Calendar.YEAR)
-				+ "-" + String.format("%02d", cal.get(Calendar.MONTH)+1)
-				+ "-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
 	}
 
 }

@@ -22,8 +22,8 @@ task debug(dependsOn: classes, type: JavaExec) {
     systemProperty 'Implementation-Version', appVersionCode
 
     dependencies {
-        debugImplementation project(':services:updates:debugUpdates')
-        debugImplementation project(':services:news:debugNews')
+        debugImplementation project(':services:updates:githubUpdates')
+        debugImplementation project(':services:news:ingameNews')
     }
 }
 
@@ -46,7 +46,7 @@ task release(dependsOn: compileForRelease, type: Jar) {
 
     dependencies {
         releaseImplementation project(':services:updates:githubUpdates')
-        releaseImplementation project(':services:news:shatteredNews')
+        releaseImplementation project(':services:news:ingameNews')
     }
 }
 
@@ -66,6 +66,6 @@ dependencies {
 
     //Need these at compile time to prevent errors there.
     // The actual dependency used at runtime will vary based on source set.
-    compileOnly project(':services:updates:debugUpdates')
-    compileOnly project(':services:news:debugNews')
+    compileOnly project(':services:updates:githubUpdates')
+    compileOnly project(':services:news:ingameNews')
 }
