@@ -198,7 +198,8 @@ public abstract class RegularLevel extends Level {
 			do {
 				mob.pos = pointToCell(roomToSpawn.random());
 				tries--;
-			} while (tries >= 0 && (findMob(mob.pos) != null || !passable[mob.pos] || mob.pos == exit));
+			} while (tries >= 0 && (findMob(mob.pos) != null || !passable[mob.pos] || mob.pos == exit
+					|| (!openSpace[mob.pos] && mob.properties().contains(Char.Property.LARGE))));
 
 			if (tries >= 0) {
 				mobsToSpawn--;
@@ -212,7 +213,8 @@ public abstract class RegularLevel extends Level {
 					do {
 						mob.pos = pointToCell(roomToSpawn.random());
 						tries--;
-					} while (tries >= 0 && findMob(mob.pos) != null || !passable[mob.pos] || mob.pos == exit);
+					} while (tries >= 0 && findMob(mob.pos) != null || !passable[mob.pos] || mob.pos == exit
+							|| (!openSpace[mob.pos] && mob.properties().contains(Char.Property.LARGE)));
 
 					if (tries >= 0) {
 						mobsToSpawn--;
