@@ -39,12 +39,12 @@ public class RingOfEnergy extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			return Messages.get(this, "stats",
-					new DecimalFormat("#.##").format(100f * (Math.pow(1.20f, soloBuffedBonus()) - 1f)),
-					new DecimalFormat("#.##").format(100f * (Math.pow(1.10f, soloBuffedBonus()) - 1f)));
+					new DecimalFormat("#.##").format(100f * (Math.pow(1.08f, soloBuffedBonus()) - 1f)),
+					new DecimalFormat("#.##").format(100f * (Math.pow(1.05f, soloBuffedBonus()) - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats",
-					new DecimalFormat("#.##").format(20f),
-					new DecimalFormat("#.##").format(10f));
+					new DecimalFormat("#.##").format(8f),
+					new DecimalFormat("#.##").format(5f));
 		}
 	}
 	
@@ -54,11 +54,11 @@ public class RingOfEnergy extends Ring {
 	}
 	
 	public static float wandChargeMultiplier( Char target ){
-		return (float)Math.pow(1.20, getBuffedBonus(target, Energy.class));
+		return (float)Math.pow(1.08, getBuffedBonus(target, Energy.class));
 	}
 
 	public static float artifactChargeMultiplier( Char target ){
-		return (float)Math.pow(1.10, getBuffedBonus(target, Energy.class));
+		return (float)Math.pow(1.05, getBuffedBonus(target, Energy.class));
 	}
 	
 	public class Energy extends RingBuff {
