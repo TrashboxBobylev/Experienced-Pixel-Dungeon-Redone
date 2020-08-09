@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
@@ -1111,6 +1112,10 @@ public class Hero extends Char {
 
 		Mob target = null;
 		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])) {
+		    if (m instanceof ExpGenerator){
+		        newMob = true;
+		        break;
+            }
 		    if (m instanceof Hook && !fieldOfView[m.pos]){
 		        m.remove(m.buff(RingOfWealth.Wealth.class));
 		        m.die(new com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom());
