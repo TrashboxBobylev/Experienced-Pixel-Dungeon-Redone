@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
@@ -105,7 +106,10 @@ public abstract class FishingRod extends Item {
                     mob.die(new Doom());
                     hook = false;
                     defaultAction = AC_CAST;
-                    if (RingOfWealth.latestDropTier >= 2) hero.earnExp(Dungeon.escalatingDepth(), this.getClass());
+                    if (RingOfWealth.latestDropTier >= 2) {
+                        hero.earnExp(Dungeon.escalatingDepth(), this.getClass());
+                        Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()));
+                    }
                 }
             }
         }

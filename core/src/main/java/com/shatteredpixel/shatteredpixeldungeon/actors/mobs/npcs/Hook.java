@@ -25,19 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth.Wealth;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HookSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.WardSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
@@ -129,7 +124,7 @@ public class Hook extends NPC {
             new Flare(6, 20).color(0xFF0000, true).show(sprite, 3f);
             Sample.INSTANCE.play( Assets.Sounds.DEGRADE );
         }
-        ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(this, tries);
+        ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(tries);
         if (bonus != null && !bonus.isEmpty()) {
             items.addAll(bonus);
             RingOfWealth.showFlareForBonusDrop(sprite);

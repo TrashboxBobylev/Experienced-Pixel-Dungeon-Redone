@@ -65,12 +65,7 @@ public class RingOfWealth extends Ring {
     public static int dropsToRare = Integer.MIN_VALUE;
     public static int level = 0;
 	
-	public static ArrayList<Item> tryForBonusDrop(Char target, int tries ){
-		Wealth wealth = target.buff(Wealth.class);
-
-		if (wealth == null) return null;
-		
-
+	public static ArrayList<Item> tryForBonusDrop(int tries){
 
 		//reset (if needed), decrement, and store counts
 		if (triesToDrop == Float.MIN_VALUE) {
