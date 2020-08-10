@@ -65,6 +65,8 @@ public class RunicBlade extends MeleeWeapon {
 
         defaultAction = AC_ZAP;
         usesTargeting = true;
+        hitSound = Assets.Sounds.HIT_SLASH;
+        hitSoundPitch = 1f;
     }
 
     @Override
