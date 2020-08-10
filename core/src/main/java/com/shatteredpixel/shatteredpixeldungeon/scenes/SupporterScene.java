@@ -127,7 +127,7 @@ public class SupporterScene extends PixelScene {
 			text = PixelScene.renderTextBlock(message, 6);
 			add(text);
 
-			icon = Icons.get(Icons.SHPX);
+			icon = Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN);
 			add(icon);
 
 		}
@@ -141,7 +141,7 @@ public class SupporterScene extends PixelScene {
 			text.setPos(x + bg.marginLeft(), y + bg.marginTop());
 
 			icon.y = text.bottom() - icon.height() + 4;
-			icon.x = x + 25;
+			icon.x = text.right() + 10;
 
 			height = (text.bottom() + 2) - y;
 
