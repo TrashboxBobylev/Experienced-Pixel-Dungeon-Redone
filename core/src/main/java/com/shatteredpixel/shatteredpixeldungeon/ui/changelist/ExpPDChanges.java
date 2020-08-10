@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRo
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -48,7 +49,42 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.3", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.4", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 11th, 2020\n" +
+                        "_-_ 1 days after Experienced Pixel Dungeon 2.3\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new ExpGenerator()), "EXP Generator",
+                "Fixed interruptions when unneeded."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new VelvetPouch()), "Inventory",
+                "Adjusted inventory size."));
+
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.GREATSWORD, null), "Overhauled Weapons",
+                "Added new abilities for some underused weapons and items. For more details, visit In-Game Guide."));
+
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.SWORD, new ItemSprite.Glowing( 0x000000 )), "Grim",
+                "Significantly nerfed Grim: now it does additional damage instead of instakill."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new BlackPsycheChest()), "Dungeon Cycles",
+                "You can enter fourth dungeon cycle."));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new ScrollOfAffection()), "Scroll of Affection",
+                "Scroll of Affection turns enemies into allies instead of charming."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Corruption is affected by Bless buff.\n\n" +
+                        "_-_ Shield weapons now grow with dungeon's cycles.\n\n" +
+                        "_-_ Significantly reduced amount of particles for some wand, to reduce lag.\n\n" +
+                        "_-_ Added new fishing rod for new dungeon cycle.\n\n" +
+                        "_-_ Various small adjustments to UI.\n\n" +
+                        "_-_ Fishing is fully fixed, for real."));
+
+        changes = new ChangeInfo("ExpPD-2.3", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
