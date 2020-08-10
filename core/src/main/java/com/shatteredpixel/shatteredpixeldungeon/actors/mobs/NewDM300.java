@@ -102,6 +102,11 @@ public class NewDM300 extends Mob {
                 defenseSkill = 624;
                 EXP = 110000;
                 break;
+            case 4:
+                HP = HT = 12000000;
+                defenseSkill = 5000;
+                EXP = 2000000;
+                break;
         }
 	}
 
@@ -111,6 +116,7 @@ public class NewDM300 extends Mob {
             case 1: return Random.NormalIntRange(67, 86);
             case 2: return Random.NormalIntRange(340, 445);
             case 3: return Random.NormalIntRange(1500, 1943);
+            case 4: return Random.NormalIntRange(47000, 84000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -121,6 +127,7 @@ public class NewDM300 extends Mob {
             case 1: return 89;
             case 2: return 375;
             case 3: return 835;
+            case 4: return 5400;
         }
 		return 20;
 	}
@@ -131,6 +138,7 @@ public class NewDM300 extends Mob {
             case 1: return Random.NormalIntRange(38, 53);
             case 2: return Random.NormalIntRange(120, 275);
             case 3: return Random.NormalIntRange(562, 1310);
+            case 4: return Random.NormalIntRange(19000, 45000);
         }
 		return Random.NormalIntRange(0, 10);
 	}

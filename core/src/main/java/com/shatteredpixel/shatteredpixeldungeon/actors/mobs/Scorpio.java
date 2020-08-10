@@ -71,6 +71,11 @@ public class Scorpio extends Mob {
                 defenseSkill = 1000;
                 EXP = 22000;
                 break;
+            case 4:
+                HP = HT = 410000000;
+                defenseSkill = 16000;
+                EXP = 9000000;
+                break;
         }
 	}
 	
@@ -80,6 +85,7 @@ public class Scorpio extends Mob {
             case 1: return Random.NormalIntRange(100, 123);
             case 2: return Random.NormalIntRange(450, 564);
             case 3: return Random.NormalIntRange(2780, 4350);
+            case 4: return Random.NormalIntRange(324000, 410000);
         }
 		return Random.NormalIntRange( 26, 36 );
 	}
@@ -90,6 +96,7 @@ public class Scorpio extends Mob {
             case 1: return 160;
             case 2: return 500;
             case 3: return 1190;
+            case 4: return 18000;
         }
 		return 36;
 	}
@@ -100,6 +107,7 @@ public class Scorpio extends Mob {
             case 1: return Random.NormalIntRange(50, 89);
             case 2: return Random.NormalIntRange(240, 400);
             case 3: return Random.NormalIntRange(1750, 3200);
+            case 4: return Random.NormalIntRange(300000, 400000);
         }
 		return Random.NormalIntRange(0, 16);
 	}

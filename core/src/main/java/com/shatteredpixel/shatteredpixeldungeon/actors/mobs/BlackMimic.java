@@ -97,6 +97,11 @@ public class BlackMimic extends Mob {
                 defenseSkill = 1300;
                 EXP = 25000000;
                 break;
+            case 4:
+                HP = HT = 2000000000;
+                defenseSkill = 23000;
+                EXP = 2100000000;
+                break;
         }
 	}
 
@@ -106,6 +111,7 @@ public class BlackMimic extends Mob {
             case 1: return Random.NormalIntRange(100, 156);
             case 2: return Random.NormalIntRange(524, 731);
             case 3: return Random.NormalIntRange(3400, 6124);
+            case 4: return Random.NormalIntRange(600000, 800000);
         }
 		return Random.NormalIntRange( 29, 49 );
 	}
@@ -116,6 +122,7 @@ public class BlackMimic extends Mob {
             case 1: return 160;
             case 2: return 564;
             case 3: return 1500;
+            case 4: return 30000;
         }
 		return 38;
 	}
@@ -126,6 +133,7 @@ public class BlackMimic extends Mob {
             case 1: return Random.NormalIntRange(60, 100);
             case 2: return Random.NormalIntRange(300, 520);
             case 3: return Random.NormalIntRange(2000, 3600);
+            case 4: return Random.NormalIntRange(423000, 520000);
         }
 		return Random.NormalIntRange(0, 20);
 	}
@@ -516,6 +524,7 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public void damage(int dmg, Object src) {
+	    if (Dungeon.cycle == 4) dmg /= 3.5f;
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
 			return;

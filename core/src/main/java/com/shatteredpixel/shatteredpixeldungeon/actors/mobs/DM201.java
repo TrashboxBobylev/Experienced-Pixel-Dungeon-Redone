@@ -61,6 +61,11 @@ public class DM201 extends DM200 {
                 defenseSkill = 590;
                 EXP = 5400;
                 break;
+            case 4:
+                HP = HT = 32000000;
+                defenseSkill = 4800;
+                EXP = 210000;
+                break;
         }
 	}
 
@@ -70,6 +75,7 @@ public class DM201 extends DM200 {
             case 1: return Random.NormalIntRange(69, 91);
             case 2: return Random.NormalIntRange(321, 412);
             case 3: return Random.NormalIntRange(1400, 1794);
+            case 4: return Random.NormalIntRange(40000, 75000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -119,10 +125,10 @@ public class DM201 extends DM200 {
 		spend(TICK);
 
 		GLog.w(Messages.get(this, "vent"));
-		GameScene.add(Blob.seed(enemy.pos, 15, CorrosiveGas.class).setStrength(8));
+		GameScene.add(Blob.seed(enemy.pos, 15, CorrosiveGas.class).setStrength((Dungeon.escalatingDepth() + 1) / 2));
 		for (int i : PathFinder.NEIGHBOURS8){
 			if (!Dungeon.level.solid[enemy.pos+i]) {
-				GameScene.add(Blob.seed(enemy.pos + i, 5, CorrosiveGas.class).setStrength(8));
+				GameScene.add(Blob.seed(enemy.pos + i, 5, CorrosiveGas.class).setStrength((Dungeon.escalatingDepth() + 1 )/ 2));
 			}
 		}
 		Sample.INSTANCE.play(Assets.Sounds.GAS);

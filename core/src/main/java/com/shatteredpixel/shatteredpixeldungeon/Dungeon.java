@@ -232,7 +232,7 @@ public class Dungeon {
         for (LimitedDrops a : LimitedDrops.values())
             a.count = 0;
         Notes.reset();
-        if (cycle < 3) cycle += 1;
+        if (cycle < 4) cycle += 1;
         GameLog.wipe();
         InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
         Game.switchScene( InterlevelScene.class );
@@ -245,6 +245,7 @@ public class Dungeon {
             case 1: return (int) (depth*1.4f +31);
             case 2: return depth*5+200;
             case 3: return depth*50+2500;
+            case 4: return depth*100 + 4300;
         }
         return depth;
     }

@@ -63,6 +63,11 @@ public class Snake extends Mob {
                 defenseSkill = 1200;
                 EXP = 921;
                 break;
+            case 4:
+                HP = HT = 900000;
+                defenseSkill = 9000;
+                EXP = 30000;
+                break;
         }
 	}
 	
@@ -72,6 +77,7 @@ public class Snake extends Mob {
             case 1: return Random.NormalIntRange(21, 36);
             case 2: return Random.NormalIntRange(120, 160);
             case 3: return Random.NormalIntRange(498, 621);
+            case 4: return Random.NormalIntRange(3900, 5780);
         }
 		return Random.NormalIntRange( 1, 4 );
 	}
@@ -82,6 +88,7 @@ public class Snake extends Mob {
             case 1: return 40;
             case 2: return 180;
             case 3: return 540;
+            case 4: return 1400;
         }
 	    return 10;
 	}

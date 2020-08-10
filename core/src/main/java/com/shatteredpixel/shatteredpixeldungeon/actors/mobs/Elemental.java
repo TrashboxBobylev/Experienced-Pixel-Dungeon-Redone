@@ -78,6 +78,11 @@ public abstract class Elemental extends Mob {
                 defenseSkill = 624;
                 EXP = 5890;
                 break;
+            case 4:
+                HP = HT = 70000000;
+                defenseSkill = 5600;
+                EXP = 500000;
+                break;
         }
 	}
 	
@@ -87,6 +92,7 @@ public abstract class Elemental extends Mob {
             case 1: return Random.NormalIntRange(64, 83);
             case 2: return Random.NormalIntRange(291, 434);
             case 3: return Random.NormalIntRange(1650, 2100);
+            case 4: return Random.NormalIntRange(30000, 85000);
         }
 		return Random.NormalIntRange( 16, 26 );
 	}
@@ -97,6 +103,7 @@ public abstract class Elemental extends Mob {
             case 1: return 102;
             case 2: return 355;
             case 3: return 930;
+            case 4: return 6000;
         }
 		return 25;
 	}
@@ -107,6 +114,7 @@ public abstract class Elemental extends Mob {
             case 1: return Random.NormalIntRange(24, 50);
             case 2: return Random.NormalIntRange(121, 243);
             case 3: return Random.NormalIntRange(700, 1321);
+            case 4: return Random.NormalIntRange(22000, 64000);
         }
 		return Random.NormalIntRange(0, 5);
 	}

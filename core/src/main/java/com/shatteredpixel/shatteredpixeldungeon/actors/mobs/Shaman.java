@@ -69,6 +69,11 @@ public abstract class Shaman extends Mob {
                 defenseSkill = 525;
                 EXP = 3900;
                 break;
+            case 4:
+                HP = HT = 8000000;
+                defenseSkill = 3300;
+                EXP = 120000;
+                break;
         }
 	}
 	
@@ -78,6 +83,7 @@ public abstract class Shaman extends Mob {
             case 1: return Random.NormalIntRange(43, 58);
             case 2: return Random.NormalIntRange(235, 265);
             case 3: return Random.NormalIntRange(880, 1200);
+            case 4: return Random.NormalIntRange(18000, 27500);
         }
 		return Random.NormalIntRange( 5, 10 );
 	}
@@ -88,6 +94,7 @@ public abstract class Shaman extends Mob {
             case 1: return 75;
             case 2: return 275;
             case 3: return 735;
+            case 4: return 3700;
         }
 		return 18;
 	}
@@ -98,6 +105,7 @@ public abstract class Shaman extends Mob {
             case 1: return Random.NormalIntRange(18, 36);
             case 2: return Random.NormalIntRange(70, 198);
             case 3: return Random.NormalIntRange(450, 790);
+            case 4: return Random.NormalIntRange(10000, 26000);
         }
 		return Random.NormalIntRange(0, 6);
 	}
@@ -157,6 +165,7 @@ public abstract class Shaman extends Mob {
                 case 1: dmg = Random.NormalIntRange(48, 62); break;
                 case 2: dmg = Random.NormalIntRange(250, 324); break;
                 case 3: dmg = Random.NormalIntRange(895, 1200); break;
+                case 4: dmg = Random.NormalIntRange(17000, 26000); break;
             }
 			enemy.damage( dmg, new EarthenBolt() );
 			

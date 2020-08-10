@@ -80,6 +80,11 @@ public class Necromancer extends Mob {
                 defenseSkill = 489;
                 EXP = 2500;
                 break;
+            case 4:
+                HP = HT = 7800000;
+                defenseSkill = 2800;
+                EXP = 64000;
+                break;
         }
 	}
 	
@@ -109,6 +114,7 @@ public class Necromancer extends Mob {
             case 1: return Random.NormalIntRange(8, 28);
             case 2: return Random.NormalIntRange(75, 180);
             case 3: return Random.NormalIntRange(400, 700);
+            case 4: return Random.NormalIntRange(7000, 12000);
         }
 		return Random.NormalIntRange(0, 5);
 	}
@@ -381,6 +387,9 @@ public class Necromancer extends Mob {
                     break;
                 case 3:
                     HP =  40000;
+                    break;
+                case 4:
+                    HP = 3000000;
                     break;
             }
 		}

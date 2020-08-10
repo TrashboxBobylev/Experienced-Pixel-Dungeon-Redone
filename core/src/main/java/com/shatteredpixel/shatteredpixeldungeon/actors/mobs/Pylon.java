@@ -81,6 +81,9 @@ public class Pylon extends Mob {
             case 3:
                 HP = HT = 50000;
                 break;
+            case 4:
+                HP = HT = 10000000;
+                break;
         }
 	}
 

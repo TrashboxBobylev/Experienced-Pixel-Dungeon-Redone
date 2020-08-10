@@ -78,6 +78,11 @@ public class RipperDemon extends Mob {
                 defenseSkill = 810;
                 EXP = 10000;
                 break;
+            case 4:
+                HP = HT = 150000000;
+                defenseSkill = 8700;
+                EXP = 1000000;
+                break;
         }
 	}
 
@@ -92,6 +97,7 @@ public class RipperDemon extends Mob {
             case 1: return Random.NormalIntRange(79, 91);
             case 2: return Random.NormalIntRange(270, 440);
             case 3: return Random.NormalIntRange(2100, 2800);
+            case 4: return Random.NormalIntRange(65000, 180000);
         }
 		return Random.NormalIntRange( 12, 25 );
 	}
@@ -102,6 +108,7 @@ public class RipperDemon extends Mob {
             case 1: return 120;
             case 2: return 430;
             case 3: return 1175;
+            case 4: return 11000;
         }
 		return 30;
 	}
@@ -117,6 +124,7 @@ public class RipperDemon extends Mob {
             case 1: return Random.NormalIntRange(34, 64);
             case 2: return Random.NormalIntRange(100, 217);
             case 3: return Random.NormalIntRange(1200, 2100);
+            case 4: return Random.NormalIntRange(90000, 140000);
         }
 		return Random.NormalIntRange(0, 4);
 	}

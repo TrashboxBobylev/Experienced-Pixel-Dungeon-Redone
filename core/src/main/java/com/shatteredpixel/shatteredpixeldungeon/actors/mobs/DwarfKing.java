@@ -92,6 +92,11 @@ public class DwarfKing extends Mob {
                 defenseSkill = 780;
                 EXP = 400000;
                 break;
+            case 4:
+                HP = HT = 1200000000;
+                defenseSkill = 7000;
+                EXP = 99999999;
+                break;
         }
 	}
 
@@ -101,6 +106,7 @@ public class DwarfKing extends Mob {
             case 1: return Random.NormalIntRange(71, 83);
             case 2: return Random.NormalIntRange(297, 455);
             case 3: return Random.NormalIntRange(2000, 2800);
+            case 4: return Random.NormalIntRange(90000, 250000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -111,6 +117,7 @@ public class DwarfKing extends Mob {
             case 1: return 127;
             case 2: return 387;
             case 3: return 1100;
+            case 4: return 10000;
         }
 		return 26;
 	}
@@ -121,6 +128,7 @@ public class DwarfKing extends Mob {
             case 1: return Random.NormalIntRange(38, 65);
             case 2: return Random.NormalIntRange(140, 295);
             case 3: return Random.NormalIntRange(1100, 1980);
+            case 4: return Random.NormalIntRange(90000, 170000);
         }
 		return Random.NormalIntRange(0, 10);
 	}

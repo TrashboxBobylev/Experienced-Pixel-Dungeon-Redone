@@ -61,6 +61,11 @@ public class Crab extends Mob {
                 defenseSkill = 390;
                 EXP = 1280;
                 break;
+            case 4:
+                HP = HT = 2250000;
+                defenseSkill = 1700;
+                EXP = 39000;
+                break;
         }
 	}
 	
@@ -70,6 +75,7 @@ public class Crab extends Mob {
             case 1: return Random.NormalIntRange(30, 45);
             case 2: return Random.NormalIntRange(150, 184);
             case 3: return Random.NormalIntRange(540, 721);
+            case 4: return Random.NormalIntRange(6000, 10000);
         }
 		return Random.NormalIntRange( 1, 7 );
 	}
@@ -80,6 +86,7 @@ public class Crab extends Mob {
             case 1: return 46;
             case 2: return 210;
             case 3: return 560;
+            case 4: return 2000;
         }
 		return 12;
 	}
@@ -90,6 +97,7 @@ public class Crab extends Mob {
             case 1: return Random.NormalIntRange(8, 20);
             case 2: return Random.NormalIntRange(76, 150);
             case 3: return Random.NormalIntRange(300, 550);
+            case 4: return Random.NormalIntRange(4000, 8500);
         }
 		return Random.NormalIntRange(0, 4);
 	}

@@ -81,6 +81,11 @@ public class Eye extends Mob {
                 defenseSkill = 900;
                 EXP = 18000;
                 break;
+            case 4:
+                HP = HT = 290000000;
+                defenseSkill = 14000;
+                EXP = 6000000;
+                break;
         }
 	}
 
@@ -90,6 +95,7 @@ public class Eye extends Mob {
             case 1: return Random.NormalIntRange(86, 106);
             case 2: return Random.NormalIntRange(360, 487);
             case 3: return Random.NormalIntRange(2600, 3641);
+            case 4: return Random.NormalIntRange(179000, 290000);
         }
 		return Random.NormalIntRange(20, 30);
 	}
@@ -100,6 +106,7 @@ public class Eye extends Mob {
             case 1: return 143;
             case 2: return 450;
             case 3: return 1100;
+            case 4: return 16000;
         }
 		return 30;
 	}
@@ -110,6 +117,7 @@ public class Eye extends Mob {
             case 1: return Random.NormalIntRange(40, 74);
             case 2: return Random.NormalIntRange(178, 334);
             case 3: return Random.NormalIntRange(1750, 2800);
+            case 4: return Random.NormalIntRange(200000, 300000);
         }
 		return Random.NormalIntRange(0, 10);
 	}
@@ -215,6 +223,7 @@ public class Eye extends Mob {
                     case 1: dmg = Random.NormalIntRange(168, 231); break;
                     case 2: dmg = Random.NormalIntRange(510, 824); break;
                     case 3: dmg = Random.NormalIntRange(3750, 5200); break;
+                    case 4: dmg = Random.NormalIntRange(200000, 560000); break;
                 }
                 ch.damage(dmg, new DeathGaze() );
 

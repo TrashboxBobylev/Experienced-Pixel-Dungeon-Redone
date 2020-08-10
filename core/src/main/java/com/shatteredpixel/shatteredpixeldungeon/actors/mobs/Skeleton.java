@@ -71,6 +71,11 @@ public class Skeleton extends Mob {
                 defenseSkill = 435;
                 EXP = 1700;
                 break;
+            case 4:
+                HP = HT = 3400000;
+                defenseSkill = 2100;
+                EXP = 51000;
+                break;
         }
 	}
 	
@@ -80,6 +85,7 @@ public class Skeleton extends Mob {
             case 1: return Random.NormalIntRange(34, 50);
             case 2: return Random.NormalIntRange(180, 231);
             case 3: return Random.NormalIntRange(600, 850);
+            case 4: return Random.NormalIntRange(8000, 14000);
         }
 		return Random.NormalIntRange( 2, 10 );
 	}
@@ -95,7 +101,7 @@ public class Skeleton extends Mob {
 		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
 			Char ch = findChar( pos + PathFinder.NEIGHBOURS8[i] );
 			if (ch != null && ch.isAlive()) {
-				int damage = Random.NormalIntRange(6, 12);
+				int damage = (int) (damageRoll() * 1.2f);
 				damage = Math.max( 0,  damage - (ch.drRoll() + ch.drRoll()) );
 				ch.damage( damage, this );
 				if (ch == Dungeon.hero && !ch.isAlive()) {
@@ -134,6 +140,7 @@ public class Skeleton extends Mob {
             case 1: return 50;
             case 2: return 224;
             case 3: return 600;
+            case 4: return 2500;
         }
 		return 12;
 	}
@@ -144,6 +151,7 @@ public class Skeleton extends Mob {
             case 1: return Random.NormalIntRange(10, 24);
             case 2: return Random.NormalIntRange(95, 170);
             case 3: return Random.NormalIntRange(360, 625);
+            case 4: return Random.NormalIntRange(5000, 10000);
         }
 		return Random.NormalIntRange(0, 5);
 	}

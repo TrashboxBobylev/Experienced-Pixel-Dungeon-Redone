@@ -89,6 +89,11 @@ public class YogDzewa extends Mob {
                 defenseSkill = 0;
                 EXP = 2000000;
                 break;
+            case 4:
+                HP = HT = 2000000000;
+                defenseSkill = 0;
+                EXP = 1500000000;
+                break;
         }
 	}
 
@@ -302,9 +307,11 @@ public class YogDzewa extends Mob {
 
 	@Override
 	public void damage( int dmg, Object src ) {
-
+        if (Dungeon.cycle == 4) dmg /= 2;
 		int preHP = HP;
 		super.damage( dmg, src );
+
+
 
 		if (phase == 0 || findFist() != null) return;
 
@@ -517,6 +524,11 @@ public class YogDzewa extends Mob {
                     defenseSkill = 840;
                     EXP = 8000;
                     break;
+                case 4:
+                    HP = HT = 90000000;
+                    defenseSkill = 17000;
+                    EXP = 1000000;
+                    break;
             }
 		}
 
@@ -526,6 +538,7 @@ public class YogDzewa extends Mob {
                 case 1: return 160;
                 case 2: return 500;
                 case 3: return 1250;
+                case 4: return 20000;
             }
 			return 30;
 		}
@@ -536,6 +549,7 @@ public class YogDzewa extends Mob {
                 case 1: return Random.NormalIntRange(70, 91);
                 case 2: return Random.NormalIntRange(325, 440);
                 case 3: return Random.NormalIntRange(2500, 4000);
+                case 4: return Random.NormalIntRange(360000, 460000);
             }
 			return Random.NormalIntRange( 15, 25 );
 		}

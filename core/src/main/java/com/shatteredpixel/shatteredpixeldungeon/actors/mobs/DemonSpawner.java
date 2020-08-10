@@ -79,6 +79,11 @@ public class DemonSpawner extends Mob {
                 defenseSkill = 0;
                 EXP = 80000;
                 break;
+            case 4:
+                HP = HT = 2100000000;
+                defenseSkill = 0;
+                EXP = 20000000;
+                break;
         }
 	}
 
@@ -88,6 +93,7 @@ public class DemonSpawner extends Mob {
             case 1: return Random.NormalIntRange(48, 73);
             case 2: return Random.NormalIntRange(185, 365);
             case 3: return Random.NormalIntRange(1800, 3120);
+            case 4: return Random.NormalIntRange(130000, 200000);
         }
 		return Random.NormalIntRange(0, 12);
 	}

@@ -64,6 +64,11 @@ public class Bat extends Mob {
                 defenseSkill = 500;
                 EXP = 3000;
                 break;
+            case 4:
+                HP = HT = 7000000;
+                defenseSkill = 3000;
+                EXP = 74000;
+                break;
         }
 	}
 	
@@ -73,6 +78,7 @@ public class Bat extends Mob {
             case 1: return Random.NormalIntRange(50, 65);
             case 2: return Random.NormalIntRange(240, 312);
             case 3: return Random.NormalIntRange(800, 1100);
+            case 4: return Random.NormalIntRange(14000, 25000);
         }
 		return Random.NormalIntRange( 5, 15 );
 	}
@@ -83,6 +89,7 @@ public class Bat extends Mob {
             case 1: return 68;
             case 2: return 260;
             case 3: return 700;
+            case 4: return 3390;
         }
 		return 16;
 	}
@@ -93,6 +100,7 @@ public class Bat extends Mob {
             case 1: return Random.NormalIntRange(13, 28);
             case 2: return Random.NormalIntRange(70, 170);
             case 3: return Random.NormalIntRange(500, 700);
+            case 4: return Random.NormalIntRange(8000, 16000);
         }
 		return Random.NormalIntRange(0, 4);
 	}

@@ -72,6 +72,11 @@ public class DM100 extends Mob implements Callback {
                 defenseSkill = 450;
                 EXP = 2200;
                 break;
+            case 4:
+                HP = HT = 4000000;
+                defenseSkill = 2560;
+                EXP = 62000;
+                break;
         }
 	}
 	
@@ -81,6 +86,7 @@ public class DM100 extends Mob implements Callback {
             case 1: return Random.NormalIntRange(31, 45);
             case 2: return Random.NormalIntRange(160, 205);
             case 3: return Random.NormalIntRange(725, 1000);
+            case 4: return Random.NormalIntRange(10000, 16800);
         }
 		return Random.NormalIntRange( 2, 8 );
 	}
@@ -91,6 +97,7 @@ public class DM100 extends Mob implements Callback {
             case 1: return 53;
             case 2: return 240;
             case 3: return 660;
+            case 4: return 2900;
         }
 		return 11;
 	}
@@ -101,6 +108,7 @@ public class DM100 extends Mob implements Callback {
             case 1: return Random.NormalIntRange(8, 24);
             case 2: return Random.NormalIntRange(60, 160);
             case 3: return Random.NormalIntRange(370, 660);
+            case 4: return Random.NormalIntRange(6000, 11000);
         }
 		return Random.NormalIntRange(0, 4);
 	}
@@ -134,6 +142,7 @@ public class DM100 extends Mob implements Callback {
                     case 1: dmg = Random.NormalIntRange(32, 48); break;
                     case 2: dmg = Random.NormalIntRange(190, 248); break;
                     case 3: dmg =  Random.NormalIntRange(600, 850); break;
+                    case 4: dmg =  Random.NormalIntRange(9000, 15000); break;
                 }
 				enemy.damage( dmg, new LightningBolt() );
 				
