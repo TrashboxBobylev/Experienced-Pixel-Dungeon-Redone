@@ -73,6 +73,7 @@ public class ExpGenerator extends NPC {
         Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
         if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()/5));
         Dungeon.hero.buff(Hunger.class).reduceHunger( -10 );
+        Dungeon.hero.resting = false;
         return super.act();
     }
 }

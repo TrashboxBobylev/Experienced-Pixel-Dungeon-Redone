@@ -1122,7 +1122,7 @@ public class Hero extends Char {
                     }
                 }
             }
-			if (fieldOfView[ m.pos ] && (m.alignment == Alignment.ENEMY || m instanceof ExpGenerator)) {
+			if (fieldOfView[ m.pos ] && (m.alignment == Alignment.ENEMY)) {
 				visible.add(m);
 				if (!visibleEnemies.contains( m )) {
 					newMob = true;
