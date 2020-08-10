@@ -26,7 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.utils.Bundle;
 
 public class Sai extends MeleeWeapon {
 
@@ -44,5 +49,61 @@ public class Sai extends MeleeWeapon {
 		return  Math.round(2.5f*(tier+1)) +     //10 base, down from 20
 				lvl*Math.round(0.5f*(tier+1));  //+2 per level, down from +4
 	}
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        DefenseDebuff debuff = Buff.affect(defender, DefenseDebuff.class, 10f);
+        debuff.stack += max() / 2;
+        return super.proc(attacker, defender, damage);
+    }
+
+    public static class DefenseDebuff extends FlavourBuff {
+
+        public static final float DURATION = 20f;
+
+        public int stack = 0;
+
+        {
+            type = buffType.NEGATIVE;
+            announced = true;
+        }
+
+        @Override
+        public int icon() {
+            return BuffIndicator.VULNERABLE;
+        }
+
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+        }
+
+        @Override
+        public String toString() {
+            return Messages.get(this, "name");
+        }
+
+        @Override
+        public String heroMessage() {
+            return Messages.get(this, "heromsg");
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", dispTurns(), stack);
+        }
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put("stack", stack);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            stack = bundle.getInt("stack");
+        }
+    }
 
 }
