@@ -65,6 +65,7 @@ public class Greatsword extends MeleeWeapon {
                 GuardianKnight guardianKnight = new GuardianKnight();
                 guardianKnight.weapon = this;
                 guardianKnight.pos = attacker.pos + i;
+                guardianKnight.aggro(defender);
                 GameScene.add(guardianKnight);
                 Dungeon.level.occupyCell(guardianKnight);
 
