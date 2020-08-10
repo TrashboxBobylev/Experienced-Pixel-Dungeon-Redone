@@ -162,6 +162,7 @@ public class ShopRoom extends SpecialRoom {
                 case 1: itemsToSpawn.add(new GoldenFishingRod()); break;
                 case 2: itemsToSpawn.add(new NeutroniumFishingRod()); break;
                 case 3: itemsToSpawn.add(new AvaritiaFishingRod()); break;
+                case 4: itemsToSpawn.add(new ChaosFishingRod()); break;
             }
 			break;
 			
