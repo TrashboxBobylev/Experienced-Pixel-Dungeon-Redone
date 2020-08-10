@@ -25,7 +25,19 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class Greatsword extends MeleeWeapon {
 
@@ -34,7 +46,59 @@ public class Greatsword extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1f;
 
-		tier=5;
+		tier = 5;
 	}
 
+    @Override
+    public String statsInfo() {
+        return Messages.get(this, "stats_desc", 9 + Dungeon.escalatingDepth() * 3);
+    }
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        for (int i : PathFinder.NEIGHBOURS9){
+
+            if (!Dungeon.level.solid[attacker.pos + i]
+                    && !Dungeon.level.pit[attacker.pos + i]
+                    && Actor.findChar(attacker.pos + i) == null) {
+
+                GuardianKnight guardianKnight = new GuardianKnight();
+                guardianKnight.weapon = this;
+                guardianKnight.pos = attacker.pos + i;
+                GameScene.add(guardianKnight);
+                Dungeon.level.occupyCell(guardianKnight);
+
+                CellEmitter.get(guardianKnight.pos).burst(Speck.factory(Speck.EVOKE), 4);
+                break;
+            }
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    public static class GuardianKnight extends Statue {
+        {
+            state = WANDERING;
+            spriteClass = GuardianSprite.class;
+            alignment = Alignment.ALLY;
+        }
+
+        public GuardianKnight() {
+            HP = HT = 9 + Dungeon.escalatingDepth() * 3;
+            defenseSkill = 4 + Dungeon.escalatingDepth();
+        }
+    }
+
+    public static class GuardianSprite extends StatueSprite {
+
+        public GuardianSprite(){
+            super();
+            tint(1, 0, 0, 0.4f);
+        }
+
+        @Override
+        public void resetColor() {
+            super.resetColor();
+            tint(1, 0, 0, 0.4f);
+        }
+    }
 }
