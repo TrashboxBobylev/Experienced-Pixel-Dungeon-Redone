@@ -25,7 +25,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+
+import static com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth.genConsumableDrop;
 
 public class Javelin extends MissileWeapon {
 
@@ -36,5 +41,13 @@ public class Javelin extends MissileWeapon {
 		
 		tier = 4;
 	}
-	
+
+    @Override
+    protected void rangedHit(Char enemy, int cell) {
+        super.rangedHit(enemy, cell);
+        if (enemy == null || !enemy.isAlive()){
+            Item item = genConsumableDrop(buffedLvl() * buffedLvl() + 2);
+            if (item != null) Dungeon.level.drop(item, cell).sprite.drop();
+        }
+    }
 }
