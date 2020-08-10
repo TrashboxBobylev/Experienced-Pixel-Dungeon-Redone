@@ -116,8 +116,6 @@ public enum HeroClass {
 
 		new PsycheChest().collect();
 
-		new BasicFishingRod().collect();
-
 	}
 
 	public Badges.Badge masteryBadge() {
