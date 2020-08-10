@@ -99,15 +99,13 @@ public class WndBag extends WndTabbed {
 	}
 
 	protected static final int COLS_P    = 7;
-	protected static final int COLS_L    = 6;
-	
-	protected static final int SLOT_WIDTH	= 19;
-	protected static final int SLOT_HEIGHT	= 19;
-	protected static int SLOT_WIDTH_P   = 24;
-	protected static int SLOT_WIDTH_L   = 28;
+	protected static final int COLS_L    = 7;
 
-	protected static int SLOT_HEIGHT_P	= 28;
-	protected static int SLOT_HEIGHT_L	= 24;
+    protected static int SLOT_WIDTH_P   = 19;
+	protected static int SLOT_WIDTH_L   = 22;
+
+	protected static int SLOT_HEIGHT_P	= 22;
+	protected static int SLOT_HEIGHT_L	= 19;
 
 	protected static final int SLOT_MARGIN	= 1;
 	
