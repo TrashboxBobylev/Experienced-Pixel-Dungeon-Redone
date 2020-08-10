@@ -38,6 +38,7 @@ public class BlackPsycheChest extends Item {
         image = ItemSpriteSheet.EBONY_CHEST;
         cursed = true;
         cursedKnown = true;
+        stackable = true;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class BlackPsycheChest extends Item {
         }
 
         if (action.equals(AC_RESET) || action.equals(AC_ACCESS)){
-            detach(Dungeon.hero.belongings.backpack);
+            detachAll(Dungeon.hero.belongings.backpack);
         }
     }
 
