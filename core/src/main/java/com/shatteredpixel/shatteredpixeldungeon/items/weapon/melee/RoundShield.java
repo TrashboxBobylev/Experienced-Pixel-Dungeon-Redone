@@ -48,14 +48,14 @@ public class RoundShield extends MeleeWeapon {
 
 	@Override
 	public int defenseFactor( Char owner ) {
-		return 4+2*buffedLvl();     //4 extra defence, plus 2 per level;
+		return (tier+1)+(tier-1)*buffedLvl();
 	}
 	
 	public String statsInfo(){
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", 4+2*buffedLvl());
+			return Messages.get(this, "stats_desc", (tier+1)+(tier-1)*buffedLvl());
 		} else {
-			return Messages.get(this, "typical_stats_desc", 4);
+			return Messages.get(this, "typical_stats_desc", (tier+1));
 		}
 	}
 }
