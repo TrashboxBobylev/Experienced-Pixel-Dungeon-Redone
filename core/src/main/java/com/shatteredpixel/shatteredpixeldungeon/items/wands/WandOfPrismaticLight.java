@@ -96,12 +96,12 @@ public class WandOfPrismaticLight extends DamageWand {
 		}
 
 		if (ch.properties().contains(Char.Property.DEMONIC) || ch.properties().contains(Char.Property.UNDEAD)){
-			ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10+buffedLvl() );
+			ch.sprite.emitter().start( ShadowParticle.UP, 0.05f,  (int) Math.sqrt(10 + buffedLvl()) );
 			Sample.INSTANCE.play(Assets.Sounds.BURNING);
 
 			ch.damage(Math.round(dmg*1.333f), this);
 		} else {
-			ch.sprite.centerEmitter().burst( RainbowParticle.BURST, 10+buffedLvl() );
+			ch.sprite.centerEmitter().burst( RainbowParticle.BURST,  (int) Math.sqrt(10 + buffedLvl()) );
 
 			ch.damage(dmg, this);
 		}

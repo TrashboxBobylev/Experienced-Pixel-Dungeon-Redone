@@ -55,7 +55,7 @@ public class Blazing extends Weapon.Enchantment {
 				Buff.affect(defender, Burning.class).reignite(defender, 8f);
 			}
 			
-			defender.sprite.emitter().burst( FlameParticle.FACTORY, level + 1 );
+			defender.sprite.emitter().burst( FlameParticle.FACTORY, (int) Math.sqrt(level + 1));
 			
 		}
 

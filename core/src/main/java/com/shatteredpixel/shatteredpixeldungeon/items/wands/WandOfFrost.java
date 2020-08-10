@@ -76,7 +76,7 @@ public class WandOfFrost extends DamageWand {
 				//5% less damage per turn of chill remaining
 				damage = (int)Math.round(damage * Math.pow(0.95f, ch.buff(Chill.class).cooldown()));
 			} else {
-				ch.sprite.burst( 0xFF99CCFF, buffedLvl() / 2 + 2 );
+				ch.sprite.burst( 0xFF99CCFF, (int) Math.sqrt(buffedLvl() / 2 + 2));
 			}
 
 			processSoulMark(ch, chargesPerCast());
