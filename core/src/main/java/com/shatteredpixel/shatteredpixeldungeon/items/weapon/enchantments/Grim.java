@@ -45,14 +45,14 @@ public class Grim extends Weapon.Enchantment {
 		int enemyHealth = defender.HP - damage;
 		if (enemyHealth <= 0) return damage; //no point in proccing if they're already dead.
 
-		//scales from 0 - 50% based on how low hp the enemy is, plus 5% per level
-		float maxChance = 0.5f + .05f*level;
+		//scales from 0 - 25% based on how low hp the enemy is, plus 0.5% per level
+		float maxChance = 0.25f + .005f*level;
 		float chanceMulti = (float)Math.pow( ((defender.HT - enemyHealth) / (float)defender.HT), 2);
 		float chance = maxChance * chanceMulti;
 		
 		if (Random.Float() < chance) {
 			
-			defender.damage( defender.HP, this );
+			damage *= 1f + chance;
 			defender.sprite.emitter().burst( ShadowParticle.UP, 5 );
 			
 			if (!defender.isAlive() && attacker instanceof Hero
