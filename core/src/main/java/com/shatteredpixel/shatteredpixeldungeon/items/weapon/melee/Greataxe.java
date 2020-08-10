@@ -25,7 +25,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.PathFinder;
 
 public class Greataxe extends MeleeWeapon {
 
@@ -50,4 +58,27 @@ public class Greataxe extends MeleeWeapon {
 		return (10 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
 
+    @Override
+    protected void onThrow(int cell) {
+        super.onThrow(cell);
+        int enemyCount = 0;
+        for (int i : PathFinder.NEIGHBOURS9){
+
+            if (!Dungeon.level.solid[cell + i]
+                    && !Dungeon.level.pit[cell + i]
+                    && Actor.findChar(cell + i) != null) {
+                KindOfWeapon equipped = Dungeon.hero.belongings.weapon;
+                Dungeon.hero.belongings.weapon = this;
+                boolean hit = Dungeon.hero.attack( Actor.findChar(cell + i) );
+                Invisibility.dispel();
+
+                Dungeon.hero.belongings.weapon = equipped;
+                enemyCount++;
+
+                CellEmitter.get(cell + i).burst(Speck.factory(Speck.SCREAM), 4);
+                break;
+            }
+        }
+        Dungeon.hero.spendAndNext( speedFactor(Dungeon.hero) + speedFactor(Dungeon.hero)*enemyCount*0.8f );
+    }
 }
