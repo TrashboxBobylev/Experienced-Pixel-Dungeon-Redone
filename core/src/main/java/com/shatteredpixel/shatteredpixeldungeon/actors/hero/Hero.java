@@ -1122,7 +1122,7 @@ public class Hero extends Char {
 		        for (Item it : belongings.backpack){
 		            if (it instanceof FishingRod){
 		                ((FishingRod) it).hook = false;
-		                it.defaultAction = AC_UNCAST;
+		                it.defaultAction = FishingRod.AC_CAST;
                     }
                 }
             }

@@ -55,7 +55,7 @@ import com.watabou.utils.PathFinder;
 import java.util.ArrayList;
 
 public abstract class FishingRod extends Item {
-    private static final String AC_CAST = "CAST";
+    public static final String AC_CAST = "CAST";
     public static final String AC_UNCAST = "UNCAST";
 
     {
