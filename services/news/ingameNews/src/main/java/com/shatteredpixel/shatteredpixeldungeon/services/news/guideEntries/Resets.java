@@ -35,6 +35,6 @@ public class Resets extends NewsArticle {
                 "_-_ end the game by fighting Black Mimic which is very powerful boss that uses abilities of every other boss in the game. This guide will not cover the strategy against him, you should see it by yourself.\n\n" +
                 "or\n\n" +
                 "_-_ enter a new loop in your adventure, called Cycle. With each new cycle, everything becomes stronger and more powerful, both enemies and weapons. You can reobtain some valueable items, like boss drops, potions of strength or artifacts.\n" +
-                "The escalation stops on entering fourth cycle, any further resets will stay on that difficulty.";
+                "The escalation stops on entering fifth cycle, any further resets will stay on that difficulty.";
     }
 }

@@ -36,7 +36,8 @@ public class Other extends NewsArticle {
                 "_-_ Shops now sell more items with more variety over them.\n\n" +
                 "_-_ The inventory space is massively increased, both for backpack and dedicated bags.\n\n" +
                 "_-_ Enchantments and glyphs no longer have a chance of disappearing with upgrading them.\n\n" +
-                "_-_ Rings have massive nerf compared to vanilla Shattered PD.";
+                "_-_ Rings have massive nerf compared to vanilla Shattered PD.\n\n" +
+                "_-_ Scroll of Affection turns every enemy in your sight into ally.";
 
     }
 }
