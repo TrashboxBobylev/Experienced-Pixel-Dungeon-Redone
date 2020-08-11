@@ -32,15 +32,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.BbatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Random;
 
 public class Bbat extends Mob {
     {
-        HP = HT = 10;
-        defenseSkill = 20;
+        HP = HT = 7;
+        defenseSkill = 15;
         baseSpeed = 2f;
+        spriteClass = BbatSprite.class;
+        alignment = Alignment.ALLY;
+        WANDERING = new Wandering();
+        intelligentAlly = true;
     }
 
     @Override
@@ -74,7 +79,7 @@ public class Bbat extends Mob {
             if (mob instanceof Bbat){
                 mob.HT += 2;
                 mob.HP += 2;
-                ((Bbat) mob).defenseSkill += 6;
+                ((Bbat) mob).defenseSkill += 2;
             }
         }
     }

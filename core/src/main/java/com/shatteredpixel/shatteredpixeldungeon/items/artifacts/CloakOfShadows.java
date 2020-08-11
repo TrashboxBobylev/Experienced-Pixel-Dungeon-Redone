@@ -143,9 +143,10 @@ public class CloakOfShadows extends Artifact {
                     if (respawnPoints.size() > 0){
                         Bbat bat = new Bbat();
                         bat.pos = respawnPoints.get(Random.index( respawnPoints ));
-                        bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 20);
+
                         bat.state = bat.WANDERING;
                         GameScene.add(bat);
+                        bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 20);
                     }
                 }
             });
