@@ -125,7 +125,7 @@ public class Hook extends NPC {
             Sample.INSTANCE.play( Assets.Sounds.DEGRADE );
         }
         ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(tries);
-        if (bonus != null && !bonus.isEmpty()) {
+        if (!bonus.isEmpty()) {
             items.addAll(bonus);
             RingOfWealth.showFlareForBonusDrop(sprite);
             Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );

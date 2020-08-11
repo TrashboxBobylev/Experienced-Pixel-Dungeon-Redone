@@ -170,9 +170,7 @@ public class RingOfWealth extends Ring {
 				return Random.Int(2) == 0 ? new ArcaneCatalyst() : new AlchemicalCatalyst();
 			case 4:
 				return new Bomb();
-			case 5:
-				return new Honeypot();
-            case 6:
+            case 5:
                 return new Food();
 		}
 	}
