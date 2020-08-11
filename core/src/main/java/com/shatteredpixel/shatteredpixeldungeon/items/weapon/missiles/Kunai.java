@@ -55,8 +55,16 @@ public class Kunai extends MissileWeapon {
 		enemy = Actor.findChar(cell);
 		super.onThrow(cell);
 	}
-	
-	@Override
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+	    if (defender instanceof Mob && ((Mob) defender).surprisedBy(attacker)){
+            Buff.affect(attacker, WeaponCharge.class, 15f).stack = level()*level() + 2;
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    @Override
 	public int damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
@@ -70,7 +78,7 @@ public class Kunai extends MissileWeapon {
 				if (exStr > 0) {
 					damage += Random.IntRange(0, exStr);
 				}
-				Buff.affect(hero, WeaponCharge.class, 15f);
+
 				return damage;
 			}
 		}
