@@ -23,15 +23,24 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -39,6 +48,9 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -63,12 +75,22 @@ public class CloakOfShadows extends Artifact {
 	private boolean stealthed = false;
 
 	public static final String AC_STEALTH = "STEALTH";
+	public static final String AC_BBAT = "BBAT";
 
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		if (isEquipped( hero ) && !cursed && (charge > 0 || stealthed))
 			actions.add(AC_STEALTH);
+		boolean needToSpawn = true;
+        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+            if (mob instanceof Bbat) {
+                needToSpawn = false;
+                break;
+            }
+        }
+        if (hero.buff(Bbat.BbatRecharge.class) == null) needToSpawn = false;
+        if (needToSpawn) actions.add(AC_BBAT);
 		return actions;
 	}
 
@@ -105,7 +127,29 @@ public class CloakOfShadows extends Artifact {
 				hero.sprite.operate( hero.pos );
 			}
 
-		}
+		} else if (action.equals(AC_BBAT)){
+            hero.sprite.operate(hero.pos, new Callback() {
+                @Override
+                public void call() {
+                    ArrayList<Integer> respawnPoints = new ArrayList<>();
+
+                    for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+                        int p = hero.pos + PathFinder.NEIGHBOURS8[i];
+                        if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+                            respawnPoints.add( p );
+                        }
+                    }
+
+                    if (respawnPoints.size() > 0){
+                        Bbat bat = new Bbat();
+                        bat.pos = respawnPoints.get(Random.index( respawnPoints ));
+                        bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 20);
+                        bat.state = bat.WANDERING;
+                        GameScene.add(bat);
+                    }
+                }
+            });
+        }
 	}
 
 	@Override

@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -1371,16 +1372,20 @@ public class Hero extends Char {
 		}
 
         if (totalExp >= 100 + Dungeon.cycle * 25 && grinding){
+            boolean souAnnounced = false;
+
             while (totalExp >= 100 + Dungeon.cycle * 25 ) {
                 totalExp -= 100 + Dungeon.cycle * 25;
                 ScrollOfUpgrade sou = new ScrollOfUpgrade();
-                new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
+
                 if (!sou.collect()){
                     Dungeon.level.drop(sou, pos);
-                } else {
+                } else if (!souAnnounced){
                     GLog.p( Messages.get(this, "you_now_have", sou.name()) );
+                    souAnnounced = true;
                 }
             }
+            new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
         }
 		
 		boolean levelUp = false;
@@ -1394,6 +1399,7 @@ public class Hero extends Char {
             }
 
             updateHT( true );
+            Bbat.updateHP();
             attackSkill++;
             defenseSkill++;
 

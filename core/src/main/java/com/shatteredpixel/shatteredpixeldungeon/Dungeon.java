@@ -31,11 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.*;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -406,6 +405,24 @@ public class Dungeon {
 		}
 
 		hero.pos = pos;
+
+		if (Statistics.deepestFloor == 1 && hero.heroClass == HeroClass.ROGUE){
+            ArrayList<Integer> respawnPoints = new ArrayList<>();
+
+            for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+                int p = hero.pos + PathFinder.NEIGHBOURS8[i];
+                if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+                    respawnPoints.add( p );
+                }
+            }
+            if (respawnPoints.size() > 0) {
+                Bbat bat = new Bbat();
+                bat.pos = respawnPoints.get(Random.index(respawnPoints));
+                bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 20);
+                bat.state = bat.WANDERING;
+                GameScene.add(bat);
+            }
+        }
 		
 		for(Mob m : level.mobs){
 			if (m.pos == hero.pos){
