@@ -983,7 +983,6 @@ public abstract class Mob extends Char {
 			}
 
 			if (mob instanceof Hook){
-                mob.remove(mob.buff(RingOfWealth.Wealth.class));
                 mob.die(new com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom());
                 for (Item it : Dungeon.hero.belongings.backpack){
                     if (it instanceof FishingRod){

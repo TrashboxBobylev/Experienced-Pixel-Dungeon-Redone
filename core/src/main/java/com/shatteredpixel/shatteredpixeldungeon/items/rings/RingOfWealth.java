@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScrol
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Visual;
@@ -198,7 +199,7 @@ public class RingOfWealth extends Ring {
 		int floorset = (Dungeon.depth)/5;
 		switch (Random.Int(5)){
 			default: case 0: case 1:
-				Weapon w = Generator.randomWeapon(floorset);
+				MeleeWeapon w = Generator.randomWeapon(floorset);
 				if (!w.hasGoodEnchant() && Random.Int(10) < level)      w.enchant();
 				else if (w.hasCurseEnchant())                           w.enchant(null);
 				result = w;
@@ -249,57 +250,4 @@ public class RingOfWealth extends Ring {
         level = bundle.getInt(LEVEL);
     }
 
-	public static class Wealth extends Buff {
-
-        public final String TRIES_TO_DROP = "tries_to_drop";
-        public final String DROPS_TO_RARE = "drops_to_rare";
-        public final String LEVEL = "level";
-
-        public Wealth(int level){
-            level = level;
-        }
-
-        @Override
-        public void storeInBundle(Bundle bundle) {
-            super.storeInBundle(bundle);
-            bundle.put(TRIES_TO_DROP, triesToDrop);
-            bundle.put(DROPS_TO_RARE, dropsToRare);
-            bundle.put(LEVEL, level);
-        }
-
-        @Override
-        public void restoreFromBundle(Bundle bundle) {
-            super.restoreFromBundle(bundle);
-            triesToDrop = bundle.getFloat(TRIES_TO_DROP);
-            dropsToRare = bundle.getInt(DROPS_TO_RARE);
-            level = bundle.getInt(LEVEL);
-        }
-
-        @Override
-        public boolean act() {
-
-            spend( TICK );
-
-            return true;
-        }
-
-
-		
-		private void triesToDrop( float val ){
-			triesToDrop = val;
-		}
-		
-		private float triesToDrop(){
-			return triesToDrop;
-		}
-
-		private void dropsToRare( int val ) {
-			dropsToRare = val;
-		}
-
-		private int dropsToRare(){
-			return dropsToRare;
-		}
-		
-	}
 }

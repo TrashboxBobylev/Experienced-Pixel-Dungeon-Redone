@@ -1113,7 +1113,6 @@ public class Hero extends Char {
 		Mob target = null;
 		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])) {
 		    if (m instanceof Hook && !fieldOfView[m.pos]){
-		        m.remove(m.buff(RingOfWealth.Wealth.class));
 		        m.die(new com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom());
 		        for (Item it : belongings.backpack){
 		            if (it instanceof FishingRod){

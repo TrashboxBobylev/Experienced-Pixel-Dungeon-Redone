@@ -102,7 +102,6 @@ public abstract class FishingRod extends Item {
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 if (Dungeon.level.heroFOV[mob.pos] && mob instanceof Hook) {
                     for (Item b : ((Hook) mob).items) b.cast(mob, hero.pos);
-                    mob.remove(mob.buff(RingOfWealth.Wealth.class));
                     mob.die(new Doom());
                     hook = false;
                     defaultAction = AC_CAST;

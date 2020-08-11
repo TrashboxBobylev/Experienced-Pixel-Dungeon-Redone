@@ -26,11 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth.Wealth;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HookSprite;
 import com.watabou.noosa.audio.Sample;
@@ -99,11 +97,6 @@ public class Hook extends NPC {
 
     @Override
     public void damage( int dmg, Object src ) {
-    }
-
-    @Override
-    public void add( Buff buff ) {
-        if (buff instanceof Wealth) super.add(buff);
     }
 
     @Override
