@@ -52,6 +52,10 @@ public class ExpPDChanges {
         ChangeInfo changes = new ChangeInfo("ExpPD-2.4", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
+
+        changes = new ChangeInfo("ExpPD-2.4", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
                 "_-_ Released August 11th, 2020\n" +
                         "_-_ 1 days after Experienced Pixel Dungeon 2.3\n" +
