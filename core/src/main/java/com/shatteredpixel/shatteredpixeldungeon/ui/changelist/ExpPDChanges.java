@@ -49,9 +49,26 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.4", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.4.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 12th, 2020\n" +
+                        "_-_ 1 days after Experienced Pixel Dungeon 2.4\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.BBAT, 0, 0, 15, 15), "Bbat",
+                "Added bbat minion to rogue to decrease early-game difficulty." ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Greatsword no longer spawns knights, when owned by statue.\n\n" +
+                        "_-_ Kunai have text for buff and actually works.\n\n" +
+                        "_-_ Armored Statue doesn't crash with tiered armor.\n\n" +
+                        "_-_ Guardian Trap no longer depends on escalating depth.\n\n" +
+                        "_-_ Cycles no longer preserve between runs (will not affect runs before this update).\n\n" +
+                        "_-_ Hunger can damage you on locked floor when drained by power plants.\n\n" +
+                        "_-_ Honeypot cannot be obtained from fishing."));
 
         changes = new ChangeInfo("ExpPD-2.4", true, "");
         changes.hardlight(Window.TITLE_COLOR);

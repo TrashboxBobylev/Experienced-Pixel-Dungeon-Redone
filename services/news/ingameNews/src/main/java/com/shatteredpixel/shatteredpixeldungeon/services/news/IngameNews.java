@@ -48,6 +48,7 @@ public class IngameNews extends NewsService {
 
 		ArrayList<NewsArticle> articles = new ArrayList<>();
 		articles.add(new FateLock());
+		articles.add(new Bbat());
 		articles.add(new PotionsOfExp());
 		articles.add(new Bartering());
 		articles.add(new ExpGen());
