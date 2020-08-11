@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -60,7 +61,8 @@ public class Greatsword extends MeleeWeapon {
 
             if (!Dungeon.level.solid[attacker.pos + i]
                     && !Dungeon.level.pit[attacker.pos + i]
-                    && Actor.findChar(attacker.pos + i) == null) {
+                    && Actor.findChar(attacker.pos + i) == null
+                    && attacker == Dungeon.hero) {
 
                 GuardianKnight guardianKnight = new GuardianKnight();
                 guardianKnight.weapon = this;
@@ -86,6 +88,12 @@ public class Greatsword extends MeleeWeapon {
         public GuardianKnight() {
             HP = HT = 9 + Dungeon.escalatingDepth() * 3;
             defenseSkill = 4 + Dungeon.escalatingDepth();
+        }
+
+        @Override
+        public void die(Object cause) {
+            weapon = null;
+            super.die(cause);
         }
     }
 
