@@ -30,16 +30,19 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BbatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Bbat extends Mob {
+
+    public static int level = 1;
+
     {
-        HP = HT = 7;
+        HP = HT = 10;
         defenseSkill = 15;
         baseSpeed = 2f;
         spriteClass = BbatSprite.class;
@@ -48,14 +51,27 @@ public class Bbat extends Mob {
         intelligentAlly = true;
     }
 
+    public static void saveLevel(Bundle bundle){
+        bundle.put("bbatLevel", level);
+    }
+
+    public static void loadLevel(Bundle bundle){
+        level = bundle.getInt("bbatLevel");
+    }
+
     @Override
     public int damageRoll() {
-        return Random.NormalIntRange( Dungeon.depth, 2 + Dungeon.depth * 2 );
+        return Random.NormalIntRange( level, 1 + level * 2 );
+    }
+
+    @Override
+    protected float attackDelay() {
+        return super.attackDelay() * 0.5f;
     }
 
     @Override
     public int attackSkill(Char target) {
-        return 10 + Dungeon.depth * 2;
+        return 10 + level * 2;
     }
 
     @Override
@@ -77,9 +93,9 @@ public class Bbat extends Mob {
     public static void updateHP(){
         for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
             if (mob instanceof Bbat){
-                mob.HT += 2;
-                mob.HP += 2;
-                ((Bbat) mob).defenseSkill += 2;
+                level += 1;
+                mob.HP = mob.HT = 8 + level * 2;
+                ((Bbat) mob).defenseSkill = 13 + level*2;
             }
         }
     }
@@ -87,7 +103,7 @@ public class Bbat extends Mob {
     @Override
     public void damage(int dmg, Object src) {
         super.damage(dmg, src);
-        Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(dmg);
+        Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(dmg*2);
     }
 
     @Override
@@ -129,7 +145,7 @@ public class Bbat extends Mob {
 
     }
 
-    public class BbatRecharge extends FlavourBuff {
+    public static class BbatRecharge extends FlavourBuff {
 
         public static final float DURATION = 20f;
 

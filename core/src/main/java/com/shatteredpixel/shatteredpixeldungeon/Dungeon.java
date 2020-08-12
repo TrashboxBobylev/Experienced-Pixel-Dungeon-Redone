@@ -79,6 +79,7 @@ public class Dungeon {
 		STRENGTH_POTIONS,
 		UPGRADE_SCROLLS,
 		ARCANE_STYLI,
+        BBAT,
 
 		//Health potion sources
 		//enemies
@@ -195,6 +196,7 @@ public class Dungeon {
 		depth = 0;
 		gold = 0;
 		cycle = 0;
+		Bbat.level = 1;
 
 		droppedItems = new SparseArray<>();
 		portedItems = new SparseArray<>();
@@ -406,7 +408,8 @@ public class Dungeon {
 
 		hero.pos = pos;
 
-		if (Statistics.deepestFloor == 1 && hero.heroClass == HeroClass.ROGUE){
+		if (!LimitedDrops.BBAT.dropped() && hero.heroClass == HeroClass.ROGUE){
+		    LimitedDrops.BBAT.drop();
             ArrayList<Integer> respawnPoints = new ArrayList<>();
 
             for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
@@ -557,6 +560,7 @@ public class Dungeon {
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
 			bundle.put( CYCLE, cycle);
+			Bbat.saveLevel(bundle);
 
 			for (int d : droppedItems.keyArray()) {
 				bundle.put(Messages.format(DROPPED, d), droppedItems.get(d));
@@ -661,6 +665,7 @@ public class Dungeon {
 		RingOfWealth.restore(bundle);
 
 		quickslot.restorePlaceholders( bundle );
+		Bbat.loadLevel(bundle);
 		
 		if (fullLoad) {
 			
