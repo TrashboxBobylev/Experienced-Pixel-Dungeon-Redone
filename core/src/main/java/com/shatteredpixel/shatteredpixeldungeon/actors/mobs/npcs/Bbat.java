@@ -147,10 +147,10 @@ public class Bbat extends Mob {
 
     public static class BbatRecharge extends FlavourBuff {
 
-        public static final float DURATION = 20f;
+        public static final float DURATION = 400f;
 
         {
-            type = buffType.POSITIVE;
+            type = buffType.NEGATIVE;
             announced = true;
         }
 

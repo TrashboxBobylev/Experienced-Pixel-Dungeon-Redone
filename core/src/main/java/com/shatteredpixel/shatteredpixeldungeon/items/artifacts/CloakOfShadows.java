@@ -90,6 +90,7 @@ public class CloakOfShadows extends Artifact {
             }
         }
         if (hero.buff(Bbat.BbatRecharge.class) == null) needToSpawn = false;
+        else if (hero.buff(Bbat.BbatRecharge.class).visualcooldown() > 0) needToSpawn = false;
         if (needToSpawn) actions.add(AC_BBAT);
 		return actions;
 	}
@@ -143,7 +144,8 @@ public class CloakOfShadows extends Artifact {
                     if (respawnPoints.size() > 0){
                         Bbat bat = new Bbat();
                         bat.pos = respawnPoints.get(Random.index( respawnPoints ));
-
+                        bat.HP = bat.HT = 8 + Bbat.level * 2;
+                        ((Bbat) bat).defenseSkill = 13 + Bbat.level*2;
                         bat.state = bat.WANDERING;
                         GameScene.add(bat);
                         bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 20);
