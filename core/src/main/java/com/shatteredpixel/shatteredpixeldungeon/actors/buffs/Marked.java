@@ -154,9 +154,9 @@ public class Marked extends Buff implements ActionIndicator.Action {
             } else {
 
                 if (Dungeon.hero.canAttack(enemy)){
+                    effect(enemy);
                     Dungeon.hero.curAction = new HeroAction.Attack( enemy );
                     Dungeon.hero.next();
-                    effect(enemy);
                     return;
                 }
 
@@ -216,7 +216,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
         for (Char ch : Actor.chars()){
             if (ch instanceof Bbat){
                 ch.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 10);
-                ch.HP = Math.max(ch.HT, ch.HP + ch.HT / 5 * mark.stack);
+                ch.HP = Math.min(ch.HT, ch.HP + ch.HT / 5 * mark.stack);
             }
         }
         enemy.buff(Marked.class).detach();
