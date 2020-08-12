@@ -89,8 +89,8 @@ public class CloakOfShadows extends Artifact {
                 break;
             }
         }
-        if (hero.buff(Bbat.BbatRecharge.class) == null) needToSpawn = false;
-        else if (hero.buff(Bbat.BbatRecharge.class).visualcooldown() > 0) needToSpawn = false;
+        if (hero.buff(Bbat.BbatRecharge.class) == null && needToSpawn) needToSpawn = false;
+        else if (hero.buff(Bbat.BbatRecharge.class).visualcooldown() > 0 && needToSpawn) needToSpawn = false;
         if (needToSpawn) actions.add(AC_BBAT);
 		return actions;
 	}
