@@ -185,6 +185,7 @@ public class YogDzewa extends Mob {
                         case 1: dmg = Random.NormalIntRange(120, 175); break;
                         case 2: dmg = Random.NormalIntRange(370, 502); break;
                         case 3: dmg = Random.NormalIntRange(2650, 4000); break;
+                        case 4: dmg = Random.NormalIntRange(179000, 320000); break;
                     }
                     ch.damage(dmg, new Eye.DeathGaze());
 
