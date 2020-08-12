@@ -46,13 +46,15 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 
+import java.text.DecimalFormat;
+
 public class Marked extends Buff implements ActionIndicator.Action {
     {
         type = buffType.NEGATIVE;
         announced = true;
     }
 
-    public int stack;
+    public int stack = 0;
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -64,10 +66,11 @@ public class Marked extends Buff implements ActionIndicator.Action {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         stack = bundle.getInt("stack");
+        if (stack > 3) ActionIndicator.setAction(this);
     }
 
     public float bonusDamage(){
-        return (float) Math.pow(stack, 1.2f);
+        return (float) Math.pow(1.085f, stack);
     }
 
     @Override
@@ -95,12 +98,17 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
     @Override
     public boolean act() {
-            if (stack > 3){
-                ActionIndicator.setAction(this);
-
+        if (stack > 3){
+            ActionIndicator.setAction(this);
         }
         spend(TICK);
         return true;
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        ActionIndicator.clearAction(this);
     }
 
     @Override
@@ -112,7 +120,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
     public String desc() {
         String desc = Messages.get(this, "desc");
 
-        desc += "\n\n" + Messages.get(this, "desc_dmg", Math.round(Math.pow(stack, 1.2f) * 100f));
+        desc += "\n\n" + Messages.get(this, "desc_dmg", new DecimalFormat("#.##").format(100f * Math.pow(1.085f, stack) - 100f));
 
         return desc;
     }
@@ -137,16 +145,23 @@ public class Marked extends Buff implements ActionIndicator.Action {
         public void onSelect(Integer cell) {
             if (cell == null) return;
             final Char enemy = Actor.findChar( cell );
-            if (!(enemy instanceof Bbat) || (enemy.buff(Marked.class) != null && enemy.buff(Marked.class).stack < 3)){
+            if (enemy == null || enemy.buff(Marked.class) == null){
                 GLog.w(Messages.get(Marked.class, "no_target"));
             } else {
+
+                if (Dungeon.hero.canAttack(enemy)){
+                    Dungeon.hero.curAction = new HeroAction.Attack( enemy );
+                    Dungeon.hero.next();
+                    effect(enemy);
+                    return;
+                }
 
                 boolean[] passable = Dungeon.level.passable.clone();
                 //need to consider enemy cell as passable in case they are on a trap or chasm
                 passable[cell] = true;
-                PathFinder.buildDistanceMap(Dungeon.hero.pos, passable, Dungeon.hero.viewDistance);
+                PathFinder.buildDistanceMap(Dungeon.hero.pos, passable, 100_000_000);
                 if (PathFinder.distance[cell] == Integer.MAX_VALUE){
-                    GLog.w(Messages.get(Marked.class, "out_of_reach"));
+                    GLog.w(Messages.get(Preparation.class, "out_of_reach"));
                     return;
                 }
 
@@ -160,8 +175,8 @@ public class Marked extends Buff implements ActionIndicator.Action {
                 int attackPos = path == null ? -1 : path.get(path.size()-2);
 
                 if (attackPos == -1 ||
-                        Dungeon.level.distance(attackPos, Dungeon.hero.pos) > Dungeon.hero.viewDistance){
-                    GLog.w(Messages.get(Marked.class, "out_of_reach"));
+                        Dungeon.level.distance(attackPos, Dungeon.hero.pos) > 100_000_000){
+                    GLog.w(Messages.get(Preparation.class, "out_of_reach"));
                     return;
                 }
 
@@ -175,7 +190,8 @@ public class Marked extends Buff implements ActionIndicator.Action {
                 Dungeon.hero.sprite.turnTo( Dungeon.hero.pos, cell);
                 CellEmitter.get( Dungeon.hero.pos ).burst( Speck.factory( Speck.WOOL ), 6 );
                 Sample.INSTANCE.play( Assets.Sounds.PUFF );
-                enemy.buff(Marked.class).detach();
+                effect(enemy);
+                Dungeon.hero.curAction = new HeroAction.Attack( enemy );
                 Dungeon.hero.next();
             }
         }
@@ -185,4 +201,20 @@ public class Marked extends Buff implements ActionIndicator.Action {
             return Messages.get(Marked.class, "prompt");
         }
     };
+
+    public static void effect(Char enemy){
+        Marked mark = enemy.buff(Marked.class);
+        if (mark.stack == 3) Buff.affect(enemy, Cripple.class, 4f);
+        if (mark.stack == 5) Buff.affect(enemy, Bleeding.class).level = Dungeon.escalatingDepth();
+        if (mark.stack == 7) Buff.affect(enemy, Vulnerable.class, 4f);
+        if (mark.stack == 9) Buff.affect(enemy, Hex.class, 4f);
+        if (mark.stack == 11) Buff.affect(enemy, Paralysis.class, 5f);
+        for (Char ch : Actor.chars()){
+            if (ch instanceof Bbat){
+                ch.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 10);
+                ch.HP = Math.max(ch.HT, ch.HP + ch.HT / 5 * mark.stack);
+            }
+        }
+        enemy.buff(Marked.class).detach();
+    }
 }

@@ -297,7 +297,6 @@ public class CloakOfShadows extends Artifact {
 					GLog.w(Messages.get(this, "no_charge"));
 					((Hero) target).interrupt();
 				} else {
-				    GameScene.add(Blob.seed(target.pos, 40, SmokeScreen.class));
 					//target hero level is 1 + 2*cloak level
 					int lvlDiffFromTarget = ((Hero) target).lvl - (1+level()*2);
 					//plus an extra one for each level after 6

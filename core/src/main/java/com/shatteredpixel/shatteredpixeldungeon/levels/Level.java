@@ -1003,20 +1003,7 @@ public abstract class Level implements Bundlable {
 						blocking[i] = false;
 					}
 				}
-			} else if ((c instanceof Hero && ((Hero) c).subClass == HeroSubClass.ASSASSIN) ||
-                    (c instanceof Bbat && Dungeon.hero.subClass == HeroSubClass.ASSASSIN)){
-                blocking = Dungeon.level.losBlocking.clone();
-                PathFinder.buildDistanceMap( c.pos, BArray.not( Dungeon.level.solid, null ), 2 );
-                for (Blob blob : blobs.values().toArray(new Blob[0])){
-                    if (blob instanceof SmokeScreen){
-                        for (int i = 0; i < blocking.length; i++){
-                            if (blocking[i] && blob.cur[i] > 0 && PathFinder.distance[i] < Integer.MAX_VALUE){
-                                blocking[i] = false;
-                            }
-                        }
-                    }
-                }
-            } else{
+			} else {
 				blocking = Dungeon.level.losBlocking;
 			}
 			

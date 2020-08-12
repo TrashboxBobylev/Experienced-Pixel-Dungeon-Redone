@@ -271,13 +271,11 @@ public abstract class Mob extends Char {
 			} else if ( alignment == Alignment.ALLY ) {
 				//look for hostile mobs to attack
 				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos]
+					if (mob.alignment == Alignment.ENEMY && (fieldOfView[mob.pos])
 							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
 						//intelligent allies do not target mobs which are passive, wandering, or asleep
 						if ((!intelligentAlly ||
-								(mob.state != mob.SLEEPING && mob.state != mob.PASSIVE && mob.state != mob.WANDERING)) ||
-                                //but hunter's bbat targets everything
-                                (this instanceof Bbat && Dungeon.hero.subClass == HeroSubClass.ASSASSIN)) {
+								(mob.state != mob.SLEEPING && mob.state != mob.PASSIVE && mob.state != mob.WANDERING))) {
 							enemies.add(mob);
 						}
 				

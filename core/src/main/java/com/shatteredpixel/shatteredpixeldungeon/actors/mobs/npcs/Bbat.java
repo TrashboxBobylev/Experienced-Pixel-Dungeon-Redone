@@ -64,14 +64,16 @@ public class Bbat extends Mob {
     @Override
     public int damageRoll() {
         if (Dungeon.hero.subClass == HeroSubClass.ASSASSIN){
-            return Random.NormalIntRange( 0, level * 2 );
+            int i = Random.NormalIntRange(0, level * 2);
+            if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
+            return i;
         }
         return Random.NormalIntRange( level, 1 + level * 2 );
     }
 
     @Override
     protected float attackDelay() {
-        return super.attackDelay() * (Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 0.4f : 0.5f);
+        return super.attackDelay() * (Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 0.33f : 0.5f);
     }
 
     @Override
@@ -90,12 +92,13 @@ public class Bbat extends Mob {
         Char enemy = super.chooseEnemy();
 
         int targetPos = Dungeon.hero.pos;
-        int distance = Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 20 : 8;
+        int distance = Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 99999 : 8;
 
         //will never attack something far from their target
         if (enemy != null
                 && Dungeon.level.mobs.contains(enemy)
                 && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)){
+            ((Mob)enemy).aggro(this);
             return enemy;
         }
 
@@ -121,7 +124,7 @@ public class Bbat extends Mob {
     @Override
     public void die(Object cause) {
         super.die(cause);
-        Buff.affect(Dungeon.hero, BbatRecharge.class, 400f);
+        Buff.affect(Dungeon.hero, BbatRecharge.class, 800f);
     }
 
     private class Wandering extends Mob.Wandering {
@@ -159,7 +162,7 @@ public class Bbat extends Mob {
 
     public static class BbatRecharge extends FlavourBuff {
 
-        public static final float DURATION = 400f;
+        public static final float DURATION = 800f;
 
         {
             type = buffType.NEGATIVE;
