@@ -232,7 +232,7 @@ public class Dungeon {
         droppedItems = new SparseArray<>();
         portedItems = new SparseArray<>();
         for (LimitedDrops a : LimitedDrops.values())
-            a.count = 0;
+            if (a != LimitedDrops.BBAT)  a.count = 0;
         Notes.reset();
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
