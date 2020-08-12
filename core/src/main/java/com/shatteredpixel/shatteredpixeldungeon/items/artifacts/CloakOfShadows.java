@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -47,10 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.AlphaTweener;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 
@@ -281,9 +279,6 @@ public class CloakOfShadows extends Artifact {
 		public boolean attachTo( Char target ) {
 			if (super.attachTo( target )) {
 				target.invisible++;
-				if (target instanceof Hero && ((Hero) target).subClass == HeroSubClass.ASSASSIN){
-					Buff.affect(target, Preparation.class);
-				}
 				return true;
 			} else {
 				return false;
@@ -302,6 +297,7 @@ public class CloakOfShadows extends Artifact {
 					GLog.w(Messages.get(this, "no_charge"));
 					((Hero) target).interrupt();
 				} else {
+				    GameScene.add(Blob.seed(target.pos, 40, SmokeScreen.class));
 					//target hero level is 1 + 2*cloak level
 					int lvlDiffFromTarget = ((Hero) target).lvl - (1+level()*2);
 					//plus an extra one for each level after 6
@@ -334,6 +330,11 @@ public class CloakOfShadows extends Artifact {
 			updateQuickslot();
 			detach();
 		}
+
+        public void dispelAssassin(){
+            updateQuickslot();
+            charge = Math.min(0, charge - 2);
+        }
 
 		@Override
 		public void fx(boolean on) {

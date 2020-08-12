@@ -1,0 +1,174 @@
+/*
+ * Pixel Dungeon
+ * Copyright (C) 2012-2015 Oleg Dolya
+ *
+ * Shattered Pixel Dungeon
+ * Copyright (C) 2014-2020 Evan Debenham
+ *
+ * Experienced Pixel Dungeon
+ * Copyright (C) 2019-2020 Trashbox Bobylev
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
+
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroAction;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Image;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.PathFinder;
+
+public class Marked extends Buff implements ActionIndicator.Action {
+    {
+        type = buffType.NEGATIVE;
+        announced = true;
+    }
+
+    public int stack;
+
+    public float bonusDamage(){
+        return (float) Math.pow(stack, 1.2f);
+    }
+
+    @Override
+    public int icon() {
+        return BuffIndicator.PREPARATION;
+    }
+
+    @Override
+    public void tintIcon(Image icon) {
+        switch (stack){
+            case 1:
+                icon.hardlight(0f, 1f, 0f);
+                break;
+            case 2:
+                icon.hardlight(1f, 1f, 0f);
+                break;
+            case 3:
+                icon.hardlight(1f, 0.6f, 0f);
+                break;
+            case 4: default:
+                icon.hardlight(1f, 0f, 0f);
+                break;
+        }
+    }
+
+    @Override
+    public boolean act() {
+            if (stack > 3){
+                ActionIndicator.setAction(this);
+            spend(TICK);
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return Messages.get(this, "name");
+    }
+
+    @Override
+    public String desc() {
+        String desc = Messages.get(this, "desc");
+
+        desc += "\n\n" + Messages.get(this, "desc_dmg", Math.round(Math.pow(stack, 1.2f) * 100f));
+
+        return desc;
+    }
+
+    @Override
+    public Image getIcon() {
+        Image actionIco = new Image(Assets.Sprites.ITEM_ICONS);
+        actionIco.frame(ItemSpriteSheet.Icons.film.get(ItemSpriteSheet.Icons.SCROLL_TELEPORT));
+        actionIco.scale.set(2f);
+        tintIcon(actionIco);
+        return actionIco;
+    }
+
+    @Override
+    public void doAction() {
+        GameScene.selectCell(attack);
+    }
+
+    private CellSelector.Listener attack = new CellSelector.Listener() {
+
+        @Override
+        public void onSelect(Integer cell) {
+            if (cell == null) return;
+            final Char enemy = Actor.findChar( cell );
+            if (!(enemy instanceof Bbat) || (enemy.buff(Marked.class) != null && enemy.buff(Marked.class).stack < 3)){
+                GLog.w(Messages.get(Marked.class, "no_target"));
+            } else {
+
+                boolean[] passable = Dungeon.level.passable.clone();
+                //need to consider enemy cell as passable in case they are on a trap or chasm
+                passable[cell] = true;
+                PathFinder.buildDistanceMap(Dungeon.hero.pos, passable, Dungeon.hero.viewDistance);
+                if (PathFinder.distance[cell] == Integer.MAX_VALUE){
+                    GLog.w(Messages.get(Marked.class, "out_of_reach"));
+                    return;
+                }
+
+                //we can move through enemies when determining blink distance,
+                // but not when actually jumping to a location
+                for (Char ch : Actor.chars()){
+                    if (ch != Dungeon.hero)  passable[ch.pos] = false;
+                }
+
+                PathFinder.Path path = PathFinder.find(Dungeon.hero.pos, cell, passable);
+                int attackPos = path == null ? -1 : path.get(path.size()-2);
+
+                if (attackPos == -1 ||
+                        Dungeon.level.distance(attackPos, Dungeon.hero.pos) > Dungeon.hero.viewDistance){
+                    GLog.w(Messages.get(Marked.class, "out_of_reach"));
+                    return;
+                }
+
+                Dungeon.hero.pos = attackPos;
+                Dungeon.level.occupyCell(Dungeon.hero);
+                //prevents the hero from being interrupted by seeing new enemies
+                Dungeon.observe();
+                Dungeon.hero.checkVisibleMobs();
+
+                Dungeon.hero.sprite.place( Dungeon.hero.pos );
+                Dungeon.hero.sprite.turnTo( Dungeon.hero.pos, cell);
+                CellEmitter.get( Dungeon.hero.pos ).burst( Speck.factory( Speck.WOOL ), 6 );
+                Sample.INSTANCE.play( Assets.Sounds.PUFF );
+                enemy.buff(Marked.class).detach();
+                Dungeon.hero.next();
+            }
+        }
+
+        @Override
+        public String prompt() {
+            return Messages.get(Marked.class, "prompt");
+        }
+    };
+}

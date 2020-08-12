@@ -35,13 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shadows;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -49,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WindParticle;
@@ -1008,7 +1003,20 @@ public abstract class Level implements Bundlable {
 						blocking[i] = false;
 					}
 				}
-			} else {
+			} else if ((c instanceof Hero && ((Hero) c).subClass == HeroSubClass.ASSASSIN) ||
+                    (c instanceof Bbat && Dungeon.hero.subClass == HeroSubClass.ASSASSIN)){
+                blocking = Dungeon.level.losBlocking.clone();
+                PathFinder.buildDistanceMap( c.pos, BArray.not( Dungeon.level.solid, null ), 2 );
+                for (Blob blob : blobs.values().toArray(new Blob[0])){
+                    if (blob instanceof SmokeScreen){
+                        for (int i = 0; i < blocking.length; i++){
+                            if (blocking[i] && blob.cur[i] > 0 && PathFinder.distance[i] < Integer.MAX_VALUE){
+                                blocking[i] = false;
+                            }
+                        }
+                    }
+                }
+            } else{
 				blocking = Dungeon.level.losBlocking;
 			}
 			
@@ -1080,7 +1088,17 @@ public abstract class Level implements Bundlable {
 						}
 					}
 				}
-			}
+			} else if (((Hero)c).subClass == HeroSubClass.ASSASSIN) {
+                for (Mob mob : mobs) {
+                    int p = mob.pos;
+                    if (mob instanceof Bbat || (mob.buff(Marked.class) != null)) {
+
+                        if (!fieldOfView[p]){
+                            Dungeon.hero.mindVisionEnemies.add(mob);
+                        }
+                    }
+                }
+            }
 			
 			for (Mob m : Dungeon.hero.mindVisionEnemies) {
 				for (int i : PathFinder.NEIGHBOURS9) {

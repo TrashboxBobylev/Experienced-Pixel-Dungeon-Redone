@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BbatSprite;
@@ -66,7 +67,7 @@ public class Bbat extends Mob {
 
     @Override
     protected float attackDelay() {
-        return super.attackDelay() * 0.5f;
+        return super.attackDelay() * (Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 0.4f : 0.5f);
     }
 
     @Override

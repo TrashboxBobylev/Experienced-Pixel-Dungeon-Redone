@@ -323,6 +323,7 @@ public class Hero extends Char {
 		KindOfWeapon equipped = belongings.weapon;
 		belongings.weapon = wep;
 		boolean hit = attack( enemy );
+		if (hit && subClass == HeroSubClass.ASSASSIN) Buff.affect(enemy, Marked.class).stack = 1;
 		Invisibility.dispel();
 		belongings.weapon = equipped;
 		
