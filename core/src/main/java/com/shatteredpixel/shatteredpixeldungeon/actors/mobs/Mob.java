@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -272,8 +274,10 @@ public abstract class Mob extends Char {
 					if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos]
 							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
 						//intelligent allies do not target mobs which are passive, wandering, or asleep
-						if (!intelligentAlly ||
-								(mob.state != mob.SLEEPING && mob.state != mob.PASSIVE && mob.state != mob.WANDERING)) {
+						if ((!intelligentAlly ||
+								(mob.state != mob.SLEEPING && mob.state != mob.PASSIVE && mob.state != mob.WANDERING)) ||
+                                //but hunter's bbat targets everything
+                                (this instanceof Bbat && Dungeon.hero.subClass == HeroSubClass.ASSASSIN)) {
 							enemies.add(mob);
 						}
 				

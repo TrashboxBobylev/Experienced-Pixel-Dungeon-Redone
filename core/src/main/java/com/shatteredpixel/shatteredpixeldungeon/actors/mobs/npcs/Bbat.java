@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Marked;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -62,6 +63,9 @@ public class Bbat extends Mob {
 
     @Override
     public int damageRoll() {
+        if (Dungeon.hero.subClass == HeroSubClass.ASSASSIN){
+            return Random.NormalIntRange( 0, level * 2 );
+        }
         return Random.NormalIntRange( level, 1 + level * 2 );
     }
 
@@ -76,15 +80,22 @@ public class Bbat extends Mob {
     }
 
     @Override
+    public int attackProc(Char enemy, int damage) {
+        if (Dungeon.hero.subClass == HeroSubClass.ASSASSIN) Buff.affect(enemy, Marked.class).stack++;
+        return super.attackProc(enemy, damage);
+    }
+
+    @Override
     protected Char chooseEnemy() {
         Char enemy = super.chooseEnemy();
 
         int targetPos = Dungeon.hero.pos;
+        int distance = Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 20 : 8;
 
         //will never attack something far from their target
         if (enemy != null
                 && Dungeon.level.mobs.contains(enemy)
-                && (Dungeon.level.distance(enemy.pos, targetPos) <= 8)){
+                && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)){
             return enemy;
         }
 

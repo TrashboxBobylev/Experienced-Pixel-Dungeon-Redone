@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 
 public class Marked extends Buff implements ActionIndicator.Action {
@@ -52,6 +53,18 @@ public class Marked extends Buff implements ActionIndicator.Action {
     }
 
     public int stack;
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put("stack", stack);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        stack = bundle.getInt("stack");
+    }
 
     public float bonusDamage(){
         return (float) Math.pow(stack, 1.2f);
@@ -84,8 +97,9 @@ public class Marked extends Buff implements ActionIndicator.Action {
     public boolean act() {
             if (stack > 3){
                 ActionIndicator.setAction(this);
-            spend(TICK);
+
         }
+        spend(TICK);
         return true;
     }
 
