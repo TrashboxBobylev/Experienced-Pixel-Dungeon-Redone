@@ -98,7 +98,7 @@ public class WndBag extends WndTabbed {
 		NOT_EQUIPPED
 	}
 
-	protected static final int COLS_P    = 5;
+	protected static final int COLS_P    = 6;
 	protected static final int COLS_L    = 10;
 
     protected static int SLOT_WIDTH_P   = 18;
@@ -148,7 +148,7 @@ public class WndBag extends WndTabbed {
 		slotHeight = PixelScene.landscape() ? SLOT_HEIGHT_L : SLOT_HEIGHT_P;
 
 		nCols = PixelScene.landscape() ? COLS_L : COLS_P;
-        nRows = (int)Math.ceil((47) / (float)nCols);
+        nRows = (int)Math.ceil((58) / (float)nCols);
 		int slotsWidth = slotWidth * nCols + SLOT_MARGIN * (nCols - 1);
 
 		placeTitle( bag, slotsWidth );

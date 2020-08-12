@@ -47,7 +47,7 @@ public class PotionBandolier extends Bag {
 	}
 
 	public int capacity(){
-		return 40;
+		return 48;
 	}
 
 	@Override
