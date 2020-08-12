@@ -202,7 +202,7 @@ public class YogDzewa extends Mob {
 
 			if (abilityCooldown <= 0){
 
-				int beams = 1 + (HT - HP)/400;
+				int beams = 1 + (HT - HP)/(HT / 5 * 2);
 				HashSet<Integer> affectedCells = new HashSet<>();
 				for (int i = 0; i < beams; i++){
 
