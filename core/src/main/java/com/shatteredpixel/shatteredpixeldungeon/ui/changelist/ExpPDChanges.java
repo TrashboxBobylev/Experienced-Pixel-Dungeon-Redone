@@ -49,7 +49,36 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.4.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.5", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 13th, 2020\n" +
+                        "_-_ 1 days after Experienced Pixel Dungeon 2.4.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.BBAT, 0, 0, 15, 15), "Bbat",
+                "_-_ Fixed crash on bbat's death." ));
+
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.ROGUE, 0, 90, 12, 15), "Hunter subclass",
+                "Replaced Assassin with Hunter.\n\n" +
+                        "_-_ Instead of waiting in shadows, Hunter need to aggro bbat into enemies to mark them.\n\n" +
+                        "_-_ Marking enemies increases bbat's damage to them and allows Hunter to teleport and inflict debuffs." ));
+
+        changes.addButton( new ChangeButton(new ItemSprite(new ExpGenerator()), "EXP Generator",
+                "_-_ Reverted satiety and sleep consumption, but you need to defend power plants from mobs.\n\n" +
+                        "_-_ If monster manages to kill plant, monster will gain a huge amount of armor and attack speed.\n\n" +
+                        "_-_ Power Plants attract mobs in 32x32 sphere."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Adjusted amount of Yog's lasers immensely.\n\n" +
+                        "_-_ Significantly increased inventory size and removed hidden slots.\n\n" +
+                        "_-_ Added cycle 4 Yog laser damage."));
+
+
+
+        changes = new ChangeInfo("ExpPD-2.4.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

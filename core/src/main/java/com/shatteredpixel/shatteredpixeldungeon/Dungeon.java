@@ -236,6 +236,7 @@ public class Dungeon {
         Notes.reset();
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
+        Generator.generalReset();
         InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
         Game.switchScene( InterlevelScene.class );
     }
