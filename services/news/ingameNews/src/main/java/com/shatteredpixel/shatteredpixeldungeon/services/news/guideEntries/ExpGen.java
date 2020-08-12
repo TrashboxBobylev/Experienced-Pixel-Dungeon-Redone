@@ -32,8 +32,8 @@ public class ExpGen extends NewsArticle {
         icon = "ITEM: 426";
         summary = "If even killing mobs in mass can't satisfy you, there is passive EXP farm method with Power Plants.\n\n" +
                 "They can be bought in shops for pretty high price, and you can get as many as you want, but there is limitations to this technology:\n\n" +
-                "_-_ While power plants don't need .\n\n" +
-                "_-_ You can't sleep with them in sight, because they emit light from consumed sunlight.\n\n" +
+                "_-_ While power plants don't need food, they need to be protected from mobs that come from everywhere.\n\n" +
+                "_-_ If you fail to defend generators, the killer will be hugely empowered: he will gain increased armor and attack speed.\n\n" +
                 "But the great news: they scale with you progression in the game!";
     }
 }
