@@ -66,7 +66,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         stack = bundle.getInt("stack");
-        if (stack > 3) ActionIndicator.setAction(this);
+        if (stack > 0) ActionIndicator.setAction(this);
     }
 
     public float bonusDamage(){
@@ -81,16 +81,16 @@ public class Marked extends Buff implements ActionIndicator.Action {
     @Override
     public void tintIcon(Image icon) {
         switch (stack){
-            case 1:
+            case 1: case 2: case 3:
                 icon.hardlight(0f, 1f, 0f);
                 break;
-            case 2:
+            case 4: case 5: case 6:
                 icon.hardlight(1f, 1f, 0f);
                 break;
-            case 3:
+            case 7: case 8: case 9:
                 icon.hardlight(1f, 0.6f, 0f);
                 break;
-            case 4: default:
+            case 10: case 11: default:
                 icon.hardlight(1f, 0f, 0f);
                 break;
         }
@@ -98,7 +98,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
     @Override
     public boolean act() {
-        if (stack > 3){
+        if (stack > 0){
             ActionIndicator.setAction(this);
         }
         spend(TICK);
@@ -121,7 +121,11 @@ public class Marked extends Buff implements ActionIndicator.Action {
         String desc = Messages.get(this, "desc");
 
         desc += "\n\n" + Messages.get(this, "desc_dmg", new DecimalFormat("#.##").format(100f * Math.pow(1.085f, stack) - 100f));
-
+        if (stack >= 3)  desc += "\n\n" + Messages.get(this, "desc_cripple");
+        if (stack >= 5) desc += "\n" + Messages.get(this, "desc_bleeding");
+        if (stack >= 7) desc += "\n" + Messages.get(this, "desc_vulnerable");
+        if (stack >= 9) desc += "\n" + Messages.get(this, "desc_hexed");
+        if (stack >= 11) desc += "\n" + Messages.get(this, "desc_paralysis");
         return desc;
     }
 
@@ -204,11 +208,11 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
     public static void effect(Char enemy){
         Marked mark = enemy.buff(Marked.class);
-        if (mark.stack == 3) Buff.affect(enemy, Cripple.class, 4f);
-        if (mark.stack == 5) Buff.affect(enemy, Bleeding.class).level = Dungeon.escalatingDepth();
-        if (mark.stack == 7) Buff.affect(enemy, Vulnerable.class, 4f);
-        if (mark.stack == 9) Buff.affect(enemy, Hex.class, 4f);
-        if (mark.stack == 11) Buff.affect(enemy, Paralysis.class, 5f);
+        if (mark.stack >= 3) Buff.affect(enemy, Cripple.class, 4f);
+        if (mark.stack >= 5) Buff.affect(enemy, Bleeding.class).level = Dungeon.escalatingDepth();
+        if (mark.stack >= 7) Buff.affect(enemy, Vulnerable.class, 4f);
+        if (mark.stack >= 9) Buff.affect(enemy, Hex.class, 4f);
+        if (mark.stack >= 11) Buff.affect(enemy, Paralysis.class, 5f);
         for (Char ch : Actor.chars()){
             if (ch instanceof Bbat){
                 ch.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 10);
