@@ -46,7 +46,7 @@ public class ExpGenerator extends Item {
 
     @Override
     protected void onThrow(int cell) {
-        if (!Dungeon.level.passable[cell]){
+        if (!Dungeon.level.passable[cell] || Dungeon.bossLevel()){
             super.onThrow(cell);
         } else {
             com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator generator = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator();

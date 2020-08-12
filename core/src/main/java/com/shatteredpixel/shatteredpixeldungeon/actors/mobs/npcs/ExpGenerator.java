@@ -26,8 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
@@ -35,30 +36,46 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ExpGenSprite;
 
-public class ExpGenerator extends NPC {
+public class ExpGenerator extends Mob {
     {
         spriteClass = ExpGenSprite.class;
+        state = PASSIVE;
+        alignment = Alignment.ALLY;
+        state = WANDERING;
+        HT = HP = 50 + Dungeon.escalatingDepth() * 5;
     }
 
     @Override
-    protected Char chooseEnemy() {
-        return null;
+    protected boolean getCloser(int target) {
+        return false;
+    }
+
+    @Override
+    protected boolean getFurther(int target) {
+        return false;
     }
 
     @Override
     public void die(Object cause) {
         super.die(cause);
+        if (!(cause instanceof Hero || cause instanceof Buff)) {
+            Buff.affect((Char) cause, Adrenaline.class, 50f);
+            Buff.affect((Char) cause, Barkskin.class).set(enemy.HT, 1);
+            Buff.affect((Char) cause, Bless.class, 60f);
+            Buff.affect((Char) cause, Levitation.class, 60f);
+            Buff.affect((Char) cause, ArcaneArmor.class).set(enemy.HT, 1);
+        }
         Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator(), pos).sprite.drop();
-    }
-
-    @Override
-    public void add( Buff buff ) {
-        if (buff instanceof RatKing.Barter || buff instanceof Viscosity.DeferedDamage) super.add(buff);
     }
 
     @Override
     public boolean reset() {
         return true;
+    }
+
+    @Override
+    protected boolean canAttack(Char enemy) {
+        return false;
     }
 
     @Override
@@ -70,10 +87,17 @@ public class ExpGenerator extends NPC {
     @Override
     protected boolean act() {
         spend(1f);
-        Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
+        boolean mobs = false;
         if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()/5));
-        Dungeon.hero.buff(Hunger.class).reduceHunger( -10 );
-        Dungeon.hero.resting = false;
+        for (Mob mob : Dungeon.level.mobs) {
+            if (Dungeon.level.distance(pos, mob.pos) <= 16 && mob.state != mob.HUNTING) {
+                mob.beckon( pos );
+            }
+            if (mob.alignment == Alignment.ENEMY){
+                mobs = true;
+            }
+        }
+        if (mobs) Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
         return super.act();
     }
 }
