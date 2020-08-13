@@ -49,7 +49,7 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.5", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.5.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
@@ -57,6 +57,19 @@ public class ExpPDChanges {
                         "_-_ 1 days after Experienced Pixel Dungeon 2.4.1\n" +
                         "\n" +
                         "Dev commentary will be added here in the future."));
+
+        changes = new ChangeInfo("ExpPD-2.5", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 13th, 2020\n" +
+                        "_-_ 0 days after Experienced Pixel Dungeon 2.5\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Increased amount of possible Marked debuffs.\n\n" +
+                        "_-_ Fixed crash when power plants are attacked by magic.\n\n" +
+                        "_-_ Power Plants require to be accessible by mobs to work."));
 
         changes.addButton( new ChangeButton(new Image(Assets.Sprites.BBAT, 0, 0, 15, 15), "Bbat",
                 "_-_ Fixed crash on bbat's death." ));

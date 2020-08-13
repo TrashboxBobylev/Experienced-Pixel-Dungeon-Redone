@@ -122,8 +122,8 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
         desc += "\n\n" + Messages.get(this, "desc_dmg", new DecimalFormat("#.##").format(100f * Math.pow(1.085f, stack) - 100f));
         if (stack >= 2)  desc += "\n\n" + Messages.get(this, "desc_poison");
-        if (stack >= 3)  desc += "\n\n" + Messages.get(this, "desc_cripple");
-        if (stack >= 4)  desc += "\n\n" + Messages.get(this, "desc_blinding");
+        if (stack >= 3)  desc += "\n" + Messages.get(this, "desc_cripple");
+        if (stack >= 4)  desc += "\n" + Messages.get(this, "desc_blinding");
         if (stack >= 5) desc += "\n" + Messages.get(this, "desc_bleeding");
         if (stack >= 6) desc += "\n" + Messages.get(this, "desc_vulnerable");
         if (stack >= 7) desc += "\n" + Messages.get(this, "desc_hexed");
