@@ -121,11 +121,16 @@ public class Marked extends Buff implements ActionIndicator.Action {
         String desc = Messages.get(this, "desc");
 
         desc += "\n\n" + Messages.get(this, "desc_dmg", new DecimalFormat("#.##").format(100f * Math.pow(1.085f, stack) - 100f));
+        if (stack >= 2)  desc += "\n\n" + Messages.get(this, "desc_poison");
         if (stack >= 3)  desc += "\n\n" + Messages.get(this, "desc_cripple");
+        if (stack >= 4)  desc += "\n\n" + Messages.get(this, "desc_blinding");
         if (stack >= 5) desc += "\n" + Messages.get(this, "desc_bleeding");
-        if (stack >= 7) desc += "\n" + Messages.get(this, "desc_vulnerable");
-        if (stack >= 9) desc += "\n" + Messages.get(this, "desc_hexed");
-        if (stack >= 11) desc += "\n" + Messages.get(this, "desc_paralysis");
+        if (stack >= 6) desc += "\n" + Messages.get(this, "desc_vulnerable");
+        if (stack >= 7) desc += "\n" + Messages.get(this, "desc_hexed");
+        if (stack >= 8) desc += "\n" + Messages.get(this, "desc_slow");
+        if (stack >= 9) desc += "\n" + Messages.get(this, "desc_ooze");
+        if (stack >= 10) desc += "\n" + Messages.get(this, "desc_paralysis");
+        if (stack >= 11) desc += "\n" + Messages.get(this, "desc_doom");
         return desc;
     }
 
@@ -208,11 +213,17 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
     public static void effect(Char enemy){
         Marked mark = enemy.buff(Marked.class);
+        if (mark.stack >= 2) Buff.affect(enemy, Poison.class).set(Dungeon.escalatingDepth());
         if (mark.stack >= 3) Buff.affect(enemy, Cripple.class, 4f);
+        if (mark.stack >= 4) Buff.affect(enemy, Blindness.class, 4f);
         if (mark.stack >= 5) Buff.affect(enemy, Bleeding.class).level = Dungeon.escalatingDepth();
-        if (mark.stack >= 7) Buff.affect(enemy, Vulnerable.class, 4f);
-        if (mark.stack >= 9) Buff.affect(enemy, Hex.class, 4f);
-        if (mark.stack >= 11) Buff.affect(enemy, Paralysis.class, 5f);
+        if (mark.stack >= 6) Buff.affect(enemy, Vulnerable.class, 4f);
+        if (mark.stack >= 7) Buff.affect(enemy, Hex.class, 4f);
+        if (mark.stack >= 8) Buff.affect(enemy, Slow.class, 4f);
+        if (mark.stack >= 9) Buff.affect(enemy, Ooze.class).set(20f);
+        if (mark.stack >= 10) Buff.affect(enemy, Paralysis.class, 5f);
+        if (mark.stack >= 11) Buff.affect(enemy, Doom.class);
+
         for (Char ch : Actor.chars()){
             if (ch instanceof Bbat){
                 ch.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 10);
