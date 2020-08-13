@@ -31,10 +31,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ExpGenSprite;
+import com.watabou.utils.PathFinder;
 
 public class ExpGenerator extends Mob {
     {
@@ -58,7 +64,7 @@ public class ExpGenerator extends Mob {
     @Override
     public void die(Object cause) {
         super.die(cause);
-        if (!(cause instanceof Hero || cause instanceof Buff)) {
+        if (cause instanceof Char && !(cause instanceof Hero)) {
             Buff.affect((Char) cause, Adrenaline.class, 50f);
             Buff.affect((Char) cause, Barkskin.class).set(enemy.HT, 1);
             Buff.affect((Char) cause, Bless.class, 60f);
@@ -90,13 +96,13 @@ public class ExpGenerator extends Mob {
         boolean mobs = false;
         if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()/5));
         for (Mob mob : Dungeon.level.mobs) {
-            if (Dungeon.level.distance(pos, mob.pos) <= 16 && mob.state != mob.HUNTING) {
+            if (Dungeon.level.distance(pos, mob.pos) <= 16 && mob.state != mob.HUNTING && mob.alignment == Alignment.ENEMY) {
                 mob.beckon( pos );
-            }
-            if (mob.alignment == Alignment.ENEMY){
-                mobs = true;
+                PathFinder.Path path = PathFinder.find( mob.pos, pos, Dungeon.level.passable );
+                if (path != null) mobs = true;
             }
         }
+
         if (mobs) Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
         return super.act();
     }
