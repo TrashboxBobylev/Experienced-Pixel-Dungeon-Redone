@@ -60,4 +60,9 @@ public class AlchemyBag extends TreasureBag {
         items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(Random.Int(1, 2)));
         return items;
     }
+
+    @Override
+    public int price() {
+        return 50 * quantity;
+    }
 }

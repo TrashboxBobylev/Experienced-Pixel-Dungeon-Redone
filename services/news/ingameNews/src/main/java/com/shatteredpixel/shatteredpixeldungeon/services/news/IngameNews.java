@@ -53,6 +53,7 @@ public class IngameNews extends NewsService {
 		articles.add(new Bartering());
 		articles.add(new ExpGen());
 		articles.add(new Fishing());
+		articles.add(new TreasureBags());
 		articles.add(new Blacky());
 		articles.add(new Overhaul());
 		articles.add(new Resets());
