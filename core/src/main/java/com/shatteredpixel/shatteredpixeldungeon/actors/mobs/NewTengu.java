@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.TenguTreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewPrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -243,10 +244,14 @@ public class NewTengu extends Mob {
 	@Override
 	public void die( Object cause ) {
 		
-		if (Dungeon.LimitedDrops.TOME_OF_MASTERY.count == 0) {
-			Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
-            Dungeon.LimitedDrops.TOME_OF_MASTERY.count++;
-		}
+		if (!Badges.isObtainedLocally(Badges.Badge.BOSS_SLAIN_2)) {
+            if (Dungeon.LimitedDrops.TOME_OF_MASTERY.count == 0) {
+                Dungeon.level.drop(new TomeOfMastery(), pos).sprite.drop();
+                Dungeon.LimitedDrops.TOME_OF_MASTERY.count++;
+            }
+        } else {
+            Dungeon.level.drop(new TenguTreasureBag(), pos).sprite.drop();
+        }
 
 		
 		GameScene.bossSlain();

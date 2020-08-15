@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.DM300TreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
@@ -72,6 +73,8 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
 import com.watabou.utils.RectF;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Badges.Badge.BOSS_SLAIN_3;
 
 public class NewDM300 extends Mob {
 
@@ -540,16 +543,20 @@ public class NewDM300 extends Mob {
 		Dungeon.level.unseal();
 
 		//60% chance of 2 shards, 30% chance of 3, 10% chance for 4. Average of 2.5
-		int shards = Random.chances(new float[]{0, 0, 6, 3, 1});
-		for (int i = 0; i < shards; i++){
-			int ofs;
-			do {
-				ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
-			} while (!Dungeon.level.passable[pos + ofs]);
-			Dungeon.level.drop( new MetalShard(), pos + ofs ).sprite.drop( pos );
-		}
+        if (!Badges.isObtainedLocally(BOSS_SLAIN_3)) {
+            int shards = Random.chances(new float[]{0, 0, 6, 3, 1});
+            for (int i = 0; i < shards; i++){
+                int ofs;
+                do {
+                    ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
+                } while (!Dungeon.level.passable[pos + ofs]);
+                Dungeon.level.drop( new MetalShard(), pos + ofs ).sprite.drop( pos );
+            }
+        } else {
+            Dungeon.level.drop( new DM300TreasureBag(), pos ).sprite.drop( pos );
+        }
 
-		Badges.validateBossSlain();
+        Badges.validateBossSlain();
 
 		LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
 		if (beacon != null) {

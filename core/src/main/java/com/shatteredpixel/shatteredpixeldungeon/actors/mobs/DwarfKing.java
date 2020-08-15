@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.DKTreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.levels.NewCityBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -470,16 +471,24 @@ public class DwarfKing extends Mob {
 				}
 				h.destroy();
 			}
-			if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
-                Dungeon.level.drop(new ArmorKit(), pos + Dungeon.level.width()).sprite.drop(pos);
-                Dungeon.LimitedDrops.ARMOR_KIT.count++;
+			if (!Badges.isObtainedLocally(Badges.Badge.BOSS_SLAIN_4)) {
+                if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
+                    Dungeon.level.drop(new ArmorKit(), pos + Dungeon.level.width()).sprite.drop(pos);
+                    Dungeon.LimitedDrops.ARMOR_KIT.count++;
+                }
+            } else {
+                Dungeon.level.drop(new DKTreasureBag(), pos + Dungeon.level.width()).sprite.drop(pos);
             }
 		} else {
-            if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
-                Dungeon.level.drop(new ArmorKit(), pos).sprite.drop();
-                Dungeon.LimitedDrops.ARMOR_KIT.count++;
+            if (!Badges.isObtainedLocally(Badges.Badge.BOSS_SLAIN_4)) {
+                if (Dungeon.LimitedDrops.ARMOR_KIT.count == 0) {
+                    Dungeon.level.drop(new ArmorKit(), pos).sprite.drop();
+                    Dungeon.LimitedDrops.ARMOR_KIT.count++;
+                }
+            } else {
+                Dungeon.level.drop(new DKTreasureBag(), pos).sprite.drop();
             }
-		}
+        }
 
 		Badges.validateBossSlain();
 

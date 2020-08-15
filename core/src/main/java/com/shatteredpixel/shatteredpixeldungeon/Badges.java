@@ -256,6 +256,10 @@ public class Badges {
 		}
 	}
 
+	public static boolean isObtainedLocally(Badge badge){
+	    return local.contains(badge);
+    }
+
 	public static void validateMonstersSlain() {
 		Badge badge = null;
 		
