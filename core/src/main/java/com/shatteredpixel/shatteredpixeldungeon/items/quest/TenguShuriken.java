@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2020 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,37 +24,40 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class RatSkull extends Item {
-	
-	{
-		image = ItemSpriteSheet.SKULL;
-		
-		unique = true;
-	}
-	
-	@Override
-	public boolean isUpgradable() {
-		return false;
-	}
-	
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
+public class TenguShuriken extends MissileWeapon {
+
+    {
+        image = ItemSpriteSheet.SHURIKEN;
+        hitSound = Assets.Sounds.HIT_STAB;
+        hitSoundPitch = 1.4f;
+
+        tier = 2;
+        baseUses = 25;
+    }
 
     @Override
-    protected void onThrow(int cell) {
-        super.onThrow(cell);
-        Char character;
-        if ((character = Actor.findChar(cell)) != null){
-            Buff.affect(character, Ooze.class).set(Float.MAX_VALUE);
-        }
+    public int max(int lvl) {
+        return  10 * tier +                      //8 base, down from 10
+                (tier == 1 ? 2*lvl : tier*lvl); //scaling unchanged
+    }
+
+    @Override
+    public float speedFactor(Char owner) {
+        return 0;
+    }
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        Buff.affect(defender, Sai.DefenseDebuff.class, 5f).stack = max() / 3;
+        return super.proc(attacker, defender, damage);
     }
 }
+

@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
@@ -107,6 +108,14 @@ abstract public class Weapon extends KindOfWeapon {
 		if (enchantment != null && attacker.buff(MagicImmune.class) == null) {
 			damage = enchantment.proc( this, attacker, defender, damage );
 		}
+		if (attacker instanceof Hero){
+		    for (Item item: ((Hero) attacker).belongings.backpack){
+		        if (item instanceof KingBlade){
+		            damage = new Unstable().proc(this,attacker,defender,damage);
+                    damage = new Unstable().proc(this,attacker,defender,damage);
+                }
+            }
+        }
 		
 		if (!levelKnown && attacker == Dungeon.hero && availableUsesToID >= 1) {
 			availableUsesToID--;

@@ -109,7 +109,9 @@ public class Dungeon {
 		MAGICAL_HOLSTER,
 
         TOME_OF_MASTERY,
-        ARMOR_KIT;
+        ARMOR_KIT,
+        DM_DROPS,
+        DK_DROPS;
 
 		public int count = 0;
 

@@ -692,7 +692,22 @@ public class ItemSpriteSheet {
 		assignItemRect(HOLSTER,     15, 16);
 	}
 
-	                                                                                    //16 free slots
+	private static final int TREASURE_BAGS =                       xy(1, 32);
+	public static final int GOO_BAG = TREASURE_BAGS+0;
+    public static final int TENGU_BAG = TREASURE_BAGS+1;
+    public static final int DM300_BAG = TREASURE_BAGS+2;
+    public static final int DK_BAG = TREASURE_BAGS+3;
+    public static final int TENGU_SHURIKEN = TREASURE_BAGS+4;
+    public static final int RUSTY_SHIELD = TREASURE_BAGS+5;
+    public static final int KING_BLADE = TREASURE_BAGS+6;
+    static{
+        for (int i = 0; i < TREASURE_BAGS+4; i++){
+            assignItemRect(i, 14, 15);
+        }
+        assignItemRect(TENGU_SHURIKEN, 14, 15);
+        assignItemRect(RUSTY_SHIELD, 12, 14);
+        assignItemRect(KING_BLADE, 15, 15);
+    }
 
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
