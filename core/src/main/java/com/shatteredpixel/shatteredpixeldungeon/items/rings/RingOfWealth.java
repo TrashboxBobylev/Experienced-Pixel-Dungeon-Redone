@@ -219,8 +219,8 @@ public class RingOfWealth extends Ring {
 		}
 		//minimum level of sqrt(ringLvl)
 		if (result.isUpgradable()){
-			if (result.level() < Math.floor(level)){
-				result.level((int)Math.floor(level));
+			if (result.level() < Math.floor(level) / 12){
+				result.level((int)Math.floor(level) / 12);
 			}
 		}
 		result.cursed = false;
