@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sword;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -49,7 +51,26 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.5.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.6", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 16th, 2020\n" +
+                        "_-_ 3 days after Experienced Pixel Dungeon 2.5.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(new ItemSprite(new GambleBag()), "Treasure Bags",
+                "Added treasure bags.\n\n" +
+                        "_-_ Once boss is defeated once, on next fights it will drop treasure bag with unique drops, loads of money and unique items for dungeon cycles.\n\n" +
+                        "_-_ You can find Gamble Bag in shops and you can catch alchemy items bag with fishing rod."));
+        changes.addButton( new ChangeButton(new ItemSprite(new Vampirism()), "Spells",
+                "Added three new spells: Vampirism, Overpopulation and Fire Empower. More info in in-game guide."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.RING_RUBY, null), "Rings",
+                "Ring's scaling is extremely nerfed again to somewhat negate their power creep. (why) (I hate furor)"));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.BASIC_HOOK, null), "Fishing",
+                "Reduced upgrades on fished items."));
+
+        changes = new ChangeInfo("ExpPD-2.5.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
