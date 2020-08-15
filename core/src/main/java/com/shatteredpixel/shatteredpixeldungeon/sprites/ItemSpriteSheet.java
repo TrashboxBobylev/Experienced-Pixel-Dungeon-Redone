@@ -706,6 +706,8 @@ public class ItemSpriteSheet {
     public static final int TENGU_SHURIKEN = TREASURE_BAGS+4;
     public static final int RUSTY_SHIELD = TREASURE_BAGS+5;
     public static final int KING_BLADE = TREASURE_BAGS+6;
+    public static final int GAMBLE_BAG = TREASURE_BAGS+7;
+    public static final int ALCHEMY_BAG = TREASURE_BAGS+8;
     static{
         for (int i = 0; i < TREASURE_BAGS+4; i++){
             assignItemRect(i, 14, 15);
@@ -713,6 +715,9 @@ public class ItemSpriteSheet {
         assignItemRect(TENGU_SHURIKEN, 14, 15);
         assignItemRect(RUSTY_SHIELD, 12, 14);
         assignItemRect(KING_BLADE, 15, 15);
+        for (int i = TREASURE_BAGS+7; i < TREASURE_BAGS+9; i++){
+            assignItemRect(i, 14, 15);
+        }
     }
 
 	//for smaller 8x8 icons that often accompany an item sprite

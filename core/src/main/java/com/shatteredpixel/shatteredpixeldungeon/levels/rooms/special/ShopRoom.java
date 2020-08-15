@@ -48,6 +48,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.AlchemyBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -170,12 +172,14 @@ public class ShopRoom extends SpecialRoom {
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
 			itemsToSpawn.add( Generator.random(Generator.misTiers[2]).quantity(2).identify() );
 			itemsToSpawn.add( new MailArmor().identify() );
+			itemsToSpawn.add( new AlchemyBag());
 			break;
 			
 		case 16:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
 			itemsToSpawn.add( Generator.random(Generator.misTiers[3]).quantity(2).identify() );
 			itemsToSpawn.add( new ScaleArmor().identify() );
+			itemsToSpawn.add( new AlchemyBag());
 			break;
 
 		case 20: case 21:
@@ -185,6 +189,8 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
+                itemsToSpawn.add( new AlchemyBag());
+                itemsToSpawn.add( new AlchemyBag());
 			break;
 		}
 		w.cursed = false;
@@ -195,6 +201,10 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
 		itemsToSpawn.add( new MerchantsBeacon() );
+
+		itemsToSpawn.add(new GambleBag());
+		itemsToSpawn.add(new GambleBag());
+		itemsToSpawn.add(new GambleBag());
 
 
 		if (Dungeon.cycle == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
