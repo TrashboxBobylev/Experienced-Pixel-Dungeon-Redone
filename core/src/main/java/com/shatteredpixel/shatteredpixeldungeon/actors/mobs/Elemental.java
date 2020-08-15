@@ -227,8 +227,13 @@ public abstract class Elemental extends Mob {
 			harmfulBuffs.add( com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost.class );
 			harmfulBuffs.add( Chill.class );
 		}
-		
-		@Override
+
+        @Override
+        public int damageRoll() {
+            return Math.round(super.damageRoll()*Dungeon.fireDamage);
+        }
+
+        @Override
 		protected void meleeProc( Char enemy, int damage ) {
 			if (Random.Int( 2 ) == 0 && !Dungeon.level.water[enemy.pos]) {
 				Buff.affect( enemy, Burning.class ).reignite( enemy );

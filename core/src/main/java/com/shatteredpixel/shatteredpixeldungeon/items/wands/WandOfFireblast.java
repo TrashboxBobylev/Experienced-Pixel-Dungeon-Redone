@@ -93,7 +93,7 @@ public class WandOfFireblast extends DamageWand {
 
 		for ( Char ch : affectedChars ){
 			processSoulMark(ch, chargesPerCast());
-			ch.damage(damageRoll(), this);
+			ch.damage(Math.round(damageRoll()*Dungeon.fireDamage), this);
 			if (ch.isAlive()) {
 				Buff.affect(ch, Burning.class).reignite(ch);
 				switch (chargesPerCast()) {
@@ -158,7 +158,7 @@ public class WandOfFireblast extends DamageWand {
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", chargesPerCast(), min(), max()) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
+			return Messages.get(this, "stats_desc", chargesPerCast(), Math.round(min()*Dungeon.fireDamage), Math.round(max()*Dungeon.fireDamage)) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
 		else
 			return Messages.get(this, "stats_desc", chargesPerCast(), min(0), max(0));
 	}

@@ -158,6 +158,9 @@ public class Dungeon {
 	public static int depth;
 	public static int gold;
 	public static int cycle;
+	public static int respawn_timer;
+	public static int additionalMobs;
+	public static float fireDamage;
 	
 	public static HashSet<Integer> chapters;
 
@@ -199,6 +202,9 @@ public class Dungeon {
 		gold = 0;
 		cycle = 0;
 		Bbat.level = 1;
+		respawn_timer = 50;
+		additionalMobs = 0;
+		fireDamage = 1;
 
 		droppedItems = new SparseArray<>();
 		portedItems = new SparseArray<>();
@@ -543,6 +549,9 @@ public class Dungeon {
 	private static final String GOLD		= "gold";
 	private static final String DEPTH		= "depth";
     private static final String CYCLE		= "cycle";
+    private static final String RESPAWN_TIMER		= "respawntimer";
+    private static final String ADDMOBS		= "additionalMobs";
+    private static final String FIREDANAGE = "firedamage";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
@@ -563,6 +572,9 @@ public class Dungeon {
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
 			bundle.put( CYCLE, cycle);
+			bundle.put( RESPAWN_TIMER, respawn_timer);
+			bundle.put( ADDMOBS, additionalMobs);
+			bundle.put(FIREDANAGE, fireDamage);
 			Bbat.saveLevel(bundle);
 
 			for (int d : droppedItems.keyArray()) {
@@ -725,6 +737,9 @@ public class Dungeon {
 		gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
 		cycle = bundle.getInt( CYCLE);
+		respawn_timer = bundle.getInt(RESPAWN_TIMER);
+		additionalMobs = bundle.getInt(ADDMOBS);
+		fireDamage = bundle.getFloat(FIREDANAGE);
 		
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );

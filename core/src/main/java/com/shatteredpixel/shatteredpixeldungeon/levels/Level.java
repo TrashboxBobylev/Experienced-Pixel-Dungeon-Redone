@@ -532,11 +532,11 @@ public abstract class Level implements Bundlable {
 	
 	public float respawnTime(){
 		if (Statistics.amuletObtained){
-			return TIME_TO_RESPAWN/2f;
+			return Dungeon.respawn_timer/2f;
 		} else if (Dungeon.level.feeling == Feeling.DARK){
-			return 2*TIME_TO_RESPAWN/3f;
+			return 2*Dungeon.respawn_timer/3f;
 		} else {
-			return TIME_TO_RESPAWN;
+			return Dungeon.respawn_timer;
 		}
 	}
 	
