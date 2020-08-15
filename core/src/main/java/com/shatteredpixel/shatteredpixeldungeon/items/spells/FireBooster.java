@@ -28,6 +28,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.PathFinder;
 
@@ -42,5 +46,25 @@ public class FireBooster extends Spell {
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(FlameParticle.FACTORY, 10);
         }
+    }
+
+    @Override
+    public int price() {
+        //prices of ingredients, divided by output quantity
+        return Math.round(quantity * ((30 + 50 + 40)));
+    }
+
+    public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
+
+        {
+            inputs =  new Class[]{PotionOfLiquidFlame.class, ScrollOfUpgrade.class, ArcaneCatalyst.class};
+            inQuantity = new int[]{1, 1};
+
+            cost = 20;
+
+            output = FireBooster.class;
+            outQuantity = 1;
+        }
+
     }
 }
