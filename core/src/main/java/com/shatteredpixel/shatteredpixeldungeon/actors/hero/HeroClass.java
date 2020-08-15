@@ -118,8 +118,6 @@ public enum HeroClass {
 
 		new PsycheChest().collect();
 
-		new AlchemyBag().collect();
-
 	}
 
 	public Badges.Badge masteryBadge() {

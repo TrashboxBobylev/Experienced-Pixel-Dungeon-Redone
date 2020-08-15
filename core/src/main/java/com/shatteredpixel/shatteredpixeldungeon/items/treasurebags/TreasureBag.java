@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.util.ArrayList;
 
@@ -71,6 +73,8 @@ public abstract class TreasureBag extends Item {
             for (Item item: items){
                 if (!item.doPickUp(hero)) {
                     Dungeon.level.drop(item, hero.pos).sprite.drop();
+                } else {
+                    GLog.i( Messages.get(Hero.class, "you_now_have", item.name()) );
                 }
             }
             hero.spendAndNext(Actor.TICK);
