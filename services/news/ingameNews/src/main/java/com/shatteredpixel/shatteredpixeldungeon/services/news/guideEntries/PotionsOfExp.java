@@ -35,6 +35,7 @@ public class PotionsOfExp extends NewsArticle {
                 "Potion of Experience is pretty nice way to gather more experience and loot, because it activates 2x experience boost and additional item from mobs when Fate Lock is activated.\n\n" +
                 "Potion of Overload is exotic version of PoE and activates mechanic, named ressurection in some roguelikes: when you kill mob, there is a high probability of spawning another mob with same rules as regular spawning.\n" +
                 "These two potions work exceptionally well together.\n\n" +
-                "Starflower gives both effects for much shorter time, have fun with it.";
+                "Starflower gives both effects for much shorter time, have fun with it.\n\n\n" +
+                "If you need gold instead of XP, you can use _Scroll of Midas_. It turns every enemy in FOV into gold, but doesn't give additional drops and any experience.";
     }
 }

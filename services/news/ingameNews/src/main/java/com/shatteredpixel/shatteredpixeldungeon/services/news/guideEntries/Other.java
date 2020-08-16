@@ -37,7 +37,8 @@ public class Other extends NewsArticle {
                 "_-_ The inventory space is massively increased, both for backpack and dedicated bags.\n\n" +
                 "_-_ Enchantments and glyphs no longer have a chance of disappearing with upgrading them.\n\n" +
                 "_-_ Rings have massive nerf compared to vanilla Shattered PD.\n\n" +
-                "_-_ Scroll of Affection turns every enemy in your sight into ally.";
+                "_-_ _Scroll of Affection_ turns every enemy in your sight into ally.\n\n" +
+                "_-_ _Scroll of Confusion_ is _Scroll of Determination_ now; instead of confusing entities, applies life-steal shielding to hero.";
 
     }
 }

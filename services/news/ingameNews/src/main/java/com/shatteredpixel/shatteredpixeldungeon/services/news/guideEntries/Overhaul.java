@@ -40,6 +40,7 @@ public class Overhaul extends NewsArticle {
                 "_-_ _Displacing Dart_ can ignore walls and other enemies, but get damage penalty.\n\n" +
                 "_-_ _Adrenaline Dart_ has instant attack speed, but also have damage penalty.\n\n" +
                 "_-_ _Holy Dart_ dooms enemies on hits.\n\n" +
+                "_-_ _Trident_ generates small amount of gold on each hit.\n\n" +
                 "_-_ Any _Grim_ weapon now deal additional damage based on health of enemy, instead of butchering enemies." +
                 "";
     }
