@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 public class TreasureBags extends NewsArticle {
     {
         title ="Boxes with Items";
-        icon ="ITEM: 496";
+        icon ="ITEM: 464";
         summary = "Once boss is defeated once, it starts dropping _treasure bags_. They can be opened for additional goods.\n\n" +
                 "_-_ Once dungeon is reset at least once, you can get some exclusive items and more consumables.\n\n\n" +
                 "There is also two other treasure bags to find:\n" +
