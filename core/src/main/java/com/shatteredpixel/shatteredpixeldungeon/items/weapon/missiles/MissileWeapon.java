@@ -280,6 +280,14 @@ abstract public class MissileWeapon extends Weapon {
 		super.reset();
 		durability = MAX_DURABILITY;
 	}
+
+	@Override
+    public boolean isSimilar( Item item ) {
+        if (item instanceof MissileWeapon){
+            return super.isSimilar(item) && tier == ((MissileWeapon) item).tier;
+        }
+        return super.isSimilar(item);
+    }
 	
 	@Override
 	public Item merge(Item other) {
