@@ -52,9 +52,9 @@ public class RingOfElements extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.##").format(100f * (1f - Math.pow(0.9995f, soloBuffedBonus()))));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f + soloBuffedBonus()*0.005f))));
 		} else {
-			return Messages.get(this, "typical_stats", new DecimalFormat("#.##").format(0.05f));
+			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class RingOfElements extends Ring {
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.9995, getBuffedBonus(target, Resistance.class));
+				return (float)(0.80f + getBuffedBonus(target, Resistance.class)*0.005f);
 			}
 		}
 		
