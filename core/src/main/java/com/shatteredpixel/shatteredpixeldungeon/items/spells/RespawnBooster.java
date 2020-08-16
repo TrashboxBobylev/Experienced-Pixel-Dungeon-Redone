@@ -49,6 +49,7 @@ public class RespawnBooster extends Spell{
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 10);
         }
+        detach( curUser.belongings.backpack );
     }
 
     @Override

@@ -46,6 +46,7 @@ public class FireBooster extends Spell {
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(FlameParticle.FACTORY, 10);
         }
+        detach( curUser.belongings.backpack );
     }
 
     @Override
