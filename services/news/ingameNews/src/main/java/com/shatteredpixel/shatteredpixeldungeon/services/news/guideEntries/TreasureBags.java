@@ -32,8 +32,10 @@ public class TreasureBags extends NewsArticle {
         icon ="ITEM: 464";
         summary = "Once boss is defeated once, it starts dropping _treasure bags_. They can be opened for additional goods.\n\n" +
                 "_-_ Once dungeon is reset at least once, you can get some exclusive items and more consumables.\n\n\n" +
-                "There is also two other treasure bags to find:\n" +
-                "_-_ _Gamble Bag_ provides 0-12 random items on opening, can be found in any shop." +
-                "_-_ _Alchemy Bag_ can be acquired by fishing or in deeper shops.";
+                "There is also four other treasure bags to find:\n" +
+                "_-_ _Lucky Bag_ provides 0-12 random items on opening, can be found in any shop.\n\n" +
+                "_-_ _Alchemy Bag_ can be acquired by fishing or in deeper shops.\n\n" +
+                "_-_ _Bigger Lucky Bag_ provides 0-30 random items, while giving more items when possible.\n\n" +
+                "_-_ _Elite Bag_ contains every category of item, free of curses and identified.";
     }
 }
