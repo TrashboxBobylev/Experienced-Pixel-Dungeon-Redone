@@ -49,7 +49,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.AlchemyBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -205,6 +207,8 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add(new GambleBag());
 		itemsToSpawn.add(new GambleBag());
 		itemsToSpawn.add(new GambleBag());
+        itemsToSpawn.add(new BiggerGambleBag());
+		if (Dungeon.depth > 6) itemsToSpawn.add(new QualityBag());
 
 
 		if (Dungeon.cycle == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
