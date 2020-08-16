@@ -48,7 +48,13 @@ public class ExpGenerator extends Mob {
         state = PASSIVE;
         alignment = Alignment.ALLY;
         state = WANDERING;
-        HT = HP = 50 + Dungeon.escalatingDepth() * 5;
+    }
+
+    public int level;
+
+    public void set(int lvl){
+        level = lvl;
+        HT = HP = (int) ((25 + Dungeon.escalatingDepth() * 2) * (1.2f * level));
     }
 
     @Override
@@ -66,10 +72,10 @@ public class ExpGenerator extends Mob {
         super.die(cause);
         if (cause instanceof Char && !(cause instanceof Hero)) {
             Buff.affect((Char) cause, Adrenaline.class, 50f);
-            Buff.affect((Char) cause, Barkskin.class).set(enemy.HT, 1);
+            Buff.affect((Char) cause, Barkskin.class).set(enemy.HT*5, 0);
             Buff.affect((Char) cause, Bless.class, 60f);
             Buff.affect((Char) cause, Levitation.class, 60f);
-            Buff.affect((Char) cause, ArcaneArmor.class).set(enemy.HT, 1);
+            Buff.affect((Char) cause, ArcaneArmor.class).set(enemy.HT*5, 0);
         }
         Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator(), pos).sprite.drop();
     }
@@ -94,16 +100,19 @@ public class ExpGenerator extends Mob {
     protected boolean act() {
         spend(1f);
         boolean mobs = false;
-        if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Dungeon.escalatingDepth()/5));
         for (Mob mob : Dungeon.level.mobs) {
-            if (Dungeon.level.distance(pos, mob.pos) <= 16 && mob.state != mob.HUNTING && mob.alignment == Alignment.ENEMY) {
-                mob.beckon( pos );
-                PathFinder.Path path = PathFinder.find( mob.pos, pos, Dungeon.level.passable );
+            if (mob.alignment == Alignment.ENEMY) {
+                PathFinder.Path path = PathFinder.find(mob.pos, pos, Dungeon.level.passable);
                 if (path != null) mobs = true;
             }
+            if (Dungeon.level.distance(pos, mob.pos) <= 16 + level*2 && mob.state != mob.HUNTING && mob.alignment == Alignment.ENEMY) {
+                mob.beckon( pos );
+            }
         }
-
-        if (mobs) Dungeon.hero.earnExp(Dungeon.escalatingDepth()/5, this.getClass());
+        if (mobs) {
+            Dungeon.hero.earnExp(Math.round((Dungeon.escalatingDepth()/5) * (1.5f * level)), this.getClass());
+            if (Dungeon.hero.fieldOfView[pos]) sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", Math.round((Dungeon.escalatingDepth()/5) * (1.5f * level))));
+        }
         return super.act();
     }
 }

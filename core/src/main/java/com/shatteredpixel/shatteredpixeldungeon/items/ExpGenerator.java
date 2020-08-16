@@ -24,8 +24,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
@@ -33,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -41,7 +45,21 @@ public class ExpGenerator extends Item {
         image = ItemSpriteSheet.MAGIC_INFUSE;
         defaultAction = AC_THROW;
         identify();
-        stackable = true;
+        stackable = false;
+    }
+
+    @Override
+    public boolean doPickUp(Hero hero) {
+        ExpGenerator generator = hero.belongings.getItem(ExpGenerator.class);
+        if (generator == null) return super.doPickUp(hero);
+        else {
+            GameScene.pickUp( this, hero.pos );
+            Sample.INSTANCE.play( Assets.Sounds.ITEM );
+            hero.spendAndNext( TIME_TO_PICK_UP );
+            generator.upgrade();
+            GLog.i( Messages.get(this, "upgrade") );
+            return true;
+        }
     }
 
     @Override
@@ -51,6 +69,7 @@ public class ExpGenerator extends Item {
         } else {
             com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator generator = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator();
             generator.pos = cell;
+            generator.set(level());
 
             GameScene.add( generator );
             ScrollOfTeleportation.appear(generator, cell);
@@ -59,11 +78,11 @@ public class ExpGenerator extends Item {
 
     @Override
     public int price() {
-        return 120 * quantity;
+        return 120 * quantity * level();
     }
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", Dungeon.escalatingDepth() / 5);
+        return Messages.get(this, "desc", Math.round((Dungeon.escalatingDepth()/5) * (1.5f * level())));
     }
 }
