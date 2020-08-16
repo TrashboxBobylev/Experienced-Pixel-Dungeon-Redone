@@ -39,7 +39,7 @@ public class RageHalo extends Halo {
 	public RageHalo(CharSprite sprite ) {
 		
 		//rectangular sprite to circular radius. Pythagorean theorem
-		super( (float)Math.sqrt(Math.pow(sprite.width()/2f, 2)*2 + Math.pow(sprite.height()/2f, 2)*2), 0xFF000C, 1f );
+		super( (float)Math.sqrt(Math.pow(sprite.width()/2f, 2)*4 + Math.pow(sprite.height()/2f, 2)*4), 0xFF000C, 1f );
 		
 		am = -0.2f;
 		aa = +0.2f;

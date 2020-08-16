@@ -53,7 +53,7 @@ public class RageShield extends Buff {
 		announced = true;
 	}
 	
-	private float left;
+	private int left;
     private float max;
 	private static final String LEFT	= "left";
 	private static final String MAX = "max";
@@ -68,7 +68,7 @@ public class RageShield extends Buff {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		left = bundle.getFloat(LEFT);
+		left = bundle.getInt(LEFT);
 		max = bundle.getFloat(MAX);
 	}
 	
@@ -103,8 +103,8 @@ public class RageShield extends Buff {
 	}
 	
 	public void set(float left){
-		this.left = left;
-		this.max = left;
+		this.left = (int) left;
+		this.max = (int) left;
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class RageShield extends Buff {
             }
 
             for (Char ch : affected){
-                if (left > 0) {
+                if (left > 0 && ch.alignment == Char.Alignment.ENEMY) {
                     target.sprite.parent.add(new Beam.HealthRay(target.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(ch.pos)));
                     float drain = ch.HT / 20f + 1;
                     if (Dungeon.level.adjacent(target.pos, ch.pos)){
@@ -134,7 +134,7 @@ public class RageShield extends Buff {
                     ch.damage(Math.round(drain), this);
                     left -= drain;
                     Buff.prolong(ch, Amok.class, 2f);
-                    target.HP = Math.max(target.HP + Math.round(drain), target.HT);
+                    target.HP = Math.min(target.HP + Math.round(drain), target.HT);
                     target.sprite.showStatus( CharSprite.POSITIVE, Integer.toString(Math.round(drain)) );
                     if (left <= 0){
                         detach();
@@ -149,4 +149,10 @@ public class RageShield extends Buff {
 		}
 		return true;
 	}
+
+    @Override
+    public void fx(boolean on) {
+        if (on) target.sprite.add(CharSprite.State.RAGESHIELDED);
+        else target.sprite.remove(CharSprite.State.RAGESHIELDED);
+    }
 }
