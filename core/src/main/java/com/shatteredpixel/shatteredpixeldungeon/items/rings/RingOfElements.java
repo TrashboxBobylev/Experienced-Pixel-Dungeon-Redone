@@ -84,7 +84,8 @@ public class RingOfElements extends Ring {
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)(0.80f + getBuffedBonus(target, Resistance.class)*0.005f);
+				if (getBuffedBonus(target, Resistance.class) > 0)return (float)(0.80f + getBuffedBonus(target, Resistance.class)*0.005f);
+				else return 1f;
 			}
 		}
 		

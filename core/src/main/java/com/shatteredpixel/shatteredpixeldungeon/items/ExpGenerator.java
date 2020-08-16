@@ -57,7 +57,6 @@ public class ExpGenerator extends Item {
             Sample.INSTANCE.play( Assets.Sounds.ITEM );
             hero.spendAndNext( TIME_TO_PICK_UP );
             generator.upgrade();
-            GLog.i( Messages.get(this, "upgrade") );
             return true;
         }
     }
@@ -74,6 +73,16 @@ public class ExpGenerator extends Item {
             GameScene.add( generator );
             ScrollOfTeleportation.appear(generator, cell);
         }
+    }
+
+    @Override
+    public int level() {
+        return super.level() + 1;
+    }
+
+    @Override
+    public int visiblyUpgraded() {
+        return super.level();
     }
 
     @Override

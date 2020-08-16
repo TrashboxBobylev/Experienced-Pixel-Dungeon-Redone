@@ -51,7 +51,8 @@ public class RingOfTenacity extends Ring {
 	
 	public static float damageMultiplier( Char t ){
 		//(HT - HP)/HT = heroes current % missing health.
-		return (float)(0.85f + getBuffedBonus( t, Tenacity.class)*((float)(t.HT - t.HP)/t.HT)*0.001f);
+		if (getBuffedBonus(t, Tenacity.class) > 0) return (float)(0.85f + getBuffedBonus( t, Tenacity.class)*((float)(t.HT - t.HP)/t.HT)*0.001f);
+		return 1f;
 	}
 
 	public class Tenacity extends RingBuff {

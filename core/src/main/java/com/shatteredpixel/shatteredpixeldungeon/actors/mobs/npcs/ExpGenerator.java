@@ -77,7 +77,7 @@ public class ExpGenerator extends Mob {
             Buff.affect((Char) cause, Levitation.class, 60f);
             Buff.affect((Char) cause, ArcaneArmor.class).set(enemy.HT*5, 0);
         }
-        Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator(), pos).sprite.drop();
+        Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator().upgrade(level - 1), pos).sprite.drop();
     }
 
     @Override

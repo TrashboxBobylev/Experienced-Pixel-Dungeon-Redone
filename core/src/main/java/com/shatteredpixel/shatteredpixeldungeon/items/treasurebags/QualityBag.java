@@ -42,7 +42,7 @@ import java.util.ArrayList;
 
 public class QualityBag extends TreasureBag {
     {
-        image = ItemSpriteSheet.GAMBLE_BAG;
+        image = ItemSpriteSheet.QUALITY_BAG;
     }
 
     @Override

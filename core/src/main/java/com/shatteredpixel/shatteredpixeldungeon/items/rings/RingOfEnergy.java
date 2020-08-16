@@ -54,11 +54,13 @@ public class RingOfEnergy extends Ring {
 	}
 	
 	public static float wandChargeMultiplier( Char target ){
-		return (float)(1.20f + getBuffedBonus(target, Energy.class)*0.5f);
+		if (getBuffedBonus(target, Energy.class) > 0) return (float)(1.20f + getBuffedBonus(target, Energy.class)*0.5f);
+		return 1f;
 	}
 
 	public static float artifactChargeMultiplier( Char target ){
-		return (float)(1.10f + getBuffedBonus(target, Energy.class)*0.25f);
+        if (getBuffedBonus(target, Energy.class) > 0) return (float)(1.10f + getBuffedBonus(target, Energy.class)*0.25f);
+		return 1f;
 	}
 	
 	public class Energy extends RingBuff {
