@@ -39,13 +39,13 @@ public class GambleBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        int amount = Random.Int(0, 12);
+        int amount = Random.Int(0, 15);
         for(int i = 0; i < amount; i++) items.add(Generator.random());
         return items;
     }
 
     @Override
     public int price() {
-        return 250 * quantity;
+        return 175 * quantity;
     }
 }

@@ -57,12 +57,12 @@ public class AlchemyBag extends TreasureBag {
                 PhaseShift.class, Recycle.class, Vampirism.class,
                 StewedMeat.class, Firebomb.class, Flashbang.class, FrostBomb.class, HolyBomb.class, Noisemaker.class,
                 RegrowthBomb.class, ShockBomb.class, WoollyBomb.class);
-        items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(Random.Int(1, 2)));
+        items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(Random.Int(1, 4)));
         return items;
     }
 
     @Override
     public int price() {
-        return 50 * quantity;
+        return 55 * quantity;
     }
 }
