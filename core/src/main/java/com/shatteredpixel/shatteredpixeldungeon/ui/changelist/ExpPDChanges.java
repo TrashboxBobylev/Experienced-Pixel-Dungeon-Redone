@@ -50,8 +50,32 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.7", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 16th, 2020\n" +
+                        "_-_ 0 days after Experienced Pixel Dungeon 2.6\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(new ItemSprite(new GambleBag()), "Treasure Bags",
+                "_-_ Boss treasure bags contain more money.\n\n" +
+                        "_-_ Lucky bag contains more items and have reduced price.\n\n" +
+                        "_-_ Alchemy bag have more items and increased price.\n\n" +
+                        "_-_ Added big lucky bag and elite bag."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.RING_RUBY, null), "Rings",
+                "Ring's scaling is reworked to be linear."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.EXOTIC_ODAL, null), "Scrolls",
+                "_-_ Scroll of Confusion is now _Scroll of Determination_ that applies life-stealing shield to user.\n\n" +
+                        "_-_ Scroll of Polymorph is now _Scroll of Midas_, that turns every visible enemy into money."));
+        changes.addButton( new ChangeButton(new ItemSprite(new Vampirism()), "Spells",
+                "Overpopulation and Flame Empower are consumed on using."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Resetting floor resets RNG.\n\n" +
+                        "_-_ Power Plants are getting upgraded instead of being stacked.\n\n" +
+                        "_-_ Tridents now drop some gold on damaging enemies."));
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.6", true, "");
+         changes = new ChangeInfo("ExpPD-2.6", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
