@@ -818,7 +818,7 @@ public class ItemSpriteSheet {
 			assignIconRect( SCROLL_PASSAGE,     5, 7 );
 			assignIconRect( SCROLL_AFFECTION,   7, 6 );
 			assignIconRect( SCROLL_FORESIGHT,   7, 5 );
-			assignIconRect( SCROLL_CONFUSION,   7, 7 );
+			assignIconRect( SCROLL_CONFUSION,   7, 6 );
 			assignIconRect( SCROLL_PSIBLAST,    5, 6 );
 			assignIconRect( SCROLL_PETRIF,      7, 5 );
 			assignIconRect( SCROLL_POLYMORPH,   7, 6 );
