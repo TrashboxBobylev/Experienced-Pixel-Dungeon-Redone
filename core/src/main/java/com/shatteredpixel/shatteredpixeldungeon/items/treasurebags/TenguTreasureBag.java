@@ -49,7 +49,7 @@ public class TenguTreasureBag extends TreasureBag {
             items.add(new TomeOfMastery());
             Dungeon.LimitedDrops.TOME_OF_MASTERY.drop();
         }
-        items.add(new Gold().quantity(Random.Int( 450 + Dungeon.escalatingDepth() * 75, 900 + Dungeon.escalatingDepth() * 85 )));
+        items.add(new Gold().quantity(Random.Int( 625 + Dungeon.escalatingDepth() * 96, 1100 + Dungeon.escalatingDepth() * 130 )));
         items.add(new Shuriken().upgrade(1).quantity(Random.Int(2, 10)));
         if (Dungeon.cycle > 0){
             items.add(new TenguShuriken().random().quantity(Random.Int(1, 3)));

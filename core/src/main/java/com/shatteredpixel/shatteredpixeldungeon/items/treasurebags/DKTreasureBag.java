@@ -48,7 +48,7 @@ public class DKTreasureBag extends TreasureBag {
             items.add(new ArmorKit());
             Dungeon.LimitedDrops.ARMOR_KIT.drop();
         }
-        items.add(new Gold().quantity(Random.Int( 800 + Dungeon.escalatingDepth() * 140, 1400 + Dungeon.escalatingDepth() * 175 )));
+        items.add(new Gold().quantity(Random.Int( 1500 + Dungeon.escalatingDepth() * 175, 2000 + Dungeon.escalatingDepth() * 233 )));
         items.add(Generator.randomUsingDefaults(Generator.Category.ARTIFACT).random());
         items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON).random());
         items.add(Generator.randomUsingDefaults(Generator.Category.ARMOR).random());

@@ -51,7 +51,7 @@ public class DM300TreasureBag extends TreasureBag {
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
         items.add(new MetalShard().quantity(Random.Int(2, 4)));
-        items.add(new Gold().quantity(Random.Int( 600 + Dungeon.escalatingDepth() * 100, 1100 + Dungeon.escalatingDepth() * 120 )));
+        items.add(new Gold().quantity(Random.Int( 1000 + Dungeon.escalatingDepth() * 140, 1600 + Dungeon.escalatingDepth() * 165 )));
         items.add(Generator.randomUsingDefaults(Generator.Category.ARMOR).random());
         if (Dungeon.cycle > 0){
             if (!Dungeon.LimitedDrops.DM_DROPS.dropped()){
