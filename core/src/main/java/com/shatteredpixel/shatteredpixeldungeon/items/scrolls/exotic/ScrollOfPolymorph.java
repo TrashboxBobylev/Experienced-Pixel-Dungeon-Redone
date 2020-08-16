@@ -33,11 +33,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
+
+import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Alignment.ALLY;
 
 public class ScrollOfPolymorph extends ExoticScroll {
 	
@@ -53,24 +56,20 @@ public class ScrollOfPolymorph extends ExoticScroll {
 		Invisibility.dispel();
 		
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-			if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]) {
+			if (mob.alignment != ALLY && Dungeon.level.heroFOV[mob.pos]) {
 				if (!mob.properties().contains(Char.Property.BOSS)
 						&& !mob.properties().contains(Char.Property.MINIBOSS)){
-					Sheep sheep = new Sheep();
-					sheep.lifespan = 10;
-					sheep.pos = mob.pos;
-					
-					//awards half exp for each sheep-ified mob
-					//50% chance to round up, 50% to round down
-					if (mob.EXP % 2 == 1) mob.EXP += Random.Int(2);
-					mob.EXP /= 2;
+
+					mob.EXP = 0;
+					mob.alignment = ALLY;
+					Gold gold = (Gold) new Gold().random();
+					gold.quantity(gold.quantity()*Random.Int(2, 6));
+					Dungeon.level.drop(gold, mob.pos).sprite.drop();
 					
 					mob.destroy();
 					mob.sprite.killAndErase();
 					Dungeon.level.mobs.remove(mob);
 					TargetHealthIndicator.instance.target(null);
-					GameScene.add(sheep);
-					CellEmitter.get(sheep.pos).burst(Speck.factory(Speck.WOOL), 4);
 				}
 			}
 		}
