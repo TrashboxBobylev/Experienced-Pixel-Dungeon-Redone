@@ -25,7 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Random;
 
 public class Trident extends MissileWeapon {
 	
@@ -36,5 +40,12 @@ public class Trident extends MissileWeapon {
 		
 		tier = 5;
 	}
-	
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        Gold gold = (Gold) new Gold().random();
+        gold.quantity(Math.round (gold.quantity()* Random.Float(0.2f, 0.7f)));
+        Dungeon.level.drop(gold, defender.pos).sprite.drop();
+        return super.proc(attacker, defender, damage);
+    }
 }
