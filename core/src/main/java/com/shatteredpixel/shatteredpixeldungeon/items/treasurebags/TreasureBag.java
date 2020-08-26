@@ -71,10 +71,12 @@ public abstract class TreasureBag extends Item {
             detach(hero.belongings.backpack);
             ArrayList<Item> items = items();
             for (Item item: items){
-                if (!item.doPickUp(hero)) {
-                    Dungeon.level.drop(item, hero.pos).sprite.drop();
-                } else {
-                    GLog.i( Messages.get(Hero.class, "you_now_have", item.name()) );
+                if (item != null) {
+                    if (!item.doPickUp(hero)) {
+                        Dungeon.level.drop(item, hero.pos).sprite.drop();
+                    } else {
+                        GLog.i(Messages.get(Hero.class, "you_now_have", item.name()));
+                    }
                 }
             }
             hero.spendAndNext(Actor.TICK);

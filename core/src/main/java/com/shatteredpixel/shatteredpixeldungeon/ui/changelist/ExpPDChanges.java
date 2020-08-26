@@ -50,7 +50,21 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.7", true, "");
+
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.7.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 16th, 2020\n" +
+                        "_-_ 3 hours after Experienced Pixel Dungeon 2.7\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                "_-_ Fixed rings having effects when they shouldn't.\n\n" +
+                        "_-_ Fixed power plants being not functional on +0.\n\n" +
+                        "_-_ Fixed new bags having incorrect icons."));
+
+        changes = new ChangeInfo("ExpPD-2.7", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
