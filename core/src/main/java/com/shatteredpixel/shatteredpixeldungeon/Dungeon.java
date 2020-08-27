@@ -265,7 +265,7 @@ public class Dungeon {
 		Actor.clear();
 		
 		depth++;
-		if (depth > Statistics.deepestFloor) {
+		if (depth > Statistics.deepestFloor && depth != 28) {
 			Statistics.deepestFloor = depth;
 			
 			if (Statistics.qualifiedForNoKilling) {
@@ -341,6 +341,9 @@ public class Dungeon {
 			break;
         case 27:
             level = new BlackMimicLevel();
+            break;
+        case 28:
+            level = new OldCavesBossLevel();
             break;
 		default:
 			level = new DeadEndLevel();
