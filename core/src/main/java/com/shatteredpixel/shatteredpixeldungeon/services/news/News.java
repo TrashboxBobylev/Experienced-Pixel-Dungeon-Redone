@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.watabou.noosa.Image;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class News {
