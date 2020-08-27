@@ -112,7 +112,6 @@ public class Artifact extends KindofMisc {
 
 	@Override
 	public boolean isUpgradable() {
-		if (this instanceof ChaliceOfBlood) return false;
         return level() >= levelCap;
     }
 
