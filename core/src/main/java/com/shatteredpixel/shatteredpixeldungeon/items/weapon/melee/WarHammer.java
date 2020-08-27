@@ -25,23 +25,36 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Random;
 
 public class WarHammer extends MeleeWeapon {
 
 	{
 		image = ItemSpriteSheet.WAR_HAMMER;
 		hitSound = Assets.Sounds.HIT_CRUSH;
-		hitSoundPitch = 1f;
+		hitSoundPitch = 4f;
 
 		tier = 5;
 		ACC = 1.20f; //20% boost to accuracy
+        DLY = 3;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return  4*(tier+1) +    //24 base, down from 30
-				lvl*(tier+1);   //scaling unchanged
+		return  15*(tier+1) +    //90 base, up from 30
+				3*lvl*(tier+1);   //scaling is tripled
 	}
 
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        curUser.sprite.centerEmitter().start( Speck.factory( Speck.KIT ), 0.05f, 10 );
+        Buff.affect(attacker, Paralysis.class, Random.Int(4, 8));
+        Buff.affect(defender, Paralysis.class, Random.Int(3, 6));
+        return super.proc(attacker, defender, damage);
+    }
 }
