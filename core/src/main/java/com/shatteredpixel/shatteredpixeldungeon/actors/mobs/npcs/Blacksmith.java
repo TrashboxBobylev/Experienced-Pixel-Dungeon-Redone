@@ -212,36 +212,28 @@ public class Blacksmith extends NPC {
 	public static void upgrade( Item item1, Item item2 ) {
 		
 		Item first, second;
+        first = item1;
+        second = item2;
 		if (item1 instanceof MeleeWeapon && item2 instanceof MeleeWeapon){
 		    if ((((MeleeWeapon) item2).tier > ((MeleeWeapon) item1).tier)){
                 first = item2;
                 second = item1;
-            } else {
-                first = item1;
-                second = item2;
             }
         } else if (item1 instanceof MissileWeapon && item2 instanceof MissileWeapon){
             if ((((MissileWeapon) item2).tier > ((MissileWeapon) item1).tier)){
                 first = item2;
                 second = item1;
-            } else {
-                first = item1;
-                second = item2;
             }
         } else if (item1 instanceof Armor && item2 instanceof Armor){
             if ((((Armor) item2).tier > ((Armor) item1).tier)){
                 first = item2;
                 second = item1;
-            } else {
-                first = item1;
-                second = item2;
             }
-        } else if (item2.level() > item1.level()) {
-			first = item2;
-			second = item1;
-		} else {
-			first = item1;
-			second = item2;
+        }
+		if (second.level() > first.level()) {
+		    Item temp = first;
+			first = second;
+			second = temp;
 		}
 
 		Sample.INSTANCE.play( Assets.Sounds.EVOKE );
