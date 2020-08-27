@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
@@ -136,9 +137,11 @@ public class OldCavesBossLevel extends Level {
 
 		Painter.fill( this, ROOM_LEFT, ROOM_TOP,
 			ROOM_RIGHT - ROOM_LEFT + 1, 1, Terrain.EMPTY_DECO );
+		shop = new ArenaShopLevel();
+		shop.set(ROOM_LEFT-1, ROOM_TOP-1, ROOM_RIGHT+1, ROOM_BOTTOM+1);
 		
 		arenaDoor = Random.Int( ROOM_LEFT, ROOM_RIGHT ) + (ROOM_BOTTOM + 1) * width();
-		map[arenaDoor] = Terrain.WALL;
+		map[arenaDoor] = Terrain.DOOR;
 		
 		entrance = Random.Int( ROOM_LEFT + 1, ROOM_RIGHT - 1 ) +
 			Random.Int( ROOM_TOP + 1, ROOM_BOTTOM - 1 ) * width();
@@ -188,6 +191,7 @@ public class OldCavesBossLevel extends Level {
 				map[i] = Terrain.WALL_DECO;
 			}
 		}
+
 		
 		return true;
 	}
@@ -213,7 +217,7 @@ public class OldCavesBossLevel extends Level {
                     }
                 }
 
-                if (count < 15) {
+                if (count < 100) {
 
                     Mob mob = createMob();
                     mob.state = mob.WANDERING;
@@ -224,7 +228,7 @@ public class OldCavesBossLevel extends Level {
                         Buff.affect(mob, ArenaBuff.class);
                     }
                 }
-                spend(respawnTime() / 2);
+                spend(respawnTime() / 3);
                 return true;
             }
         };

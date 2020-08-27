@@ -68,6 +68,7 @@ public class TicketToArena extends Item{
         if (action.equals(AC_USE)){
             if (Dungeon.depth != 28){
                 depth = Dungeon.depth;
+                pos = hero.pos;
                 Dungeon.depth = 27;
                 InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
                 Game.switchScene( InterlevelScene.class );
