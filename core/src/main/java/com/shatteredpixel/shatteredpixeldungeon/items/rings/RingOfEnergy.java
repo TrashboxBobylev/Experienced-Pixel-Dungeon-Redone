@@ -39,8 +39,8 @@ public class RingOfEnergy extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			return Messages.get(this, "stats",
-					new DecimalFormat("#.###").format(100f * (1.20f + soloBuffedBonus()*0.5f - 1f)),
-					new DecimalFormat("#.###").format(100f * (1.10f + soloBuffedBonus()*0.25f - 1f)));
+					new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.01f - 1f)),
+					new DecimalFormat("#.###").format(100f * (1.10f + soloVisualBonus()*0.005f - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats",
 					new DecimalFormat("#.###").format(20f),
@@ -54,13 +54,17 @@ public class RingOfEnergy extends Ring {
 	}
 	
 	public static float wandChargeMultiplier( Char target ){
-		if (getBuffedBonus(target, Energy.class) > 0) return (float)(1.20f + getBuffedBonus(target, Energy.class)*0.5f);
-		return 1f;
+        float multiplier = 1f;
+        if (getBuffedBonus(target, Energy.class) == 1) multiplier = 1.2f;
+        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.01;
+        return multiplier;
 	}
 
 	public static float artifactChargeMultiplier( Char target ){
-        if (getBuffedBonus(target, Energy.class) > 0) return (float)(1.10f + getBuffedBonus(target, Energy.class)*0.25f);
-		return 1f;
+        float multiplier = 1f;
+        if (getBuffedBonus(target, Energy.class) == 1) multiplier = 1.1f;
+        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.005;
+        return multiplier;
 	}
 	
 	public class Energy extends RingBuff {

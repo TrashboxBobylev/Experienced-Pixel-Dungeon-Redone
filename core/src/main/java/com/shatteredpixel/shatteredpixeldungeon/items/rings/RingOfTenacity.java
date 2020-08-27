@@ -38,7 +38,7 @@ public class RingOfTenacity extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.85f + soloBuffedBonus()*0.001))));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.85f + soloVisualBonus()*0.001))));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(15f));
 		}
@@ -50,9 +50,10 @@ public class RingOfTenacity extends Ring {
 	}
 	
 	public static float damageMultiplier( Char t ){
-		//(HT - HP)/HT = heroes current % missing health.
-		if (getBuffedBonus(t, Tenacity.class) > 0) return (float)(0.85f + getBuffedBonus( t, Tenacity.class)*((float)(t.HT - t.HP)/t.HT)*0.001f);
-		return 1f;
+        float multiplier = 1f;
+        if (getBuffedBonus(t, Tenacity.class) == 1) multiplier = 0.85f;
+        if (getBuffedBonus(t, Tenacity.class) > 1) multiplier -= getBuffedBonus(t, Tenacity.class)*0.001;
+        return multiplier * ((float)(t.HT - t.HP)/t.HT);
 	}
 
 	public class Tenacity extends RingBuff {

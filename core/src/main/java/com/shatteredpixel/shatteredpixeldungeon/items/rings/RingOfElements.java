@@ -52,7 +52,7 @@ public class RingOfElements extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f + soloBuffedBonus()*0.005f))));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f + soloVisualBonus()*0.005f))));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}
@@ -80,12 +80,13 @@ public class RingOfElements extends Ring {
 	}
 	
 	public static float resist( Char target, Class effect ){
-		if (getBuffedBonus(target, Resistance.class) == 0) return 1f;
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				if (getBuffedBonus(target, Resistance.class) > 0)return (float)(0.80f + getBuffedBonus(target, Resistance.class)*0.005f);
-				else return 1f;
+                float multiplier = 1f;
+                if (getBuffedBonus(target, Resistance.class) == 1) multiplier = 0.8f;
+                if (getBuffedBonus(target, Resistance.class) > 1) multiplier -= getBuffedBonus(target, Resistance.class)*0.005;
+                return multiplier;
 			}
 		}
 		

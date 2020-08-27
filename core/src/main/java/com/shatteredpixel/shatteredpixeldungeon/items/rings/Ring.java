@@ -221,7 +221,7 @@ public class Ring extends KindofMisc {
 		//+0: 66.67% (2/3)
 		//+1: 26.67% (4/15)
 		//+2: 6.67%  (1/15)
-		int n = 0;
+		int n = 1;
 		if (Random.Int(3) == 0) {
 			n++;
 			if (Random.Int(5) == 0){
@@ -229,11 +229,6 @@ public class Ring extends KindofMisc {
 			}
 		}
 		level(n);
-		
-		//30% chance to be cursed
-		if (Random.Float() < 0.3f) {
-			cursed = true;
-		}
 		
 		return this;
 	}
@@ -312,7 +307,7 @@ public class Ring extends KindofMisc {
 	}
 
 	public static int getBuffedBonus(Char target, Class<?extends RingBuff> type){
-		int bonus = 0;
+		int bonus = -1;
 		for (RingBuff buff : target.buffs(type)) {
 			bonus += buff.buffedLvl();
 		}
@@ -334,6 +329,14 @@ public class Ring extends KindofMisc {
 			return Ring.this.buffedLvl()+1;
 		}
 	}
+
+    public int soloVisualBonus(){
+        if (cursed){
+            return Math.min( 0, Ring.this.buffedLvl()-2 );
+        } else {
+            return Ring.this.buffedLvl();
+        }
+    }
 
 	public class RingBuff extends Buff {
 
