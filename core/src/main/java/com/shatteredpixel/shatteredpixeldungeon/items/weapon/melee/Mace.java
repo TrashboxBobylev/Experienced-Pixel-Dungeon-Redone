@@ -25,6 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Mace extends MeleeWeapon {
@@ -44,4 +48,9 @@ public class Mace extends MeleeWeapon {
 				lvl*(tier+1);   //scaling unchanged
 	}
 
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+	    if (attacker == Dungeon.hero) new WandOfDisintegration().upgrade(level()).execute((Hero) attacker, "ZAP");
+        return super.proc(attacker, defender, damage);
+    }
 }
