@@ -55,6 +55,9 @@ public class ShatteredPixelDungeon extends Game {
         com.watabou.utils.Bundle.addAlias(
                 com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena.class,
                 "com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator" );
+        com.watabou.utils.Bundle.addAlias(
+                com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep.class,
+                "com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator" );
 		
 		//v0.7.0
 		com.watabou.utils.Bundle.addAlias(
