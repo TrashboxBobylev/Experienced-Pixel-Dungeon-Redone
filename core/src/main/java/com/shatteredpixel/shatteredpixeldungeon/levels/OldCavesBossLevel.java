@@ -27,8 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OldDM300;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -37,6 +39,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ToxicTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -70,20 +74,22 @@ public class OldCavesBossLevel extends Level {
 	private int arenaDoor;
 	private boolean enteredArena = false;
 	private boolean keyDropped = false;
+	private ArenaShopLevel shop;
 	
 	@Override
 	public String tilesTex() {
-		return Assets.Environment.TILES_CAVES;
+		return Assets.Environment.TILES_CITY;
 	}
 	
 	@Override
 	public String waterTex() {
-		return Assets.Environment.WATER_CAVES;
+		return Assets.Environment.WATER_CITY;
 	}
 	
 	private static final String DOOR	= "door";
 	private static final String ENTERED	= "entered";
 	private static final String DROPPED	= "droppped";
+	private static final String SHOP = "shop";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -91,6 +97,7 @@ public class OldCavesBossLevel extends Level {
 		bundle.put( DOOR, arenaDoor );
 		bundle.put( ENTERED, enteredArena );
 		bundle.put( DROPPED, keyDropped );
+		bundle.put( SHOP, shop);
 	}
 	
 	@Override
@@ -99,6 +106,7 @@ public class OldCavesBossLevel extends Level {
 		arenaDoor = bundle.getInt( DOOR );
 		enteredArena = bundle.getBoolean( ENTERED );
 		keyDropped = bundle.getBoolean( DROPPED );
+		shop = (ArenaShopLevel) bundle.get(SHOP);
 	}
 	
 	@Override
@@ -120,7 +128,7 @@ public class OldCavesBossLevel extends Level {
 		exit = space.left + space.width()/2 + (space.top - 1) * width();
 		
 		map[exit] = Terrain.LOCKED_EXIT;
-		
+
 		Painter.fill( this, ROOM_LEFT - 1, ROOM_TOP - 1,
 			ROOM_RIGHT - ROOM_LEFT + 3, ROOM_BOTTOM - ROOM_TOP + 3, Terrain.WALL );
 		Painter.fill( this, ROOM_LEFT, ROOM_TOP + 1,
@@ -130,11 +138,11 @@ public class OldCavesBossLevel extends Level {
 			ROOM_RIGHT - ROOM_LEFT + 1, 1, Terrain.EMPTY_DECO );
 		
 		arenaDoor = Random.Int( ROOM_LEFT, ROOM_RIGHT ) + (ROOM_BOTTOM + 1) * width();
-		map[arenaDoor] = Terrain.DOOR;
+		map[arenaDoor] = Terrain.WALL;
 		
 		entrance = Random.Int( ROOM_LEFT + 1, ROOM_RIGHT - 1 ) +
 			Random.Int( ROOM_TOP + 1, ROOM_BOTTOM - 1 ) * width();
-		map[entrance] = Terrain.ENTRANCE;
+		map[entrance] = Terrain.PEDESTAL;
 		
 		boolean[] patch = Patch.generate( width, height, 0.30f, 6, true );
 		for (int i=0; i < length(); i++) {
@@ -146,7 +154,7 @@ public class OldCavesBossLevel extends Level {
 		for (int i=0; i < length(); i++) {
 			if (map[i] == Terrain.EMPTY && Random.Int( 6 ) == 0) {
 				map[i] = Terrain.INACTIVE_TRAP;
-				Trap t = new ToxicTrap().reveal();
+				Trap t = new SummoningTrap().reveal();
 				t.active = false;
 				setTrap(t, i);
 			}
@@ -189,8 +197,42 @@ public class OldCavesBossLevel extends Level {
 	}
 	
 	public Actor respawner() {
-		return null;
-	}
+        return new Actor() {
+
+            {
+                actPriority = BUFF_PRIO; //as if it were a buff.
+            }
+
+            @Override
+            protected boolean act() {
+                float count = 0;
+
+                for (Mob mob : mobs.toArray(new Mob[0])){
+                    if (mob.alignment == Char.Alignment.ENEMY && !mob.properties().contains(Char.Property.MINIBOSS)) {
+                        count += mob.spawningWeight();
+                    }
+                }
+
+                if (count < 15) {
+
+                    Mob mob = createMob();
+                    mob.state = mob.WANDERING;
+                    mob.pos = randomRespawnCell( mob );
+                    if (Dungeon.hero.isAlive() && mob.pos != -1 && distance(Dungeon.hero.pos, mob.pos) >= 4) {
+                        GameScene.add( mob );
+                        mob.beckon( Dungeon.hero.pos );
+                        Buff.affect(mob, ArenaBuff.class);
+                    }
+                }
+                spend(respawnTime() / 2);
+                return true;
+            }
+        };
+    }
+
+    public static class ArenaBuff extends Buff {
+
+    }
 	
 	@Override
 	protected void createItems() {
@@ -205,88 +247,14 @@ public class OldCavesBossLevel extends Level {
 	}
 	
 	@Override
-	public int randomRespawnCell( Char ch ) {
-		int cell;
-		do {
-			cell = entrance + PathFinder.NEIGHBOURS8[Random.Int(8)];
-		} while (!passable[cell]
-				|| (Char.hasProp(ch, Char.Property.LARGE) && !openSpace[cell])
-				|| Actor.findChar(cell) != null);
-		return cell;
-	}
-	
-	@Override
-	public void occupyCell( Char ch ) {
-		
-		super.occupyCell( ch );
-		
-		if (!enteredArena && outsideEntraceRoom( ch.pos ) && ch == Dungeon.hero) {
-			
-			enteredArena = true;
-			seal();
-			
-			for (Mob m : mobs){
-				//bring the first ally with you
-				if (m.alignment == Char.Alignment.ALLY && !m.properties().contains(Char.Property.IMMOVABLE)){
-					m.pos = Dungeon.hero.pos + (Random.Int(2) == 0 ? +1 : -1);
-					m.sprite.place(m.pos);
-					break;
-				}
-			}
-			
-			OldDM300 boss = new OldDM300();
-			boss.state = boss.WANDERING;
-			do {
-				boss.pos = Random.Int( length() );
-			} while (
-				!passable[boss.pos] ||
-				!outsideEntraceRoom( boss.pos ) ||
-				heroFOV[boss.pos]);
-			GameScene.add( boss );
-			
-			set( arenaDoor, Terrain.WALL );
-			GameScene.updateMap( arenaDoor );
-			Dungeon.observe();
-			
-			CellEmitter.get( arenaDoor ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
-			Camera.main.shake( 3, 0.7f );
-			Sample.INSTANCE.play( Assets.Sounds.ROCKS );
-		}
-	}
-	
-	@Override
-	public Heap drop( Item item, int cell ) {
-		
-		if (!keyDropped && item instanceof SkeletonKey) {
-			
-			keyDropped = true;
-			unseal();
-			
-			CellEmitter.get( arenaDoor ).start( Speck.factory( Speck.ROCK ), 0.07f, 10 );
-			
-			set( arenaDoor, Terrain.EMPTY_DECO );
-			GameScene.updateMap( arenaDoor );
-			Dungeon.observe();
-		}
-		
-		return super.drop( item, cell );
-	}
-	
-	private boolean outsideEntraceRoom( int cell ) {
-		int cx = cell % width();
-		int cy = cell / width();
-		return cx < ROOM_LEFT-1 || cx > ROOM_RIGHT+1 || cy < ROOM_TOP-1 || cy > ROOM_BOTTOM+1;
-	}
-	
-	@Override
 	public String tileName( int tile ) {
 		switch (tile) {
 			case Terrain.GRASS:
-				return Messages.get(CavesLevel.class, "grass_name");
+				return Messages.get(CityLevel.class, "grass_name");
 			case Terrain.HIGH_GRASS:
-				return Messages.get(CavesLevel.class, "high_grass_name");
+				return Messages.get(CityLevel.class, "high_grass_name");
 			case Terrain.WATER:
-				return Messages.get(CavesLevel.class, "water_name");
+				return Messages.get(CityLevel.class, "water_name");
 			default:
 				return super.tileName( tile );
 		}
@@ -296,15 +264,15 @@ public class OldCavesBossLevel extends Level {
 	public String tileDesc( int tile ) {
 		switch (tile) {
 			case Terrain.ENTRANCE:
-				return Messages.get(CavesLevel.class, "entrance_desc");
+				return Messages.get(CityLevel.class, "entrance_desc");
 			case Terrain.EXIT:
-				return Messages.get(CavesLevel.class, "exit_desc");
+				return Messages.get(CityLevel.class, "exit_desc");
 			case Terrain.HIGH_GRASS:
-				return Messages.get(CavesLevel.class, "high_grass_desc");
+				return Messages.get(CityLevel.class, "high_grass_desc");
 			case Terrain.WALL_DECO:
-				return Messages.get(CavesLevel.class, "wall_deco_desc");
+				return Messages.get(CityLevel.class, "wall_deco_desc");
 			case Terrain.BOOKSHELF:
-				return Messages.get(CavesLevel.class, "bookshelf_desc");
+				return Messages.get(CityLevel.class, "bookshelf_desc");
 			default:
 				return super.tileDesc( tile );
 		}
@@ -313,7 +281,7 @@ public class OldCavesBossLevel extends Level {
 	@Override
 	public Group addVisuals() {
 		super.addVisuals();
-		CavesLevel.addCavesVisuals(this, visuals);
+		CityLevel.addCityVisuals(this, visuals);
 		return visuals;
 	}
 }

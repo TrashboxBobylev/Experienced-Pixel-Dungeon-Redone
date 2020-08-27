@@ -34,16 +34,19 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.OldCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
@@ -636,7 +639,8 @@ public abstract class Mob extends Char {
                     mob.pos = Dungeon.level.randomRespawnCell(mob);
                     if (Dungeon.hero.isAlive() && mob.pos != -1 && Dungeon.level.distance(Dungeon.hero.pos, mob.pos) >= 4) {
                         GameScene.add(mob);
-                        if (Statistics.amuletObtained) {
+                        if (Dungeon.depth == 28) {
+                            Buff.affect(mob, OldCavesBossLevel.ArenaBuff.class);
                             mob.beckon(Dungeon.hero.pos);
                         }
                     }
@@ -658,6 +662,8 @@ public abstract class Mob extends Char {
 			if (EXP % 2 == 1) EXP += Random.Int(2);
 			EXP /= 2;
 		}
+
+		if (buff(OldCavesBossLevel.ArenaBuff.class) != null) EXP = 0;
 
 		if (alignment == Alignment.ENEMY){
 			rollToDropLoot();
@@ -686,6 +692,13 @@ public abstract class Mob extends Char {
             if (Dungeon.hero.buff(Bless.class) != null) {
                 Dungeon.level.drop(Generator.random(), pos).sprite.drop();
             }
+        }
+
+		if (buff(OldCavesBossLevel.ArenaBuff.class) != null){
+		    Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
+            Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
+            Dungeon.level.drop(Generator.random(), pos).sprite.drop();
+            Dungeon.level.drop(RingOfWealth.genConsumableDrop(-5), pos).sprite.drop();
         }
 		
 //		//ring of wealth logic
