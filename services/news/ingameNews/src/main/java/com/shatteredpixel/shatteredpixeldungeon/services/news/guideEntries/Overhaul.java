@@ -33,10 +33,12 @@ public class Overhaul extends NewsArticle {
         summary = "Some weapons in new Dungeon have significantly changed properties:\n\n" +
                 "_-_ _Greatsword_ summons knight statues around you to help in fighting monsters. They have same weapon as you, but significantly less HP, than common animated statues.\n\n" +
                 "_-_ _Greataxe_ now has ranged ability: on throwing it, you can do devastating 3x3 attack.\n\n" +
-                "_-_ _Sai_ is now able to progressively decrease armor on successful hits, making it as either support weapon or great Gladiator equipment.\n\n" +
+                "_-_ _Sai_ is now able to progressively decrease armor on successful hits.\n\n" +
                 "_-_ _Runic Blade_ now can shoot magical blades, that have all properties of magical and melee attacks at once. But the blade after casting needs some recharge.\n\n" +
                 "_-_ _Kunai_ on surprise attack gives buff to all melee weapons in your possession.\n\n" +
                 "_-_ _Javelin_ on killing hits can create single consumable item like fishing.\n\n" +
+                "_-_ _Mace_ have immense might that allows it to shoot laser beams on attacks.\n\n"+
+                "_-_ _Warhammers_ are extremely strong, but stun both attacker and target.\n\n"+
                 "_-_ _Displacing Dart_ can ignore walls and other enemies, but get damage penalty.\n\n" +
                 "_-_ _Adrenaline Dart_ has instant attack speed, but also have damage penalty.\n\n" +
                 "_-_ _Holy Dart_ dooms enemies on hits.\n\n" +

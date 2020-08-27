@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.items.BlackPsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
+import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAff
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -50,7 +52,31 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.7.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.8", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 28th, 2020\n" +
+                        "_-_ 12 days after Experienced Pixel Dungeon 2.7.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(new ItemSprite(new GambleBag()), "Treasure Bags",
+                "Fixed the crash, when item from backpack is null."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.RING_RUBY, null), "Rings",
+                "Refactored multiplier code to match vanilla's behaviour."));
+        changes.addButton( new ChangeButton(new ItemSprite(new Greataxe()), "Greataxe",
+                "Greataxe now properly hits several enemies."));
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.MACE, null), "Overhauled Weapons",
+                "_-_ Mace shoots laser beams on attacking.\n\n" +
+                        "_-_ Warhammer is very powerful, but very slow."));
+        changes.addButton( new ChangeButton(new ItemSprite(new TicketToArena()), "Arena",
+                "Replaced passive exp generation with arena.\n\n" +
+                        "_-_You can buy one-time tickets in any shops.\n\n" +
+                        "_-_ You can meet a wide variety of mobs, which have no exp, but drop gold and valueable items.\n\n" +
+                        "_-_ There is shop with bags to buy.\n\n\n" +
+                        "Experience Gens in inventory will be replaced by tickets, generators in world will be replaced by sheeps."));
+
+        changes = new ChangeInfo("ExpPD-2.7.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

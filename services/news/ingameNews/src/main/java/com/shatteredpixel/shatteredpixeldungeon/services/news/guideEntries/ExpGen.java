@@ -28,13 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class ExpGen extends NewsArticle {
     {
-        title = "Automatic XP";
+        title = "Arena";
         icon = "ITEM: 426";
-        summary = "If even killing mobs in mass can't satisfy you, there is passive EXP farm method with Power Plants.\n\n" +
-                "They can be bought in shops for pretty high price, and you can get as many as you want, but there is limitations to this technology:\n\n" +
-                "_-_ While power plants don't need food, they need to be protected from mobs that come from everywhere; they will not generate EXP if cannot be reached by enemies.\n\n" +
-                "_-_ If you fail to defend generators, the killer will be hugely empowered: he will gain increased armor and attack speed.\n\n" +
-                "_-_ They cannot be placed on boss levels.\n\n" +
-                "But the great news: they scale with you progression in the game!";
+        summary = "If you want to win your money and prizes efficently, then welcome to arena!\n" +
+                "_-_ _Arena_ is new unique area, which can be accessed with unique tickets, which can be bought at any shops.\n\n" +
+                "_-_ Mobs in _arena_ are strongest in this dungeon, drop no EXP, but have gold and random items as loot.\n\n" +
+                "_-_ While grinding, you can buy loot bags in arena shop.";
     }
 }
