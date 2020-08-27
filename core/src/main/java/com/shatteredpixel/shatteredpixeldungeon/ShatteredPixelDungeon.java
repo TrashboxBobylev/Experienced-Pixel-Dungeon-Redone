@@ -50,6 +50,11 @@ public class ShatteredPixelDungeon extends Game {
 	
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? WelcomeScene.class : sceneClass, platform );
+
+		//v2.7
+        com.watabou.utils.Bundle.addAlias(
+                com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena.class,
+                "com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator" );
 		
 		//v0.7.0
 		com.watabou.utils.Bundle.addAlias(
