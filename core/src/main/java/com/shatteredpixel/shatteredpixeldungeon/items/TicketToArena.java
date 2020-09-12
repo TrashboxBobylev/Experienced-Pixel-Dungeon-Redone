@@ -100,4 +100,9 @@ public class TicketToArena extends Item{
         depth	= bundle.getInt( DEPTH );
         pos	= bundle.getInt( POS );
     }
+
+    @Override
+    public int price() {
+        return 120 * quantity;
+    }
 }
