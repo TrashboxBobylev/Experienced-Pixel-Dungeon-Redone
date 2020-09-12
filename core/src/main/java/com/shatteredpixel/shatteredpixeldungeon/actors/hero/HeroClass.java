@@ -111,8 +111,6 @@ public enum HeroClass {
 
 		new PsycheChest().collect();
 
-		new TicketToArena().collect();
-
 	}
 
 	public Badges.Badge masteryBadge() {

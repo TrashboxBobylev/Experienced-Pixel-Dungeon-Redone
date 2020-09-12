@@ -52,7 +52,20 @@ public class ExpPDChanges {
 	
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.8", true, "");
+	        ChangeInfo changes = new ChangeInfo("ExpPD-2.8.1", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released September 13th, 2020\n" +
+                            "_-_ 16 days after Experienced Pixel Dungeon 2.8\n" +
+                            "\n" +
+                            "Dev commentary will be added here in the future."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                    "_-_ Fixed tenacity and might.\n\n" +
+                            "_-_ Fixed beacons of returning breaking time and space.\n\n" +
+                            "_-_ Fixed bags on arena and arena's ticket price."));
+
+        changes = new ChangeInfo("ExpPD-2.8", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
