@@ -38,7 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
@@ -50,10 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
-import com.watabou.utils.Rect;
+import com.watabou.utils.*;
 
 public class OldCavesBossLevel extends Level {
 	
@@ -146,6 +145,47 @@ public class OldCavesBossLevel extends Level {
 		entrance = Random.Int( ROOM_LEFT + 1, ROOM_RIGHT - 1 ) +
 			Random.Int( ROOM_TOP + 1, ROOM_BOTTOM - 1 ) * width();
 		map[entrance] = Terrain.PEDESTAL;
+
+		{
+			for (int i = 0; i < 6; i++) itemsToSpawn.add(new GambleBag());
+			for (int i = 0; i < 6; i++) itemsToSpawn.add(new BiggerGambleBag());
+			for (int i = 0; i < 6; i++) itemsToSpawn.add(new QualityBag());
+
+			Point itemPlacement = new Point(cellToPoint(arenaDoor));
+			if (itemPlacement.y == ROOM_TOP-1){
+				itemPlacement.y++;
+			} else if (itemPlacement.y == ROOM_BOTTOM+1) {
+				itemPlacement.y--;
+			} else if (itemPlacement.x == ROOM_LEFT-1){
+				itemPlacement.x++;
+			} else {
+				itemPlacement.x--;
+			}
+
+			for (Item item : itemsToSpawn) {
+
+				if (itemPlacement.x == ROOM_TOP && itemPlacement.y != ROOM_TOP){
+					itemPlacement.y--;
+				} else if (itemPlacement.y == ROOM_TOP && itemPlacement.x != ROOM_RIGHT){
+					itemPlacement.x++;
+				} else if (itemPlacement.x == ROOM_RIGHT && itemPlacement.y != ROOM_BOTTOM){
+					itemPlacement.y++;
+				} else {
+					itemPlacement.x--;
+				}
+
+				int cell = pointToCell(itemPlacement);
+
+				if (heaps.get( cell ) != null) {
+					do {
+						cell = pointToCell(new Point( Random.IntRange( ROOM_TOP, ROOM_RIGHT ),
+								Random.IntRange( ROOM_TOP, ROOM_BOTTOM )));
+					} while (heaps.get( cell ) != null || findMob( cell ) != null);
+				}
+
+				drop( item, cell ).type = Heap.Type.FOR_SALE;
+			}
+		}
 		
 		boolean[] patch = Patch.generate( width, height, 0.30f, 6, true );
 		for (int i=0; i < length(); i++) {
