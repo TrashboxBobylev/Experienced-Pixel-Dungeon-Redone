@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.*;
@@ -239,6 +240,8 @@ public class Dungeon {
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
         Generator.generalReset();
+		BeaconOfReturning beacon = Dungeon.hero.belongings.getItem(BeaconOfReturning.class);
+		if (beacon != null) beacon.returnDepth = -1;
         InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
         Game.switchScene( InterlevelScene.class );
     }
