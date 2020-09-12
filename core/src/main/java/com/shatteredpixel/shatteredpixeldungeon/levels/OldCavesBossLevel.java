@@ -54,6 +54,8 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.*;
 
+import java.util.ArrayList;
+
 public class OldCavesBossLevel extends Level {
 	
 	{
@@ -147,6 +149,7 @@ public class OldCavesBossLevel extends Level {
 		map[entrance] = Terrain.PEDESTAL;
 
 		{
+			itemsToSpawn = new ArrayList<>();
 			for (int i = 0; i < 6; i++) itemsToSpawn.add(new GambleBag());
 			for (int i = 0; i < 6; i++) itemsToSpawn.add(new BiggerGambleBag());
 			for (int i = 0; i < 6; i++) itemsToSpawn.add(new QualityBag());
@@ -164,7 +167,7 @@ public class OldCavesBossLevel extends Level {
 
 			for (Item item : itemsToSpawn) {
 
-				if (itemPlacement.x == ROOM_TOP && itemPlacement.y != ROOM_TOP){
+				if (itemPlacement.x == ROOM_LEFT && itemPlacement.y != ROOM_TOP){
 					itemPlacement.y--;
 				} else if (itemPlacement.y == ROOM_TOP && itemPlacement.x != ROOM_RIGHT){
 					itemPlacement.x++;
