@@ -51,9 +51,9 @@ public class RingOfTenacity extends Ring {
 	
 	public static float damageMultiplier( Char t ){
         float multiplier = 1f;
-        if (getBuffedBonus(t, Tenacity.class) == 1) multiplier = 0.85f;
-        if (getBuffedBonus(t, Tenacity.class) > 1) multiplier -= getBuffedBonus(t, Tenacity.class)*0.001;
-        return multiplier * ((float)(t.HT - t.HP)/t.HT);
+        if (getBuffedBonus(t, Tenacity.class) == 1) multiplier = 0.85f * ((float)(t.HP - t.HT)/t.HT);
+        if (getBuffedBonus(t, Tenacity.class) > 1) multiplier -= getBuffedBonus(t, Tenacity.class)*0.001*((float)(t.HP - t.HT)/t.HT);
+        return multiplier;
 	}
 
 	public class Tenacity extends RingBuff {
