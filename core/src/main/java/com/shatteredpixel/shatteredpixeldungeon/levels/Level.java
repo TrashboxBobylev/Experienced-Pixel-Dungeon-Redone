@@ -593,6 +593,7 @@ public abstract class Level implements Bundlable {
 		if (w != null && w.volume > 0){
 			for (int i=0; i < length(); i++) {
 				solid[i] = solid[i] || w.cur[i] > 0;
+				flamable[i] = flamable[i] || w.cur[i] > 0;
 			}
 		}
 		
@@ -632,6 +633,10 @@ public abstract class Level implements Bundlable {
 
 	public void destroy( int pos ) {
 		set( pos, Terrain.EMBERS );
+		Blob web = blobs.get(Web.class);
+		if (web != null){
+			web.clear(pos);
+		}
 	}
 
 	public void cleanWalls() {

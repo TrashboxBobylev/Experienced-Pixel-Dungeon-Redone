@@ -88,7 +88,6 @@ public class WandOfDisintegration extends DamageWand {
 
 			if (Dungeon.level.solid[c]) {
 				terrainPassed++;
-				if (web != null) web.clear(c);
 			}
 
 			if (Dungeon.level.flamable[c]) {

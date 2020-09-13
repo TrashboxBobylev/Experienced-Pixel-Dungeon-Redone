@@ -57,7 +57,7 @@ public class WandOfRegrowth extends Wand {
 	{
 		image = ItemSpriteSheet.WAND_REGROWTH;
 
-		collisionProperties = Ballistica.STOP_TERRAIN;
+		collisionProperties = Ballistica.STOP_SOLID;
 	}
 	
 	private int totChrgUsed = 0;
