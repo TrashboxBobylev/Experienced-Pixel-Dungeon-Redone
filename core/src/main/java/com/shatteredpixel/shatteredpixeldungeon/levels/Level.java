@@ -355,7 +355,7 @@ public abstract class Level implements Bundlable {
 				if (mob != null) mobsToSpawn.add(mob);
 			}
 		}
-		
+
 		buildFlagMaps();
 		cleanWalls();
 
@@ -422,7 +422,7 @@ public abstract class Level implements Bundlable {
 		if (mobsToSpawn == null || mobsToSpawn.isEmpty()) {
 			mobsToSpawn = Bestiary.getMobRotation(Dungeon.depth);
 		}
-		
+
 		return Reflection.newInstance(mobsToSpawn.remove(0));
 	}
 
@@ -473,7 +473,7 @@ public abstract class Level implements Bundlable {
 		}
 		return null;
 	}
-	
+
 	public Actor respawner() {
 		return new Actor() {
 
@@ -490,7 +490,7 @@ public abstract class Level implements Bundlable {
 						count += mob.spawningWeight();
 					}
 				}
-				
+
 				if (count < nMobs()) {
 
 					Mob mob = createMob();
@@ -508,7 +508,7 @@ public abstract class Level implements Bundlable {
 			}
 		};
 	}
-	
+
 	public float respawnTime(){
 		float respawn_timer = Math.max(1f, Dungeon.respawn_timer);
 		if (Statistics.amuletObtained){
@@ -632,7 +632,12 @@ public abstract class Level implements Bundlable {
 	}
 
 	public void destroy( int pos ) {
-		set( pos, Terrain.EMBERS );
+		//if raw tile type is flammable or empty
+		int terr = map[pos];
+		if (terr == Terrain.EMPTY || terr == Terrain.EMPTY_DECO
+				|| (Terrain.flags[map[pos]] & Terrain.FLAMABLE) != 0) {
+			set(pos, Terrain.EMBERS);
+		}
 		Blob web = blobs.get(Web.class);
 		if (web != null){
 			web.clear(pos);
