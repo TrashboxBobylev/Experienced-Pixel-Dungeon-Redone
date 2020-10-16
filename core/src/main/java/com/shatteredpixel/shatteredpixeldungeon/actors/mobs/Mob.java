@@ -680,14 +680,14 @@ public abstract class Mob extends Char {
 		
 		float lootChance = this.lootChance;
 		
-		if (Dungeon.Float() < lootChance) {
+		if (Random.Float() < lootChance) {
 			Item loot = createLoot();
 			if (loot != null) {
 				Dungeon.level.drop(loot, pos).sprite.drop();
 			}
 		}
 
-		if (Dungeon.hero.grinding && Dungeon.Float() < 0.33f){
+		if (Dungeon.hero.grinding && Random.Float() < 0.33f){
             Dungeon.level.drop(Generator.random(), pos).sprite.drop();
             if (Dungeon.hero.buff(Bless.class) != null) {
                 Dungeon.level.drop(Generator.random(), pos).sprite.drop();
