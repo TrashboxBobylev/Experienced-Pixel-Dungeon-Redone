@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.*;
@@ -370,6 +371,9 @@ public class Generator {
 	}
 	
 	public static Item random( Category cat ) {
+		if (Dungeon.Int(200) == 0) {
+			return new ElixirOfMight();
+		}
 		switch (cat) {
 			case ARMOR:
 				return randomArmor();
