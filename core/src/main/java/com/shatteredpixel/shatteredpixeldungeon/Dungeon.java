@@ -156,6 +156,7 @@ public class Dungeon {
 	public static int respawn_timer;
 	public static int additionalMobs;
 	public static float fireDamage;
+	public static int luck;
 	
 	public static HashSet<Integer> chapters;
 
@@ -200,6 +201,7 @@ public class Dungeon {
 		respawn_timer = 50;
 		additionalMobs = 0;
 		fireDamage = 1;
+		luck = 1;
 
 		droppedItems = new SparseArray<>();
 		portedItems = new SparseArray<>();
@@ -552,6 +554,7 @@ public class Dungeon {
     private static final String RESPAWN_TIMER		= "respawntimer";
     private static final String ADDMOBS		= "additionalMobs";
     private static final String FIREDANAGE = "firedamage";
+    private static final String LUCK        = "luck";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
@@ -575,6 +578,7 @@ public class Dungeon {
 			bundle.put( RESPAWN_TIMER, respawn_timer);
 			bundle.put( ADDMOBS, additionalMobs);
 			bundle.put(FIREDANAGE, fireDamage);
+			bundle.put(LUCK, luck);
 			Bbat.saveLevel(bundle);
 
 			for (int d : droppedItems.keyArray()) {
@@ -740,6 +744,7 @@ public class Dungeon {
 		respawn_timer = bundle.getInt(RESPAWN_TIMER);
 		additionalMobs = bundle.getInt(ADDMOBS);
 		fireDamage = bundle.getFloat(FIREDANAGE);
+		luck = bundle.getInt(LUCK);
 		
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
@@ -989,6 +994,79 @@ public class Dungeon {
 		
 		return PathFinder.getStepBack( ch.pos, from, passable );
 		
+	}
+
+	//luck-augmented RNG
+	public static int Int(int max){
+		int highest = Integer.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			int roll = Random.Int(max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static int Int(int min, int max){
+		int highest = Integer.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			int roll = Random.Int(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static int IntRange(int min, int max){
+		int highest = Integer.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			int roll = Random.IntRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static int NormalIntRange(int min, int max){
+		int highest = Integer.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			int roll = Random.NormalIntRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static float Float(){
+		float highest = Float.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.Float();
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static float Float(float max){
+		float highest = Float.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.Float(max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static float Float(float min, float max){
+		float highest = Float.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.Float(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static float NormalFloat(float min, float max){
+		float highest = Float.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.NormalFloat(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
 	}
 
 }
