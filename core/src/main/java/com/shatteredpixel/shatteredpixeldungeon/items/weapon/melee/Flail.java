@@ -34,7 +34,7 @@ public class Flail extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 0.8f;
 
-		tier = 4;
+		internalTier = tier = 4;
 		ACC = 0.9f; //0.9x accuracy
 		//also cannot surprise attack, see Hero.canSurpriseAttack
 	}

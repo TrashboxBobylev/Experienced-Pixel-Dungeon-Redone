@@ -34,7 +34,7 @@ public class Whip extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1.1f;
 
-		tier = 3;
+		internalTier = tier = 3;
 		RCH = 3;    //lots of extra reach
 	}
 

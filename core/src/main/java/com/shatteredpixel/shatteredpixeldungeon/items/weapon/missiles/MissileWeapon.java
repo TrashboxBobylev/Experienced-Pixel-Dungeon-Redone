@@ -69,6 +69,7 @@ abstract public class MissileWeapon extends Weapon {
 	protected MissileWeapon parent;
 	
 	public int tier;
+	public int internalTier;
 	
 	@Override
 	public int min() {

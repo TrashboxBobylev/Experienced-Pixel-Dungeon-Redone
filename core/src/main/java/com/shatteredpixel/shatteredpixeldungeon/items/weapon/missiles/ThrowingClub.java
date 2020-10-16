@@ -34,7 +34,7 @@ public class ThrowingClub extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 1.1f;
 		
-		tier = 2;
+		internalTier = tier = 2;
 		baseUses = 15;
 		sticky = false;
 	}

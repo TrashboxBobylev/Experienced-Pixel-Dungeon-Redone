@@ -38,7 +38,7 @@ public class AssassinsBlade extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 0.9f;
 
-		tier = 4;
+		internalTier = tier = 4;
 	}
 
 	@Override

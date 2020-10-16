@@ -41,7 +41,7 @@ public class ThrowingKnife extends MissileWeapon {
 		
 		bones = false;
 		
-		tier = 1;
+		internalTier = tier = 1;
 		baseUses = 5;
 	}
 	

@@ -34,7 +34,7 @@ public class Gloves extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1.3f;
 
-		tier = 1;
+		internalTier = tier = 1;
 		DLY = 0.5f; //2x speed
 		
 		bones = false;

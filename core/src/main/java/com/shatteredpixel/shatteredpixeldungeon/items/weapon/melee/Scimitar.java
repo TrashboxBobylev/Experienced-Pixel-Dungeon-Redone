@@ -34,7 +34,7 @@ public class Scimitar extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1.2f;
 
-		tier = 3;
+		internalTier = tier = 3;
 		DLY = 0.8f; //1.25x speed
 	}
 

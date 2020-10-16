@@ -36,7 +36,7 @@ public class FishingSpear extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1.1f;
 		
-		tier = 2;
+		internalTier = tier = 2;
 	}
 	
 	@Override

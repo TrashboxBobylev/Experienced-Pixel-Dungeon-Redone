@@ -36,7 +36,7 @@ public class RoundShield extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1f;
 
-		tier = 3;
+		internalTier = tier = 3;
 	}
 
 	@Override

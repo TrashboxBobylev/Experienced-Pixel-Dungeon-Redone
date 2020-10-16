@@ -35,7 +35,7 @@ public class Quarterstaff extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 1f;
 
-		tier = 2;
+		internalTier = tier = 2;
 	}
 
 	@Override

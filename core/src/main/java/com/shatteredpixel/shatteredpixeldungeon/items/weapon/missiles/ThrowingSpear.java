@@ -34,7 +34,7 @@ public class ThrowingSpear extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1f;
 		
-		tier = 3;
+		internalTier = tier = 3;
 	}
 	
 }

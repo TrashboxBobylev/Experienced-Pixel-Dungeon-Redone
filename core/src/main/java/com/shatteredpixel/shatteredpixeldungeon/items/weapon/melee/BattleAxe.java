@@ -34,7 +34,7 @@ public class BattleAxe extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 0.9f;
 
-		tier = 4;
+		internalTier = tier = 4;
 		ACC = 1.24f; //24% boost to accuracy
 	}
 

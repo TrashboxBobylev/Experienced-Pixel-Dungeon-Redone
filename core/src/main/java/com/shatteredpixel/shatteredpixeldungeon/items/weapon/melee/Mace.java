@@ -38,7 +38,7 @@ public class Mace extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 1f;
 
-		tier = 3;
+		internalTier = tier = 3;
 		ACC = 1.28f; //28% boost to accuracy
 	}
 

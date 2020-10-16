@@ -36,7 +36,7 @@ public class Crossbow extends MeleeWeapon {
 		
 		//check Dart.class for additional properties
 		
-		tier = 4;
+		internalTier = tier = 4;
 	}
 	
 	@Override

@@ -38,7 +38,7 @@ public class Dagger extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1.1f;
 
-		tier = 1;
+		internalTier = tier = 1;
 		
 		bones = false;
 	}

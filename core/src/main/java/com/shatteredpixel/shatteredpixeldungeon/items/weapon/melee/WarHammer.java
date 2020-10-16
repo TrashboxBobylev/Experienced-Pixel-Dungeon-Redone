@@ -39,7 +39,7 @@ public class WarHammer extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 4f;
 
-		tier = 5;
+		internalTier = tier = 5;
 		ACC = 1.20f; //20% boost to accuracy
         DLY = 3;
 	}

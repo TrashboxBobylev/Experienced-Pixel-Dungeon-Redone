@@ -40,7 +40,7 @@ public class Sai extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1.3f;
 
-		tier = 3;
+		internalTier = tier = 3;
 		DLY = 0.5f; //2x speed
 	}
 

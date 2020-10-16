@@ -34,7 +34,7 @@ public class Glaive extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 0.8f;
 
-		tier = 5;
+		internalTier = tier = 5;
 		DLY = 1.5f; //0.67x speed
 		RCH = 2;    //extra reach
 	}

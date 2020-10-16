@@ -37,7 +37,7 @@ public class Tomahawk extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 0.9f;
 
-		tier = 4;
+		internalTier = tier = 4;
 		baseUses = 5;
 	}
 

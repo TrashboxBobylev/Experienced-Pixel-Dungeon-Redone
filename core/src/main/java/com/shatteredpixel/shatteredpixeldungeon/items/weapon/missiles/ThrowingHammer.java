@@ -34,7 +34,7 @@ public class ThrowingHammer extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 0.8f;
 		
-		tier = 5;
+		internalTier = tier = 5;
 		baseUses = 15;
 		sticky = false;
 	}

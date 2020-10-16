@@ -61,7 +61,7 @@ public class RunicBlade extends MeleeWeapon {
     {
         image = ItemSpriteSheet.RUNIC_BLADE;
 
-        tier = 4;
+        internalTier = tier = 4;
 
         defaultAction = AC_ZAP;
         usesTargeting = true;

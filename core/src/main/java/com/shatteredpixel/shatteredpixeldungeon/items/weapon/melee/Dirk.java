@@ -38,7 +38,7 @@ public class Dirk extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1f;
 
-		tier = 2;
+		internalTier = tier = 2;
 	}
 
 	@Override

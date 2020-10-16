@@ -37,7 +37,7 @@ public class Bolas extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1f;
 		
-		tier = 3;
+		internalTier = tier = 3;
 		baseUses = 5;
 	}
 	
