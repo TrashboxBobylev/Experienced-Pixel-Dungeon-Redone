@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class Greatsword extends MeleeWeapon {
 
@@ -83,7 +84,7 @@ public class Greatsword extends MeleeWeapon {
         }
 
         public GuardianKnight() {
-            HP = HT = 9 + Dungeon.escalatingDepth() * 3;
+            HP = HT = 9 + Dungeon.escalatingDepth() * 4;
             defenseSkill = 4 + Dungeon.escalatingDepth();
         }
 
@@ -91,6 +92,11 @@ public class Greatsword extends MeleeWeapon {
         public void die(Object cause) {
             weapon = null;
             super.die(cause);
+        }
+
+        @Override
+        public int drRoll() {
+            return Random.Int(Dungeon.escalatingDepth(), Dungeon.escalatingDepth());
         }
     }
 
