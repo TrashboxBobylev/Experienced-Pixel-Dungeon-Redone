@@ -141,7 +141,7 @@ public class WandOfCorruption extends Wand {
 				corruptEnemy( enemy );
 			} else {
 				float debuffChance = corruptingPower / enemyResist;
-				if (Random.Float() < debuffChance){
+				if (Dungeon.Float() < debuffChance){
 					debuffEnemy( enemy, MAJOR_DEBUFFS);
 				} else {
 					debuffEnemy( enemy, MINOR_DEBUFFS);
@@ -149,7 +149,7 @@ public class WandOfCorruption extends Wand {
 			}
 
 			processSoulMark(ch, chargesPerCast());
-			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.8f * Random.Float(0.87f, 1.15f) );
+			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.8f * Dungeon.Float(0.87f, 1.15f) );
 			
 		} else {
 			Dungeon.level.pressCell(bolt.collisionPos);
@@ -172,7 +172,7 @@ public class WandOfCorruption extends Wand {
 		}
 		
 		//all buffs with a > 0 chance are flavor buffs
-		Class<?extends FlavourBuff> debuffCls = (Class<? extends FlavourBuff>) Random.chances(debuffs);
+		Class<?extends FlavourBuff> debuffCls = (Class<? extends FlavourBuff>) Dungeon.chances(debuffs);
 		
 		if (debuffCls != null){
 			Buff.append(enemy, debuffCls, 6 + buffedLvl()*3);
@@ -226,7 +226,7 @@ public class WandOfCorruption extends Wand {
 		// lvl 0 - 25%
 		// lvl 1 - 40%
 		// lvl 2 - 50%
-		if (Random.Int( buffedLvl() + 4 ) >= 3){
+		if (Dungeon.Int( buffedLvl() + 4 ) >= 3){
 			Buff.prolong( defender, Amok.class, 4+ buffedLvl()*2);
 		}
 	}

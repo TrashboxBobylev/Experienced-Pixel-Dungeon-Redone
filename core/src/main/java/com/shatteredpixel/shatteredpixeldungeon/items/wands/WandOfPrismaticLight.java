@@ -90,7 +90,7 @@ public class WandOfPrismaticLight extends DamageWand {
 		int dmg = damageRoll();
 
 		//three in (5+lvl) chance of failing
-		if (Random.Int(5+buffedLvl()) >= 3) {
+		if (Dungeon.Int(5+buffedLvl()) >= 3) {
 			Buff.prolong(ch, Blindness.class, 2f + (buffedLvl() * 0.333f));
 			ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 		}
@@ -155,7 +155,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public void staffFx(MagesStaff.StaffParticle particle) {
-		particle.color( Random.Int( 0x1000000 ) );
+		particle.color( Dungeon.Int( 0x1000000 ) );
 		particle.am = 0.5f;
 		particle.setLifespan(1f);
 		particle.speed.polar(Random.Float(PointF.PI2), 2f);

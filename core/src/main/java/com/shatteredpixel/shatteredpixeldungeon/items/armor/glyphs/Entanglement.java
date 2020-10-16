@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -45,7 +46,7 @@ public class Entanglement extends Glyph {
 
 		final int level = Math.max( 0, armor.buffedLvl() );
 		
-		if (Random.Int( 4 ) == 0) {
+		if (Dungeon.Int( 4 ) == 0) {
 			
 			Buff.affect( defender, Earthroot.Armor.class ).level( 5 + 2 * level );
 			CellEmitter.bottom( defender.pos ).start( EarthParticle.FACTORY, 0.05f, 8 );

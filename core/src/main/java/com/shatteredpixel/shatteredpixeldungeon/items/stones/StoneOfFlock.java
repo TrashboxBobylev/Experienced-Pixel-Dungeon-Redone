@@ -52,7 +52,7 @@ public class StoneOfFlock extends Runestone {
 					&& Actor.findChar(cell + i) == null) {
 				
 				Sheep sheep = new Sheep();
-				sheep.lifespan = Random.IntRange(5, 8);
+				sheep.lifespan = Dungeon.IntRange(5, 8);
 				sheep.pos = cell + i;
 				GameScene.add(sheep);
 				Dungeon.level.occupyCell(sheep);

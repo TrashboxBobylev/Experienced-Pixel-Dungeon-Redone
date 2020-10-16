@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -122,7 +123,7 @@ public class WaterOfTransmutation extends WellWater {
 		Category c = Generator.wepTiers[w.tier-1];
 
 		do {
-			n = (MeleeWeapon)Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+			n = (MeleeWeapon)Reflection.newInstance(c.classes[Dungeon.chances(c.probs)]);
 		} while (Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 
 		int level = w.level();

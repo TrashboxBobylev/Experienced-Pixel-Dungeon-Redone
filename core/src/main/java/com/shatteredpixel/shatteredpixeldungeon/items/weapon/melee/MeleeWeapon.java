@@ -72,7 +72,7 @@ public class MeleeWeapon extends Weapon {
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
 			if (exStr > 0) {
-				damage += Random.IntRange( 0, exStr );
+				damage += Dungeon.IntRange( 0, exStr );
 			}
 		}
 		

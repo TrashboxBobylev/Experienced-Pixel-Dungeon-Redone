@@ -181,7 +181,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = Random.NormalIntRange(5 + Dungeon.escalatingDepth(), 10 + Dungeon.escalatingDepth()*2);
+				int dmg = Dungeon.NormalIntRange(5 + Dungeon.escalatingDepth(), 10 + Dungeon.escalatingDepth()*2);
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -217,7 +217,7 @@ public class Bomb extends Item {
 	
 	@Override
 	public Item random() {
-		switch(Random.Int( 4 )){
+		switch(Dungeon.Int( 4 )){
 			case 0:
 				return new DoubleBomb();
 			default:

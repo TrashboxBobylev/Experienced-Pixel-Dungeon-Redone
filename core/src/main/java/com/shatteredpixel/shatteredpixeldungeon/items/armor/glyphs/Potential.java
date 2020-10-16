@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EnergyParticle;
@@ -45,7 +46,7 @@ public class Potential extends Glyph {
 		// lvl 0 - 16.7%
 		// lvl 1 - 28.6%
 		// lvl 2 - 37.5%
-		if (defender instanceof Hero && Random.Int( level + 6 ) >= 5 ) {
+		if (defender instanceof Hero && Dungeon.Int( level + 6 ) >= 5 ) {
 			int wands = ((Hero) defender).belongings.charge( 1f );
 			if (wands > 0) {
 				defender.sprite.centerEmitter().burst(EnergyParticle.FACTORY, 10);

@@ -293,7 +293,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 								}
 							}
 						}
-						Buff.prolong(enemy, Vertigo.class, Random.NormalIntRange(1, 4));
+						Buff.prolong(enemy, Vertigo.class, Dungeon.NormalIntRange(1, 4));
 					}
 					break;
 				case SLAM:

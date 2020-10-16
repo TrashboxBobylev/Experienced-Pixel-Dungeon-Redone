@@ -48,21 +48,15 @@ public class ElixirOfMight extends Elixir {
 	public void apply( Hero hero ) {
 		setKnown();
 		
-		hero.STR++;
-		
-		Buff.affect(hero, HTBoost.class).reset();
-		HTBoost boost = Buff.affect(hero, HTBoost.class);
-		boost.reset();
+		Dungeon.luck++;
 		
 		hero.updateHT( true );
-		hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "msg_1", boost.boost() ));
+		hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "msg_1" ));
 		GLog.p( Messages.get(this, "msg_2") );
-
-		Badges.validateStrengthAttained();
 	}
 	
 	public String desc() {
-		return Messages.get(this, "desc", HTBoost.boost(Dungeon.hero.HT));
+		return Messages.get(this, "desc");
 	}
 	
 	@Override
@@ -77,7 +71,7 @@ public class ElixirOfMight extends Elixir {
 			inputs =  new Class[]{PotionOfStrength.class, AlchemicalCatalyst.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 5;
+			cost = 20;
 			
 			output = ElixirOfMight.class;
 			outQuantity = 1;

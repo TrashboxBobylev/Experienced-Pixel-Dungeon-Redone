@@ -91,7 +91,7 @@ public class RegrowthBomb extends Bomb {
 			}
 		}
 
-		int plants = Random.chances(new float[]{0, 6, 3, 1});
+		int plants = Dungeon.chances(new float[]{0, 6, 3, 1});
 
 		for (int i = 0; i < plants; i++) {
 			Integer plantPos = Random.element(plantCandidates);
@@ -104,7 +104,7 @@ public class RegrowthBomb extends Bomb {
 		Integer plantPos = Random.element(plantCandidates);
 		if (plantPos != null){
 			Plant.Seed plant;
-			switch (Random.chances(new float[]{0, 6, 3, 1})){
+			switch (Dungeon.chances(new float[]{0, 6, 3, 1})){
 				case 1: default:
 					plant = new WandOfRegrowth.Dewcatcher.Seed();
 					break;

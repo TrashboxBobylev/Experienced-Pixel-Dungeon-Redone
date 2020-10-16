@@ -285,7 +285,7 @@ public abstract class RegularLevel extends Level {
 	protected void createItems() {
 		
 		// drops 3/4/5 items 60%/30%/10% of the time
-		int nItems = 3 + Random.chances(new float[]{6, 3, 1}) + Dungeon.cycle * 10;
+		int nItems = 3 + Dungeon.chances(new float[]{6, 3, 1}) + Dungeon.cycle * 10;
 		
 		for (int i=0; i < nItems; i++) {
 

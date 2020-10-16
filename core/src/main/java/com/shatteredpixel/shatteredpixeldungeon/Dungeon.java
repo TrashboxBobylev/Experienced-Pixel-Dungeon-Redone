@@ -63,6 +63,7 @@ import com.watabou.utils.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Dungeon {
@@ -1069,4 +1070,56 @@ public class Dungeon {
 		return highest;
 	}
 
+	//returns an index from chances, the probability of each index is the weight values in changes
+	public static int chances( float[] chances ) {
+
+		int length = chances.length;
+
+		float sum = 0;
+		for (int i=0; i < length; i++) {
+			sum += chances[i];
+		}
+
+		float value = Float( sum );
+		sum = 0;
+		for (int i=0; i < length; i++) {
+			sum += chances[i];
+			if (value < sum) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	@SuppressWarnings("unchecked")
+	//returns a key element from chances, the probability of each key is the weight value it maps to
+	public static <K> K chances( HashMap<K,Float> chances ) {
+
+		int size = chances.size();
+
+		Object[] values = chances.keySet().toArray();
+		float[] probs = new float[size];
+		float sum = 0;
+		for (int i=0; i < size; i++) {
+			probs[i] = chances.get( values[i] );
+			sum += probs[i];
+		}
+
+		if (sum <= 0) {
+			return null;
+		}
+
+		float value = Float( sum );
+
+		sum = probs[0];
+		for (int i=0; i < size; i++) {
+			if (value < sum) {
+				return (K)values[i];
+			}
+			sum += probs[i + 1];
+		}
+
+		return null;
+	}
 }

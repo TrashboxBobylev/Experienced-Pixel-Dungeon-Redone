@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -80,7 +81,7 @@ public class SewerBossLevel extends SewerLevel {
 	@Override
 	protected int standardRooms() {
 		//2 to 3, average 2.5
-		return 2+Random.chances(new float[]{1, 1});
+		return 2+ Dungeon.chances(new float[]{1, 1});
 	}
 	
 	protected Builder builder(){

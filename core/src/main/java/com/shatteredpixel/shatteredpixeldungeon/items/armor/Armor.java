@@ -473,7 +473,7 @@ public class Armor extends EquipableItem {
 		
 		//30% chance to be cursed
 		//15% chance to be inscribed
-		float effectRoll = Random.Float();
+		float effectRoll = Dungeon.Float();
 		if (effectRoll < 0.3f) {
 			inscribe(Glyph.randomCurse());
 			cursed = true;
@@ -605,7 +605,7 @@ public class Armor extends EquipableItem {
 
 		@SuppressWarnings("unchecked")
 		public static Glyph random( Class<? extends Glyph> ... toIgnore ) {
-			switch(Random.chances(typeChances)){
+			switch(Dungeon.chances(typeChances)){
 				case 0: default:
 					return randomCommon( toIgnore );
 				case 1:

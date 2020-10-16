@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
@@ -64,7 +65,7 @@ public class ArcaneCatalyst extends Spell {
 		detach( curUser.belongings.backpack );
 		updateQuickslot();
 		
-		Scroll s = Reflection.newInstance(Random.chances(scrollChances));
+		Scroll s = Reflection.newInstance(Dungeon.chances(scrollChances));
 		s.anonymize();
 		curItem = s;
 		s.doRead();

@@ -64,8 +64,8 @@ public class RingOfWealth extends Ring {
 
 		//reset (if needed), decrement, and store counts
 		if (triesToDrop == Float.MIN_VALUE) {
-			triesToDrop = Random.NormalIntRange(0, 30);
-			dropsToRare = Random.NormalIntRange(5, 10);
+			triesToDrop = Dungeon.NormalIntRange(0, 30);
+			dropsToRare = Dungeon.NormalIntRange(5, 10);
 		}
 
 		//now handle reward logic
@@ -79,7 +79,7 @@ public class RingOfWealth extends Ring {
 					i = genEquipmentDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
-				dropsToRare = Random.NormalIntRange(5, 10);
+				dropsToRare = Dungeon.NormalIntRange(5, 10);
 			} else {
 				Item i;
 				do {
@@ -88,7 +88,7 @@ public class RingOfWealth extends Ring {
 				drops.add(i);
 				dropsToRare--;
 			}
-			triesToDrop += Random.NormalIntRange(0, 30);
+			triesToDrop += Dungeon.NormalIntRange(0, 30);
 		}
 		
 		return drops;
@@ -120,7 +120,7 @@ public class RingOfWealth extends Ring {
 	}
 	
 	public static Item genConsumableDrop(int level) {
-		float roll = Random.Float();
+		float roll = Dungeon.Float();
 		//60% chance - 4% per level. Starting from +15: 0%
 		if (roll < (0.6f - 0.04f * level)) {
 			latestDropTier = 1;
@@ -137,7 +137,7 @@ public class RingOfWealth extends Ring {
 	}
 
 	private static Item genLowValueConsumable(){
-		switch (Random.Int(4)){
+		switch (Dungeon.Int(4)){
 			case 0: default:
 				Item i = new Gold().random();
 				return i.quantity(i.quantity()/2);
@@ -151,7 +151,7 @@ public class RingOfWealth extends Ring {
 	}
 
 	private static Item genMidValueConsumable(){
-		switch (Random.Int(7)){
+		switch (Dungeon.Int(7)){
 			case 0: default:
 				Item i = genLowValueConsumable();
 				return i.quantity(i.quantity()*2);
@@ -162,7 +162,7 @@ public class RingOfWealth extends Ring {
 				i = Generator.randomUsingDefaults(Generator.Category.SCROLL);
 				return Reflection.newInstance(ExoticScroll.regToExo.get(i.getClass()));
 			case 3:
-				return Random.Int(2) == 0 ? new ArcaneCatalyst() : new AlchemicalCatalyst();
+				return Dungeon.Int(2) == 0 ? new ArcaneCatalyst() : new AlchemicalCatalyst();
 			case 4:
 				return new Bomb();
             case 5:
@@ -171,7 +171,7 @@ public class RingOfWealth extends Ring {
 	}
 
 	private static Item genHighValueConsumable(){
-		switch (Random.Int(5)){
+		switch (Dungeon.Int(5)){
 			case 0: default:
 				Item i = genMidValueConsumable();
 				if (i instanceof Bomb){
@@ -193,16 +193,16 @@ public class RingOfWealth extends Ring {
 	private static Item genEquipmentDrop( int level ){
 		Item result;
 		int floorset = (Dungeon.depth)/5;
-		switch (Random.Int(5)){
+		switch (Dungeon.Int(5)){
 			default: case 0: case 1:
 				MeleeWeapon w = Generator.randomWeapon(floorset);
-				if (!w.hasGoodEnchant() && Random.Int(10) < level)      w.enchant();
+				if (!w.hasGoodEnchant() && Dungeon.Int(10) < level)      w.enchant();
 				else if (w.hasCurseEnchant())                           w.enchant(null);
 				result = w;
 				break;
 			case 2:
 				Armor a = Generator.randomArmor(floorset);
-				if (!a.hasGoodGlyph() && Random.Int(10) < level)        a.inscribe();
+				if (!a.hasGoodGlyph() && Dungeon.Int(10) < level)        a.inscribe();
 				else if (a.hasCurseGlyph())                             a.inscribe(null);
 				result = a;
 				break;

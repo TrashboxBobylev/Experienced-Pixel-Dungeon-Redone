@@ -144,7 +144,7 @@ public class MirrorImage extends NPC {
 	@Override
 	public int drRoll() {
 		if (hero != null && hero.belongings.weapon != null){
-			return Random.NormalIntRange(0, hero.belongings.weapon.defenseFactor(this)/2);
+			return Dungeon.NormalIntRange(0, hero.belongings.weapon.defenseFactor(this)/2);
 		} else {
 			return 0;
 		}

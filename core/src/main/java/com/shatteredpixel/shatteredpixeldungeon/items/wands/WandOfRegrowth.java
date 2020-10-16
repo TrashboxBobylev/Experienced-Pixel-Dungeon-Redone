@@ -147,9 +147,9 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		if (!cells.isEmpty() && Random.Float() > furrowedChance &&
-				(chrgUsed == 3 || (chrgUsed == 2 && Random.Int(2) == 0))){
+				(chrgUsed == 3 || (chrgUsed == 2 && Dungeon.Int(2) == 0))){
 			int cell = cells.remove(0);
-			Dungeon.level.plant( Random.Int(2) == 0 ? new Seedpod.Seed() : new Dewcatcher.Seed(), cell);
+			Dungeon.level.plant( Dungeon.Int(2) == 0 ? new Seedpod.Seed() : new Dewcatcher.Seed(), cell);
 		}
 
 		if (!cells.isEmpty() && Random.Float() > furrowedChance && chrgUsed == 3){
@@ -158,7 +158,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		if (!cells.isEmpty() && Random.Float() > furrowedChance &&
-				(chrgUsed >= 2 || (chrgUsed == 1 && Random.Int(2) == 0))){
+				(chrgUsed >= 2 || (chrgUsed == 1 && Dungeon.Int(2) == 0))){
 			int cell = cells.remove(0);
 			Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), cell);
 		}
@@ -272,7 +272,7 @@ public class WandOfRegrowth extends Wand {
 		@Override
 		public void activate( Char ch ) {
 
-			int nDrops = Random.NormalIntRange(3, 6);
+			int nDrops = Dungeon.NormalIntRange(3, 6);
 
 			ArrayList<Integer> candidates = new ArrayList<>();
 			for (int i : PathFinder.NEIGHBOURS8){
@@ -308,7 +308,7 @@ public class WandOfRegrowth extends Wand {
 		@Override
 		public void activate( Char ch ) {
 
-			int nSeeds = Random.NormalIntRange(2, 4);
+			int nSeeds = Dungeon.NormalIntRange(2, 4);
 
 			ArrayList<Integer> candidates = new ArrayList<>();
 			for (int i : PathFinder.NEIGHBOURS8){

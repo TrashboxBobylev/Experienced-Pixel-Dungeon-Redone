@@ -44,7 +44,7 @@ public class Trident extends MissileWeapon {
     @Override
     public int proc(Char attacker, Char defender, int damage) {
         Gold gold = (Gold) new Gold().random();
-        gold.quantity(Math.round (gold.quantity()* Random.Float(0.2f, 0.7f)));
+        gold.quantity(Math.round (gold.quantity()* Dungeon.Float(0.2f, 0.7f)));
         Dungeon.level.drop(gold, defender.pos).sprite.drop();
         return super.proc(attacker, defender, damage);
     }

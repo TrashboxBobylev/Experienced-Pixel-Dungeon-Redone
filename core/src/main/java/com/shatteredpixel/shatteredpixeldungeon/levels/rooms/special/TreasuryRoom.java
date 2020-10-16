@@ -45,7 +45,7 @@ public class TreasuryRoom extends SpecialRoom {
 		
 		Heap.Type heapType = Random.Int( 2 ) == 0 ? Heap.Type.CHEST : Heap.Type.HEAP;
 		
-		int n = Random.IntRange( 2, 3 );
+		int n = Dungeon.IntRange( 2, 3 );
 		for (int i=0; i < n; i++) {
 			int pos;
 			do {
@@ -64,7 +64,7 @@ public class TreasuryRoom extends SpecialRoom {
 				do {
 					pos = level.pointToCell(random());
 				} while (level.map[pos] != Terrain.EMPTY);
-				level.drop( new Gold( Random.IntRange( 5, 12 ) ), pos );
+				level.drop( new Gold( Dungeon.IntRange( 5, 12 ) ), pos );
 			}
 		}
 		

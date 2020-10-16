@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
@@ -63,7 +64,7 @@ public class Blocking extends Weapon.Enchantment {
 		}
 		
 		public int blockingRoll(){
-			return Random.NormalIntRange(0, blocking);
+			return Dungeon.NormalIntRange(0, blocking);
 		}
 		
 		@Override

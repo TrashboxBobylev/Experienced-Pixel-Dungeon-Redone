@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -44,7 +45,7 @@ public class StorageRoom extends SpecialRoom {
 
 		boolean honeyPot = Random.Int( 2 ) == 0;
 		
-		int n = Random.IntRange( 3, 4 );
+		int n = Dungeon.IntRange( 3, 4 );
 		for (int i=0; i < n; i++) {
 			int pos;
 			do {

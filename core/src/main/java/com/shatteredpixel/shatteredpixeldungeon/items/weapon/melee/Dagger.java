@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -62,7 +63,7 @@ public class Dagger extends MeleeWeapon {
 						max()));
 				int exStr = hero.STR() - STRReq();
 				if (exStr > 0) {
-					damage += Random.IntRange(0, exStr);
+					damage += Dungeon.IntRange(0, exStr);
 				}
 				return damage;
 			}

@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -75,7 +76,7 @@ public class SecretLibraryRoom extends SecretRoom {
 		}
 		entrance.set( Door.Type.HIDDEN );
 		
-		int n = Random.IntRange( 2, 3 );
+		int n = Dungeon.IntRange( 2, 3 );
 		HashMap<Class<? extends Scroll>, Float> chances = new HashMap<>(scrollChances);
 		for (int i=0; i < n; i++) {
 			int pos;
@@ -83,7 +84,7 @@ public class SecretLibraryRoom extends SecretRoom {
 				pos = level.pointToCell(random());
 			} while (level.map[pos] != Terrain.EMPTY_SP || level.heaps.get( pos ) != null);
 			
-			Class<?extends Scroll> scrollCls = Random.chances(chances);
+			Class<?extends Scroll> scrollCls = Dungeon.chances(chances);
 			chances.put(scrollCls, 0f);
 			level.drop( Reflection.newInstance(scrollCls), pos );
 		}

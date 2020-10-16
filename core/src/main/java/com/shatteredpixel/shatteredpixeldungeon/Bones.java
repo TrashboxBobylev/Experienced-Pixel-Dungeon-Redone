@@ -74,8 +74,8 @@ public class Bones {
 
 	private static Item pickItem(Hero hero){
 		Item item = null;
-		if (Random.Int(3) != 0) {
-			switch (Random.Int(7)) {
+		if (Dungeon.Int(3) != 0) {
+			switch (Dungeon.Int(7)) {
 				case 0:
 					item = hero.belongings.weapon;
 					break;
@@ -109,14 +109,14 @@ public class Bones {
 					items.add(curItem);
 			}
 
-			if (Random.Int(3) < items.size()) {
+			if (Dungeon.Int(3) < items.size()) {
 				item = Random.element(items);
 				if (item.stackable){
-					item.quantity(Random.NormalIntRange(1, (item.quantity() + 1) / 2));
+					item.quantity(Dungeon.NormalIntRange(1, (item.quantity() + 1) / 2));
 				}
 			} else {
 				if (Dungeon.gold > 100) {
-					item = new Gold( Random.NormalIntRange( 50, Dungeon.gold/2 ) );
+					item = new Gold( Dungeon.NormalIntRange( 50, Dungeon.gold/2 ) );
 				} else {
 					item = new Gold( 50 );
 				}

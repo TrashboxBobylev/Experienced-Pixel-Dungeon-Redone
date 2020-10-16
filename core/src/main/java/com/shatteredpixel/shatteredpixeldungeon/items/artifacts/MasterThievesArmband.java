@@ -106,7 +106,7 @@ public class MasterThievesArmband extends Artifact {
 				exp += value;
 			} else {
 				float chance = stealChance(value);
-				if (Random.Float() > chance)
+				if (Dungeon.Float() > chance)
 					return false;
 				else {
 					if (chance <= 1)

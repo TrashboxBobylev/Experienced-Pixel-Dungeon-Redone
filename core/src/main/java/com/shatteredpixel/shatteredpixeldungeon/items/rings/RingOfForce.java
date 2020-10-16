@@ -62,10 +62,10 @@ public class RingOfForce extends Ring {
 		if (hero.buff(Force.class) != null) {
 			int level = getBuffedBonus(hero, Force.class);
 			float tier = tier(hero.STR());
-			return Random.NormalIntRange(min(level, tier), max(level, tier));
+			return Dungeon.NormalIntRange(min(level, tier), max(level, tier));
 		} else {
 			//attack without any ring of force influence
-			return Random.NormalIntRange(1, Math.max(hero.STR()-8, 1));
+			return Dungeon.NormalIntRange(1, Math.max(hero.STR()-8, 1));
 		}
 	}
 

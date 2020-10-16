@@ -206,7 +206,7 @@ public class WandOfLivingEarth extends DamageWand {
 	
 	@Override
 	public void staffFx(MagesStaff.StaffParticle particle) {
-		if (Random.Int(10) == 0){
+		if (Dungeon.Int(10) == 0){
 			particle.color(ColorMath.random(0xFFF568, 0x80791A));
 		} else {
 			particle.color(ColorMath.random(0x805500, 0x332500));

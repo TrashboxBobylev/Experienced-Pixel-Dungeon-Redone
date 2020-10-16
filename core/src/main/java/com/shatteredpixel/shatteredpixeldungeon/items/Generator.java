@@ -360,10 +360,10 @@ public class Generator {
 	}
 	
 	public static Item random() {
-		Category cat = Random.chances( categoryProbs );
+		Category cat = Dungeon.chances( categoryProbs );
 		if (cat == null){
 			generalReset();
-			cat = Random.chances( categoryProbs );
+			cat = Dungeon.chances( categoryProbs );
 		}
 		categoryProbs.put( cat, categoryProbs.get( cat ) - 1);
 		return random( cat );
@@ -382,10 +382,10 @@ public class Generator {
 				//if we're out of artifacts, return a ring instead.
 				return item != null ? item : random(Category.RING);
 			default:
-				int i = Random.chances(cat.probs);
+				int i = Dungeon.chances(cat.probs);
 				if (i == -1) {
 					reset(cat);
-					i = Random.chances(cat.probs);
+					i = Dungeon.chances(cat.probs);
 				}
 				if (cat.defaultProbs != null) cat.probs[i]--;
 				return ((Item) Reflection.newInstance(cat.classes[i])).random();
@@ -397,7 +397,7 @@ public class Generator {
 		if (cat.defaultProbs == null) {
 			return random(cat); //currently covers weapons/armor/missiles
 		} else {
-			return ((Item) Reflection.newInstance(cat.classes[Random.chances(cat.defaultProbs)])).random();
+			return ((Item) Reflection.newInstance(cat.classes[Dungeon.chances(cat.defaultProbs)])).random();
 		}
 	}
 	
@@ -413,7 +413,7 @@ public class Generator {
 
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 		
-		Armor a = (Armor)Reflection.newInstance(Category.ARMOR.classes[Random.chances(floorSetTierProbs[floorSet])]);
+		Armor a = (Armor)Reflection.newInstance(Category.ARMOR.classes[Dungeon.chances(floorSetTierProbs[floorSet])]);
 		a.random();
 		return a;
 	}
@@ -434,8 +434,8 @@ public class Generator {
 
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 		
-		Category c = wepTiers[Random.chances(floorSetTierProbs[floorSet])];
-		MeleeWeapon w = (MeleeWeapon)Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+		Category c = wepTiers[Dungeon.chances(floorSetTierProbs[floorSet])];
+		MeleeWeapon w = (MeleeWeapon)Reflection.newInstance(c.classes[Dungeon.chances(c.probs)]);
 		w.random();
 		return w;
 	}
@@ -456,8 +456,8 @@ public class Generator {
 		
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 		
-		Category c = misTiers[Random.chances(floorSetTierProbs[floorSet])];
-		MissileWeapon w = (MissileWeapon)Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+		Category c = misTiers[Dungeon.chances(floorSetTierProbs[floorSet])];
+		MissileWeapon w = (MissileWeapon)Reflection.newInstance(c.classes[Dungeon.chances(c.probs)]);
 		w.random();
 		return w;
 	}
@@ -466,7 +466,7 @@ public class Generator {
 	public static Artifact randomArtifact() {
 
 		Category cat = Category.ARTIFACT;
-		int i = Random.chances( cat.probs );
+		int i = Dungeon.chances( cat.probs );
 
 		//if no artifacts are left, return null
 		if (i == -1){

@@ -262,7 +262,7 @@ public class Ghost extends NPC {
 		}
 		
 		public static void spawn( SewerLevel level ) {
-			if (!spawned && Dungeon.depth > 1 && Random.Int( 5 - Dungeon.depth ) == 0) {
+			if (!spawned && Dungeon.depth > 1 && Dungeon.Int( 5 - Dungeon.depth ) == 0) {
 				
 				Ghost ghost = new Ghost();
 				do {
@@ -280,7 +280,7 @@ public class Ghost extends NPC {
 				depth = Dungeon.depth;
 
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				float itemTierRoll = Random.Float();
+				float itemTierRoll = Dungeon.Float();
 				int wepTier;
 
 				if (itemTierRoll < 0.5f) {
@@ -298,10 +298,10 @@ public class Ghost extends NPC {
 				}
 				
 				Generator.Category c = Generator.wepTiers[wepTier - 1];
-				weapon = (MeleeWeapon) Reflection.newInstance(c.classes[Random.chances(c.probs)]);
+				weapon = (MeleeWeapon) Reflection.newInstance(c.classes[Dungeon.chances(c.probs)]);
 
 				//50%:+0, 30%:+1, 15%:+2, 5%:+3
-				float itemLevelRoll = Random.Float();
+				float itemLevelRoll = Dungeon.Float();
 				int itemLevel;
 				if (itemLevelRoll < 0.5f){
 					itemLevel = 0;
@@ -322,7 +322,7 @@ public class Ghost extends NPC {
                 armor.tier += Dungeon.cycle * 5;
 
 				//10% to be enchanted
-				if (Random.Int(10) == 0){
+				if (Dungeon.Int(10) == 0){
 					weapon.enchant();
 					armor.inscribe();
 				}

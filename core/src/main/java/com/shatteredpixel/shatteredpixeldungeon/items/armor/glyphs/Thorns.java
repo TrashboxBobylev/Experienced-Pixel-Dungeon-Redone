@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -43,7 +44,7 @@ public class Thorns extends Armor.Glyph {
 		// lvl 0 - 16.7%
 		// lvl 1 - 23.1%
 		// lvl 2 - 28.5%
-		if ( Random.Int( level + 12) >= 10) {
+		if ( Dungeon.Int( level + 12) >= 10) {
 
 			Buff.affect( attacker, Bleeding.class).set( 4 + level );
 

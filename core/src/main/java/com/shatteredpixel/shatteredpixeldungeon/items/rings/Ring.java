@@ -197,7 +197,7 @@ public class Ring extends KindofMisc {
 	public Item upgrade() {
 		super.upgrade();
 		
-		if (Random.Int(3) == 0) {
+		if (Dungeon.Int(3) == 0) {
 			cursed = false;
 		}
 		
@@ -222,9 +222,9 @@ public class Ring extends KindofMisc {
 		//+1: 26.67% (4/15)
 		//+2: 6.67%  (1/15)
 		int n = 1;
-		if (Random.Int(3) == 0) {
+		if (Dungeon.Int(3) == 0) {
 			n++;
-			if (Random.Int(5) == 0){
+			if (Dungeon.Int(5) == 0){
 				n++;
 			}
 		}

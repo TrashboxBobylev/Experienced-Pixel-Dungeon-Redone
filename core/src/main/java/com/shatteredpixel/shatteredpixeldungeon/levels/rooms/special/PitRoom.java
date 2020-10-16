@@ -82,7 +82,7 @@ public class PitRoom extends SpecialRoom {
 		} while ( mainLoot == null || Challenges.isItemBlocked(mainLoot));
 		level.drop(mainLoot, remains);
 		
-		int n = Random.IntRange( 1, 2 );
+		int n = Dungeon.IntRange( 1, 2 );
 		for (int i=0; i < n; i++) {
 			level.drop( prize( level ), remains ).setHauntedIfCursed();
 		}

@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.curses;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -43,7 +44,7 @@ public class Overgrowth extends Armor.Glyph {
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 		
-		if ( Random.Int( 20 ) == 0) {
+		if ( Dungeon.Int( 20 ) == 0) {
 			
 			Plant.Seed s;
 			do{

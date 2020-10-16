@@ -52,7 +52,7 @@ public class Multiplicity extends Armor.Glyph {
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 
-		if (Random.Int(20) == 0){
+		if (Dungeon.Int(20) == 0){
 			ArrayList<Integer> spawnPoints = new ArrayList<>();
 
 			for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
@@ -65,7 +65,7 @@ public class Multiplicity extends Armor.Glyph {
 			if (spawnPoints.size() > 0) {
 
 				Mob m = null;
-				if (Random.Int(2) == 0 && defender instanceof Hero){
+				if (Dungeon.Int(2) == 0 && defender instanceof Hero){
 					m = new MirrorImage();
 					((MirrorImage)m).duplicate( (Hero)defender );
 

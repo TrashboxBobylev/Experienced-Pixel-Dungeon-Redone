@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
@@ -78,7 +79,7 @@ public class AntiMagic extends Armor.Glyph {
 	}
 	
 	public static int drRoll( int level ){
-		return Random.NormalIntRange(level, 3 + Math.round(level*1.5f));
+		return Dungeon.NormalIntRange(level, 3 + Math.round(level*1.5f));
 	}
 
 	@Override

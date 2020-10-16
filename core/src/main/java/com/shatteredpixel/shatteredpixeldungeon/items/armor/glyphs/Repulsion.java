@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -42,7 +43,7 @@ public class Repulsion extends Armor.Glyph {
 		// lvl 2 - 43%
 		int level = Math.max( 0, armor.buffedLvl() );
 
-		if (Random.Int( level + 5 ) >= 4){
+		if (Dungeon.Int( level + 5 ) >= 4){
 			int oppositeHero = attacker.pos + (attacker.pos - defender.pos);
 			Ballistica trajectory = new Ballistica(attacker.pos, oppositeHero, Ballistica.MAGIC_BOLT);
 			WandOfBlastWave.throwChar(attacker, trajectory, 2, true);

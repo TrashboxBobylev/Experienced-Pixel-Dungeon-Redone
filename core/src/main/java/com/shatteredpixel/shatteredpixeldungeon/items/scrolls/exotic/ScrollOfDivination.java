@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -82,7 +83,7 @@ public class ScrollOfDivination extends ExoticScroll {
 		float[] probs = baseProbs.clone();
 		
 		while (left > 0 && total > 0) {
-			switch (Random.chances(probs)) {
+			switch (Dungeon.chances(probs)) {
 				default:
 					probs = baseProbs.clone();
 					continue;

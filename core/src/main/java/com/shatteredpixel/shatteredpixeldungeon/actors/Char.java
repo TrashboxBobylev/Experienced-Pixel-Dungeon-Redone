@@ -345,10 +345,12 @@ public abstract class Char extends Actor {
 		}
 
 		float acuRoll = Random.Float( acuStat );
+		if (attacker instanceof Hero) acuRoll = Dungeon.Float( acuStat );
 		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		
 		float defRoll = Random.Float( defStat );
+		if (defender instanceof Hero) defRoll = Dungeon.Float( defRoll );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		

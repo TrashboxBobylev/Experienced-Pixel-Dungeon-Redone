@@ -48,13 +48,13 @@ public class CityLevel extends RegularLevel {
 	@Override
 	protected int standardRooms() {
 		//7 to 10, average 7.9
-		return 7+Random.chances(new float[]{4, 3, 2, 1});
+		return 7+Dungeon.chances(new float[]{4, 3, 2, 1});
 	}
 	
 	@Override
 	protected int specialRooms() {
 		//2 to 3, average 2.33
-		return 2 + Random.chances(new float[]{2, 1});
+		return 2 + Dungeon.chances(new float[]{2, 1});
 	}
 	
 	@Override

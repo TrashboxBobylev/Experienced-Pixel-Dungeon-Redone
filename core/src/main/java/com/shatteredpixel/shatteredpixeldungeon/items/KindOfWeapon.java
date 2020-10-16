@@ -102,7 +102,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	abstract public int max(int lvl);
 
 	public int damageRoll( Char owner ) {
-		return Random.NormalIntRange( min(), max() );
+		return Dungeon.NormalIntRange( min(), max() );
 	}
 	
 	public float accuracyFactor( Char owner ) {

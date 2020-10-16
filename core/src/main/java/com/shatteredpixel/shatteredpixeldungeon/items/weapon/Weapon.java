@@ -260,7 +260,7 @@ abstract public class Weapon extends KindOfWeapon {
 		
 		//30% chance to be cursed
 		//10% chance to be enchanted
-		float effectRoll = Random.Float();
+		float effectRoll = Dungeon.Float();
 		if (effectRoll < 0.3f) {
 			enchant(Enchantment.randomCurse());
 			cursed = true;
@@ -363,7 +363,7 @@ abstract public class Weapon extends KindOfWeapon {
 		
 		@SuppressWarnings("unchecked")
 		public static Enchantment random( Class<? extends Enchantment> ... toIgnore ) {
-			switch(Random.chances(typeChances)){
+			switch(Dungeon.chances(typeChances)){
 				case 0: default:
 					return randomCommon( toIgnore );
 				case 1:

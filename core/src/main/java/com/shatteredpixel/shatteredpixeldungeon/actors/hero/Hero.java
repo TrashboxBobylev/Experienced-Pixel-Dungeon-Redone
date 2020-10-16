@@ -355,21 +355,21 @@ public class Hero extends Char {
 		int dr = 0;
 
 		if (belongings.armor != null) {
-			int armDr = Random.NormalIntRange( belongings.armor.DRMin(), belongings.armor.DRMax());
+			int armDr = Dungeon.NormalIntRange( belongings.armor.DRMin(), belongings.armor.DRMax());
 			if (STR() < belongings.armor.STRReq()){
 				armDr -= 2*(belongings.armor.STRReq() - STR());
 			}
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon != null)  {
-			int wepDr = Random.NormalIntRange( 0 , belongings.weapon.defenseFactor( this ) );
+			int wepDr = Dungeon.NormalIntRange( 0 , belongings.weapon.defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon).STRReq() - STR());
 			}
 			if (wepDr > 0) dr += wepDr;
 		}
 		Barkskin bark = buff(Barkskin.class);
-		if (bark != null)               dr += Random.NormalIntRange( 0 , bark.level() );
+		if (bark != null)               dr += Dungeon.NormalIntRange( 0 , bark.level() );
 		
 		Blocking.BlockBuff block = buff(Blocking.BlockBuff.class);
 		if (block != null)              dr += block.blockingRoll();

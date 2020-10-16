@@ -56,7 +56,7 @@ public class MageArmor extends ClassArmor {
 				&& mob.alignment != Char.Alignment.ALLY) {
 				Buff.affect( mob, Burning.class ).reignite( mob );
 				Buff.prolong( mob, Roots.class, Roots.DURATION );
-				mob.damage(Random.NormalIntRange(4, 16 + Dungeon.escalatingDepth()), new Burning());
+				mob.damage(Dungeon.NormalIntRange(4, 16 + Dungeon.escalatingDepth()), new Burning());
 			}
 		}
 		

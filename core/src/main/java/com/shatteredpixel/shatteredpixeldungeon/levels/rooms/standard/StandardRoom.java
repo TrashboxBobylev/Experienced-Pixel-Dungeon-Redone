@@ -83,7 +83,7 @@ public abstract class StandardRoom extends Room {
 		for (int i = 0; i < minOrdinal; i++)                    probs[i] = 0;
 		for (int i = maxOrdinal+1; i < categories.length; i++)  probs[i] = 0;
 		
-		int ordinal = Random.chances(probs);
+		int ordinal = Dungeon.chances(probs);
 		
 		if (ordinal != -1){
 			sizeCat = categories[ordinal];
@@ -157,7 +157,7 @@ public abstract class StandardRoom extends Room {
 	
 	
 	public static StandardRoom createRoom(){
-		return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
+		return Reflection.newInstance(rooms.get(Dungeon.chances(chances[Dungeon.depth])));
 	}
 	
 }
