@@ -38,7 +38,6 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.Halo;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.PointF;
-import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -55,13 +54,15 @@ public class PrisonLevel extends RegularLevel {
 	}
 	
 	@Override
-	protected int standardRooms() {
+	protected int standardRooms(boolean forceMax) {
+		if (forceMax) return 8;
 		//6 to 8, average 6.66
 		return 6+Dungeon.chances(new float[]{4, 2, 2});
 	}
 	
 	@Override
-	protected int specialRooms() {
+	protected int specialRooms(boolean forceMax) {
+		if (forceMax) return 3;
 		//1 to 3, average 1.83
 		return 1+Dungeon.chances(new float[]{3, 4, 3});
 	}

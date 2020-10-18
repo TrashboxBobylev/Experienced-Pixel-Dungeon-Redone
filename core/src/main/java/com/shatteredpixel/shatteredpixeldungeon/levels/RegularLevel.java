@@ -68,7 +68,7 @@ public abstract class RegularLevel extends Level {
 	protected Room roomExit;
 	
 	public int secretDoors;
-	
+
 	@Override
 	protected boolean build() {
 		
@@ -93,8 +93,12 @@ public abstract class RegularLevel extends Level {
 		ArrayList<Room> initRooms = new ArrayList<>();
 		initRooms.add ( roomEntrance = new EntranceRoom());
 		initRooms.add( roomExit = new ExitRoom());
-		
-		int standards = standardRooms();
+
+		//force max standard rooms and multiple by 1.5x for large levels
+		int standards = standardRooms(feeling == Feeling.LARGE);
+		if (feeling == Feeling.LARGE){
+			standards = (int)Math.ceil(standards * 1.5f);
+		}
 		standards *= Dungeon.cycle+1;
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
@@ -107,8 +111,12 @@ public abstract class RegularLevel extends Level {
 		
 		if (Dungeon.shopOnLevel())
 			initRooms.add(new ShopRoom());
-		
-		int specials = specialRooms();
+
+		//force max special rooms and add one more for large levels
+		int specials = specialRooms(feeling == Feeling.LARGE);
+		if (feeling == Feeling.LARGE){
+			specials++;
+		}
 		SpecialRoom.initForFloor();
 		for (int i = 0; i < specials; i++) {
 			SpecialRoom s = SpecialRoom.createRoom();
@@ -117,17 +125,20 @@ public abstract class RegularLevel extends Level {
 		}
 		
 		int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
-		for (int i = 0; i < secrets; i++)
+		//one additional secret for secret levels
+		if (feeling == Feeling.SECRETS) secrets++;
+		for (int i = 0; i < secrets; i++) {
 			initRooms.add(SecretRoom.createRoom());
-		
+		}
+
 		return initRooms;
 	}
 	
-	protected int standardRooms(){
+	protected int standardRooms(boolean forceMax){
 		return 0;
 	}
 	
-	protected int specialRooms(){
+	protected int specialRooms(boolean forceMax){
 		return 0;
 	}
 	
@@ -154,13 +165,13 @@ public abstract class RegularLevel extends Level {
 	
 	@Override
 	public int nMobs() {
-		switch(Dungeon.depth) {
-			case 1:
-				//mobs are not randomly spawned on floor 1.
-				return 0;
-			default:
-				return 3 + Dungeon.depth % 5 + Random.Int(3) + Dungeon.cycle * 3 + Dungeon.additionalMobs;
+		if (Dungeon.depth <= 1) return 0;
+
+		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3);
+		if (feeling == Feeling.LARGE){
+			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
+		return mobs;
 	}
 	
 	@Override
@@ -227,18 +238,18 @@ public abstract class RegularLevel extends Level {
 		}
 
 	}
-	
+
 	@Override
 	public int randomRespawnCell( Char ch ) {
 		int count = 0;
 		int cell = -1;
-		
+
 		while (true) {
-			
+
 			if (++count > 30) {
 				return -1;
 			}
-			
+
 			Room room = randomRoom( StandardRoom.class );
 			if (room == null || room == roomEntrance) {
 				continue;
@@ -253,7 +264,7 @@ public abstract class RegularLevel extends Level {
 					&& cell != exit) {
 				return cell;
 			}
-			
+
 		}
 	}
 	
@@ -287,6 +298,10 @@ public abstract class RegularLevel extends Level {
 		
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Dungeon.chances(new float[]{6, 3, 1}) + Dungeon.cycle * 10;
+
+		if (feeling == Feeling.LARGE){
+			nItems += 2;
+		}
 		
 		for (int i=0; i < nItems; i++) {
 
