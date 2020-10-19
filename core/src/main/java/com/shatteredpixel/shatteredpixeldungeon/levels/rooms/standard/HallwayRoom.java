@@ -29,7 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.*;
 
-public class HallwayRoom extends EmptyRoom {
+public class HallwayRoom extends StandardRoom {
+
+	{
+		joinable = false;
+	}
 
 	//FIXME lots of copy-pasta from tunnel rooms here
 	@Override
