@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.watabou.utils.*;
 
 import java.util.ArrayList;
@@ -155,8 +156,19 @@ public class SewerPipeRoom extends StandardRoom {
 			}
 		}
 
-		for (Door door : connected.values()) {
-			door.set( Door.Type.REGULAR );
+		for (Room r : connected.keySet()) {
+			if (r instanceof SewerPipeRoom){
+				Point door = connected.get(r);
+				Painter.fill(level, door.x-1, door.y-1, 3, 3, Terrain.EMPTY);
+				if (door.x == left || door.x == right){
+					Painter.fill(level, door.x-1, door.y, 3, 1, Terrain.WATER);
+				} else {
+					Painter.fill(level, door.x, door.y-1, 1, 3, Terrain.WATER);
+				}
+				connected.get(r).set( Door.Type.WATER );
+			} else {
+				connected.get(r).set( Door.Type.REGULAR );
+			}
 		}
 	}
 
@@ -190,18 +202,19 @@ public class SewerPipeRoom extends StandardRoom {
 
 		return c;
 	}
-	
+
 	private int spaceBetween(int a, int b){
 		return Math.abs(a - b)-1;
 	}
-	
+
 	//gets the path distance between two points
 	private int distanceBetweenPoints(Point a, Point b){
 		//on the same side
-		if (a.y == b.y || a.x == b.x){
+		if (((a.x == left || a.x == right) && a.y == b.y)
+				|| ((a.y == top || a.y == bottom) && a.x == b.x)){
 			return Math.max(spaceBetween(a.x, b.x), spaceBetween(a.y, b.y));
 		}
-		
+
 		//otherwise...
 		//subtract 1 at the end to account for overlap
 		return
@@ -213,14 +226,15 @@ public class SewerPipeRoom extends StandardRoom {
 						-
 						1;
 	}
-	
+
 	private Point[] corners;
-	
+
 	//picks the smallest path to fill between two points
 	private void fillBetweenPoints(Level level, Point from, Point to, int floor){
-		
+
 		//doors are along the same side
-		if (from.y == to.y || from.x == to.x){
+		if (((from.x == left+1 || from.x == right-1) && from.x == to.x)
+				|| ((from.y == top+1 || from.y == bottom-1) && from.y == to.y)){
 			Painter.fill(level,
 					Math.min(from.x, to.x),
 					Math.min(from.y, to.y),
@@ -229,7 +243,7 @@ public class SewerPipeRoom extends StandardRoom {
 					floor);
 			return;
 		}
-		
+
 		//set up corners
 		if (corners == null){
 			corners = new Point[4];
@@ -238,7 +252,7 @@ public class SewerPipeRoom extends StandardRoom {
 			corners[2] = new Point(right-2, bottom-2);
 			corners[3] = new Point(left+2, bottom-2);
 		}
-		
+
 		//doors on adjacent sides
 		for (Point c : corners){
 			if ((c.x == from.x || c.y == from.y) && (c.x == to.x || c.y == to.y)){
@@ -247,7 +261,7 @@ public class SewerPipeRoom extends StandardRoom {
 				return;
 			}
 		}
-		
+
 		//doors on opposite sides
 		Point side;
 		if (from.y == top+2 || from.y == bottom-2){
@@ -258,7 +272,7 @@ public class SewerPipeRoom extends StandardRoom {
 			} else {
 				side = new Point(right-2, top + height()/2);
 			}
-			
+
 		} else {
 			//connect along the top, or bottom side
 			if (spaceBetween(top, from.y) + spaceBetween(top, to.y) <=
