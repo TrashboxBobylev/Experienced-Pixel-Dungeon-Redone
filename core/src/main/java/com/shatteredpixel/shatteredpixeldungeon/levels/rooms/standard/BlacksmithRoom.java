@@ -34,10 +34,6 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 public class BlacksmithRoom extends StandardRoom {
-
-	{
-		joinable = false; //TODO maybe joinable? Could be neat in terms of layout
-	}
 	
 	@Override
 	public int minWidth() {

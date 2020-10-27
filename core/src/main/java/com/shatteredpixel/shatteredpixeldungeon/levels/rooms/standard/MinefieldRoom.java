@@ -33,6 +33,10 @@ import com.watabou.utils.Random;
 
 public class MinefieldRoom extends StandardRoom {
 
+	{
+		joinable = false;
+	}
+
 	@Override
 	public float[] sizeCatProbs() {
 		return new float[]{4, 1, 0};

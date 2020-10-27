@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.watabou.utils.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class RegularPainter extends Painter {
 	
@@ -174,6 +175,8 @@ public abstract class RegularPainter extends Painter {
 			hiddenDoorChance = (0.5f + hiddenDoorChance)/2f;
 		}
 
+		roomMerges.clear();
+
 		for (Room r : rooms) {
 			for (Room n : r.connected.keySet()) {
 				
@@ -231,14 +234,28 @@ public abstract class RegularPainter extends Painter {
 			}
 		}
 	}
+
+	private HashMap<Room, Room> roomMerges = new HashMap<>();
 	
 	protected boolean joinRooms( Level l, Room r, Room n ) {
 
-		//FIXME currently this joins rooms a bit too often! Need to think up some limitations
 		if (!(r instanceof StandardRoom) || !((StandardRoom) r).joinable
 				|| !(n instanceof StandardRoom) || !((StandardRoom) n).joinable) {
 			return false;
 		}
+
+		if (roomMerges.get(r) == n) return true;
+		if (roomMerges.get(n) == r) return true;
+
+		//normal sized rooms can be merged at most once. Large and Giant rooms can be merged many times
+		if (roomMerges.containsKey(r) || roomMerges.containsValue(r)){
+			if (((StandardRoom) r).sizeCat == StandardRoom.SizeCategory.NORMAL) return false;
+		}
+		if (roomMerges.containsKey(n) || roomMerges.containsValue(n)){
+			if (((StandardRoom) n).sizeCat == StandardRoom.SizeCategory.NORMAL) return false;
+		}
+
+		//TODO maybe more limitations here, such as limiting maximum width/height for normal sized rooms?
 		
 		Rect w = r.intersect( n );
 		if (w.left == w.right) {
@@ -263,6 +280,8 @@ public abstract class RegularPainter extends Painter {
 			
 			Painter.fill( l, w.left, w.top, w.width(), 1, Terrain.EMPTY );
 		}
+
+		roomMerges.put(r, n);
 		
 		return true;
 	}

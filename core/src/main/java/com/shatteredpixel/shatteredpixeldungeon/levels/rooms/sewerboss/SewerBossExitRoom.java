@@ -36,10 +36,6 @@ import com.watabou.noosa.Tilemap;
 import com.watabou.utils.Point;
 
 public class SewerBossExitRoom extends ExitRoom {
-
-	{
-		joinable = false;
-	}
 	
 	@Override
 	public int minWidth() {
