@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -33,6 +34,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CreativeGloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -393,6 +396,12 @@ public class YogDzewa extends Mob {
 		Dungeon.level.viewDistance = 4;
 		if (Dungeon.hero.buff(Light.class) == null){
 			Dungeon.hero.viewDistance = Dungeon.level.viewDistance;
+		}
+
+		if (Dungeon.hero.belongings.weapon instanceof CreativeGloves){
+			Dungeon.hero.belongings.weapon = null;
+			Dungeon.level.drop(new Clayball(), pos).sprite.drop();
+			Badges.validateClay();
 		}
 
 		GameScene.bossSlain();

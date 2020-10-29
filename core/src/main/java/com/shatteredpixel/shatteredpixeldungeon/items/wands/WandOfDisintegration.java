@@ -60,7 +60,7 @@ public class WandOfDisintegration extends DamageWand {
 	}
 	
 	@Override
-	protected void onZap( Ballistica beam ) {
+    public void onZap(Ballistica beam) {
 		
 		boolean terrainAffected = false;
 		

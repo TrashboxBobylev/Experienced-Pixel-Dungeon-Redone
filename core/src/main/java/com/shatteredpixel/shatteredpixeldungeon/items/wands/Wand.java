@@ -105,7 +105,7 @@ public abstract class Wand extends Item {
 		}
 	}
 	
-	protected abstract void onZap( Ballistica attack );
+	public abstract void onZap(Ballistica attack);
 
 	public abstract void onHit( MagesStaff staff, Char attacker, Char defender, int damage);
 

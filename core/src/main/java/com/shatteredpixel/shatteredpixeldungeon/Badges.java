@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -134,7 +135,13 @@ public class Badges {
 		GAMES_PLAYED_1( 60, true ),
 		GAMES_PLAYED_2( 61, true ),
 		GAMES_PLAYED_3( 62, true ),
-		GAMES_PLAYED_4( 63, true );
+		GAMES_PLAYED_4( 63, true ),
+		WAND_QUEST_1(68, true),
+		WAND_QUEST_2(69, true),
+		WAND_QUEST_3(70, true),
+		WAND_QUEST_4(71, true),
+		WAND_QUEST_5(72, true),
+		WAND_QUEST_6(73, true);
 
 		public boolean meta;
 
@@ -805,6 +812,30 @@ public class Badges {
 		}
 		displayBadge( badge );
 	}
+
+	public static void validateCheese(){
+		displayBadge( Badge.WAND_QUEST_1);
+	}
+
+	public static void validateUnstable(){
+		displayBadge( Badge.WAND_QUEST_2);
+	}
+
+	public static void validateCreative(){
+		displayBadge( Badge.WAND_QUEST_3);
+	}
+
+	public static void validateClay(){
+		displayBadge( Badge.WAND_QUEST_4);
+	}
+
+	public static void validateKey(){
+		displayBadge( Badge.WAND_QUEST_5);
+	}
+
+	public static void truth(){
+		displayBadge( Badge.WAND_QUEST_6);
+	}
 	
 	private static void displayBadge( Badge badge ) {
 		
@@ -889,6 +920,7 @@ public class Badges {
 		leaveBest( filtered, Badge.ALL_SCROLLS_IDENTIFIED, Badge.ALL_ITEMS_IDENTIFIED );
 		leaveBest( filtered, Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4 );
 		leaveBest( filtered, Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3 );
+		leaveBest( filtered, Badge.WAND_QUEST_1, Badge.WAND_QUEST_2, Badge.WAND_QUEST_3, Badge.WAND_QUEST_4, Badge.WAND_QUEST_5, Badge.WAND_QUEST_6);
 		
 		ArrayList<Badge> list = new ArrayList<>(filtered);
 		Collections.sort( list );

@@ -57,7 +57,7 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	@Override
-	protected void onZap(Ballistica bolt) {
+    public void onZap(Ballistica bolt) {
 
 		Heap heap = Dungeon.level.heaps.get(bolt.collisionPos);
 		if (heap != null) {

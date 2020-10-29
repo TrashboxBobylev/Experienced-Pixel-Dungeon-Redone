@@ -33,11 +33,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.KeyToTruth;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfUnstable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -47,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.Blacksmith
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BlacksmithSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MimicSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBlacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
@@ -81,6 +85,28 @@ public class Blacksmith extends NPC {
 		sprite.turnTo( pos, c.pos );
 
 		if (c != Dungeon.hero){
+			return true;
+		}
+		if (Dungeon.hero.belongings.getItem(KeyToTruth.class) != null){
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					GameScene.show(new WndQuest(Blacksmith.this, Messages.get(Blacksmith.class, "key")){
+						@Override
+						public void hide() {
+							super.hide();
+							Dungeon.hero.belongings.getItem(KeyToTruth.class).detach(Dungeon.hero.belongings.backpack);
+							Blacksmith.this.destroy();
+
+							Blacksmith.this.sprite.die();
+
+							Quest.completed = true;
+
+							Badges.truth();
+						}
+					});
+				}
+			});
 			return true;
 		}
 		
@@ -349,7 +375,7 @@ public class Blacksmith extends NPC {
 		}
 		
 		public static ArrayList<Room> spawn( ArrayList<Room> rooms ) {
-			if (!spawned && Dungeon.depth > 11 && Random.Int( 15 - Dungeon.depth ) == 0) {
+			if (!spawned && Dungeon.depth > 0 /*&& Random.Int( 15 - Dungeon.depth ) == 0*/) {
 				
 				rooms.add(new BlacksmithRoom());
 				spawned = true;

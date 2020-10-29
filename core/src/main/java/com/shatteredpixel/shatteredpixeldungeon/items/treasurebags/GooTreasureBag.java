@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
@@ -31,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RatSkull;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfUnstable;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CreativeGloves;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -52,6 +55,11 @@ public class GooTreasureBag extends TreasureBag{
             items.add(new RatSkull());
             for (int i = 0; i < 5; i++) items.add(Reflection.newInstance(ExoticPotion.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.POTION).getClass())));
             for (int i = 0; i < 5; i++) items.add(Reflection.newInstance(ExoticPotion.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.SCROLL).getClass())));
+        }
+        if (Dungeon.hero.belongings.getItem(WandOfUnstable.class) != null){
+            items.add(new CreativeGloves().identify().random());
+            Dungeon.hero.belongings.getItem(WandOfUnstable.class).detach(Dungeon.hero.belongings.backpack);
+            Badges.validateCreative();
         }
         return items;
     }

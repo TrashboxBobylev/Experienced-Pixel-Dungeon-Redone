@@ -76,7 +76,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	protected void onZap( Ballistica bolt ) {
+    public void onZap(Ballistica bolt) {
 
 		ArrayList<Integer> cells = new ArrayList<>(cone.cells);
 

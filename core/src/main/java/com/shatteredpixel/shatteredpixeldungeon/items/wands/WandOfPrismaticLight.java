@@ -68,7 +68,7 @@ public class WandOfPrismaticLight extends DamageWand {
 	}
 
 	@Override
-	protected void onZap(Ballistica beam) {
+	public void onZap(Ballistica beam) {
 		affectMap(beam);
 		
 		if (Dungeon.level.viewDistance < 6 ){

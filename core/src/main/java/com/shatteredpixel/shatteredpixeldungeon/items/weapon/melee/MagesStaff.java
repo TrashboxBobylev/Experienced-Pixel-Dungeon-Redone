@@ -215,8 +215,24 @@ public class MagesStaff extends MeleeWeapon {
 
 		return this;
 	}
-	
-	public void gainCharge( float amt ){
+
+	@Override
+	public String name() {
+		if (wand != null) {
+			if (wand instanceof WandOfUnstable){
+				String glitchy = "¢ÄãćS±«»ùăæǅƆǑʥʄɤȨζϻϡΰѾӫӸףעᵿᶗᵺᶆ";
+				StringBuilder builder = new StringBuilder();
+				for (int i = 0; i < 8; i++){
+					builder.append(glitchy.charAt(Random.Int(glitchy.length())));
+				}
+				return "staff of " + builder.toString();
+			}
+			return Messages.get(wand, "staff_name");
+		}
+		return super.name();
+	}
+
+	public void gainCharge(float amt ){
 		if (wand != null){
 			wand.gainCharge(amt);
 		}

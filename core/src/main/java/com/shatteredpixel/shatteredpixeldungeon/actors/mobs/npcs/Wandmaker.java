@@ -24,15 +24,18 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CeremonialCandle;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfUnstable;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
@@ -43,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WandmakerSprite;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndWandmaker;
 import com.watabou.noosa.Game;
@@ -93,6 +97,36 @@ public class Wandmaker extends NPC {
 		sprite.turnTo( pos, Dungeon.hero.pos );
 
 		if (c != Dungeon.hero){
+			return true;
+		}
+
+		if (Dungeon.hero.belongings.getItem(Cheese.class) != null){
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					GameScene.show(new WndQuest(Wandmaker.this, Messages.get(Wandmaker.class, "cheese")){
+						@Override
+						public void hide() {
+							super.hide();
+							Dungeon.hero.belongings.getItem(Cheese.class).detach(Dungeon.hero.belongings.backpack);
+							Item wand = new WandOfUnstable().identify();
+							if (wand.doPickUp( Dungeon.hero )) {
+								GLog.i( Messages.get(Dungeon.hero, "you_now_have", wand.name()) );
+							} else {
+								Dungeon.level.drop( wand, pos ).sprite.drop();
+							}
+							yell( Messages.get(this, "farewell", Dungeon.hero.name()) );
+							Wandmaker.this.destroy();
+
+							Wandmaker.this.sprite.die();
+
+							Wandmaker.Quest.complete();
+
+							Badges.validateUnstable();
+						}
+					});
+				}
+			});
 			return true;
 		}
 

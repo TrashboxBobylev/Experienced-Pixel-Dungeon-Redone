@@ -34,10 +34,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +47,7 @@ import java.util.Collection;
 public class RatKing extends NPC {
 
     public boolean ghastly = false;
+    public int counter = 0;
 
 	{
 		spriteClass = RatKingSprite.class;
@@ -126,8 +129,13 @@ public class RatKing extends NPC {
             do {
 		            item = Generator.random();
                 } while (item instanceof Gold);
-                item.cast(this, Dungeon.hero.pos);
-                spend(2f);
+            if (++counter == 50){
+                counter = 0;
+                item = new Cheese();
+            }
+            item.cast(this, Dungeon.hero.pos);
+
+            spend(2f);
         }
 		return super.act();
 	}
@@ -202,11 +210,15 @@ public class RatKing extends NPC {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put("h", ghastly);
+        bundle.put("e", counter);
     }
 
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         ghastly = bundle.getBoolean("h");
+        if (bundle.contains("e")){
+            counter = bundle.getInt("e");
+        }
     }
 }
