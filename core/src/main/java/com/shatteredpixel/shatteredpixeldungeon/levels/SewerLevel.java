@@ -115,11 +115,6 @@ public class SewerLevel extends RegularLevel {
 		
 		super.createItems();
 	}
-
-	@Override
-	protected ArrayList<Room> initRooms() {
-		return Blacksmith.Quest.spawn(super.initRooms());
-	}
 	
 	@Override
 	public Group addVisuals() {
