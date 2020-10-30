@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -193,7 +194,8 @@ public abstract class Recipe {
 		new MeatPie.Recipe(),
         new Vampirism.Recipe(),
         new RespawnBooster.Recipe(),
-        new FireBooster.Recipe()
+        new FireBooster.Recipe(),
+		new WandOfEarthblast.Recipe()
 	};
 	
 	public static Recipe findRecipe(ArrayList<Item> ingredients){
@@ -225,8 +227,7 @@ public abstract class Recipe {
 	
 	public static boolean usableInRecipe(Item item){
 		return !item.cursed
-				&& (!(item instanceof EquipableItem) || (item instanceof AlchemistsToolkit && item.isIdentified()))
-				&& !(item instanceof Wand);
+				&& (!(item instanceof EquipableItem) || (item instanceof AlchemistsToolkit && item.isIdentified()));
 	}
 }
 
