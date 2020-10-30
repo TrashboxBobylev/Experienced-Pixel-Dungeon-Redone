@@ -43,6 +43,7 @@ public class HeroSprite extends CharSprite {
 	private static final int FRAME_HEIGHT	= 15;
 	
 	private static final int RUN_FRAMERATE	= 20;
+	private static final int HIT_FRAMERATE  = 15;
 	
 	private static TextureFilm tiers;
 	
@@ -76,7 +77,7 @@ public class HeroSprite extends CharSprite {
 		die = new Animation( 20, false );
 		die.frames( film, 8, 9, 10, 11, 12, 11 );
 		
-		attack = new Animation( 15, false );
+		attack = new Animation( HIT_FRAMERATE, false );
 		attack.frames( film, 13, 14, 15, 0 );
 		
 		zap = attack.clone();
@@ -149,6 +150,10 @@ public class HeroSprite extends CharSprite {
 	
 	public void sprint( float speed ) {
 		run.delay = 1f / speed / RUN_FRAMERATE;
+	}
+
+	public void hit( float speed ) {
+		attack.delay = 1f / speed / HIT_FRAMERATE;
 	}
 	
 	public static TextureFilm tiers() {

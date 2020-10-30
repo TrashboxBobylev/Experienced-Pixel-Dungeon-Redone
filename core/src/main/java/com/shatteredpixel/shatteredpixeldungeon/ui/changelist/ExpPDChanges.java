@@ -30,12 +30,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
 import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -49,10 +52,39 @@ import com.watabou.noosa.Image;
 import java.util.ArrayList;
 
 public class ExpPDChanges {
-	
+
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-	        ChangeInfo changes = new ChangeInfo("ExpPD-2.8.1", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.9", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released October 31th, 2020\n" +
+                            "_-_ 47 days after Experienced Pixel Dungeon 2.8.1\n" +
+                            "\n" +
+                            "Dev commentary will be added here in the future."));
+
+            changes.addButton( new ChangeButton(new ItemSprite(new WandOfEarthblast()), "Brand new wand!",
+                    "Added the legendary overpowered Wand of Avalanche. To find it, you need to complete big backtracking quest with 6 parts!\n\n" +
+                            "To begin, get cheese from Rat King."));
+
+            changes.addButton( new ChangeButton(new ItemSprite(new Cheese()), "WoA quest content",
+                    "Added 6 items, used in Wand of Avalanche quest, 5 of which are usable as equipment or consumable."));
+
+            changes.addButton( new ChangeButton(new ItemSprite(new ElixirOfMight()), "Luck mechanic",
+                    "Added incrementable luck. You can drink elixirs of luck to improve your chances to attack and dodge, item rarity, damage rolls and many other things.\n\n" +
+                            "_-_ Elixir of Luck can replace any random item with 0.5% chance or be brewed from Strength potion."));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
+                    "_-_ Buffed Grim's damage and Greatsword's knights HP.\n\n" +
+                            "_-_ Added little animation quirk with fast weapons."));
+
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                    "Fixed:\n" +
+                            "_-_ Chalice of Blood being broken beyond +30.\n"+
+                                "_-_ Potential transmutation crashes."));
+
+	        changes = new ChangeInfo("ExpPD-2.8.1", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

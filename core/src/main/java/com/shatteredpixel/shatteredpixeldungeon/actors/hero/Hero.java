@@ -1627,7 +1627,11 @@ public class Hero extends Char {
 		}
 		
 		Invisibility.dispel();
-		if (!(belongings.weapon instanceof CreativeGloves)) spend( attackDelay() );
+		if (!(belongings.weapon instanceof CreativeGloves)) {
+			spend( attackDelay() );
+			((HeroSprite)sprite).hit(1 / attackDelay());
+		}
+		else ((HeroSprite)sprite).hit(15f);
 
 		curAction = null;
 
