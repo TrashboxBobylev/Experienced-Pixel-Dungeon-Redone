@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.watabou.utils.Point;
 import com.watabou.utils.Rect;
 
 public class RingBridgeRoom extends RingTunnelRoom {
@@ -51,5 +52,10 @@ public class RingBridgeRoom extends RingTunnelRoom {
 				Painter.fill(level, i.left, i.top, i.width()+1, i.height()+1, Terrain.CHASM);
 			}
 		}
+	}
+
+	@Override
+	public boolean canMerge(Level l, Point p, int mergeTerrain) {
+		return mergeTerrain == Terrain.CHASM;
 	}
 }

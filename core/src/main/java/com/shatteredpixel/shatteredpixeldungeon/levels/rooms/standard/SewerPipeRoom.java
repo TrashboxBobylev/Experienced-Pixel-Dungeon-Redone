@@ -34,10 +34,6 @@ import java.util.ArrayList;
 
 public class SewerPipeRoom extends StandardRoom {
 
-	{
-		joinable = false;
-	}
-
 	@Override
 	public int minWidth() {
 		return Math.max(7, super.minWidth());
@@ -51,6 +47,11 @@ public class SewerPipeRoom extends StandardRoom {
 	@Override
 	public float[] sizeCatProbs() {
 		return new float[]{4, 2, 1};
+	}
+
+	@Override
+	public boolean canMerge(Level l, Point p, int mergeTerrain) {
+		return false;
 	}
 
 	@Override
