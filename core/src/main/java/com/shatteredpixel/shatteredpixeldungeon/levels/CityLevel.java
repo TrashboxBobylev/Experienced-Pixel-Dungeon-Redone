@@ -48,7 +48,7 @@ public class CityLevel extends RegularLevel {
 	@Override
 	protected int standardRooms(boolean forceMax) {
 		if (forceMax) return 10;
-		//7 to 10, average 7.9
+		//7 to 10, average 8.0
 		return 7+Dungeon.chances(new float[]{4, 3, 2, 1});
 	}
 	
