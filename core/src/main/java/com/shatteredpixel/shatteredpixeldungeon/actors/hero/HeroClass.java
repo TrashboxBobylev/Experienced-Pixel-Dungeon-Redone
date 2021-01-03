@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfUnstable;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -112,6 +113,7 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		new PsycheChest().collect();
+		hero.grinding = true;
 	}
 
 	public Badges.Badge masteryBadge() {

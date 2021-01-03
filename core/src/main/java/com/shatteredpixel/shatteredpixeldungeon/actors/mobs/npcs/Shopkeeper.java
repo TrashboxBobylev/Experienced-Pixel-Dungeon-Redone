@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.KeyToTruth;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -68,7 +69,7 @@ public class Shopkeeper extends NPC {
 	@Override
 	public void damage( int dmg, Object src ) {
 		flee();
-		if (src instanceof Viscosity.DeferedDamage){
+		if (src instanceof Viscosity.DeferedDamage || src instanceof Clayball){
 			Dungeon.level.drop(new KeyToTruth(), pos).sprite.drop();
 			Badges.validateKey();
 		}
@@ -77,6 +78,10 @@ public class Shopkeeper extends NPC {
 	@Override
 	public void add( Buff buff ) {
 		flee();
+		if (buff instanceof Viscosity.DeferedDamage){
+			Dungeon.level.drop(new KeyToTruth(), pos).sprite.drop();
+			Badges.validateKey();
+		}
 	}
 	
 	public void flee() {

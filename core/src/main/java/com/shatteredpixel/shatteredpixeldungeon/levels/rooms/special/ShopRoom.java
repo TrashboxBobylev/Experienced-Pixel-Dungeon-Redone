@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -49,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleB
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -204,6 +206,7 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add(new GambleBag());
         itemsToSpawn.add(new BiggerGambleBag());
 		if (Dungeon.depth > 6) itemsToSpawn.add(new QualityBag());
+		if (Badges.isUnlocked(Badges.Badge.WAND_QUEST_5)) itemsToSpawn.add(new Clayball());
 
 
 		if (Dungeon.cycle == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));

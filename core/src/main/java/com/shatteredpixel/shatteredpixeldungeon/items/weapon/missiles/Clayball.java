@@ -66,7 +66,7 @@ public class Clayball extends MissileWeapon {
 
 	@Override
 	public int price() {
-		return super.price()/2; //half normal value
+		return 826 * quantity;
 	}
 
 	@Override
@@ -111,4 +111,6 @@ public class Clayball extends MissileWeapon {
 		WandOfBlastWave.BlastWave.blast(cell);
 		Sample.INSTANCE.play( Assets.Sounds.BLAST );
 	}
+
+
 }
