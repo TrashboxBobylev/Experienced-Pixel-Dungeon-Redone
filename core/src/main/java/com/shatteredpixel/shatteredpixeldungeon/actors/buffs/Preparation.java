@@ -56,10 +56,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	}
 	
 	public enum AttackLevel{
-		LVL_1( 5,  0.18f, 0.15f, 1, 1),
-		LVL_2( 14,  0.35f, 0.27f, 2, 3),
-		LVL_3( 44,  0.64f, 0.45f, 5, 7),
-		LVL_4( 90, 0.89f, 0.69f, 8, 9);
+		LVL_1( 5,  0.50f, 0.15f, 1, 2),
+		LVL_2( 14,  1.25f, 0.27f, 3, 6),
+		LVL_3( 44,  4.50f, 0.45f, 8, 12),
+		LVL_4( 120, 41.30f, 5.05f, 16, 24);
 		
 		final int turnsReq;
 		final float baseDmgBonus, KOThreshold;
@@ -105,15 +105,11 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	
 	@Override
 	public boolean act() {
-		if (target.invisible > 0){
-			turnsInvis++;
-			if (AttackLevel.getLvl(turnsInvis).blinkDistance > 0 && target == Dungeon.hero){
-				ActionIndicator.setAction(this);
-			}
-			spend(TICK);
-		} else {
-			detach();
+		if (Dungeon.hero.justMoved) turnsInvis++;
+		if (AttackLevel.getLvl(turnsInvis).blinkDistance > 0 && target == Dungeon.hero){
+			ActionIndicator.setAction(this);
 		}
+		spend(TICK);
 		return true;
 	}
 	
