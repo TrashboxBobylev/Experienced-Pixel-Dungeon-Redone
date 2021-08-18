@@ -55,7 +55,28 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.9.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.9.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 18th, 2021\n" +
+                        "_-_ 223 days after Experienced Pixel Dungeon 2.9.2\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
+                "_-_ Fixed bugs with Scroll of Transmutation.\n\n" +
+                        "_-_ Fixed bug with Preparation bugging out bosses.\n\n" +
+                        "_-_ Fixed certain missiles having lower damage than intended.\n\n" +
+                        "_-_ Fixed Scroll of Upgrade showing the upgrade option even if you didn't identify it.\n\n" +
+                        "_-_ Fixed Scroll of Affection making bosses allied.\n\n" +
+                        "_-_ Fixed Wealth effect triggering on opening containers.\n\n" +
+                        "_-_ Hugely buffed Black Mimic's stats, fixed his clones counting as boss defeat.\n\n" +
+                        "_-_ Scroll of Determination lasts two times longer.\n\n" +
+                        "_-_ Fixed certain artifacts not recharging at all on high upgrade levels.\n\n" +
+                        "_-_ Significantly buffed fishing: you need to wait less and rare drops are more frequent.\n\n" +
+                        "_-_ Alchemy pots give more energy on higher dungeon cycles."));
+
+            changes = new ChangeInfo("ExpPD-2.9.2", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
