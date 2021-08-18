@@ -45,7 +45,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -64,8 +63,8 @@ public class RingOfWealth extends Ring {
 
 		//reset (if needed), decrement, and store counts
 		if (triesToDrop == Float.MIN_VALUE) {
-			triesToDrop = Dungeon.NormalIntRange(0, 30);
-			dropsToRare = Dungeon.NormalIntRange(5, 10);
+			triesToDrop = Dungeon.NormalIntRange(0, 20);
+			dropsToRare = Dungeon.NormalIntRange(3, 8);
 		}
 
 		//now handle reward logic
@@ -79,7 +78,7 @@ public class RingOfWealth extends Ring {
 					i = genEquipmentDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
 				drops.add(i);
-				dropsToRare = Dungeon.NormalIntRange(5, 10);
+				dropsToRare = Dungeon.NormalIntRange(3, 8);
 			} else {
 				Item i;
 				do {
@@ -88,7 +87,7 @@ public class RingOfWealth extends Ring {
 				drops.add(i);
 				dropsToRare--;
 			}
-			triesToDrop += Dungeon.NormalIntRange(0, 30);
+			triesToDrop += Dungeon.NormalIntRange(0, 20);
 		}
 		
 		return drops;
