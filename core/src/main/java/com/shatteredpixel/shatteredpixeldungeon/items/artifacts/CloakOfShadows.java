@@ -225,6 +225,9 @@ public class CloakOfShadows extends Artifact {
 					float missing = (chargeCap - charge);
 					if (level() > 7) missing += 5*(level() - 7)/3f;
 					float turnsToCharge = (45 - missing);
+					if (turnsToCharge <= 0) {
+						turnsToCharge = 1 / (missing - 44);
+					}
                     turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
                     if (turnsToCharge <= 0) turnsToCharge = 1;
                     partialCharge += (1f / turnsToCharge);
