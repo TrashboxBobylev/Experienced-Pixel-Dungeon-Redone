@@ -67,9 +67,9 @@ public class BlackMimic extends Mob {
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 3000;
+		HP = HT = 6000;
 		EXP = 2000;
-		defenseSkill = 20;
+		defenseSkill = 60;
 
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
@@ -78,23 +78,23 @@ public class BlackMimic extends Mob {
 		properties.add(Property.LARGE);
         switch (Dungeon.cycle){
             case 1:
-                HP = HT = 15000;
-                defenseSkill = 125;
+                HP = HT = 60000;
+                defenseSkill = 250;
                 EXP = 6000;
                 break;
             case 2:
-                HP = HT = 600000;
-                defenseSkill = 360;
+                HP = HT = 900000;
+                defenseSkill = 720;
                 EXP = 500000;
                 break;
             case 3:
-                HP = HT = 30000000;
-                defenseSkill = 1300;
+                HP = HT = 80000000;
+                defenseSkill = 2500;
                 EXP = 25000000;
                 break;
             case 4:
                 HP = HT = 2000000000;
-                defenseSkill = 23000;
+                defenseSkill = 50000;
                 EXP = 2100000000;
                 break;
         }
@@ -103,34 +103,34 @@ public class BlackMimic extends Mob {
 	@Override
 	public int damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(100, 156);
-            case 2: return Random.NormalIntRange(524, 731);
-            case 3: return Random.NormalIntRange(3400, 6124);
-            case 4: return Random.NormalIntRange(600000, 800000);
+            case 1: return Random.NormalIntRange(140, 325);
+            case 2: return Random.NormalIntRange(1000, 1560);
+            case 3: return Random.NormalIntRange(6700, 12900);
+            case 4: return Random.NormalIntRange(800000, 1200000);
         }
-		return Random.NormalIntRange( 29, 49 );
+		return Random.NormalIntRange( 50, 99 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
         switch (Dungeon.cycle){
-            case 1: return 160;
-            case 2: return 564;
-            case 3: return 1500;
-            case 4: return 30000;
+            case 1: return 320;
+            case 2: return 1128;
+            case 3: return 4000;
+            case 4: return 60000;
         }
-		return 38;
+		return 60;
 	}
 
 	@Override
 	public int drRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(60, 100);
-            case 2: return Random.NormalIntRange(300, 520);
-            case 3: return Random.NormalIntRange(2000, 3600);
+            case 1: return Random.NormalIntRange(80, 200);
+            case 2: return Random.NormalIntRange(700, 1000);
+            case 3: return Random.NormalIntRange(5000, 9000);
             case 4: return Random.NormalIntRange(423000, 520000);
         }
-		return Random.NormalIntRange(0, 20);
+		return Random.NormalIntRange(0, 70);
 	}
 
 	public int pylonsActivated = 0;
@@ -195,7 +195,6 @@ public class BlackMimic extends Mob {
 	protected boolean act() {
 		GameScene.add(Blob.seed(pos, 0, FallingRocks.class));
 		GameScene.add(Blob.seed(pos, 0, CorrosiveGas.class));
-
 
 
 		//ability logic only triggers if DM is not supercharged
@@ -584,24 +583,25 @@ public class BlackMimic extends Mob {
 	public void die( Object cause ) {
 
 		super.die( cause );
+		if (!isCopy) {
+			GameScene.bossSlain();
+			Dungeon.level.unseal();
 
-		GameScene.bossSlain();
-		Dungeon.level.unseal();
+			Dungeon.level.drop(new Amulet(), pos).sprite.drop(pos);
 
-        Dungeon.level.drop( new Amulet(), pos).sprite.drop( pos );
+			LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
+			if (beacon != null) {
+				beacon.upgrade();
+			}
 
-		LloydsBeacon beacon = Dungeon.hero.belongings.getItem(LloydsBeacon.class);
-		if (beacon != null) {
-			beacon.upgrade();
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (mob.isAlive()) {
+					mob.die(Dungeon.hero);
+				}
+			}
+
+			yell(Messages.get(this, "defeated"));
 		}
-
-        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-                if (mob.isAlive()) {
-                    mob.die(Dungeon.hero);
-                }
-            }
-
-		yell( Messages.get(this, "defeated") );
 	}
 
 	@Override
