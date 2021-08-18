@@ -50,7 +50,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
-import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 public class ScrollOfTransmutation extends InventoryScroll {
@@ -148,13 +147,15 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		Weapon n;
 		Generator.Category c;
 		if (w instanceof MeleeWeapon) {
-			c = Generator.wepTiers[((MeleeWeapon) w).internalTier];
+			c = Generator.wepTiers[w.internalTier];
 		} else {
-			c = Generator.misTiers[((MissileWeapon) w).internalTier];
+			c = Generator.misTiers[w.internalTier];
 		}
 		
 		do {
 			n = (Weapon) Reflection.newInstance(c.classes[Dungeon.chances(c.probs)]);
+			if (w.tier > 5)
+				n.tier += Dungeon.cycle * 5;
 		} while (Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 		
 		int level = w.level();
