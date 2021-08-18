@@ -147,9 +147,9 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		Weapon n;
 		Generator.Category c;
 		if (w instanceof MeleeWeapon) {
-			c = Generator.wepTiers[w.internalTier];
+			c = Generator.wepTiers[w.internalTier-1];
 		} else {
-			c = Generator.misTiers[w.internalTier];
+			c = Generator.misTiers[w.internalTier-1];
 		}
 		
 		do {
