@@ -47,7 +47,7 @@ public class ScrollOfAffection extends ExoticScroll {
 		Invisibility.dispel();
 		
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-			if (Dungeon.level.heroFOV[mob.pos]) {
+			if (Dungeon.level.heroFOV[mob.pos] && !mob.properties().contains(Char.Property.BOSS)) {
 				mob.alignment = Char.Alignment.ALLY;
 				mob.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 5 );
 			}
