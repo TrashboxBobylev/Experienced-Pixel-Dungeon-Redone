@@ -59,7 +59,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		LVL_1( 5,  0.50f, 0.15f, 1, 2),
 		LVL_2( 14,  1.25f, 0.27f, 3, 6),
 		LVL_3( 44,  4.50f, 0.45f, 8, 12),
-		LVL_4( 120, 41.30f, 5.05f, 16, 24);
+		LVL_4( 120, 41.30f, 1.50f, 16, 24);
 		
 		final int turnsReq;
 		final float baseDmgBonus, KOThreshold;
