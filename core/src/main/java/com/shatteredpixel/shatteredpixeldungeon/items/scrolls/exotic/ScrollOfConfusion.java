@@ -49,7 +49,7 @@ public class ScrollOfConfusion extends ExoticScroll {
 		
 		readAnimation();
 
-		Buff.affect(curUser, RageShield.class).set(curUser.HT * 1.5f);
+		Buff.affect(curUser, RageShield.class).set(curUser.HT * 3f);
 	}
 	
 }
