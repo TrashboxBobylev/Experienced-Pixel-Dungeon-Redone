@@ -219,6 +219,9 @@ public class TimekeepersHourglass extends Artifact {
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
 				//90 turns to charge at full, 60 turns to charge at 0/10
 				float chargeGain = 1 / (90f - (chargeCap - charge)*3f);
+				if (chargeGain <= 0){
+					chargeGain = 1 / ((chargeCap - charge)*3f);
+				}
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
                 if (partialCharge <= 0) partialCharge = 1;

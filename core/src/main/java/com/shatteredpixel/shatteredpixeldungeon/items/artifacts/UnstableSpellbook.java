@@ -278,6 +278,9 @@ public class UnstableSpellbook extends Artifact {
 			if (charge < chargeCap && !cursed && (lock == null || lock.regenOn())) {
 				//120 turns to charge at full, 80 turns to charge at 0/8
 				float chargeGain = 1 / (120f - (chargeCap - charge)*5f);
+				if (chargeGain <= 0){
+					chargeGain = 1 / ((chargeCap - charge)*5f);
+				}
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 				if (partialCharge <= 0) partialCharge = 1;
