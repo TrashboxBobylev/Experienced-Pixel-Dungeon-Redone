@@ -82,7 +82,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
     @Override
     public ArrayList<String> actions(Hero hero) {
         ArrayList<String> actions = super.actions( hero );
-        if (!anonymous || isIdentified()) actions.add(AC_UPGRADE);
+        if (!anonymous && isIdentified()) actions.add(AC_UPGRADE);
         return actions;
     }
 
