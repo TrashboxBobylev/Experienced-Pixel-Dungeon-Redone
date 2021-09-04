@@ -106,9 +106,9 @@ public class Bbat extends Mob {
     }
 
     public static void updateHP(){
+        level += 1;
         for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
             if (mob instanceof Bbat){
-                level += 1;
                 mob.HP = mob.HT = 8 + level * 2;
                 ((Bbat) mob).defenseSkill = 13 + level*2;
             }
