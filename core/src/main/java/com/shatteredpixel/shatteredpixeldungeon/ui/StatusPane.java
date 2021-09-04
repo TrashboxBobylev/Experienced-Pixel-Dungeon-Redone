@@ -67,6 +67,8 @@ public class StatusPane extends Component {
 	private DangerIndicator danger;
 	private BuffIndicator buffs;
 	private Compass compass;
+	private Image cycle;
+	private BitmapText cycleNumber;
 
 	private JournalButton btnJournal;
 	private MenuButton btnMenu;
@@ -130,6 +132,13 @@ public class StatusPane extends Component {
 		depth.hardlight( 0xCACFC2 );
 		depth.measure();
 		add( depth );
+		if (Dungeon.cycle > 0) {
+			cycle = new Image(Icons.get(Icons.CHANGES));
+			add(cycle);
+
+			cycleNumber = new BitmapText(PixelScene.pixelFont);
+			add(cycleNumber);
+		}
 
 		danger = new DangerIndicator();
 		add( danger );
@@ -167,8 +176,16 @@ public class StatusPane extends Component {
 		depth.x = width - 35.5f - depth.width() / 2f;
 		depth.y = 8f - depth.baseLine() / 2f;
 		PixelScene.align(depth);
-
-		danger.setPos( width - danger.width(), 20 );
+		if (cycle != null){
+			danger.setPos( width - danger.width(), 37 );
+			cycle.x = width - cycle.width() - 2;
+			cycle.y = 20;
+			cycleNumber.text(String.valueOf(Dungeon.cycle));
+			cycleNumber.measure();
+			cycleNumber.x = width - cycleNumber.width() - 3;
+			cycleNumber.y = 28;
+		}
+		else danger.setPos( width - danger.width(), 20 );
 
 		buffs.setPos( 31, 9 );
 
