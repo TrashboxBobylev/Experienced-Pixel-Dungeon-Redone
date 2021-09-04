@@ -313,7 +313,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = Random.NormalIntRange( 2 + wandLevel, 8 + 4*wandLevel );
+			int dmg = (int) (Random.NormalIntRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
 			enemy.damage( dmg, WandOfWarding.class );
 			if (enemy.isAlive()){
 				Wand.processSoulMark(enemy, wandLevel, 1);

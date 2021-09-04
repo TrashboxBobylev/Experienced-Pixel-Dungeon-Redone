@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Random;
 
@@ -32,13 +33,13 @@ import com.watabou.utils.Random;
 public abstract class DamageWand extends Wand{
 
 	public int min(){
-		return min(buffedLvl());
+		return (int) (min(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
 	}
 
 	public abstract int min(int lvl);
 
 	public int max(){
-		return max(buffedLvl());
+		return (int) (max(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
 	}
 
 	public abstract int max(int lvl);
