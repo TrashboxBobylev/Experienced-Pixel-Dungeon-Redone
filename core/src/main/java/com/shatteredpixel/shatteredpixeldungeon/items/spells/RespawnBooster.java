@@ -41,8 +41,13 @@ public class RespawnBooster extends Spell{
 
     @Override
     protected void onCast(Hero hero) {
-        Dungeon.respawn_timer = (int) GameMath.gate(1, Dungeon.respawn_timer - 2, 50);
-        if (Dungeon.respawn_timer % 3 == 0) Dungeon.additionalMobs++;
+        if (Dungeon.respawn_timer > 1) {
+            Dungeon.respawn_timer = (int) GameMath.gate(1, Dungeon.respawn_timer - 2, 50);
+        }
+        else {
+            Dungeon.respawn_timer *= 0.7f;
+        }
+        if (Dungeon.respawn_timer % 3 == 0 || Dungeon.respawn_timer < 0.7f) Dungeon.additionalMobs++;
 
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 10);
