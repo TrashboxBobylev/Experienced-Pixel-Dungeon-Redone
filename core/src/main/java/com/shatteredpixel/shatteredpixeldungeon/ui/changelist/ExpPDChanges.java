@@ -55,7 +55,22 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.9.3", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.9.4", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released September 4th, 2021\n" +
+                            "_-_ 17 days after Experienced Pixel Dungeon 2.9.3\n" +
+                            "\n" +
+                            "Dev commentary will be added here in the future."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
+                    "_-_ Fixed certain issues with arena ticket.\n\n" +
+                            "_-_ Bbat upgrades when being dead.\n\n" +
+                            "_-_ Overpopulation spell can scale much further.\n\n" +
+                            "_-_ Wands scale their damage with hero's level.\n\n" +
+                            "_-_ Added cycle indicator."));
+
+        changes = new ChangeInfo("ExpPD-2.9.3", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
