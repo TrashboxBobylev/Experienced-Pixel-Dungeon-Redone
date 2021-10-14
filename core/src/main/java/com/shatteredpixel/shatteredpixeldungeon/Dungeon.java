@@ -154,7 +154,7 @@ public class Dungeon {
 	public static int depth;
 	public static int gold;
 	public static int cycle;
-	public static int respawn_timer;
+	public static float respawn_timer;
 	public static int additionalMobs;
 	public static float fireDamage;
 	public static int luck;
@@ -742,7 +742,7 @@ public class Dungeon {
 		gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
 		cycle = bundle.getInt( CYCLE);
-		respawn_timer = bundle.getInt(RESPAWN_TIMER);
+		respawn_timer = bundle.getFloat(RESPAWN_TIMER);
 		additionalMobs = bundle.getInt(ADDMOBS);
 		fireDamage = bundle.getFloat(FIREDANAGE);
 		luck = bundle.getInt(LUCK);
