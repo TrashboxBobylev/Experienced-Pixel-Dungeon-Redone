@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
-import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -116,7 +115,6 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		new PsycheChest().collect();
-		new TomeOfMastery().collect();
 		hero.grinding = true;
 	}
 
