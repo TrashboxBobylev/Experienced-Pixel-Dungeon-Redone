@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class Perks {
     public enum Perk {
-        ;
+        SUCKER_PUNCH;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");
@@ -39,7 +39,7 @@ public class Perks {
 
         @Override
         public String toString() {
-            return Messages.get(Perks.class, name() + ".name");
+            return Messages.titleCase(Messages.get(Perks.class, name() + ".name"));
         }
     }
 
@@ -53,8 +53,8 @@ public class Perks {
 
     public static void restoreFromBundle(Bundle bundle, ArrayList<Perk> perks) {
         perks.clear();
-        if (bundle.getStringArray("conduct") != null) {
-            String[] conductIds = bundle.getStringArray("conduct");
+        if (bundle.getStringArray("perks") != null) {
+            String[] conductIds = bundle.getStringArray("perks");
             for (String conduct : conductIds) {
                 perks.add(Perk.valueOf(conduct));
             }

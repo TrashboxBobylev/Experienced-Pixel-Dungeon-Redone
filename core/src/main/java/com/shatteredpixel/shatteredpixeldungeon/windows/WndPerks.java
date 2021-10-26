@@ -75,12 +75,12 @@ public class WndPerks extends Window {
                     }
                 }
                 size = infos.size();
-                for (int i = 1; i < size+1; i++) {
+                for (int i = 0; i < size; i++) {
                     if (infos.get(i).inside(x, y)) {
                         int index = i;
 
                         String message = allConducts.get(index).desc();
-                        String title = Messages.titleCase(Messages.get(Perks.class, allConducts.get(index).name()));
+                        String title = Messages.titleCase(allConducts.get(index).toString());
                         ShatteredPixelDungeon.scene().add(
                                 new WndTitledMessage(
                                         Icons.get(Icons.INFO),
@@ -106,7 +106,7 @@ public class WndPerks extends Window {
             cb.conduct = i;
 
             pos += GAP;
-            cb.setRect(0, pos, WIDTH, BTN_HEIGHT);
+            cb.setRect(0, pos, WIDTH-16, BTN_HEIGHT);
 
             content.add(cb);
             boxes.add(cb);
@@ -156,7 +156,6 @@ public class WndPerks extends Window {
         protected void layout() {
             super.layout();
             hotArea.width = hotArea.height = 0;
-            if (!editable) icon.alpha(0f);
         }
     }
 }
