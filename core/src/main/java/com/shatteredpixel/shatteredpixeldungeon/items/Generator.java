@@ -470,14 +470,13 @@ public class Generator {
 	public static Artifact randomArtifact() {
 
 		Category cat = Category.ARTIFACT;
-		int i = Dungeon.chances( cat.probs );
+		int i = Random.chances( cat.probs );
 
 		//if no artifacts are left, return null
 		if (i == -1){
 			return null;
 		}
 
-		cat.probs[i]--;
 		return (Artifact) Reflection.newInstance((Class<? extends Artifact>) cat.classes[i]).random();
 
 	}

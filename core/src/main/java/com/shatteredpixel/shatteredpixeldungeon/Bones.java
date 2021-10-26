@@ -25,15 +25,12 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
 import com.watabou.utils.Random;
-import com.watabou.utils.Reflection;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -148,27 +145,6 @@ public class Bones {
 				depth = 0;
 				
 				if (item == null) return null;
-
-				//Enforces artifact uniqueness
-				if (item instanceof Artifact){
-					if (Generator.removeArtifact(((Artifact)item).getClass())) {
-						
-						//generates a new artifact of the same type, always +0
-						Artifact artifact = Reflection.newInstance(((Artifact)item).getClass());
-						
-						if (artifact == null){
-							return new Gold(item.price());
-						}
-
-						artifact.cursed = true;
-						artifact.cursedKnown = true;
-
-						return artifact;
-						
-					} else {
-						return new Gold(item.price());
-					}
-				}
 				
 				if (item.isUpgradable() && !(item instanceof MissileWeapon)) {
 					item.cursed = true;
