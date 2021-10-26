@@ -95,6 +95,7 @@ public abstract class RegularLevel extends Level {
 		initRooms.add( roomExit = new ExitRoom());
 		
 		int standards = standardRooms();
+		standards *= Dungeon.cycle+1;
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
 			do {
