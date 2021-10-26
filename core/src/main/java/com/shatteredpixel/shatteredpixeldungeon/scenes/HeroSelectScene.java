@@ -343,6 +343,13 @@ public class HeroSelectScene extends PixelScene {
 							new Image(Assets.Environment.TILES_SEWERS, 112, 96, 16, 16 )
 					};
 					break;
+				case RAT_KING:
+					tabIcons = new Image[]{
+							new ItemSprite(ItemSpriteSheet.CHEESE, null),
+							new ItemSprite(ItemSpriteSheet.KING_BLADE, null),
+							Icons.get(Icons.DEPTH)
+					};
+					break;
 			}
 
 			tab = new IconTab( tabIcons[0] ){

@@ -26,7 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.noosa.Image;
 
 public enum Icons {
@@ -260,6 +262,8 @@ public enum Icons {
 			return get( ROGUE );
 		case HUNTRESS:
 			return get( HUNTRESS );
+		case RAT_KING:
+			return new ItemSprite(new Cheese());
 		default:
 			return null;
 		}
