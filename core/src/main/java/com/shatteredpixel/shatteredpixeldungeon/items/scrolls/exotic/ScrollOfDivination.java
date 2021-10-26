@@ -72,7 +72,10 @@ public class ScrollOfDivination extends ExoticScroll {
 		int total = potions.size() + scrolls.size() + rings.size();
 		
 		if (total == 0){
-			GLog.n( Messages.get(this, "nothing_left") );
+			GLog.w( Messages.get(this, "nothing_left") );
+			for (Item item : Dungeon.hero.belongings){
+				if (Random.Int(4) == 0) item.identify();
+			}
 			return;
 		}
 		
