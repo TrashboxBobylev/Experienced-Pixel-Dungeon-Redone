@@ -164,7 +164,7 @@ public abstract class Wand extends Item {
 
 	protected static void processSoulMark(Char target, int wandLevel, int chargesUsed){
 		if (target != Dungeon.hero &&
-				Dungeon.hero.subClass == HeroSubClass.WARLOCK &&
+				Dungeon.hero.isSubclass(HeroSubClass.WARLOCK) &&
 				//standard 1 - 0.92^x chance, plus 7%. Starts at 15%
 				Random.Float() > (Math.pow(0.92f, (wandLevel*chargesUsed)+1) - 0.07f)){
 			SoulMark.prolong(target, SoulMark.class, SoulMark.DURATION + wandLevel);
@@ -334,7 +334,7 @@ public abstract class Wand extends Item {
 			buff.detach();
 		}
 		
-		if (curUser.heroClass == HeroClass.MAGE) levelKnown = true;
+		if (curUser.isClass(HeroClass.MAGE)) levelKnown = true;
 		updateQuickslot();
 
 		curUser.spendAndNext( TIME_TO_ZAP );

@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
@@ -74,6 +75,11 @@ public class TomeOfMastery extends Item {
 		if (action.equals( AC_READ )) {
 			
 			curUser = hero;
+
+			if (hero.heroClass == HeroClass.RAT_KING){
+				choose(HeroSubClass.KING);
+				return;
+			}
 			
 			HeroSubClass way1 = null;
 			HeroSubClass way2 = null;

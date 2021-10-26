@@ -69,5 +69,4 @@ public enum HeroSubClass {
 		String value = bundle.getString( SUBCLASS );
 		return valueOf( value );
 	}
-	
 }

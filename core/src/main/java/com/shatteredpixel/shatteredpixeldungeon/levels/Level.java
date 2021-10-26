@@ -980,7 +980,7 @@ public abstract class Level implements Bundlable {
 		if (sighted) {
 			boolean[] blocking;
 			
-			if ((c instanceof Hero && ((Hero) c).subClass == HeroSubClass.WARDEN)
+			if ((c instanceof Hero && ((Hero) c).isSubclass(HeroSubClass.WARDEN))
 				|| c instanceof YogFist.SoiledFist) {
 				blocking = Dungeon.level.losBlocking.clone();
 				for (int i = 0; i < blocking.length; i++){
@@ -993,7 +993,7 @@ public abstract class Level implements Bundlable {
 			}
 			
 			int viewDist = c.viewDistance;
-			if (c instanceof Hero && ((Hero) c).subClass == HeroSubClass.SNIPER) viewDist *= 1.5f;
+			if (c instanceof Hero && ((Hero) c).isSubclass(HeroSubClass.SNIPER)) viewDist *= 1.5f;
 			
 			ShadowCaster.castShadow( cx, cy, fieldOfView, blocking, viewDist );
 		} else {
@@ -1009,7 +1009,7 @@ public abstract class Level implements Bundlable {
 			if (c.buff(MagicalSight.class) != null){
 				sense = 8;
 			}
-			if (((Hero)c).subClass == HeroSubClass.SNIPER){
+			if (((Hero)c).isSubclass(HeroSubClass.SNIPER)){
 				sense *= 1.5f;
 			}
 		}
@@ -1050,7 +1050,7 @@ public abstract class Level implements Bundlable {
 					}
 
 				}
-			} else if (((Hero)c).heroClass == HeroClass.HUNTRESS) {
+			} else if (((Hero)c).isClass(HeroClass.HUNTRESS)) {
 				for (Mob mob : mobs) {
 					int p = mob.pos;
 					if (distance( c.pos, p) == 2) {
@@ -1060,7 +1060,7 @@ public abstract class Level implements Bundlable {
 						}
 					}
 				}
-			} else if (((Hero)c).subClass == HeroSubClass.ASSASSIN) {
+			} else if (((Hero)c).isSubclass(HeroSubClass.ASSASSIN)) {
                 for (Mob mob : mobs) {
                     int p = mob.pos;
                     if (mob instanceof Bbat || (mob.buff(Marked.class) != null)) {

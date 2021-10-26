@@ -147,7 +147,7 @@ public class MagesStaff extends MeleeWeapon {
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 		if (wand != null &&
-				attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
+				attacker instanceof Hero && ((Hero)attacker).isSubclass(HeroSubClass.BATTLEMAGE)) {
 			if (wand.curCharges < wand.maxCharges) wand.partialCharge += 0.33f;
 			ScrollOfRecharging.charge((Hero)attacker);
 			wand.onHit(this, attacker, defender, damage);
@@ -160,7 +160,7 @@ public class MagesStaff extends MeleeWeapon {
 		int reach = super.reachFactor(owner);
 		if (owner instanceof Hero
 				&& wand instanceof WandOfDisintegration
-				&& ((Hero)owner).subClass == HeroSubClass.BATTLEMAGE){
+				&& ((Hero)owner).isSubclass(HeroSubClass.BATTLEMAGE)){
 			reach++;
 		}
 		return reach;

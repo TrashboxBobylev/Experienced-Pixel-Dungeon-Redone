@@ -206,7 +206,7 @@ public class RunicBlade extends MeleeWeapon {
                                                     if (Char.hit(curUser, enemy, true)) {
                                                         int dmg = curBlade.damageRoll(curUser);
                                                         enemy.damage(dmg, curBlade);
-                                                        if (curUser.subClass == HeroSubClass.GLADIATOR) Buff.affect( curUser, Combo.class ).hit( enemy );
+                                                        if (curUser.isSubclass(HeroSubClass.GLADIATOR)) Buff.affect( curUser, Combo.class ).hit( enemy );
                                                         curBlade.proc(curUser, enemy, dmg);
                                                         Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
                                                     } else {

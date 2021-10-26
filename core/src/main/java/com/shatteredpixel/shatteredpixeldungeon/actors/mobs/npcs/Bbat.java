@@ -63,7 +63,7 @@ public class Bbat extends Mob {
 
     @Override
     public int damageRoll() {
-        if (Dungeon.hero.subClass == HeroSubClass.ASSASSIN){
+        if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)){
             int i = Random.NormalIntRange(0, level * 2);
             if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
             return i;
@@ -73,7 +73,7 @@ public class Bbat extends Mob {
 
     @Override
     protected float attackDelay() {
-        return super.attackDelay() * (Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 0.33f : 0.5f);
+        return super.attackDelay() * (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN) ? 0.33f : 0.5f);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class Bbat extends Mob {
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (Dungeon.hero.subClass == HeroSubClass.ASSASSIN) Buff.affect(enemy, Marked.class).stack++;
+        if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)) Buff.affect(enemy, Marked.class).stack++;
         return super.attackProc(enemy, damage);
     }
 
@@ -92,7 +92,7 @@ public class Bbat extends Mob {
         Char enemy = super.chooseEnemy();
 
         int targetPos = Dungeon.hero.pos;
-        int distance = Dungeon.hero.subClass == HeroSubClass.ASSASSIN ? 99999 : 8;
+        int distance = Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN) ? 99999 : 8;
 
         //will never attack something far from their target
         if (enemy != null

@@ -122,7 +122,7 @@ public abstract class TippedDart extends Dart {
 	protected float durabilityPerUse() {
 		float use = super.durabilityPerUse();
 		
-		if (Dungeon.hero.subClass == HeroSubClass.WARDEN){
+		if (Dungeon.hero.isSubclass(HeroSubClass.WARDEN)){
 			use /= 2f;
 		}
 
