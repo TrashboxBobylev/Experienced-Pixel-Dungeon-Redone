@@ -43,27 +43,33 @@ public class MageArmor extends ClassArmor {
 	{
 		image = ItemSpriteSheet.ARMOR_MAGE;
 	}
-	
+
 	@Override
 	public void doSpecial() {
-
-		Invisibility.dispel();
-		charge -= 35;
-		updateQuickslot();
-
+		if(doMoltenEarth()) {
+			useCharge();
+			curUser.spend( Actor.TICK );
+			Invisibility.dispel();
+			curUser.sprite.operate(curUser.pos);
+			playMoltenEarthFX();
+		}
+	}
+	public static boolean doMoltenEarth() {
+		boolean success = false;
 		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 			if (Dungeon.level.heroFOV[mob.pos]
-				&& mob.alignment != Char.Alignment.ALLY) {
+					&& mob.alignment != Char.Alignment.ALLY) {
+				success = true;
 				Buff.affect( mob, Burning.class ).reignite( mob );
 				Buff.prolong( mob, Roots.class, Roots.DURATION );
-				mob.damage(Dungeon.NormalIntRange(4, 16 + Dungeon.escalatingDepth()), new Burning());
+				mob.damage(Random.NormalIntRange(4, 16 + Dungeon.depth), new Burning());
 			}
 		}
-		
-		curUser.spend( Actor.TICK );
-		curUser.sprite.operate( curUser.pos );
+		return success;
+	}
+	public static void playMoltenEarthFX() {
 		curUser.busy();
-		
+
 		curUser.sprite.emitter().start( ElmoParticle.FACTORY, 0.025f, 20 );
 		Sample.INSTANCE.play( Assets.Sounds.BURNING );
 		Sample.INSTANCE.play( Assets.Sounds.BURNING );

@@ -70,8 +70,6 @@ public class WarriorArmor extends ClassArmor {
 
 
 				Invisibility.dispel();
-				charge -= 35;
-				updateQuickslot();
 
 				final int dest = cell;
 				curUser.busy();

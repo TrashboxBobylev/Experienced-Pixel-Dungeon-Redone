@@ -52,7 +52,7 @@ import com.watabou.utils.Random;
 
 public class Combo extends Buff implements ActionIndicator.Action {
 	
-	private int count = 0;
+	public int count = 0;
 	private float comboTime = 0f;
 	private int misses = 0;
 	
@@ -181,6 +181,11 @@ public class Combo extends Buff implements ActionIndicator.Action {
 		GameScene.selectCell(finisher);
 	}
 
+	@Override
+	public boolean usable() {
+		return count > 1;
+	}
+
 	private enum finisherType{
 		CLOBBER, CLEAVE, SLAM, CRUSH, FURY
 	}
@@ -216,6 +221,8 @@ public class Combo extends Buff implements ActionIndicator.Action {
 		private void doAttack(final Char enemy){
 
 			AttackIndicator.target(enemy);
+			Buff.detach(target, Preparation.class); // not the point, otherwise this would be all that's done.
+
 
 			if (enemy.defenseSkill(target) >= Char.INFINITE_EVASION){
 				enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );

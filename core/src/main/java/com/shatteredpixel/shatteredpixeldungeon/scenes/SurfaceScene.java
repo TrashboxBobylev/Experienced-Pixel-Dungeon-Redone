@@ -362,8 +362,15 @@ public class SurfaceScene extends PixelScene {
 		private static final int HEIGHT	= 32;
 		
 		public Avatar( HeroClass cl ) {
-			super( Assets.Sprites.AVATARS );
-			frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.ordinal() ) );
+			if (cl == HeroClass.RAT_KING) {
+				// FIXME do I want this animated?
+				copy(HeroSprite.avatar(cl, 6));
+				scale.set(WIDTH/width(),HEIGHT/height());
+			}
+			else {
+				texture(Assets.Sprites.AVATARS);
+				frame( new TextureFilm( texture, WIDTH, HEIGHT ).get( cl.ordinal() ) );
+			}
 		}
 	}
 	

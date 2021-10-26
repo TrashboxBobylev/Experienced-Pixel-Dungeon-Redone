@@ -51,8 +51,6 @@ public class HuntressArmor extends ClassArmor {
 	public void doSpecial() {
 
 		Invisibility.dispel();
-		charge -= 35;
-		updateQuickslot();
 
 		Item proto = new Shuriken();
 		

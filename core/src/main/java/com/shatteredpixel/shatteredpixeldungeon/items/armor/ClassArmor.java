@@ -73,6 +73,9 @@ abstract public class ClassArmor extends Armor {
 		case HUNTRESS:
 			classArmor = new HuntressArmor();
 			break;
+			case RAT_KING:
+				classArmor = new RatKingArmor();
+				break;
 		}
 		
 		classArmor.level(armor.level() - (armor.curseInfusionBonus ? 1 : 0));
@@ -90,6 +93,11 @@ abstract public class ClassArmor extends Armor {
 		}
 		
 		return classArmor;
+	}
+
+	protected void useCharge() {
+		charge -= 35;
+		updateQuickslot();
 	}
 
 	private static final String ARMOR_TIER	= "armortier";

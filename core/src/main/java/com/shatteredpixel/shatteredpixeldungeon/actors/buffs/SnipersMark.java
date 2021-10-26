@@ -119,6 +119,7 @@ public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 		if (cell == -1) return;
 		
 		bow.sniperSpecial = true;
+		Buff.detach(target, Preparation.class);
 		
 		arrow.cast(hero, cell);
 		detach();

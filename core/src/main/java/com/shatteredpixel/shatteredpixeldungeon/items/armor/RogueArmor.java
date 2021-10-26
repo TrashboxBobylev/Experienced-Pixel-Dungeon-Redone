@@ -71,8 +71,6 @@ public class RogueArmor extends ClassArmor {
 					return;
 				}
 
-				charge -= 35;
-				updateQuickslot();
 				
 				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 					if (Dungeon.level.adjacent(mob.pos, curUser.pos) && mob.alignment != Char.Alignment.ALLY) {

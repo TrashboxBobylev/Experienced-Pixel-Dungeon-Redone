@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Image;
@@ -102,14 +103,35 @@ public class ActionIndicator extends Tag {
 			action.doAction();
 	}
 
-	public static void setAction(Action action){
+	@Override
+	protected boolean onLongClick() {
+		return findAction(true);
+	}
+
+	public static boolean setAction(Action action){
+		if(!action.usable() || ActionIndicator.action == action) return false;
 		ActionIndicator.action = action;
 		updateIcon();
+		return true;
+	}
+
+	// list of action buffs that we should replace it with.
+	private static final Class<?extends Buff>[] actionBuffClasses = new Class[]{Preparation.class, SnipersMark.class, Combo.class, Momentum.class};
+	private static boolean findAction(boolean cycle) {
+		if(action == null) cycle = false;
+		int start = -1;
+		if(cycle) while(++start < actionBuffClasses.length && !actionBuffClasses[start].isInstance(action));
+
+		for(int i = (start+1)%actionBuffClasses.length; i != start && i < actionBuffClasses.length; i++) {
+			Buff b = Dungeon.hero.buff(actionBuffClasses[i]);
+			if(b != null && setAction((Action)b)) return true;
+			if(cycle && i+1 == actionBuffClasses.length) i = -1;
+		}
+		return false;
 	}
 
 	public static void clearAction(Action action){
-		if (ActionIndicator.action == action)
-			ActionIndicator.action = null;
+		if(ActionIndicator.action == action && !findAction(false)) ActionIndicator.action = null;
 	}
 
 	public static void updateIcon(){
@@ -132,6 +154,8 @@ public class ActionIndicator extends Tag {
 		public Image getIcon();
 
 		public void doAction();
+
+		default boolean usable() { return true; }
 
 	}
 

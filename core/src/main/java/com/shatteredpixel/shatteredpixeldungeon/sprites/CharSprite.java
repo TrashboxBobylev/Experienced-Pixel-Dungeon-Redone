@@ -226,36 +226,51 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			motion.stop(false);
 		}
 	}
-	
+
+	// putting animation changes in here will guarentee that each gets to play, but the default is that they override each other.
+	// didn't expect to have to rewrite this in order to get what I want...
+	// set is used to emulate current behavior vs the delayed behavior.
+	// note that doing this also overrides auto-ending so you might want to deal with that.
+	public void doAfterAnim(Callback callback) { doAfterAnim(callback,false); }
+	protected void doAfterAnim(Callback callback, boolean set) {
+		if(animCallback != null) { // which means something is playing
+			Callback curCallback = animCallback;
+			animCallback = () -> { // this allows me to effectively stack callbacks while keeping sequence of events intact.
+				curCallback.call();
+				callback.call();
+			};
+		}
+		else if (set) animCallback = callback; // this is the internal behavior.
+		else callback.call(); // this is the public behavior.
+	}
+
 	public void attack( int cell ) {
 		turnTo( ch.pos, cell );
 		play( attack );
 	}
-	
+
 	public void attack( int cell, Callback callback ) {
-		animCallback = callback;
-		turnTo( ch.pos, cell );
-		play( attack );
+		doAfterAnim(callback,true);
+		attack(cell);
 	}
-	
+
 	public void operate( int cell ) {
 		turnTo( ch.pos, cell );
 		play( operate );
 	}
-	
+
 	public void operate( int cell, Callback callback ) {
-		animCallback = callback;
-		turnTo( ch.pos, cell );
-		play( operate );
+		doAfterAnim(callback,true);
+		operate(cell);
 	}
-	
+
 	public void zap( int cell ) {
 		turnTo( ch.pos, cell );
 		play( zap );
 	}
-	
+
 	public void zap( int cell, Callback callback ) {
-		animCallback = callback;
+		doAfterAnim(callback,true);
 		zap( cell );
 	}
 	
