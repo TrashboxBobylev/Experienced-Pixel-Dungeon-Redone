@@ -37,8 +37,8 @@ public class MeleeWeapon extends Weapon {
 
 	@Override
 	public int min(int lvl) {
-		return  tier +  //base
-				lvl;    //level scaling
+		return  tier*2 +  //base
+				lvl*2;    //level scaling
 	}
 
 	@Override
