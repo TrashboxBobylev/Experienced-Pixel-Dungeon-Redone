@@ -126,7 +126,7 @@ public class RingOfWealth extends Ring {
 			latestDropTier = 1;
 			return genLowValueConsumable();
 		//30% chance + 2% per level. Starting from +15: 60%-2%*(lvl-15)
-		} else if (roll < (0.9f - 0.02f * level)) {
+		} else if (roll < 0.9f) {
 			latestDropTier = 2;
 			return genMidValueConsumable();
 		//10% chance + 2% per level. Starting from +15: 40%+2%*(lvl-15)
