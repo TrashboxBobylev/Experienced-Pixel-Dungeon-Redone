@@ -119,6 +119,8 @@ public class Hero extends Char {
 		if (this.subClass == HeroSubClass.KING) return true;
 		return subClass == this.subClass;
 	}
+
+	public ArrayList<Perks.Perk> perks = new ArrayList<>();
 	
 	private int attackSkill = 10;
 	private int defenseSkill = 5;
@@ -201,6 +203,7 @@ public class Hero extends Char {
     private static final String TOTAL_EXPERIENCE	= "totalExp";
 	private static final String HTBOOST     = "htboost";
 	private static final String GRINDING = "grinding";
+	private static final String PERKS = "perks";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -209,6 +212,7 @@ public class Hero extends Char {
 		
 		heroClass.storeInBundle( bundle );
 		subClass.storeInBundle( bundle );
+		Perks.storeInBundle(bundle, perks);
 		
 		bundle.put( ATTACK, attackSkill );
 		bundle.put( DEFENSE, defenseSkill );
@@ -232,6 +236,7 @@ public class Hero extends Char {
 		
 		heroClass = HeroClass.restoreInBundle( bundle );
 		subClass = HeroSubClass.restoreInBundle( bundle );
+		Perks.restoreFromBundle(bundle, perks);
 		
 		attackSkill = bundle.getInt( ATTACK );
 		defenseSkill = bundle.getInt( DEFENSE );

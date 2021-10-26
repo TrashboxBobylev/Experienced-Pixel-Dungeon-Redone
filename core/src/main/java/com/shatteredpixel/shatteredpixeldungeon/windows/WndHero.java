@@ -33,10 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Group;
@@ -112,6 +109,16 @@ public class WndHero extends WndTabbed {
 			title.color(Window.SHPX_COLOR);
 			title.setRect( 0, 0, WIDTH, 0 );
 			add(title);
+			IconButton perkInfo = new IconButton(Icons.get(Icons.INFO)){
+				@Override
+				protected void onClick() {
+					super.onClick();
+					hide();
+					GameScene.show(new WndPerks(hero.perks, false));
+				}
+			};
+			perkInfo.setRect(WIDTH - 15, title.top()-2.5f, 16, 16);
+			add(perkInfo);
 
 			pos = title.bottom() + 2*GAP;
 
