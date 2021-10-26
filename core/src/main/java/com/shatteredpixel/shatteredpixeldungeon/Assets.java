@@ -206,6 +206,7 @@ public class Assets {
 		public static final String MAGE		= "splashes/mage.jpg";
 		public static final String ROGUE	= "splashes/rogue.jpg";
 		public static final String HUNTRESS	= "splashes/huntress.jpg";
+		public static final String RATKING = "splashes/ratking.jpg";
 	}
 
 	public static class Sprites {
@@ -275,5 +276,6 @@ public class Assets {
 		public static final String LOTUS	= "sprites/lotus.png";
 		public static final String HOOKS = "sprites/hooks.png";
 		public static final String EXP_GEN = "sprites/expgen.png";
+		public static final String RAT_KING_HERO = "sprites/ratkinghero.png";
 	}
 }

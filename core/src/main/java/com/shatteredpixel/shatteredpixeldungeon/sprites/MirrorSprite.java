@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
@@ -49,7 +50,7 @@ public class MirrorSprite extends MobSprite {
 	}
 	
 	public void updateArmor( int tier ) {
-		TextureFilm film = new TextureFilm( HeroSprite.tiers(), tier, FRAME_WIDTH, FRAME_HEIGHT );
+		TextureFilm film = new TextureFilm( HeroSprite.tiers(Assets.Sprites.ROGUE, FRAME_HEIGHT), tier, FRAME_WIDTH, FRAME_HEIGHT );
 		
 		idle = new Animation( 1, true );
 		idle.frames( film, 0, 0, 0, 1, 0, 0, 1, 1 );
