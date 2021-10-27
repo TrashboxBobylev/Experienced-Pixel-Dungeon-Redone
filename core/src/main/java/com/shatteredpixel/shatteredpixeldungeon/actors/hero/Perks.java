@@ -56,7 +56,9 @@ public class Perks {
             }
         },
         PROTEIN_INFUSION,
-        FISHING_PRO;
+        FISHING_PRO,
+        WAND_PRO,
+        IRON_WILL;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
@@ -57,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -65,6 +67,8 @@ import com.watabou.utils.Random;
 
 import java.util.Arrays;
 import java.util.HashSet;
+
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks.Perk.IRON_WILL;
 
 public abstract class Char extends Actor {
 	
@@ -491,6 +495,14 @@ public abstract class Char extends Actor {
 		}
 		shielded -= dmg;
 		HP -= dmg;
+		if (this instanceof Hero && srcClass != Viscosity.DeferedDamage.class && HP <= 0 &&
+				((Hero) this).perks.contains(IRON_WILL)){
+			HP += dmg;
+			Camera.main.shake(4, 0.25f);
+			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY);
+			Buff.affect(this, Viscosity.DeferedDamage.class).
+					prolong(dmg * 4);
+		}
 		
 		if (sprite != null) {
 			sprite.showStatus(HP > HT / 2 ?
