@@ -525,6 +525,14 @@ public class Hero extends Char {
 			spendAndNext( TICK );
 			return false;
 		}
+		if (!(curAction instanceof HeroAction.Move))
+			if (buff(Perks.DirectiveMovingTracker.class) != null) {
+				if (buff(Perks.DirectiveMovingTracker.class).count() > -1) {
+					Buff.detach(this, Perks.DirectiveMovingTracker.class);
+				} else {
+					buff(Perks.DirectiveMovingTracker.class).countUp(1);
+				}
+			}
 		
 		boolean actResult;
 		if (curAction == null) {
@@ -994,6 +1002,8 @@ public class Hero extends Char {
 
 		if (wep != null) damage = wep.proc( this, enemy, damage );
 
+		damage = Perks.onAttackProc( this, enemy, damage );
+
 		if (isSubclass(HeroSubClass.SNIPER)) {
 			if (wep instanceof MissileWeapon && !(wep instanceof SpiritBow.SpiritArrow)) {
 				Actor.add(new Actor() {
@@ -1235,11 +1245,19 @@ public class Hero extends Char {
 		if (step != -1) {
 			
 			float speed = speed();
-			
+
 			sprite.move(pos, step);
 			move(step);
-
-			spend( 1 / speed );
+			if (buff(Perks.DirectiveMovingTracker.class) != null){
+				Perks.DirectiveMovingTracker b = buff(Perks.DirectiveMovingTracker.class);
+				b.countUp(1);
+				if (b.count() >= 3){
+					b.detach();
+				}
+			}
+			else {
+				spend(1 / speed);
+			}
 			justMoved = true;
 			
 			search(false);

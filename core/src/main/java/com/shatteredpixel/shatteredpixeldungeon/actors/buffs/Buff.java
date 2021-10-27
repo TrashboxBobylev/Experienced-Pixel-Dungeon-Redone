@@ -41,7 +41,7 @@ public class Buff extends Actor {
 		actPriority = BUFF_PRIO; //low priority, towards the end of a turn
 	}
 
-	//determines how the buff is announced when it is shown.
+    //determines how the buff is announced when it is shown.
 	public enum buffType {POSITIVE, NEGATIVE, NEUTRAL}
 	public buffType type = buffType.NEUTRAL;
 	
@@ -166,5 +166,11 @@ public class Buff extends Actor {
 		for ( Buff b : target.buffs( cl )){
 			b.detach();
 		}
+	}
+
+	public static<T extends CounterBuff> T count( Char target, Class<T> buffclass, float count ) {
+		T buff = affect( target, buffclass );
+		buff.countUp( count );
+		return buff;
 	}
 }
