@@ -60,7 +60,8 @@ public class Perks {
         WAND_PRO,
         IRON_WILL,
         MYSTICAL_MEAL,
-        ADDITIONAL_MONEY;
+        ADDITIONAL_MONEY,
+        BETTER_BARTERING;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

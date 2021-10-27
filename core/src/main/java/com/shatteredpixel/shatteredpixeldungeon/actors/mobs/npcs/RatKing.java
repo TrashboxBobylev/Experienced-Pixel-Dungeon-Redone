@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -124,6 +125,7 @@ public class RatKing extends NPC {
             Sample.INSTANCE.play( Assets.Sounds.PUFF );
         }
 		if (barter.items.size() > 0){
+		    if (!Dungeon.hero.perks.contains(Perks.Perk.BETTER_BARTERING) || Random.Int(3) != 0)
 		        barter.items.remove(barter.items.size() - 1);
             Item item;
             do {
