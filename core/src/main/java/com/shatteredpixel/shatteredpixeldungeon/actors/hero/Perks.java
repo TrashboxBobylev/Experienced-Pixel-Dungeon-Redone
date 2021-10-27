@@ -62,7 +62,8 @@ public class Perks {
         MYSTICAL_MEAL,
         ADDITIONAL_MONEY,
         BETTER_BARTERING,
-        POTIONS;
+        POTIONS,
+        MORE_BAG;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

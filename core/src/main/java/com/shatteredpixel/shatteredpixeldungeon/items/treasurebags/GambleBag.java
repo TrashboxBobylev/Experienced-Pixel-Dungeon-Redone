@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -40,6 +42,7 @@ public class GambleBag extends TreasureBag {
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
         int amount = Random.Int(0, 15);
+        if (Dungeon.hero.perks.contains(Perks.Perk.MORE_BAG)) amount *= 1.5f;
         for(int i = 0; i < amount; i++) items.add(Generator.random());
         return items;
     }

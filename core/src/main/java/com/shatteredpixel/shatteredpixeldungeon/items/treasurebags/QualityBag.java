@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
@@ -35,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScrol
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -47,42 +49,46 @@ public class QualityBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        Weapon wep = Generator.randomWeapon(Dungeon.depth+1);
-        wep.cursed = false;
-        if (wep.hasCurseEnchant()) wep.enchant();
-        wep.identify();
-        items.add(wep);
+        int amount = 1;
+        if (Dungeon.hero.perks.contains(Perks.Perk.MORE_BAG) && Random.Int(2) == 0) amount = 2;
+        for (int i = 0; i < amount; i++) {
+            Weapon wep = Generator.randomWeapon(Dungeon.depth + 1);
+            wep.cursed = false;
+            if (wep.hasCurseEnchant()) wep.enchant();
+            wep.identify();
+            items.add(wep);
 
-        Armor arm = Generator.randomArmor(Dungeon.depth+1);
-        arm.cursed = false;
-        if (arm.hasCurseGlyph()) arm.inscribe();
-        arm.identify();
-        items.add(arm);
+            Armor arm = Generator.randomArmor(Dungeon.depth + 1);
+            arm.cursed = false;
+            if (arm.hasCurseGlyph()) arm.inscribe();
+            arm.identify();
+            items.add(arm);
 
-        Ring ring = (Ring) Generator.random(Generator.Category.RING);
-        ring.cursed = false;
-        ring.identify();
-        items.add(ring);
+            Ring ring = (Ring) Generator.random(Generator.Category.RING);
+            ring.cursed = false;
+            ring.identify();
+            items.add(ring);
 
-        Artifact artifact = Generator.randomArtifact();
-        if (artifact != null) {
-            artifact.cursed = false;
-            artifact.identify();
-            items.add(artifact);
+            Artifact artifact = Generator.randomArtifact();
+            if (artifact != null) {
+                artifact.cursed = false;
+                artifact.identify();
+                items.add(artifact);
+            }
+
+            items.add(Generator.randomUsingDefaults(Generator.Category.SCROLL).random());
+            items.add(Reflection.newInstance(ExoticPotion.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.SCROLL).getClass())));
+            items.add(Generator.randomUsingDefaults(Generator.Category.POTION).random());
+            items.add(Reflection.newInstance(ExoticScroll.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.POTION).getClass())));
+
+            items.add(Generator.random(Generator.Category.FOOD));
+            items.add(Generator.random(Generator.Category.STONE));
+            Wand wand = (Wand) Generator.random(Generator.Category.WAND);
+            wand.cursed = false;
+            items.add(wand);
+
+            items.add(Generator.random(Generator.Category.SEED));
         }
-
-        items.add(Generator.randomUsingDefaults(Generator.Category.SCROLL).random());
-        items.add(Reflection.newInstance(ExoticPotion.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.SCROLL).getClass())));
-        items.add(Generator.randomUsingDefaults(Generator.Category.POTION).random());
-        items.add(Reflection.newInstance(ExoticScroll.exoToReg.get(Generator.randomUsingDefaults(Generator.Category.POTION).getClass())));
-
-        items.add(Generator.random(Generator.Category.FOOD));
-        items.add(Generator.random(Generator.Category.STONE));
-        Wand wand = (Wand) Generator.random(Generator.Category.WAND);
-        wand.cursed = false;
-        items.add(wand);
-
-        items.add(Generator.random(Generator.Category.SEED));
 
         return items;
     }

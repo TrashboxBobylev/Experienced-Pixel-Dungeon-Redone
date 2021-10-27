@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
@@ -58,7 +60,9 @@ public class AlchemyBag extends TreasureBag {
                 PhaseShift.class, Recycle.class, Vampirism.class,
                 StewedMeat.class, Firebomb.class, Flashbang.class, FrostBomb.class, HolyBomb.class, Noisemaker.class,
                 RegrowthBomb.class, ShockBomb.class, WoollyBomb.class);
-        items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(Random.Int(1, 4)));
+        int amount = Random.Int(1, 4);
+        if (Dungeon.hero.perks.contains(Perks.Perk.MORE_BAG)) amount *= 1.5f;
+        items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(amount));
         return items;
     }
 
