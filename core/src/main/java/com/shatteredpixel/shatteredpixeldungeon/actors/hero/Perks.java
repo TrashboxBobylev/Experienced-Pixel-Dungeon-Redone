@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -31,9 +32,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -41,7 +44,8 @@ import java.util.ArrayList;
 public class Perks {
     public enum Perk {
         SUCKER_PUNCH,
-        DIRECTIVE;
+        DIRECTIVE,
+        FOLLOW_UP_STRIKE;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");
@@ -66,6 +70,7 @@ public class Perks {
     }
     public static class SuckerPunchTracker extends Buff{}
     public static class DirectiveTracker extends FlavourBuff {}
+    public static class FollowupStrikeTracker extends Buff{};
     public static class DirectiveMovingTracker extends CounterBuff {
         public int duration() { return 3;}
         public float iconFadePercent() { return Math.max(0, 1f - ((count()) / (duration()))); }
@@ -95,6 +100,17 @@ public class Perks {
             }, 0);
 
             Buff.affect(enemy, DirectiveTracker.class);
+        }
+        if (hero.perks.contains(Perk.FOLLOW_UP_STRIKE)) {
+            if (hero.belongings.weapon instanceof MissileWeapon) {
+                Buff.affect(enemy, FollowupStrikeTracker.class);
+            } else if (enemy.buff(FollowupStrikeTracker.class) != null){
+                damage += hero.damageRoll()/4;
+                if (!(enemy instanceof Mob) || !((Mob) enemy).surprisedBy(hero)){
+                    Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
+                }
+                enemy.buff(FollowupStrikeTracker.class).detach();
+            }
         }
         return damage;
     }
