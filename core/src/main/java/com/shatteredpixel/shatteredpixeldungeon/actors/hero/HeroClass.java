@@ -55,6 +55,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSt
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
 
+import java.util.Arrays;
+
 public enum HeroClass {
 
 	WARRIOR( "warrior", HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
@@ -115,7 +117,7 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		new PsycheChest().collect();
-		hero.perks.add(Perks.Perk.HOLD_FAST);
+		hero.perks.addAll(Arrays.asList(Perks.Perk.values()));
 		hero.grinding = true;
 	}
 

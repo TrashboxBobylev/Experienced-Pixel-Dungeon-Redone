@@ -364,6 +364,10 @@ public class Hero extends Char {
 		if (belongings.armor != null) {
 			evasion = belongings.armor.evasionFactor(this, evasion);
 		}
+		if (perks.contains(Perks.Perk.PROTEIN_INFUSION)){
+			int hunger = buff(Hunger.class).hunger();
+			evasion *= 1f + 0.5f*((Hunger.STARVING - hunger)/Hunger.STARVING);
+		}
 
 		return Math.round(evasion);
 	}
@@ -432,6 +436,10 @@ public class Hero extends Char {
 		if (momentum != null){
 			((HeroSprite)sprite).sprint( 1f + 0.05f*momentum.stacks());
 			speed *= momentum.speedMultiplier();
+		}
+		if (perks.contains(Perks.Perk.PROTEIN_INFUSION)){
+			int hunger = buff(Hunger.class).hunger();
+			speed *= 1f + 1f*((Hunger.STARVING - hunger)/Hunger.STARVING);
 		}
 		
 		return speed;

@@ -54,7 +54,8 @@ public class Perks {
             public String desc() {
                 return Messages.get(Perks.class, name() + ".desc", HoldFast.minArmor(), HoldFast.armor());
             }
-        };
+        },
+        PROTEIN_INFUSION;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");
