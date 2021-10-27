@@ -58,7 +58,8 @@ public class Perks {
         PROTEIN_INFUSION,
         FISHING_PRO,
         WAND_PRO,
-        IRON_WILL;
+        IRON_WILL,
+        MYSTICAL_MEAL;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");
