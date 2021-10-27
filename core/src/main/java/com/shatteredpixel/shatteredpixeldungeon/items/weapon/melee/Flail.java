@@ -41,7 +41,7 @@ public class Flail extends MeleeWeapon {
 
 	@Override
 	public int max(int lvl) {
-		return  Math.round(7*(tier+1)) +        //35 base, up from 25
-				lvl*Math.round(1.6f*(tier+1));  //+8 per level, up from +5
+		return  Math.round(8*(tier+1)) +        //40 base, up from 30
+				lvl*Math.round(2f*(tier+1));  //+10 per level, up from +6
 	}
 }

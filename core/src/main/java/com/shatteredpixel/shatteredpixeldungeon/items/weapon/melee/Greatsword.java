@@ -49,6 +49,12 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
+    public int max(int lvl) {
+        return  6*(tier+1) +    //36
+                lvl*(tier+2);   //+7
+    }
+
+    @Override
     public String statsInfo() {
         return Messages.get(this, "stats_desc", 9 + Dungeon.escalatingDepth() * 3);
     }
