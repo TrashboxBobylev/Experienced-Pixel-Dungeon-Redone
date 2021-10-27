@@ -1447,7 +1447,8 @@ public class Hero extends Char {
 	}
 	
 	public static int maxExp( int lvl ){
-		if (Dungeon.hero.heroClass == HeroClass.RAT_KING) return 3 + lvl*4;
+		HeroClass heroClass = Dungeon.hero == null ? GamesInProgress.selectedClass: Dungeon.hero.heroClass;
+		if (heroClass == HeroClass.RAT_KING) return 3 + lvl*4;
 		return 5 + lvl * 5;
 	}
 	
