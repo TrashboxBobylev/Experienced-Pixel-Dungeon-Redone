@@ -32,12 +32,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -116,7 +119,15 @@ public class Perks {
     }
 
     public static void earnPerk(Hero hero){
-
+        if (hero.lvl % 12 == 0 && hero.lvl < 12*Perk.values().length){
+            Perk perk;
+            do {
+                perk = Random.element(Perk.values());
+            } while (hero.perks.contains(perk));
+            hero.perks.add(perk);
+            GLog.p(Messages.get(Perks.class, "perk_obtain", perk.toString()));
+            hero.sprite.emitter().burst(Speck.factory(Speck.MASTERY), 20);
+        }
     }
 
     public static void storeInBundle(Bundle bundle, ArrayList<Perk> perks) {

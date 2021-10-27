@@ -115,8 +115,6 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		new PsycheChest().collect();
-		hero.perks.add(Perks.Perk.SUCKER_PUNCH);
-		hero.perks.add(Perks.Perk.DIRECTIVE);
 		hero.grinding = true;
 	}
 
