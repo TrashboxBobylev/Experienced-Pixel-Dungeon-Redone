@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -48,7 +49,12 @@ public class Perks {
     public enum Perk {
         SUCKER_PUNCH,
         DIRECTIVE,
-        FOLLOW_UP_STRIKE;
+        FOLLOW_UP_STRIKE,
+        HOLD_FAST{
+            public String desc() {
+                return Messages.get(Perks.class, name() + ".desc", HoldFast.minArmor(), HoldFast.armor());
+            }
+        };
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

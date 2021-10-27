@@ -391,6 +391,9 @@ public class Hero extends Char {
 		
 		Blocking.BlockBuff block = buff(Blocking.BlockBuff.class);
 		if (block != null)              dr += block.blockingRoll();
+		if (buff(HoldFast.class) != null){
+			dr += Random.NormalIntRange(HoldFast.minArmor(), HoldFast.armor());
+		}
 		
 		return dr;
 	}
@@ -989,6 +992,9 @@ public class Hero extends Char {
 	public void rest( boolean fullRest ) {
 		spendAndNext( TIME_TO_REST );
 		if (!fullRest) {
+			if (perks.contains(Perks.Perk.HOLD_FAST)){
+				Buff.affect(this, HoldFast.class);
+			}
 			sprite.showStatus( CharSprite.DEFAULT, Messages.get(this, "wait") );
 		}
 		resting = fullRest;

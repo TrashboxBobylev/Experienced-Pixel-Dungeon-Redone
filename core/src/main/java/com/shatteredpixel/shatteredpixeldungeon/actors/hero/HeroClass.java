@@ -115,6 +115,7 @@ public enum HeroClass {
 		new ScrollOfIdentify().identify();
 
 		new PsycheChest().collect();
+		hero.perks.add(Perks.Perk.HOLD_FAST);
 		hero.grinding = true;
 	}
 
