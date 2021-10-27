@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class PotionOfExperience extends Potion {
@@ -40,7 +41,9 @@ public class PotionOfExperience extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-        Buff.prolong(hero, Bless.class, Bless.DURATION*8);
+		float duration = Bless.DURATION * 8;
+		if (hero.perks.contains(Perks.Perk.POTIONS)) duration *= 2;
+		Buff.prolong(hero, Bless.class, duration);
 	}
 	
 	@Override

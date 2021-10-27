@@ -61,7 +61,8 @@ public class Perks {
         IRON_WILL,
         MYSTICAL_MEAL,
         ADDITIONAL_MONEY,
-        BETTER_BARTERING;
+        BETTER_BARTERING,
+        POTIONS;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

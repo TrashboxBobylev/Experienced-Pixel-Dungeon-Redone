@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Overload;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class PotionOfHolyFuror extends ExoticPotion {
@@ -38,7 +39,9 @@ public class PotionOfHolyFuror extends ExoticPotion {
 	@Override
 	public void apply( Hero hero ) {
 		setKnown();
-		Buff.prolong(hero, Overload.class, 200);
+		int duration = 200;
+		if (hero.perks.contains(Perks.Perk.POTIONS)) duration *= 2;
+		Buff.prolong(hero, Overload.class, duration);
 	}
 	
 }
