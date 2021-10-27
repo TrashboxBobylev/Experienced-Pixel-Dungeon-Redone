@@ -667,7 +667,7 @@ public abstract class Mob extends Char {
 			EXP /= 2;
 		}
 
-		if (buff(OldCavesBossLevel.ArenaBuff.class) != null) EXP = 0;
+		if (buff(OldCavesBossLevel.ArenaBuff.class) != null) EXP /= 2;
 
 		if (alignment == Alignment.ENEMY){
 			rollToDropLoot();

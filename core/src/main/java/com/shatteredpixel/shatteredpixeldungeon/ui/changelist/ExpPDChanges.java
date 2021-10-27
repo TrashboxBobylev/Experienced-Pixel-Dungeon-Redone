@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.BlackPsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
 import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
@@ -43,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
@@ -55,17 +57,27 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.9.5", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.10", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
-                "_-_ Released October 14th, 2021\n" +
-                        "_-_ 40 days after Experienced Pixel Dungeon 2.9.4\n" +
+                "_-_ Released October 27th, 2021\n" +
+                        "_-_ 53 days after Experienced Pixel Dungeon 2.9.4\n" +
+                        "_-_ 361 day after Experienced Pixel Dungeon 2.9\n\n" +
                         "\n" +
                         "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(HeroSprite.avatar(HeroClass.RAT_KING, 6), "New class!",
+                "His Ratiness joins the battle for greed and loot, with his signature ability being everything he wants to be and faster leveling from RKD!"));
+        changes.addButton( new ChangeButton(new Image(Assets.Interfaces.BUFFS_LARGE, 80, 32, 16, 16), "Perks",
+                "Each 10th level you will get a random neat bonus, called Perk. Right now there is 12 of them." ));
         changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
                 "_-_ Fixed certain issues with infinity turns.\n\n" +
-                        "_-_ Fishing no longer uses luck."));
+                        "_-_ Levels are bigger at higher cycles.\n\n" +
+                        "_-_ Artifacts are no longer enforced to be unique.\n\n" +
+                        "_-_ Massively buffed most of melee weapons.\n\n" +
+                        "_-_ Greataxe uses one turn regardless of targets.\n\n" +
+                        "_-_ Arena mobs give 50% XP instead of 0.\n\n" +
+                        "_-_ Fishing no longer uses luck and no longer exclusively uses purple tier at higher levels."));
 
             changes = new ChangeInfo("ExpPD-2.9.4", true, "");
             changes.hardlight(Window.TITLE_COLOR);
