@@ -1388,10 +1388,11 @@ public class Hero extends Char {
                     Dungeon.level.drop(sou, pos);
                 } else if (!souAnnounced){
                     GLog.p( Messages.get(this, "you_now_have", sou.name()) );
+					new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
                     souAnnounced = true;
                 }
             }
-            new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
+
         }
 		
 		boolean levelUp = false;
@@ -1408,6 +1409,7 @@ public class Hero extends Char {
             Bbat.updateHP();
             attackSkill++;
             defenseSkill++;
+            Perks.earnPerk(this);
 
         }
 		
