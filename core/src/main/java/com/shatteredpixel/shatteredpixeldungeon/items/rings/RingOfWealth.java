@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
@@ -85,6 +86,7 @@ public class RingOfWealth extends Ring {
 				do {
 					i = genConsumableDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
+				if (Dungeon.hero.perks.contains(Perks.Perk.FISHING_PRO) && Random.Int(4) == 0) i.quantity(i.quantity()*2);
 				drops.add(i);
 				dropsToRare--;
 			}
