@@ -141,6 +141,7 @@ public class Perks {
             } while (hero.perks.contains(perk));
             hero.perks.add(perk);
             GLog.p(Messages.get(Perks.class, "perk_obtain", perk.toString()));
+            if (hero.sprite != null)
             hero.sprite.emitter().burst(Speck.factory(Speck.MASTERY), 20);
         }
     }

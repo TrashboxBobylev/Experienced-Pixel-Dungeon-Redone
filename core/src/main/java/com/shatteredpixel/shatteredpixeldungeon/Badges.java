@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -117,6 +116,7 @@ public class Badges {
 		MASTERY_MAGE,
 		MASTERY_ROGUE,
 		MASTERY_HUNTRESS,
+		MASTERY_RAT_KING,
 		UNLOCK_MAGE( 65 ),
 		UNLOCK_ROGUE( 66 ),
 		UNLOCK_HUNTRESS( 67 ),
@@ -684,6 +684,9 @@ public class Badges {
 			break;
 		case HUNTRESS:
 			badge = Badge.MASTERY_HUNTRESS;
+			break;
+		case RAT_KING:
+			badge = Badge.MASTERY_RAT_KING;
 			break;
 		}
 		
