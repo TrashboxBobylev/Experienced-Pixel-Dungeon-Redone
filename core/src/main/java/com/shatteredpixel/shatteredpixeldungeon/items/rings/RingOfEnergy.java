@@ -55,14 +55,14 @@ public class RingOfEnergy extends Ring {
 	
 	public static float wandChargeMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Energy.class) == 1) multiplier = 1.2f;
+        if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.2f;
         if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.01;
         return multiplier;
 	}
 
 	public static float artifactChargeMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Energy.class) == 1) multiplier = 1.1f;
+        if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.1f;
         if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.005;
         return multiplier;
 	}

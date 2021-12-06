@@ -51,7 +51,7 @@ public class RingOfEvasion extends Ring {
 	
 	public static float evasionMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Evasion.class) == 1) multiplier = 1.2f;
+        if (getBuffedBonus(target, Evasion.class) > 0) multiplier = 1.2f;
         if (getBuffedBonus(target, Evasion.class) > 1) multiplier += getBuffedBonus(target, Evasion.class)*0.001;
         return multiplier;
 	}

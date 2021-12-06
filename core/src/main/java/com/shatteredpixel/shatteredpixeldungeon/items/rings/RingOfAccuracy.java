@@ -51,7 +51,7 @@ public class RingOfAccuracy extends Ring {
 	
 	public static float accuracyMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Accuracy.class) == 1) multiplier = 1.2f;
+        if (getBuffedBonus(target, Accuracy.class) > 0) multiplier = 1.2f;
         if (getBuffedBonus(target, Accuracy.class) > 1) multiplier += getBuffedBonus(target, Accuracy.class)*0.0075;
 		return multiplier;
 	}

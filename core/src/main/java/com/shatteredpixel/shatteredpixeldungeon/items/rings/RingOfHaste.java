@@ -51,7 +51,7 @@ public class RingOfHaste extends Ring {
 	
 	public static float speedMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Haste.class) == 1) multiplier = 1.1f;
+        if (getBuffedBonus(target, Haste.class) > 0) multiplier = 1.1f;
         if (getBuffedBonus(target, Haste.class) > 1) multiplier += getBuffedBonus(target, Haste.class)*0.001;
         return multiplier;
 	}
