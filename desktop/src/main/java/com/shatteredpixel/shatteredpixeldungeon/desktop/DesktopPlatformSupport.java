@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.watabou.noosa.Game;
 import com.watabou.utils.PlatformSupport;
 import com.watabou.utils.Point;
-
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.util.HashMap;
@@ -43,6 +42,7 @@ public class DesktopPlatformSupport extends PlatformSupport {
 	
 	@Override
 	public void updateDisplaySize() {
+		//FIXME we still set window resolution when game becomes maximized =/
 		if (!SPDSettings.fullscreen()) {
 			SPDSettings.windowResolution( new Point( Game.width, Game.height ) );
 		}

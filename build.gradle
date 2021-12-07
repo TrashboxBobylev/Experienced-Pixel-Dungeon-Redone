@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         //FIXME the version of R8 coming with gradle plugin 4.0.0 causes serious problems
@@ -21,9 +21,9 @@ allprojects {
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
-        appAndroidCompileSDK = 29
-        appAndroidMinSDK = 9
-        appAndroidTargetSDK = 29
+        appAndroidCompileSDK = 30
+        appAndroidMinSDK = 14
+        appAndroidTargetSDK = 30
 
         gdxVersion = '1.10.0'
     }
@@ -31,7 +31,7 @@ allprojects {
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
 }

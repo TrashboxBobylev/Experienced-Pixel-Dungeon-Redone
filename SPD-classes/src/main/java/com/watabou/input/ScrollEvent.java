@@ -32,9 +32,9 @@ import java.util.ArrayList;
 public class ScrollEvent {
 	
 	public PointF pos;
-	public int amount;
+	public float amount;
 	
-	public ScrollEvent(PointF mousePos, int amount){
+	public ScrollEvent(PointF mousePos, float amount){
 		this.amount = amount;
 		this.pos = mousePos;
 	}
