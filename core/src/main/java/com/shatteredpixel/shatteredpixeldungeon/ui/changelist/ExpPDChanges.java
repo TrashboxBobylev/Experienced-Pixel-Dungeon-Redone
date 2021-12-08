@@ -56,7 +56,30 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.10.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.102", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released December 8th, 2021\n" +
+                        "_-_ 41 day after Experienced Pixel Dungeon 2.10.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
+                "_-_ Fixed softlocks from chalice by overhauling regeneration.\n\n" +
+                        "_-_ Rarity of items inside of categories is longer affected luck (should remove prevalence of 2 types of wands or rings).\n\n" +
+                        "_-_ Fixed rings giving much less benefits than shown in their description.\n\n" +
+                        "_-_ Fixed RK's mirror images.\n\n" +
+                        "_-_ Added an icon for older Android versions."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                "_-_ New level gen algorithm.\n" +
+                        "_-_ Added HP number to health bar.\n" +
+                        "_-_ Quick-use UI.\n" +
+                        "_-_ Items with cone AoEs can trickshot.\n" +
+                        "_-_ Web can burn and wands can shoot through web.\n" +
+                        "_-_ Overhauled On Diet, Faith is my Armor and Pharmo."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.10.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
