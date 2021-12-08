@@ -132,7 +132,7 @@ public class WandOfEarthblast extends DamageWand {
 		int d = 3 + (chargesPerCast()-1);
 		int dist = Math.min(bolt.dist, d);
 
-		final ConeAOE cone = new ConeAOE(bolt, d, 90, collisionProperties );
+		cone = new ConeAOE(bolt, d, 90, collisionProperties );
 
 		//cast to cells at the tip, rather than all cells, better performance.
 		for (Ballistica ray : cone.rays){
