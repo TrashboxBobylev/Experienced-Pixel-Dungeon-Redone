@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -132,10 +132,7 @@ public class WandOfEarthblast extends DamageWand {
 		int d = 3 + (chargesPerCast()-1);
 		int dist = Math.min(bolt.dist, d);
 
-		cone = new ConeAOE( bolt.sourcePos, bolt.path.get(dist),
-				d,
-				90,
-				collisionProperties);
+		final ConeAOE cone = new ConeAOE(bolt, d, 90, collisionProperties );
 
 		//cast to cells at the tip, rather than all cells, better performance.
 		for (Ballistica ray : cone.rays){
