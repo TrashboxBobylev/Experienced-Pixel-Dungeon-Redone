@@ -114,7 +114,7 @@ public abstract class FishingRod extends Item {
                     return;
                 }
 
-                final Ballistica hooking = new Ballistica(curUser.pos, target, Ballistica.STOP_TARGET | Ballistica.STOP_TERRAIN);
+                final Ballistica hooking = new Ballistica(curUser.pos, target, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID);
 
                 if (!(Dungeon.level.water[hooking.collisionPos] && !Dungeon.level.solid[hooking.collisionPos])) {
                     GLog.w(Messages.get(FishingRod.class, "no_water"));
