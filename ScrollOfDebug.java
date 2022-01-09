@@ -37,7 +37,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import sun.net.www.protocol.file.FileURLConnection;
-
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
  *
@@ -49,33 +48,12 @@ import sun.net.www.protocol.file.FileURLConnection;
  * @implNote The storage mechanism for the classes is currently...not needed and I may simplify it down to a standard list.
  *
  * @author Zrp200
- * @version v0.0.0
+ * @version v0.0.1
  * **/
 @SuppressWarnings("rawtypes")
 public class ScrollOfDebug extends Scroll {
     {
         image = ItemSpriteSheet.SCROLL_HOLDER;
-    }
-
-    @Override
-    public boolean isIdentified() {
-        return true;
-    }
-
-    @Override
-    public String name() {
-        return "Scroll of Debug";
-    }
-
-    @Override
-    public String desc() { 
-        return "A scroll that gives you great power, letting you create virtually any item or mob in the game" 
-                + "\n\nCurrently supported commands are: " 
-                + "\n_- spawn_ (spawns a mob, given as a separate argument like 'summon goo') " 
-                + "_- give_ (as in 'give amulet'), which creates and puts into your inventory the generated item. It also supports quantity ('+#') and upgrades ('+#')."
-                + "_- help_ (gives a list of all possible inputs that can be given to the other two commands)"
-                + "\n\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously." 
-                + "\n\nThe scroll currently does not function on mobile devices.";
     }
 
     @Override
@@ -96,7 +74,7 @@ public class ScrollOfDebug extends Scroll {
 
                     String output =
                             getRefCmdClasses("give", Item.class, trie) +
-                            getRefCmdClasses("spawn", Mob.class, trie);
+                                    getRefCmdClasses("spawn", Mob.class, trie);
                     GameScene.show(new WndTitledMessage(new ItemSprite(ScrollOfDebug.this), "Available Classes", output.trim()));
                 }
                 if (commands.length > 1) {
@@ -147,6 +125,26 @@ public class ScrollOfDebug extends Scroll {
             }
         });
     }
+
+    @Override public String name() {
+        return "Scroll of Debug";
+    }
+    @Override public String desc() {
+        return "A scroll that gives you great power, letting you create virtually any item or mob in the game."
+                +"\n\nCommands:"
+                +"\n\n_- spawn_ MOB"
+                +"\nSummons the indicated mob and randomly places them on the depth."
+                +"\n\n_- give_ ITEM [_+_LEVEL] [_x_QUANTITY]"
+                +"\nCreates and puts into your inventory the generated item."
+                +"\n\n_- help_"
+                +"\nGives a (very long) list of all possible inputs that can be given to the other two commands."
+                +"\n\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously. "
+                +"\nThe scroll also currently does not function on mobile devices.";
+    }
+    @Override public boolean isIdentified() {
+        return true;
+    }
+    @Override public boolean isKnown() { return true; }
 
     // gets the corresponding help menu.
     String getRefCmdClasses(String command, Class baseClass, PackageTrie trie) {
@@ -271,8 +269,13 @@ public class ScrollOfDebug extends Scroll {
         }
         // this is probably not efficient or even taking advantage of what I've done.
         public Class<?> getClass(String className) {
-            for(Class<?> cls : classes) if(cls.getName().toLowerCase(Locale.ROOT).endsWith(className.toLowerCase(Locale.ROOT)))
-                return cls;
+            boolean hasQualifiers = className.matches("[.$]");
+            for(Class<?> cls : classes) {
+                boolean match = hasQualifiers
+                        ? cls.getName().toLowerCase(Locale.ROOT).endsWith( className.toLowerCase(Locale.ROOT) )
+                        : cls.getSimpleName().equalsIgnoreCase(className);
+                if(match) return cls;
+            }
             return null;
         }
 
@@ -401,7 +404,7 @@ public class ScrollOfDebug extends Scroll {
             if(index == -1) continue;
 
             name = name.substring(0, index)
-                       .replace('/', '.');
+                    .replace('/', '.');
 
             Class<?> cls;
             if (name.contains(pckgname) && canInstantiate(cls = Class.forName(name))) {
