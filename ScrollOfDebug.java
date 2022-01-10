@@ -1,23 +1,36 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
-import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Reflection;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-
+// Commands
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+// needed for HelpWindow
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+// WndTextInput (added in v0.9.4)
 import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
+// Output
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
+
+import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.ui.Component;
+import com.watabou.utils.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,18 +50,16 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import sun.net.www.protocol.file.FileURLConnection;
+
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
  *
- * Currently the commands supported are
- * 'give' (which gives an item),
- * 'spawn' (which spawns a mob),
- * 'help' (which dumps a list of classes that can be attempted to interact with)
+ * See Command for a description of all commands.
  *
  * @implNote The storage mechanism for the classes is currently...not needed and I may simplify it down to a standard list.
  *
  * @author Zrp200
- * @version v0.0.1
+ * @version v0.1.0
  * **/
 @SuppressWarnings("rawtypes")
 public class ScrollOfDebug extends Scroll {
@@ -56,52 +67,116 @@ public class ScrollOfDebug extends Scroll {
         image = ItemSpriteSheet.SCROLL_HOLDER;
     }
 
+    private enum Command {
+        HELP(null, // ...
+                "[COMMAND | all]",
+                "Gives more information on commands, or in the case of 'all', all of them."),
+        GIVE(Item.class,
+                "ITEM [_+_LEVEL] [_x_QUANTITY]",
+                "Creates and puts into your inventory the generated item."),
+        SPAWN(Mob.class,
+                "MOB",
+                "Summons the indicated mob and randomly places them on the depth."),
+        AFFECT(Buff.class,
+                "BUFF [duration]",
+                "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing.");
+
+        final Class<?> paramClass;
+        final String syntax, description;
+        Command(Class<?> paramClass, String syntax, String description) {
+            this.paramClass = paramClass;
+            this.syntax = syntax;
+            this.description = description;
+        }
+
+        @Override public String toString() { return name().toLowerCase(); }
+
+        String documentation() { return documentation(this, syntax, description); }
+        static String documentation(Object command, String syntax, String description) {
+            return String.format("_%s_ %s\n%s", command, syntax, description);
+        }
+
+        // adds more information depending on what the paramClass actually is.
+        String fullDocumentation(PackageTrie trie) {
+            String documentation = documentation();
+            if(paramClass != null) {
+                documentation += "\n\n_Valid Classes_:" + trie.listAllClasses(paramClass);
+            }
+            return documentation;
+        }
+
+
+        static Command get(String string) { try {
+            return valueOf(string.toUpperCase());
+        } catch (Exception e) { return null; } }
+    }
+
     @Override
     public void doRead() {
+        collect(); // you don't lose scroll of debug.
         GameScene.show(new WndTextInput("Enter Command:", "", 100, false,
                 "Execute", "Cancel") {
-            @Override
-            public void onSelect(boolean positive, String text) {
+            @Override public void onSelect(boolean positive, String text) {
+                if(!positive) return;
+
                 if (trie == null) try {
                     trie = getClassesForPackage("com");
                 } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
-                String[] commands = text.split(" ");
 
-                // help command.
-                // todo allow specification of package to narrow results, and perhaps a verbose argument to see whole package.
-                if (commands[0].equalsIgnoreCase("help")) {
-                    // this does not display properly on shpd-based mods, as only rkpd2-based mods have autoscroll.
+                String[] input = text.split(" ");
 
-                    String output =
-                            getRefCmdClasses("give", Item.class, trie) +
-                                    getRefCmdClasses("spawn", Mob.class, trie);
-                    GameScene.show(new WndTitledMessage(new ItemSprite(ScrollOfDebug.this), "Available Classes", output.trim()));
+                Command command; try { command = Command.valueOf(input[0].toUpperCase()); }
+                catch (Exception e) {
+                    GLog.w("\""+input[0]+"\" is not a valid command.");
+                    return;
                 }
-                if (commands.length > 1) {
-                    Class cls = trie.findClass(commands[1]);
 
-                    if (commands[0].equalsIgnoreCase("spawn")) {
-                        if (cls != null && Mob.class.isAssignableFrom(cls)) {
-                            Mob mob = Reflection.newInstance((Class<Mob>) cls);
+                if(command == Command.HELP) {
+                    String output = null;
+                    boolean all = false;
+                    if(input.length > 1) {
+                        // we only care about the initial argument.
+                        Command cmd = Command.get(input[1]);
+                        if(cmd != null) output = cmd.fullDocumentation(trie);
+                        else all = input[1].equalsIgnoreCase("all");
+                    }
+                    if(output == null) {
+                        StringBuilder builder = new StringBuilder();
+                        for(Command cmd : Command.values()) {
+                            if(all) {
+                                // extensive. help is omitted because we are using help.
+                                if(cmd != Command.HELP) {
+                                    builder.append("\n\n").append(cmd.fullDocumentation(trie));
+                                }
+                            } else {
+                                // by default attempt to shorten the command list as much as possible.
+                                builder.append(String.format("\n_%s_: %s", cmd, cmd.description));
+                            }
+                        }
+                        output = builder.toString().trim();
+                    }
+                    GameScene.show(new HelpWindow(output));
+                } else if(input.length > 1) {
+                    final Class cls = trie.findClass(input[1]);
+                    boolean valid = true;
+                    Object o = null; try {
+                        o = Reflection.newInstanceUnhandled(cls);
+                    } catch (Exception e) { valid = false; }
+                    if (valid && command.paramClass.isInstance(o)) switch (command) {
+                        case SPAWN: Mob mob = (Mob)o;
                             mob.pos = Dungeon.level.randomRespawnCell(mob);
-
-                            if (mob.pos != -1) {
+                            if(mob.pos != 1) {
                                 GameScene.add(mob);
                                 GLog.w("Summoned " + mob.name());
                             }
-                        } else {
-                            GLog.w("Mob not found.");
-                        }
-                    } else if (commands[0].equalsIgnoreCase("give")) {
-                        Item item;
-                        // todo add enchants/glyphs for weapons/armor?
-                        if (cls != null && Item.class.isAssignableFrom(cls)
-                                && ( item = Reflection.newInstance((Class<Item>)cls) ) != null) {
+                            break;
+                        case GIVE: Item item = (Item)o;
                             item.identify();
+                            // todo add enchants/glyphs for weapons/armor?
                             // process modifiers left to right (so later ones have higher precedence)
-                            for(int i=2; i < commands.length; i++) try {
-                                int number = Integer.parseInt(commands[i].substring(1));
-                                switch(commands[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
+                            for(int i=2; i < input.length; i++) try {
+                                int number = Integer.parseInt(input[i].substring(1));
+                                switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
                                     case 'x':
                                         item.quantity(number);
                                         break;
@@ -110,7 +185,6 @@ public class ScrollOfDebug extends Scroll {
                                         break;
                                 }
                             } catch (NumberFormatException e) {/* do nothing */}
-
                             if (item.collect()) {
                                 boolean important = item.unique && (item instanceof Scroll || item instanceof Potion);
                                 String pickupMessage = Messages.get(curUser, "you_now_have", item);
@@ -118,10 +192,59 @@ public class ScrollOfDebug extends Scroll {
                                 Sample.INSTANCE.play(Assets.Sounds.ITEM);
                                 GameScene.pickUp(item, curUser.pos);
                             }
-                        }
-                    }
-                }
-                collect();
+                            break;
+                        case AFFECT:
+                            Buff buff = (Buff)o;
+
+                            Float d = null;
+                            if(input.length > 2) try {
+                                d = Float.parseFloat(input[2]);
+                            } catch (NumberFormatException e) {/*do nothing*/}
+                            final Float duration = d;
+
+                            GameScene.selectCell(new CellSelector.Listener() {
+                                @Override public String prompt() {
+                                    return "Select the character to apply the buff to:";
+                                }
+                                @Override public void onSelect(Integer cell) {
+                                    Char target;
+                                    if(cell == null || cell == -1 || (target = Actor.findChar(cell)) == null) return;
+                                    Buff added = null;
+                                    if(duration != null) {
+                                        // this is the fun part.
+                                        if(buff instanceof FlavourBuff) added = Buff.affect(target, cls, duration);
+                                        else {
+                                            String[] methodNames = input.length > 3 ? new String[]{input[3]} :
+                                                    new String[]{"set","prolong","extend"};
+                                            Class[] paramTypes = {float.class, int.class};
+                                            for(String methodName : methodNames) for(Class paramType : paramTypes) try {
+                                                cls.getMethod(methodName, paramType)
+                                                        .invoke(added, paramType == float.class ? duration : duration.intValue());
+                                                break;
+                                            } catch (NoSuchMethodException e) {/*continue*/}
+                                            catch (Exception e) { e.printStackTrace(); }
+                                        }
+                                    }
+                                    if(added == null) {
+                                        added = Buff.affect(target, cls);
+                                    }
+                                    // manual announce.
+                                    if(added.icon() == BuffIndicator.NONE && !added.announced) {
+                                        int color; switch(added.type) {
+                                            case POSITIVE:
+                                                color = CharSprite.POSITIVE;
+                                            case NEGATIVE:
+                                                color = CharSprite.NEGATIVE;
+                                            default:
+                                                color = CharSprite.NEUTRAL;
+                                        }
+                                        target.sprite.showStatus(color, added.toString());
+                                    }
+                                }
+                            });
+                            break;
+                    } else GLog.w( "%s \"%s\" not found.", command.paramClass.getSimpleName(), input[1]);
+                } else onSelect(true, "help " + text); // lazy me, I know.
             }
         });
     }
@@ -130,35 +253,19 @@ public class ScrollOfDebug extends Scroll {
         return "Scroll of Debug";
     }
     @Override public String desc() {
-        return "A scroll that gives you great power, letting you create virtually any item or mob in the game."
-                +"\n\nCommands:"
-                +"\n\n_- spawn_ MOB"
-                +"\nSummons the indicated mob and randomly places them on the depth."
-                +"\n\n_- give_ ITEM [_+_LEVEL] [_x_QUANTITY]"
-                +"\nCreates and puts into your inventory the generated item."
-                +"\n\n_- help_"
-                +"\nGives a (very long) list of all possible inputs that can be given to the other two commands."
-                +"\n\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously. "
-                +"\nThe scroll also currently does not function on mobile devices.";
+        StringBuilder builder = new StringBuilder();
+        builder.append("A scroll that gives you great power, letting you create virtually any item or mob in the game.")
+                .append("\n\nCommands:");
+        for(Command cmd : Command.values()) builder.append("\n\n_-_ ").append(cmd.documentation());
+        return builder.append("\n"
+                + "\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously. "
+                + "\nThe scroll also currently does not function on mobile devices.")
+                .toString();
     }
     @Override public boolean isIdentified() {
         return true;
     }
     @Override public boolean isKnown() { return true; }
-
-    // gets the corresponding help menu.
-    String getRefCmdClasses(String command, Class baseClass, PackageTrie trie) {
-        ClassNameMap names = new ClassNameMap();
-        for(Class cls : trie.getAllClasses()) {
-            if(baseClass.isAssignableFrom(cls)) names.put(cls.getSimpleName(), cls);
-        }
-        StringBuilder result = new StringBuilder();
-        if(!names.isEmpty()) {
-            result.append("\n\n_").append(command).append("_:");
-            for(String name : names.getNames()) result.append("\n_-_ ").append(name);
-        }
-        return result.toString();
-    }
 
     // ensures name uniqueness for help display. treemap so things are sorted.
     private static class ClassNameMap extends HashMap<String, Class> {
@@ -213,6 +320,19 @@ public class ScrollOfDebug extends Scroll {
     static class PackageTrie {
         private final HashMap<String, PackageTrie> subTries = new HashMap<>();
         private final ArrayList<Class<?>> classes = new ArrayList<>();
+
+        // this is used for displaying valid arguments for commands, currently.
+        String listAllClasses(Class<?> parent) {
+            ClassNameMap names = new ClassNameMap();
+            for(Class cls : getAllClasses()) {
+                if(parent.isAssignableFrom(cls)) names.put(cls.getSimpleName(), cls);
+            }
+            StringBuilder result = new StringBuilder();
+            if(!names.isEmpty()) {
+                for(String name : names.getNames()) result.append("\n_-_ ").append(name);
+            }
+            return result.toString();
+        }
 
         private void add(String pkg, PackageTrie tree) {
             if(!tree.isEmpty()) subTries.put(pkg, tree);
@@ -291,6 +411,48 @@ public class ScrollOfDebug extends Scroll {
             PackageTrie stored = subTries.get(pkg);
             if(stored == null) subTries.put(pkg, stored = new PackageTrie());
             return stored;
+        }
+    }
+
+    // including RKPD2 scrolling window code.
+    private static class HelpWindow extends Window {
+        private static final int WIDTH_MIN=120, WIDTH_MAX=220;
+        HelpWindow(String message) {
+            int width = WIDTH_MIN;
+
+            RenderedTextBlock text = PixelScene.renderTextBlock(6);
+            text.text(message, width);
+            //text.setPos(titlebar.left(), titlebar.bottom() + 2 * GAP);
+
+            while (PixelScene.landscape()
+                    && text.bottom() > (PixelScene.MIN_HEIGHT_L - 10)
+                    && width < WIDTH_MAX) {
+                text.maxWidth(width += 20);
+            }
+
+            //Component comp = new Component();
+            //comp.add(text);
+            //text.setPos(0, GAP);
+            //comp.setSize(text.width(), text.height() + GAP * 2);
+            //resize(width, (int) Math.min((int) comp.bottom() + 2 + titlebar.height() + GAP, maxHeight()));*/
+
+            int height = (int)text.bottom();
+            int maxHeight = (int)(PixelScene.uiCamera.height * 0.9);
+            boolean needScrollPane = height > maxHeight;
+            if(needScrollPane) height = maxHeight;
+            resize((int)text.width(), height);
+            if(needScrollPane) {
+                Component wrapper = new Component();
+                wrapper.setSize(text.width(), text.height());
+                ScrollPane sp = new ScrollPane(wrapper);
+                add(sp);
+                wrapper.add(text);
+                text.setPos(0,0);
+                sp.setSize(wrapper.width(), height);
+            }
+            else {
+                add(text);
+            }
         }
     }
 
