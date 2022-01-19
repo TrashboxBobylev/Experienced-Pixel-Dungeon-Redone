@@ -1,16 +1,20 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 // Commands
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -28,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
 // Output
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Reflection;
 
@@ -54,32 +57,40 @@ import sun.net.www.protocol.file.FileURLConnection;
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
  *
- * See Command for a description of all commands.
+ * @implNote This only works on .jar versions of the game.
  *
- * @implNote The storage mechanism for the classes is currently...not needed and I may simplify it down to a standard list.
- *
- * @author Zrp200
- * @version v0.1.0
+ * @author  <a href="https://github.com/zrp200/scrollofdebug">
+ *              Zrp200
+ * @version v0.2.0
  * **/
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ScrollOfDebug extends Scroll {
     {
         image = ItemSpriteSheet.SCROLL_HOLDER;
     }
+
+    /** this is where all the game files are supposed to be located. **/
+    private static final String ROOT = "com.shatteredpixel.shatteredpixeldungeon";
 
     private enum Command {
         HELP(null, // ...
                 "[COMMAND | all]",
                 "Gives more information on commands, or in the case of 'all', all of them."),
         GIVE(Item.class,
-                "ITEM [_+_LEVEL] [_x_QUANTITY]",
+                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force]",
                 "Creates and puts into your inventory the generated item."),
         SPAWN(Mob.class,
                 "MOB",
                 "Summons the indicated mob and randomly places them on the depth."),
+        SET(Trap.class,
+                "TRAP",
+                "Sets a trap at an indicated position"),
         AFFECT(Buff.class,
                 "BUFF [duration]",
-                "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing.");
+                "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing."),
+        SEED(Blob.class,
+                "BLOB [amount]",
+                "Seeds a blob of the specified amount to a targeted tile");
 
         final Class<?> paramClass;
         final String syntax, description;
@@ -119,10 +130,6 @@ public class ScrollOfDebug extends Scroll {
             @Override public void onSelect(boolean positive, String text) {
                 if(!positive) return;
 
-                if (trie == null) try {
-                    trie = getClassesForPackage("com");
-                } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
-
                 String[] input = text.split(" ");
 
                 Command command; try { command = Command.valueOf(input[0].toUpperCase()); }
@@ -157,12 +164,12 @@ public class ScrollOfDebug extends Scroll {
                     }
                     GameScene.show(new HelpWindow(output));
                 } else if(input.length > 1) {
-                    final Class cls = trie.findClass(input[1]);
+                    final Class cls = trie.findClass(input[1], command.paramClass);
                     boolean valid = true;
                     Object o = null; try {
                         o = Reflection.newInstanceUnhandled(cls);
                     } catch (Exception e) { valid = false; }
-                    if (valid && command.paramClass.isInstance(o)) switch (command) {
+                    if (valid) switch (command) {
                         case SPAWN: Mob mob = (Mob)o;
                             mob.pos = Dungeon.level.randomRespawnCell(mob);
                             if(mob.pos != 1) {
@@ -170,27 +177,56 @@ public class ScrollOfDebug extends Scroll {
                                 GLog.w("Summoned " + mob.name());
                             }
                             break;
+                        case SET:
+                            Trap t = (Trap)o;
+                            GameScene.selectCell(new CellSelector.Listener() {
+                                @Override
+                                public void onSelect(Integer cell) {
+                                    if(cell ==  null || cell == -1) return;
+                                    // currently manually set traps are always revealed.
+                                    Dungeon.level.setTrap(t.set(cell).reveal(), cell);
+                                    Level.set(cell, Terrain.TRAP);
+                                }
+                                @Override public String prompt() {
+                                    return "Select location of trap:";
+                                }
+                            });
+                            break;
                         case GIVE: Item item = (Item)o;
                             item.identify();
                             // todo add enchants/glyphs for weapons/armor?
                             // process modifiers left to right (so later ones have higher precedence)
+                            boolean collect = false;
                             for(int i=2; i < input.length; i++) try {
-                                int number = Integer.parseInt(input[i].substring(1));
-                                switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
-                                    case 'x':
-                                        item.quantity(number);
-                                        break;
-                                    case '+':
-                                        item.level(number);
-                                        break;
+                                if(input[i].startsWith("--force") || input[i].equalsIgnoreCase("-f")) {
+                                    collect = true;
+                                }
+                                else {
+                                    int number = Integer.parseInt(input[i].substring(1));
+                                    switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
+                                        case 'x':
+                                            item.quantity(number);
+                                            break;
+                                        case '+':
+                                            item.level(number);
+                                            break;
+                                    }
                                 }
                             } catch (NumberFormatException e) {/* do nothing */}
-                            if (item.collect()) {
+                            Item toPickUp = collect ? new Item() {
+                                // create wrapper item that simulates doPickUp while actually just calling collect.
+                                { image = item.image; }
+                                @Override public boolean collect(Bag container) {
+                                    return item.collect(container);
+                                }
+                            } : item;
+                            if (toPickUp.doPickUp(curUser)) {
+                                // ripped from Hero#actPickUp, kinda.
                                 boolean important = item.unique && (item instanceof Scroll || item instanceof Potion);
                                 String pickupMessage = Messages.get(curUser, "you_now_have", item);
                                 if(important) GLog.p(pickupMessage); else GLog.i(pickupMessage);
-                                Sample.INSTANCE.play(Assets.Sounds.ITEM);
-                                GameScene.pickUp(item, curUser.pos);
+                                // attempt to nullify turn usage.
+                                curUser.spend(-curUser.cooldown());
                             }
                             break;
                         case AFFECT:
@@ -233,8 +269,10 @@ public class ScrollOfDebug extends Scroll {
                                         int color; switch(added.type) {
                                             case POSITIVE:
                                                 color = CharSprite.POSITIVE;
+                                                break;
                                             case NEGATIVE:
                                                 color = CharSprite.NEGATIVE;
+                                                break;
                                             default:
                                                 color = CharSprite.NEUTRAL;
                                         }
@@ -243,6 +281,21 @@ public class ScrollOfDebug extends Scroll {
                                 }
                             });
                             break;
+                        case SEED:
+                            int a = 1;
+                            if(input.length > 2) try {
+                                a = Integer.parseInt(input[2]);
+                            } catch (Exception e) {/*do nothing*/}
+                            final int amount = a;
+                            GameScene.selectCell(new CellSelector.Listener() {
+                                @Override public String prompt() {
+                                    return "Select the tile to seed the blob:";
+                                }
+                                @Override public void onSelect(Integer cell) {
+                                    if(cell == null) return;
+                                    GameScene.add(Blob.seed(cell, amount, (Class<Blob>)cls));
+                                }
+                            });
                     } else GLog.w( "%s \"%s\" not found.", command.paramClass.getSimpleName(), input[1]);
                 } else onSelect(true, "help " + text); // lazy me, I know.
             }
@@ -258,8 +311,8 @@ public class ScrollOfDebug extends Scroll {
                 .append("\n\nCommands:");
         for(Command cmd : Command.values()) builder.append("\n\n_-_ ").append(cmd.documentation());
         return builder.append("\n"
-                + "\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously. "
-                + "\nThe scroll also currently does not function on mobile devices.")
+                        + "\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously. "
+                        + "\nThe scroll also currently does not function on mobile devices.")
                 .toString();
     }
     @Override public boolean isIdentified() {
@@ -314,6 +367,11 @@ public class ScrollOfDebug extends Scroll {
 
     public static ClassLoader loader = ScrollOfDebug.class.getClassLoader();
     public static PackageTrie trie = null; // loaded when needed.
+    static {
+        try {
+            trie = getClassesForPackage(ROOT);
+        } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
+    }
 
     // this structure is *probably* not needed, but if you wanted to be able to filter easily by directory this makes it easy.
     // and I kiinda wanted to do this.
@@ -362,10 +420,10 @@ public class ScrollOfDebug extends Scroll {
             return null;
         }
 
-        private Class<?> findClass(String name) {
-            return findClass(name.split("\\."), 0);
+        private Class<?> findClass(String name, Class parent) {
+            return findClass(name.split("\\."), parent, 0);
         }
-        private Class<?> findClass(String[] path, int i) {
+        private Class<?> findClass(String[] path, Class parent, int i) {
             if(i == path.length) return null;
 
             Class<?> found = null;
@@ -373,13 +431,13 @@ public class ScrollOfDebug extends Scroll {
             if(i+1 < path.length) {
                 match = getPackage(path[i]);
                 if (match != null) {
-                    found = match.findClass(path, i + 1);
-                    if (found != null) return found;
+                    found = match.findClass(path, parent, i + 1);
+                    if (found != null && (parent == null || parent.isAssignableFrom(found)) ) return found;
                 }
-            } else if( ( found = getClass(path[i]) ) != null) return found;
+            } else if( ( found = getClass(path[i]) ) != null && (parent == null || parent.isAssignableFrom(found))) return found;
             ArrayList<PackageTrie> toSearch = new ArrayList(subTries.values());
             toSearch.remove(match);
-            for(PackageTrie tree : toSearch) if( (found = tree.findClass(path,i)) != null ) break;
+            for(PackageTrie tree : toSearch) if( (found = tree.findClass(path,parent,i)) != null ) break;
             return found;
         }
 
