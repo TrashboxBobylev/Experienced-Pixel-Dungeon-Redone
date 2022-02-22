@@ -1,42 +1,3 @@
-Index: core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
-diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java
---- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java	(revision d5b092a88882a6ba6deb9e04d1853940307e69e6)
-+++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java	(date 1642623156245)
-@@ -101,6 +101,7 @@
- import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
- import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
- import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfDebug;
- import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
- import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
- import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-@@ -140,6 +141,7 @@
- import com.watabou.noosa.audio.Sample;
- import com.watabou.utils.Bundle;
- import com.watabou.utils.Callback;
-+import com.watabou.utils.DeviceCompat;
- import com.watabou.utils.GameMath;
- import com.watabou.utils.PathFinder;
- import com.watabou.utils.Point;
-@@ -208,7 +210,13 @@
- 		STR = STARTING_STR;
- 		
- 		belongings = new Belongings( this );
--		
-+		// scroll of debug: autocollect, put in last slot as that's least likely to be occupied.
-+		// Note DeviceCompat.isDebug prevents scroll of debug from appearing in release versions of the game.
-+		if(DeviceCompat.isDebug() && DeviceCompat.isDesktop()) {
-+			ScrollOfDebug debug = new ScrollOfDebug();
-+			if(debug.collect(belongings.backpack)) Dungeon.quickslot.setSlot(3, debug);
-+		}
-+
- 		visibleEnemies = new ArrayList<>();
- 	}
- 	
 Index: core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/items/scrolls/ScrollOfDebug.java
 IDEA additional info:
 Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
@@ -44,10 +5,12 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 ===================================================================
 diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/items/scrolls/ScrollOfDebug.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/items/scrolls/ScrollOfDebug.java
 new file mode 100644
---- /dev/null	(date 1642622484123)
-+++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/items/scrolls/ScrollOfDebug.java	(date 1642622484123)
-@@ -0,0 +1,645 @@
+--- /dev/null	(date 1645488647704)
++++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/items/scrolls/ScrollOfDebug.java	(date 1645488647704)
+@@ -0,0 +1,707 @@
 +package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
++
++import static java.util.Arrays.copyOfRange;
 +
 +import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 +import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -87,17 +50,13 @@ new file mode 100644
 +import java.io.File;
 +import java.io.IOException;
 +import java.io.UnsupportedEncodingException;
++import java.lang.reflect.Method;
 +import java.lang.reflect.Modifier;
 +import java.net.JarURLConnection;
 +import java.net.URL;
 +import java.net.URLConnection;
 +import java.net.URLDecoder;
-+import java.util.ArrayList;
-+import java.util.Collections;
-+import java.util.Enumeration;
-+import java.util.HashMap;
-+import java.util.Locale;
-+import java.util.Map;
++import java.util.*;
 +import java.util.jar.JarEntry;
 +import java.util.jar.JarFile;
 +
@@ -110,7 +69,7 @@ new file mode 100644
 + *
 + * @author  <a href="https://github.com/zrp200/scrollofdebug">
 + *              Zrp200
-+ * @version v0.2.0
++ * @version v0.2.1
 + * **/
 +@SuppressWarnings({"rawtypes", "unchecked"})
 +public class ScrollOfDebug extends Scroll {
@@ -125,8 +84,10 @@ new file mode 100644
 +        HELP(null, // ...
 +                "[COMMAND | all]",
 +                "Gives more information on commands, or in the case of 'all', all of them."),
++        // todo add more debug-oriented commands
++        // generation commands.
 +        GIVE(Item.class,
-+                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force]",
++                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force] [ METHOD [args] ]",
 +                "Creates and puts into your inventory the generated item."),
 +        SPAWN(Mob.class,
 +                "MOB",
@@ -135,7 +96,7 @@ new file mode 100644
 +                "TRAP",
 +                "Sets a trap at an indicated position"),
 +        AFFECT(Buff.class,
-+                "BUFF [duration]",
++                "BUFF [duration] [METHOD [args]]",
 +                "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing."),
 +        SEED(Blob.class,
 +                "BLOB [amount]",
@@ -246,22 +207,28 @@ new file mode 100644
 +                            // todo add enchants/glyphs for weapons/armor?
 +                            // process modifiers left to right (so later ones have higher precedence)
 +                            boolean collect = false;
++                            int last = 1;
 +                            for(int i=2; i < input.length; i++) try {
 +                                if(input[i].startsWith("--force") || input[i].equalsIgnoreCase("-f")) {
 +                                    collect = true;
++                                    last = i;
 +                                }
 +                                else {
 +                                    int number = Integer.parseInt(input[i].substring(1));
 +                                    switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
 +                                        case 'x':
 +                                            item.quantity(number);
++                                            last = i;
 +                                            break;
 +                                        case '+':
 +                                            item.level(number);
++                                            last = i;
 +                                            break;
 +                                    }
 +                                }
 +                            } catch (NumberFormatException e) {/* do nothing */}
++                            if(++last < input.length) executeMethod(input[last++],
++                                    item, copyOfRange(input, last, input.length));
 +                            Item toPickUp = collect ? new Item() {
 +                                // create wrapper item that simulates doPickUp while actually just calling collect.
 +                                { image = item.image; }
@@ -277,16 +244,11 @@ new file mode 100644
 +                                // attempt to nullify turn usage.
 +                                curUser.spend(-curUser.cooldown());
 +                            }
++                            // worth a shot.
 +                            break;
 +                        case AFFECT:
 +                            Buff buff = (Buff)o;
-+
-+                            Float d = null;
-+                            if(input.length > 2) try {
-+                                d = Float.parseFloat(input[2]);
-+                            } catch (NumberFormatException e) {/*do nothing*/}
-+                            final Float duration = d;
-+
++                            // fixme perhaps have special logic for when additional arguments in general are passed to non-flavor buffs.
 +                            GameScene.selectCell(new CellSelector.Listener() {
 +                                @Override public String prompt() {
 +                                    return "Select the character to apply the buff to:";
@@ -295,20 +257,37 @@ new file mode 100644
 +                                    Char target;
 +                                    if(cell == null || cell == -1 || (target = Actor.findChar(cell)) == null) return;
 +                                    Buff added = null;
-+                                    if(duration != null) {
-+                                        // this is the fun part.
-+                                        if(buff instanceof FlavourBuff) added = Buff.affect(target, cls, duration);
-+                                        else {
-+                                            String[] methodNames = input.length > 3 ? new String[]{input[3]} :
-+                                                    new String[]{"set","prolong","extend"};
-+                                            Class[] paramTypes = {float.class, int.class};
-+                                            for(String methodName : methodNames) for(Class paramType : paramTypes) try {
-+                                                cls.getMethod(methodName, paramType)
-+                                                        .invoke(added, paramType == float.class ? duration : duration.intValue());
-+                                                break;
-+                                            } catch (NoSuchMethodException e) {/*continue*/}
-+                                            catch (Exception e) { e.printStackTrace(); }
++                                    int index = 2;
++
++                                    boolean success = false;
++
++                                    if(index >= input.length)
++                                    {
++                                        // no additional arguments.
++                                        Buff.affect(target, cls);
++                                    }
++                                    else {
++                                        if(buff instanceof FlavourBuff) {
++                                            try {
++                                                added = Buff.affect(target,cls,Float.parseFloat(input[index]));
++                                                index++;
++                                            } catch (NumberFormatException e) {
++                                                added = Buff.affect(target,cls);
++                                            }
++                                        } else {
++                                            added = Buff.affect(target, cls);
++                                            // check some common methods for active buffs
++                                            String[] methodNames = {"set", "reset", "prolong", "extend"};
++                                            for(String methodName : methodNames) {
++                                                if(success = executeMethod(methodName,added, copyOfRange(input,index,input.length)))
++                                                    break;
++                                            }
 +                                        }
++                                        // attempt to call a specified method.
++                                        if(!success &&
++                                                index < input.length
++                                                && !executeMethod(input[index], added, copyOfRange(input,index+1,input.length))
++                                        ) GLog.w("Warning: No supported method matching "+input[index]+" was found.");
 +                                    }
 +                                    if(added == null) {
 +                                        added = Buff.affect(target, cls);
@@ -368,6 +347,48 @@ new file mode 100644
 +        return true;
 +    }
 +    @Override public boolean isKnown() { return true; }
++
++    // fixme there's no way to know how many arguments were actually used, which forces this to be the last command.
++    /** dynamic method execution logic **/
++    boolean executeMethod(String methodName, Object obj, String... args) {
++        ArrayList<Method> methods = new ArrayList<>();
++        for(Method method : obj.getClass().getMethods()) {
++            if(method.getName().equalsIgnoreCase(methodName)) methods.add(method);
++        }
++        Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
++        methodLookup: for(Method method : methods) {
++            Object[] params = new Object[method.getParameterTypes().length];
++            if(params.length > args.length) continue;
++            try {
++                for(int i=0; i < params.length; i++) {
++                    Class type = method.getParameterTypes()[i];
++                    if (type == int.class || type == Integer.class)
++                        params[i] = Integer.parseInt(args[i]);
++                    else if (type == float.class || type == Float.class)
++                        params[i] = Float.parseFloat(args[i]);
++                    else if(Enum.class.isAssignableFrom(type)) {
++                        for(String name : new String[]{
++                                args[i], args[i].toUpperCase(), args[i].toLowerCase()
++                        }) try { params[i] = Enum.valueOf(type,name); } catch (IllegalArgumentException e) {/*continue*/}
++                    }
++                    // Char is omitted for consistency's sake. support will be added later.
++                    else if (!Char.class.isAssignableFrom(type)) {
++                        if(Class.class.isAssignableFrom(type)) {
++                            params[i] = trie.findClass(args[i], Object.class);
++                        } else {
++                            params[i] = trie.findClass(args[i], type);
++                            params[i] = Reflection.newInstanceUnhandled((Class)params[i]);
++                        }
++                        if(params[i] == null) continue methodLookup;
++                    }
++                    else continue methodLookup; // unsupported
++                }
++                method.invoke(obj, params);
++                return true;
++            } catch (Exception e) {/*do nothing */}
++        }
++        return false;
++    }
 +
 +    // ensures name uniqueness for help display. treemap so things are sorted.
 +    private static class ClassNameMap extends HashMap<String, Class> {
@@ -472,6 +493,7 @@ new file mode 100644
 +        private Class<?> findClass(String name, Class parent) {
 +            return findClass(name.split("\\."), parent, 0);
 +        }
++        // known issues: duplicated classes may mask each other.
 +        private Class<?> findClass(String[] path, Class parent, int i) {
 +            if(i == path.length) return null;
 +
@@ -484,6 +506,7 @@ new file mode 100644
 +                    if (found != null && (parent == null || parent.isAssignableFrom(found)) ) return found;
 +                }
 +            } else if( ( found = getClass(path[i]) ) != null && (parent == null || parent.isAssignableFrom(found))) return found;
++            else found = null;
 +            ArrayList<PackageTrie> toSearch = new ArrayList(subTries.values());
 +            toSearch.remove(match);
 +            for(PackageTrie tree : toSearch) if( (found = tree.findClass(path,parent,i)) != null ) break;
@@ -496,7 +519,7 @@ new file mode 100644
 +        }
 +        // this is probably not efficient or even taking advantage of what I've done.
 +        public Class<?> getClass(String className) {
-+            boolean hasQualifiers = className.matches("[.$]");
++            boolean hasQualifiers = className.contains("$") || className.contains(".");
 +            for(Class<?> cls : classes) {
 +                boolean match = hasQualifiers
 +                        ? cls.getName().toLowerCase(Locale.ROOT).endsWith( className.toLowerCase(Locale.ROOT) )
@@ -693,3 +716,42 @@ new file mode 100644
 +
 +}
 \ No newline at end of file
+Index: core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java
+--- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java	(revision 5d1a2dce6b554b40f6737ead45d411fd98f4c67d)
++++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/actors/hero/Hero.java	(date 1645488647702)
+@@ -101,6 +101,7 @@
+ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
+ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
+ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
++import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfDebug;
+ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+@@ -140,6 +141,7 @@
+ import com.watabou.noosa.audio.Sample;
+ import com.watabou.utils.Bundle;
+ import com.watabou.utils.Callback;
++import com.watabou.utils.DeviceCompat;
+ import com.watabou.utils.GameMath;
+ import com.watabou.utils.PathFinder;
+ import com.watabou.utils.Point;
+@@ -208,7 +210,13 @@
+ 		STR = STARTING_STR;
+
+ 		belongings = new Belongings( this );
+-
++		// scroll of debug: autocollect, put in last slot as that's least likely to be occupied.
++		// Note DeviceCompat.isDebug prevents scroll of debug from appearing in release versions of the game.
++		if(DeviceCompat.isDebug() && DeviceCompat.isDesktop()) {
++			ScrollOfDebug debug = new ScrollOfDebug();
++			if(debug.collect(belongings.backpack)) Dungeon.quickslot.setSlot(3, debug);
++		}
++
+ 		visibleEnemies = new ArrayList<>();
+ 	}
+

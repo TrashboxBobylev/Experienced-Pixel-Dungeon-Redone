@@ -1,5 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
+import static java.util.Arrays.copyOfRange;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 // Commands
@@ -38,17 +40,13 @@ import com.watabou.utils.Reflection;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -61,7 +59,7 @@ import sun.net.www.protocol.file.FileURLConnection;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v0.2.0
+ * @version v0.2.1
  * **/
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ScrollOfDebug extends Scroll {
@@ -76,8 +74,10 @@ public class ScrollOfDebug extends Scroll {
         HELP(null, // ...
                 "[COMMAND | all]",
                 "Gives more information on commands, or in the case of 'all', all of them."),
+        // todo add more debug-oriented commands
+        // generation commands.
         GIVE(Item.class,
-                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force]",
+                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force] [ METHOD [args] ]",
                 "Creates and puts into your inventory the generated item."),
         SPAWN(Mob.class,
                 "MOB",
@@ -86,7 +86,7 @@ public class ScrollOfDebug extends Scroll {
                 "TRAP",
                 "Sets a trap at an indicated position"),
         AFFECT(Buff.class,
-                "BUFF [duration]",
+                "BUFF [duration] [METHOD [args]]",
                 "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing."),
         SEED(Blob.class,
                 "BLOB [amount]",
@@ -197,22 +197,28 @@ public class ScrollOfDebug extends Scroll {
                             // todo add enchants/glyphs for weapons/armor?
                             // process modifiers left to right (so later ones have higher precedence)
                             boolean collect = false;
+                            int last = 1;
                             for(int i=2; i < input.length; i++) try {
                                 if(input[i].startsWith("--force") || input[i].equalsIgnoreCase("-f")) {
                                     collect = true;
+                                    last = i;
                                 }
                                 else {
                                     int number = Integer.parseInt(input[i].substring(1));
                                     switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
                                         case 'x':
                                             item.quantity(number);
+                                            last = i;
                                             break;
                                         case '+':
                                             item.level(number);
+                                            last = i;
                                             break;
                                     }
                                 }
                             } catch (NumberFormatException e) {/* do nothing */}
+                            if(++last < input.length) executeMethod(input[last++],
+                                    item, copyOfRange(input, last, input.length));
                             Item toPickUp = collect ? new Item() {
                                 // create wrapper item that simulates doPickUp while actually just calling collect.
                                 { image = item.image; }
@@ -228,16 +234,11 @@ public class ScrollOfDebug extends Scroll {
                                 // attempt to nullify turn usage.
                                 curUser.spend(-curUser.cooldown());
                             }
+                            // worth a shot.
                             break;
                         case AFFECT:
                             Buff buff = (Buff)o;
-
-                            Float d = null;
-                            if(input.length > 2) try {
-                                d = Float.parseFloat(input[2]);
-                            } catch (NumberFormatException e) {/*do nothing*/}
-                            final Float duration = d;
-
+                            // fixme perhaps have special logic for when additional arguments in general are passed to non-flavor buffs.
                             GameScene.selectCell(new CellSelector.Listener() {
                                 @Override public String prompt() {
                                     return "Select the character to apply the buff to:";
@@ -246,20 +247,37 @@ public class ScrollOfDebug extends Scroll {
                                     Char target;
                                     if(cell == null || cell == -1 || (target = Actor.findChar(cell)) == null) return;
                                     Buff added = null;
-                                    if(duration != null) {
-                                        // this is the fun part.
-                                        if(buff instanceof FlavourBuff) added = Buff.affect(target, cls, duration);
-                                        else {
-                                            String[] methodNames = input.length > 3 ? new String[]{input[3]} :
-                                                    new String[]{"set","prolong","extend"};
-                                            Class[] paramTypes = {float.class, int.class};
-                                            for(String methodName : methodNames) for(Class paramType : paramTypes) try {
-                                                cls.getMethod(methodName, paramType)
-                                                        .invoke(added, paramType == float.class ? duration : duration.intValue());
-                                                break;
-                                            } catch (NoSuchMethodException e) {/*continue*/}
-                                            catch (Exception e) { e.printStackTrace(); }
+                                    int index = 2;
+
+                                    boolean success = false;
+
+                                    if(index >= input.length)
+                                    {
+                                        // no additional arguments.
+                                        Buff.affect(target, cls);
+                                    }
+                                    else {
+                                        if(buff instanceof FlavourBuff) {
+                                            try {
+                                                added = Buff.affect(target,cls,Float.parseFloat(input[index]));
+                                                index++;
+                                            } catch (NumberFormatException e) {
+                                                added = Buff.affect(target,cls);
+                                            }
+                                        } else {
+                                            added = Buff.affect(target, cls);
+                                            // check some common methods for active buffs
+                                            String[] methodNames = {"set", "reset", "prolong", "extend"};
+                                            for(String methodName : methodNames) {
+                                                if(success = executeMethod(methodName,added, copyOfRange(input,index,input.length)))
+                                                    break;
+                                            }
                                         }
+                                        // attempt to call a specified method.
+                                        if(!success &&
+                                                index < input.length
+                                                && !executeMethod(input[index], added, copyOfRange(input,index+1,input.length))
+                                        ) GLog.w("Warning: No supported method matching "+input[index]+" was found.");
                                     }
                                     if(added == null) {
                                         added = Buff.affect(target, cls);
@@ -319,6 +337,48 @@ public class ScrollOfDebug extends Scroll {
         return true;
     }
     @Override public boolean isKnown() { return true; }
+
+    // fixme there's no way to know how many arguments were actually used, which forces this to be the last command.
+    /** dynamic method execution logic **/
+    boolean executeMethod(String methodName, Object obj, String... args) {
+        ArrayList<Method> methods = new ArrayList<>();
+        for(Method method : obj.getClass().getMethods()) {
+            if(method.getName().equalsIgnoreCase(methodName)) methods.add(method);
+        }
+        Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
+        methodLookup: for(Method method : methods) {
+            Object[] params = new Object[method.getParameterTypes().length];
+            if(params.length > args.length) continue;
+            try {
+                for(int i=0; i < params.length; i++) {
+                    Class type = method.getParameterTypes()[i];
+                    if (type == int.class || type == Integer.class)
+                        params[i] = Integer.parseInt(args[i]);
+                    else if (type == float.class || type == Float.class)
+                        params[i] = Float.parseFloat(args[i]);
+                    else if(Enum.class.isAssignableFrom(type)) {
+                        for(String name : new String[]{
+                                args[i], args[i].toUpperCase(), args[i].toLowerCase()
+                        }) try { params[i] = Enum.valueOf(type,name); } catch (IllegalArgumentException e) {/*continue*/}
+                    }
+                    // Char is omitted for consistency's sake. support will be added later.
+                    else if (!Char.class.isAssignableFrom(type)) {
+                        if(Class.class.isAssignableFrom(type)) {
+                            params[i] = trie.findClass(args[i], Object.class);
+                        } else {
+                            params[i] = trie.findClass(args[i], type);
+                            params[i] = Reflection.newInstanceUnhandled((Class)params[i]);
+                        }
+                        if(params[i] == null) continue methodLookup;
+                    }
+                    else continue methodLookup; // unsupported
+                }
+                method.invoke(obj, params);
+                return true;
+            } catch (Exception e) {/*do nothing */}
+        }
+        return false;
+    }
 
     // ensures name uniqueness for help display. treemap so things are sorted.
     private static class ClassNameMap extends HashMap<String, Class> {
@@ -423,6 +483,7 @@ public class ScrollOfDebug extends Scroll {
         private Class<?> findClass(String name, Class parent) {
             return findClass(name.split("\\."), parent, 0);
         }
+        // known issues: duplicated classes may mask each other.
         private Class<?> findClass(String[] path, Class parent, int i) {
             if(i == path.length) return null;
 
@@ -435,6 +496,7 @@ public class ScrollOfDebug extends Scroll {
                     if (found != null && (parent == null || parent.isAssignableFrom(found)) ) return found;
                 }
             } else if( ( found = getClass(path[i]) ) != null && (parent == null || parent.isAssignableFrom(found))) return found;
+            else found = null;
             ArrayList<PackageTrie> toSearch = new ArrayList(subTries.values());
             toSearch.remove(match);
             for(PackageTrie tree : toSearch) if( (found = tree.findClass(path,parent,i)) != null ) break;
@@ -447,7 +509,7 @@ public class ScrollOfDebug extends Scroll {
         }
         // this is probably not efficient or even taking advantage of what I've done.
         public Class<?> getClass(String className) {
-            boolean hasQualifiers = className.matches("[.$]");
+            boolean hasQualifiers = className.contains("$") || className.contains(".");
             for(Class<?> cls : classes) {
                 boolean match = hasQualifiers
                         ? cls.getName().toLowerCase(Locale.ROOT).endsWith( className.toLowerCase(Locale.ROOT) )
