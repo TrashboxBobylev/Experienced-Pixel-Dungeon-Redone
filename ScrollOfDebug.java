@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import com.watabou.noosa.ui.Component;
+import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
 import java.io.File;
@@ -63,7 +64,7 @@ import sun.net.www.protocol.file.FileURLConnection;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v0.2.1
+ * @version v0.3.0
  * **/
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ScrollOfDebug extends Scroll {
@@ -140,6 +141,7 @@ public class ScrollOfDebug extends Scroll {
                 if(!positive) return;
 
                 String[] input = text.split(" ");
+                Callback init = null;
 
                 Command command; try { command = Command.valueOf(input[0].toUpperCase()); }
                 catch (Exception e) {
