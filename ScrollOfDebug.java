@@ -2,6 +2,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import static java.util.Arrays.copyOfRange;
 
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 // Commands
@@ -10,6 +12,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
@@ -49,6 +52,7 @@ import java.net.URLDecoder;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.regex.Matcher;
 
 import sun.net.www.protocol.file.FileURLConnection;
 
@@ -90,7 +94,12 @@ public class ScrollOfDebug extends Scroll {
                 "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing."),
         SEED(Blob.class,
                 "BLOB [amount]",
-                "Seeds a blob of the specified amount to a targeted tile");
+                "Seeds a blob of the specified amount to a targeted tile"),
+        INSPECT(Object.class, "CLASS", "Gives a list of supported methods for the indicated class.") {
+            @Override String fullDocumentation(PackageTrie trie) {
+                return documentation(); // absolutely not.
+            }
+        };
 
         final Class<?> paramClass;
         final String syntax, description;
@@ -141,18 +150,18 @@ public class ScrollOfDebug extends Scroll {
                 if(command == Command.HELP) {
                     String output = null;
                     boolean all = false;
-                    if(input.length > 1) {
+                    if (input.length > 1) {
                         // we only care about the initial argument.
                         Command cmd = Command.get(input[1]);
-                        if(cmd != null) output = cmd.fullDocumentation(trie);
+                        if (cmd != null) output = cmd.fullDocumentation(trie);
                         else all = input[1].equalsIgnoreCase("all");
                     }
-                    if(output == null) {
+                    if (output == null) {
                         StringBuilder builder = new StringBuilder();
-                        for(Command cmd : Command.values()) {
-                            if(all) {
+                        for (Command cmd : Command.values()) {
+                            if (all) {
                                 // extensive. help is omitted because we are using help.
-                                if(cmd != Command.HELP) {
+                                if (cmd != Command.HELP) {
                                     builder.append("\n\n").append(cmd.fullDocumentation(trie));
                                 }
                             } else {
@@ -164,7 +173,39 @@ public class ScrollOfDebug extends Scroll {
                     }
                     GameScene.show(new HelpWindow(output));
                 } else if(input.length > 1) {
-                    final Class cls = trie.findClass(input[1], command.paramClass);
+                    Class _cls = trie.findClass(input[1], command.paramClass);
+
+                    if(command == Command.INSPECT) {
+                        Class cls = _cls;
+                        if(cls == null) {
+                            Command c = Command.get(input[1]);
+                            if(c != null) cls = c.paramClass;
+                        }
+                        if(cls != null) {
+                            StringBuilder message = new StringBuilder();
+                            for(Map.Entry<Class,Set<Method>> entry : hierarchy(cls).entrySet()) {
+                                String className = entry.getKey().getName();
+                                int i = className.indexOf(ROOT);
+                                if(i == -1) continue;
+                                className = className.substring(i+ROOT.length()+1);
+                                message.append("\n\n_").append(className).append("_");
+                                for(Method m : entry.getValue()) {
+                                    message.append("\n_").append(Modifier.isStatic(m.getModifiers()) ? '*' : '-').append("_")
+                                            .append(m.getName());
+                                    for(Class p : m.getParameterTypes()) {
+                                        if(p == Hero.class) continue;
+                                        message.append(' ').append(p.getSimpleName().toUpperCase());
+                                    }
+                                }
+                            }
+                            GameScene.show(new HelpWindow(
+                                    "inspection of _"+input[1]+"_:"
+                                            + message.toString() ));
+                            return;
+                        }
+                    }
+
+                    final Class cls = _cls;
 
                     boolean valid = true;
                     Object o = null; try {
@@ -360,7 +401,7 @@ public class ScrollOfDebug extends Scroll {
         int j = 0;
         // currently not implemented.
         IntMap<Class> delayedChecks = null;//new IntMap<>();
-                for(int i=0; i < params.length; i++) {
+        for(int i=0; i < params.length; i++) {
             Class type = params[i];
             if (type == int.class || type == Integer.class) {
                 // could be a cell.
@@ -368,37 +409,54 @@ public class ScrollOfDebug extends Scroll {
                 else args[i] = Integer.parseInt(input[j]);
                 j++;
             }
-                    else if (type == float.class || type == Float.class)
+            else if (type == float.class || type == Float.class)
                 args[i] = Float.parseFloat(input[j++]);
             else if (type == String.class)
                 args[i] = input[j++];
             else if (type == Boolean.class || type == boolean.class)
                 args[i] = Boolean.getBoolean(input[j++]);
-                    else if(Enum.class.isAssignableFrom(type)) {
-                        for(String name : new String[]{
+            else if (Enum.class.isAssignableFrom(type)) {
+                for (String name : new String[]{
                         input[j], input[j].toUpperCase(), input[j].toLowerCase()
                 })
                     try {
                         args[i] = Enum.valueOf(type, name);
                     } catch (IllegalArgumentException e) {/*continue*/}
                 j++;
-                    }
+            }
             else if(Char.class.isAssignableFrom(type)) {
                 // two subclasses, which means two possible ways for this to go.
                 if(type == Char.class && input[j].equalsIgnoreCase("hero")) {
                     params[i] = Hero.class;
                     j++;
-                        }
+                }
                 if(type == Hero.class) args[i] = curUser;
                 delayedChecks.put(i, type);
             } else args[i] = Class.class.isAssignableFrom(type)
                     ? trie.findClass(input[j++], Object.class)
                     : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
             if (args[i] == null && !delayedChecks.containsKey(i)) throw new IllegalArgumentException();
-                    }
+        }
         if(delayedChecks.notEmpty()) throw new IllegalArgumentException(); // currently not supported. logic would go here though.
         return args;
     }
+
+    TreeMap<Class,Set<Method>> hierarchy(Class base) {
+        TreeMap<Class, Set<Method>> map = new TreeMap<>((c1, c2) -> {
+            int res = 0;
+            if (c1.isAssignableFrom(c2)) res++;
+            if (c2.isAssignableFrom(c1)) res--;
+            return res;
+        });
+        for (Method m : base.getMethods()) {
+            Class key = m.getDeclaringClass();
+            Set<Method> value = map.get(key);
+            if(value == null) map.put(key, value = new HashSet<>());
+            value.add(m);
+        }
+        return map;
+    }
+
     // ensures name uniqueness for help display. treemap so things are sorted.
     private static class ClassNameMap extends HashMap<String, Class> {
         ArrayList<String> getNames() {
@@ -440,7 +498,6 @@ public class ScrollOfDebug extends Scroll {
             return fullName.substring(left+1, right) + name;
         }
     }
-
 
     // reflection logic.
 
