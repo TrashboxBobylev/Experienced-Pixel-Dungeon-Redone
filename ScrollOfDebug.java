@@ -165,6 +165,7 @@ public class ScrollOfDebug extends Scroll {
                     GameScene.show(new HelpWindow(output));
                 } else if(input.length > 1) {
                     final Class cls = trie.findClass(input[1], command.paramClass);
+
                     boolean valid = true;
                     Object o = null; try {
                         o = Reflection.newInstanceUnhandled(cls);
@@ -346,40 +347,58 @@ public class ScrollOfDebug extends Scroll {
             if(method.getName().equalsIgnoreCase(methodName)) methods.add(method);
         }
         Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
-        methodLookup: for(Method method : methods) {
-            Object[] params = new Object[method.getParameterTypes().length];
-            if(params.length > args.length) continue;
-            try {
-                for(int i=0; i < params.length; i++) {
-                    Class type = method.getParameterTypes()[i];
-                    if (type == int.class || type == Integer.class)
-                        params[i] = Integer.parseInt(args[i]);
-                    else if (type == float.class || type == Float.class)
-                        params[i] = Float.parseFloat(args[i]);
-                    else if(Enum.class.isAssignableFrom(type)) {
-                        for(String name : new String[]{
-                                args[i], args[i].toUpperCase(), args[i].toLowerCase()
-                        }) try { params[i] = Enum.valueOf(type,name); } catch (IllegalArgumentException e) {/*continue*/}
-                    }
-                    // Char is omitted for consistency's sake. support will be added later.
-                    else if (!Char.class.isAssignableFrom(type)) {
-                        if(Class.class.isAssignableFrom(type)) {
-                            params[i] = trie.findClass(args[i], Object.class);
-                        } else {
-                            params[i] = trie.findClass(args[i], type);
-                            params[i] = Reflection.newInstanceUnhandled((Class)params[i]);
-                        }
-                        if(params[i] == null) continue methodLookup;
-                    }
-                    else continue methodLookup; // unsupported
-                }
-                method.invoke(obj, params);
-                return true;
-            } catch (Exception e) {/*do nothing */}
-        }
+        for(Method method : methods) try {
+            method.invoke(obj, getArguments(method.getParameterTypes(), args));
+            return true;
+        } catch (Exception e) {/*do nothing */}
         return false;
     }
 
+    // throws an exception if it fails. This removes the need for me to handle errors at all.
+    Object[] getArguments(Class[] params, String[] input) throws Exception {
+        Object[] args = new Object[params.length];
+        int j = 0;
+        // currently not implemented.
+        IntMap<Class> delayedChecks = null;//new IntMap<>();
+                for(int i=0; i < params.length; i++) {
+            Class type = params[i];
+            if (type == int.class || type == Integer.class) {
+                // could be a cell.
+                if(input[j].equalsIgnoreCase("cell")) delayedChecks.put(i,Integer.class);
+                else args[i] = Integer.parseInt(input[j]);
+                j++;
+            }
+                    else if (type == float.class || type == Float.class)
+                args[i] = Float.parseFloat(input[j++]);
+            else if (type == String.class)
+                args[i] = input[j++];
+            else if (type == Boolean.class || type == boolean.class)
+                args[i] = Boolean.getBoolean(input[j++]);
+                    else if(Enum.class.isAssignableFrom(type)) {
+                        for(String name : new String[]{
+                        input[j], input[j].toUpperCase(), input[j].toLowerCase()
+                })
+                    try {
+                        args[i] = Enum.valueOf(type, name);
+                    } catch (IllegalArgumentException e) {/*continue*/}
+                j++;
+                    }
+            else if(Char.class.isAssignableFrom(type)) {
+                // two subclasses, which means two possible ways for this to go.
+                if(type == Char.class && input[j].equalsIgnoreCase("hero")) {
+                    params[i] = Hero.class;
+                    j++;
+                        }
+                if(type == Hero.class) args[i] = curUser;
+                delayedChecks.put(i, type);
+            } else args[i] = Class.class.isAssignableFrom(type)
+                    ? trie.findClass(input[j++], Object.class)
+                    : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
+            if (args[i] == null && !delayedChecks.containsKey(i)) throw new IllegalArgumentException();
+                    }
+        if(delayedChecks.notEmpty()) throw new IllegalArgumentException(); // currently not supported. logic would go here though.
+        return args;
+    }
     // ensures name uniqueness for help display. treemap so things are sorted.
     private static class ClassNameMap extends HashMap<String, Class> {
         ArrayList<String> getNames() {
