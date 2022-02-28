@@ -402,7 +402,7 @@ public class ScrollOfDebug extends Scroll {
         Object[] args = new Object[params.length];
         int j = 0;
         // currently not implemented.
-        IntMap<Class> delayedChecks = null;//new IntMap<>();
+        IntMap<Class> delayedChecks = new IntMap<>();
         for(int i=0; i < params.length; i++) {
             Class type = params[i];
             if (type == int.class || type == Integer.class) {
