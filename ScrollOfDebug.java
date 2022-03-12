@@ -1,6 +1,8 @@
-package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
+package com.zrp200.scrollofdebug;
 
 import static java.util.Arrays.copyOfRange;
+
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.StringBuilder;
