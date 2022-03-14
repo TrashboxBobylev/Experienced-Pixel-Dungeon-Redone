@@ -506,7 +506,7 @@ public class ScrollOfDebug extends Scroll {
         }
         StringBuilder result = new StringBuilder();
         if(!names.isEmpty()) {
-            for(String name : names.getNames()) result.append("\n_-_ ").append(name);
+            for(String name : names.getNames()) if(canInstantiate(names.get(name))) result.append("\n_-_ ").append(name);
         }
         return result.toString();
     }
