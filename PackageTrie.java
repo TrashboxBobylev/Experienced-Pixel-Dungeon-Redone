@@ -210,16 +210,9 @@ public class PackageTrie {
 
             name = name.substring(0, index)
                     .replace('/', '.');
-
-            Class<?> cls = Class.forName(name);
-            tree.addClass(cls, pckgname);
-//            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
-//                tree.getOrCreate(cls
-//                        .getPackage()
-//                        .getName()
-//                        .substring(pckgname.length())
-//                ).classes.add(cls);
-//            }
+            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
+                tree.addClass(Class.forName(name),pckgname);
+            }
         }
     }
 }
