@@ -1,0 +1,324 @@
+diff --git a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
+index fc254b5cc..82d3a4c2d 100644
+--- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
++++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
+@@ -30,7 +30,12 @@ import com.watabou.noosa.Game;
+ 
+ import java.util.HashMap;
+ 
++import com.zrp200.debug.PackageTrie;
++
+ public abstract class PlatformSupport {
++	public PackageTrie findClasses(String pckgname) throws ClassNotFoundException {
++		return PackageTrie.getClassesForPackage(pckgname);
++	}
+ 	
+ 	public abstract void updateDisplaySize();
+ 	
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java b/SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java
+similarity index 94%
+rename from core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
+rename to SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java
+index def33bd1a..b81ed540c 100644
+--- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
++++ b/SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java
+@@ -1,4 +1,4 @@
+-package com.zrp200.scrollofdebug;
++package com.zrp200.debug;
+ 
+ import static java.util.Collections.*;
+ 
+@@ -181,7 +181,7 @@ public class PackageTrie {
+                         Class cls = Class.forName(pckgname + '.'
+                                 + file.substring(0, file.length() - 6));
+                         //if(canInstantiate(cls))
+-                        trie.classes.add(cls);
++                            trie.classes.add(cls);
+                     } catch (final NoClassDefFoundError e) {
+                         // do nothing. this class hasn't been found by the
+                         // loader, and we don't care.
+@@ -210,16 +210,9 @@ public class PackageTrie {
+ 
+             name = name.substring(0, index)
+                     .replace('/', '.');
+-
+-            Class<?> cls = Class.forName(name);
+-            tree.addClass(cls, pckgname);
+-//            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
+-//                tree.getOrCreate(cls
+-//                        .getPackage()
+-//                        .getName()
+-//                        .substring(pckgname.length())
+-//                ).classes.add(cls);
+-//            }
++            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
++                tree.addClass(Class.forName(name),pckgname);
++            }
+         }
+     }
+ }
+diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
+index a29c7e1c8..0aae11520 100644
+--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
+@@ -41,12 +41,41 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+ import com.watabou.noosa.Game;
+ import com.watabou.utils.PlatformSupport;
+ 
++import java.io.IOException;
++import java.util.Enumeration;
+ import java.util.HashMap;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+ 
++import dalvik.system.DexFile;
++import com.zrp200.debug.PackageTrie;
++
+ public class AndroidPlatformSupport extends PlatformSupport {
+-	
++
++	@Override
++	public PackageTrie findClasses(String pkgName) throws ClassNotFoundException {
++		return new PackageTrie() {
++			{
++				try {
++					Enumeration<String> entries = new DexFile(AndroidGame.instance
++							.getContext()
++							.getPackageCodePath()
++					).entries();
++					String n; while(entries.hasMoreElements()) {
++						n = entries.nextElement();
++						if(n.contains(pkgName)) try {
++							addClass(Class.forName(n), pkgName);
++						} catch (Exception e) {
++							e.printStackTrace();
++						}
++					}
++				} catch (IOException e) {
++					//e.printStackTrace();
++				}
++			}
++		};
++	}
++
+ 	public void updateDisplaySize(){
+ 		if (SPDSettings.landscape() != null) {
+ 			AndroidGame.instance.setRequestedOrientation( SPDSettings.landscape() ?
+diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
+index b4553bc52..453182c15 100644
+--- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
++++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
+@@ -205,7 +205,7 @@ public class GameScene extends PixelScene {
+ 
+ 		// debug logic...
+ 		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
+-		boolean supported = true;//DeviceCompat.isDebug() && DeviceCompat.isDesktop();
++		boolean supported = DeviceCompat.isDebug();
+ 		if(supported) {
+ 			if(debug == null) {
+ 				debug = new ScrollOfDebug();
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+index 7f26d16f7..8316df3fa 100644
+--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+@@ -42,7 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+ import com.watabou.noosa.ui.Component;
+ import com.watabou.utils.Callback;
+ import com.watabou.utils.Reflection;
+-import com.zrp200.scrollofdebug.PackageTrie;
++import com.zrp200.debug.PackageTrie;
+ 
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+@@ -53,7 +53,7 @@ import java.util.*;
+  *
+  * @author  <a href="https://github.com/zrp200/scrollofdebug">
+  *              Zrp200
+- * @version v0.3.0
++ * @version v0.3.0-Android
+  * **/
+ @SuppressWarnings({"rawtypes", "unchecked"})
+ public class ScrollOfDebug extends Scroll {
+@@ -495,7 +495,7 @@ public class ScrollOfDebug extends Scroll {
+     public static PackageTrie trie = null; // loaded when needed.
+     static {
+         try {
+-            trie = PackageTrie.getClassesForPackage(ROOT);
++            trie = ShatteredPixelDungeon.platform.findClasses(ROOT);
+         } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
+     }
+ 
+@@ -506,7 +506,7 @@ public class ScrollOfDebug extends Scroll {
+         }
+         StringBuilder result = new StringBuilder();
+         if(!names.isEmpty()) {
+-            for(String name : names.getNames()) result.append("\n_-_ ").append(name);
++            for(String name : names.getNames()) if(canInstantiate(names.get(name))) result.append("\n_-_ ").append(name);
+         }
+         return result.toString();
+     }
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/android-support.patch b/core/src/main/java/com/zrp200/scrollofdebug/android-support.patch
+new file mode 100644
+index 000000000..6670567cc
+--- /dev/null
++++ b/core/src/main/java/com/zrp200/scrollofdebug/android-support.patch
+@@ -0,0 +1,159 @@
++diff --git a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
++index 82d3a4c2d..fc254b5cc 100644
++--- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
+++++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
++@@ -30,12 +30,7 @@ import com.watabou.noosa.Game;
++ 
++ import java.util.HashMap;
++ 
++-import com.zrp200.debug.PackageTrie;
++-
++ public abstract class PlatformSupport {
++-	public PackageTrie findClasses(String pckgname) throws ClassNotFoundException {
++-		return PackageTrie.getClassesForPackage(pckgname);
++-	}
++ 	
++ 	public abstract void updateDisplaySize();
++ 	
++diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
++index 0aae11520..a29c7e1c8 100644
++--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
+++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
++@@ -41,41 +41,12 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
++ import com.watabou.noosa.Game;
++ import com.watabou.utils.PlatformSupport;
++ 
++-import java.io.IOException;
++-import java.util.Enumeration;
++ import java.util.HashMap;
++ import java.util.regex.Matcher;
++ import java.util.regex.Pattern;
++ 
++-import dalvik.system.DexFile;
++-import com.zrp200.debug.PackageTrie;
++-
++ public class AndroidPlatformSupport extends PlatformSupport {
++-
++-	@Override
++-	public PackageTrie findClasses(String pkgName) throws ClassNotFoundException {
++-		return new PackageTrie() {
++-			{
++-				try {
++-					Enumeration<String> entries = new DexFile(AndroidGame.instance
++-							.getContext()
++-							.getPackageCodePath()
++-					).entries();
++-					String n; while(entries.hasMoreElements()) {
++-						n = entries.nextElement();
++-						if(n.contains(pkgName)) try {
++-							addClass(Class.forName(n), pkgName);
++-						} catch (Exception e) {
++-							e.printStackTrace();
++-						}
++-					}
++-				} catch (IOException e) {
++-					//e.printStackTrace();
++-				}
++-			}
++-		};
++-	}
++-
+++	
++ 	public void updateDisplaySize(){
++ 		if (SPDSettings.landscape() != null) {
++ 			AndroidGame.instance.setRequestedOrientation( SPDSettings.landscape() ?
++diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
++index 453182c15..b4553bc52 100644
++--- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
+++++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
++@@ -205,7 +205,7 @@ public class GameScene extends PixelScene {
++ 
++ 		// debug logic...
++ 		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
++-		boolean supported = DeviceCompat.isDebug();
+++		boolean supported = true;//DeviceCompat.isDebug() && DeviceCompat.isDesktop();
++ 		if(supported) {
++ 			if(debug == null) {
++ 				debug = new ScrollOfDebug();
++diff --git a/SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java b/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
++similarity index 94%
++rename from SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java
++rename to core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
++index b81ed540c..def33bd1a 100644
++--- a/SPD-classes/src/main/java/com/zrp200/debug/PackageTrie.java
+++++ b/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
++@@ -1,4 +1,4 @@
++-package com.zrp200.debug;
+++package com.zrp200.scrollofdebug;
++ 
++ import static java.util.Collections.*;
++ 
++@@ -181,7 +181,7 @@ public class PackageTrie {
++                         Class cls = Class.forName(pckgname + '.'
++                                 + file.substring(0, file.length() - 6));
++                         //if(canInstantiate(cls))
++-                            trie.classes.add(cls);
+++                        trie.classes.add(cls);
++                     } catch (final NoClassDefFoundError e) {
++                         // do nothing. this class hasn't been found by the
++                         // loader, and we don't care.
++@@ -210,9 +210,16 @@ public class PackageTrie {
++ 
++             name = name.substring(0, index)
++                     .replace('/', '.');
++-            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
++-                tree.addClass(Class.forName(name),pckgname);
++-            }
+++
+++            Class<?> cls = Class.forName(name);
+++            tree.addClass(cls, pckgname);
+++//            if (name.contains(pckgname) /*&& canInstantiate(cls = Class.forName(name))*/) {
+++//                tree.getOrCreate(cls
+++//                        .getPackage()
+++//                        .getName()
+++//                        .substring(pckgname.length())
+++//                ).classes.add(cls);
+++//            }
++         }
++     }
++ }
++diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
++index 8316df3fa..7f26d16f7 100644
++--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
++@@ -42,7 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
++ import com.watabou.noosa.ui.Component;
++ import com.watabou.utils.Callback;
++ import com.watabou.utils.Reflection;
++-import com.zrp200.debug.PackageTrie;
+++import com.zrp200.scrollofdebug.PackageTrie;
++ 
++ import java.lang.reflect.Method;
++ import java.lang.reflect.Modifier;
++@@ -53,7 +53,7 @@ import java.util.*;
++  *
++  * @author  <a href="https://github.com/zrp200/scrollofdebug">
++  *              Zrp200
++- * @version v0.3.0-Android
+++ * @version v0.3.0
++  * **/
++ @SuppressWarnings({"rawtypes", "unchecked"})
++ public class ScrollOfDebug extends Scroll {
++@@ -495,7 +495,7 @@ public class ScrollOfDebug extends Scroll {
++     public static PackageTrie trie = null; // loaded when needed.
++     static {
++         try {
++-            trie = ShatteredPixelDungeon.platform.findClasses(ROOT);
+++            trie = PackageTrie.getClassesForPackage(ROOT);
++         } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
++     }
++ 
++@@ -506,7 +506,7 @@ public class ScrollOfDebug extends Scroll {
++         }
++         StringBuilder result = new StringBuilder();
++         if(!names.isEmpty()) {
++-            for(String name : names.getNames()) if(canInstantiate(names.get(name))) result.append("\n_-_ ").append(name);
+++            for(String name : names.getNames()) result.append("\n_-_ ").append(name);
++         }
++         return result.toString();
++     }
