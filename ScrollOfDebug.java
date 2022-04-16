@@ -416,11 +416,11 @@ public class ScrollOfDebug extends Scroll {
             }
             else if(Char.class.isAssignableFrom(type)) {
                 // two subclasses, which means two possible ways for this to go.
-                if(type == Char.class && input[j].equalsIgnoreCase("hero")) {
+                if(type.isAssignableFrom(Hero.class) && input[j].equalsIgnoreCase("hero")) {
                     params[i] = Hero.class;
                     j++;
                 }
-                if(type == Hero.class) args[i] = curUser;
+                if(type == Hero.class) args[i] = curUser; // autofill
                 delayedChecks.put(i, type);
             } else args[i] = Class.class.isAssignableFrom(type)
                     ? trie.findClass(input[j++], Object.class)
