@@ -96,14 +96,14 @@ public class PackageTrie {
 
     protected final PackageTrie getOrCreate(String pkg) {
         if(pkg == null || pkg.isEmpty()) return this;
-        String[] split = pkg.split("\\.", 1);
+        String[] split = pkg.split("\\.", 2);
         PackageTrie stored = subTries.get(split[0]);
         if(stored == null) subTries.put(pkg, stored = new PackageTrie());
         return split.length == 1 ? stored : stored.getOrCreate(split[1]);
     }
     protected final void addClass(Class cls, String pkg) {
         String clsPkg = cls.getPackage().getName();
-        if(clsPkg.startsWith(pkg)) getOrCreate(clsPkg.substring(pkg.length())).classes.add(cls);
+        if(clsPkg.startsWith(pkg)) getOrCreate(clsPkg.substring(pkg.length()+1)).classes.add(cls);
     }
 
     /**
