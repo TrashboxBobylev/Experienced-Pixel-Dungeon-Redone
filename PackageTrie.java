@@ -103,7 +103,8 @@ public class PackageTrie {
     }
     protected final void addClass(Class cls, String pkg) {
         String clsPkg = cls.getPackage().getName();
-        if(clsPkg.startsWith(pkg)) getOrCreate(clsPkg.substring(pkg.length()+1)).classes.add(cls);
+        if(clsPkg.equals(pkg)) classes.add(cls);
+        else if(clsPkg.startsWith(pkg)) getOrCreate(clsPkg.substring(pkg.length()+1)).classes.add(cls);
     }
 
     /**
