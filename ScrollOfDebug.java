@@ -84,6 +84,7 @@ public class ScrollOfDebug extends Scroll {
         SEED(Blob.class,
                 "BLOB [amount]",
                 "Seeds a blob of the specified amount to a targeted tile"),
+        USE(Object.class, "CLASS[.|#]method [args]", "Use a specified method from a desired class"),
         INSPECT(Object.class, "CLASS", "Gives a list of supported methods for the indicated class.") {
             @Override String fullDocumentation(PackageTrie trie) {
                 return documentation(); // absolutely not.
@@ -196,6 +197,17 @@ public class ScrollOfDebug extends Scroll {
                     }
 
                     final Class cls = _cls;
+
+                    if(command == Command.USE) {
+                        if(!executeMethod(
+                                cls == Hero.class ? Dungeon.hero
+                                        : canInstantiate(cls) ? Reflection.newInstance(cls)
+                                        : null,
+                                cls, input, 2)) {
+                            GLog.w(String.format("No method '%s' was found for %s", input[2], cls));
+                        }
+                        return;
+                    }
 
                     boolean valid = true;
                     Object o = null; try {
