@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
-import com.zrp200.scrollofdebug.PackageTrie;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -250,8 +249,7 @@ public class ScrollOfDebug extends Scroll {
                                     }
                                 }
                             } catch (NumberFormatException e) {/* do nothing */}
-                            if(++last < input.length) executeMethod(input[last++],
-                                    item, copyOfRange(input, last, input.length));
+                            if(++last < input.length) executeMethod(item, input, last);
                             Item toPickUp = collect ? new Item() {
                                 // create wrapper item that simulates doPickUp while actually just calling collect.
                                 { image = item.image; }
@@ -302,14 +300,14 @@ public class ScrollOfDebug extends Scroll {
                                             // check some common methods for active buffs
                                             String[] methodNames = {"set", "reset", "prolong", "extend"};
                                             for(String methodName : methodNames) {
-                                                if(success = executeMethod(methodName,added, copyOfRange(input,index,input.length)))
+                                                if(success = executeMethod(added, methodName, copyOfRange(input,index,input.length)))
                                                     break;
                                             }
                                         }
                                         // attempt to call a specified method.
                                         if(!success &&
                                                 index < input.length
-                                                && !executeMethod(input[index], added, copyOfRange(input,index+1,input.length))
+                                                && !executeMethod(added, input, index)
                                         ) GLog.w("Warning: No supported method matching "+input[index]+" was found.");
                                     }
                                     if(added == null) {
@@ -370,11 +368,15 @@ public class ScrollOfDebug extends Scroll {
     }
     @Override public boolean isKnown() { return true; }
 
+    // variant that derives class from the object given
+    <T> boolean executeMethod(T obj, String methodName, String... args) {
+        return executeMethod(obj, (Class<T>)obj.getClass(), methodName, args);
+    }
     // fixme there's no way to know how many arguments were actually used, which forces this to be the last command.
     /** dynamic method execution logic **/
-    boolean executeMethod(String methodName, Object obj, String... args) {
+    <T> boolean executeMethod(T obj, Class<? super T> cls, String methodName, String... args) {
         ArrayList<Method> methods = new ArrayList<>();
-        for(Method method : obj.getClass().getMethods()) {
+        for(Method method : cls.getMethods()) {
             if(method.getName().equalsIgnoreCase(methodName)) methods.add(method);
         }
         Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
@@ -384,6 +386,14 @@ public class ScrollOfDebug extends Scroll {
         } catch (Exception e) {/*do nothing */}
         return false;
     }
+    // shortcut methods that interpret input to get the arguments needed
+    <T> boolean executeMethod(T obj, Class<? super T> cls, String[] input, int startIndex) {
+        return executeMethod(obj, cls, input[startIndex++], startIndex < input.length
+                ? copyOfRange(input, startIndex, input.length)
+                : new String[0]
+        );
+    }
+    <T> boolean executeMethod(T obj, String[] input, int startIndex) { return executeMethod(obj, (Class<T>)obj.getClass(), input, startIndex); }
 
     // throws an exception if it fails. This removes the need for me to handle errors at all.
     Object[] getArguments(Class[] params, String[] input) throws Exception {
