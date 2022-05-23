@@ -46,6 +46,8 @@ import com.watabou.utils.Reflection;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
@@ -59,6 +61,8 @@ public class ScrollOfDebug extends Scroll {
     {
         image = ItemSpriteSheet.SCROLL_HOLDER;
     }
+
+    static String lastCommand = ""; // used with '!!'
 
     /** this is where all the game files are supposed to be located. **/
     private static final String ROOT = "com.shatteredpixel.shatteredpixeldungeon";
@@ -129,6 +133,17 @@ public class ScrollOfDebug extends Scroll {
                 "Execute", "Cancel") {
             @Override public void onSelect(boolean positive, String text) {
                 if(!positive) return;
+
+                // !! handling
+                {
+                    Matcher m = Pattern.compile("!!").matcher(text);
+                    if(m.find()) {
+                        GLog.newLine();
+                        GLog.i("> %s", text = m.replaceAll(lastCommand));
+                        GLog.newLine();
+                    }
+                }
+                lastCommand = text;
 
                 String[] input = text.split(" ");
                 Callback init = null;
