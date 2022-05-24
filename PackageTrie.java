@@ -97,8 +97,9 @@ public class PackageTrie {
     protected final PackageTrie getOrCreate(String pkg) {
         if(pkg == null || pkg.isEmpty()) return this;
         String[] split = pkg.split("\\.", 2);
+        // [0] is stored, [1] is recursively added.
         PackageTrie stored = subTries.get(split[0]);
-        if(stored == null) subTries.put(pkg, stored = new PackageTrie());
+        if(stored == null) subTries.put(split[0], stored = new PackageTrie());
         return split.length == 1 ? stored : stored.getOrCreate(split[1]);
     }
     protected final void addClass(Class cls, String pkg) {
