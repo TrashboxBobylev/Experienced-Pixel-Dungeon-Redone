@@ -84,19 +84,20 @@ public class ScrollOfDebug extends Scroll {
         SEED(Blob.class,
                 "BLOB [amount]",
                 "Seeds a blob of the specified amount to a targeted tile"),
-        USE(Object.class, "CLASS[.|#]method [args]", "Use a specified method from a desired class"),
-        INSPECT(Object.class, "CLASS", "Gives a list of supported methods for the indicated class.") {
-            @Override String fullDocumentation(PackageTrie trie) {
-                return documentation(); // absolutely not.
-            }
-        };
+        USE(Object.class, "CLASS method [args]", "Use a specified method from a desired class.", false),
+        INSPECT(Object.class, "CLASS", "Gives a list of supported methods for the indicated class.", false);
 
         final Class<?> paramClass;
         final String syntax, description;
-        Command(Class<?> paramClass, String syntax, String description) {
+        final boolean includeUses;
+        Command(Class<?> paramClass, String syntax, String description, boolean includeUses) {
             this.paramClass = paramClass;
             this.syntax = syntax;
             this.description = description;
+            this.includeUses = includeUses;
+        }
+        Command(Class<?> paramClass, String syntax, String description) {
+            this(paramClass,syntax,description,true);
         }
 
         @Override public String toString() { return name().toLowerCase(); }
@@ -109,7 +110,7 @@ public class ScrollOfDebug extends Scroll {
         // adds more information depending on what the paramClass actually is.
         String fullDocumentation(PackageTrie trie) {
             String documentation = documentation();
-            if(paramClass != null) {
+            if(paramClass != null && includeUses) {
                 documentation += "\n\n_Valid Classes_:" + listAllClasses(trie,paramClass);
             }
             return documentation;
