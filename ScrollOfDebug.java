@@ -199,9 +199,11 @@ public class ScrollOfDebug extends Scroll {
                     final Class cls = _cls;
 
                     if(command == Command.USE) {
-                        if(!executeMethod(
+                        // alias for inspect when not enough args.
+                        if(input.length == 2) onSelect(true, "inspect " + input[1]);
+                        else if(!executeMethod(
                                 cls == Hero.class ? Dungeon.hero
-                                        : canInstantiate(cls) ? Reflection.newInstance(cls)
+                                        : cls != null && canInstantiate(cls) ? Reflection.newInstance(cls)
                                         : null,
                                 cls, input, 2)) {
                             GLog.w(String.format("No method '%s' was found for %s", input[2], cls));
@@ -393,7 +395,17 @@ public class ScrollOfDebug extends Scroll {
         }
         Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
         for(Method method : methods) try {
-            method.invoke(obj, getArguments(method.getParameterTypes(), args));
+            Object[] arguments = getArguments(method.getParameterTypes(), args);
+            Object result = method.invoke(obj, arguments);
+            if(result != null) {
+                String argsAsString = Arrays.deepToString(arguments);
+                GLog.w("%s%s%s(%s): %s",
+                        cls.getSimpleName(),
+                        Modifier.isStatic(method.getModifiers()) ? '.' : '#',
+                        method.getName(),
+                        // snip first and last brace
+                        argsAsString.substring(1,argsAsString.length()-1), result);
+            }
             return true;
         } catch (Exception e) {/*do nothing */}
         return false;
@@ -438,7 +450,7 @@ public class ScrollOfDebug extends Scroll {
             }
             else if(Char.class.isAssignableFrom(type)) {
                 // two subclasses, which means two possible ways for this to go.
-                if(type.isAssignableFrom(Hero.class) && input[j].equalsIgnoreCase("hero")) {
+                if(j < input.length && type.isAssignableFrom(Hero.class) && input[j].equalsIgnoreCase("hero")) {
                     params[i] = Hero.class;
                     j++;
                 }
