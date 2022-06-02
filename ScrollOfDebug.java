@@ -1,5 +1,6 @@
 package com.zrp200.scrollofdebug;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
 import static java.util.Arrays.copyOfRange;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
@@ -428,7 +429,7 @@ public class ScrollOfDebug extends Scroll {
     }
     // shortcut methods that interpret input to get the arguments needed
     <T> boolean executeMethod(T obj, Class<? super T> cls, String[] input, int startIndex) {
-        return executeMethod(obj, cls, input[startIndex++], startIndex < input.length
+        return startIndex < input.length && executeMethod(obj, cls, input[startIndex++], startIndex < input.length
                 ? copyOfRange(input, startIndex, input.length)
                 : new String[0]
         );
