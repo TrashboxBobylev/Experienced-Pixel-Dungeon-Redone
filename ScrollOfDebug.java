@@ -73,6 +73,7 @@ public class ScrollOfDebug extends Scroll {
                 "[COMMAND | all]",
                 "Gives more information on commands, or in the case of 'all', all of them."),
         // todo add more debug-oriented commands
+        CHANGES(null, "", "Gives a history of changes to Scroll of Debug."),
         // generation commands.
         GIVE(Item.class,
                 "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force] [ METHOD [args] ]",
@@ -155,7 +156,10 @@ public class ScrollOfDebug extends Scroll {
                     return;
                 }
 
-                if(command == Command.HELP) {
+                if(command == Command.CHANGES) {
+                    GameScene.show(new HelpWindow(CHANGELOG));
+                }
+                else if(command == Command.HELP) {
                     String output = null;
                     boolean all = false;
                     if (input.length > 1) {
@@ -665,4 +669,22 @@ public class ScrollOfDebug extends Scroll {
         try { c.getConstructor(); } catch (NoSuchMethodException e) { return false; }
         return !( Modifier.isAbstract(c.getModifiers()) || Reflection.isMemberClass(c) && !Reflection.isStatic(c) );
     }
+
+    private static final String CHANGELOG
+        = "_0.4.0_:"
+            +"\n_-_ Added this command."
+            +"\n_-_ Added _use_ command, which can call a desired method on any game class that supports it (see _inspect_ for valid methods)."
+            +"\n_-_ Including _!!_ in a command will replace it with the previously written command."
+            +"\n_- spawn_ command now supports either a quantity argument or a --place (-p) option for manual placing of the mob."
+            +"\n_- spawn_ command now supports methods, which are called directly after placing the mob."
+            +"\n_-_ When calling methods that yield output, the output is now displayed in the game log."
+            +"\n_-_ Scroll of Debug is now considered unique, and thus will not burn."
+            +"\n_-_ Fixed more bugs in class finding for jar version caused by 0.3."
+            +"\n_-_ Fixed Hero method arguments not being automatically resolved to the hero."
+        +"\n\n\n_0.3.3_:"
+            +"\n_-_ Scroll Of Debug now automatically adds itself to the first open quickslot, rather than always quickslot #3."
+        +"\n_0.3.1, 0.3.2_:"
+            +"\n_-_ Fixed faulty package logic caused by 0.3.0"
+        +"\n_0.3.0_:"
+            +"\n_-_ Scroll of Debug now works on Android";
 }
