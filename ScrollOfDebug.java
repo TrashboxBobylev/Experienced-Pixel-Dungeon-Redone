@@ -78,14 +78,14 @@ public class ScrollOfDebug extends Scroll {
                 "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force] [ METHOD [args] ]",
                 "Creates and puts into your inventory the generated item."),
         SPAWN(Mob.class,
-                "MOB",
-                "Summons the indicated mob and randomly places them on the depth."),
+                "MOB [_x_QUANTITY | -p | --place]",
+                "Summons the indicated mob and randomly places them on the depth. -p allows manual placement, though cannot be combined with a quantity argument."),
         SET(Trap.class,
                 "TRAP",
                 "Sets a trap at an indicated position"),
         AFFECT(Buff.class,
                 "BUFF [duration] [METHOD [args]]",
-                "Allows you to attach a buff to a character in sight. This can be extremely dangerous, or it could do literally nothing."),
+                "Allows you to attach a buff to a character in sight."),
         SEED(Blob.class,
                 "BLOB [amount]",
                 "Seeds a blob of the specified amount to a targeted tile"),
@@ -234,10 +234,60 @@ public class ScrollOfDebug extends Scroll {
                     } catch (Exception e) { valid = false; }
                     if (valid) switch (command) {
                         case SPAWN: Mob mob = (Mob)o;
-                            mob.pos = Dungeon.level.randomRespawnCell(mob);
-                            if(mob.pos != 1) {
-                                GameScene.add(mob);
-                                GLog.w("Summoned " + mob.name());
+                            // process args
+                            int quantity = 1;
+                            boolean manualPlace = false;
+                            boolean qSpecified = false;
+                            if(input.length > 2) {
+                                String opt = input[2];
+                                // is this a forced use of regex?
+                                Matcher matcher = Pattern.compile("x(\\d+)").matcher(opt);
+                                if(matcher.find()) {
+                                    quantity = Integer.parseInt(matcher.group(1));
+                                    qSpecified = true;
+                                } else if(opt.matches("-p|--place")) {
+                                    manualPlace = true;
+                                }
+                            }
+                            if(manualPlace) {
+                                GameScene.selectCell(new CellSelector.Listener() {
+                                    @Override public String prompt() {
+                                        return "Select a tile to place " + mob.name();
+                                    }
+                                    @Override public void onSelect(Integer cell) {
+                                        if(cell == null) return;
+                                        // damn it evan for making me copy paste this
+                                        if(level.findMob(cell) != null
+                                                || !level.passable[cell]
+                                                || level.solid[cell]
+                                                || !level.openSpace[cell] && mob.properties().contains(Char.Property.LARGE)
+                                        ) {
+                                            GLog.w("You cannot place %s here.", mob.name());
+                                            return;
+                                        }
+                                        mob.pos = cell;
+                                        GameScene.add(mob);
+                                        // doing this means that I can't actually let you select cells for methods; it'll be immediately cancelled.
+                                        executeMethod(mob,input,3);
+                                        GLog.w("Summoned " + mob.name());
+                                    }
+                                });
+                            } else {
+                                int spawned = 0;
+                                boolean canExecute = true;
+                                // nonstandard for loop that generates mobs. first mob is the original one.
+                                for(Mob m = mob; m != null && spawned++ < quantity; m = (Mob)Reflection.newInstance(cls)) {
+                                    m.pos = level.randomRespawnCell(m);
+                                    if(m.pos == -1) break;
+                                    GameScene.add(m);
+                                    // if it fails we don't want to flood the screen with messages.
+                                    if(canExecute) canExecute = executeMethod(m, input, qSpecified?3:2);
+                                }
+                                spawned--;
+                                GLog.w("Summoned "
+                                        + mob.name()
+                                        + (spawned == 1 ? "" : " x" + spawned)
+                                );
                             }
                             break;
                         case SET:
