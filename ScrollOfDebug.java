@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v0.3.0
+ * @version v0.4.0
  * **/
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ScrollOfDebug extends Scroll {
