@@ -295,8 +295,9 @@ public class ScrollOfDebug extends Scroll {
                                 if(important) GLog.p(pickupMessage); else GLog.i(pickupMessage);
                                 // attempt to nullify turn usage.
                                 curUser.spend(-curUser.cooldown());
+                            } else {
+                                GLog.n(Messages.get(curUser, "you_cant_have", item.name()));
                             }
-                            // worth a shot.
                             break;
                         case AFFECT:
                             Buff buff = (Buff)o;
@@ -398,6 +399,9 @@ public class ScrollOfDebug extends Scroll {
         return true;
     }
     @Override public boolean isKnown() { return true; }
+    {
+        unique = true;
+    }
 
     // variant that derives class from the object given
     <T> boolean executeMethod(T obj, String methodName, String... args) {
@@ -472,7 +476,7 @@ public class ScrollOfDebug extends Scroll {
                     j++;
                 }
                 if(type == Hero.class) args[i] = curUser; // autofill
-                delayedChecks.put(i, type);
+                else delayedChecks.put(i, type);
             } else args[i] = Class.class.isAssignableFrom(type)
                     ? trie.findClass(input[j++], Object.class)
                     : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
