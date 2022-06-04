@@ -4,8 +4,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
---- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision f54aad31ee40dea1a1ef485f6ef1d8dba3d5dedd)
-+++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision f36fb36e689ac7d928947a7fd5b975b166f7dadd)
+--- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision b6582d47d264e13a3620c681fa00e905ad51ca62)
++++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision 5ace1377507fb2e7f6af522a9bf6826710617e32)
 @@ -30,7 +30,12 @@
  
  import java.util.HashMap;
@@ -24,9 +24,9 @@ Index: core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
 diff --git a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
 rename from core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
 rename to SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
---- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision f54aad31ee40dea1a1ef485f6ef1d8dba3d5dedd)
-+++ b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision f36fb36e689ac7d928947a7fd5b975b166f7dadd)
-@@ -182,7 +182,7 @@
+--- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision b6582d47d264e13a3620c681fa00e905ad51ca62)
++++ b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision 5ace1377507fb2e7f6af522a9bf6826710617e32)
+@@ -183,7 +183,7 @@
                          Class cls = Class.forName(pckgname + '.'
                                  + file.substring(0, file.length() - 6));
                          //if(canInstantiate(cls))
@@ -41,8 +41,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
---- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision f54aad31ee40dea1a1ef485f6ef1d8dba3d5dedd)
-+++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision f36fb36e689ac7d928947a7fd5b975b166f7dadd)
+--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision b6582d47d264e13a3620c681fa00e905ad51ca62)
++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision 5ace1377507fb2e7f6af522a9bf6826710617e32)
 @@ -41,12 +41,41 @@
  import com.watabou.noosa.Game;
  import com.watabou.utils.PlatformSupport;
@@ -86,49 +86,15 @@ diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/andr
  	public void updateDisplaySize(){
  		if (SPDSettings.landscape() != null) {
  			AndroidGame.instance.setRequestedOrientation( SPDSettings.landscape() ?
-Index: core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
-diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
---- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java	(revision f54aad31ee40dea1a1ef485f6ef1d8dba3d5dedd)
-+++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java	(revision f36fb36e689ac7d928947a7fd5b975b166f7dadd)
-@@ -205,7 +205,7 @@
- 
- 		// debug logic...
- 		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
--		boolean supported = true;//DeviceCompat.isDebug() && DeviceCompat.isDesktop();
-+		boolean supported = DeviceCompat.isDebug();
- 		if(supported) {
- 			if(debug == null) {
- 				debug = new ScrollOfDebug();
 Index: core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
 IDEA additional info:
 Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
---- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision f54aad31ee40dea1a1ef485f6ef1d8dba3d5dedd)
-+++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision f36fb36e689ac7d928947a7fd5b975b166f7dadd)
-@@ -42,7 +42,6 @@
- import com.watabou.noosa.ui.Component;
- import com.watabou.utils.Callback;
- import com.watabou.utils.Reflection;
--import com.zrp200.scrollofdebug.PackageTrie;
- 
- import java.lang.reflect.Method;
- import java.lang.reflect.Modifier;
-@@ -53,7 +52,7 @@
-  *
-  * @author  <a href="https://github.com/zrp200/scrollofdebug">
-  *              Zrp200
-- * @version v0.3.0
-+ * @version v0.4.0-Android
-  * **/
- @SuppressWarnings({"rawtypes", "unchecked"})
- public class ScrollOfDebug extends Scroll {
-@@ -495,7 +494,7 @@
+--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision b6582d47d264e13a3620c681fa00e905ad51ca62)
++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision 5ace1377507fb2e7f6af522a9bf6826710617e32)
+@@ -604,7 +604,7 @@
      public static PackageTrie trie = null; // loaded when needed.
      static {
          try {
