@@ -314,27 +314,30 @@ public class ScrollOfDebug extends Scroll {
                             // todo add enchants/glyphs for weapons/armor?
                             // process modifiers left to right (so later ones have higher precedence)
                             boolean collect = false;
-                            int last = 1;
-                            for(int i=2; i < input.length; i++) try {
+                            for(int i=2; i < input.length; i++) {
                                 if(input[i].startsWith("--force") || input[i].equalsIgnoreCase("-f")) {
                                     collect = true;
-                                    last = i;
                                 }
-                                else {
-                                    int number = Integer.parseInt(input[i].substring(1));
-                                    switch(input[i].toLowerCase(Locale.ENGLISH).charAt(0)) {
+                                else if(input[i].matches("[\\-x+]\\d+")) {
+                                    switch (input[i].charAt(0)) {
                                         case 'x':
-                                            item.quantity(number);
-                                            last = i;
+                                            item.quantity(Integer.parseInt(input[i].substring(1)));
                                             break;
+                                        case '-':
                                         case '+':
-                                            item.level(number);
-                                            last = i;
+                                            item.level(Integer.parseInt(input[i]));
                                             break;
                                     }
                                 }
-                            } catch (NumberFormatException e) {/* do nothing */}
-                            if(++last < input.length) executeMethod(item, input, last);
+                                else {
+                                    if(!executeMethod(item,input,i)) {
+                                        GLog.w("Unrecognized option or method '%s'", input[i]);
+                                        onSelect(true, "help " + input[0]);
+                                        return;
+                                    }
+                                    break;
+                                }
+                            }
                             Item toPickUp = collect ? new Item() {
                                 // create wrapper item that simulates doPickUp while actually just calling collect.
                                 { image = item.image; }
