@@ -496,7 +496,10 @@ public class ScrollOfDebug extends Scroll {
                         Modifier.isStatic(method.getModifiers()) ? '.' : '#',
                         method.getName(),
                         // snip first and last brace
-                        argsAsString.substring(1,argsAsString.length()-1), result);
+                        argsAsString.substring(1,argsAsString.length()-1),
+                        // this displays arrays properly.
+                        result.getClass().isArray() ? Arrays.deepToString((Object[])result) : result
+                );
             }
             return true;
         } catch (Exception e) {/*do nothing */}
