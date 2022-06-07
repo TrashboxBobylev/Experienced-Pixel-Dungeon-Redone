@@ -201,6 +201,9 @@ public class ScrollOfDebug extends Scroll {
                                 if(i == -1) continue;
                                 className = className.substring(i+ROOT.length()+1);
                                 message.append("\n\n_").append(className).append("_");
+                                for(Object member : entry.getKey().getEnumConstants()) {
+                                    message.append("\n_->_ ").append(member.toString().replaceAll("_"," "));
+                                }
                                 for(Method m : entry.getValue()) {
                                     message.append("\n_").append(Modifier.isStatic(m.getModifiers()) ? '*' : '-').append("_")
                                             .append(m.getName());
