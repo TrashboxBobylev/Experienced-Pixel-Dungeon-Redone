@@ -76,22 +76,22 @@ public class ScrollOfDebug extends Scroll {
         CHANGES(null, "", "Gives a history of changes to Scroll of Debug."),
         // generation commands.
         GIVE(Item.class,
-                "ITEM [_+_LEVEL] [_x_QUANTITY] [-f | --force] [ METHOD [args] ]",
+                "<item> [+<level>] [x<quantity>] [-f|--force] [<method> [<args..>] ]",
                 "Creates and puts into your inventory the generated item."),
         SPAWN(Mob.class,
-                "MOB [_x_QUANTITY | -p | --place]",
+                "<mob> [x<quantity>|(-p|--place)]",
                 "Summons the indicated mob and randomly places them on the depth. -p allows manual placement, though cannot be combined with a quantity argument."),
         SET(Trap.class,
-                "TRAP",
+                "<trap>",
                 "Sets a trap at an indicated position"),
         AFFECT(Buff.class,
-                "BUFF [duration] [METHOD [args]]",
+                "<buff> [<duration>] [<method> [<args..>]]",
                 "Allows you to attach a buff to a character in sight."),
         SEED(Blob.class,
-                "BLOB [amount]",
+                "<blob> [<amount>]",
                 "Seeds a blob of the specified amount to a targeted tile"),
-        USE(Object.class, "CLASS method [args]", "Use a specified method from a desired class.", false),
-        INSPECT(Object.class, "CLASS", "Gives a list of supported methods for the indicated class.", false);
+        USE(Object.class, "<object> method [args]", "Use a specified method from a desired class.", false),
+        INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class.", false);
 
         final Class<?> paramClass;
         final String syntax, description;
@@ -204,9 +204,20 @@ public class ScrollOfDebug extends Scroll {
                                 for(Method m : entry.getValue()) {
                                     message.append("\n_").append(Modifier.isStatic(m.getModifiers()) ? '*' : '-').append("_")
                                             .append(m.getName());
-                                    for(Class p : m.getParameterTypes()) {
-                                        if(p == Hero.class) continue;
-                                        message.append(' ').append(p.getSimpleName().toUpperCase());
+                                    Class[] types = m.getParameterTypes();
+                                    int left = types.length;
+                                    for(Class c : m.getParameterTypes()) {
+                                        StringBuilder param = new StringBuilder("<");
+                                        param.append(c.getSimpleName().toLowerCase());
+                                        // varargs handling. Not supported, but...maybe someday?
+                                        if(--left == 0 && m.isVarArgs()) param.append("..");
+                                        param.append('>');
+                                        // optional handling, currently only hero is handled.
+                                        // todo have similar methods be merged, with the offending parameters marked as optional.
+                                        if(c == Hero.class) {
+                                            param.insert(0,'[').append(']');
+                                        }
+                                        message.append(' ').append(param);
                                     }
                                 }
                             }
