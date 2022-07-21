@@ -1,0 +1,26 @@
+Index: core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision 98d32b0158e31b161ff5aa160f40130f1b4f8adf)
++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision ffff854ef141991725fe5d20e9d943fa625c1aa6)
+@@ -36,7 +36,7 @@
+ import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
+ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+ // WndTextInput (added in v0.9.4)
+-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
++import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
+ // Output
+ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+
+@@ -131,7 +131,7 @@
+     @Override
+     public void doRead() {
+         collect(); // you don't lose scroll of debug.
+-        GameScene.show(new WndTextInput("Enter Command:", null, "", 100, false,
++        GameScene.show(new WndTextInput("Enter Command:", "", 100, false,
+                 "Execute", "Cancel") {
+             @Override public void onSelect(boolean positive, String text) {
+                 if(!positive) return;
