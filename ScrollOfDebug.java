@@ -53,9 +53,12 @@ import java.util.regex.Pattern;
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
  *
+ *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v0.4.0
+ * @version v1.0.0
+ *
+ * @apiNote Compatible with Shattered Pixel Dungeon v1.3.0+, and compatible with any LibGDX Shattered Pixel Dungeon version (post v0.8) with minimal changes.
  * **/
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ScrollOfDebug extends Scroll {
@@ -693,7 +696,16 @@ public class ScrollOfDebug extends Scroll {
     }
 
     private static final String CHANGELOG
-        = "_0.4.0_:"
+        = ""
+            +"_1.0.0_:"
+            +"\n_-_ Changes to Shattered Pixel Dungeon in v1.3.0 mean scroll of debug no longer directly supports versions before it."
+            +"\n_-_ Changed formatting style of commands."
+            +"\n_-_ Enumerated types now list their values in _inspect_"
+            +"\n_- give_ now only requires a - to give degraded items, rather than +-"
+            +"\n_- give_ now rejects more invalid inputs."
+            +"\n_-_ Scroll of Debug's add implementation only triggers when it is not in the player's inventory."
+            +"\n_-_ Fixed scrollpanes being offset incorrectly in full shpd view"
+            +"_0.4.0_:"
             +"\n_-_ Added this command."
             +"\n_-_ Added _use_ command, which can call a desired method on any game class that supports it (see _inspect_ for valid methods)."
             +"\n_-_ Including _!!_ in a command will replace it with the previously written command."
