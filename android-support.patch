@@ -4,8 +4,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
---- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
-+++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+--- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision 94dd380c6c81d1babdeeb98d8b49be596f43edf2)
++++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision 433578b2a6797877c66fa819adc0d901be623efd)
 @@ -30,7 +30,12 @@
 
  import java.util.HashMap;
@@ -27,8 +27,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 diff --git a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
 rename from core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
 rename to SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
---- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
-+++ b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+--- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision 94dd380c6c81d1babdeeb98d8b49be596f43edf2)
++++ b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision 433578b2a6797877c66fa819adc0d901be623efd)
 @@ -183,7 +183,7 @@
                          Class cls = Class.forName(pckgname + '.'
                                  + file.substring(0, file.length() - 6));
@@ -44,8 +44,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
---- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
-+++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision f8c6c7e438826b67e02cdf03a63662c5b542a83f)
+--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision 94dd380c6c81d1babdeeb98d8b49be596f43edf2)
++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision bea8e668cb2eb8dd230457c77f8494beb707f5d1)
 @@ -41,12 +41,41 @@
  import com.watabou.noosa.Game;
  import com.watabou.utils.PlatformSupport;
@@ -95,8 +95,8 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 <+>UTF-8
 ===================================================================
 diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
---- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
-+++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision 94dd380c6c81d1babdeeb98d8b49be596f43edf2)
++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision 433578b2a6797877c66fa819adc0d901be623efd)
 @@ -629,7 +629,7 @@
      public static PackageTrie trie = null; // loaded when needed.
      static {
@@ -106,3 +106,56 @@ diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/co
          } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
      }
 
+Index: core/src/main/java/com/zrp200/scrollofdebug/v1_3_Compatibility_fixes_Android.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/v1_3_Compatibility_fixes_Android.patch b/core/src/main/java/com/zrp200/scrollofdebug/v1_3_Compatibility_fixes_Android.patch
+new file mode 100644
+--- /dev/null	(revision bea8e668cb2eb8dd230457c77f8494beb707f5d1)
++++ b/core/src/main/java/com/zrp200/scrollofdebug/v1_3_Compatibility_fixes_Android.patch	(revision bea8e668cb2eb8dd230457c77f8494beb707f5d1)
+@@ -0,0 +1,43 @@
++Index: android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
++--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision 37eb579247b6694b3c80bacf589fadaf6de414b0)
+++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(date 1658003330856)
++@@ -57,7 +57,7 @@
++ 		return new PackageTrie() {
++ 			{
++ 				try {
++-					Enumeration<String> entries = new DexFile(AndroidGame.instance
+++					Enumeration<String> entries = new DexFile(AndroidLauncher.instance
++ 							.getContext()
++ 							.getPackageCodePath()
++ 					).entries();
++Index: core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
++--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision 37eb579247b6694b3c80bacf589fadaf6de414b0)
+++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(date 1658189051636)
++@@ -36,7 +36,7 @@
++ import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
++ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
++ // WndTextInput (added in v0.9.4)
++-import com.shatteredpixel.shatteredpixeldungeon.ui.WndTextInput;
+++import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
++ // Output
++ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
++
++@@ -131,7 +131,7 @@
++     @Override
++     public void doRead() {
++         collect(); // you don't lose scroll of debug.
++-        GameScene.show(new WndTextInput("Enter Command:", "", 100, false,
+++        GameScene.show(new WndTextInput("Enter Command:", null, "", 100, false,
++                 "Execute", "Cancel") {
++             @Override public void onSelect(boolean positive, String text) {
++                 if(!positive) return;
