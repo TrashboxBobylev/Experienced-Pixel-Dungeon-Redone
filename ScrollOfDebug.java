@@ -702,6 +702,7 @@ public class ScrollOfDebug extends Scroll {
     // including RKPD2 scrolling window code.
     private static class HelpWindow extends Window {
         private static final int WIDTH_MIN=120, WIDTH_MAX=220;
+        ScrollPane scrollPane;
         HelpWindow(String message) {
             int width = WIDTH_MIN;
 
@@ -729,15 +730,21 @@ public class ScrollOfDebug extends Scroll {
             if(needScrollPane) {
                 Component wrapper = new Component();
                 wrapper.setSize(text.width(), text.height());
-                ScrollPane sp = new ScrollPane(wrapper);
-                add(sp);
+                add(scrollPane = new ScrollPane(wrapper));
                 wrapper.add(text);
                 text.setPos(0,0);
-                sp.setSize(wrapper.width(), height);
+                scrollPane.setSize(wrapper.width(), height);
             }
             else {
                 add(text);
             }
+        }
+
+        @Override // this should be removed for pre-v1.2 builds, this method was added in v1.2
+        public void offset(int xOffset, int yOffset) {
+            super.offset(xOffset, yOffset);
+            // this prevents issues in the full ui mode.
+            if(scrollPane != null) scrollPane.setSize(scrollPane.width(), scrollPane.height());
         }
     }
 
