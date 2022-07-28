@@ -44,8 +44,7 @@ import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -199,16 +198,45 @@ public class ScrollOfDebug extends Scroll {
                         if(cls != null) {
                             StringBuilder message = new StringBuilder();
                             for(Map.Entry<Class,Set<Method>> entry : hierarchy(cls).entrySet()) {
-                                String className = entry.getKey().getName();
+                                Class inspecting = entry.getKey();
+                                String className = inspecting.getName();
                                 int i = className.indexOf(ROOT);
                                 if(i == -1) continue;
                                 className = className.substring(i+ROOT.length()+1);
                                 message.append("\n\n_").append(className).append("_");
-                                Object[] enumConstants = entry.getKey().getEnumConstants();
+                                Object[] enumConstants = inspecting.getEnumConstants();
                                 if(enumConstants != null) for(Object member : entry.getKey().getEnumConstants()) {
                                     message.append("\n_->_ ").append(member.toString().replaceAll("_"," "));
                                 }
-                                // todo add support for retrieving static variables
+                                for(Field f : inspecting.getFields()) {
+                                    if(f.isEnumConstant()) continue;
+                                    if(f.getDeclaringClass() != inspecting) continue;
+                                    int modifiers = f.getModifiers();
+                                    Class t = f.getType();
+                                    message.append("\n_")
+                                            .append(Modifier.isStatic(modifiers) ? '-' : '#')
+                                            .append('_').append(f.getName().replaceAll("_"," "));
+                                    if(Modifier.isFinal(modifiers)) {
+                                        boolean showValue = Modifier.isStatic(modifiers);
+                                        if(showValue) try {
+                                            // no point in showing if we're just going to get a meaningless hash
+                                            showValue = t.isPrimitive()
+                                                    || t.getMethod("toString")
+                                                        .getDeclaringClass() != Object.class;
+                                        } catch (NoSuchMethodException e) { showValue = false; }
+                                        if(showValue) try {
+                                            message.append("=").append(f.get(null));
+                                        } catch (IllegalAccessException e) {/* do nothing*/}
+                                        else {
+                                            message.append(": ").append(t.getName());
+                                        }
+                                    } else {
+                                        // this signifies that the getter can be accessed this way. hopefully no one was dumb enough to duplicate the name.
+                                        message.append(" [<")
+                                                .append(f.getType().getName().toLowerCase())
+                                                .append(">]");
+                                    }
+                                }
                                 for(Method m : entry.getValue()) {
                                     message.append("\n_").append(Modifier.isStatic(m.getModifiers()) ? '*' : '-').append("_")
                                             .append(m.getName());
@@ -479,6 +507,8 @@ public class ScrollOfDebug extends Scroll {
         unique = true;
     }
 
+
+    // todo change return type to integer to indicate how many spaces were used, possibly add option to force all to be used. This would allow stacking.
     // variant that derives class from the object given
     <T> boolean executeMethod(T obj, String methodName, String... args) {
         return executeMethod(obj, (Class<T>)obj.getClass(), methodName, args);
@@ -495,19 +525,26 @@ public class ScrollOfDebug extends Scroll {
             Object[] arguments = getArguments(method.getParameterTypes(), args);
             Object result = method.invoke(obj, arguments);
             if(result != null) {
-                String argsAsString = Arrays.deepToString(arguments);
-                GLog.w("%s%s%s(%s): %s",
-                        cls.getSimpleName(),
-                        Modifier.isStatic(method.getModifiers()) ? '.' : '#',
-                        method.getName(),
-                        // snip first and last brace
-                        argsAsString.substring(1,argsAsString.length()-1),
-                        // this displays arrays properly.
-                        result.getClass().isArray() ? Arrays.deepToString((Object[])result) : result
-                );
+                printMethodOutput(cls,method,method.getModifiers(),result,arguments);
             }
             return true;
         } catch (Exception e) {/*do nothing */}
+        // check if it is actually a field.
+        try {
+            Field field = cls.getField(methodName);
+            Object result;
+            if(args.length == 0) {
+                result = field.get(obj);
+            }
+            // fixme this will need to be revisited when I implement stacking of methods
+            else if(args.length == 1) {
+                // convert the argument to a proper object and assign
+                // fixme should not have to do this much wrangling
+                field.set(obj, result=getArguments(new Class[]{field.getType()}, args)[0]);
+            } else throw new IllegalArgumentException();
+            printMethodOutput(cls,field,field.getModifiers(), result);
+            return true;
+        } catch(Exception e) {/*not a valid match*/}
         return false;
     }
     // shortcut methods that interpret input to get the arguments needed
@@ -519,8 +556,24 @@ public class ScrollOfDebug extends Scroll {
     }
     <T> boolean executeMethod(T obj, String[] input, int startIndex) { return executeMethod(obj, (Class<T>)obj.getClass(), input, startIndex); }
 
+    // prints out the result of a method call.
+    static void printMethodOutput(Class cls, Member m, int modifiers, Object result, Object... arguments) {
+        String argsAsString = Arrays.deepToString(arguments);
+        String argFormat = m instanceof Method ? "(%5$s):" : " =";
+        GLog.w("%s%s%s"+argFormat+" %4$s",
+                cls.getSimpleName(),
+                Modifier.isStatic(modifiers) ? '.' : '#',
+                m.getName(),
+                // this displays arrays properly.
+                result.getClass().isArray() ? Arrays.deepToString((Object[])result) : result,
+                // snip first and last brace
+                argsAsString.substring(1,argsAsString.length()-1)
+        );
+    }
+
     // throws an exception if it fails. This removes the need for me to handle errors at all.
     Object[] getArguments(Class[] params, String[] input) throws Exception {
+        // todo make a #getArgument(Class, String... input)
         Object[] args = new Object[params.length];
         int j = 0;
         // currently not implemented.
