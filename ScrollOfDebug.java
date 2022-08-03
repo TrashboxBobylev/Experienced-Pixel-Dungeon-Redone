@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v1.0.0
+ * @version v1.1.0
  *
  * @apiNote Compatible with Shattered Pixel Dungeon v1.3.0+, and compatible with any LibGDX Shattered Pixel Dungeon version (post v0.8) with minimal changes.
  * **/
@@ -757,7 +757,10 @@ public class ScrollOfDebug extends Scroll {
 
     private static final String CHANGELOG
         = ""
-            +"_1.0.0_:"
+            +"_1.1.0_:"
+            +"\n_-_ Actually fixed scrollpane issues this time"
+            +"\n_-_ Added the ability to retrieve and set public fields of objects, though such functionality cannot be used to pass them to methods at this time."
+            +"\n_1.0.0_:"
             +"\n_-_ Changes to Shattered Pixel Dungeon in v1.3.0 mean scroll of debug no longer directly supports versions before it."
             +"\n_-_ Changed formatting style of commands."
             +"\n_-_ Enumerated types now list their values in _inspect_"
