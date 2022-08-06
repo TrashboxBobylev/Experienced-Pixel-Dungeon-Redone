@@ -33,16 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.Gizmo;
 import com.watabou.noosa.Group;
@@ -58,7 +49,6 @@ public class WndHero extends WndTabbed {
 	private static final int HEIGHT		= 120;
 	
 	private StatsTab stats;
-	private TalentsTab talents;
 	private BuffsTab buffs;
 
 	public static int lastIdx = 0;
@@ -71,10 +61,6 @@ public class WndHero extends WndTabbed {
 
 		stats = new StatsTab();
 		add( stats );
-
-		talents = new TalentsTab();
-		add(talents);
-		talents.setRect(0, 0, WIDTH, HEIGHT);
 
 		buffs = new BuffsTab();
 		add( buffs );
@@ -93,27 +79,15 @@ public class WndHero extends WndTabbed {
 				stats.visible = stats.active = selected;
 			}
 		} );
-		add( new IconTab( Icons.get(Icons.TALENT) ) {
-			protected void select( boolean value ) {
-				super.select( value );
-				if (selected) lastIdx = 1;
-				if (selected) StatusPane.talentBlink = 0;
-				talents.visible = talents.active = selected;
-			}
-		} );
 		add( new IconTab( Icons.get(Icons.BUFFS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
-				if (selected) lastIdx = 2;
+				if (selected) lastIdx = 1;
 				buffs.visible = buffs.active = selected;
 			}
 		} );
 
 		layoutTabs();
-
-		talents.setRect(0, 0, WIDTH, HEIGHT);
-		talents.pane.scrollTo(0, talents.pane.content().height() - talents.pane.height());
-		talents.layout();
 
 		select( lastIdx );
 	}
@@ -121,7 +95,6 @@ public class WndHero extends WndTabbed {
 	@Override
 	public void offset(int xOffset, int yOffset) {
 		super.offset(xOffset, yOffset);
-		talents.layout();
 		buffs.layout();
 	}
 
@@ -153,7 +126,7 @@ public class WndHero extends WndTabbed {
 			title.color(Window.TITLE_COLOR);
 			title.setRect( 0, 0, WIDTH-16, 0 );
 			add(title);
-			IconButton perkInfo = new IconButton(Icons.get(Icons.INFO)){
+			IconButton perkInfo = new IconButton(Icons.get(Icons.TALENT)){
 				@Override
 				protected void onClick() {
 					super.onClick();
@@ -161,7 +134,7 @@ public class WndHero extends WndTabbed {
 					GameScene.show(new WndPerks(hero.perks, false));
 				}
 			};
-			perkInfo.setRect(WIDTH - 15, title.top()-2.5f, 16, 16);
+			perkInfo.setRect(title.right()-16, 0, 16, 16);
 			add(perkInfo);
 
 			IconButton infoButton = new IconButton(Icons.get(Icons.INFO)){
@@ -230,25 +203,6 @@ public class WndHero extends WndTabbed {
 		public float height() {
 			return pos;
 		}
-	}
-
-	public class TalentsTab extends Component {
-
-		TalentsPane pane;
-
-		@Override
-		protected void createChildren() {
-			super.createChildren();
-			pane = new TalentsPane(TalentButton.Mode.UPGRADE);
-			add(pane);
-		}
-
-		@Override
-		protected void layout() {
-			super.layout();
-			pane.setRect(x, y, width, height);
-		}
-
 	}
 
 	private class BuffsTab extends Component {
