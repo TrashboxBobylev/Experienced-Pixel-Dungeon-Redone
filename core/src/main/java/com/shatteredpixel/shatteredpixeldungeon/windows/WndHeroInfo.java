@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -34,19 +33,13 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
 public class WndHeroInfo extends WndTabbed {
 
 	private HeroInfoTab heroInfo;
-	private TalentInfoTab talentInfo;
 	private SubclassInfoTab subclassInfo;
 	private ArmorAbilityInfoTab abilityInfo;
 
@@ -70,6 +63,9 @@ public class WndHeroInfo extends WndTabbed {
 			case HUNTRESS:
 				tabIcon = new ItemSprite(ItemSpriteSheet.SPIRIT_BOW, null);
 				break;
+			case RAT_KING:
+				tabIcon = new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING, null);
+				break;
 		}
 
 		int finalHeight = MIN_HEIGHT;
@@ -84,19 +80,6 @@ public class WndHeroInfo extends WndTabbed {
 			protected void select(boolean value) {
 				super.select(value);
 				heroInfo.visible = heroInfo.active = value;
-			}
-		});
-
-		talentInfo = new TalentInfoTab(cl);
-		add(talentInfo);
-		talentInfo.setSize(WIDTH, MIN_HEIGHT);
-		finalHeight = (int)Math.max(finalHeight, talentInfo.height());
-
-		add( new IconTab( Icons.get(Icons.TALENT) ){
-			@Override
-			protected void select(boolean value) {
-				super.select(value);
-				talentInfo.visible = talentInfo.active = value;
 			}
 		});
 
@@ -133,7 +116,6 @@ public class WndHeroInfo extends WndTabbed {
 		resize(WIDTH, finalHeight);
 
 		layoutTabs();
-		talentInfo.layout();
 
 		select(0);
 
@@ -183,6 +165,16 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.GLOVES),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
+				case RAT_KING:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING)
+					};
+					break;
 			}
 			for (Image im : icons) {
 				add(im);
@@ -210,43 +202,6 @@ public class WndHeroInfo extends WndTabbed {
 
 			height = Math.max(height, pos - 4*MARGIN);
 
-		}
-	}
-
-	private static class TalentInfoTab extends Component {
-
-		private RenderedTextBlock title;
-		private RenderedTextBlock message;
-		private TalentsPane talentPane;
-
-		public TalentInfoTab( HeroClass cls ){
-			super();
-			title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(WndHeroInfo.class, "talents")), 9);
-			title.hardlight(TITLE_COLOR);
-			add(title);
-
-			message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "talents_msg"), 6);
-			add(message);
-
-			ArrayList<LinkedHashMap<Talent, Integer>> talents = new ArrayList<>();
-			Talent.initClassTalents(cls, talents);
-			talents.get(2).clear(); //we show T3 talents with subclasses
-
-			talentPane = new TalentsPane(TalentButton.Mode.INFO, talents);
-			add(talentPane);
-		}
-
-		@Override
-		protected void layout() {
-			super.layout();
-
-			title.setPos((width-title.width())/2, MARGIN);
-			message.maxWidth((int)width);
-			message.setPos(0, title.bottom()+4*MARGIN);
-
-			talentPane.setRect(0, message.bottom() + 3*MARGIN, width, 85);
-
-			height = Math.max(height, talentPane.bottom());
 		}
 	}
 
