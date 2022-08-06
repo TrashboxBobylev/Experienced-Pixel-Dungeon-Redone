@@ -213,6 +213,8 @@ public class ScrollOfDebug extends Scroll {
                                     if(f.getDeclaringClass() != inspecting) continue;
                                     int modifiers = f.getModifiers();
                                     Class t = f.getType();
+                                    // wonder if this should be sorted (possibly static -> instance)
+                                    // also need to revisit the use of symbols, - is duplicated inappropriately.
                                     message.append("\n_")
                                             .append(Modifier.isStatic(modifiers) ? '-' : '#')
                                             .append('_').append(f.getName().replaceAll("_"," "));
@@ -228,12 +230,12 @@ public class ScrollOfDebug extends Scroll {
                                             message.append("=").append(f.get(null));
                                         } catch (IllegalAccessException e) {/* do nothing*/}
                                         else {
-                                            message.append(": ").append(t.getName());
+                                            message.append(": ").append(t.getSimpleName());
                                         }
                                     } else {
                                         // this signifies that the getter can be accessed this way. hopefully no one was dumb enough to duplicate the name.
                                         message.append(" [<")
-                                                .append(f.getType().getName().toLowerCase())
+                                                .append(f.getType().getSimpleName())
                                                 .append(">]");
                                     }
                                 }
@@ -518,6 +520,7 @@ public class ScrollOfDebug extends Scroll {
     <T> boolean executeMethod(T obj, Class<? super T> cls, String methodName, String... args) {
         ArrayList<Method> methods = new ArrayList<>();
         for(Method method : cls.getMethods()) {
+            if(args.length > method.getParameterTypes().length) continue; // prevents arbitrary hiding.
             if(method.getName().equalsIgnoreCase(methodName)) methods.add(method);
         }
         Collections.sort(methods, (m1, m2) -> m2.getParameterTypes().length - m1.getParameterTypes().length );
@@ -531,7 +534,15 @@ public class ScrollOfDebug extends Scroll {
         } catch (Exception e) {/*do nothing */}
         // check if it is actually a field.
         try {
-            Field field = cls.getField(methodName);
+            Field field = null;
+            // this is needed because it's currently not case sensitive, while getField() is.
+            for(Field f : cls.getFields()) {
+                if(f.getName().equalsIgnoreCase(methodName)) {
+                    field = f;
+                    break;
+                }
+            }
+            if(field == null) return false;
             Object result;
             if(args.length == 0) {
                 result = field.get(obj);
