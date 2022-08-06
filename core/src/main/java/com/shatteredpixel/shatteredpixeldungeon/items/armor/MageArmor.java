@@ -24,12 +24,39 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
 
 public class MageArmor extends ClassArmor {
 	
 	{
 		image = ItemSpriteSheet.ARMOR_MAGE;
+	}
+
+
+	public static boolean doMoltenEarth() {
+		boolean success = false;
+
+		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+			if (Dungeon.level.heroFOV[mob.pos]
+					&& mob.alignment != Char.Alignment.ALLY && Dungeon.level.distance(Dungeon.hero.pos, mob.pos) <= 6) {
+				success = true;
+			}
+		}
+		return success;
+	}
+	public static void playMoltenEarthFX() {
+		curUser.busy();
+
+		curUser.sprite.emitter().start( ElmoParticle.FACTORY, 0.025f, 20 );
+		Sample.INSTANCE.play( Assets.Sounds.BURNING );
+		Sample.INSTANCE.play( Assets.Sounds.BURNING );
+		Sample.INSTANCE.play( Assets.Sounds.BURNING );
 	}
 
 }

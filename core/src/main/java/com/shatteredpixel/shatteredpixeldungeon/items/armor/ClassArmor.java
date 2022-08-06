@@ -131,9 +131,13 @@ abstract public class ClassArmor extends Armor {
 		return classArmor;
 	}
 
-	protected void useCharge() {
-		charge -= 35;
+	public void useCharge(Hero hero, ArmorAbility armorAbility, boolean recordUsed) {
+		if (hero.armorAbility != null)
+			charge -= armorAbility.chargeUse(hero);
 		updateQuickslot();
+	}
+	public void useCharge(Hero hero, ArmorAbility armorAbility) {
+		useCharge(hero, armorAbility, true);
 	}
 
 	private static final String ARMOR_TIER	= "armortier";
