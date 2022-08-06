@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -49,8 +48,8 @@ public class ExoticPotion extends Potion {
 		regToExo.put(PotionOfToxicGas.class, PotionOfCorrosiveGas.class);
 		exoToReg.put(PotionOfCorrosiveGas.class, PotionOfToxicGas.class);
 		
-		regToExo.put(PotionOfStrength.class, PotionOfAdrenalineSurge.class);
-		exoToReg.put(PotionOfAdrenalineSurge.class, PotionOfStrength.class);
+		regToExo.put(PotionOfStrength.class, PotionOfMastery.class);
+		exoToReg.put(PotionOfMastery.class, PotionOfStrength.class);
 		
 		regToExo.put(PotionOfFrost.class, PotionOfSnapFreeze.class);
 		exoToReg.put(PotionOfSnapFreeze.class, PotionOfFrost.class);
@@ -70,8 +69,8 @@ public class ExoticPotion extends Potion {
 		regToExo.put(PotionOfLevitation.class, PotionOfStormClouds.class);
 		exoToReg.put(PotionOfStormClouds.class, PotionOfLevitation.class);
 		
-		regToExo.put(PotionOfExperience.class, PotionOfHolyFuror.class);
-		exoToReg.put(PotionOfHolyFuror.class, PotionOfExperience.class);
+		regToExo.put(PotionOfExperience.class, PotionOfDivineInspiration.class);
+		exoToReg.put(PotionOfDivineInspiration.class, PotionOfExperience.class);
 		
 		regToExo.put(PotionOfPurity.class, PotionOfCleansing.class);
 		exoToReg.put(PotionOfCleansing.class, PotionOfPurity.class);
@@ -108,55 +107,44 @@ public class ExoticPotion extends Potion {
 	
 	@Override
 	//20 gold more than its none-exotic equivalent
-	public int price() {
-		return (Reflection.newInstance(exoToReg.get(getClass())).price() + 20) * quantity;
+	public int value() {
+		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 20) * quantity;
 	}
-	
+
+	@Override
+	//4 more energy than its none-exotic equivalent
+	public int energyVal() {
+		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 4) * quantity;
+	}
+
 	public static class PotionToExotic extends Recipe{
-		
+
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {
-			int s = 0;
-			Potion p = null;
-			
-			for (Item i : ingredients){
-				if (i instanceof Plant.Seed){
-					s++;
-				} else if (regToExo.containsKey(i.getClass())) {
-					p = (Potion)i;
-				}
+			if (ingredients.size() == 1 && regToExo.containsKey(ingredients.get(0).getClass())){
+				return true;
 			}
-			
-			return p != null && s == 2;
+
+			return false;
 		}
 		
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
-			return 0;
+			return 4;
 		}
-		
+
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
-			Item result = null;
-			
 			for (Item i : ingredients){
 				i.quantity(i.quantity()-1);
-				if (regToExo.containsKey(i.getClass())) {
-					result = Reflection.newInstance(regToExo.get(i.getClass()));
-				}
 			}
-			return result;
+
+			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
 		}
-		
+
 		@Override
 		public Item sampleOutput(ArrayList<Item> ingredients) {
-			for (Item i : ingredients){
-				if (regToExo.containsKey(i.getClass())) {
-					return Reflection.newInstance(regToExo.get(i.getClass()));
-				}
-			}
-			return null;
-			
+			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
 		}
 	}
 }

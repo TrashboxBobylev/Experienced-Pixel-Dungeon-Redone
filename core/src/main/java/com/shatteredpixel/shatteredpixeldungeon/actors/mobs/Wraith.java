@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -98,22 +98,20 @@ public class Wraith extends Mob {
 	
 	public static void spawnAround( int pos ) {
 		for (int n : PathFinder.NEIGHBOURS4) {
-			int cell = pos + n;
-			if (Dungeon.level.passable[cell] && Actor.findChar( cell ) == null) {
-				spawnAt( cell );
-			}
+			spawnAt( pos + n );
 		}
 	}
 	
 	public static Wraith spawnAt( int pos ) {
-		if (Dungeon.level.passable[pos] && Actor.findChar( pos ) == null) {
+		if ((!Dungeon.level.solid[pos] || Dungeon.level.passable[pos]) && Actor.findChar( pos ) == null) {
 			
 			Wraith w = new Wraith();
-			w.adjustStats( Dungeon.escalatingDepth() );
+			w.adjustStats( Dungeon.scalingDepth() );
 			w.pos = pos;
 			w.state = w.HUNTING;
 			GameScene.add( w, SPAWN_DELAY );
-			
+			Dungeon.level.occupyCell(w);
+
 			w.sprite.alpha( 0 );
 			w.sprite.parent.add( new AlphaTweener( w.sprite, 1, 0.5f ) );
 			

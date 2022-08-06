@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.watabou.noosa;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
+import com.watabou.glwrap.Texture;
 
 public class Halo extends Image {
 	
@@ -41,12 +42,17 @@ public class Halo extends Image {
 		super();
 		
 		if (!TextureCache.contains( CACHE_KEY )) {
-			Pixmap pixmap = new Pixmap(2*RADIUS+1, 2*RADIUS+1, Pixmap.Format.RGBA8888);
+
+			Pixmap pixmap = TextureCache.create( CACHE_KEY, 2*RADIUS+1, 2*RADIUS+1 ).bitmap;
+
+			pixmap.setColor( 0x00000000 );
+			pixmap.fill();
+
 			pixmap.setColor( 0xFFFFFF08 );
 			for (int i = 0; i < RADIUS; i+=2) {
 				pixmap.fillCircle(RADIUS, RADIUS, (RADIUS - i));
 			}
-			TextureCache.add( CACHE_KEY, new SmartTexture( pixmap ) );
+
 		}
 		
 		texture( CACHE_KEY );

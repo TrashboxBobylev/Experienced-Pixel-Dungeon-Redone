@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -123,9 +123,12 @@ public class GolemSprite extends MobSprite {
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 
+	private boolean died = false;
+
 	@Override
 	public void onComplete( Animation anim ) {
-		if (anim == die) {
+		if (anim == die && !died) {
+			died = true;
 			emitter().burst( ElmoParticle.FACTORY, 4 );
 		}
 		if (anim == zap) {

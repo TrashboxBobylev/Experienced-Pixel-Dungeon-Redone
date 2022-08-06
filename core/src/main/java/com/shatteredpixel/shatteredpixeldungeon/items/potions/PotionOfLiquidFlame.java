@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -43,7 +43,7 @@ public class PotionOfLiquidFlame extends Potion {
 	public void shatter( int cell ) {
 
 		if (Dungeon.level.heroFOV[cell]) {
-			setKnown();
+			identify();
 
 			splash( cell );
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
@@ -60,7 +60,7 @@ public class PotionOfLiquidFlame extends Potion {
 	}
 	
 	@Override
-	public int price() {
-		return isKnown() ? 30 * quantity : super.price();
+	public int value() {
+		return isKnown() ? 30 * quantity : super.value();
 	}
 }

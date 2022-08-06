@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -33,6 +33,7 @@ import com.watabou.noosa.NoosaScript;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.PointF;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -110,14 +111,18 @@ public class CircleArc extends Visual {
 		this.sweep = sweep;
 		dirty = true;
 	}
+
+	public float getSweep(){
+		return sweep;
+	}
 	
 	private void updateTriangles(){
 		
 		dirty = false;
 		float v[] = new float[4];
 		
-		indices.position( 0 );
-		vertices.position( 0 );
+		((Buffer)indices).position( 0 );
+		((Buffer)vertices).position( 0 );
 		
 		v[0] = 0;
 		v[1] = 0;
@@ -147,8 +152,8 @@ public class CircleArc extends Visual {
 			indices.put( (short)(1 + i * 2) );
 			indices.put( (short)(2 + i * 2) );
 		}
-		
-		indices.position( 0 );
+
+		((Buffer)indices).position( 0 );
 	}
 	
 	@Override

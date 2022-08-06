@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -50,6 +50,9 @@ public class GreatCrab extends Crab {
 
 		state = WANDERING;
 
+		loot = new MysteryMeat().quantity(2);
+		lootChance = 1f;
+
 		properties.add(Property.MINIBOSS);
         switch (Dungeon.cycle){
             case 1:
@@ -82,13 +85,16 @@ public class GreatCrab extends Crab {
 
 	@Override
 	public void damage( int dmg, Object src ){
-		//crab blocks all attacks originating from its current enemy if it sees them.
-		//All direct damage is negated, no exceptions. environmental effects go through as normal.
-		if ((enemySeen && state != SLEEPING && paralysed == 0)
-				&& ((src instanceof Wand && enemy == Dungeon.hero)
-				|| (src instanceof Char && enemy == src))){
+		//crab blocks all wand damage from the hero if it sees them.
+		//Direct damage is negated, but add-on effects and environmental effects go through as normal.
+		if (enemySeen
+				&& state != SLEEPING
+				&& paralysed == 0
+				&& src instanceof Wand
+				&& enemy == Dungeon.hero
+				&& enemy.invisible == 0){
 			GLog.n( Messages.get(this, "noticed") );
-			sprite.showStatus( CharSprite.NEUTRAL, Messages.get(this, "blocked") );
+			sprite.showStatus( CharSprite.NEUTRAL, Messages.get(this, "def_verb") );
 			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 		} else {
 			super.damage( dmg, src );
@@ -96,12 +102,26 @@ public class GreatCrab extends Crab {
 	}
 
 	@Override
+	public int defenseSkill( Char enemy ) {
+		//crab blocks all melee attacks from its current target
+		if (enemySeen
+				&& state != SLEEPING
+				&& paralysed == 0
+				&& enemy == this.enemy
+				&& enemy.invisible == 0){
+			if (sprite != null && sprite.visible) {
+				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
+				GLog.n( Messages.get(this, "noticed") );
+			}
+			return INFINITE_EVASION;
+		}
+		return super.defenseSkill( enemy );
+	}
+
+	@Override
 	public void die( Object cause ) {
 		super.die( cause );
 
 		Ghost.Quest.process();
-
-		Dungeon.level.drop( new MysteryMeat(), pos );
-		Dungeon.level.drop( new MysteryMeat(), pos ).sprite.drop();
 	}
 }

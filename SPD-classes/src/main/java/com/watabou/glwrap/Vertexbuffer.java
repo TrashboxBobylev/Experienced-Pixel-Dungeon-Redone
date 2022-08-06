@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,6 +26,7 @@ package com.watabou.glwrap;
 
 import com.badlogic.gdx.Gdx;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
@@ -77,7 +78,7 @@ public class Vertexbuffer {
 	public void updateGLData(){
 		if (updateStart == -1) return;
 
-		vertices.position(updateStart);
+		((Buffer)vertices).position(updateStart);
 		bind();
 
 		if (updateStart == 0 && updateEnd == vertices.limit()){
@@ -105,7 +106,15 @@ public class Vertexbuffer {
 		}
 	}
 
-	public static void refreshAllBuffers(){
+	public static void clear(){
+		synchronized (buffers) {
+			for (Vertexbuffer buf : buffers.toArray(new Vertexbuffer[0])) {
+				buf.delete();
+			}
+		}
+	}
+
+	public static void reload(){
 		synchronized (buffers) {
 			for (Vertexbuffer buf : buffers) {
 				buf.updateVertices();

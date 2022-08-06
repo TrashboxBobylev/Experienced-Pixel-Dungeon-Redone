@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,11 +35,12 @@ public class ConeAOE {
 
 	public Ballistica coreRay;
 
+	public ArrayList<Ballistica> outerRays = new ArrayList<>();
 	public ArrayList<Ballistica> rays = new ArrayList<>();
 	public HashSet<Integer> cells = new HashSet<>();
 
 	public ConeAOE( Ballistica core, float degrees ){
-		this( core, Float.POSITIVE_INFINITY, degrees, Ballistica.STOP_TARGET/* TODO */);
+		this( core, Float.POSITIVE_INFINITY, degrees, core.collisionProperties );
 	}
 
 	public ConeAOE( Ballistica core, float maxDist, float degrees, int ballisticaParams ){
@@ -72,6 +73,7 @@ public class ConeAOE {
 		float initalAngle = PointF.angle(fromP, toP)/PointF.G2R;
 		//want to preserve order so that our collection of rays is going clockwise
 		LinkedHashSet<Integer> targetCells = new LinkedHashSet<>();
+		LinkedHashSet<Integer> outerCells = new LinkedHashSet<>();
 
 		//cast a ray every 0.5 degrees in a clockwise arc, to find cells along the cone's outer arc
 		for (float a = initalAngle+degrees/2f; a >= initalAngle-degrees/2f; a-=0.5f){
@@ -83,9 +85,10 @@ public class ConeAOE {
 					(int)GameMath.gate(0, (int)Math.floor(scan.x), Dungeon.level.width()-1),
 					(int)GameMath.gate(0, (int)Math.floor(scan.y), Dungeon.level.height()-1));
 			targetCells.add(Dungeon.level.pointToCell(scanInt));
+			outerCells.add(Dungeon.level.pointToCell(scanInt));
 			//if the cone is large enough, also cast rays to cells just inside of the outer arc
 			// this helps fill in any holes when casting rays
-			if (circleRadius >= 7) {
+			if (circleRadius >= 4) {
 				scan.polar(a * PointF.G2R, circleRadius - 1);
 				scan.offset(fromP);
 				scan.x += (fromP.x > scan.x ? +0.5f : -0.5f);
@@ -98,10 +101,14 @@ public class ConeAOE {
 		}
 
 		//cast a ray to each found cell, these make up the cone
+		//we don't add the core ray as its collision properties may differ from the cone
 		for( int c : targetCells ){
 			Ballistica ray = new Ballistica(core.sourcePos, c, ballisticaParams);
 			cells.addAll(ray.subPath(1, ray.dist));
 			rays.add(ray);
+			if (outerCells.contains(c)){
+				outerRays.add(ray);
+			}
 		}
 
 		//lastly add any cells in the core

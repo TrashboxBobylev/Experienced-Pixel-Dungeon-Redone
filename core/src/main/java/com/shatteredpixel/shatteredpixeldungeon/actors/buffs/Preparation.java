@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroAction;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
@@ -53,30 +55,55 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	{
 		//always acts after other buffs, so invisibility effects can process first
 		actPriority = BUFF_PRIO - 1;
+		type = buffType.POSITIVE;
 	}
 	
 	public enum AttackLevel{
-		LVL_1( 5,  0.50f, 0.15f, 1, 2),
-		LVL_2( 14,  1.25f, 0.27f, 3, 6),
-		LVL_3( 44,  4.50f, 0.45f, 8, 12),
-		LVL_4( 120, 41.30f, 1.50f, 16, 24);
-		
+		LVL_1( 1, 0.10f, 1),
+		LVL_2( 3, 0.20f, 1),
+		LVL_3( 5, 0.35f, 2),
+		LVL_4( 9, 0.50f, 3);
+
 		final int turnsReq;
-		final float baseDmgBonus, KOThreshold;
-		final int damageRolls, blinkDistance;
+		final float baseDmgBonus;
+		final int damageRolls;
 		
-		AttackLevel( int turns, float base, float threshold, int rolls, int dist){
+		AttackLevel( int turns, float base, int rolls){
 			turnsReq = turns;
-			baseDmgBonus = base; KOThreshold = threshold;
-			damageRolls = rolls; blinkDistance = dist;
+			baseDmgBonus = base;
+			damageRolls = rolls;
+		}
+
+		//1st index is prep level, 2nd is talent level
+		private static final float[][] KOThresholds = new float[][]{
+				{.03f, .04f, .05f, .06f},
+				{.10f, .13f, .17f, .20f},
+				{.20f, .27f, .33f, .40f},
+				{.50f, .67f, .83f, 1.0f}
+		};
+
+		public float KOThreshold(){
+			return KOThresholds[ordinal()][Dungeon.hero.pointsInTalent(Talent.ENHANCED_LETHALITY)];
+		}
+
+		//1st index is prep level, 2nd is talent level
+		private static final int[][] blinkRanges = new int[][]{
+				{1, 1, 2, 2},
+				{2, 3, 4, 5},
+				{3, 4, 6, 7},
+				{4, 6, 8, 10}
+		};
+
+		public int blinkDistance(){
+			return blinkRanges[ordinal()][Dungeon.hero.pointsInTalent(Talent.ASSASSINS_REACH)];
 		}
 		
 		public boolean canKO(Char defender){
 			if (defender.properties().contains(Char.Property.MINIBOSS)
 					|| defender.properties().contains(Char.Property.BOSS)){
-				return (defender.HP/(float)defender.HT) < (KOThreshold/5f);
+				return (defender.HP/(float)defender.HT) < (KOThreshold()/5f);
 			} else {
-				return (defender.HP/(float)defender.HT) < KOThreshold;
+				return (defender.HP/(float)defender.HT) < KOThreshold();
 			}
 		}
 		
@@ -106,7 +133,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	@Override
 	public boolean act() {
 		if (Dungeon.hero.justMoved) turnsInvis++;
-		if (AttackLevel.getLvl(turnsInvis).blinkDistance > 0 && target == Dungeon.hero){
+		if (AttackLevel.getLvl(turnsInvis).blinkDistance() > 0 && target == Dungeon.hero){
 			ActionIndicator.setAction(this);
 		}
 		spend(TICK);
@@ -118,13 +145,17 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		super.detach();
 		ActionIndicator.clearAction(this);
 	}
-	
+
+	public int attackLevel(){
+		return AttackLevel.getLvl(turnsInvis).ordinal()+1;
+	}
+
 	public int damageRoll( Char attacker ){
 		return AttackLevel.getLvl(turnsInvis).damageRoll(attacker);
 	}
 
 	public boolean canKO( Char defender ){
-		return AttackLevel.getLvl(turnsInvis).canKO(defender);
+		return !defender.isInvulnerable(target.getClass()) && AttackLevel.getLvl(turnsInvis).canKO(defender);
 	}
 	
 	@Override
@@ -165,6 +196,11 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	}
 
 	@Override
+	public String iconTextDisplay() {
+		return Integer.toString(turnsInvis);
+	}
+
+	@Override
 	public String toString() {
 		return Messages.get(this, "name");
 	}
@@ -177,15 +213,15 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 
 		desc += "\n\n" + Messages.get(this, "desc_dmg",
 				(int)(lvl.baseDmgBonus*100),
-				(int)(lvl.KOThreshold*100),
-				(int)(lvl.KOThreshold*20));
+				(int)(lvl.KOThreshold()*100),
+				(int)(lvl.KOThreshold()*20));
 		
 		if (lvl.damageRolls > 1){
 			desc += " " + Messages.get(this, "desc_dmg_likely");
 		}
 		
-		if (lvl.blinkDistance > 0){
-			desc += "\n\n" + Messages.get(this, "desc_blink", lvl.blinkDistance);
+		if (lvl.blinkDistance() > 0){
+			desc += "\n\n" + Messages.get(this, "desc_blink", lvl.blinkDistance());
 		}
 		
 		desc += "\n\n" + Messages.get(this, "desc_invis_time", turnsInvis);
@@ -204,9 +240,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		turnsInvis = bundle.getInt(TURNS);
-		if (AttackLevel.getLvl(turnsInvis).blinkDistance > 0){
-			ActionIndicator.setAction(this);
-		}
+		ActionIndicator.setAction(this);
 	}
 	
 	@Override
@@ -214,9 +248,14 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		super.storeInBundle(bundle);
 		bundle.put(TURNS, turnsInvis);
 	}
-	
+
 	@Override
-	public Image getIcon() {
+	public String actionName() {
+		return Messages.get(this, "action_name");
+	}
+
+	@Override
+	public Image actionIcon() {
 		Image actionIco = Effects.get(Effects.Type.WOUND);
 		tintIcon(actionIco);
 		return actionIco;
@@ -233,10 +272,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		public void onSelect(Integer cell) {
 			if (cell == null) return;
 			final Char enemy = Actor.findChar( cell );
-			if (enemy == null || Dungeon.hero.isCharmedBy(enemy) || enemy instanceof NPC){
+			if (enemy == null || Dungeon.hero.isCharmedBy(enemy) || enemy instanceof NPC || !Dungeon.level.heroFOV[cell] || enemy == Dungeon.hero){
 				GLog.w(Messages.get(Preparation.class, "no_target"));
 			} else {
-				
+
 				//just attack them then!
 				if (Dungeon.hero.canAttack(enemy)){
 					Dungeon.hero.curAction = new HeroAction.Attack( enemy );
@@ -245,35 +284,35 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 				}
 				
 				AttackLevel lvl = AttackLevel.getLvl(turnsInvis);
-				
-				boolean[] passable = Dungeon.level.passable.clone();
-				//need to consider enemy cell as passable in case they are on a trap or chasm
-				passable[cell] = true;
-				PathFinder.buildDistanceMap(Dungeon.hero.pos, passable, lvl.blinkDistance+1);
-				if (PathFinder.distance[cell] == Integer.MAX_VALUE){
+
+				PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.not(Dungeon.level.solid, null), lvl.blinkDistance());
+				int dest = -1;
+				for (int i : PathFinder.NEIGHBOURS8){
+					//cannot blink into a cell that's occupied or impassable, only over them
+					if (Actor.findChar(cell+i) != null)     continue;
+					if (!Dungeon.level.passable[cell+i])    continue;
+
+					if (dest == -1 || PathFinder.distance[dest] > PathFinder.distance[cell+i]){
+						dest = cell+i;
+					//if two cells have the same pathfinder distance, prioritize the one with the closest true distance to the hero
+					} else if (PathFinder.distance[dest] == PathFinder.distance[cell+i]){
+						if (Dungeon.level.trueDistance(Dungeon.hero.pos, dest) > Dungeon.level.trueDistance(Dungeon.hero.pos, cell+i)){
+							dest = cell+i;
+						}
+					}
+
+				}
+
+				if (dest == -1 || PathFinder.distance[dest] == Integer.MAX_VALUE || Dungeon.hero.rooted){
 					GLog.w(Messages.get(Preparation.class, "out_of_reach"));
 					return;
 				}
 				
-				//we can move through enemies when determining blink distance,
-				// but not when actually jumping to a location
-				for (Char ch : Actor.chars()){
-					if (ch != Dungeon.hero)  passable[ch.pos] = false;
-				}
-				
-				PathFinder.Path path = PathFinder.find(Dungeon.hero.pos, cell, passable);
-				int attackPos = path == null ? -1 : path.get(path.size()-2);
-				
-				if (attackPos == -1 ||
-						Dungeon.level.distance(attackPos, Dungeon.hero.pos) > lvl.blinkDistance){
-					GLog.w(Messages.get(Preparation.class, "out_of_reach"));
-					return;
-				}
-				
-				Dungeon.hero.pos = attackPos;
+				Dungeon.hero.pos = dest;
 				Dungeon.level.occupyCell(Dungeon.hero);
 				//prevents the hero from being interrupted by seeing new enemies
 				Dungeon.observe();
+				GameScene.updateFog();
 				Dungeon.hero.checkVisibleMobs();
 				
 				Dungeon.hero.sprite.place( Dungeon.hero.pos );
@@ -288,7 +327,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		
 		@Override
 		public String prompt() {
-			return Messages.get(Preparation.class, "prompt", AttackLevel.getLvl(turnsInvis).blinkDistance);
+			return Messages.get(Preparation.class, "prompt", AttackLevel.getLvl(turnsInvis).blinkDistance());
 		}
 	};
 }

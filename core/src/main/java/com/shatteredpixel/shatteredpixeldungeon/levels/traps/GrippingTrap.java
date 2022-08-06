@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -41,17 +41,9 @@ public class GrippingTrap extends Trap {
 	{
 		color = GREY;
 		shape = DOTS;
-	}
-	
-	@Override
-	public void trigger() {
-		if (Dungeon.level.heroFOV[pos]){
-			Sample.INSTANCE.play(Assets.Sounds.TRAP);
-		}
-		//this trap is not disarmed by being triggered
-		reveal();
-		Level.set(pos, Terrain.TRAP);
-		activate();
+
+		disarmedByActivation = false;
+		avoidsHallways = true;
 	}
 
 	@Override
@@ -60,7 +52,7 @@ public class GrippingTrap extends Trap {
 		Char c = Actor.findChar( pos );
 
 		if (c != null && !c.flying) {
-			int damage = Math.max( 0,  (2 + Dungeon.escalatingDepth()) - c.drRoll() );
+			int damage = Math.max( 0,  (2 + Dungeon.depth/2) - c.drRoll()/2 );
 			Buff.affect( c, Bleeding.class ).set( damage );
 			Buff.prolong( c, Cripple.class, Cripple.DURATION);
 			Wound.hit( c );

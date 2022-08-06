@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -112,9 +112,13 @@ public class SmartTexture extends Texture {
 	
 	public RectF uvRect( float left, float top, float right, float bottom ) {
 		return new RectF(
-			left		/ width,
+			left	/ width,
 			top		/ height,
 			right	/ width,
 			bottom	/ height );
+	}
+
+	public RectF uvRectBySize(float left, float top, float width, float height){
+		return uvRect(left, top, left+width, top+height);
 	}
 }

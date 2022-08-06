@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
@@ -70,16 +71,7 @@ public class PotionOfPurity extends Potion {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
 				
 				for (Blob blob : blobs) {
-					
-					int value = blob.cur[i];
-					if (value > 0) {
-						
-						blob.clear(i);
-						blob.cur[i] = 0;
-						blob.volume -= value;
-						
-					}
-					
+					blob.clear(i);
 				}
 				
 				if (Dungeon.level.heroFOV[i]) {
@@ -93,8 +85,8 @@ public class PotionOfPurity extends Potion {
 		if (Dungeon.level.heroFOV[cell]) {
 			splash(cell);
 			Sample.INSTANCE.play(Assets.Sounds.SHATTER);
-			
-			setKnown();
+
+			identify();
 			GLog.i(Messages.get(this, "freshness"));
 		}
 		
@@ -104,11 +96,12 @@ public class PotionOfPurity extends Potion {
 	public void apply( Hero hero ) {
 		GLog.w( Messages.get(this, "protected") );
 		Buff.prolong( hero, BlobImmunity.class, BlobImmunity.DURATION );
-		setKnown();
+		SpellSprite.show(hero, SpellSprite.PURITY);
+		identify();
 	}
 	
 	@Override
-	public int price() {
-		return isKnown() ? 40 * quantity : super.price();
+	public int value() {
+		return isKnown() ? 40 * quantity : super.value();
 	}
 }

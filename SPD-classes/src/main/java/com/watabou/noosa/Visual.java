@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -157,6 +157,10 @@ public class Visual extends Gizmo {
 				y + (height() - v.height())/2f
 		);
 	}
+
+	public void originToCenter() {
+		origin.set(width / 2, height / 2);
+	}
 	
 	public float width() {
 		return width * scale.x;
@@ -264,6 +268,7 @@ public class Visual extends Gizmo {
 		Camera c = camera();
 
 		if (c == null) return false;
+		if (!c.hitTest(x, y)) return false;
 
 		PointF p = c.screenToCamera( x, y );
 		return overlapsPoint( p.x, p.y );

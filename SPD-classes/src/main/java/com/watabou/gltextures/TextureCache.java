@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -81,9 +81,26 @@ public class TextureCache {
 		}
 		
 	}
-	
-	public synchronized static void add( Object key, SmartTexture tx ) {
-		all.put( key, tx );
+
+	//texture is created at given size, but size is not enforced if it already exists
+	//texture contents are also not enforced, make sure you know the texture's state!
+	public synchronized static SmartTexture create( Object key, int width, int height ) {
+
+		if (all.containsKey( key )) {
+
+			return all.get( key );
+
+		} else {
+
+			SmartTexture tx = new SmartTexture(new Pixmap( width, height, Pixmap.Format.RGBA8888 ));
+
+			tx.filter( Texture.LINEAR, Texture.LINEAR );
+			tx.wrap( Texture.CLAMP, Texture.CLAMP );
+
+			all.put( key, tx );
+
+			return tx;
+		}
 	}
 	
 	public synchronized static void remove( Object key ){
@@ -133,7 +150,7 @@ public class TextureCache {
 		try {
 			if (src instanceof Integer){
 				
-				//LibGDX does not support android resource integer handles, and they were
+				//libGDX does not support android resource integer handles, and they were
 				//never used by the game anyway, should probably remove this entirely
 				return null;
 				

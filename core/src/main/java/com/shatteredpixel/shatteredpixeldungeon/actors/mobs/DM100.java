@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,8 +24,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -129,15 +131,12 @@ public class DM100 extends Mob implements Callback {
 			return super.doAttack( enemy );
 			
 		} else {
-			
-			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-				sprite.zap( enemy.pos );
-			}
-			
+
 			spend( TIME_TO_ZAP );
 			
 			if (hit( this, enemy, true )) {
 				int dmg = Random.NormalIntRange(3, 10);
+				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(32, 48); break;
                     case 2: dmg = Random.NormalIntRange(190, 248); break;
@@ -145,15 +144,18 @@ public class DM100 extends Mob implements Callback {
                     case 4: dmg =  Random.NormalIntRange(9000, 15000); break;
                 }
 				enemy.damage( dmg, new LightningBolt() );
-				
-				enemy.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
-				enemy.sprite.flash();
+
+				if (enemy.sprite.visible) {
+					enemy.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
+					enemy.sprite.flash();
+				}
 				
 				if (enemy == Dungeon.hero) {
 					
 					Camera.main.shake( 2, 0.3f );
 					
 					if (!enemy.isAlive()) {
+						Badges.validateDeathFromEnemyMagic();
 						Dungeon.fail( getClass() );
 						GLog.n( Messages.get(this, "zap_kill") );
 					}
@@ -162,7 +164,7 @@ public class DM100 extends Mob implements Callback {
 				enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
 			}
 			
-			if (sprite != null && sprite.visible) {
+			if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 				sprite.zap( enemy.pos );
 				return false;
 			} else {

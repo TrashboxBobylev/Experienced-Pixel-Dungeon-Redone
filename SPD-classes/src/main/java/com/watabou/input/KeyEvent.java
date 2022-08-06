@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -65,7 +65,18 @@ public class KeyEvent {
 	
 	public static synchronized void processKeyEvents(){
 		for (KeyEvent k : keyEvents){
-			keySignal.dispatch(k);
+			if (KeyBindings.getActionForKey(k) == GameAction.LEFT_CLICK){
+				PointerEvent.emulateMouseButton(PointerEvent.LEFT, k.pressed);
+				if (KeyBindings.bindingKey) keySignal.dispatch(k);
+			} else if (KeyBindings.getActionForKey(k) == GameAction.RIGHT_CLICK){
+				PointerEvent.emulateMouseButton(PointerEvent.RIGHT, k.pressed);
+				if (KeyBindings.bindingKey) keySignal.dispatch(k);
+			} else if (KeyBindings.getActionForKey(k) == GameAction.MIDDLE_CLICK){
+				PointerEvent.emulateMouseButton(PointerEvent.MIDDLE, k.pressed);
+				if (KeyBindings.bindingKey) keySignal.dispatch(k);
+			} else {
+				keySignal.dispatch(k);
+			}
 		}
 		keyEvents.clear();
 	}

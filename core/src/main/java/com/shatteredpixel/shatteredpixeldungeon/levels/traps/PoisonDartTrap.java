@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -45,6 +46,7 @@ public class PoisonDartTrap extends Trap {
 		shape = CROSSHAIR;
 		
 		canBeHidden = false;
+		avoidsHallways = true;
 	}
 	
 	protected int poisonAmount(){
@@ -65,11 +67,14 @@ public class PoisonDartTrap extends Trap {
 		
 		//find the closest char that can be aimed at
 		if (target == null){
+			float closestDist = Float.MAX_VALUE;
 			for (Char ch : Actor.chars()){
+				float curDist = Dungeon.level.trueDistance(pos, ch.pos);
+				if (ch.invisible > 0) curDist += 1000;
 				Ballistica bolt = new Ballistica(pos, ch.pos, Ballistica.PROJECTILE);
-				if (canTarget(ch) && bolt.collisionPos == ch.pos &&
-						(target == null || Dungeon.level.trueDistance(pos, ch.pos) < Dungeon.level.trueDistance(pos, target.pos))){
+				if (canTarget(ch) && bolt.collisionPos == ch.pos && curDist < closestDist){
 					target = ch;
+					closestDist = curDist;
 				}
 			}
 		}
@@ -93,8 +98,15 @@ public class PoisonDartTrap extends Trap {
 								public void call() {
 									int dmg = Random.NormalIntRange(4, 8) - finalTarget.drRoll();
 									finalTarget.damage(dmg, trap);
-									if (finalTarget == Dungeon.hero && !finalTarget.isAlive()){
-										Dungeon.fail( trap.getClass() );
+									if (finalTarget == Dungeon.hero){
+										//for the poison dart traps in the Tengu fight
+										if (Dungeon.depth == 10) {
+											Statistics.qualifiedForBossChallengeBadge = false;
+											Statistics.bossScores[1] -= 100;
+										}
+										if (!finalTarget.isAlive()) {
+											Dungeon.fail(trap.getClass());
+										}
 									}
 									Buff.affect( finalTarget, Poison.class ).set( poisonAmount() );
 									Sample.INSTANCE.play(Assets.Sounds.HIT, 1, 1, Random.Float(0.8f, 1.25f));

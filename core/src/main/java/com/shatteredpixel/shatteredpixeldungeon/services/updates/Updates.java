@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.services.updates;
 
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.watabou.utils.Callback;
 
 import java.util.Date;
 
@@ -39,11 +40,24 @@ public class Updates {
 	private static Date lastCheck = null;
 	private static final long CHECK_DELAY = 1000*60*60; //1 hour
 
+	public static boolean isUpdateable(){
+		return supportsUpdates() && service.isUpdateable();
+	}
+
+	public static boolean supportsBetaChannel(){
+		return supportsUpdates() && service.supportsBetaChannel();
+	}
+
 	public static void checkForUpdate(){
-		if (!supportsUpdates()) return;
+		if (!isUpdateable()) return;
 		if (lastCheck != null && (new Date().getTime() - lastCheck.getTime()) < CHECK_DELAY) return;
 
-		service.checkForUpdate(!SPDSettings.WiFi(), new UpdateService.UpdateResultCallback() {
+		//We do this so that automatically enabled beta checking (for users who DLed a beta) persists afterward
+		if (SPDSettings.betas()){
+			SPDSettings.betas(true);
+		}
+
+		service.checkForUpdate(!SPDSettings.WiFi(), SPDSettings.betas(), new UpdateService.UpdateResultCallback() {
 			@Override
 			public void onUpdateAvailable(AvailableUpdateData update) {
 				lastCheck = new Date();
@@ -79,6 +93,39 @@ public class Updates {
 	public static void clearUpdate(){
 		updateData = null;
 		lastCheck = null;
+	}
+
+	public static boolean isInstallable(){
+		return supportsUpdates() && service.isInstallable();
+	}
+
+	public static void launchInstall(){
+		if (supportsUpdates()){
+			service.initializeInstall();
+		}
+	}
+
+	public static boolean supportsReviews() {
+		return supportsUpdates() && service.supportsReviews();
+	}
+
+	public static void launchReview(Callback callback){
+		if (supportsUpdates()){
+			service.initializeReview(new UpdateService.ReviewResultCallback() {
+				@Override
+				public void onComplete() {
+					callback.call();
+				}
+			});
+		} else {
+			callback.call();
+		}
+	}
+
+	public static void openReviewURI(){
+		if (supportsUpdates()){
+			service.openReviewURI();
+		}
 	}
 
 }

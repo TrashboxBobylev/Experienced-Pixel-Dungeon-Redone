@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.NinePatch;
-import com.watabou.noosa.ui.Button;
 
 public class Tag extends Button {
 
@@ -37,6 +36,10 @@ public class Tag extends Button {
 	protected NinePatch bg;
 	
 	protected float lightness = 0;
+
+	public static int SIZE = 24;
+
+	protected boolean flipped = false;
 	
 	public Tag( int color ) {
 		super();
@@ -71,7 +74,9 @@ public class Tag extends Button {
 	}
 
 	public void flip(boolean value){
+		flipped = value;
 		bg.flipHorizontal(value);
+		layout();
 	}
 	
 	@Override

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -43,7 +43,7 @@ public class BadgesList extends ScrollPane {
 	public BadgesList( boolean global ) {
 		super( new Component() );
 		
-		for (Badges.Badge badge : Badges.filtered( global )) {
+		for (Badges.Badge badge : Badges.filterReplacedBadges( global )) {
 			
 			if (badge.image == -1) {
 				continue;
@@ -95,7 +95,7 @@ public class BadgesList extends ScrollPane {
 			
 			this.badge = badge;
 			icon.copy( BadgeBanner.image( badge.image ));
-			label.text( badge.desc() );
+			label.text( badge.title() );
 		}
 		
 		@Override
@@ -123,7 +123,7 @@ public class BadgesList extends ScrollPane {
 		public boolean onClick( float x, float y ) {
 			if (inside( x, y )) {
 				Sample.INSTANCE.play( Assets.Sounds.CLICK, 0.7f, 0.7f, 1.2f );
-				Game.scene().add( new WndBadge( badge ) );
+				Game.scene().add( new WndBadge( badge, true ) );
 				return true;
 			} else {
 				return false;

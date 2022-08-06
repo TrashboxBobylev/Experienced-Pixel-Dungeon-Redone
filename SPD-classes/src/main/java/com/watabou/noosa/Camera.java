@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -55,6 +55,7 @@ public class Camera extends Gizmo {
 	public float[] matrix;
 	
 	public PointF scroll;
+	public PointF centerOffset;
 	
 	private float shakeMagX		= 10f;
 	private float shakeMagY		= 10f;
@@ -96,7 +97,7 @@ public class Camera extends Gizmo {
 		int length = all.size();
 		for (int i=0; i < length; i++) {
 			Camera c = all.get( i );
-			if (c.exists && c.active) {
+			if (c != null && c.exists && c.active) {
 				c.update();
 			}
 		}
@@ -125,6 +126,7 @@ public class Camera extends Gizmo {
 		screenHeight = (int)(height * zoom);
 		
 		scroll = new PointF();
+		centerOffset = new PointF();
 		
 		matrix = new float[16];
 		Matrix.setIdentity( matrix );
@@ -142,12 +144,15 @@ public class Camera extends Gizmo {
 	}
 	
 	public void zoom( float value, float fx, float fy ) {
-		
+
+		PointF offsetAdjust = centerOffset.clone();
+		centerOffset.scale(zoom).invScale(value);
+
 		zoom = value;
 		width = (int)(screenWidth / zoom);
 		height = (int)(screenHeight / zoom);
 		
-		snapTo( fx, fy );
+		snapTo( fx - offsetAdjust.x, fy - offsetAdjust.y );
 	}
 	
 	public void resize( int width, int height ) {
@@ -168,7 +173,7 @@ public class Camera extends Gizmo {
 		super.update();
 		
 		if (followTarget != null){
-			panTarget = followTarget.center();
+			panTarget = followTarget.center().offset(centerOffset);
 		}
 		
 		if (panIntensity > 0f){
@@ -205,9 +210,17 @@ public class Camera extends Gizmo {
 		scroll.offset(point);
 		panIntensity = 0f;
 	}
+
+	public void setCenterOffset( float x, float y ){
+		scroll.x    += x - centerOffset.x;
+		scroll.y    += y - centerOffset.y;
+		panTarget.x += x - centerOffset.x;
+		panTarget.y += y - centerOffset.y;
+		centerOffset.set(x, y);
+	}
 	
 	public void snapTo(float x, float y ) {
-		scroll.set( x - width / 2, y - height / 2 );
+		scroll.set( x - width / 2, y - height / 2 ).offset(centerOffset);
 		panIntensity = 0f;
 		followTarget = null;
 	}
@@ -217,7 +230,7 @@ public class Camera extends Gizmo {
 	}
 	
 	public void panTo( PointF dst, float intensity ){
-		panTarget = dst;
+		panTarget = dst.offset(centerOffset);
 		panIntensity = intensity;
 		followTarget = null;
 	}

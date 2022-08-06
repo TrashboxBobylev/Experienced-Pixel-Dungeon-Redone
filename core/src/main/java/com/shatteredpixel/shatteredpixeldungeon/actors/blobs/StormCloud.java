@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,12 +36,16 @@ public class StormCloud extends Blob {
 		super.evolve();
 		
 		int cell;
-		
+
+		Fire fire = (Fire) Dungeon.level.blobs.get(Fire.class);
 		for (int i = area.left; i < area.right; i++){
 			for (int j = area.top; j < area.bottom; j++){
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0) {
 					Dungeon.level.setCellToWater(true, cell);
+					if (fire != null){
+						fire.clear(i);
+					}
 				}
 			}
 		}

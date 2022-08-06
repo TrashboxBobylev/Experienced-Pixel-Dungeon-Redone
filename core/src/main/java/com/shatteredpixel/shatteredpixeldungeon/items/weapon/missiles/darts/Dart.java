@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,11 +30,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -69,7 +72,7 @@ public class Dart extends MissileWeapon {
 	public void execute(Hero hero, String action) {
 		super.execute(hero, action);
 		if (action.equals(AC_TIP)){
-			GameScene.selectItem(itemSelector, WndBag.Mode.SEED, Messages.get(this, "prompt"));
+			GameScene.selectItem(itemSelector);
 		}
 	}
 	
@@ -98,12 +101,16 @@ public class Dart extends MissileWeapon {
 	private static Crossbow bow;
 	
 	private void updateCrossbow(){
-		if (Dungeon.hero.belongings.weapon instanceof Crossbow){
-			bow = (Crossbow) Dungeon.hero.belongings.weapon;
+		if (Dungeon.hero.belongings.weapon() instanceof Crossbow){
+			bow = (Crossbow) Dungeon.hero.belongings.weapon();
 		} else {
 			bow = null;
 		}
         tier = 1 + Dungeon.cycle * 5;
+	}
+
+	public boolean crossbowHasEnchant( Char owner ){
+		return bow != null && bow.enchantment != null && owner.buff(MagicImmune.class) == null;
 	}
 	
 	@Override
@@ -117,14 +124,19 @@ public class Dart extends MissileWeapon {
 	
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-		if (bow != null && bow.enchantment != null && attacker.buff(MagicImmune.class) == null){
-			level(bow.level());
-			damage = bow.enchantment.proc(this, attacker, defender, damage);
-			level(0);
+		if (bow != null){
+			damage = bow.proc(attacker, defender, damage);
 		}
+
 		return super.proc(attacker, defender, damage);
 	}
-	
+
+	@Override
+	public int throwPos(Hero user, int dst) {
+		updateCrossbow();
+		return super.throwPos(user, dst);
+	}
+
 	@Override
 	protected void onThrow(int cell) {
 		updateCrossbow();
@@ -145,7 +157,16 @@ public class Dart extends MissileWeapon {
 	public String info() {
 
 		updateCrossbow();
-		return super.info();
+		if (bow != null && !bow.isIdentified()){
+			int level = bow.level();
+			//temporarily sets the level of the bow to 0 for IDing purposes
+			bow.level(0);
+			String info = super.info();
+			bow.level(level);
+			return info;
+		} else {
+			return super.info();
+		}
 	}
 	
 	@Override
@@ -154,12 +175,27 @@ public class Dart extends MissileWeapon {
 	}
 	
 	@Override
-	public int price() {
-		return super.price()/2; //half normal value
+	public int value() {
+		return super.value()/2; //half normal value
 	}
 	
-	private final WndBag.Listener itemSelector = new WndBag.Listener() {
-		
+	private final WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return Messages.get(Dart.class, "prompt");
+		}
+
+		@Override
+		public Class<?extends Bag> preferredBag(){
+			return VelvetPouch.class;
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return item instanceof Plant.Seed;
+		}
+
 		@Override
 		public void onSelect(final Item item) {
 			
@@ -193,7 +229,8 @@ public class Dart extends MissileWeapon {
 			
 			TippedDart tipResult = TippedDart.getTipped((Plant.Seed) item, 1);
 			
-			GameScene.show(new WndOptions(Messages.get(Dart.class, "tip_title"),
+			GameScene.show(new WndOptions( new ItemSprite(item),
+					Messages.titleCase(item.name()),
 					Messages.get(Dart.class, "tip_desc", tipResult.name()) + "\n\n" + tipResult.desc(),
 					options){
 				

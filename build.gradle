@@ -25,13 +25,16 @@ allprojects {
         appAndroidMinSDK = 14
         appAndroidTargetSDK = 30
 
-        gdxVersion = '1.10.0'
+        gdxVersion = '1.11.0'
+        gdxControllersVersion = '2.2.2'
+        robovmVersion = '2.3.16'
     }
     version = appVersionName
 
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 
 }

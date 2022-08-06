@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -39,7 +40,7 @@ import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Music;
-import com.watabou.noosa.ui.Button;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
 import com.watabou.utils.GameMath;
 
 public class RankingsScene extends PixelScene {
@@ -57,8 +58,11 @@ public class RankingsScene extends PixelScene {
 	public void create() {
 		
 		super.create();
-		
-		Music.INSTANCE.play( Assets.Music.THEME, true );
+
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
 
 		uiCamera.visible = false;
 		
@@ -92,12 +96,10 @@ public class RankingsScene extends PixelScene {
 			
 			for (Rankings.Record rec : Rankings.INSTANCE.records) {
 				Record row = new Record( pos, pos == Rankings.INSTANCE.lastRecord, rec );
-				float offset =
-						rowHeight <= 14 ?
-								pos %2 == 1?
-										5 :
-										-5
-								: 0;
+				float offset = 0;
+				if (rowHeight <= 14){
+					offset = (pos % 2 == 1) ? 5 : -5;
+				}
 				row.setRect( left+offset, top + pos * rowHeight, w - left * 2, rowHeight );
 				add(row);
 				
@@ -137,9 +139,40 @@ public class RankingsScene extends PixelScene {
 		btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
 		add( btnExit );
 
+		int left = 0;
+
+		if (Rankings.INSTANCE.latestDaily != null) {
+			IconButton btnDailies = new IconButton(Icons.CALENDAR.get()) {
+				@Override
+				protected void onClick() {
+					ShatteredPixelDungeon.scene().addToFront(new WndDailies());
+				}
+
+				@Override
+				protected void onPointerUp() {
+					icon.hardlight(0.5f, 1f, 2f);
+				}
+			};
+			btnDailies.icon().hardlight(0.5f, 1f, 2f);
+			btnDailies.setRect( left, 0, 20, 20 );
+			left += 20;
+			add(btnDailies);
+		}
+
+		if (Dungeon.daily){
+			addToFront(new WndDailies());
+		}
+
 		fadeIn();
 	}
-	
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		//so that opening daily records does not trigger WndDailies opening on future visits
+		Dungeon.daily = false;
+	}
+
 	@Override
 	protected void onBackPressed() {
 		ShatteredPixelDungeon.switchNoFade(TitleScene.class);
@@ -156,7 +189,7 @@ public class RankingsScene extends PixelScene {
 		
 		private Rankings.Record rec;
 		
-		protected ItemSprite shield;
+		protected Image shield;
 		private Flare flare;
 		private BitmapText position;
 		private RenderedTextBlock desc;
@@ -185,12 +218,10 @@ public class RankingsScene extends PixelScene {
 			
 			desc.text( Messages.titleCase(rec.desc()) );
 
-			//desc.measure();
-
 			int odd = pos % 2;
 			
 			if (rec.win) {
-				shield.view( ItemSpriteSheet.AMULET, null );
+				shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
 				position.hardlight( TEXT_WIN[odd] );
 				desc.hardlight( TEXT_WIN[odd] );
 				depth.hardlight( TEXT_WIN[odd] );
@@ -204,12 +235,25 @@ public class RankingsScene extends PixelScene {
 				if (rec.depth != 0){
 					depth.text( Integer.toString(rec.depth) );
 					depth.measure();
-					steps.copy(Icons.DEPTH.get());
+					steps.copy(Icons.STAIRS.get());
 
 					add(steps);
 					add(depth);
 				}
 
+				if (rec.ascending){
+					shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
+					shield.hardlight(0.4f, 0.4f, 0.7f);
+				}
+
+			}
+
+			if (rec.daily){
+				shield.copy( Icons.get(Icons.CALENDAR) );
+				shield.hardlight(0.5f, 1f, 2f);
+			} else if (!rec.customSeed.isEmpty()){
+				shield.copy( Icons.get(Icons.SEED) );
+				shield.hardlight(1f, 1.5f, 0.67f);
 			}
 
 			if (rec.herolevel != 0){
@@ -230,7 +274,7 @@ public class RankingsScene extends PixelScene {
 			
 			super.createChildren();
 			
-			shield = new ItemSprite( ItemSpriteSheet.TOMB, null );
+			shield = new Image(new ItemSprite( ItemSpriteSheet.TOMB, null ));
 			add( shield );
 			
 			position = new BitmapText( PixelScene.pixelFont);
@@ -254,7 +298,7 @@ public class RankingsScene extends PixelScene {
 			
 			super.layout();
 			
-			shield.x = x;
+			shield.x = x + (16 - shield.width) / 2f;
 			shield.y = y + (height - shield.height) / 2f;
 			align(shield);
 			
@@ -282,8 +326,8 @@ public class RankingsScene extends PixelScene {
 			depth.y = steps.y + (steps.height - depth.height()) / 2f + 1;
 			align(depth);
 
-			desc.maxWidth((int)(steps.x - (shield.x + shield.width + GAP)));
-			desc.setPos(shield.x + shield.width + GAP, shield.y + (shield.height - desc.height()) / 2f + 1);
+			desc.maxWidth((int)(steps.x - (x + 16 + GAP)));
+			desc.setPos(x + 16 + GAP, shield.y + (shield.height - desc.height()) / 2f + 1);
 			align(desc);
 		}
 		

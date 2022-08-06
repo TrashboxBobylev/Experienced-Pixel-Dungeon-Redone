@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -42,20 +42,33 @@ public class Random {
 		resetGenerators();
 	}
 
-	public static void resetGenerators(){
+	public static synchronized void resetGenerators(){
 		generators = new ArrayDeque<>();
 		generators.push(new java.util.Random());
 	}
 
-	public static void pushGenerator(){
+	public static synchronized void pushGenerator(){
 		generators.push( new java.util.Random() );
 	}
 
-	public static void pushGenerator( long seed ){
-		generators.push( new java.util.Random( seed ) );
+	public static synchronized void pushGenerator( long seed ){
+		generators.push( new java.util.Random( scrambleSeed(seed) ) );
 	}
 
-	public static void popGenerator(){
+	//scrambles a given seed, this helps eliminate patterns between the outputs of similar seeds
+	//Algorithm used is MX3 by Jon Maiga (jonkagstrom.com), CC0 license.
+	private static synchronized long scrambleSeed( long seed ){
+		seed ^= seed >>> 32;
+		seed *= 0xbea225f9eb34556dL;
+		seed ^= seed >>> 29;
+		seed *= 0xbea225f9eb34556dL;
+		seed ^= seed >>> 32;
+		seed *= 0xbea225f9eb34556dL;
+		seed ^= seed >>> 29;
+		return seed;
+	}
+
+	public static synchronized void popGenerator(){
 		if (generators.size() == 1){
 			Game.reportException( new RuntimeException("tried to pop the last random number generator!"));
 		} else {
@@ -64,7 +77,7 @@ public class Random {
 	}
 
 	//returns a uniformly distributed float in the range [0, 1)
-	public static float Float() {
+	public static synchronized float Float() {
 		return generators.peek().nextFloat();
 	}
 
@@ -84,7 +97,7 @@ public class Random {
 	}
 
 	//returns a uniformly distributed int in the range [0, max)
-	public static int Int( int max ) {
+	public static synchronized int Int( int max ) {
 		return max > 0 ? generators.peek().nextInt(max) : 0;
 	}
 
@@ -104,7 +117,7 @@ public class Random {
 	}
 
 	//returns a uniformly distributed long in the range [-2^63, 2^63)
-	public static long Long() {
+	public static synchronized long Long() {
 		return generators.peek().nextLong();
 	}
 
@@ -193,7 +206,7 @@ public class Random {
 			null;
 	}
 
-	public static<T> void shuffle( List<?extends T> list){
+	public synchronized static<T> void shuffle( List<?extends T> list){
 		Collections.shuffle(list, generators.peek());
 	}
 	

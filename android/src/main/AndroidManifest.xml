@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	package="com.shatteredpixel.shatteredpixeldungeon.android"
-	android:installLocation="auto">
-	
+	android:installLocation="auto"
+	android:targetSandboxVersion="2"
+	xmlns:dist="http://schemas.android.com/apk/distribution">
+
+	<dist:module dist:instant="true" />
 	<uses-feature android:glEsVersion="0x00020000"/>
 
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!--Needed to resolve an error with gdx-controller 2.2.2-->
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/>
+
+	<!-- We perform a runtime check to ensure controllers are disabled on API 14 & 15 -->
+	<uses-sdk tools:overrideLibrary="com.badlogicgames.gdx.controllers" />
 
 	<!-- Note that the game doesn't truly support small screen resolutions,
 		it instead forces downscaling to work on these displays.-->
@@ -22,23 +34,21 @@
 		android:label="${appName}"
 		android:theme="@android:style/Theme.Black.NoTitleBar"
 		android:resizeableActivity="true"
-		android:launchMode="singleInstance"
 		android:allowBackup="true"
 		android:fullBackupOnly="true"
 		android:backupAgent=".AndroidBackupHandler">
 		<activity
-			android:label="${appName}"
-			android:name=".AndroidLauncher">
-			<intent-filter >
+			android:name=".AndroidLauncher"
+			android:screenOrientation="nosensor"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+			android:exported="true">
+			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<activity
-			android:label="${appName}"
-			android:name=".AndroidGame"
-			android:screenOrientation="nosensor"
-			android:configChanges="keyboard|keyboardHidden|orientation">
+			android:name=".AndroidMissingNativesHandler">
 		</activity>
 
 	</application>

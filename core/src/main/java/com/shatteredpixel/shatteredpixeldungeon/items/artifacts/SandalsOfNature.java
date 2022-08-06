@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,9 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EarthParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
@@ -62,8 +65,6 @@ public class SandalsOfNature extends Artifact {
 	public static final String AC_FEED = "FEED";
 	public static final String AC_ROOT = "ROOT";
 
-	protected WndBag.Mode mode = WndBag.Mode.SEED;
-
 	public ArrayList<Class> seeds = new ArrayList<>();
 
 	@Override
@@ -82,7 +83,7 @@ public class SandalsOfNature extends Artifact {
 
 		if (action.equals(AC_FEED)){
 
-			GameScene.selectItem(itemSelector, mode, Messages.get(this, "prompt"));
+			GameScene.selectItem(itemSelector);
 
 		} else if (action.equals(AC_ROOT) && level() > 0){
 
@@ -94,6 +95,7 @@ public class SandalsOfNature extends Artifact {
 				CellEmitter.bottom(hero.pos).start(EarthParticle.FACTORY, 0.05f, 8);
 				Camera.main.shake(1, 0.4f);
 				charge = 0;
+				Talent.onArtifactUsed(Dungeon.hero);
 				updateQuickslot();
 			}
 		}
@@ -105,8 +107,14 @@ public class SandalsOfNature extends Artifact {
 	}
 	
 	@Override
-	public void charge(Hero target) {
-		target.buff(Naturalism.class).charge();
+	public void charge(Hero target, float amount) {
+		target.buff(Naturalism.class).charge(amount);
+	}
+
+	@Override
+	public String name() {
+		if (level() == 0)   return super.name();
+		else                return Messages.get(this, "name_" + level());
 	}
 
 	@Override
@@ -142,12 +150,8 @@ public class SandalsOfNature extends Artifact {
 		return super.upgrade();
 	}
 
-	public static boolean canUseSeed(Item item){
-		if (item instanceof Plant.Seed){
-			return !(curItem instanceof SandalsOfNature) ||
-					!((SandalsOfNature) curItem).seeds.contains(item.getClass());
-		}
-		return false;
+	public boolean canUseSeed(Item item){
+		return item instanceof Plant.Seed && !seeds.contains(item.getClass());
 	}
 
 
@@ -162,7 +166,6 @@ public class SandalsOfNature extends Artifact {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		if (level() > 0) name = Messages.get(this, "name_" + level());
 		if (bundle.contains(SEEDS))
 			Collections.addAll(seeds , bundle.getClassArray(SEEDS));
 		if (level() == 1)  image = ItemSpriteSheet.ARTIFACT_SHOES;
@@ -171,10 +174,11 @@ public class SandalsOfNature extends Artifact {
 	}
 
 	public class Naturalism extends ArtifactBuff{
-		public void charge() {
+		public void charge(float amount) {
 			if (level() > 0 && charge < target.HT){
 				//gain 1+(1*level)% of the difference between current charge and max HP.
 				float chargeGain = (target.HT-charge) * (.01f+ level()*0.01f);
+				chargeGain *= amount;
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += Math.max(0, chargeGain);
 				while (partialCharge > 1){
@@ -186,7 +190,23 @@ public class SandalsOfNature extends Artifact {
 		}
 	}
 
-	protected WndBag.Listener itemSelector = new WndBag.Listener() {
+	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return Messages.get(SandalsOfNature.class, "prompt");
+		}
+
+		@Override
+		public Class<?extends Bag> preferredBag(){
+			return VelvetPouch.class;
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return canUseSeed(item);
+		}
+
 		@Override
 		public void onSelect( Item item ) {
 			if (item != null && item instanceof Plant.Seed) {

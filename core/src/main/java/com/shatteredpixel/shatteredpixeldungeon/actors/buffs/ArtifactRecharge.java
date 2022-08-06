@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,9 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -40,22 +40,26 @@ public class ArtifactRecharge extends Buff {
 		type = buffType.POSITIVE;
 	}
 
-	private int left;
+	private float left;
+	public boolean ignoreHornOfPlenty;
 	
 	@Override
 	public boolean act() {
-		
-		if (target instanceof Hero){
-			Belongings b = ((Hero) target).belongings;
-			
-			if (b.artifact instanceof Artifact){
-				((Artifact)b.artifact).charge((Hero)target);
-			}
-			if (b.misc instanceof Artifact){
-				((Artifact)b.misc).charge((Hero)target);
+
+		if (target instanceof Hero) {
+			float chargeAmount = Math.min(1, left);
+			for (Buff b : target.buffs()) {
+				if (b instanceof Artifact.ArtifactBuff) {
+					if (b instanceof HornOfPlenty.hornRecharge && ignoreHornOfPlenty){
+						continue;
+					}
+					if (!((Artifact.ArtifactBuff) b).isCursed()) {
+						((Artifact.ArtifactBuff) b).charge((Hero) target, chargeAmount);
+					}
+				}
 			}
 		}
-		
+
 		left--;
 		if (left <= 0){
 			detach();
@@ -66,12 +70,18 @@ public class ArtifactRecharge extends Buff {
 		return true;
 	}
 	
-	public void set( int amount ){
-		left = amount;
+	public ArtifactRecharge set( float amount ){
+		if (left < amount) left = amount;
+		return this;
 	}
 	
-	public void prolong( int amount ){
+	public ArtifactRecharge prolong( float amount ){
 		left += amount;
+		return this;
+	}
+
+	public float left(){
+		return left;
 	}
 	
 	@Override
@@ -90,6 +100,11 @@ public class ArtifactRecharge extends Buff {
 	}
 
 	@Override
+	public String iconTextDisplay() {
+		return Integer.toString((int)left);
+	}
+
+	@Override
 	public String toString() {
 		return Messages.get(this, "name");
 	}
@@ -100,16 +115,19 @@ public class ArtifactRecharge extends Buff {
 	}
 	
 	private static final String LEFT = "left";
-	
+	private static final String IGNORE_HORN = "ignore_horn";
+
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put( LEFT, left );
+		bundle.put( IGNORE_HORN, ignoreHornOfPlenty );
 	}
 	
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		left = bundle.getInt(LEFT);
+		left = bundle.getFloat(LEFT);
+		ignoreHornOfPlenty = bundle.getBoolean(IGNORE_HORN);
 	}
 }

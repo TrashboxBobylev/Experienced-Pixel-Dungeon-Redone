@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -40,14 +40,20 @@ public class PotionOfExperience extends Potion {
 	
 	@Override
 	public void apply( Hero hero ) {
-		setKnown();
+		identify();
 		float duration = Bless.DURATION * 8;
 		if (hero.perks.contains(Perks.Perk.POTIONS)) duration *= 2;
 		Buff.prolong(hero, Bless.class, duration);
+		new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
 	}
 	
 	@Override
-	public int price() {
-		return isKnown() ? 50 * quantity : super.price();
+	public int value() {
+		return isKnown() ? 50 * quantity : super.value();
+	}
+
+	@Override
+	public int energyVal() {
+		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }

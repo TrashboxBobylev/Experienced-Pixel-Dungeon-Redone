@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
@@ -97,8 +98,8 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	protected float attackDelay() {
-		return super.attackDelay()*weapon.speedFactor( this );
+	public float attackDelay() {
+		return super.attackDelay()*weapon.delayFactor( this );
 	}
 
 	@Override
@@ -111,6 +112,14 @@ public class Statue extends Mob {
 		return Random.NormalIntRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this));
 	}
 	
+	@Override
+	public void add(Buff buff) {
+		super.add(buff);
+		if (state == PASSIVE && buff.type == Buff.buffType.NEGATIVE){
+			state = HUNTING;
+		}
+	}
+
 	@Override
 	public void damage( int dmg, Object src ) {
 
@@ -140,7 +149,7 @@ public class Statue extends Mob {
 	@Override
 	public void die( Object cause ) {
 		if (weapon != null) {
-            weapon.identify();
+            weapon.identify(false);
             Dungeon.level.drop(weapon, pos).sprite.drop();
         }
 		super.die( cause );

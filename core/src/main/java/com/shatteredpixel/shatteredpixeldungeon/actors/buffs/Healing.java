@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -49,6 +50,10 @@ public class Healing extends Buff {
 	public boolean act(){
 		
 		target.HP = Math.min(target.HT, target.HP + healingThisTick());
+
+		if (target.HP == target.HT && target instanceof Hero){
+			((Hero)target).resting = false;
+		}
 		
 		healingLeft -= healingThisTick();
 		
@@ -106,6 +111,11 @@ public class Healing extends Buff {
 	@Override
 	public int icon() {
 		return BuffIndicator.HEALING;
+	}
+
+	@Override
+	public String iconTextDisplay() {
+		return Integer.toString(healingLeft);
 	}
 	
 	@Override

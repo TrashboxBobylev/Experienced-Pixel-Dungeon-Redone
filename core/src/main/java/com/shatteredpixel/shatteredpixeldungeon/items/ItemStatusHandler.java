@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,17 +32,17 @@ import java.util.*;
 public class ItemStatusHandler<T extends Item> {
 
 	private Class<? extends T>[] items;
-	private HashMap<Class<? extends T>, String> itemLabels;
-	private HashMap<String, Integer> labelImages;
-	private HashSet<Class<? extends T>> known;
+	private LinkedHashMap<Class<? extends T>, String> itemLabels;
+	private LinkedHashMap<String, Integer> labelImages;
+	private LinkedHashSet<Class<? extends T>> known;
 
 	public ItemStatusHandler( Class<? extends T>[] items, HashMap<String, Integer> labelImages ) {
 
 		this.items = items;
 
-		this.itemLabels = new HashMap<>();
-		this.labelImages = new HashMap<>(labelImages);
-		known = new HashSet<>();
+		this.itemLabels = new LinkedHashMap<>();
+		this.labelImages = new LinkedHashMap<>(labelImages);
+		known = new LinkedHashSet<>();
 
 		ArrayList<String> labelsLeft = new ArrayList<>(labelImages.keySet());
 
@@ -62,9 +62,9 @@ public class ItemStatusHandler<T extends Item> {
 
 		this.items = items;
 
-		this.itemLabels = new HashMap<>();
-		this.labelImages = new HashMap<>(labelImages);
-		known = new HashSet<>();
+		this.itemLabels = new LinkedHashMap<>();
+		this.labelImages = new LinkedHashMap<>(labelImages);
+		known = new LinkedHashSet<>();
 
 		ArrayList<String> allLabels = new ArrayList<>(labelImages.keySet());
 
@@ -202,7 +202,7 @@ public class ItemStatusHandler<T extends Item> {
 	}
 	
 	public HashSet<Class<? extends T>> unknown() {
-		HashSet<Class<? extends T>> result = new HashSet<>();
+		LinkedHashSet<Class<? extends T>> result = new LinkedHashSet<>();
 		for (Class<? extends T> i : items) {
 			if (!known.contains( i )) {
 				result.add( i );

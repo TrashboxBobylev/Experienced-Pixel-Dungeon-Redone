@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,14 +24,17 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -39,8 +42,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
@@ -66,15 +69,14 @@ public class CloakOfShadows extends Artifact {
 		bones = false;
 	}
 
-	private boolean stealthed = false;
-
 	public static final String AC_STEALTH = "STEALTH";
 	public static final String AC_BBAT = "BBAT";
 
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (isEquipped( hero ) && !cursed && (charge > 0 || stealthed))
+		if ((isEquipped( hero ) || hero.hasTalent(Talent.LIGHT_CLOAK))
+				&& !cursed && (charge > 0 || activeBuff != null)) {
 			actions.add(AC_STEALTH);
 		boolean needToSpawn = true;
         for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
@@ -87,6 +89,7 @@ public class CloakOfShadows extends Artifact {
             if (hero.buff(Bbat.BbatRecharge.class) != null) needToSpawn = false;
         }
         if (needToSpawn) actions.add(AC_BBAT);
+		}
 		return actions;
 	}
 
@@ -97,29 +100,25 @@ public class CloakOfShadows extends Artifact {
 
 		if (action.equals( AC_STEALTH )) {
 
-			if (!stealthed){
-				if (!isEquipped(hero)) GLog.i( Messages.get(Artifact.class, "need_to_equip") );
+			if (activeBuff == null){
+				if (!isEquipped(hero) && !hero.hasTalent(Talent.LIGHT_CLOAK)) GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 				else if (cursed)       GLog.i( Messages.get(this, "cursed") );
 				else if (charge <= 0)  GLog.i( Messages.get(this, "no_charge") );
 				else {
-					stealthed = true;
 					hero.spend( 1f );
 					hero.busy();
 					Sample.INSTANCE.play(Assets.Sounds.MELD);
 					activeBuff = activeBuff();
 					activeBuff.attachTo(hero);
-					if (hero.sprite.parent != null) {
-						hero.sprite.parent.add(new AlphaTweener(hero.sprite, 0.4f, 0.4f));
-					} else {
-						hero.sprite.alpha(0.4f);
-					}
+					Talent.onArtifactUsed(Dungeon.hero);
 					hero.sprite.operate(hero.pos);
 				}
 			} else {
-				stealthed = false;
 				activeBuff.detach();
 				activeBuff = null;
-				hero.spend( 1f );
+				if (hero.invisible <= 0 && hero.buff(Preparation.class) != null){
+					hero.buff(Preparation.class).detach();
+				}
 				hero.sprite.operate( hero.pos );
 			}
 
@@ -154,8 +153,7 @@ public class CloakOfShadows extends Artifact {
 	@Override
 	public void activate(Char ch){
 		super.activate(ch);
-		if (stealthed){
-			activeBuff = activeBuff();
+		if (activeBuff != null && activeBuff.target == null){
 			activeBuff.attachTo(ch);
 		}
 	}
@@ -163,10 +161,44 @@ public class CloakOfShadows extends Artifact {
 	@Override
 	public boolean doUnequip(Hero hero, boolean collect, boolean single) {
 		if (super.doUnequip(hero, collect, single)){
-			stealthed = false;
+			if (!collect || !hero.hasTalent(Talent.LIGHT_CLOAK)){
+				if (activeBuff != null){
+					activeBuff.detach();
+					activeBuff = null;
+				}
+			} else {
+				activate(hero);
+			}
+
 			return true;
 		} else
 			return false;
+	}
+
+	@Override
+	public boolean collect( Bag container ) {
+		if (super.collect(container)){
+			if (container.owner instanceof Hero
+					&& passiveBuff == null
+					&& ((Hero) container.owner).hasTalent(Talent.LIGHT_CLOAK)){
+				activate((Hero) container.owner);
+			}
+			return true;
+		} else{
+			return false;
+		}
+	}
+
+	@Override
+	protected void onDetach() {
+		if (passiveBuff != null){
+			passiveBuff.detach();
+			passiveBuff = null;
+		}
+		if (activeBuff != null && !isEquipped((Hero) activeBuff.target)){
+			activeBuff.detach();
+			activeBuff = null;
+		}
 	}
 
 	@Override
@@ -180,9 +212,10 @@ public class CloakOfShadows extends Artifact {
 	}
 	
 	@Override
-	public void charge(Hero target) {
+	public void charge(Hero target, float amount) {
 		if (charge < chargeCap) {
-			partialCharge += 0.25f;
+			if (!isEquipped(target)) amount *= 0.75f*target.pointsInTalent(Talent.LIGHT_CLOAK)/3f;
+			partialCharge += 0.25f*amount;
 			if (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -190,7 +223,12 @@ public class CloakOfShadows extends Artifact {
 			}
 		}
 	}
-	
+
+	public void overCharge(int amount){
+		charge = Math.min(charge+amount, chargeCap+amount);
+		updateQuickslot();
+	}
+
 	@Override
 	public Item upgrade() {
 		chargeCap = chargeCap+1;
@@ -198,21 +236,25 @@ public class CloakOfShadows extends Artifact {
 	}
 
 	private static final String STEALTHED = "stealthed";
+	private static final String BUFF = "buff";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
-		bundle.put( STEALTHED, stealthed );
+		if (activeBuff != null) bundle.put(BUFF, activeBuff);
 	}
 
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		stealthed = bundle.getBoolean( STEALTHED );
+		if (bundle.contains(BUFF)){
+			activeBuff = new cloakStealth();
+			activeBuff.restoreFromBundle(bundle.getBundle(BUFF));
+		}
 	}
 
 	@Override
-	public int price() {
+	public int value() {
 		return 0;
 	}
 
@@ -221,16 +263,16 @@ public class CloakOfShadows extends Artifact {
 		public boolean act() {
 			if (charge < chargeCap) {
 				LockedFloor lock = target.buff(LockedFloor.class);
-				if (!stealthed && (lock == null || lock.regenOn())) {
+				if (activeBuff == null && (lock == null || lock.regenOn())) {
 					float missing = (chargeCap - charge);
 					if (level() > 7) missing += 5*(level() - 7)/3f;
 					float turnsToCharge = (45 - missing);
-					if (turnsToCharge <= 0) {
-						turnsToCharge = 1 / (missing - 44);
+					turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
+					float chargeToGain = (1f / turnsToCharge);
+					if (!isEquipped(Dungeon.hero)){
+						chargeToGain *= 0.75f*Dungeon.hero.pointsInTalent(Talent.LIGHT_CLOAK)/3f;
 					}
-                    turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
-                    if (turnsToCharge <= 0) turnsToCharge = 1;
-                    partialCharge += (1f / turnsToCharge);
+					partialCharge += chargeToGain;
 				}
 
 				if (partialCharge >= 1) {
@@ -270,14 +312,30 @@ public class CloakOfShadows extends Artifact {
 		}
 
 		@Override
+		public void tintIcon(Image icon) {
+			icon.brightness(0.6f);
+		}
+
+		@Override
 		public float iconFadePercent() {
-			return (5f - turnsToCost) / 5f;
+			return (4f - turnsToCost) / 4f;
+		}
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(turnsToCost);
 		}
 
 		@Override
 		public boolean attachTo( Char target ) {
 			if (super.attachTo( target )) {
 				target.invisible++;
+				if (target instanceof Hero && ((Hero) target).subClass == HeroSubClass.ASSASSIN){
+					Buff.affect(target, Preparation.class);
+				}
+				if (target instanceof Hero && ((Hero) target).hasTalent(Talent.PROTECTIVE_SHADOWS)){
+					Buff.affect(target, Talent.ProtectiveShadowsTracker.class);
+				}
 				return true;
 			} else {
 				return false;
@@ -314,7 +372,7 @@ public class CloakOfShadows extends Artifact {
 						GLog.p(Messages.get(this, "levelup"));
 						
 					}
-					turnsToCost = 5;
+					turnsToCost = 4;
 				}
 				updateQuickslot();
 			}
@@ -352,16 +410,17 @@ public class CloakOfShadows extends Artifact {
 
 		@Override
 		public void detach() {
-			if (target.invisible > 0)
-				target.invisible--;
-			stealthed = false;
+			activeBuff = null;
+
+			if (target.invisible > 0)   target.invisible--;
 
 			updateQuickslot();
 			super.detach();
 		}
 		
 		private static final String TURNSTOCOST = "turnsToCost";
-		
+		private static final String BARRIER_INC = "barrier_inc";
+
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);

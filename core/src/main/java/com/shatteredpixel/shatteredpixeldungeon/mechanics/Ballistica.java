@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -38,6 +38,7 @@ public class Ballistica {
 	public ArrayList<Integer> path = new ArrayList<>();
 	public Integer sourcePos = null;
 	public Integer collisionPos = null;
+	public Integer collisionProperties = null;
 	public Integer dist = 0;
 
 	//parameters to specify the colliding cell
@@ -55,6 +56,7 @@ public class Ballistica {
 
 	public Ballistica( int from, int to, int params ){
 		sourcePos = from;
+		collisionProperties = params;
 		build(from, to,
 				(params & STOP_TARGET) > 0,
 				(params & STOP_CHARS) > 0,
@@ -115,9 +117,13 @@ public class Ballistica {
 		int err = dA / 2;
 		while (Dungeon.level.insideMap(cell)) {
 
-			//if we're in a wall, collide with the previous cell along the path.
-			//we don't use solid here because we don't want to stop short of closed doors
-			if (stopTerrain && cell != sourcePos && !Dungeon.level.passable[cell] && !Dungeon.level.avoid[cell]) {
+			//if we're in solid terrain, and there's no char there, collide with the previous cell.
+			// we don't use solid here because we don't want to stop short of closed doors.
+			if (stopTerrain
+					&& cell != sourcePos
+					&& !Dungeon.level.passable[cell]
+					&& !Dungeon.level.avoid[cell]
+					&& Actor.findChar(cell) == null) {
 				collide(path.get(path.size() - 1));
 			}
 

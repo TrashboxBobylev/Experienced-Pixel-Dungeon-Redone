@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,7 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class Rat extends Mob {
@@ -62,7 +64,16 @@ public class Rat extends Mob {
                 break;
         }
 	}
-	
+
+	@Override
+	protected boolean act() {
+		if (Dungeon.level.heroFOV[pos] && Dungeon.hero.armorAbility instanceof Ratmogrify){
+			alignment = Alignment.ALLY;
+			if (state == SLEEPING) state = WANDERING;
+		}
+		return super.act();
+	}
+
 	@Override
 	public int damageRoll() {
 	    switch (Dungeon.cycle) {
@@ -94,5 +105,19 @@ public class Rat extends Mob {
             case 4: return Random.NormalIntRange(2000, 4500);
         }
 		return Random.NormalIntRange(0, 1);
+	}
+
+	private static final String RAT_ALLY = "rat_ally";
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		if (alignment == Alignment.ALLY) bundle.put(RAT_ALLY, true);
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		if (bundle.contains(RAT_ALLY)) alignment = Alignment.ALLY;
 	}
 }

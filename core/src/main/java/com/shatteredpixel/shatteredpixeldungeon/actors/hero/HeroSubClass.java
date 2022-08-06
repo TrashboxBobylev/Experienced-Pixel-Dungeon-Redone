@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,49 +24,61 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.watabou.utils.Bundle;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
+import com.watabou.noosa.Game;
 
 public enum HeroSubClass {
 
-	NONE( null ),
-	
-	GLADIATOR( "gladiator" ),
-	BERSERKER( "berserker" ),
-	
-	WARLOCK( "warlock" ),
-	BATTLEMAGE( "battlemage" ),
-	
-	ASSASSIN( "assassin" ),
-	FREERUNNER( "freerunner" ),
-	
-	SNIPER( "sniper" ),
-	WARDEN( "warden" ),
+	NONE(HeroIcon.NONE),
 
-	KING("kingy");
+	BERSERKER(HeroIcon.BERSERKER),
+	GLADIATOR(HeroIcon.GLADIATOR),
+
+	BATTLEMAGE(HeroIcon.BATTLEMAGE),
+	WARLOCK(HeroIcon.WARLOCK),
 	
-	private String title;
+	ASSASSIN(HeroIcon.ASSASSIN),
+	FREERUNNER(HeroIcon.FREERUNNER),
 	
-	HeroSubClass( String title ) {
-		this.title = title;
+	SNIPER(HeroIcon.SNIPER),
+	WARDEN(HeroIcon.WARDEN);
+
+	int icon;
+
+	HeroSubClass(int icon){
+		this.icon = icon;
 	}
 	
 	public String title() {
-		return Messages.get(this, title);
+		return Messages.get(this, name());
 	}
-	
+
+	public String shortDesc() {
+		return Messages.get(this, name()+"_short_desc");
+	}
+
 	public String desc() {
-		return Messages.get(this, title+"_desc");
+		//Include the staff effect description in the battlemage's desc if possible
+		if (this == BATTLEMAGE){
+			String desc = Messages.get(this, name() + "_desc");
+			if (Game.scene() instanceof GameScene){
+				MagesStaff staff = Dungeon.hero.belongings.getItem(MagesStaff.class);
+				if (staff != null && staff.wandClass() != null){
+					desc += "\n\n" + Messages.get(staff.wandClass(), "bmage_desc");
+					desc = desc.replaceAll("_", "");
+				}
+			}
+			return desc;
+		} else {
+			return Messages.get(this, name() + "_desc");
+		}
 	}
-	
-	private static final String SUBCLASS	= "subClass";
-	
-	public void storeInBundle( Bundle bundle ) {
-		bundle.put( SUBCLASS, toString() );
-	}
-	
-	public static HeroSubClass restoreInBundle( Bundle bundle ) {
-		String value = bundle.getString( SUBCLASS );
-		return valueOf( value );
+
+	public int icon(){
+		return icon;
 	}
 }

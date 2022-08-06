@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -47,6 +47,9 @@ public class Buff extends Actor {
 	
 	//whether or not the buff announces its name
 	public boolean announced = false;
+
+	//whether a buff should persist through revive effects for the hero
+	public boolean revivePersists = false;
 	
 	protected HashSet<Class> resistances = new HashSet<>();
 	
@@ -101,6 +104,11 @@ public class Buff extends Actor {
 	//percent (0-1) to fade out out the buff icon, usually if buff is expiring
 	public float iconFadePercent(){
 		return 0;
+	}
+
+	//text to display on large buff icons in the desktop UI
+	public String iconTextDisplay(){
+		return "";
 	}
 
 	//visual effect usually attached to the sprite of the character the buff is attacked to
@@ -159,6 +167,12 @@ public class Buff extends Actor {
 	public static<T extends FlavourBuff> T prolong( Char target, Class<T> buffClass, float duration ) {
 		T buff = affect( target, buffClass );
 		buff.postpone( duration * target.resist(buffClass) );
+		return buff;
+	}
+
+	public static<T extends CounterBuff> T count( Char target, Class<T> buffclass, float count ) {
+		T buff = affect( target, buffclass );
+		buff.countUp( count );
 		return buff;
 	}
 	

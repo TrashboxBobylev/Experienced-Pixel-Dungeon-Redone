@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -76,11 +76,17 @@ public class PitfallTrap extends Trap {
 
 	public static class DelayedPit extends FlavourBuff {
 
+		{
+			revivePersists = true;
+		}
+
 		int pos;
 		int depth;
 
 		@Override
 		public boolean act() {
+
+			boolean herofell = false;
 			if (depth == Dungeon.depth) {
 				for (int i : PathFinder.NEIGHBOURS9) {
 
@@ -94,7 +100,9 @@ public class PitfallTrap extends Trap {
 
 					Heap heap = Dungeon.level.heaps.get(cell);
 
-					if (heap != null) {
+					if (heap != null && heap.type != Heap.Type.FOR_SALE
+							&& heap.type != Heap.Type.LOCKED_CHEST
+							&& heap.type != Heap.Type.CRYSTAL_CHEST) {
 						for (Item item : heap.items) {
 							Dungeon.dropToChasm(item);
 						}
@@ -110,6 +118,7 @@ public class PitfallTrap extends Trap {
 						&& !(ch.alignment == Char.Alignment.NEUTRAL && Char.hasProp(ch, Char.Property.IMMOVABLE))) {
 						if (ch == Dungeon.hero) {
 							Chasm.heroFall(cell);
+							herofell = true;
 						} else {
 							Chasm.mobFall((Mob) ch);
 						}
@@ -119,7 +128,7 @@ public class PitfallTrap extends Trap {
 			}
 
 			detach();
-			return true;
+			return !herofell;
 		}
 
 		private static final String POS = "pos";
@@ -140,7 +149,4 @@ public class PitfallTrap extends Trap {
 		}
 
 	}
-
-	//TODO these used to become chasms when disarmed, but the functionality was problematic
-	//because it could block routes, perhaps some way to make this work elegantly?
 }

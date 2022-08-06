@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -119,9 +119,17 @@ public class GnollTrickster extends Gnoll {
 			return super.getCloser( target );
 		}
 	}
+
+	@Override
+	public void aggro(Char ch) {
+		//cannot be aggroed to something it can't see
+		if (ch == null || fieldOfView == null || fieldOfView[ch.pos]) {
+			super.aggro(ch);
+		}
+	}
 	
 	@Override
-	protected Item createLoot() {
+	public Item createLoot() {
 		MissileWeapon drop = (MissileWeapon)super.createLoot();
 		//half quantity, rounded up
 		drop.quantity((drop.quantity()+1)/2);

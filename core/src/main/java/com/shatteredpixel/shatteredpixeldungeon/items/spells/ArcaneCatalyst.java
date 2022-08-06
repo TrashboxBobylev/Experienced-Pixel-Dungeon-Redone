@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -72,10 +72,15 @@ public class ArcaneCatalyst extends Spell {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 40 * quantity;
 	}
-	
+
+	@Override
+	public int energyVal() {
+		return 8 * quantity;
+	}
+
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe {
 		
 		@Override
@@ -100,12 +105,12 @@ public class ArcaneCatalyst extends Spell {
 		public int cost(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (i instanceof Plant.Seed){
-					return 2;
-				} else if (i instanceof Runestone){
 					return 1;
+				} else if (i instanceof Runestone){
+					return 0;
 				}
 			}
-			return 1;
+			return 0;
 		}
 		
 		@Override

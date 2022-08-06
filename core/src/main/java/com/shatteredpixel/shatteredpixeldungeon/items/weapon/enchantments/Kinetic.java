@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -46,9 +46,9 @@ public class Kinetic extends Weapon.Enchantment {
 			attacker.buff(ConservedDamage.class).detach();
 		}
 		
-		if (damage > defender.HP){
-			int extraDamage = damage - defender.HP;
-			
+		if (damage > (defender.HP + defender.shielding())){
+			int extraDamage = damage - (defender.HP + defender.shielding());
+
 			Buff.affect(attacker, ConservedDamage.class).setBonus(extraDamage);
 		}
 		
@@ -61,6 +61,10 @@ public class Kinetic extends Weapon.Enchantment {
 	}
 	
 	public static class ConservedDamage extends Buff {
+
+		{
+			type = buffType.POSITIVE;
+		}
 		
 		@Override
 		public int icon() {
@@ -76,6 +80,11 @@ public class Kinetic extends Weapon.Enchantment {
 			} else {
 				icon.hardlight(1f, 1f, 1f - preservedDamage*.2f);
 			}
+		}
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(damageBonus());
 		}
 		
 		private float preservedDamage;

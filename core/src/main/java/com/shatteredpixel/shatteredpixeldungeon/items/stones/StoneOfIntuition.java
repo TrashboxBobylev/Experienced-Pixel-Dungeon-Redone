@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,11 +25,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -43,18 +44,27 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Reflection;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public class StoneOfIntuition extends InventoryStone {
 	
-	
 	{
-		mode = WndBag.Mode.UNIDED_POTION_OR_SCROLL;
 		image = ItemSpriteSheet.STONE_INTUITION;
+	}
+
+	@Override
+	protected boolean usableOnItem(Item item) {
+		if (item instanceof Ring){
+			return !((Ring) item).isKnown();
+		} else if (item instanceof Potion){
+			return !((Potion) item).isKnown();
+		} else if (item instanceof Scroll){
+			return !((Scroll) item).isKnown();
+		}
+		return false;
 	}
 	
 	@Override
@@ -63,6 +73,8 @@ public class StoneOfIntuition extends InventoryStone {
 		GameScene.show( new WndGuess(item));
 		
 	}
+
+	public static class IntuitionUseTracker extends Buff {{ revivePersists = true; }};
 	
 	private static Class curGuess = null;
 	
@@ -91,10 +103,25 @@ public class StoneOfIntuition extends InventoryStone {
 					super.onClick();
 					useAnimation();
 					if (item.getClass() == curGuess){
-						item.identify();
+						if (item instanceof Ring){
+							((Ring) item).setKnown();
+						} else {
+							item.identify();
+						}
 						GLog.p( Messages.get(WndGuess.class, "correct") );
 						curUser.sprite.parent.add( new Identification( curUser.sprite.center().offset( 0, -16 ) ) );
+
+						if (curUser.buff(IntuitionUseTracker.class) == null){
+							GLog.h( Messages.get(WndGuess.class, "preserved") );
+							new StoneOfIntuition().collect();
+							Buff.affect(curUser, IntuitionUseTracker.class);
+						} else {
+							curUser.buff(IntuitionUseTracker.class).detach();
+						}
 					} else {
+						if (curUser.buff(IntuitionUseTracker.class) != null) {
+							curUser.buff(IntuitionUseTracker.class).detach();
+						}
 						GLog.n( Messages.get(WndGuess.class, "incorrect") );
 					}
 					curGuess = null;
@@ -112,44 +139,34 @@ public class StoneOfIntuition extends InventoryStone {
 			int rows;
 			int placed = 0;
 			
-			HashSet<Class<?extends Item>> unIDed = new HashSet<>();
-			final Class<?extends Item>[] all;
-
+			final ArrayList<Class<?extends Item>> unIDed = new ArrayList<>();
 			if (item.isIdentified()){
 				hide();
 				return;
 			} else if (item instanceof Potion){
-				unIDed.addAll(Potion.getUnknown());
-				all = (Class<? extends Item>[]) Generator.Category.POTION.classes.clone();
-				if (item instanceof ExoticPotion){
-					for (int i = 0; i < all.length; i++){
-						all[i] = ExoticPotion.regToExo.get(all[i]);
+				if (item instanceof ExoticPotion) {
+					for (Class<?extends Item> i : Potion.getUnknown()){
+						unIDed.add(ExoticPotion.regToExo.get(i));
 					}
-					HashSet<Class<?extends Item>> exoUID = new HashSet<>();
-					for (Class<?extends Item> i : unIDed){
-						exoUID.add(ExoticPotion.regToExo.get(i));
-					}
-					unIDed = exoUID;
+				} else {
+					unIDed.addAll(Potion.getUnknown());
 				}
 			} else if (item instanceof Scroll){
-				unIDed.addAll(Scroll.getUnknown());
-				all = (Class<? extends Item>[]) Generator.Category.SCROLL.classes.clone();
 				if (item instanceof ExoticScroll) {
-					for (int i = 0; i < all.length; i++) {
-						all[i] = ExoticScroll.regToExo.get(all[i]);
+					for (Class<?extends Item> i : Scroll.getUnknown()){
+						unIDed.add(ExoticScroll.regToExo.get(i));
 					}
-					HashSet<Class<? extends Item>> exoUID = new HashSet<>();
-					for (Class<? extends Item> i : unIDed) {
-						exoUID.add(ExoticScroll.regToExo.get(i));
-					}
-					unIDed = exoUID;
+				} else {
+					unIDed.addAll(Scroll.getUnknown());
 				}
+			} else if (item instanceof Ring) {
+				unIDed.addAll(Ring.getUnknown());
 			} else {
 				hide();
 				return;
 			}
 			
-			if (unIDed.size() < 6){
+			if (unIDed.size() <= 5){
 				rows = 1;
 				top += BTN_SIZE/2f;
 				left = (WIDTH - BTN_SIZE*unIDed.size())/2f;
@@ -158,16 +175,12 @@ public class StoneOfIntuition extends InventoryStone {
 				left = (WIDTH - BTN_SIZE*((unIDed.size()+1)/2))/2f;
 			}
 			
-			for (int i = 0; i < all.length; i++){
-				if (!unIDed.contains(all[i])) {
-					continue;
-				}
-				
-				final int j = i;
+			for (final Class<?extends Item> i : unIDed){
+
 				IconButton btn = new IconButton(){
 					@Override
 					protected void onClick() {
-						curGuess = all[j];
+						curGuess = i;
 						guess.visible = true;
 						guess.text( Messages.titleCase(Messages.get(curGuess, "name")) );
 						guess.enable(true);
@@ -175,7 +188,7 @@ public class StoneOfIntuition extends InventoryStone {
 					}
 				};
 				Image im = new Image(Assets.Sprites.ITEM_ICONS);
-				im.frame(ItemSpriteSheet.Icons.film.get(Reflection.newInstance(all[i]).icon));
+				im.frame(ItemSpriteSheet.Icons.film.get(Reflection.newInstance(i).icon));
 				im.scale.set(2f);
 				btn.icon(im);
 				btn.setRect(left + placed*BTN_SIZE, top, BTN_SIZE, BTN_SIZE);

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -78,8 +78,7 @@ public class BlacksmithSprite extends MobSprite {
 	public void onComplete( Animation anim ) {
 		super.onComplete( anim );
 		
-		//FIXME should figure out why onComplete is called constantly when an animation is paused
-		if (visible && emitter != null && anim == idle && !paused) {
+		if (visible && emitter != null && anim == idle) {
 			emitter.burst( Speck.factory( Speck.FORGE ), 3 );
 			float volume = 0.2f / (Dungeon.level.distance( ch.pos, Dungeon.hero.pos ));
 			Sample.INSTANCE.play( Assets.Sounds.EVOKE, volume, volume, 0.8f  );

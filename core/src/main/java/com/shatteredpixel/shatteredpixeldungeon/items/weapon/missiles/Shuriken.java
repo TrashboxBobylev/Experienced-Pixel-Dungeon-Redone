@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -47,8 +47,8 @@ public class Shuriken extends MissileWeapon {
 	}
 	
 	@Override
-	public float speedFactor(Char owner) {
+	public float delayFactor(Char owner) {
 		if (owner instanceof Hero && ((Hero) owner).justMoved)  return 0;
-		else                                                    return super.speedFactor(owner);
+		else                                                    return super.delayFactor(owner);
 	}
 }

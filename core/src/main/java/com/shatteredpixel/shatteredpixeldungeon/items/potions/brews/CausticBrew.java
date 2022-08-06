@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -41,7 +41,6 @@ import com.watabou.utils.PathFinder;
 public class CausticBrew extends Brew {
 	
 	{
-		//TODO finish visuals
 		image = ItemSpriteSheet.BREW_CAUSTIC;
 	}
 	
@@ -67,9 +66,9 @@ public class CausticBrew extends Brew {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
-		return quantity * (30 + 50);
+		return quantity * (30 + 30);
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
@@ -78,7 +77,7 @@ public class CausticBrew extends Brew {
 			inputs =  new Class[]{PotionOfToxicGas.class, GooBlob.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 4;
+			cost = 2;
 			
 			output = CausticBrew.class;
 			outQuantity = 1;

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -57,7 +57,7 @@ public class Guard extends Mob {
 		maxLvl = 14;
 
 		loot = Generator.Category.ARMOR;
-		lootChance = 0.2f; //by default, see rollToDropLoot()
+		lootChance = 0.2f; //by default, see lootChance()
 
 		properties.add(Property.UNDEAD);
 		
@@ -121,30 +121,40 @@ public class Guard extends Mob {
 			} else {
 				final int newPosFinal = newPos;
 				this.target = newPos;
-				yell( Messages.get(this, "scorpion") );
-				new Item().throwSound();
-				Sample.INSTANCE.play( Assets.Sounds.CHAINS );
-				sprite.parent.add(new Chains(sprite.center(), enemy.sprite.center(), new Callback() {
-					public void call() {
-						Actor.addDelayed(new Pushing(enemy, enemy.pos, newPosFinal, new Callback(){
-							public void call() {
-								enemy.pos = newPosFinal;
-								Dungeon.level.occupyCell(enemy);
-								Cripple.prolong(enemy, Cripple.class, 4f);
-								if (enemy == Dungeon.hero) {
-									Dungeon.hero.interrupt();
-									Dungeon.observe();
-									GameScene.updateFog();
+
+				if (sprite.visible || enemy.sprite.visible) {
+					yell(Messages.get(this, "scorpion"));
+					new Item().throwSound();
+					Sample.INSTANCE.play(Assets.Sounds.CHAINS);
+					sprite.parent.add(new Chains(sprite.center(), enemy.sprite.destinationCenter(), new Callback() {
+						public void call() {
+							Actor.addDelayed(new Pushing(enemy, enemy.pos, newPosFinal, new Callback() {
+								public void call() {
+									pullEnemy(enemy, newPosFinal);
 								}
-							}
-						}), -1);
-						next();
-					}
-				}));
+							}), -1);
+							next();
+						}
+					}));
+				} else {
+					pullEnemy(enemy, newPos);
+				}
 			}
 		}
 		chainsUsed = true;
 		return true;
+	}
+
+	private void pullEnemy( Char enemy, int pullPos ){
+		enemy.pos = pullPos;
+		enemy.sprite.place(pullPos);
+		Dungeon.level.occupyCell(enemy);
+		Cripple.prolong(enemy, Cripple.class, 4f);
+		if (enemy == Dungeon.hero) {
+			Dungeon.hero.interrupt();
+			Dungeon.observe();
+			GameScene.updateFog();
+		}
 	}
 
 	@Override
@@ -170,15 +180,14 @@ public class Guard extends Mob {
 	}
 
 	@Override
-	public void rollToDropLoot() {
+	public float lootChance() {
 		//each drop makes future drops 1/2 as likely
 		// so loot chance looks like: 1/5, 1/10, 1/20, 1/40, etc.
-		lootChance *= Math.pow(1/2f, Dungeon.LimitedDrops.GUARD_ARM.count);
-		super.rollToDropLoot();
+		return super.lootChance() * (float)Math.pow(1/2f, Dungeon.LimitedDrops.GUARD_ARM.count);
 	}
 
 	@Override
-	protected Item createLoot() {
+	public Item createLoot() {
 		Dungeon.LimitedDrops.GUARD_ARM.count++;
 		return super.createLoot();
 	}
@@ -207,10 +216,10 @@ public class Guard extends Mob {
 					&& !isCharmedBy( enemy )
 					&& !canAttack( enemy )
 					&& Dungeon.level.distance( pos, enemy.pos ) < 5
-					&& Random.Int(3) == 0
+
 					
 					&& chain(enemy.pos)){
-				return false;
+				return !(sprite.visible || enemy.sprite.visible);
 			} else {
 				return super.act( enemyInFOV, justAlerted );
 			}

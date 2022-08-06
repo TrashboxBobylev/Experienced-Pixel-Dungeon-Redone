@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -57,7 +57,10 @@ public class TitleScene extends PixelScene {
 		
 		super.create();
 
-		Music.INSTANCE.play( Assets.Music.THEME, true );
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
 
 		uiCamera.visible = false;
 		
@@ -101,7 +104,7 @@ public class TitleScene extends PixelScene {
 		add( signs );
 
 		final Chrome.Type GREY_TR = Chrome.Type.GREY_BUTTON_TR;
-		
+
 		StyledButton btnPlay = new StyledButton(GREY_TR, Messages.get(this, "enter")){
 			@Override
 			protected void onClick() {
@@ -140,6 +143,7 @@ public class TitleScene extends PixelScene {
 		};
 		btnRankings.icon(Icons.get(Icons.RANKINGS));
 		add(btnRankings);
+Dungeon.daily = false;
 
 		StyledButton btnBadges = new StyledButton(GREY_TR, Messages.get(this, "badges")){
 			@Override
@@ -204,6 +208,12 @@ public class TitleScene extends PixelScene {
 		version.y = h - version.height() - 2;
 		add( version );
 
+		if (DeviceCompat.isDesktop()) {
+			ExitButton btnExit = new ExitButton();
+			btnExit.setPos( w - btnExit.width(), 0 );
+			add( btnExit );
+		}
+
 		fadeIn();
 	}
 	
@@ -217,7 +227,7 @@ public class TitleScene extends PixelScene {
 
 		public NewsButton(Chrome.Type type, String label ){
 			super(type, label);
-			News.checkForNews();
+			if (SPDSettings.news()) News.checkForNews();
 		}
 
 		int unreadCount = -1;
@@ -227,10 +237,17 @@ public class TitleScene extends PixelScene {
 			super.update();
 
 			if (unreadCount == -1 && News.articlesAvailable()){
-				unreadCount = News.unreadArticles(new Date(SPDSettings.newsLastRead()));
-				if (unreadCount > 0){
-					unreadCount = Math.min(unreadCount, 9);
-					text(text() + "(" + unreadCount + ")");
+				long lastRead = SPDSettings.newsLastRead();
+				if (lastRead == 0){
+					if (News.articles().get(0) != null) {
+						SPDSettings.newsLastRead(News.articles().get(0).date.getTime());
+					}
+				} else {
+					unreadCount = News.unreadArticles(new Date(SPDSettings.newsLastRead()));
+					if (unreadCount > 0) {
+						unreadCount = Math.min(unreadCount, 9);
+						text(text() + "(" + unreadCount + ")");
+					}
 				}
 			}
 
@@ -259,21 +276,27 @@ public class TitleScene extends PixelScene {
 		public void update() {
 			super.update();
 
-			if (Updates.updateAvailable()){
-				if (!updateShown){
-					updateShown = true;
-					text(Messages.get(TitleScene.class, "update"));
-				}
+			if (!updateShown && (Updates.updateAvailable() || Updates.isInstallable())){
+				updateShown = true;
+				if (Updates.isInstallable())    text(Messages.get(TitleScene.class, "install"));
+				else                            text(Messages.get(TitleScene.class, "update"));
+			}
+
+			if (updateShown){
 				textColor(ColorMath.interpolate( 0xFFFFFF, Window.SHPX_COLOR, 0.5f + (float)Math.sin(Game.timeTotal*5)/2f));
 			}
 		}
 
 		@Override
 		protected void onClick() {
-			if (Updates.updateAvailable()){
+			if (Updates.isInstallable()){
+				Updates.launchInstall();
+
+			} else if (Updates.updateAvailable()){
 				AvailableUpdateData update = Updates.updateData();
 
 				ShatteredPixelDungeon.scene().addToFront( new WndOptions(
+						Icons.get(Icons.CHANGES),
 						update.versionName == null ? Messages.get(this,"title") : Messages.get(this,"versioned_title", update.versionName),
 						update.desc == null ? Messages.get(this,"desc") : update.desc,
 						Messages.get(this,"update"),
@@ -284,13 +307,14 @@ public class TitleScene extends PixelScene {
 						if (index == 0) {
 							Updates.launchUpdate(Updates.updateData());
 						} else if (index == 1){
-							ChangesScene.changesSelected = 4;
+							ChangesScene.changesSelected = 0;
 							ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 						}
 					}
 				});
+
 			} else {
-				ChangesScene.changesSelected = 4;
+				ChangesScene.changesSelected = 0;
 				ShatteredPixelDungeon.switchNoFade( ChangesScene.class );
 			}
 		}
@@ -331,7 +355,7 @@ public class TitleScene extends PixelScene {
 
 		public SupportButton( Chrome.Type type, String label ){
 			super(type, label);
-			icon(Icons.get(Icons.INFO));
+			icon(Icons.get(Icons.GOLD));
 			textColor(Window.TITLE_COLOR);
 		}
 

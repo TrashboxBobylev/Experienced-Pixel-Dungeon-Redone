@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,6 +32,7 @@ import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
 
+//removed from drops, here for pre-1.1.0 saves
 public class MerchantsBeacon extends Item {
 
 	private static final String AC_USE = "USE";
@@ -77,7 +78,7 @@ public class MerchantsBeacon extends Item {
 	}
 
 	@Override
-	public int price() {
+	public int value() {
 		return 5 * quantity;
 	}
 

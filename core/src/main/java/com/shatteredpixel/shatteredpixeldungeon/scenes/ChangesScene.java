@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,11 +27,14 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.*;
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
+import com.watabou.noosa.Scene;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.ui.Component;
 
@@ -40,12 +43,19 @@ import java.util.ArrayList;
 public class ChangesScene extends PixelScene {
 	
 	public static int changesSelected = 4;
+
+	private NinePatch rightPanel;
+	private IconTitle changeTitle;
+	private RenderedTextBlock changeBody;
 	
 	@Override
 	public void create() {
 		super.create();
-		
-		Music.INSTANCE.play( Assets.Music.THEME, true );
+
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.THEME_1, Assets.Music.THEME_2},
+				new float[]{1, 1},
+				false);
 
 		int w = Camera.main.width;
 		int h = Camera.main.height;
@@ -66,11 +76,38 @@ public class ChangesScene extends PixelScene {
 		NinePatch panel = Chrome.get(Chrome.Type.TOAST);
 
 		int pw = 135 + panel.marginLeft() + panel.marginRight() - 2;
-		int ph = h - 35;
+		int ph = h - 36;
 
-		panel.size( pw, ph );
-		panel.x = (w - pw) / 2f;
-		panel.y = title.bottom() + 4;
+		if (h >= PixelScene.MIN_HEIGHT_FULL && w >= PixelScene.MIN_WIDTH_FULL) {
+			panel.size( pw, ph );
+			panel.x = (w - pw) / 2f - pw/2 - 1;
+			panel.y = title.bottom() + 5;
+
+			rightPanel = Chrome.get(Chrome.Type.TOAST);
+			rightPanel.size( pw, ph );
+			rightPanel.x = (w - pw) / 2f + pw/2 + 1;
+			rightPanel.y = title.bottom() + 5;
+			add(rightPanel);
+
+			changeTitle = new IconTitle(Icons.get(Icons.CHANGES), Messages.get(this, "right_title"));
+			changeTitle.setPos(rightPanel.x + rightPanel.marginLeft(), rightPanel.y + rightPanel.marginTop());
+			changeTitle.setSize(pw, 20);
+			add(changeTitle);
+
+			String body = Messages.get(this, "right_body");
+			if (Messages.lang() != Languages.ENGLISH){
+				body += "\n\n_" + Messages.get(this, "lang_warn") + "_";
+			}
+			changeBody = PixelScene.renderTextBlock(body, 6);
+			changeBody.maxWidth(pw - panel.marginHor());
+			changeBody.setPos(rightPanel.x + rightPanel.marginLeft(), changeTitle.bottom()+2);
+			add(changeBody);
+
+		} else {
+			panel.size( pw, ph );
+			panel.x = (w - pw) / 2f;
+			panel.y = title.bottom() + 5;
+		}
 		align( panel );
 		add( panel );
 		
@@ -78,15 +115,21 @@ public class ChangesScene extends PixelScene {
 
 		switch (changesSelected){
 			case 0: default:
-				v0_8_X_Changes.addAllChanges(changeInfos);
+				v1_X_Changes.addAllChanges(changeInfos);
 				break;
 			case 1:
-				v0_7_X_Changes.addAllChanges(changeInfos);
+				v0_9_X_Changes.addAllChanges(changeInfos);
 				break;
 			case 2:
-				v0_6_X_Changes.addAllChanges(changeInfos);
+				v0_8_X_Changes.addAllChanges(changeInfos);
 				break;
 			case 3:
+				v0_7_X_Changes.addAllChanges(changeInfos);
+				break;
+			case 4:
+				v0_6_X_Changes.addAllChanges(changeInfos);
+				break;
+			case 5:
 				v0_5_X_Changes.addAllChanges(changeInfos);
 				v0_4_X_Changes.addAllChanges(changeInfos);
 				v0_3_X_Changes.addAllChanges(changeInfos);
@@ -147,7 +190,7 @@ public class ChangesScene extends PixelScene {
 		list.setRect(
 				panel.x + panel.marginLeft(),
 				panel.y + panel.marginTop() - 1,
-				panel.innerWidth(),
+				panel.innerWidth() + 2,
 				panel.innerHeight() + 2);
 		list.scrollTo(0, 0);
 
@@ -207,7 +250,7 @@ public class ChangesScene extends PixelScene {
 		btn0_6.setRect(btn0_7.right() + 1, btn0_8.top(), 27, 14);
 		add(btn0_6);
 		
-		RedButton btnOld = new RedButton("v0.5-0.1"){
+		StyledButton btn0_7 = new StyledButton(Chrome.Type.GREY_BUTTON_TR, "0.7"){
 			@Override
 			protected void onClick() {
 				super.onClick();
@@ -227,7 +270,37 @@ public class ChangesScene extends PixelScene {
 
 		fadeIn();
 	}
-	
+
+	private void updateChangesText(Image icon, String title, String message){
+		if (changeTitle != null){
+			changeTitle.icon(icon);
+			changeTitle.label(title);
+			changeTitle.setPos(changeTitle.left(), changeTitle.top());
+
+			int pw = 135 + rightPanel.marginHor() - 2;
+			changeBody.text(message, pw - rightPanel.marginHor());
+			while (changeBody.height() > rightPanel.height()-25
+					&& changeBody.right() + 5 < Camera.main.width){
+				changeBody.maxWidth(changeBody.maxWidth()+5);
+			}
+			int ph = Camera.main.height - 36;
+			rightPanel.size(changeBody.maxWidth() + rightPanel.marginHor(), Math.max(ph, changeBody.height()+18+rightPanel.marginVer()));
+			changeBody.setPos(changeBody.left(), changeTitle.bottom()+2);
+
+		} else {
+			addToFront(new ChangesWindow(icon, title, message));
+		}
+	}
+
+	public static void showChangeInfo(Image icon, String title, String message){
+		Scene s = ShatteredPixelDungeon.scene();
+		if (s instanceof ChangesScene){
+			((ChangesScene) s).updateChangesText(icon, title, message);
+			return;
+		}
+		s.addToFront(new ChangesWindow(icon, title, message));
+	}
+
 	@Override
 	protected void onBackPressed() {
 		ShatteredPixelDungeon.switchNoFade(TitleScene.class);

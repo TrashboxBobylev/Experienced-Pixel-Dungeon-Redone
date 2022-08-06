@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -50,8 +50,8 @@ public class Bones {
 
 		depth = Dungeon.depth;
 
-		//heroes which have won the game, who die far above their farthest depth, or who are challenged drop no bones.
-		if (Statistics.amuletObtained || (Statistics.deepestFloor - 5) >= depth || Dungeon.challenges > 0) {
+		//heroes drop no bones if they have the amulet, die far above their farthest depth, are challenged, or are playing with a custom seed.
+		if (Statistics.amuletObtained || (Statistics.deepestFloor - 5) >= depth || Dungeon.challenges > 0 || !Dungeon.customSeedText.isEmpty()) {
 			depth = -1;
 			return;
 		}
@@ -130,7 +130,9 @@ public class Bones {
 				Bundle bundle = FileUtils.bundleFromFile(BONES_FILE);
 
 				depth = bundle.getInt( LEVEL );
-				item = (Item)bundle.get( ITEM );
+				if (depth > 0) {
+					item = (Item) bundle.get(ITEM);
+				}
 
 				return get();
 
@@ -139,9 +141,15 @@ public class Bones {
 			}
 
 		} else {
-			//heroes who are challenged cannot find bones
-			if (depth == Dungeon.depth && Dungeon.challenges == 0) {
-				FileUtils.deleteFile( BONES_FILE );
+			//heroes who are challenged or on a seeded run cannot find bones
+			if (depth == Dungeon.depth && Dungeon.challenges == 0 && Dungeon.customSeedText.isEmpty()) {
+				Bundle emptyBones = new Bundle();
+				emptyBones.put(LEVEL, 0);
+				try {
+					FileUtils.bundleToFile( BONES_FILE, emptyBones );
+				} catch (IOException e) {
+					ShatteredPixelDungeon.reportException(e);
+				}
 				depth = 0;
 				
 				if (item == null) return null;

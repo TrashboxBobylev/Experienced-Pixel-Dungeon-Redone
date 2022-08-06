@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -52,14 +52,14 @@ public abstract class ShieldBuff extends Buff {
 	}
 	
 	public void setShield( int shield ) {
-		this.shielding = shield;
+		if (this.shielding <= shield) this.shielding = shield;
 		if (target != null) target.needsShieldUpdate = true;
 	}
 	
 	public void incShield(){
 		incShield(1);
 	}
-	
+
 	public void incShield( int amt ){
 		shielding += amt;
 		if (target != null) target.needsShieldUpdate = true;
@@ -68,7 +68,7 @@ public abstract class ShieldBuff extends Buff {
 	public void decShield(){
 		decShield(1);
 	}
-	
+
 	public void decShield( int amt ){
 		shielding -= amt;
 		if (target != null) target.needsShieldUpdate = true;

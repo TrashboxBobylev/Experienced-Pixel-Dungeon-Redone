@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,11 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Image;
 
@@ -46,7 +44,7 @@ public class ActionIndicator extends Tag {
 
 		instance = this;
 
-		setSize( 24, 24 );
+		setSize( SIZE, SIZE );
 		visible = false;
 	}
 	
@@ -66,8 +64,9 @@ public class ActionIndicator extends Tag {
 		super.layout();
 		
 		if (icon != null){
-			icon.x = x + (width - icon.width()) / 2;
-			icon.y = y + (height - icon.height()) / 2;
+			if (!flipped)   icon.x = x + (SIZE - icon.width()) / 2f + 1;
+			else            icon.x = x + width - (SIZE + icon.width()) / 2f - 1;
+			icon.y = y + (height - icon.height()) / 2f;
 			PixelScene.align(icon);
 			if (!members.contains(icon))
 				add(icon);
@@ -102,8 +101,19 @@ public class ActionIndicator extends Tag {
 
 	@Override
 	protected void onClick() {
-		if (action != null && Dungeon.hero.ready)
+		if (action != null && Dungeon.hero.ready) {
 			action.doAction();
+		}
+	}
+
+	@Override
+	protected String hoverText() {
+		String text = (action == null ? null : action.actionName());
+		if (text != null){
+			return Messages.titleCase(text);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -145,7 +155,7 @@ public class ActionIndicator extends Tag {
 					instance.icon = null;
 				}
 				if (action != null) {
-					instance.icon = action.getIcon();
+					instance.icon = action.actionIcon();
 					instance.needsLayout = true;
 				}
 			}
@@ -154,7 +164,9 @@ public class ActionIndicator extends Tag {
 
 	public interface Action{
 
-		public Image getIcon();
+		public String actionName();
+
+		public Image actionIcon();
 
 		public void doAction();
 

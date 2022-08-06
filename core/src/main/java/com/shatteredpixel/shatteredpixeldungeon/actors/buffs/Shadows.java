@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,8 +26,10 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
 public class Shadows extends Invisibility {
@@ -38,8 +40,9 @@ public class Shadows extends Invisibility {
 
 	{
 		announced = false;
+		type = buffType.POSITIVE;
 	}
-	
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
@@ -55,9 +58,18 @@ public class Shadows extends Invisibility {
 	
 	@Override
 	public boolean attachTo( Char target ) {
+		if (Dungeon.level != null) {
+			for (Mob m : Dungeon.level.mobs) {
+				if (Dungeon.level.adjacent(m.pos, target.pos) && m.alignment != target.alignment) {
+					return false;
+				}
+			}
+		}
 		if (super.attachTo( target )) {
-			if (Dungeon.level != null)
+			if (Dungeon.level != null) {
+				Sample.INSTANCE.play( Assets.Sounds.MELD );
 				Dungeon.observe();
+			}
 			return true;
 		} else {
 			return false;
@@ -74,10 +86,18 @@ public class Shadows extends Invisibility {
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			spend( TICK * 2 );
+			spend( TICK );
 			
-			if (--left <= 0 || Dungeon.hero.visibleEnemies() > 0) {
+			if (--left <= 0) {
 				detach();
+				return true;
+			}
+
+			for (Mob m : Dungeon.level.mobs){
+				if (Dungeon.level.adjacent(m.pos, target.pos) && m.alignment != target.alignment){
+					detach();
+					return true;
+				}
 			}
 			
 		} else {

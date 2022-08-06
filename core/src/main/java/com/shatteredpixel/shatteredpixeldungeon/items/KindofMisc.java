@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,10 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 
@@ -45,43 +47,84 @@ public abstract class KindofMisc extends EquipableItem {
 		if ( this instanceof Artifact
 				&& hero.belongings.artifact != null
 				&& hero.belongings.misc != null){
-			equipFull = true;
+
+			//see if we can re-arrange items first
+			if (hero.belongings.misc instanceof Ring && hero.belongings.ring == null){
+				hero.belongings.ring = (Ring) hero.belongings.misc;
+				hero.belongings.misc = null;
+			} else {
+				equipFull = true;
+			}
 		} else if (this instanceof Ring
 				&& hero.belongings.misc != null
 				&& hero.belongings.ring != null){
-			equipFull = true;
+
+			//see if we can re-arrange items first
+			if (hero.belongings.misc instanceof Artifact && hero.belongings.artifact == null){
+				hero.belongings.artifact = (Artifact) hero.belongings.misc;
+				hero.belongings.misc = null;
+			} else {
+				equipFull = true;
+			}
 		}
 
 		if (equipFull) {
 
-			final KindofMisc m1;
-			final KindofMisc m2;
-			if (this instanceof Artifact){
-				m1 = hero.belongings.artifact;
-				m2 = hero.belongings.misc;
-			} else {
-				m1 = hero.belongings.misc;
-				m2 = hero.belongings.ring;
+			final KindofMisc[] miscs = new KindofMisc[3];
+			miscs[0] = hero.belongings.artifact;
+			miscs[1] = hero.belongings.misc;
+			miscs[2] = hero.belongings.ring;
+
+			final boolean[] enabled = new boolean[3];
+			enabled[0] = miscs[0] != null;
+			enabled[1] = miscs[1] != null;
+			enabled[2] = miscs[2] != null;
+
+			//force swapping with the same type of item if 2x of that type is already present
+			if (this instanceof Ring && hero.belongings.misc instanceof Ring){
+				enabled[0] = false; //disable artifact
+			} else if (this instanceof Artifact && hero.belongings.misc instanceof Artifact){
+				enabled[2] = false; //disable ring
 			}
 
 			GameScene.show(
-					new WndOptions(Messages.get(KindofMisc.class, "unequip_title"),
+					new WndOptions(new ItemSprite(this),
+							Messages.get(KindofMisc.class, "unequip_title"),
 							Messages.get(KindofMisc.class, "unequip_message"),
-							Messages.titleCase(m1.toString()),
-							Messages.titleCase(m2.toString())) {
+							miscs[0] == null ? "---" : Messages.titleCase(miscs[0].toString()),
+							miscs[1] == null ? "---" : Messages.titleCase(miscs[1].toString()),
+							miscs[2] == null ? "---" : Messages.titleCase(miscs[2].toString())) {
 
 						@Override
 						protected void onSelect(int index) {
 
-							KindofMisc equipped = (index == 0 ? m1 : m2);
+							KindofMisc equipped = miscs[index];
+							//we directly remove the item because we want to have inventory capacity
+							// to unequip the equipped one, but don't want to trigger any other
+							// item detaching logic
 							int slot = Dungeon.quickslot.getSlot(KindofMisc.this);
-							detach(hero.belongings.backpack);
+							Dungeon.hero.belongings.backpack.items.remove(KindofMisc.this);
 							if (equipped.doUnequip(hero, true, false)) {
+								//swap out equip in misc slot if needed
+								if (index == 0 && KindofMisc.this instanceof Ring){
+									hero.belongings.artifact = (Artifact)hero.belongings.misc;
+									hero.belongings.misc = null;
+								} else if (index == 2 && KindofMisc.this instanceof Artifact){
+									hero.belongings.ring = (Ring) hero.belongings.misc;
+									hero.belongings.misc = null;
+								}
+								Dungeon.hero.belongings.backpack.items.add(KindofMisc.this);
 								doEquip(hero);
 							} else {
-								collect();
+								Dungeon.hero.belongings.backpack.items.add(KindofMisc.this);
 							}
 							if (slot != -1) Dungeon.quickslot.setSlot(slot, KindofMisc.this);
+							updateQuickslot();
+						}
+
+						@Override
+						protected boolean enabled(int index) {
+							return enabled[index];
 						}
 					});
 
@@ -99,6 +142,7 @@ public abstract class KindofMisc extends EquipableItem {
 
 			detach( hero.belongings.backpack );
 
+			Talent.onItemEquipped(hero, this);
 			activate( hero );
 
 			cursedKnown = true;
@@ -137,9 +181,9 @@ public abstract class KindofMisc extends EquipableItem {
 
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.artifact == this
-				|| hero.belongings.misc == this
-				|| hero.belongings.ring == this;
+		return hero.belongings.artifact() == this
+				|| hero.belongings.misc() == this
+				|| hero.belongings.ring() == this;
 	}
 
 }

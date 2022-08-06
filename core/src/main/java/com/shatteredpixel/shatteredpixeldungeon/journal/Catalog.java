@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -67,7 +67,6 @@ public enum Catalog {
 		WEAPONS.seen.put( Gloves.class,                     false);
 		WEAPONS.seen.put( Dagger.class,                     false);
 		WEAPONS.seen.put( MagesStaff.class,                 false);
-		//WEAPONS.seen.put( Boomerang.class,                  false);
 		WEAPONS.seen.put( Shortsword.class,                 false);
 		WEAPONS.seen.put( HandAxe.class,                    false);
 		WEAPONS.seen.put( Spear.class,                      false);
@@ -198,26 +197,26 @@ public enum Catalog {
 		Badges.validateItemsIdentified();
 	}
 	
-	private static final String CATALOGS = "catalogs";
+	private static final String CATALOG_ITEMS = "catalog_items";
 	
 	public static void store( Bundle bundle ){
 		
 		Badges.loadGlobal();
 		
-		ArrayList<String> seen = new ArrayList<>();
+		ArrayList<Class> seen = new ArrayList<>();
 		
 		//if we have identified all items of a set, we use the badge to keep track instead.
 		if (!Badges.isUnlocked(Badges.Badge.ALL_ITEMS_IDENTIFIED)) {
 			for (Catalog cat : values()) {
 				if (!Badges.isUnlocked(catalogBadges.get(cat))) {
 					for (Class<? extends Item> item : cat.items()) {
-						if (cat.seen.get(item)) seen.add(item.getSimpleName());
+						if (cat.seen.get(item)) seen.add(item);
 					}
 				}
 			}
 		}
 		
-		bundle.put( CATALOGS, seen.toArray(new String[0]) );
+		bundle.put( CATALOG_ITEMS, seen.toArray(new Class[0]) );
 		
 	}
 	
@@ -245,13 +244,15 @@ public enum Catalog {
 		}
 		
 		//general save/load
-		if (bundle.contains(CATALOGS)) {
-			List<String> seen = Arrays.asList(bundle.getStringArray(CATALOGS));
+		if (bundle.contains(CATALOG_ITEMS)) {
+			List<Class> seenClasses = new ArrayList<>();
+			if (bundle.contains(CATALOG_ITEMS)) {
+				seenClasses = Arrays.asList(bundle.getClassArray(CATALOG_ITEMS));
+			}
 			
-			//TODO should adjust this to tie into the bundling system's class array
 			for (Catalog cat : values()) {
 				for (Class<? extends Item> item : cat.items()) {
-					if (seen.contains(item.getSimpleName())) {
+					if (seenClasses.contains(item)) {
 						cat.seen.put(item, true);
 					}
 				}

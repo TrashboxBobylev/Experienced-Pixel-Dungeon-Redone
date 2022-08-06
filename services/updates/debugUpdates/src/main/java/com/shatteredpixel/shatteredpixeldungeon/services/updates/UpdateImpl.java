@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.updates;
 
+import com.watabou.noosa.Game;
+
 public class UpdateImpl {
 
 	private static UpdateService updateChecker = new DebugUpdates();
@@ -33,7 +35,7 @@ public class UpdateImpl {
 	}
 
 	public static boolean supportsUpdates(){
-		return true;
+		return Game.version.contains("INDEV");
 	}
 
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,11 +25,18 @@
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.watabou.gltextures.SmartTexture;
+import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BadgeBanner extends Image {
 
@@ -37,28 +44,33 @@ public class BadgeBanner extends Image {
 		FADE_IN, STATIC, FADE_OUT
 	}
 	private State state;
+
+	public static final float DEFAULT_SCALE	= 3;
+	public static final int SIZE = 16;
 	
-	private static final float DEFAULT_SCALE	= 3;
-	
-	private static final float FADE_IN_TIME		= 0.2f;
+	private static final float FADE_IN_TIME		= 0.25f;
 	private static final float STATIC_TIME		= 1f;
-	private static final float FADE_OUT_TIME	= 1.0f;
+	private static final float FADE_OUT_TIME	= 1.75f;
 	
 	private int index;
 	private float time;
 	
 	private static TextureFilm atlas;
 	
-	private static BadgeBanner current;
+	public static ArrayList<BadgeBanner> showing = new ArrayList<>();
 	
 	private BadgeBanner( int index ) {
 		
 		super( Assets.Interfaces.BADGES );
 		
 		if (atlas == null) {
-			atlas = new TextureFilm( texture, 16, 16 );
+			atlas = new TextureFilm( texture, SIZE, SIZE );
 		}
 		
+		setup(index);
+	}
+	
+	public void setup( int index ){
 		this.index = index;
 		
 		frame( atlas.get( index ) );
@@ -111,160 +123,72 @@ public class BadgeBanner extends Image {
 				killAndErase();
 				break;
 			}
-				
+			
 		}
 	}
 	
 	@Override
 	public void kill() {
-		if (current == this) {
-			current = null;
-		}
+		showing.remove(this);
 		super.kill();
 	}
-	
+
+	@Override
+	public void destroy() {
+		showing.remove(this);
+		super.destroy();
+	}
+
+	//map to cache highlight positions so we don't have to keep looking at texture pixels
+	private static HashMap<Integer, Point> highlightPositions = new HashMap<>();
+
+	//we also hardcode any special cases
+	static {
+		highlightPositions.put(Badges.Badge.MASTERY_COMBO.image, new Point(3, 7));
+	}
+
+	//adds a shine to an appropriate pixel on a badge
 	public static void highlight( Image image, int index ) {
 		
 		PointF p = new PointF();
-		
-		switch (index) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-			p.offset( 7, 3 );
-			break;
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-			p.offset( 6, 5 );
-			break;
-		case 8:
-		case 9:
-		case 10:
-		case 11:
-			p.offset( 6, 3 );
-			break;
-		case 12:
-		case 13:
-		case 14:
-		case 15:
-			p.offset( 7, 4 );
-			break;
-		case 16:
-			p.offset( 6, 3 );
-			break;
-		case 17:
-			p.offset( 5, 4 );
-			break;
-		case 18:
-			p.offset( 7, 3 );
-			break;
-		case 20:
-			p.offset( 7, 3 );
-			break;
-		case 21:
-			p.offset( 7, 3 );
-			break;
-		case 22:
-			p.offset( 6, 4 );
-			break;
-		case 23:
-			p.offset( 4, 5 );
-			break;
-		case 24:
-			p.offset( 6, 4 );
-			break;
-		case 25:
-			p.offset( 6, 5 );
-			break;
-		case 26:
-			p.offset( 5, 5 );
-			break;
-		case 27:
-			p.offset( 6, 4 );
-			break;
-		case 28:
-			p.offset( 3, 5 );
-			break;
-		case 29:
-			p.offset( 5, 4 );
-			break;
-		case 30:
-			p.offset( 5, 4 );
-			break;
-		case 31:
-			p.offset( 5, 5 );
-			break;
-		case 32:
-		case 33:
-			p.offset( 7, 4 );
-			break;
-		case 34:
-			p.offset( 6, 4 );
-			break;
-		case 35:
-			p.offset( 6, 4 );
-			break;
-		case 36:
-			p.offset( 6, 5 );
-			break;
-		case 37:
-			p.offset( 4, 4 );
-			break;
-		case 38:
-			p.offset( 5, 5 );
-		break;
-		case 39:
-			p.offset( 5, 4 );
-			break;
-		case 40:
-		case 41:
-		case 42:
-		case 43:
-			p.offset( 5, 4 );
-			break;
-		case 44:
-		case 45:
-		case 46:
-		case 47:
-			p.offset( 5, 5 );
-			break;
-		case 48:
-		case 49:
-		case 50:
-		case 51:
-			p.offset( 7, 4 );
-			break;
-		case 52:
-		case 53:
-		case 54:
-		case 55:
-			p.offset( 4, 4 );
-			break;
-		case 56:
-			p.offset( 3, 7 );
-			break;
-		case 57:
-			p.offset( 4, 5 );
-			break;
-		case 58:
-			p.offset( 6, 4 );
-			break;
-		case 59:
-			p.offset( 7, 4 );
-			break;
-		case 60:
-		case 61:
-		case 62:
-		case 63:
-			p.offset( 4, 4 );
-			break;
+
+		if (highlightPositions.containsKey(index)){
+			p.x = highlightPositions.get(index).x * image.scale.x;
+			p.y = highlightPositions.get(index).y * image.scale.y;
+		} else {
+
+			SmartTexture tx = TextureCache.get(Assets.Interfaces.BADGES);
+
+			int size = 16;
+
+			int cols = tx.width / size;
+			int row = index / cols;
+			int col = index % cols;
+
+			int x = 3;
+			int y = 4;
+			int bgColor = tx.getPixel(col * size + x, row * size + y);
+			int curColor = 0;
+
+			for (x = 3; x <= 12; x++) {
+				curColor = tx.getPixel(col * size + x, row * size + y);
+				if (curColor != bgColor) break;
+			}
+
+			if (curColor == bgColor) {
+				y++;
+				for (x = 3; x <= 12; x++) {
+					curColor = tx.getPixel(col * size + x, row * size + y);
+					if (curColor != bgColor) break;
+				}
+			}
+
+			p.x = x * image.scale.x;
+			p.y = y * image.scale.y;
+
+			highlightPositions.put(index, new Point(x, y));
 		}
-		
-		p.x *= image.scale.x;
-		p.y *= image.scale.y;
+
 		p.offset(
 			-image.origin.x * (image.scale.x - 1),
 			-image.origin.y * (image.scale.y - 1) );
@@ -277,10 +201,13 @@ public class BadgeBanner extends Image {
 	}
 	
 	public static BadgeBanner show( int image ) {
-		if (current != null) {
-			current.killAndErase();
-		}
-		return (current = new BadgeBanner( image ));
+		BadgeBanner banner = new BadgeBanner(image);
+		showing.add(banner);
+		return banner;
+	}
+
+	public static boolean isShowingBadges(){
+		return !showing.isEmpty();
 	}
 	
 	public static Image image( int index ) {

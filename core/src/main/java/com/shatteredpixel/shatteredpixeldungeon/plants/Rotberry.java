@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -44,7 +44,7 @@ public class Rotberry extends Plant {
 	@Override
 	public void activate( Char ch ) {
 		if (ch instanceof Hero && ((Hero) ch).isSubclass(HeroSubClass.WARDEN)){
-			Buff.affect(ch, AdrenalineSurge.class).reset(1, 200f);
+			Buff.affect(ch, AdrenalineSurge.class).reset(1, AdrenalineSurge.DURATION);
 		}
 		
 		Dungeon.level.drop( new Seed(), pos ).sprite.drop();
@@ -66,11 +66,18 @@ public class Rotberry extends Plant {
 			image = ItemSpriteSheet.SEED_ROTBERRY;
 
 			plantClass = Rotberry.class;
+
+			unique = true;
 		}
 		
 		@Override
-		public int price() {
+		public int value() {
 			return 30 * quantity;
+		}
+
+		@Override
+		public int energyVal() {
+			return 3 * quantity;
 		}
 	}
 }

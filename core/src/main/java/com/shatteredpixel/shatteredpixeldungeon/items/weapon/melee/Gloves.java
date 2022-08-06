@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -54,8 +54,8 @@ public class Gloves extends MeleeWeapon {
 			return  (int)(3f*(tier+1)) +    //6 base, down from 10
 					lvl*tier + Dungeon.hero.buff(AttackBuff.class).stack;
 		}
-		return  (int)(3f*(tier+1)) +    //6 base, down from 10
-				lvl*tier;               //+1 per level, down from +2
+		return  Math.round(2.5f*(tier+1)) +     //5 base, down from 10
+				lvl*Math.round(0.5f*(tier+1));  //+1 per level, down from +2
 	}
 
 	@Override

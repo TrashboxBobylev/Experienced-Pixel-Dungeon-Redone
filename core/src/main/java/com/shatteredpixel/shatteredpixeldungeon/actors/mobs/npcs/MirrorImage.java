@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -105,8 +106,8 @@ public class MirrorImage extends NPC {
 	@Override
 	public int damageRoll() {
 		int damage;
-		if (hero.belongings.weapon != null){
-			damage = hero.belongings.weapon.damageRoll(this);
+		if (hero.belongings.weapon() != null){
+			damage = hero.belongings.weapon().damageRoll(this);
 		} else {
 			damage = hero.damageRoll(); //handles ring of force
 		}
@@ -132,19 +133,19 @@ public class MirrorImage extends NPC {
 	}
 	
 	@Override
-	protected float attackDelay() {
+	public float attackDelay() {
 		return hero.attackDelay(); //handles ring of furor
 	}
 	
 	@Override
 	protected boolean canAttack(Char enemy) {
-		return super.canAttack(enemy) || (hero.belongings.weapon != null && hero.belongings.weapon.canReach(this, enemy.pos));
+		return super.canAttack(enemy) || (hero.belongings.weapon() != null && hero.belongings.weapon().canReach(this, enemy.pos));
 	}
 	
 	@Override
 	public int drRoll() {
-		if (hero != null && hero.belongings.weapon != null){
-			return Dungeon.NormalIntRange(0, hero.belongings.weapon.defenseFactor(this)/2);
+		if (hero != null && hero.belongings.weapon() != null){
+			return Dungeon.NormalIntRange(0, hero.belongings.weapon().defenseFactor(this)/2);
 		} else {
 			return 0;
 		}
@@ -162,8 +163,8 @@ public class MirrorImage extends NPC {
 		if (enemy instanceof Mob) {
 			((Mob)enemy).aggro( this );
 		}
-		if (hero.belongings.weapon != null){
-			damage = hero.belongings.weapon.proc( this, enemy, damage );
+		if (hero.belongings.weapon() != null){
+			damage = hero.belongings.weapon().proc( this, enemy, damage );
 			if (!enemy.isAlive() && enemy == Dungeon.hero){
 				Dungeon.fail(getClass());
 				GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
@@ -177,12 +178,7 @@ public class MirrorImage extends NPC {
 	@Override
 	public CharSprite sprite() {
 		CharSprite s = super.sprite();
-		
-		//pre-0.7.0 saves
-		if (heroID == 0){
-			heroID = Dungeon.hero.id();
-		}
-		
+
 		hero = (Hero)Actor.findById(heroID);
 		if (hero != null) {
 			armTier = hero.tier();
@@ -195,7 +191,7 @@ public class MirrorImage extends NPC {
 		immunities.add( ToxicGas.class );
 		immunities.add( CorrosiveGas.class );
 		immunities.add( Burning.class );
-		immunities.add( Corruption.class );
+		immunities.add( AllyBuff.class );
 	}
 	
 	public static class MirrorInvis extends Invisibility {

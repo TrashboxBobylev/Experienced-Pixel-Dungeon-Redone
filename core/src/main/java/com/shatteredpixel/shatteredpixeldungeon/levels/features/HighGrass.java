@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -33,12 +33,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Camouflage;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -80,10 +84,43 @@ public class HighGrass {
 				if (naturalism != null) {
 					if (!naturalism.isCursed()) {
 						naturalismLevel = naturalism.itemLevel() + 1;
-						naturalism.charge();
+						naturalism.charge(1);
 					} else {
 						naturalismLevel = -1;
 					}
+				}
+
+				//berries try to drop on floors 2/3/4/6/7/8, to a max of 4/6
+				if (ch instanceof Hero && ((Hero) ch).hasTalent(Talent.NATURES_BOUNTY)){
+					int berriesAvailable = 2 + 2*((Hero) ch).pointsInTalent(Talent.NATURES_BOUNTY);
+
+					//pre-1.3.0 saves
+					Talent.NatureBerriesAvailable oldAvailable = ch.buff(Talent.NatureBerriesAvailable.class);
+					if (oldAvailable != null){
+						Buff.affect(ch, Talent.NatureBerriesDropped.class).countUp(berriesAvailable - oldAvailable.count());
+						oldAvailable.detach();
+					}
+
+					Talent.NatureBerriesDropped dropped = Buff.affect(ch, Talent.NatureBerriesDropped.class);
+					berriesAvailable -= dropped.count();
+
+					if (berriesAvailable > 0) {
+						int targetFloor = 2 + 2 * ((Hero) ch).pointsInTalent(Talent.NATURES_BOUNTY);
+						targetFloor -= berriesAvailable;
+						targetFloor += (targetFloor >= 5) ? 3 : 2;
+
+						//If we're behind: 1/10, if we're on page: 1/30, if we're ahead: 1/90
+						boolean droppingBerry = false;
+						if (Dungeon.depth > targetFloor) droppingBerry = Random.Int(10) == 0;
+						else if (Dungeon.depth == targetFloor) droppingBerry = Random.Int(30) == 0;
+						else if (Dungeon.depth < targetFloor) droppingBerry = Random.Int(90) == 0;
+
+						if (droppingBerry) {
+							dropped.countUp(1);
+							level.drop(new Berry(), pos).sprite.drop();
+						}
+					}
+
 				}
 			}
 			
@@ -98,15 +135,22 @@ public class HighGrass {
 					level.drop(new Dewdrop(), pos).sprite.drop();
 				}
 			}
-			
+
+			//Camouflage
 			if (ch instanceof Hero) {
 				Hero hero = (Hero) ch;
-				
-				//Camouflage
-				//FIXME doesn't work with sad ghost
-				if (hero.belongings.armor != null && hero.belongings.armor.hasGlyph(Camouflage.class, hero)) {
-					Buff.prolong(hero, Invisibility.class, 3 + hero.belongings.armor.buffedLvl()/2);
-					Sample.INSTANCE.play( Assets.Sounds.MELD );
+				if (hero.belongings.armor() != null && hero.belongings.armor().hasGlyph(Camouflage.class, hero)) {
+					Camouflage.activate(hero, hero.belongings.armor.buffedLvl());
+				}
+			} else if (ch instanceof DriedRose.GhostHero){
+				DriedRose.GhostHero ghost = (DriedRose.GhostHero) ch;
+				if (ghost.armor() != null && ghost.armor().hasGlyph(Camouflage.class, ghost)){
+					Camouflage.activate(ghost, ghost.armor().buffedLvl());
+				}
+			} else if (ch instanceof ArmoredStatue){
+				ArmoredStatue statue = (ArmoredStatue) ch;
+				if (statue.armor() != null && statue.armor().hasGlyph(Camouflage.class, statue)){
+					Camouflage.activate(statue, statue.armor().buffedLvl());
 				}
 			}
 			

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
@@ -52,7 +53,7 @@ public class StoneOfAggression extends Runestone {
 		
 		if (ch != null) {
 			if (ch.alignment == Char.Alignment.ENEMY) {
-				Buff.prolong(ch, Aggression.class, Aggression.DURATION / 5f);
+				Buff.prolong(ch, Aggression.class, Aggression.DURATION / 4f);
 			} else {
 				Buff.prolong(ch, Aggression.class, Aggression.DURATION);
 			}
@@ -67,7 +68,7 @@ public class StoneOfAggression extends Runestone {
 		}
 		
 	}
-	
+
 	public static class Aggression extends FlavourBuff {
 		
 		public static final float DURATION = 20f;
@@ -76,17 +77,21 @@ public class StoneOfAggression extends Runestone {
 			type = buffType.NEGATIVE;
 			announced = true;
 		}
-		
+
 		@Override
-		public void storeInBundle( Bundle bundle ) {
-			super.storeInBundle(bundle);
+		public int icon() {
+			return BuffIndicator.TARGETED;
 		}
-		
+
 		@Override
-		public void restoreFromBundle( Bundle bundle ) {
-			super.restoreFromBundle( bundle );
+		public float iconFadePercent() {
+			if (target.alignment == Char.Alignment.ENEMY){
+				return Math.max(0, (DURATION/4f - visualcooldown()) / (DURATION/4f));
+			} else {
+				return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+			}
 		}
-		
+
 		@Override
 		public void detach() {
 			//if our target is an enemy, reset the aggro of any enemies targeting it
@@ -106,6 +111,11 @@ public class StoneOfAggression extends Runestone {
 		@Override
 		public String toString() {
 			return Messages.get(this, "name");
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc", dispTurns());
 		}
 		
 	}

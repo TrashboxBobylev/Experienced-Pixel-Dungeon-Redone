@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -101,18 +102,18 @@ public class RatKing extends NPC {
 	protected boolean act() {
         if (!ghastly) {
             if (Dungeon.depth < 5){
-                if (pos == Dungeon.level.exit){
+                if (pos == Dungeon.level.exit()){
                     destroy();
                     sprite.killAndErase();
                 } else {
-                    target = Dungeon.level.exit;
+                    target = Dungeon.level.exit();
                 }
             } else if (Dungeon.depth > 5){
-                if (pos == Dungeon.level.entrance){
+                if (pos == Dungeon.level.entrance()){
                     destroy();
                     sprite.killAndErase();
                 } else {
-                    target = Dungeon.level.entrance;
+                    target = Dungeon.level.entrance();
                 }
             }
         }
@@ -151,15 +152,57 @@ public class RatKing extends NPC {
 		if (c != Dungeon.hero){
 			return super.interact(c);
 		}
-        if (!ghastly) {
-            if (state == SLEEPING) {
-                notice();
-                yell(Messages.get(this, "not_sleeping"));
-                state = WANDERING;
-            } else {
-                yell(Messages.get(this, "what_is_it"));
-            }
-        }
+
+		if (state == SLEEPING) {
+			notice();
+			yell( Messages.get(this, "not_sleeping") );
+			state = WANDERING;
+		} else {
+			yell( Messages.get(this, "what_is_it") );
+		}
+
+		KingsCrown crown = Dungeon.hero.belongings.getItem(KingsCrown.class);
+		if (state == SLEEPING) {
+			notice();
+			yell( Messages.get(this, "not_sleeping") );
+			state = WANDERING;
+		} else if (crown != null){
+			if (Dungeon.hero.belongings.armor() == null){
+				yell( Messages.get(RatKing.class, "crown_clothes") );
+			} else {
+				Badges.validateRatmogrify();
+				Game.runOnRenderThread(new Callback() {
+					@Override
+					public void call() {
+						GameScene.show(new WndOptions(
+								sprite(),
+								Messages.titleCase(name()),
+								Messages.get(RatKing.class, "crown_desc"),
+								Messages.get(RatKing.class, "crown_yes"),
+								Messages.get(RatKing.class, "crown_info"),
+								Messages.get(RatKing.class, "crown_no")
+						){
+							@Override
+							protected void onSelect(int index) {
+								if (index == 0){
+									crown.upgradeArmor(Dungeon.hero, Dungeon.hero.belongings.armor(), new Ratmogrify());
+									((RatKingSprite)sprite).resetAnims();
+									yell(Messages.get(RatKing.class, "crown_thankyou"));
+								} else if (index == 1) {
+									GameScene.show(new WndInfoArmorAbility(Dungeon.hero.heroClass, new Ratmogrify()));
+								} else {
+									yell(Messages.get(RatKing.class, "crown_fine"));
+								}
+							}
+						});
+					}
+				});
+			}
+		} else if (Dungeon.hero.armorAbility instanceof Ratmogrify) {
+			yell( Messages.get(RatKing.class, "crown_after") );
+		} else {
+			yell( Messages.get(this, "what_is_it") );
+		}
 		return true;
 	}
 	

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,7 +28,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
@@ -86,7 +88,7 @@ public class Spinner extends Mob {
             case 3: return Random.NormalIntRange(1200, 1468);
             case 4: return Random.NormalIntRange(18000, 50000);
         }
-		return Random.NormalIntRange(10, 25);
+		return Random.NormalIntRange(10, 20);
 	}
 
 	@Override
@@ -150,7 +152,7 @@ public class Spinner extends Mob {
 			}
 		}
 		
-		if (state == FLEEING && buff( Terror.class ) == null &&
+		if (state == FLEEING && buff( Terror.class ) == null && buff( Dread.class ) == null &&
 				enemy != null && enemySeen && enemy.buff( Poison.class ) == null) {
 			state = HUNTING;
 		}
@@ -161,7 +163,10 @@ public class Spinner extends Mob {
 	public int attackProc(Char enemy, int damage) {
 		damage = super.attackProc( enemy, damage );
 		if (Random.Int(2) == 0) {
-			Buff.affect(enemy, Poison.class).set(Random.Int(7, 9) );
+			int duration = Random.IntRange(7, 8);
+			//we only use half the ascension modifier here as total poison dmg doesn't scale linearly
+			duration = Math.round(duration * (AscensionChallenge.statModifier(this)/2f + 0.5f));
+			Buff.affect(enemy, Poison.class).set(duration);
 			webCoolDown = 0;
 			state = FLEEING;
 		}
@@ -172,8 +177,8 @@ public class Spinner extends Mob {
 	private boolean shotWebVisually = false;
 
 	@Override
-	public void move(int step) {
-		if (enemySeen && webCoolDown <= 0 && lastEnemyPos != -1){
+	public void move(int step, boolean travelling) {
+		if (travelling && enemySeen && webCoolDown <= 0 && lastEnemyPos != -1){
 			if (webPos() != -1){
 				if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 					sprite.zap( webPos() );
@@ -183,11 +188,12 @@ public class Spinner extends Mob {
 				}
 			}
 		}
-		super.move(step);
+		super.move(step, travelling);
 	}
 	
 	public int webPos(){
 
+		Char enemy = this.enemy;
 		if (enemy == null) return -1;
 		
 		Ballistica b;
@@ -215,7 +221,7 @@ public class Spinner extends Mob {
 
 		//ensure we aren't shooting the web through walls
 		int projectilePos = new Ballistica( pos, webPos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID).collisionPos;
-		
+
 		if (webPos != enemy.pos && projectilePos == webPos && Dungeon.level.passable[webPos]){
 			return webPos;
 		} else {
@@ -270,7 +276,7 @@ public class Spinner extends Mob {
 	private class Fleeing extends Mob.Fleeing {
 		@Override
 		protected void nowhereToRun() {
-			if (buff(Terror.class) == null) {
+			if (buff(Terror.class) == null && buff(Dread.class) == null) {
 				state = HUNTING;
 			} else {
 				super.nowhereToRun();

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -42,11 +42,13 @@ public class ElixirOfMight extends Elixir {
 
 	{
 		image = ItemSpriteSheet.ELIXIR_MIGHT;
+
+		unique = true;
 	}
 	
 	@Override
 	public void apply( Hero hero ) {
-		setKnown();
+		identify();
 		
 		Dungeon.luck++;
 		
@@ -60,7 +62,7 @@ public class ElixirOfMight extends Elixir {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
 		return quantity * (50 + 40);
 	}
@@ -120,7 +122,12 @@ public class ElixirOfMight extends Elixir {
 		public float iconFadePercent() {
 			return (5f - left) / 5f;
 		}
-		
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(left);
+		}
+
 		@Override
 		public String toString() {
 			return Messages.get(this, "name");

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,11 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 public class AdrenalineSurge extends Buff {
 
-	public static float DURATION = 800f;
+	public static float DURATION = 200f;
 	
 	{
 		type = buffType.POSITIVE;
@@ -62,12 +63,22 @@ public class AdrenalineSurge extends Buff {
 	
 	@Override
 	public int icon() {
-		return BuffIndicator.FURY;
+		return BuffIndicator.UPGRADE;
+	}
+
+	@Override
+	public void tintIcon(Image icon) {
+		icon.hardlight(1f, 0.5f, 0);
 	}
 
 	@Override
 	public float iconFadePercent() {
 		return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+	}
+
+	@Override
+	public String iconTextDisplay() {
+		return Integer.toString((int)visualcooldown());
 	}
 
 	@Override
@@ -94,11 +105,6 @@ public class AdrenalineSurge extends Buff {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		boost = bundle.getInt( BOOST );
-		//pre-0.7.1
-		if (bundle.contains(INTERVAL)) {
-			interval = bundle.getFloat(INTERVAL);
-		} else {
-			interval = 800f;
-		}
+		interval = bundle.getFloat(INTERVAL);
 	}
 }

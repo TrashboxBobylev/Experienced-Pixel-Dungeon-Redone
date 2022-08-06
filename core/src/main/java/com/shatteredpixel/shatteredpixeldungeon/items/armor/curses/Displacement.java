@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -39,7 +39,7 @@ public class Displacement extends Armor.Glyph {
 	public int proc(Armor armor, Char attacker, Char defender, int damage ) {
 
 		if (defender == Dungeon.hero && Dungeon.Int(20) == 0){
-			ScrollOfTeleportation.teleportHero(Dungeon.hero);
+			ScrollOfTeleportation.teleportChar(Dungeon.hero);
 			return 0;
 		}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.glwrap.Blending;
@@ -33,6 +34,7 @@ import com.watabou.noosa.NoosaScript;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.PointF;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -101,8 +103,8 @@ public class Flare extends Visual {
 			indices.put( (short)(1 + i * 2) );
 			indices.put( (short)(2 + i * 2) );
 		}
-		
-		indices.position( 0 );
+
+		((Buffer)indices).position( 0 );
 	}
 	
 	public Flare color( int color, boolean lightMode ) {
@@ -113,7 +115,11 @@ public class Flare extends Visual {
 	}
 	
 	public Flare show( Visual visual, float duration ) {
-		point( visual.center() );
+		if (visual instanceof CharSprite){
+			point(((CharSprite) visual).destinationCenter());
+		} else {
+			point(visual.center());
+		}
 		visual.parent.addToBack( this );
 		
 		lifespan = this.duration = duration;

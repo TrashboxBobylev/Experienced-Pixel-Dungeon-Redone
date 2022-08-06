@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,7 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -58,7 +60,10 @@ public class Imp extends NPC {
 	
 	@Override
 	protected boolean act() {
-		
+		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
+			die(null);
+			return true;
+		}
 		if (!Quest.given && Dungeon.level.heroFOV[pos]) {
 			if (!seenBefore) {
 				yell( Messages.get(this, "hey", Dungeon.hero.name() ) );
@@ -68,9 +73,7 @@ public class Imp extends NPC {
 		} else {
 			seenBefore = false;
 		}
-		
-		throwItem();
-		
+
 		return super.act();
 	}
 	
@@ -121,6 +124,7 @@ public class Imp extends NPC {
 			tell( Quest.alternative ? Messages.get(this, "monks_1") : Messages.get(this, "golems_1") );
 			Quest.given = true;
 			Quest.completed = false;
+			Notes.add( Notes.Landmark.IMP );
 		}
 
 		return true;
@@ -243,7 +247,7 @@ public class Imp extends NPC {
 		}
 		
 		public static void process( Mob mob ) {
-			if (spawned && given && !completed) {
+			if (spawned && given && !completed && Dungeon.depth != 20) {
 				if ((alternative && mob instanceof Monk) ||
 					(!alternative && mob instanceof Golem)) {
 					
@@ -255,7 +259,8 @@ public class Imp extends NPC {
 		public static void complete() {
 			reward = null;
 			completed = true;
-			
+
+			Statistics.questScores[3] = 4000;
 			Notes.remove( Notes.Landmark.IMP );
 		}
 		

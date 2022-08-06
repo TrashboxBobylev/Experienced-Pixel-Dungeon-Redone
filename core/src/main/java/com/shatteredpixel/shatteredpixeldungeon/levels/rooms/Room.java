@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -127,7 +127,7 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 		}
 		return step;
 	}
-	
+
 	//Width and height are increased by 1 because rooms are inclusive to their right and bottom sides
 	@Override
 	public int width() {
@@ -239,7 +239,7 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 	public boolean canMerge(Level l, Point p, int mergeTerrain){
 		return false;
 	}
-	
+
 	public boolean addNeigbour( Room other ) {
 		if (neigbours.contains(other))
 			return true;
@@ -327,7 +327,7 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 		return points;
 	}
 	
-	//whether or not a character (usually spawned) can be placed here
+	//whether or not a character can be placed here (usually via spawn, tele, or wander)
 	public boolean canPlaceCharacter(Point p, Level l){
 		return inside(p);
 	}
@@ -342,7 +342,8 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 		}
 		return points;
 	}
-	
+
+
 	// **** Graph.Node interface ****
 
 	@Override
@@ -403,7 +404,7 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 	public static class Door extends Point implements Bundlable {
 		
 		public enum Type {
-			EMPTY, TUNNEL, WATER, REGULAR, UNLOCKED, HIDDEN, BARRICADE, LOCKED
+			EMPTY, TUNNEL, WATER, REGULAR, UNLOCKED, HIDDEN, BARRICADE, LOCKED, CRYSTAL
 		}
 		public Type type = Type.EMPTY;
 		

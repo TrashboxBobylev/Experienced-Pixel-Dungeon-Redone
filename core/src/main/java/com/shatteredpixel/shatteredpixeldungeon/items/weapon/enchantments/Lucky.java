@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -45,8 +45,8 @@ public class Lucky extends Weapon.Enchantment {
 		// lvl 0 - 10%
 		// lvl 1 ~ 12%
 		// lvl 2 ~ 14%
-		if (defender.HP <= damage
-				&& Random.Int( level + 40 ) >= 36){
+		float procChance = (level+4f)/(level+40f) * procChanceMultiplier(attacker);
+		if (defender.HP <= damage && Random.Float() < procChance){
 			Buff.affect(defender, LuckProc.class);
 		}
 		

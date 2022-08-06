@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor.Glyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -52,8 +53,14 @@ public class Viscosity extends Glyph {
 		//should build in functionality for that, but this works for now
 		int realDamage = damage - defender.drRoll();
 
+		//account for icon stomach (just skip the glyph)
+		if (defender.buff(Talent.WarriorFoodImmunity.class) != null){
+			return damage;
+		}
+
+		//account for huntress armor piercing
 		if (attacker instanceof Hero
-				&& ((Hero) attacker).belongings.weapon instanceof MissileWeapon
+				&& ((Hero) attacker).belongings.weapon() instanceof MissileWeapon
 				&& ((Hero) attacker).isSubclass(HeroSubClass.SNIPER)
 				&& !Dungeon.level.adjacent(attacker.pos, defender.pos)){
 			realDamage = damage;
@@ -123,7 +130,12 @@ public class Viscosity extends Glyph {
 		public int icon() {
 			return BuffIndicator.DEFERRED;
 		}
-		
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(damage);
+		}
+
 		@Override
 		public String toString() {
 			return Messages.get(this, "name");
@@ -137,10 +149,10 @@ public class Viscosity extends Glyph {
 				target.damage( damageThisTick, this );
 				if (target == Dungeon.hero && !target.isAlive()) {
 
+					Badges.validateDeathFromFriendlyMagic();
+
 					Dungeon.fail( getClass() );
 					GLog.n( Messages.get(this, "ondeath") );
-					
-					Badges.validateDeathFromGlyph();
 				}
 				spend( TICK );
 

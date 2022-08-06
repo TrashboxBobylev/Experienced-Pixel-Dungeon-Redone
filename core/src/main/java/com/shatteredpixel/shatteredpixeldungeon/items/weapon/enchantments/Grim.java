@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -49,7 +49,9 @@ public class Grim extends Weapon.Enchantment {
 		float maxChance = 0.50f + .08f*level;
 		float chanceMulti = (float)Math.pow( ((defender.HT - enemyHealth) / (float)defender.HT), 2);
 		float chance = maxChance * chanceMulti;
-		
+
+		chance *= procChanceMultiplier(attacker);
+
 		if (Random.Float() < chance) {
 			
 			damage *= 1f + chance/10;

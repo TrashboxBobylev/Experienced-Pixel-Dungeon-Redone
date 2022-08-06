@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -100,7 +100,7 @@ public class TrapsRoom extends SpecialRoom {
 			level.drop( prize( level ), pos ).type = Heap.Type.CHEST;
 		} else {
 			Painter.set( level, pos, Terrain.PEDESTAL );
-			level.drop( prize( level ), pos );
+			level.drop( prize( level ), pos ).type = Heap.Type.CHEST;
 		}
 		
 		level.addItemToSpawn( new PotionOfLevitation() );
@@ -110,6 +110,7 @@ public class TrapsRoom extends SpecialRoom {
 
 		Item prize;
 
+		//67% chance for prize item
 		if (Random.Int(3) != 0){
 			prize = level.findPrizeItem();
 			if (prize != null)

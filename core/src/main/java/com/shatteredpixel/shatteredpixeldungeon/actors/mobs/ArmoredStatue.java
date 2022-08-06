@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,8 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
@@ -73,9 +77,39 @@ public class ArmoredStatue extends Statue {
 		return super.drRoll() + Random.NormalIntRange( armor.DRMin(), armor.DRMax());
 	}
 
+	//used in some glyph calculations
+	public Armor armor(){
+		return armor;
+	}
+
+	@Override
+	public boolean isImmune(Class effect) {
+		if (effect == Burning.class
+				&& armor != null
+				&& armor.hasGlyph(Brimstone.class, this)){
+			return true;
+		}
+		return super.isImmune(effect);
+	}
+
 	@Override
 	public int defenseProc(Char enemy, int damage) {
+		damage = super.defenseProc(enemy, damage);
 		return armor.proc(enemy, this, damage);
+	}
+
+	@Override
+	public void damage(int dmg, Object src) {
+		//TODO improve this when I have proper damage source logic
+		if (armor != null && armor.hasGlyph(AntiMagic.class, this)
+				&& AntiMagic.RESISTS.contains(src.getClass())){
+			dmg -= AntiMagic.drRoll(armor.buffedLvl());
+		}
+
+		super.damage( dmg, src );
+
+		//for the rose status indicator
+		Item.updateQuickslot();
 	}
 
 	@Override
@@ -102,7 +136,7 @@ public class ArmoredStatue extends Statue {
 
 	@Override
 	public void die( Object cause ) {
-		armor.identify();
+		armor.identify(false);
 		Dungeon.level.drop( armor, pos ).sprite.drop();
 		super.die( cause );
 	}

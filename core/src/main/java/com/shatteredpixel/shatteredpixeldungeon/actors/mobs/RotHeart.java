@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -62,6 +63,12 @@ public class RotHeart extends Mob {
                 break;
 
         }
+	}
+
+	@Override
+	protected boolean act() {
+		alerted = false;
+		return super.act();
 	}
 
 	@Override
@@ -106,6 +113,7 @@ public class RotHeart extends Mob {
 	public void die(Object cause) {
 		super.die(cause);
 		Dungeon.level.drop( new Rotberry.Seed(), pos ).sprite.drop();
+		Statistics.questScores[1] = 2000;
 	}
 
 	@Override
@@ -138,6 +146,7 @@ public class RotHeart extends Mob {
 		immunities.add( Sleep.class );
 		immunities.add( ToxicGas.class );
 		immunities.add( Terror.class );
+		immunities.add( Dread.class );
 		immunities.add( Vertigo.class );
 	}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,8 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -150,7 +151,9 @@ public class Ghoul extends Mob {
 			
 			int[] neighbours = {pos + 1, pos - 1, pos + Dungeon.level.width(), pos - Dungeon.level.width()};
 			for (int n : neighbours) {
-				if (Dungeon.level.passable[n] && Actor.findChar( n ) == null) {
+				if (Dungeon.level.passable[n]
+						&& Actor.findChar( n ) == null
+						&& (!Char.hasProp(this, Property.LARGE) || Dungeon.level.openSpace[n])) {
 					candidates.add( n );
 				}
 			}
@@ -164,13 +167,18 @@ public class Ghoul extends Mob {
 				}
 				
 				child.pos = Random.element( candidates );
-				
+
+				GameScene.add( child );
 				Dungeon.level.occupyCell(child);
 				
-				GameScene.add( child );
 				if (sprite.visible) {
 					Actor.addDelayed( new Pushing( child, pos, child.pos ), -1 );
 				}
+
+				for (Buff b : buffs(ChampionEnemy.class)){
+					Buff.affect( child, b.getClass());
+				}
+
 			}
 			
 		}
@@ -202,8 +210,10 @@ public class Ghoul extends Mob {
 	protected synchronized void onRemove() {
 		if (beingLifeLinked) {
 			for (Buff buff : buffs()) {
-				//corruption and king damager are preserved when removed via life link
-				if (!(buff instanceof Corruption) && !(buff instanceof DwarfKing.KingDamager)) {
+				//ally buffs, champion, and king damager are preserved when removed via life link
+				if (!(buff instanceof AllyBuff)
+						&& (!(buff instanceof ChampionEnemy))
+						&& !(buff instanceof DwarfKing.KingDamager)) {
 					buff.detach();
 				}
 			}
@@ -258,6 +268,11 @@ public class Ghoul extends Mob {
 		public boolean act() {
 			ghoul.sprite.visible = Dungeon.level.heroFOV[ghoul.pos];
 
+			if (target.alignment != ghoul.alignment){
+				detach();
+				return true;
+			}
+
 			if (target.fieldOfView == null){
 				target.fieldOfView = new boolean[Dungeon.level.length()];
 				Dungeon.level.updateFieldOfView( target, target.fieldOfView );
@@ -268,14 +283,21 @@ public class Ghoul extends Mob {
 				return true;
 			}
 
+			if (Dungeon.level.pit[ghoul.pos]){
+				super.detach();
+				ghoul.die(this);
+				return true;
+			}
+
 			turnsToRevive--;
 			if (turnsToRevive <= 0){
-				ghoul.HP = Math.round(ghoul.HT/10f);
 				if (Actor.findChar( ghoul.pos ) != null) {
 					ArrayList<Integer> candidates = new ArrayList<>();
 					for (int n : PathFinder.NEIGHBOURS8) {
 						int cell = ghoul.pos + n;
-						if (Dungeon.level.passable[cell] && Actor.findChar( cell ) == null) {
+						if (Dungeon.level.passable[cell]
+								&& Actor.findChar( cell ) == null
+								&& (!Char.hasProp(ghoul, Property.LARGE) || Dungeon.level.openSpace[cell])) {
 							candidates.add( cell );
 						}
 					}
@@ -289,8 +311,9 @@ public class Ghoul extends Mob {
 						return true;
 					}
 				}
+				ghoul.HP = Math.round(ghoul.HT/10f);
 				Actor.add(ghoul);
-				ghoul.spend(-ghoul.cooldown());
+				ghoul.timeToNow();
 				Dungeon.level.mobs.add(ghoul);
 				Dungeon.level.occupyCell( ghoul );
 				ghoul.sprite.idle();
@@ -321,7 +344,7 @@ public class Ghoul extends Mob {
 			Ghoul newHost = searchForHost(ghoul);
 			if (newHost != null){
 				attachTo(newHost);
-				spend(-cooldown());
+				timeToNow();
 			} else {
 				ghoul.die(this);
 			}

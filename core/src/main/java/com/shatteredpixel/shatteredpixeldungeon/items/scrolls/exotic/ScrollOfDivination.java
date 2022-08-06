@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -58,12 +58,8 @@ public class ScrollOfDivination extends ExoticScroll {
 	public void doRead() {
 		
 		curUser.sprite.parent.add( new Identification( curUser.sprite.center().offset( 0, -16 ) ) );
-		
-		readAnimation();
-		setKnown();
-		
+
 		Sample.INSTANCE.play( Assets.Sounds.READ );
-		Invisibility.dispel();
 		
 		HashSet<Class<? extends Potion>> potions = Potion.getUnknown();
 		HashSet<Class<? extends Scroll>> scrolls = Scroll.getUnknown();
@@ -97,7 +93,7 @@ public class ScrollOfDivination extends ExoticScroll {
 					}
 					probs[0]--;
 					Potion p = Reflection.newInstance(Random.element(potions));
-					p.setKnown();
+					p.identify();
 					IDed.add(p);
 					potions.remove(p.getClass());
 					break;
@@ -108,7 +104,7 @@ public class ScrollOfDivination extends ExoticScroll {
 					}
 					probs[1]--;
 					Scroll s = Reflection.newInstance(Random.element(scrolls));
-					s.setKnown();
+					s.identify();
 					IDed.add(s);
 					scrolls.remove(s.getClass());
 					break;
@@ -127,8 +123,15 @@ public class ScrollOfDivination extends ExoticScroll {
 			left --;
 			total --;
 		}
-		
-		GameScene.show(new WndDivination( IDed ));
+
+		if (left == 4){
+			GLog.n( Messages.get(this, "nothing_left") );
+		} else {
+			GameScene.show(new WndDivination(IDed));
+		}
+
+		readAnimation();
+		identify();
 	}
 	
 	private class WndDivination extends Window {

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.*;
@@ -44,6 +45,13 @@ public class AboutScene extends PixelScene {
 		int w = Camera.main.width;
 		int h = Camera.main.height;
 
+		Archs archs = new Archs();
+		archs.setSize( w, h );
+		add( archs );
+
+		//darkens the arches
+		add(new ColorBlock(w, h, 0x88000000));
+
 		ScrollPane list = new ScrollPane( new Component() );
 		add( list );
 
@@ -55,8 +63,8 @@ public class AboutScene extends PixelScene {
 		String shpxLink = "https://ShatteredPixel.com";
 		//tracking codes, so that the website knows where this pageview came from
 		shpxLink += "?utm_source=shatteredpd";
-		shpxLink += "&utm_medium=android";
-		shpxLink += "&utm_campaign=about_page";
+		shpxLink += "&utm_medium=about_page";
+		shpxLink += "&utm_campaign=ingame_link";
 
 		CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,
 				"Shattered Pixel Dungeon",
@@ -64,7 +72,11 @@ public class AboutScene extends PixelScene {
 				"Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
 				"ShatteredPixel.com",
 				shpxLink);
-		shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+		if (landscape()){
+			shpx.setRect((w - fullWidth)/2f - 6, 10, 120, 0);
+		} else {
+			shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+		}
 		content.add(shpx);
 
 		CreditsBlock alex = new CreditsBlock(false, Window.SHPX_COLOR,
@@ -75,7 +87,7 @@ public class AboutScene extends PixelScene {
 				"https://www.alekskomitov.com");
 		alex.setSize(colWidth/2f, 0);
 		if (landscape()){
-			alex.setPos(shpx.right(), shpx.top() + (shpx.height() - alex.height())/2f);
+			alex.setPos(shpx.right(), shpx.top() + (shpx.height() - alex.height()*2)/2f);
 		} else {
 			alex.setPos(w/2f - colWidth/2f, shpx.bottom()+5);
 		}
@@ -83,12 +95,21 @@ public class AboutScene extends PixelScene {
 
 		CreditsBlock charlie = new CreditsBlock(false, Window.SHPX_COLOR,
 				"Sound Effects:",
-				Icons.CHARLIE.get(),
-				"Charlie",
+				Icons.CELESTI.get(),
+				"Celesti",
 				"s9menine.itch.io",
 				"https://s9menine.itch.io");
 		charlie.setRect(alex.right(), alex.top(), colWidth/2f, 0);
 		content.add(charlie);
+
+		CreditsBlock kristjan = new CreditsBlock(false, Window.SHPX_COLOR,
+				"Music:",
+				Icons.KRISTJAN.get(),
+				"Kristjan Haaristo",
+				"youtube.com/user/...",
+				"https://www.youtube.com/channel/UCL1e7SgzSWbD_DQxB_5YcLA");
+		kristjan.setRect(alex.right() - colWidth/4f, alex.bottom() + 5, colWidth/2f, 0);
+		content.add(kristjan);
 
 		//*** Pixel Dungeon Credits ***
 
@@ -100,9 +121,9 @@ public class AboutScene extends PixelScene {
 				"pixeldungeon.watabou.ru",
 				"http://pixeldungeon.watabou.ru");
 		if (landscape()){
-			wata.setRect(shpx.left(), shpx.bottom() + 8, colWidth, 0);
+			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
 		} else {
-			wata.setRect(shpx.left(), alex.bottom() + 8, colWidth, 0);
+			wata.setRect(shpx.left(), kristjan.bottom() + 8, colWidth, 0);
 		}
 		content.add(wata);
 
@@ -116,22 +137,22 @@ public class AboutScene extends PixelScene {
 				null);
 		cube.setSize(colWidth/2f, 0);
 		if (landscape()){
-			cube.setPos(wata.right(), wata.top() + (wata.height() - cube.height())/2f);
+			cube.setPos(wata.right() + colWidth/4f, wata.top() + (wata.height() - cube.height())/2f);
 		} else {
-			cube.setPos(alex.left(), wata.bottom()+5);
+			cube.setPos(alex.left() + colWidth/4f, wata.bottom()+5);
 		}
 		content.add(cube);
 
-		//*** LibGDX Credits ***
+		//*** libGDX Credits ***
 
 		final int GDX_COLOR = 0xE44D3C;
 		CreditsBlock gdx = new CreditsBlock(true,
 				GDX_COLOR,
-				null,
+				"libGDX",
 				Icons.LIBGDX.get(),
-				"ShatteredPD is powered by _LibGDX_!",
-				"libgdx.badlogicgames.com",
-				"http://libgdx.badlogicgames.com");
+				"ShatteredPD is powered by _libGDX_!",
+				"libGDX.com",
+				"https://libGDX.com/");
 		if (landscape()){
 			gdx.setRect(wata.left(), wata.bottom() + 8, colWidth, 0);
 		} else {
@@ -140,12 +161,6 @@ public class AboutScene extends PixelScene {
 		content.add(gdx);
 
 		addLine(gdx.top() - 4, content);
-
-		//blocks the rays from the LibGDX icon going above the line
-		ColorBlock blocker = new ColorBlock(w, 8, 0xFF000000);
-		blocker.y = gdx.top() - 12;
-		content.addToBack(blocker);
-		content.sendToBack(gdx);
 
 		CreditsBlock arcnor = new CreditsBlock(false, GDX_COLOR,
 				"Pixel Dungeon GDX:",
@@ -193,7 +208,7 @@ public class AboutScene extends PixelScene {
 				"ShatteredPD is community-translated via _Transifex_! Thank you so much to all of Shattered's volunteer translators!",
 				"www.transifex.com/shattered-pixel/",
 				"https://www.transifex.com/shattered-pixel/shattered-pixel-dungeon/");
-		transifex.setRect((Camera.main.width - colWidth)/2f, bob.bottom() + 8, colWidth, 0);
+		transifex.setRect((Camera.main.width - colWidth)/2f, bob.bottom() + 12, colWidth, 0);
 		content.add(transifex);
 
 		addLine(transifex.top() - 4, content);
@@ -242,7 +257,7 @@ public class AboutScene extends PixelScene {
 		btnExit.setPos( Camera.main.width - btnExit.width(), 0 );
 		add( btnExit );
 
-		fadeIn();
+		//fadeIn();
 	}
 	
 	@Override
@@ -309,7 +324,7 @@ public class AboutScene extends PixelScene {
 				linkButton = new PointerArea(0, 0, 0, 0){
 					@Override
 					protected void onClick( PointerEvent event ) {
-						DeviceCompat.openURI( linkUrl );
+						ShatteredPixelDungeon.platform.openURI( linkUrl );
 					}
 				};
 				add(linkButton);

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.AlchemyBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
@@ -155,8 +156,8 @@ public class ShopRoom extends SpecialRoom {
 		switch (Dungeon.depth) {
 		case 6: default:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[1]).quantity(2).identify() );
-			itemsToSpawn.add( new LeatherArmor().identify() );
+			itemsToSpawn.add( Generator.random(Generator.misTiers[1]).quantity(2).identify(false) );
+			itemsToSpawn.add( new LeatherArmor().identify(false) );
 
 			switch (Dungeon.cycle){
                 case 0: itemsToSpawn.add(new BasicFishingRod()); break;
@@ -169,22 +170,22 @@ public class ShopRoom extends SpecialRoom {
 			
 		case 11:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[2]).quantity(2).identify() );
-			itemsToSpawn.add( new MailArmor().identify() );
+			itemsToSpawn.add( Generator.random(Generator.misTiers[2]).quantity(2).identify(false) );
+			itemsToSpawn.add( new MailArmor().identify(false) );
 			itemsToSpawn.add( new AlchemyBag());
 			break;
 			
 		case 16:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[3]).quantity(2).identify() );
-			itemsToSpawn.add( new ScaleArmor().identify() );
+			itemsToSpawn.add( Generator.random(Generator.misTiers[3]).quantity(2).identify(false) );
+			itemsToSpawn.add( new ScaleArmor().identify(false) );
 			itemsToSpawn.add( new AlchemyBag());
 			break;
 
 		case 20: case 21:
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[4]).quantity(2).identify() );
-			itemsToSpawn.add( new PlateArmor().identify() );
+			itemsToSpawn.add( Generator.random(Generator.misTiers[4]).quantity(2).identify(false) );
+			itemsToSpawn.add( new PlateArmor().identify(false) );
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
@@ -193,13 +194,11 @@ public class ShopRoom extends SpecialRoom {
 			break;
 		}
 		w.cursed = false;
-		w.identify();
+		w.identify(false);
 		itemsToSpawn.add(w);
 		itemsToSpawn.add(new PotionOfExperience());
-		
-		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
-		itemsToSpawn.add( new MerchantsBeacon() );
+		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
 		itemsToSpawn.add(new GambleBag());
 		itemsToSpawn.add(new GambleBag());
@@ -207,6 +206,7 @@ public class ShopRoom extends SpecialRoom {
         itemsToSpawn.add(new BiggerGambleBag());
 		if (Dungeon.depth > 6) itemsToSpawn.add(new QualityBag());
 		if (Badges.isUnlocked(Badges.Badge.WAND_QUEST_5)) itemsToSpawn.add(new Clayball());
+		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
 
 
 		if (Dungeon.cycle == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
@@ -251,7 +251,7 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add(new TicketToArena());
 
 		TimekeepersHourglass hourglass = Dungeon.hero.belongings.getItem(TimekeepersHourglass.class);
-		if (hourglass != null){
+		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed){
 			int bags = 0;
 			//creates the given float percent of the remaining bags to be dropped.
 			//this way players who get the hourglass late can still max it, usually.
@@ -299,10 +299,16 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( rare );
 
 		//hard limit is 63 items + 1 shopkeeper, as shops can't be bigger than 8x8=64 internally
-		if (itemsToSpawn.size() > 63)
+		if (itemsToSpawn.size() > 63) {
 			throw new RuntimeException("Shop attempted to carry more than 63 items!");
+		}
 
-		Random.shuffle(itemsToSpawn);
+		//use a new generator here to prevent items in shop stock affecting levelgen RNG (e.g. sandbags)
+		//we can use a random long for the seed as it will be the same long every time
+		Random.pushGenerator(Random.Long());
+			Random.shuffle(itemsToSpawn);
+		Random.popGenerator();
+
 		return itemsToSpawn;
 	}
 

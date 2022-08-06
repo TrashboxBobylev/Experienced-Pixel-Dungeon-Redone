@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,8 +36,8 @@ import java.util.ArrayList;
 public class WndChallenges extends Window {
 
 	private static final int WIDTH		= 120;
-	private static final int TTL_HEIGHT    = 18;
-	private static final int BTN_HEIGHT    = 18;
+	private static final int TTL_HEIGHT = 16;
+	private static final int BTN_HEIGHT = 16;
 	private static final int GAP        = 1;
 
 	private boolean editable;
@@ -65,7 +65,7 @@ public class WndChallenges extends Window {
 
 			final String challenge = Challenges.NAME_IDS[i];
 			
-			CheckBox cb = new CheckBox( Messages.get(Challenges.class, challenge) );
+			CheckBox cb = new CheckBox( Messages.titleCase(Messages.get(Challenges.class, challenge)) );
 			cb.checked( (checked & Challenges.MASKS[i]) != 0 );
 			cb.active = editable;
 

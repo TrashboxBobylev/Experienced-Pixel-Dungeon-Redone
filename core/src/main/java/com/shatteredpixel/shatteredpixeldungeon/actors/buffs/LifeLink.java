@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 public class LifeLink extends FlavourBuff {
@@ -65,7 +66,12 @@ public class LifeLink extends FlavourBuff {
 
 	@Override
 	public int icon() {
-		return BuffIndicator.HEART;
+		return BuffIndicator.HERB_HEALING;
+	}
+
+	@Override
+	public void tintIcon(Image icon) {
+		icon.hardlight(1, 0, 1);
 	}
 
 	@Override

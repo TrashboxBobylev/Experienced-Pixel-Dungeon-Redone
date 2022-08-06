@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,11 +30,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
+import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -78,14 +80,24 @@ public class Swiftthistle extends Plant {
 		
 		@Override
 		public int icon() {
-			return BuffIndicator.SLOW;
+			return BuffIndicator.TIME;
+		}
+
+		@Override
+		public void tintIcon(Image icon) {
+			icon.hardlight(1f, 1f, 0);
 		}
 
 		@Override
 		public float iconFadePercent() {
 			return Math.max(0, (6f - left) / 6f);
 		}
-		
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString((int)left);
+		}
+
 		public void reset(){
 			left = 7f;
 		}
@@ -102,49 +114,58 @@ public class Swiftthistle extends Plant {
 		
 		public void processTime(float time){
 			left -= time;
-			
-			if (left <= 0){
+
+			//use 1/1,000 to account for rounding errors
+			if (left < -0.001f){
 				detach();
 			}
 			
 		}
 		
 		public void setDelayedPress(int cell){
-			if (!presses.contains(cell))
+			if (!presses.contains(cell)) {
 				presses.add(cell);
+			}
 		}
-		
-		private void triggerPresses(){
-			for (int cell : presses)
+
+		public void triggerPresses() {
+			for (int cell : presses) {
 				Dungeon.level.pressCell(cell);
-			
+			}
+
+			presses = new ArrayList<>();
+		}
+
+		public void disarmPressedTraps(){
+			for (int cell : presses){
+				Trap t = Dungeon.level.traps.get(cell);
+				if (t != null && t.disarmedByActivation) t.disarm();
+			}
+
 			presses = new ArrayList<>();
 		}
 		
 		@Override
-		public boolean attachTo(Char target) {
-			if (super.attachTo(target)){
-				if (Dungeon.level != null)
-					for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
-						mob.sprite.add(CharSprite.State.PARALYSED);
-				GameScene.freezeEmitters = true;
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		@Override
 		public void detach(){
-			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
-				if (mob.paralysed <= 0) mob.sprite.remove(CharSprite.State.PARALYSED);
-			GameScene.freezeEmitters = false;
-			
 			super.detach();
 			triggerPresses();
 			target.next();
 		}
-		
+
+		@Override
+		public void fx(boolean on) {
+			Emitter.freezeEmitters = on;
+			if (on){
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+					if (mob.sprite != null) mob.sprite.add(CharSprite.State.PARALYSED);
+				}
+			} else {
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+					if (mob.paralysed <= 0) mob.sprite.remove(CharSprite.State.PARALYSED);
+				}
+			}
+		}
+
 		private static final String PRESSES = "presses";
 		private static final String LEFT = "left";
 		

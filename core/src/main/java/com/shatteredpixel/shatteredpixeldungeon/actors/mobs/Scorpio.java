@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -44,7 +44,7 @@ public class Scorpio extends Mob {
 	{
 		spriteClass = ScorpioSprite.class;
 		
-		HP = HT = 95;
+		HP = HT = 110;
 		defenseSkill = 24;
 		viewDistance = Light.DISTANCE;
 		
@@ -87,7 +87,7 @@ public class Scorpio extends Mob {
             case 3: return Random.NormalIntRange(2780, 4350);
             case 4: return Random.NormalIntRange(324000, 410000);
         }
-		return Random.NormalIntRange( 26, 36 );
+		return Random.NormalIntRange( 30, 40 );
 	}
 	
 	@Override
@@ -138,7 +138,15 @@ public class Scorpio extends Mob {
 	}
 	
 	@Override
-	protected Item createLoot() {
+	public void aggro(Char ch) {
+		//cannot be aggroed to something it can't see
+		if (ch == null || fieldOfView == null || fieldOfView[ch.pos]) {
+			super.aggro(ch);
+		}
+	}
+
+	@Override
+	public Item createLoot() {
 		Class<?extends Potion> loot;
 		do{
 			loot = (Class<? extends Potion>) Random.oneOf(Generator.Category.POTION.classes);

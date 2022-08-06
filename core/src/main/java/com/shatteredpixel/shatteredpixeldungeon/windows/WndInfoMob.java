@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,8 +36,8 @@ import com.watabou.noosa.ui.Component;
 public class WndInfoMob extends WndTitledMessage {
 	
 	public WndInfoMob( Mob mob ) {
-		
-		super( new MobTitle( mob ), mob.description() );
+
+		super( new MobTitle( mob ), mob.info() );
 		
 	}
 	
@@ -63,7 +63,7 @@ public class WndInfoMob extends WndTitledMessage {
 			health.level(mob);
 			add( health );
 
-			buffs = new BuffIndicator( mob );
+			buffs = new BuffIndicator( mob, false );
 			add( buffs );
 		}
 		
@@ -73,16 +73,17 @@ public class WndInfoMob extends WndTitledMessage {
 			image.x = 0;
 			image.y = Math.max( 0, name.height() + health.height() - image.height() );
 
+			float w = width - image.width() - GAP;
+
+			name.maxWidth((int)w);
 			name.setPos(x + image.width + GAP,
 					image.height() > name.height() ? y +(image.height() - name.height()) / 2 : y);
-
-			float w = width - image.width() - GAP;
 
 			health.setRect(image.width() + GAP, name.bottom() + GAP, w, health.height());
 
 			buffs.setPos(
 				name.right() + GAP-1,
-				name.bottom() - BuffIndicator.SIZE-2
+				name.bottom() - BuffIndicator.SIZE_SMALL-2
 			);
 
 			height = health.bottom();

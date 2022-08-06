@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,8 +29,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3FileHandle;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -53,7 +55,16 @@ public class DesktopLauncher {
 		if (!DesktopLaunchValidator.verifyValidJVMState(args)){
 			return;
 		}
-		
+
+		//detection for FreeBSD (which is equivalent to linux for us)
+		//TODO might want to merge request this to libGDX
+		if (System.getProperty("os.name").contains("FreeBSD")) {
+			SharedLibraryLoader.isLinux = true;
+			//this overrides incorrect values set in SharedLibraryLoader's static initializer
+			SharedLibraryLoader.isIos = false;
+			SharedLibraryLoader.is64Bit = System.getProperty("os.arch").contains("64") || System.getProperty("os.arch").startsWith("armv8");
+		}
+
 		final String title;
 		if (DesktopLauncher.class.getPackage().getSpecificationTitle() == null){
 			title = System.getProperty("Specification-Title");
@@ -77,14 +88,27 @@ public class DesktopLauncher {
 				exceptionMsg = exceptionMsg.replace("com.watabou.", "");
 				exceptionMsg = exceptionMsg.replace("com.badlogic.gdx.", "");
 				exceptionMsg = exceptionMsg.replace("\t", "    ");
+				exceptionMsg = exceptionMsg.replace("'", "");
 
-				TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
-						title + " has run into an error it can't recover from and has crashed, sorry about that!\n\n" +
-						"If you could, please email this error message to the developer (Evan@ShatteredPixel.com):\n\n" +
-						"version: " + Game.version + "\n" +
-						exceptionMsg,
-						"ok", "error", false );
-				if (Gdx.app != null) Gdx.app.exit();
+				if (exceptionMsg.length() > 500){
+					exceptionMsg = exceptionMsg.substring(0, 500) + "...";
+				}
+
+				if (exceptionMsg.contains("Couldnt create window")){
+					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+							title + " was not able to initialize its graphics display, sorry about that!\n\n" +
+									"This usually happens when your graphics card does not support OpenGL 2.0+, or has misconfigured graphics drivers.\n\n" +
+									"If you are certain the game should be working on your computer, feel free to message the developer (Evan@ShatteredPixel.com)\n\n" +
+									"version: " + Game.version, "ok", "error", false);
+				} else {
+					TinyFileDialogs.tinyfd_messageBox(title + " Has Crashed!",
+							title + " has run into an error it cannot recover from and has crashed, sorry about that!\n\n" +
+									"If you could, please email this error message to the developer (Evan@ShatteredPixel.com):\n\n" +
+									"version: " + Game.version + "\n" +
+									exceptionMsg,
+							"ok", "error", false);
+				}
+				System.exit(1);
 			}
 		});
 		
@@ -105,12 +129,13 @@ public class DesktopLauncher {
 		if (NewsImpl.supportsNews()){
 			News.service = NewsImpl.getNewsService();
 		}
-		
+
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		
 		config.setTitle( title );
-		
+
 		String basePath = "";
+		Files.FileType baseFileType = null;
 		if (SharedLibraryLoader.isWindows) {
 			if (System.getProperties().getProperty("os.name").equals("Windows XP")) {
 				basePath = "Application Data/.shatteredpixel/" +
@@ -118,39 +143,49 @@ public class DesktopLauncher {
 			} else {
 				basePath = "AppData/Roaming/.shatteredpixel/Experienced Pixel Dungeon/";
 			}
+			baseFileType = Files.FileType.External;
 		} else if (SharedLibraryLoader.isMac) {
 			basePath = "Library/Application Support/Experienced Pixel Dungeon/";
+			baseFileType = Files.FileType.External;
 		} else if (SharedLibraryLoader.isLinux) {
-			basePath = ".shatteredpixel/Experienced-Pixel-Dungeon/";
+			String XDGHome = System.getenv("XDG_DATA_HOME");
+			if (XDGHome == null) XDGHome = System.getProperty("user.home") + "/.local/share";
+			basePath = XDGHome + "/.shatteredpixel/Experienced-Pixel-Dungeon/";
+
+			//copy over files from old linux save DIR, pre-1.2.0
+			FileHandle oldBase = new Lwjgl3FileHandle(".shatteredpixel/shattered-pixel-dungeon/", Files.FileType.External);
+			FileHandle newBase = new Lwjgl3FileHandle(basePath, Files.FileType.Absolute);
+			if (oldBase.exists()){
+				if (!newBase.exists()) {
+					oldBase.copyTo(newBase.parent());
+				}
+				oldBase.deleteDirectory();
+				oldBase.parent().delete(); //only regular delete, in case of saves from other PD versions
+			}
+			baseFileType = Files.FileType.Absolute;
 		}
 
-		//copy over prefs from old file location from legacy desktop codebase
-		FileHandle oldPrefs = new Lwjgl3FileHandle(basePath + "pd-prefs", Files.FileType.External);
-		FileHandle newPrefs = new Lwjgl3FileHandle(basePath + SPDSettings.DEFAULT_PREFS_FILE, Files.FileType.External);
-		if (oldPrefs.exists() && !newPrefs.exists()){
-			oldPrefs.copyTo(newPrefs);
-		}
-
-		config.setPreferencesConfig( basePath, Files.FileType.External );
-		SPDSettings.set( new Lwjgl3Preferences( SPDSettings.DEFAULT_PREFS_FILE, basePath) );
-		FileUtils.setDefaultFileProperties( Files.FileType.External, basePath );
+		config.setPreferencesConfig( basePath, baseFileType );
+		SPDSettings.set( new Lwjgl3Preferences( new Lwjgl3FileHandle(basePath + SPDSettings.DEFAULT_PREFS_FILE, baseFileType) ));
+		FileUtils.setDefaultFileProperties( baseFileType, basePath );
 		
-		config.setWindowSizeLimits( 480, 320, -1, -1 );
+		config.setWindowSizeLimits( 720, 400, -1, -1 );
 		Point p = SPDSettings.windowResolution();
 		config.setWindowedMode( p.x, p.y );
 
 		config.setMaximized(SPDSettings.windowMaximized());
 
-		if (SPDSettings.fullscreen()) {
+		//going fullscreen on launch is still buggy on macOS, so game enters it slightly later
+		if (SPDSettings.fullscreen() && !SharedLibraryLoader.isMac) {
 			config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		}
 		
-		//we set fullscreen/maximized in the listener as doing it through the config seems to be buggy
+		//records whether window is maximized or not for settings
 		DesktopWindowListener listener = new DesktopWindowListener();
 		config.setWindowListener( listener );
 		
-		config.setWindowIcon("icons/icon_16.png", "icons/icon_32.png", "icons/icon_64.png",
-				"icons/icon_128.png", "icons/icon_256.png");
+		config.setWindowIcon("icons/icon_16.png", "icons/icon_32.png", "icons/icon_48.png",
+				"icons/icon_64.png", "icons/icon_128.png", "icons/icon_256.png");
 
 		new Lwjgl3Application(new ShatteredPixelDungeon(new DesktopPlatformSupport()), config);
 	}

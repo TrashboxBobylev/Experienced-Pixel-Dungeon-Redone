@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -85,6 +85,10 @@ public class Artifact extends KindofMisc {
 	}
 
 	public void activate( Char ch ) {
+		if (passiveBuff != null){
+			passiveBuff.detach();
+			passiveBuff = null;
+		}
 		passiveBuff = passiveBuff();
 		passiveBuff.attachTo(ch);
 	}
@@ -93,12 +97,9 @@ public class Artifact extends KindofMisc {
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 		if (super.doUnequip( hero, collect, single )) {
 
-			passiveBuff.detach();
-			passiveBuff = null;
-
-			if (activeBuff != null){
-				activeBuff.detach();
-				activeBuff = null;
+			if (passiveBuff != null) {
+				passiveBuff.detach();
+				passiveBuff = null;
 			}
 
 			return true;
@@ -133,7 +134,7 @@ public class Artifact extends KindofMisc {
 
 	//transfers upgrades from another artifact, transfer level will equal the displayed level
 	public void transferUpgrade(int transferLvl) {
-		upgrade(Math.round((float)(transferLvl*levelCap)/10));
+		upgrade(Math.round((transferLvl*levelCap)/10f));
 	}
 
 	@Override
@@ -191,7 +192,7 @@ public class Artifact extends KindofMisc {
 	}
 
 	@Override
-	public int price() {
+	public int value() {
 		int price = 100;
 		if (level() > 0)
 			price += 20*visiblyUpgraded();
@@ -211,7 +212,7 @@ public class Artifact extends KindofMisc {
 
 	protected ArtifactBuff activeBuff() {return null; }
 	
-	public void charge(Hero target){
+	public void charge(Hero target, float amount){
 		//do nothing by default;
 	}
 
@@ -223,6 +224,10 @@ public class Artifact extends KindofMisc {
 
 		public boolean isCursed() {
 			return cursed;
+		}
+
+		public void charge(Hero target, float amount){
+			Artifact.this.charge(target, amount);
 		}
 
 	}

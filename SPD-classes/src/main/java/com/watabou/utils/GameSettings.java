@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,6 +26,7 @@ package com.watabou.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.watabou.noosa.Game;
 
 public class GameSettings {
 	
@@ -63,8 +64,29 @@ public class GameSettings {
 			} else {
 				return i;
 			}
-		} catch (ClassCastException e) {
-			//ShatteredPixelDungeon.reportException(e);
+		} catch (Exception e) {
+			Game.reportException(e);
+			put(key, defValue);
+			return defValue;
+		}
+	}
+
+	public static long getLong( String key, long defValue ) {
+		return getLong(key, defValue, Long.MIN_VALUE, Long.MAX_VALUE);
+	}
+
+	public static long getLong( String key, long defValue, long min, long max ) {
+		try {
+			long i = get().getLong( key, defValue );
+			if (i < min || i > max){
+				long val = (long)GameMath.gate(min, i, max);
+				put(key, val);
+				return val;
+			} else {
+				return i;
+			}
+		} catch (Exception e) {
+			Game.reportException(e);
 			put(key, defValue);
 			return defValue;
 		}
@@ -94,9 +116,8 @@ public class GameSettings {
 	public static boolean getBoolean( String key, boolean defValue ) {
 		try {
 			return get().getBoolean(key, defValue);
-		} catch (ClassCastException e) {
-			//ShatteredPixelDungeon.reportException(e);
-			put(key, defValue);
+		} catch (Exception e) {
+			Game.reportException(e);
 			return defValue;
 		}
 	}
@@ -114,8 +135,8 @@ public class GameSettings {
 			} else {
 				return s;
 			}
-		} catch (ClassCastException e) {
-			//ShatteredPixelDungeon.reportException(e);
+		} catch (Exception e) {
+			Game.reportException(e);
 			put(key, defValue);
 			return defValue;
 		}

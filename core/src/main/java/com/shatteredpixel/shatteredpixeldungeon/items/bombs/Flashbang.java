@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -51,9 +51,9 @@ public class Flashbang extends Bomb {
 				if (power > 0){
 					Buff.prolong(ch, Blindness.class, power);
 					Buff.prolong(ch, Cripple.class, power);
-				}
-				if (ch == Dungeon.hero){
-					GameScene.flash(0xFFFFFF);
+					if (ch == Dungeon.hero){
+						GameScene.flash(0x80FFFFFF);
+					}
 				}
 			}
 		}
@@ -61,7 +61,7 @@ public class Flashbang extends Bomb {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 40);
 	}

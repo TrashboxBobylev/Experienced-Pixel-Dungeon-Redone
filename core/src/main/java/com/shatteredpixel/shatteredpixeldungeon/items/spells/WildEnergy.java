@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
@@ -43,43 +44,37 @@ public class WildEnergy extends TargetedSpell {
 	
 	{
 		image = ItemSpriteSheet.WILD_ENERGY;
+		usesTargeting = true;
 	}
 	
 	//we rely on cursedWand to do fx instead
 	@Override
 	protected void fx(Ballistica bolt, Callback callback) {
-		affectTarget(bolt, curUser);
+		CursedWand.cursedZap(this, curUser, bolt, callback);
 	}
 	
 	@Override
 	protected void affectTarget(Ballistica bolt, final Hero hero) {
-		CursedWand.cursedZap(this, hero, bolt, new Callback() {
-			@Override
-			public void call() {
-				Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
-				Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
-				ScrollOfRecharging.charge(hero);
+		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+		Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
+		ScrollOfRecharging.charge(hero);
+		SpellSprite.show(hero, SpellSprite.CHARGE);
 
-				hero.belongings.charge(1f);
-				for (int i = 0; i < 4; i++){
-					if (hero.belongings.artifact instanceof Artifact)   ((Artifact) hero.belongings.artifact).charge(hero);
-					if (hero.belongings.misc instanceof Artifact)       ((Artifact) hero.belongings.misc).charge(hero);
-				}
-
-				Buff.affect(hero, Recharging.class, 8f);
-				Buff.affect(hero, ArtifactRecharge.class).prolong( 8 );
-				
-				detach( curUser.belongings.backpack );
-				updateQuickslot();
-				curUser.spendAndNext( 1f );
+		hero.belongings.charge(1f);
+		for (Buff b : hero.buffs()){
+			if (b instanceof Artifact.ArtifactBuff){
+				if (!((Artifact.ArtifactBuff) b).isCursed()) ((Artifact.ArtifactBuff) b).charge(hero, 4);
 			}
-		});
+		}
+
+		Buff.affect(hero, Recharging.class, 8f);
+		Buff.affect(hero, ArtifactRecharge.class).prolong( 8 ).ignoreHornOfPlenty = false;
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients, divided by output quantity
-		return Math.round(quantity * ((50 + 100) / 5f));
+		return Math.round(quantity * ((50 + 50) / 5f));
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
@@ -88,7 +83,7 @@ public class WildEnergy extends TargetedSpell {
 			inputs =  new Class[]{ScrollOfMysticalEnergy.class, MetalShard.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 8;
+			cost = 4;
 			
 			output = WildEnergy.class;
 			outQuantity = 5;

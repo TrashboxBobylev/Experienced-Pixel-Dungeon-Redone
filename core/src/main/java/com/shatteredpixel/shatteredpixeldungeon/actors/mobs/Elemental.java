@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
@@ -47,7 +48,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ElementalSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -85,27 +85,47 @@ public abstract class Elemental extends Mob {
                 break;
         }
 	}
-	
+
+	private boolean summonedALly;
+
 	@Override
 	public int damageRoll() {
-        switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(64, 83);
-            case 2: return Random.NormalIntRange(291, 434);
-            case 3: return Random.NormalIntRange(1650, 2100);
-            case 4: return Random.NormalIntRange(30000, 85000);
-        }
-		return Random.NormalIntRange( 16, 26 );
+		if (!summonedALly) {
+			switch (Dungeon.cycle) {
+				case 1: return Random.NormalIntRange(64, 83);
+				case 2: return Random.NormalIntRange(291, 434);
+				case 3: return Random.NormalIntRange(1650, 2100);
+				case 4: return Random.NormalIntRange(30000, 85000);
+			}
+			return Random.NormalIntRange( 16, 26 );
+		} else {
+			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
+			return Random.NormalIntRange(5*regionScale, 5 + 5*regionScale);
+		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-        switch (Dungeon.cycle){
-            case 1: return 102;
-            case 2: return 355;
-            case 3: return 930;
-            case 4: return 6000;
-        }
-		return 25;
+		if (!summonedALly) {
+			switch (Dungeon.cycle){
+				case 1: return 102;
+				case 2: return 355;
+				case 3: return 930;
+				case 4: return 6000;
+			}
+			return 25;
+		} else {
+			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
+			return 5 + 5*regionScale;
+		}
+	}
+
+	public void setSummonedALly(){
+		summonedALly = true;
+		//sewers are prison are equivalent, otherwise scales as normal (2/2/3/4/5)
+		int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
+		defenseSkill = 5*regionScale;
+		HT = 15*regionScale;
 	}
 	
 	@Override
@@ -119,7 +139,7 @@ public abstract class Elemental extends Mob {
 		return Random.NormalIntRange(0, 5);
 	}
 	
-	private int rangedCooldown = Random.NormalIntRange( 3, 5 );
+	protected int rangedCooldown = Random.NormalIntRange( 3, 5 );
 	
 	@Override
 	protected boolean act() {
@@ -141,7 +161,7 @@ public abstract class Elemental extends Mob {
 	
 	protected boolean doAttack( Char enemy ) {
 		
-		if (Dungeon.level.adjacent( pos, enemy.pos )) {
+		if (Dungeon.level.adjacent( pos, enemy.pos ) || rangedCooldown > 0) {
 			
 			return super.doAttack( enemy );
 			
@@ -199,11 +219,13 @@ public abstract class Elemental extends Mob {
 	protected ArrayList<Class<? extends Buff>> harmfulBuffs = new ArrayList<>();
 	
 	private static final String COOLDOWN = "cooldown";
-	
+	private static final String SUMMONED_ALLY = "summoned_ally";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		bundle.put( COOLDOWN, rangedCooldown );
+		bundle.put( SUMMONED_ALLY, summonedALly);
 	}
 	
 	@Override
@@ -211,6 +233,10 @@ public abstract class Elemental extends Mob {
 		super.restoreFromBundle( bundle );
 		if (bundle.contains( COOLDOWN )){
 			rangedCooldown = bundle.getInt( COOLDOWN );
+		}
+		summonedALly = bundle.getBoolean( SUMMONED_ALLY );
+		if (summonedALly){
+			setSummonedALly();
 		}
 	}
 	
@@ -237,7 +263,7 @@ public abstract class Elemental extends Mob {
 		protected void meleeProc( Char enemy, int damage ) {
 			if (Random.Int( 2 ) == 0 && !Dungeon.level.water[enemy.pos]) {
 				Buff.affect( enemy, Burning.class ).reignite( enemy );
-				Splash.at( enemy.sprite.center(), sprite.blood(), 5);
+				if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
 			}
 		}
 		
@@ -246,7 +272,7 @@ public abstract class Elemental extends Mob {
 			if (!Dungeon.level.water[enemy.pos]) {
 				Buff.affect( enemy, Burning.class ).reignite( enemy, 4f );
 			}
-			Splash.at( enemy.sprite.center(), sprite.blood(), 5);
+			if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
 		}
 	}
 	
@@ -257,15 +283,12 @@ public abstract class Elemental extends Mob {
 			spriteClass = ElementalSprite.NewbornFire.class;
 			
 			HT = 60;
-			HP = HT/2; //32
+			HP = HT/2; //30
 			
 			defenseSkill = 12;
 			
 			EXP = 7;
-			
-			loot = new Embers();
-			lootChance = 1f;
-			
+
 			properties.add(Property.MINIBOSS);
 
             switch (Dungeon.cycle){
@@ -282,6 +305,18 @@ public abstract class Elemental extends Mob {
                     EXP = 268;
                     break;
             }
+
+			//newborn elementals do not have ranged attacks
+			rangedCooldown = Integer.MAX_VALUE;
+		}
+
+		@Override
+		public void die(Object cause) {
+			super.die(cause);
+			if (alignment == Alignment.ENEMY) {
+				Dungeon.level.drop( new Embers(), pos ).sprite.drop();
+				Statistics.questScores[1] = 2000;
+			}
 		}
 
 		@Override
@@ -290,7 +325,22 @@ public abstract class Elemental extends Mob {
 		}
 		
 	}
-	
+
+	//not a miniboss, fully HP, otherwise a newborn elemental
+	public static class AllyNewBornElemental extends NewbornFireElemental {
+
+		{
+			HP = HT;
+			properties.remove(Property.MINIBOSS);
+		}
+
+		@Override
+		public boolean reset() {
+			return false;
+		}
+
+	}
+
 	public static class FrostElemental extends Elemental {
 		
 		{
@@ -308,14 +358,14 @@ public abstract class Elemental extends Mob {
 		protected void meleeProc( Char enemy, int damage ) {
 			if (Random.Int( 3 ) == 0 || Dungeon.level.water[enemy.pos]) {
 				Freezing.freeze( enemy.pos );
-				Splash.at( enemy.sprite.center(), sprite.blood(), 5);
+				if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
 			}
 		}
 		
 		@Override
 		protected void rangedProc( Char enemy ) {
 			Freezing.freeze( enemy.pos );
-			Splash.at( enemy.sprite.center(), sprite.blood(), 5);
+			if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
 		}
 	}
 	
@@ -343,16 +393,23 @@ public abstract class Elemental extends Mob {
 			for (Char ch : affected) {
 				ch.damage( Math.round( damage * 0.4f ), this );
 			}
-			
-			sprite.parent.addToFront( new Lightning( arcs, null ) );
-			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+
+			boolean visible = sprite.visible || enemy.sprite.visible;
+			for (Char ch : affected){
+				if (ch.sprite.visible) visible = true;
+			}
+
+			if (visible) {
+				sprite.parent.addToFront(new Lightning(arcs, null));
+				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+			}
 		}
 		
 		@Override
 		protected void rangedProc( Char enemy ) {
 			Buff.affect( enemy, Blindness.class, Blindness.DURATION/2f );
 			if (enemy == Dungeon.hero) {
-				GameScene.flash(0xFFFFFF);
+				GameScene.flash(0x80FFFFFF);
 			}
 		}
 	}
@@ -368,22 +425,12 @@ public abstract class Elemental extends Mob {
 		
 		@Override
 		protected void meleeProc( Char enemy, int damage ) {
-			CursedWand.cursedZap( null, this, new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ), new Callback() {
-				@Override
-				public void call() {
-					next();
-				}
-			} );
+			CursedWand.cursedEffect(null, this, enemy);
 		}
 		
 		@Override
 		protected void rangedProc( Char enemy ) {
-			CursedWand.cursedZap( null, this, new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ), new Callback() {
-				@Override
-				public void call() {
-					next();
-				}
-			} );
+			CursedWand.cursedEffect(null, this, enemy);
 		}
 	}
 	

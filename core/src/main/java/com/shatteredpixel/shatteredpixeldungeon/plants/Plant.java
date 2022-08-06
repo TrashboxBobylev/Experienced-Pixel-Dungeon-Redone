@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,8 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -46,8 +49,6 @@ import com.watabou.utils.*;
 import java.util.ArrayList;
 
 public abstract class Plant implements Bundlable {
-
-	public String plantName = Messages.get(this, "name");
 	
 	public int image;
 	public int pos;
@@ -60,6 +61,11 @@ public abstract class Plant implements Bundlable {
 
 		if (ch instanceof Hero){
 			((Hero) ch).interrupt();
+		}
+
+		if (Dungeon.level.heroFOV[pos] && Dungeon.hero.hasTalent(Talent.NATURES_AID)){
+			// 3/5 turns based on talent points spent
+			Buff.affect(Dungeon.hero, Barkskin.class).set(2, 1 + 2*(Dungeon.hero.pointsInTalent(Talent.NATURES_AID)));
 		}
 
 		wither();
@@ -104,9 +110,17 @@ public abstract class Plant implements Bundlable {
 	public void storeInBundle( Bundle bundle ) {
 		bundle.put( POS, pos );
 	}
-	
+
+	public String name(){
+		return Messages.get(this, "name");
+	}
+
 	public String desc() {
-		return Messages.get(this, "desc");
+		String desc = Messages.get(this, "desc");
+		if (Dungeon.hero.subClass == HeroSubClass.WARDEN){
+			desc += "\n\n" + Messages.get(this, "warden_desc");
+		}
+		return desc;
 	}
 	
 	public static class Seed extends Item {
@@ -158,11 +172,11 @@ public abstract class Plant implements Bundlable {
 			super.execute (hero, action );
 
 			if (action.equals( AC_PLANT )) {
-							
-				hero.spend( TIME_TO_PLANT );
+
 				hero.busy();
 				((Seed)detach( hero.belongings.backpack )).onThrow( hero.pos );
-				
+				hero.spend( TIME_TO_PLANT );
+
 				hero.sprite.operate( hero.pos );
 				
 			}
@@ -188,13 +202,22 @@ public abstract class Plant implements Bundlable {
 		}
 		
 		@Override
-		public int price() {
+		public int value() {
 			return 10 * quantity;
 		}
 
 		@Override
+		public int energyVal() {
+			return 2 * quantity;
+		}
+
+		@Override
 		public String desc() {
-			return Messages.get(plantClass, "desc");
+			String desc = Messages.get(plantClass, "desc");
+			if (Dungeon.hero.subClass == HeroSubClass.WARDEN){
+				desc += "\n\n" + Messages.get(plantClass, "warden_desc");
+			}
+			return desc;
 		}
 
 		@Override

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -62,7 +62,8 @@ public class AlchemicalCatalyst extends Potion {
 	
 	@Override
 	public void apply(Hero hero) {
-		Potion p = Reflection.newInstance(Dungeon.chances(potionChances));
+		Potion p = Reflection.newInstance(Random.chances(potionChances));
+		//Don't allow this to roll healing in pharma
 		while (Dungeon.isChallenged(Challenges.NO_HEALING) && p instanceof PotionOfHealing){
 			p = Reflection.newInstance(Random.chances(potionChances));
 		}
@@ -84,10 +85,15 @@ public class AlchemicalCatalyst extends Potion {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 40 * quantity;
+}
+
+	@Override
+	public int energyVal() {
+		return 8 * quantity;
 	}
-	
+
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe {
 		
 		@Override
@@ -112,12 +118,12 @@ public class AlchemicalCatalyst extends Potion {
 		public int cost(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (i instanceof Plant.Seed){
-					return 1;
+					return 0;
 				} else if (i instanceof Runestone){
-					return 2;
+					return 1;
 				}
 			}
-			return 1;
+			return 0;
 		}
 		
 		@Override

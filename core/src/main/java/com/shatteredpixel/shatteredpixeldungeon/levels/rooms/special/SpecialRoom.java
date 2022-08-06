@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -81,22 +81,54 @@ public abstract class SpecialRoom extends Room {
 			entrance = (Door)bundle.get(ENTRANCE);
 		}
 	}
-	
-	private static final ArrayList<Class<? extends SpecialRoom>> ALL_SPEC = new ArrayList<>( Arrays.asList(
-			WeakFloorRoom.class, MagicWellRoom.class, CryptRoom.class, PoolRoom.class, GardenRoom.class, LibraryRoom.class, ArmoryRoom.class,
-			TreasuryRoom.class, TrapsRoom.class, StorageRoom.class, StatueRoom.class, VaultRoom.class, RunestoneRoom.class
+
+	//9 special rooms which give equipment more often than consumables (or as often as)
+	private static final ArrayList<Class<? extends SpecialRoom>> EQUIP_SPECIALS = new ArrayList<>( Arrays.asList(
+			WeakFloorRoom.class, CryptRoom.class, PoolRoom.class, ArmoryRoom.class, SentryRoom.class,
+			StatueRoom.class, CrystalVaultRoom.class, CrystalChoiceRoom.class, SacrificeRoom.class
+	));
+
+	//10 special rooms which give consumables more often than equipment
+	//note that alchemy rooms are spawned separately
+	private static final ArrayList<Class<? extends SpecialRoom>> CONSUMABLE_SPECIALS = new ArrayList<>( Arrays.asList(
+			RunestoneRoom.class, GardenRoom.class, LibraryRoom.class, StorageRoom.class,
+			TreasuryRoom.class, MagicWellRoom.class, ToxicGasRoom.class, MagicalFireRoom.class,
+			TrapsRoom.class, CrystalPathRoom.class
 	) );
-	
+
+	//only one special that uses crystal keys per floor
+	private static final ArrayList<Class<? extends SpecialRoom>> CRYSTAL_KEY_SPECIALS = new ArrayList<>( Arrays.asList(
+			PitRoom.class, CrystalVaultRoom.class, CrystalChoiceRoom.class, CrystalPathRoom.class
+	) );
+
+	//only one special that generates a potion per floor
+	private static final ArrayList<Class<? extends SpecialRoom>> POTION_SPAWN_ROOMS = new ArrayList<>( Arrays.asList(
+			PoolRoom.class, SentryRoom.class, StorageRoom.class, ToxicGasRoom.class, MagicalFireRoom.class, TrapsRoom.class
+	) );
+
 	public static ArrayList<Class<? extends Room>> runSpecials = new ArrayList<>();
 	public static ArrayList<Class<? extends Room>> floorSpecials = new ArrayList<>();
 	
 	private static int pitNeededDepth = -1;
 	
 	public static void initForRun() {
-		runSpecials = (ArrayList<Class<?extends Room>>)ALL_SPEC.clone();
-		
+		runSpecials = new ArrayList<>();
+
+		ArrayList<Class<?extends Room>> runEquipSpecials = (ArrayList<Class<?extends Room>>)EQUIP_SPECIALS.clone();
+		ArrayList<Class<?extends Room>> runConsSpecials = (ArrayList<Class<?extends Room>>)CONSUMABLE_SPECIALS.clone();
+
+		Random.shuffle(runEquipSpecials);
+		Random.shuffle(runConsSpecials);
+
+		// TODO currently always a consumable special first as there's 1 more of them, adjust as needed if adding more
+		runSpecials.add(runConsSpecials.remove(0));
+
+		while (!runEquipSpecials.isEmpty() || !runConsSpecials.isEmpty()){
+			if (!runEquipSpecials.isEmpty())    runSpecials.add(runEquipSpecials.remove(0));
+			if (!runConsSpecials.isEmpty())     runSpecials.add(runConsSpecials.remove(0));
+		}
+
 		pitNeededDepth = -1;
-		Random.shuffle(runSpecials);
 	}
 	
 	public static void initForFloor(){
@@ -110,6 +142,12 @@ public abstract class SpecialRoom extends Room {
 	
 	private static void useType( Class<?extends Room> type ) {
 		floorSpecials.remove( type );
+		if (CRYSTAL_KEY_SPECIALS.contains(type)){
+			floorSpecials.removeAll(CRYSTAL_KEY_SPECIALS);
+		}
+		if (POTION_SPAWN_ROOMS.contains(type)){
+			floorSpecials.removeAll(POTION_SPAWN_ROOMS);
+		}
 		if (runSpecials.remove( type )) {
 			runSpecials.add( type );
 		}
@@ -123,15 +161,7 @@ public abstract class SpecialRoom extends Room {
 		if (Dungeon.depth == pitNeededDepth){
 			pitNeededDepth = -1;
 			
-			floorSpecials.remove( ArmoryRoom.class );
-			floorSpecials.remove( CryptRoom.class );
-			floorSpecials.remove( LibraryRoom.class );
-			floorSpecials.remove( RunestoneRoom.class );
-			floorSpecials.remove( StatueRoom.class );
-			floorSpecials.remove( TreasuryRoom.class );
-			floorSpecials.remove( VaultRoom.class );
-			floorSpecials.remove( WeakFloorRoom.class );
-			
+			useType( PitRoom.class );
 			return new PitRoom();
 			
 		} else if (floorSpecials.contains(LaboratoryRoom.class)) {
@@ -144,16 +174,13 @@ public abstract class SpecialRoom extends Room {
 			if (Dungeon.bossLevel(Dungeon.depth + 1)){
 				floorSpecials.remove(WeakFloorRoom.class);
 			}
-			
-			Room r = null;
-			int index = floorSpecials.size();
-			for (int i = 0; i < 4; i++){
-				int newidx = Random.Int( floorSpecials.size() );
-				if (newidx < index) index = newidx;
-			}
-			
-			r = Reflection.newInstance(floorSpecials.get( index ));
-			
+
+			//60% chance for front of queue, 30% chance for next, 10% for one after that
+			int index = Random.chances(new float[]{6, 3, 1});
+			while (index >= floorSpecials.size()) index--;
+
+			Room r = Reflection.newInstance(floorSpecials.get( index ));
+
 			if (r instanceof WeakFloorRoom){
 				pitNeededDepth = Dungeon.depth + 1;
 			}
@@ -171,10 +198,7 @@ public abstract class SpecialRoom extends Room {
 		runSpecials.clear();
 		if (bundle.contains( ROOMS )) {
 			for (Class<? extends Room> type : bundle.getClassArray(ROOMS)) {
-				//pre-0.7.0 saves
-				if (type != null && type != LaboratoryRoom.class) {
-					runSpecials.add(type);
-				}
+				runSpecials.add(type);
 			}
 		} else {
 			initForRun();

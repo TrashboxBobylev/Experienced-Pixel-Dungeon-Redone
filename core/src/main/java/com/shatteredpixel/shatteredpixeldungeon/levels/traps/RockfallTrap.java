@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -52,6 +52,7 @@ public class RockfallTrap extends Trap {
 		shape = DIAMOND;
 		
 		canBeHidden = false;
+		avoidsHallways = true;
 	}
 	
 	@Override
@@ -61,9 +62,12 @@ public class RockfallTrap extends Trap {
 		
 		//determines if the trap is actually in the world, or if it is being spawned for its effect
 		boolean onGround = Dungeon.level.traps.get(pos) == this;
+		Room r = null;
+		if (Dungeon.level instanceof RegularLevel){
+			r = ((RegularLevel) Dungeon.level).room(pos);
+		}
 		
-		if (onGround && Dungeon.level instanceof RegularLevel){
-			Room r = ((RegularLevel) Dungeon.level).room(pos);
+		if (onGround && r != null){
 			int cell;
 			for (Point p : r.getPoints()){
 				cell = Dungeon.level.pointToCell(p);
@@ -72,7 +76,7 @@ public class RockfallTrap extends Trap {
 				}
 			}
 			
-		//if we don't have rooms, then just do 5x5
+		//if we don't have a room, then just do 5x5
 		} else {
 			PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
 			for (int i = 0; i < PathFinder.distance.length; i++) {

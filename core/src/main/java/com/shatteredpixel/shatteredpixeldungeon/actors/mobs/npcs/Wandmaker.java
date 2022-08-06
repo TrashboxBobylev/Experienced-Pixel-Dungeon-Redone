@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,7 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -67,7 +69,10 @@ public class Wandmaker extends NPC {
 	
 	@Override
 	protected boolean act() {
-		throwItem();
+		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
+			die(null);
+			return true;
+		}
 		if (Dungeon.level.heroFOV[pos] && Quest.wand1 != null){
 			Notes.add( Notes.Landmark.WANDMAKER );
 		}
@@ -225,6 +230,7 @@ public class Wandmaker extends NPC {
 			});
 
 			Quest.given = true;
+			Notes.add( Notes.Landmark.WANDMAKER );
 		}
 
 		return true;
@@ -317,17 +323,20 @@ public class Wandmaker extends NPC {
 				
 				Wandmaker npc = new Wandmaker();
 				boolean validPos;
-				//Do not spawn wandmaker on the entrance, or in front of a door.
+				//Do not spawn wandmaker on the entrance, a trap, or in front of a door.
 				do {
 					validPos = true;
 					npc.pos = level.pointToCell(room.random());
-					if (npc.pos == level.entrance){
+					if (npc.pos == level.entrance()){
 						validPos = false;
 					}
 					for (Point door : room.connected.values()){
 						if (level.trueDistance( npc.pos, level.pointToCell( door ) ) <= 1){
 							validPos = false;
 						}
+					}
+					if (level.traps.get(npc.pos) != null){
+						validPos = false;
 					}
 				} while (!validPos);
 				level.mobs.add( npc );
@@ -352,7 +361,7 @@ public class Wandmaker extends NPC {
                     case 1: wand2.upgrade(4); break;
                     case 2: wand2.upgrade(35); break;
                 }
-				
+
 			}
 		}
 		
@@ -386,6 +395,7 @@ public class Wandmaker extends NPC {
 			wand2 = null;
 			
 			Notes.remove( Notes.Landmark.WANDMAKER );
+			Statistics.questScores[1] = 2000;
 		}
 	}
 }

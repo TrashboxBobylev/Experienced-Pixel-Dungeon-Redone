@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -99,7 +99,7 @@ public class Succubus extends Mob {
             case 3: return Random.NormalIntRange(2300, 3170);
             case 4: return Random.NormalIntRange(170000, 250000);
         }
-		return Random.NormalIntRange( 22, 30 );
+		return Random.NormalIntRange( 25, 30 );
 	}
 	
 	@Override
@@ -114,13 +114,18 @@ public class Succubus extends Mob {
 			} else {
 				HP += 5 + damage;
 			}
-			sprite.emitter().burst( Speck.factory( Speck.HEALING ), 2 );
-			Sample.INSTANCE.play( Assets.Sounds.CHARMS );
+			if (Dungeon.level.heroFOV[pos]) {
+				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 2 );
+				Sample.INSTANCE.play( Assets.Sounds.CHARMS );
+			}
 		} else if (Random.Int( 3 ) == 0) {
-			//attack will reduce by 5 turns, so effectively DURATION-5 turns
-			Buff.affect( enemy, Charm.class, Charm.DURATION ).object = id();
-			enemy.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 5 );
-			Sample.INSTANCE.play( Assets.Sounds.CHARMS );
+			Charm c = Buff.affect( enemy, Charm.class, Charm.DURATION/2f );
+			c.object = id();
+			c.ignoreNextHit = true; //so that the -5 duration from succubus hit is ignored
+			if (Dungeon.level.heroFOV[enemy.pos]) {
+				enemy.sprite.centerEmitter().start(Speck.factory(Speck.HEART), 0.2f, 5);
+				Sample.INSTANCE.play(Assets.Sounds.CHARMS);
+			}
 		}
 		
 		return damage;
@@ -130,9 +135,12 @@ public class Succubus extends Mob {
 	protected boolean getCloser( int target ) {
 		if (fieldOfView[target] && Dungeon.level.distance( pos, target ) > 2 && blinkCooldown <= 0) {
 			
-			blink( target );
-			spend( -1 / speed() );
-			return true;
+			if (blink( target )) {
+				spend(-1 / speed());
+				return true;
+			} else {
+				return false;
+			}
 			
 		} else {
 
@@ -142,7 +150,7 @@ public class Succubus extends Mob {
 		}
 	}
 	
-	private void blink( int target ) {
+	private boolean blink( int target ) {
 		
 		Ballistica route = new Ballistica( pos, target, Ballistica.PROJECTILE);
 		int cell = route.collisionPos;
@@ -151,11 +159,13 @@ public class Succubus extends Mob {
 		if (Actor.findChar( cell ) != null && cell != this.pos)
 			cell = route.path.get(route.dist-1);
 
-		if (Dungeon.level.avoid[ cell ]){
+		if (Dungeon.level.avoid[ cell ] || (properties().contains(Property.LARGE) && !Dungeon.level.openSpace[cell])){
 			ArrayList<Integer> candidates = new ArrayList<>();
 			for (int n : PathFinder.NEIGHBOURS8) {
 				cell = route.collisionPos + n;
-				if (Dungeon.level.passable[cell] && Actor.findChar( cell ) == null) {
+				if (Dungeon.level.passable[cell]
+						&& Actor.findChar( cell ) == null
+						&& (!properties().contains(Property.LARGE) || Dungeon.level.openSpace[cell])) {
 					candidates.add( cell );
 				}
 			}
@@ -163,13 +173,14 @@ public class Succubus extends Mob {
 				cell = Random.element(candidates);
 			else {
 				blinkCooldown = Random.IntRange(4, 6);
-				return;
+				return false;
 			}
 		}
 		
 		ScrollOfTeleportation.appear( this, cell );
 
 		blinkCooldown = Random.IntRange(4, 6);
+		return true;
 	}
 	
 	@Override
@@ -195,7 +206,7 @@ public class Succubus extends Mob {
 	}
 
 	@Override
-	protected Item createLoot() {
+	public Item createLoot() {
 		Class<?extends Scroll> loot;
 		do{
 			loot = (Class<? extends Scroll>) Random.oneOf(Generator.Category.SCROLL.classes);

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,8 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.painters;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.connection.ConnectionRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.CaveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
 import com.watabou.utils.Random;
@@ -94,15 +92,7 @@ public class CavesPainter extends RegularPainter {
 					level.traps.remove(corner);
 				}
 			}
-			
-			for (Room n : room.connected.keySet()) {
-				if ((n instanceof StandardRoom || n instanceof ConnectionRoom) && Random.Int( 5 ) == 0) {
-					Painter.set( level, room.connected.get( n ), Terrain.EMPTY_DECO );
-				}
-				if (n instanceof CaveRoom && room instanceof CaveRoom){
-					Painter.set( level, room.connected.get( n ), Terrain.EMPTY_DECO );
-				}
-			}
+
 		}
 		
 		for (int i=w + 1; i < l - w; i++) {

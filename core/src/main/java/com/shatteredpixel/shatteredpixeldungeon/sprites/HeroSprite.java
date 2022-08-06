@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,9 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.utils.Callback;
@@ -100,16 +102,24 @@ public class HeroSprite extends CharSprite {
 	@Override
 	public void place( int p ) {
 		super.place( p );
-		Camera.main.panTo(center(), 5f);
+		if (Game.scene() instanceof GameScene) Camera.main.panTo(center(), 5f);
 	}
 
 	@Override
 	public void move( int from, int to ) {
 		super.move( from, to );
-		if (ch.flying) {
+		if (ch != null && ch.flying) {
 			play( fly );
 		}
 		Camera.main.panFollow(this, 20f);
+	}
+
+	@Override
+	public void idle() {
+		super.idle();
+		if (ch != null && ch.flying) {
+			play( fly );
+		}
 	}
 
 	@Override

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -50,9 +50,11 @@ public class GamesInProgress {
 	private static final String GAME_FOLDER = "game%d";
 	private static final String GAME_FILE	= "game.dat";
 	private static final String DEPTH_FILE	= "depth%d.dat";
+	private static final String DEPTH_BRANCH_FILE	= "depth%d-branch%d.dat";
 	
 	public static boolean gameExists( int slot ){
-		return FileUtils.dirExists(Messages.format(GAME_FOLDER, slot));
+		return FileUtils.dirExists(gameFolder(slot))
+				&& FileUtils.fileLength(gameFile(slot)) > 1;
 	}
 	
 	public static String gameFolder( int slot ){
@@ -63,8 +65,12 @@ public class GamesInProgress {
 		return gameFolder(slot) + "/" + GAME_FILE;
 	}
 	
-	public static String depthFile( int slot, int depth ) {
-		return gameFolder(slot) + "/" + Messages.format(DEPTH_FILE, depth);
+	public static String depthFile( int slot, int depth, int branch ) {
+		if (branch == 0) {
+			return gameFolder(slot) + "/" + Messages.format(DEPTH_FILE, depth);
+		} else {
+			return gameFolder(slot) + "/" + Messages.format(DEPTH_BRANCH_FILE, depth, branch);
+		}
 	}
 	
 	public static int firstEmpty(){
@@ -76,7 +82,7 @@ public class GamesInProgress {
 	
 	public static ArrayList<Info> checkAll(){
 		ArrayList<Info> result = new ArrayList<>();
-		for (int i = 0; i <= MAX_SLOTS; i++){
+		for (int i = 1; i <= MAX_SLOTS; i++){
 			Info curr = check(i);
 			if (curr != null) result.add(curr);
 		}
@@ -105,8 +111,8 @@ public class GamesInProgress {
 				info.slot = slot;
 				Dungeon.preview(info, bundle);
 				
-				//saves from before 0.6.5c are not supported
-				if (info.version < ShatteredPixelDungeon.v0_6_5c) {
+				//saves from before v0.9.3c are not supported
+				if (info.version < ShatteredPixelDungeon.v0_9_3c) {
 					info = null;
 				}
 
@@ -123,16 +129,21 @@ public class GamesInProgress {
 		}
 	}
 
-	public static void set(int slot, int depth, int challenges,
+	public static void set(int slot, int depth, int challenges, long seed, String customSeed, boolean daily,
 	                       Hero hero) {
 		Info info = new Info();
 		info.slot = slot;
 		
 		info.depth = depth;
 		info.challenges = challenges;
+
+		info.seed = seed;
+		info.customSeed = customSeed;
+		info.daily = daily;
 		
 		info.level = hero.lvl;
 		info.str = hero.STR;
+		info.strBonus = hero.STR() - hero.STR;
 		info.exp = hero.exp;
 		info.hp = hero.HP;
 		info.ht = hero.HT;
@@ -161,9 +172,14 @@ public class GamesInProgress {
 		public int depth;
 		public int version;
 		public int challenges;
+
+		public long seed;
+		public String customSeed;
+		public boolean daily;
 		
 		public int level;
 		public int str;
+		public int strBonus;
 		public int exp;
 		public int hp;
 		public int ht;

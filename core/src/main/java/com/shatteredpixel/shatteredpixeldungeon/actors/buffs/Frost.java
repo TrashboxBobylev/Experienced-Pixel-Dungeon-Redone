@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -53,10 +52,11 @@ public class Frost extends FlavourBuff {
 	
 	@Override
 	public boolean attachTo( Char target ) {
+		Buff.detach( target, Burning.class );
+
 		if (super.attachTo( target )) {
 			
 			target.paralysed++;
-			Buff.detach( target, Burning.class );
 			Buff.detach( target, Chill.class );
 
 			if (target instanceof Hero) {
@@ -64,10 +64,11 @@ public class Frost extends FlavourBuff {
 				Hero hero = (Hero)target;
 				ArrayList<Item> freezable = new ArrayList<>();
 				//does not reach inside of containers
-				for (Item i : hero.belongings.backpack.items){
-					if ((i instanceof Potion && !(i instanceof PotionOfStrength))
-						|| i instanceof MysteryMeat){
-						freezable.add(i);
+				if (hero.buff(LostInventory.class) == null) {
+					for (Item i : hero.belongings.backpack.items) {
+						if (!i.unique && (i instanceof Potion || i instanceof MysteryMeat)) {
+							freezable.add(i);
+						}
 					}
 				}
 				
@@ -88,7 +89,7 @@ public class Frost extends FlavourBuff {
 
 				Item item = ((Thief) target).item;
 
-				if (item instanceof Potion && !(item instanceof PotionOfStrength)) {
+				if (item instanceof Potion && !item.unique) {
 					((Potion) ((Thief) target).item).shatter(target.pos);
 					((Thief) target).item = null;
 				} else if (item instanceof MysteryMeat){
@@ -129,8 +130,13 @@ public class Frost extends FlavourBuff {
 
 	@Override
 	public void fx(boolean on) {
-		if (on) target.sprite.add(CharSprite.State.FROZEN);
-		else target.sprite.remove(CharSprite.State.FROZEN);
+		if (on) {
+			target.sprite.add(CharSprite.State.FROZEN);
+			target.sprite.add(CharSprite.State.PARALYSED);
+		} else {
+			target.sprite.remove(CharSprite.State.FROZEN);
+			if (target.paralysed <= 1) target.sprite.remove(CharSprite.State.PARALYSED);
+		}
 	}
 
 	@Override
@@ -141,6 +147,11 @@ public class Frost extends FlavourBuff {
 	@Override
 	public String desc() {
 		return Messages.get(this, "desc", dispTurns());
+	}
+
+	{
+		//can't chill what's frozen!
+		immunities.add( Chill.class );
 	}
 
 }

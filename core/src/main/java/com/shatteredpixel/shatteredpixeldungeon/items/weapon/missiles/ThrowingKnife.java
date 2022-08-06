@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -51,19 +51,12 @@ public class ThrowingKnife extends MissileWeapon {
 		return  12 * tier +                      //6 base, up from 5
 				(tier == 1 ? 4*lvl : tier*2*lvl); //scaling unchanged
 	}
-	
-	private Char enemy;
-	
-	@Override
-	protected void onThrow(int cell) {
-		enemy = Actor.findChar(cell);
-		super.onThrow(cell);
-	}
-	
+
 	@Override
 	public int damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
+			Char enemy = hero.enemy();
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 75% toward max to max on surprise, instead of min to max.
 				int diff = max() - min();

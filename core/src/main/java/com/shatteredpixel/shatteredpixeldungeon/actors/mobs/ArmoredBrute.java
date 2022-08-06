@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -67,7 +67,7 @@ public class ArmoredBrute extends Brute {
 	}
 	
 	@Override
-	protected Item createLoot () {
+	public Item createLoot() {
 		if (Random.Int( 4 ) == 0) {
 			return new PlateArmor().random();
 		}

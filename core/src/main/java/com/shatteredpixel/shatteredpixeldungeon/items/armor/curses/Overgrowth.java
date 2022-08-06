@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 
 public class Overgrowth extends Armor.Glyph {
@@ -45,14 +44,9 @@ public class Overgrowth extends Armor.Glyph {
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 		
 		if ( Dungeon.Int( 20 ) == 0) {
-			
-			Plant.Seed s;
-			do{
-				s = (Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED);
-			} while (s instanceof Starflower.Seed);
-			
-			Plant p = s.couch(defender.pos, null);
-			
+
+			Plant p = ((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(defender.pos, null);
+
 			//momentarily revoke warden benefits, otherwise this curse would be incredibly powerful
 			if (defender instanceof Hero && ((Hero) defender).isSubclass(HeroSubClass.WARDEN)){
 				((Hero) defender).subClass = HeroSubClass.NONE;

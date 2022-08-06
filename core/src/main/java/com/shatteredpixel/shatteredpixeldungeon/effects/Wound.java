@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -34,7 +34,7 @@ import com.watabou.noosa.Visual;
 
 public class Wound extends Image {
 
-	private static final float TIME_TO_FADE = 0.8f;
+	private static final float TIME_TO_FADE = 1f;
 	
 	private float time;
 	
@@ -69,7 +69,7 @@ public class Wound extends Image {
 			kill();
 		} else {
 			float p = time / TIME_TO_FADE;
-			alpha( p );
+			alpha((float) Math.sqrt(p));
 			scale.x = 1 + p;
 		}
 	}

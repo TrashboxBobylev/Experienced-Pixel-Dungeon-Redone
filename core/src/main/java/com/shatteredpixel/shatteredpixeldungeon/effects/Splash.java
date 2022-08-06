@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -44,6 +44,7 @@ public class Splash {
 		}
 		
 		Emitter emitter = GameScene.emitter();
+		if (emitter == null) return;
 		emitter.pos( p );
 		
 		FACTORY.color = color;
@@ -59,12 +60,29 @@ public class Splash {
 		}
 		
 		Emitter emitter = GameScene.emitter();
+		if (emitter == null) return;
 		emitter.pos( p );
 		
 		FACTORY.color = color;
 		FACTORY.dir = dir;
 		FACTORY.cone = cone;
 		emitter.burst( FACTORY, n );
+	}
+
+	public static void at( PointF p, final float dir, final float cone, final int color, int n, float interval ) {
+
+		if (n <= 0) {
+			return;
+		}
+
+		Emitter emitter = GameScene.emitter();
+		if (emitter == null) return;
+		emitter.pos( p );
+
+		FACTORY.color = color;
+		FACTORY.dir = dir;
+		FACTORY.cone = cone;
+		emitter.start( FACTORY, interval, n );
 	}
 	
 	private static final SplashFactory FACTORY = new SplashFactory();

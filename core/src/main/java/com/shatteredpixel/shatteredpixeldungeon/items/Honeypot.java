@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -104,11 +104,10 @@ public class Honeypot extends Item {
 		int newPos = pos;
 		if (Actor.findChar( pos ) != null) {
 			ArrayList<Integer> candidates = new ArrayList<>();
-			boolean[] passable = Dungeon.level.passable;
 			
 			for (int n : PathFinder.NEIGHBOURS4) {
 				int c = pos + n;
-				if (passable[c] && Actor.findChar( c ) == null) {
+				if (!Dungeon.level.solid[c] && Actor.findChar( c ) == null) {
 					candidates.add( c );
 				}
 			}
@@ -118,7 +117,7 @@ public class Honeypot extends Item {
 		
 		if (newPos != -1) {
 			Bee bee = new Bee();
-			bee.spawn( Dungeon.escalatingDepth() );
+			bee.spawn( Dungeon.scalingDepth() );
 			bee.setPotInfo( pos, owner );
 			bee.HP = bee.HT;
 			bee.pos = newPos;
@@ -147,7 +146,7 @@ public class Honeypot extends Item {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 30 * quantity;
 	}
 
@@ -160,8 +159,8 @@ public class Honeypot extends Item {
 		}
 
 		@Override
-		public boolean doPickUp(Hero hero) {
-			if ( super.doPickUp(hero) ){
+		public boolean doPickUp(Hero hero, int pos) {
+			if ( super.doPickUp(hero, pos) ){
 				pickupPot( hero );
 				return true;
 			} else {
@@ -245,7 +244,7 @@ public class Honeypot extends Item {
 		}
 		
 		@Override
-		public int price() {
+		public int value() {
 			return 5 * quantity;
 		}
 	}

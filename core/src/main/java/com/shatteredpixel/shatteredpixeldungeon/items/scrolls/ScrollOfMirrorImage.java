@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -54,25 +53,11 @@ public class ScrollOfMirrorImage extends Scroll {
 		int spawnedImages = spawnImages(curUser, NIMAGES);
 		
 		if (spawnedImages > 0) {
-			setKnown();
+			identify();
 		}
 		
 		Sample.INSTANCE.play( Assets.Sounds.READ );
-		Invisibility.dispel();
 		
-		readAnimation();
-	}
-	
-	@Override
-	public void empoweredRead() {
-		//spawns 2 images right away, delays 3 of them, 5 total.
-		new DelayedImageSpawner(5 - spawnImages(curUser, 2), 1, 2).attachTo(curUser);
-		
-		setKnown();
-		
-		Sample.INSTANCE.play( Assets.Sounds.READ );
-		Invisibility.dispel();
-	
 		readAnimation();
 	}
 	
@@ -170,7 +155,7 @@ public class ScrollOfMirrorImage extends Scroll {
 	}
 
 	@Override
-	public int price() {
-		return isKnown() ? 30 * quantity : super.price();
+	public int value() {
+		return isKnown() ? 30 * quantity : super.value();
 	}
 }

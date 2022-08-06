@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -56,13 +56,18 @@ public class TenguSprite extends MobSprite {
 		
 		play( run.clone() );
 	}
-	
+
 	@Override
-	public void idle() {
-		isMoving = false;
-		super.idle();
+	public void play(Animation anim) {
+		if (isMoving && anim != run){
+			synchronized (this){
+				isMoving = false;
+				notifyAll();
+			}
+		}
+		super.play(anim);
 	}
-	
+
 	@Override
 	public void move( int from, int to ) {
 		
@@ -84,7 +89,7 @@ public class TenguSprite extends MobSprite {
 		if (!Dungeon.level.adjacent( cell, ch.pos )) {
 
 			((MissileSprite)parent.recycle( MissileSprite.class )).
-				reset( ch.pos, cell, new TenguShuriken(), new Callback() {
+				reset( this, cell, new TenguShuriken(), new Callback() {
 					@Override
 					public void call() {
 						ch.onAttackComplete();

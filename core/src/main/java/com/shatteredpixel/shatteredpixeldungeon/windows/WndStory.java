@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
 import com.watabou.utils.SparseArray;
 
@@ -60,30 +61,46 @@ public class WndStory extends Window {
 		CHAPTERS.put( ID_CITY, "city" );
 		CHAPTERS.put( ID_HALLS, "halls" );
 	}
-	
+
+	private IconTitle ttl;
 	private RenderedTextBlock tf;
 	
 	private float delay;
-	
+
 	public WndStory( String text ) {
+		this( null, null, text );
+	}
+	
+	public WndStory(Image icon, String title, String text ) {
 		super( 0, 0, Chrome.get( Chrome.Type.SCROLL ) );
+
+		int width = PixelScene.landscape() ? WIDTH_L - MARGIN * 2: WIDTH_P - MARGIN *2;
+
+		float y = MARGIN;
+		if (icon != null && title != null){
+			ttl = new IconTitle(icon, title);
+			ttl.setRect(MARGIN, y, width-2*MARGIN, 0);
+			y = ttl.bottom()+MARGIN;
+			add(ttl);
+			ttl.tfLabel.invert();
+		}
 		
 		tf = PixelScene.renderTextBlock( text, 6 );
-		tf.maxWidth(PixelScene.landscape() ?
-					WIDTH_L - MARGIN * 2:
-					WIDTH_P - MARGIN *2);
+		tf.maxWidth(width);
 		tf.invert();
-		tf.setPos(MARGIN, 2);
+		tf.setPos(MARGIN, y);
 		add( tf );
-		
-		add( new PointerArea( chrome ) {
+
+		PointerArea blocker = new PointerArea( 0, 0, PixelScene.uiCamera.width, PixelScene.uiCamera.height ) {
 			@Override
 			protected void onClick( PointerEvent event ) {
-				hide();
+				onBackPressed();
 			}
-		} );
+		};
+		blocker.camera = PixelScene.uiCamera;
+		add(blocker);
 		
-		resize( (int)(tf.width() + MARGIN * 2), (int)Math.min( tf.height()+2, 180 ) );
+		resize( (int)(tf.width() + MARGIN * 2), (int)Math.min( tf.bottom()+MARGIN, 180 ) );
 	}
 	
 	@Override
@@ -92,6 +109,7 @@ public class WndStory extends Window {
 		
 		if (delay > 0 && (delay -= Game.elapsed) <= 0) {
 			shadow.visible = chrome.visible = tf.visible = true;
+			if (ttl != null) ttl.visible = true;
 		}
 	}
 	
@@ -106,6 +124,7 @@ public class WndStory extends Window {
 			WndStory wnd = new WndStory( text );
 			if ((wnd.delay = 0.6f) > 0) {
 				wnd.shadow.visible = wnd.chrome.visible = wnd.tf.visible = false;
+				if (wnd.ttl != null) wnd.ttl.visible = false;
 			}
 			
 			Game.scene().add( wnd );

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -62,7 +63,7 @@ public class Bag extends Item implements Iterable<Item> {
 
 		super.execute( hero, action );
 
-		if (action.equals( AC_OPEN )) {
+		if (action.equals( AC_OPEN ) && !items.isEmpty()) {
 			
 			GameScene.show( new WndQuickBag( this ) );
 			
@@ -72,18 +73,7 @@ public class Bag extends Item implements Iterable<Item> {
 	@Override
 	public boolean collect( Bag container ) {
 
-		for (Item item : container.items.toArray( new Item[0] )) {
-			if (canHold( item )) {
-				int slot = Dungeon.quickslot.getSlot(item);
-				item.detachAll(container);
-				if (!item.collect(this)) {
-					item.collect(container);
-				}
-				if (slot != -1) {
-					Dungeon.quickslot.setSlot(slot, item);
-				}
-			}
-		}
+		grabItems(container);
 
 		if (super.collect( container )) {
 			
@@ -103,6 +93,27 @@ public class Bag extends Item implements Iterable<Item> {
 		for (Item item : items)
 			Dungeon.quickslot.clearItem(item);
 		updateQuickslot();
+	}
+
+	public void grabItems(){
+		if (owner != null && owner instanceof Hero && this != ((Hero) owner).belongings.backpack) {
+			grabItems(((Hero) owner).belongings.backpack);
+		}
+	}
+
+	public void grabItems( Bag container ){
+		for (Item item : container.items.toArray( new Item[0] )) {
+			if (canHold( item )) {
+				int slot = Dungeon.quickslot.getSlot(item);
+				item.detachAll(container);
+				if (!item.collect(this)) {
+					item.collect(container);
+				}
+				if (slot != -1) {
+					Dungeon.quickslot.setSlot(slot, item);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -133,12 +144,18 @@ public class Bag extends Item implements Iterable<Item> {
 		bundle.put( ITEMS, items );
 	}
 
+	//temp variable so that bags can load contents even with lost inventory debuff
+	private boolean loading;
+
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
+
+		loading = true;
 		for (Bundlable item : bundle.getCollection( ITEMS )) {
 			if (item != null) ((Item)item).collect( this );
 		}
+		loading = false;
 	}
 	
 	public boolean contains( Item item ) {
@@ -153,6 +170,11 @@ public class Bag extends Item implements Iterable<Item> {
 	}
 
 	public boolean canHold( Item item ){
+		if (!loading && owner != null && owner.buff(LostInventory.class) != null
+			&& !item.keptThoughLostInvent){
+			return false;
+		}
+
 		if (items.contains(item) || item instanceof Bag || items.size() < capacity()){
 			return true;
 		} else if (item.stackable) {

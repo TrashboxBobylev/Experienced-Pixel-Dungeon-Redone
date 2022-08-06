@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -35,13 +35,13 @@ public class ChargrilledMeat extends Food {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 8 * quantity;
 	}
 	
-	public static Food cook( MysteryMeat ingredient ) {
+	public static Food cook( int quantity ) {
 		ChargrilledMeat result = new ChargrilledMeat();
-		result.quantity = ingredient.quantity();
+		result.quantity = quantity;
 		return result;
 	}
 }

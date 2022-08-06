@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -40,16 +40,17 @@ public class Blazing extends Weapon.Enchantment {
 	
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
+		int level = Math.max( 0, weapon.buffedLvl() );
+
 		// lvl 0 - 33%
 		// lvl 1 - 50%
 		// lvl 2 - 60%
-		int level = Math.max( 0, weapon.buffedLvl() );
-		
-		if (Random.Int( level + 3 ) >= 2) {
+		float procChance = (level+1f)/(level+3f) * procChanceMultiplier(attacker);
+		if (Random.Float() < procChance) {
 			
 			if (defender.buff(Burning.class) != null){
 				Buff.affect(defender, Burning.class).reignite(defender, 8f);
-				int burnDamage = Math.round(Dungeon.NormalIntRange( 1, 3 + Dungeon.escalatingDepth()/4 ) * Dungeon.fireDamage);
+				int burnDamage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
 				defender.damage( Math.round(burnDamage * 0.67f), this );
 			} else {
 				Buff.affect(defender, Burning.class).reignite(defender, 8f);

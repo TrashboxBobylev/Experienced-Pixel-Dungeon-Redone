@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -56,6 +56,10 @@ public class GameAction {
 
 	public static final GameAction NONE = new GameAction( "none" );
 	public static final GameAction BACK = new GameAction( "back" );
+
+	public static final GameAction LEFT_CLICK   = new GameAction( "left_click" );
+	public static final GameAction RIGHT_CLICK  = new GameAction( "right_click" );
+	public static final GameAction MIDDLE_CLICK = new GameAction( "middle_click" );
 
 	public static ArrayList<GameAction> allActions(){
 		return new ArrayList<>(ALL_ACTIONS);

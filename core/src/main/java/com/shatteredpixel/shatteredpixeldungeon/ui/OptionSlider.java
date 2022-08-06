@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -63,6 +63,11 @@ public abstract class OptionSlider extends Component {
 			active = false;
 		}
 
+		if (title.length() > 20){
+			remove(this.title);
+			this.title = PixelScene.renderTextBlock(6);
+			add(this.title);
+		}
 		this.title.text(title);
 		this.minTxt.text(minTxt);
 		this.maxTxt.text(maxTxt);

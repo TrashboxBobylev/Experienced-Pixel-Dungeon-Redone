@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -46,18 +46,16 @@ public class PotionOfSnapFreeze extends ExoticPotion {
 	public void shatter(int cell) {
 		
 		if (Dungeon.level.heroFOV[cell]) {
-			setKnown();
+			identify();
 			
 			splash( cell );
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
 		}
 		
-		Fire fire = (Fire)Dungeon.level.blobs.get( Fire.class );
-		
 		for (int offset : PathFinder.NEIGHBOURS9){
 			if (!Dungeon.level.solid[cell+offset]) {
 				
-				Freezing.affect( cell + offset, fire );
+				Freezing.affect( cell + offset );
 				
 				Char ch = Actor.findChar( cell + offset);
 				if (ch != null){

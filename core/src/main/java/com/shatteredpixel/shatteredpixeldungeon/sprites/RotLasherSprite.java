@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -49,5 +49,10 @@ public class RotLasherSprite extends MobSprite {
 		die.frames( frames, 3, 4, 5, 6 );
 
 		play( idle );
+	}
+
+	@Override
+	public int blood() {
+		return 0xFF88CC44;
 	}
 }

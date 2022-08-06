@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,7 +27,15 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.effects.*;
+import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
+import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.IceBlock;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TorchHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
@@ -50,6 +58,8 @@ import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import java.nio.Buffer;
 
 public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip.Listener {
 	
@@ -75,9 +85,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected float shadowOffset    = 0.25f;
 
 	public enum State {
-		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, RAGESHIELDED
+		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, RAGESHIELDED, HEARTS
 	}
-	
+	private int stunStates = 0;
+
 	protected Animation idle;
 	protected Animation run;
 	protected Animation attack;
@@ -94,14 +105,16 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected Emitter marked;
 	protected Emitter levitation;
 	protected Emitter healing;
-	
+	protected Emitter hearts;
+
 	protected IceBlock iceBlock;
 	protected DarkBlock darkBlock;
 	protected TorchHalo light;
 	protected ShieldHalo shield;
 	protected AlphaTweener invisible;
 	protected RageHalo rageShield;
-	
+	protected Flare aura;
+
 	protected EmoIcon emo;
 	protected CharHealthIndicator health;
 
@@ -151,7 +164,15 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		ch.updateSpriteState();
 	}
-	
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		if (ch != null && ch.sprite == this){
+			ch.sprite = null;
+		}
+	}
+
 	//used for just updating a sprite based on a given character, not linking them or placing in the game
 	public void linkVisuals( Char ch ){
 		//do nothin by default
@@ -214,7 +235,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	//returns where the center of this sprite will be after it completes any motion in progress
 	public PointF destinationCenter(){
 		PosTweener motion = this.motion;
-		if (motion != null){
+		if (motion != null && motion.elapsed >= 0){
 			return new PointF(motion.end.x + width()/2f, motion.end.y + height()/2f);
 		} else {
 			return center();
@@ -285,7 +306,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void jump( int from, int to, Callback callback ) {
-		float distance = Dungeon.level.trueDistance( from, to );
+		float distance = Math.max( 1f, Dungeon.level.trueDistance( from, to ));
 		jump( from, to, callback, distance * 2, distance * 0.1f );
 	}
 
@@ -312,19 +333,19 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	
 	public Emitter emitter() {
 		Emitter emitter = GameScene.emitter();
-		emitter.pos( this );
+		if (emitter != null) emitter.pos( this );
 		return emitter;
 	}
 	
 	public Emitter centerEmitter() {
 		Emitter emitter = GameScene.emitter();
-		emitter.pos( center() );
+		if (emitter != null) emitter.pos( center() );
 		return emitter;
 	}
 	
 	public Emitter bottomEmitter() {
 		Emitter emitter = GameScene.emitter();
-		emitter.pos( x, y + height, width, 0 );
+		if (emitter != null) emitter.pos( x, y + height, width, 0 );
 		return emitter;
 	}
 	
@@ -351,7 +372,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		flashTime = FLASH_INTERVAL;
 	}
 	
-	public synchronized void add( State state ) {
+	public void add( State state ) {
 		switch (state) {
 			case BURNING:
 				burning = emitter();
@@ -379,7 +400,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				break;
 			case FROZEN:
 				iceBlock = IceBlock.freeze( this );
-				paused = true;
 				break;
 			case ILLUMINATED:
 				GameScene.effect( light = new TorchHalo( this ) );
@@ -405,10 +425,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
             case RAGESHIELDED:
                 GameScene.effect( rageShield = new RageHalo( this ));
                 break;
+			case HEARTS:
+				hearts = emitter();
+				hearts.pour(Speck.factory(Speck.HEART), 0.5f);
+				break;
 		}
 	}
 	
-	public synchronized void remove( State state ) {
+	public void remove( State state ) {
 		switch (state) {
 			case BURNING:
 				if (burning != null) {
@@ -437,7 +461,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					iceBlock.melt();
 					iceBlock = null;
 				}
-				paused = false;
 				break;
 			case ILLUMINATED:
 				if (light != null) {
@@ -473,6 +496,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					shield.putOut();
 				}
 				break;
+			case HEARTS:
+				if (hearts != null){
+					hearts.on = false;
+					hearts = null;
+				}
+				break;
             case RAGESHIELDED:
                 if (rageShield != null){
                     rageShield.putOut();
@@ -480,16 +509,38 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
                 break;
 		}
 	}
-	
+
+	public void aura( int color ){
+		if (aura != null){
+			aura.killAndErase();
+		}
+		float size = Math.max(width(), height());
+		size = Math.max(size+4, 16);
+		aura = new Flare(5, size);
+		aura.angularSpeed = 90;
+		aura.color(color, true);
+
+		if (parent != null) {
+			aura.show(this, 0);
+		}
+	}
+
+	public void clearAura(){
+		if (aura != null){
+			aura.killAndErase();
+			aura = null;
+		}
+	}
+
 	@Override
 	public void update() {
-		
-		super.update();
-		
-		if (paused && listener != null) {
-			listener.onComplete( curAnim );
+		if (paused && ch != null && curAnim != null && !curAnim.looped && !finished){
+			listener.onComplete(curAnim);
+			finished = true;
 		}
-		
+
+		super.update();
+
 		if (flashTime > 0 && (flashTime -= Game.elapsed) <= 0) {
 			resetColor();
 		}
@@ -508,6 +559,19 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		if (marked != null) {
 			marked.visible = visible;
+		}
+		if (healing != null){
+			healing.visible = visible;
+		}
+		if (hearts != null){
+			hearts.visible = visible;
+		}
+		if (aura != null){
+			if (aura.parent == null){
+				aura.show(this, 0);
+			}
+			aura.visible = visible;
+			aura.point(center());
 		}
 		if (sleeping) {
 			showSleep();
@@ -636,7 +700,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (renderShadow) {
 			if (dirty) {
-				verticesBuffer.position(0);
+				((Buffer)verticesBuffer).position(0);
 				verticesBuffer.put(vertices);
 				if (buffer == null)
 					buffer = new Vertexbuffer(verticesBuffer);

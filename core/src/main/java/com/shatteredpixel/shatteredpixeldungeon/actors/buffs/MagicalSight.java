@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -34,11 +34,10 @@ public class MagicalSight extends FlavourBuff {
 	
 	public static final float DURATION = 50f;
 	
-	public int distance = 8;
+	public static final int DISTANCE = 12;
 	
 	{
 		type = buffType.POSITIVE;
-		announced = true;
 	}
 	
 	@Override

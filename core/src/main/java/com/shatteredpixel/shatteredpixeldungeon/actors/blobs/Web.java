@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -93,7 +93,17 @@ public class Web extends Blob {
 		super.fullyClear();
 		Dungeon.level.buildFlagMaps();
 	}
-	
+
+	@Override
+	public void onBuildFlagMaps(Level l) {
+		if (volume > 0){
+			for (int i=0; i < l.length(); i++) {
+				l.solid[i] = l.solid[i] || cur[i] > 0;
+				l.flamable[i] = l.flamable[i] || cur[i] > 0;
+			}
+		}
+	}
+
 	@Override
 	public String tileDesc() {
 		return Messages.get(this, "desc");

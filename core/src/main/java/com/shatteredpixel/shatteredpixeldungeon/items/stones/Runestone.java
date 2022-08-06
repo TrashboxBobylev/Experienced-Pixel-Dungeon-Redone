@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -34,13 +35,18 @@ public abstract class Runestone extends Item {
 		stackable = true;
 		defaultAction = AC_THROW;
 	}
-	
+
+	//runestones press the cell they're thrown to by default, but a couple stones override this
+	protected boolean pressesCell = true;
+
 	@Override
 	protected void onThrow(int cell) {
 		if (Dungeon.level.pit[cell] || !defaultAction.equals(AC_THROW)){
 			super.onThrow( cell );
 		} else {
+			if (pressesCell) Dungeon.level.pressCell( cell );
 			activate(cell);
+			Invisibility.dispel();
 		}
 	}
 	
@@ -57,10 +63,15 @@ public abstract class Runestone extends Item {
 	}
 	
 	@Override
-	public int price() {
-		return 10 * quantity;
+	public int value() {
+		return 15 * quantity;
 	}
-	
+
+	@Override
+	public int energyVal() {
+		return 3 * quantity;
+	}
+
 	public static class PlaceHolder extends Runestone {
 		
 		{

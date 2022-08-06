@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,7 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.*;
@@ -35,7 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel;
-import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -55,7 +57,7 @@ public class Pylon extends Mob {
 	{
 		spriteClass = PylonSprite.class;
 
-		HP = HT = 50;
+		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 80 : 50;
 
 		maxLvl = -2;
 
@@ -86,39 +88,45 @@ public class Pylon extends Mob {
 
 	@Override
 	protected boolean act() {
-		spend(TICK);
-
-		Heap heap = Dungeon.level.heaps.get( pos );
-		if (heap != null) {
-			int n;
-			do {
-				n = pos + PathFinder.NEIGHBOURS8[Random.Int( 8 )];
-			} while (!Dungeon.level.passable[n] && !Dungeon.level.avoid[n]);
-			Dungeon.level.drop( heap.pickUp(), n ).sprite.drop( pos );
-		}
-        if (Random.Float() < 0.5f && Dungeon.depth > 26){
-            List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, Web.class);
-            GameScene.add(Blob.seed(pos, 500, Random.element(blobs)));
-        }
+		alerted = false;
+		super.act();
 
 		if (alignment == Alignment.NEUTRAL){
 			return true;
 		}
 
-		int cell1 = pos + PathFinder.CIRCLE8[targetNeighbor];
-		int cell2 = pos + PathFinder.CIRCLE8[(targetNeighbor+4)%8];
+		ArrayList<Integer> shockCells = new ArrayList<>();
+
+		shockCells.add(pos + PathFinder.CIRCLE8[targetNeighbor]);
+
+		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+3)%8]);
+			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+5)%8]);
+		} else {
+			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+4)%8]);
+		}
 
 		sprite.flash();
-		if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[cell1] || Dungeon.level.heroFOV[cell2]) {
-			sprite.parent.add(new Lightning(DungeonTilemap.raisedTileCenterToWorld(cell1),
-					DungeonTilemap.raisedTileCenterToWorld(cell2), null));
-			CellEmitter.get(cell1).burst(SparkParticle.FACTORY, 3);
-			CellEmitter.get(cell2).burst(SparkParticle.FACTORY, 3);
+
+		boolean visible = Dungeon.level.heroFOV[pos];
+		for (int cell : shockCells){
+			if (Dungeon.level.heroFOV[cell]){
+				visible = true;
+			}
+		}
+
+		if (visible) {
+			for (int cell : shockCells){
+				sprite.parent.add(new Lightning(sprite.center(),
+						DungeonTilemap.raisedTileCenterToWorld(cell), null));
+				CellEmitter.get(cell).burst(SparkParticle.FACTORY, 3);
+			}
 			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 		}
 
-		shockChar(Actor.findChar(cell1));
-		shockChar(Actor.findChar(cell2));
+		for (int cell : shockCells) {
+			shockChar(Actor.findChar(cell));
+		}
 
 		targetNeighbor = (targetNeighbor+1)%8;
 
@@ -126,13 +134,17 @@ public class Pylon extends Mob {
 	}
 
 	private void shockChar( Char ch ){
-		if (ch != null && !(ch instanceof BlackMimic || ch instanceof NewDM300)){
+		if (ch != null && !(ch instanceof DM300)){
 			ch.sprite.flash();
 			ch.damage(Random.NormalIntRange(10, 20) + Dungeon.cycle * 60, new Electricity());
 
-			if (ch == Dungeon.hero && !ch.isAlive()){
-				Dungeon.fail(NewDM300.class);
-				GLog.n( Messages.get(Electricity.class, "ondeath") );
+			if (ch == Dungeon.hero) {
+				Statistics.qualifiedForBossChallengeBadge = false;
+				Statistics.bossScores[2] -= 100;
+				if (!ch.isAlive()) {
+					Dungeon.fail(DM300.class);
+					GLog.n(Messages.get(Electricity.class, "ondeath"));
+				}
 			}
 		}
 	}
@@ -150,7 +162,7 @@ public class Pylon extends Mob {
 	}
 
 	@Override
-	public void notice() {
+	public void beckon(int cell) {
 		//do nothing
 	}
 
@@ -177,11 +189,13 @@ public class Pylon extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public boolean isInvulnerable(Class effect) {
 		//immune to damage when inactive
-		if (alignment == Alignment.NEUTRAL){
-			return;
-		}
+		return (alignment == Alignment.NEUTRAL);
+	}
+
+	@Override
+	public void damage(int dmg, Object src) {
 		if (dmg >= 15 + Dungeon.cycle * 60 && Dungeon.cycle < 2){
 			//takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
 			dmg = 14 + Dungeon.cycle * 60 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
@@ -193,7 +207,7 @@ public class Pylon extends Mob {
 	public void die(Object cause) {
 		super.die(cause);
 		if (Dungeon.depth == 15)
-		((NewCavesBossLevel)Dungeon.level).eliminatePylon();
+		((CavesBossLevel)Dungeon.level).eliminatePylon();
 		else ((BlackMimicLevel)Dungeon.level).eliminatePylon();
 	}
 
@@ -218,8 +232,8 @@ public class Pylon extends Mob {
 		immunities.add( Paralysis.class );
 		immunities.add( Amok.class );
 		immunities.add( Sleep.class );
-		immunities.add( ToxicGas.class );
 		immunities.add( Terror.class );
+		immunities.add( Dread.class );
 		immunities.add( Vertigo.class );
 		if (Dungeon.depth == 27) immunities.add(Fire.class);
 	}

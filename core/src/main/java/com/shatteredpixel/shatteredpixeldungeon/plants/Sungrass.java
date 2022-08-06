@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -109,14 +109,19 @@ public class Sungrass extends Plant {
 			
 			if (level <= 0) {
 				detach();
+				if (target instanceof Hero){
+					((Hero)target).resting = false;
+				}
 			}
 			spend( STEP );
 			return true;
 		}
 
 		public void boost( int amount ){
-			level += amount;
-			pos = target.pos;
+			if (target != null) {
+				level += amount;
+				pos = target.pos;
+			}
 		}
 		
 		@Override
@@ -127,6 +132,11 @@ public class Sungrass extends Plant {
 		@Override
 		public float iconFadePercent() {
 			return Math.max(0, (target.HT - level) / (float)target.HT);
+		}
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(level);
 		}
 		
 		@Override

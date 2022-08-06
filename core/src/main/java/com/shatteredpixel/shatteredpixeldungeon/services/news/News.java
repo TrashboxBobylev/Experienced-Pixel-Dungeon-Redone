@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.watabou.noosa.Image;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class News {
@@ -72,19 +73,25 @@ public class News {
 
 	private static ArrayList<NewsArticle> articles;
 
-	public static boolean articlesAvailable(){
-		return articles != null;
+	public static synchronized boolean articlesAvailable(){
+		return articles != null && !articles.isEmpty();
 	}
 
-	public static ArrayList<NewsArticle> articles(){
+	public static synchronized ArrayList<NewsArticle> articles(){
 		return new ArrayList<>(articles);
 	}
 
-	public static int unreadArticles(Date lastRead){
-		return 0;
+	public static synchronized int unreadArticles(Date lastRead) {
+		int unread = 0;
+		if (articles != null) {
+			for (NewsArticle article : articles) {
+				if (article.date.after(lastRead)) unread++;
+			}
+		}
+		return unread;
 	}
 
-	public static void clearArticles(){
+	public static synchronized void clearArticles(){
 		articles = null;
 		lastCheck = null;
 	}
@@ -115,6 +122,14 @@ public class News {
 			if (article.icon != null) ShatteredPixelDungeon.reportException(e);
 			return Icons.get(Icons.NEWS);
 		}
+	}
+
+	public static String parseArticleDate(NewsArticle article){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(article.date);
+		return cal.get(Calendar.YEAR)
+				+ "-" + String.format("%02d", cal.get(Calendar.MONTH)+1)
+				+ "-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
 	}
 
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -70,8 +70,8 @@ public class HolyBomb extends Bomb {
 			if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains(Char.Property.DEMONIC)){
 				ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10 );
 				
-				//bomb deals an additional 67% damage to unholy enemies in a 5x5 range
-				int damage = Math.round(Dungeon.NormalIntRange( Dungeon.escalatingDepth()+5, 10 + Dungeon.escalatingDepth() * 2 ) * 0.67f);
+				//bomb deals an additional 50% damage to unholy enemies in a 5x5 range
+				int damage = Math.round(Random.NormalIntRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ) * 0.5f);
 				ch.damage(damage, this);
 			}
 		}
@@ -80,7 +80,7 @@ public class HolyBomb extends Bomb {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 30);
 	}

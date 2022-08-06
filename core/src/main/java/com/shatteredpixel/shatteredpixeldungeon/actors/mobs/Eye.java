@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -24,11 +24,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -42,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.EyeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class Eye extends Mob {
@@ -147,6 +149,7 @@ public class Eye extends Mob {
 	protected boolean act() {
 		if (beamCharged && state != HUNTING){
 			beamCharged = false;
+			sprite.idle();
 		}
 		if (beam == null && beamTarget != -1) {
 			beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
@@ -176,6 +179,7 @@ public class Eye extends Mob {
 				sprite.zap( beam.collisionPos );
 				return false;
 			} else {
+				sprite.idle();
 				deathGaze();
 				return true;
 			}
@@ -224,6 +228,7 @@ public class Eye extends Mob {
                     case 3: dmg = Random.NormalIntRange(3750, 5200); break;
                     case 4: dmg = Random.NormalIntRange(200000, 560000); break;
                 }
+				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
                 ch.damage(dmg, new DeathGaze() );
 
 				if (Dungeon.level.heroFOV[pos]) {
@@ -232,6 +237,7 @@ public class Eye extends Mob {
 				}
 
 				if (!ch.isAlive() && ch == Dungeon.hero) {
+					Badges.validateDeathFromEnemyMagic();
 					Dungeon.fail( getClass() );
 					GLog.n( Messages.get(this, "deathgaze_kill") );
 				}
@@ -250,17 +256,26 @@ public class Eye extends Mob {
 
 	//generates an average of 1 dew, 0.25 seeds, and 0.25 stones
 	@Override
-	protected Item createLoot() {
+	public Item createLoot() {
 		Item loot;
 		switch(Random.Int(4)){
 			case 0: case 1: default:
-				loot = new Dewdrop().quantity(2);
+				loot = new Dewdrop();
+				int ofs;
+				do {
+					ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
+				} while (Dungeon.level.solid[pos + ofs] && !Dungeon.level.passable[pos + ofs]);
+				if (Dungeon.level.heaps.get(pos+ofs) == null) {
+					Dungeon.level.drop(new Dewdrop(), pos + ofs).sprite.drop(pos);
+				} else {
+					Dungeon.level.drop(new Dewdrop(), pos + ofs).sprite.drop(pos + ofs);
+				}
+				break;
+			case 2:
+				loot = Generator.randomUsingDefaults(Generator.Category.SEED);
 				break;
 			case 3:
-				loot = Generator.random(Generator.Category.SEED);
-				break;
-			case 4:
-				loot = Generator.random(Generator.Category.STONE);
+				loot = Generator.randomUsingDefaults(Generator.Category.STONE);
 				break;
 		}
 		return loot;
@@ -292,7 +307,7 @@ public class Eye extends Mob {
 	}
 	
 	{
-		immunities.add( Terror.class );
+		//immunities.add( Terror.class );
 	}
 
 	private class Hunting extends Mob.Hunting{

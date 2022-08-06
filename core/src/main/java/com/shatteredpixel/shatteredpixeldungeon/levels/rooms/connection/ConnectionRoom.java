@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -46,12 +46,6 @@ public abstract class ConnectionRoom extends Room {
 	public int minConnections(int direction) {
 		if (direction == ALL)   return 2;
 		else                    return 0;
-	}
-	
-	@Override
-	public boolean canPlaceTrap(Point p) {
-		//traps cannot appear in connection rooms on floor 1
-		return super.canPlaceTrap(p) && Dungeon.depth > 1;
 	}
 	
 	//FIXME this is a very messy way of handing variable connection rooms

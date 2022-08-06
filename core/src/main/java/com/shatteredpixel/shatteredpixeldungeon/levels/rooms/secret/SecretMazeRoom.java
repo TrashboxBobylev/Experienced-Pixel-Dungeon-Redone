@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -105,6 +105,7 @@ public class SecretMazeRoom extends SecretRoom {
 				prize = Generator.randomArmor((Dungeon.depth / 5) + 1);
 			}
 		} while (prize.cursed || Challenges.isItemBlocked(prize));
+		prize.cursedKnown = true;
 		
 		//33% chance for an extra update.
 		if (Random.Int(3) == 0){

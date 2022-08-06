@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,8 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -37,9 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -61,68 +59,51 @@ public class ScrollOfTeleportation extends Scroll {
 	public void doRead() {
 
 		Sample.INSTANCE.play( Assets.Sounds.READ );
-		Invisibility.dispel();
 		
-		teleportPreferringUnseen( curUser );
-		setKnown();
-
-		readAnimation();
-	}
-	
-	@Override
-	public void empoweredRead() {
-		
-		if (Dungeon.bossLevel()){
-			GLog.w( Messages.get(this, "no_tele") );
-			return;
+		if (teleportPreferringUnseen( curUser )){
+			readAnimation();
 		}
-		
-		GameScene.selectCell(new CellSelector.Listener() {
-			@Override
-			public void onSelect(Integer target) {
-				if (target != null) {
-					//time isn't spent
-					((HeroSprite)curUser.sprite).read();
-					teleportToLocation(curUser, target);
-					
-				}
-			}
-			
-			@Override
-			public String prompt() {
-				return Messages.get(ScrollOfTeleportation.class, "prompt");
-			}
-		});
+		identify();
+
 	}
 	
-	public static void teleportToLocation(Hero hero, int pos){
+	public static boolean teleportToLocation(Char ch, int pos){
 		PathFinder.buildDistanceMap(pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
-		if (PathFinder.distance[hero.pos] == Integer.MAX_VALUE
+		if (PathFinder.distance[ch.pos] == Integer.MAX_VALUE
 				|| (!Dungeon.level.passable[pos] && !Dungeon.level.avoid[pos])
 				|| Actor.findChar(pos) != null){
-			GLog.w( Messages.get(ScrollOfTeleportation.class, "cant_reach") );
-			return;
+			if (ch == Dungeon.hero){
+				GLog.w( Messages.get(ScrollOfTeleportation.class, "cant_reach") );
+			}
+			return false;
 		}
 		
-		appear( hero, pos );
-		Dungeon.level.occupyCell(hero );
-		Dungeon.observe();
-		GameScene.updateFog();
+		appear( ch, pos );
+		Dungeon.level.occupyCell( ch );
+		if (ch == Dungeon.hero) {
+			Dungeon.observe();
+			GameScene.updateFog();
+		}
+		return true;
 		
 	}
 	
-	public static void teleportHero( Hero hero ) {
-		teleportChar( hero );
+	public static boolean teleportHero( Hero hero ) {
+		return teleportChar( hero );
 	}
 	
-	public static void teleportChar( Char ch ) {
+	public static boolean teleportChar( Char ch ) {
 
-		if (Dungeon.bossLevel()){
+		if (!(Dungeon.level instanceof RegularLevel)){
+			return teleportInNonRegularLevel( ch, false );
+		}
+
+		if (Char.hasProp(ch, Char.Property.IMMOVABLE)){
 			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
-			return;
+			return false;
 		}
 		
-		int count = 10;
+		int count = 20;
 		int pos;
 		do {
 			pos = Dungeon.level.randomRespawnCell( ch );
@@ -134,6 +115,7 @@ public class ScrollOfTeleportation extends Scroll {
 		if (pos == -1) {
 			
 			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
+			return false;
 			
 		} else {
 			
@@ -145,16 +127,17 @@ public class ScrollOfTeleportation extends Scroll {
 				
 				Dungeon.observe();
 				GameScene.updateFog();
+				Dungeon.hero.interrupt();
 			}
+			return true;
 			
 		}
 	}
 	
-	public static void teleportPreferringUnseen( Hero hero ){
+	public static boolean teleportPreferringUnseen( Hero hero ){
 		
-		if (Dungeon.bossLevel() || !(Dungeon.level instanceof RegularLevel)){
-			teleportHero( hero );
-			return;
+		if (!(Dungeon.level instanceof RegularLevel)){
+			return teleportInNonRegularLevel( hero, true );
 		}
 		
 		RegularLevel level = (RegularLevel) Dungeon.level;
@@ -166,7 +149,7 @@ public class ScrollOfTeleportation extends Scroll {
 				boolean locked = false;
 				for (Point p : r.getPoints()){
 					terr = level.map[level.pointToCell(p)];
-					if (terr == Terrain.LOCKED_DOOR || terr == Terrain.BARRICADE){
+					if (terr == Terrain.LOCKED_DOOR || terr == Terrain.CRYSTAL_DOOR || terr == Terrain.BARRICADE){
 						locked = true;
 						break;
 					}
@@ -186,7 +169,7 @@ public class ScrollOfTeleportation extends Scroll {
 		}
 		
 		if (candidates.isEmpty()){
-			teleportHero( hero );
+			return teleportChar( hero );
 		} else {
 			int pos = Random.element(candidates);
 			boolean secretDoor = false;
@@ -218,8 +201,72 @@ public class ScrollOfTeleportation extends Scroll {
 			}
 			Dungeon.observe();
 			GameScene.updateFog();
+			return true;
 		}
 		
+	}
+
+	//teleports to a random pathable location on the floor
+	//prefers not seen(optional) > not visible > visible
+	public static boolean teleportInNonRegularLevel(Char ch, boolean preferNotSeen ){
+
+		if (Char.hasProp(ch, Char.Property.IMMOVABLE)){
+			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
+			return false;
+		}
+
+		ArrayList<Integer> visibleValid = new ArrayList<>();
+		ArrayList<Integer> notVisibleValid = new ArrayList<>();
+		ArrayList<Integer> notSeenValid = new ArrayList<>();
+
+		boolean[] passable = Dungeon.level.passable;
+
+		if (Char.hasProp(ch, Char.Property.LARGE)){
+			passable = BArray.or(passable, Dungeon.level.openSpace, null);
+		}
+
+		PathFinder.buildDistanceMap(ch.pos, passable);
+
+		for (int i = 0; i < Dungeon.level.length(); i++){
+			if (PathFinder.distance[i] < Integer.MAX_VALUE
+					&& !Dungeon.level.secret[i]
+					&& Actor.findChar(i) == null){
+				if (preferNotSeen && !Dungeon.level.visited[i]){
+					notSeenValid.add(i);
+				} else if (Dungeon.level.heroFOV[i]){
+					visibleValid.add(i);
+				} else {
+					notVisibleValid.add(i);
+				}
+			}
+		}
+
+		int pos;
+
+		if (!notSeenValid.isEmpty()){
+			pos = Random.element(notSeenValid);
+		} else if (!notVisibleValid.isEmpty()){
+			pos = Random.element(notVisibleValid);
+		} else if (!visibleValid.isEmpty()){
+			pos = Random.element(visibleValid);
+		} else {
+			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
+			return false;
+		}
+
+		appear( ch, pos );
+		Dungeon.level.occupyCell( ch );
+
+		if (ch == Dungeon.hero) {
+			GLog.i( Messages.get(ScrollOfTeleportation.class, "tele") );
+
+			Dungeon.observe();
+			GameScene.updateFog();
+			Dungeon.hero.interrupt();
+		}
+
+		return true;
+
 	}
 
 	public static void appear( Char ch, int pos ) {
@@ -230,7 +277,11 @@ public class ScrollOfTeleportation extends Scroll {
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 		}
 
-		ch.move( pos );
+		if (Dungeon.level.heroFOV[ch.pos] && ch != Dungeon.hero ) {
+			CellEmitter.get(ch.pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
+		}
+
+		ch.move( pos, false );
 		if (ch.pos == pos) ch.sprite.place( pos );
 
 		if (ch.invisible == 0) {
@@ -244,7 +295,7 @@ public class ScrollOfTeleportation extends Scroll {
 	}
 	
 	@Override
-	public int price() {
-		return isKnown() ? 30 * quantity : super.price();
+	public int value() {
+		return isKnown() ? 30 * quantity : super.value();
 	}
 }

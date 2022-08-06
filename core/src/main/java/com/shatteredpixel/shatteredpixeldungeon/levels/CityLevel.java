@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.*;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Group;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.PointF;
@@ -44,14 +45,22 @@ public class CityLevel extends RegularLevel {
 		color1 = 0x4b6636;
 		color2 = 0xf2f2f2;
 	}
-	
+
+	@Override
+	public void playLevelMusic() {
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.CITY_1, Assets.Music.CITY_2, Assets.Music.CITY_2},
+				new float[]{1, 1, 0.5f},
+				false);
+	}
+
 	@Override
 	protected int standardRooms(boolean forceMax) {
-		if (forceMax) return 10;
-		//7 to 10, average 8.0
-		return 7+Dungeon.chances(new float[]{4, 3, 2, 1});
+		if (forceMax) return 8;
+		//6 to 8, average 7
+		return 6+Random.chances(new float[]{1, 3, 1});
 	}
-	
+
 	@Override
 	protected int specialRooms(boolean forceMax) {
 		if (forceMax) return 3;
@@ -82,7 +91,7 @@ public class CityLevel extends RegularLevel {
 		return new Class[]{
 				FrostTrap.class, StormTrap.class, CorrosionTrap.class, BlazingTrap.class, DisintegrationTrap.class,
 				RockfallTrap.class, FlashingTrap.class, GuardianTrap.class, WeakeningTrap.class,
-				DisarmingTrap.class, SummoningTrap.class, WarpingTrap.class, CursingTrap.class, PitfallTrap.class, DistortionTrap.class };
+				DisarmingTrap.class, SummoningTrap.class, WarpingTrap.class, CursingTrap.class, PitfallTrap.class, DistortionTrap.class, GatewayTrap.class, GeyserTrap.class };
 	}
 
 	@Override
@@ -90,7 +99,7 @@ public class CityLevel extends RegularLevel {
 		return new float[]{
 				4, 4, 4, 4, 4,
 				2, 2, 2, 2,
-				1, 1, 1, 1, 1, 1 };
+				1, 1, 1, 1, 1, 1, 1, 1 };
 	}
 	
 	@Override
@@ -149,11 +158,11 @@ public class CityLevel extends RegularLevel {
 		}
 	}
 	
-	private static class Smoke extends Emitter {
+	public static class Smoke extends Emitter {
 		
 		private int pos;
-		
-		private static final Emitter.Factory factory = new Factory() {
+
+		public static final Emitter.Factory factory = new Factory() {
 			
 			@Override
 			public void emit( Emitter emitter, int index, float x, float y ) {

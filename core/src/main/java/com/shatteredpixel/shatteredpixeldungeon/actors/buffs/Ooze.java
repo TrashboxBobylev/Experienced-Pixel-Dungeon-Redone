@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -52,12 +52,7 @@ public class Ooze extends Buff {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		//pre-0.7.0
-		if (bundle.contains( LEFT )) {
-			left = bundle.getFloat(LEFT);
-		} else {
-			left = 20;
-		}
+		left = bundle.getFloat(LEFT);
 	}
 	
 	@Override
@@ -69,7 +64,12 @@ public class Ooze extends Buff {
 	public float iconFadePercent() {
 		return Math.max(0, (DURATION - left) / DURATION);
 	}
-	
+
+	@Override
+	public String iconTextDisplay() {
+		return Integer.toString((int)left);
+	}
+
 	@Override
 	public String toString() {
 		return Messages.get(this, "name");
@@ -92,10 +92,14 @@ public class Ooze extends Buff {
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
-			if (Dungeon.cycle > 0 || Dungeon.depth > 4)
-				target.damage( Dungeon.escalatingDepth()/5, this );
-			else if (Random.Int(2) == 0 && Dungeon.depth < 4)
-				target.damage( 1, this );
+			if (Dungeon.scalingDepth() > 5) {
+				target.damage(1 + Dungeon.scalingDepth() / 5, this);
+			} else if (Dungeon.scalingDepth() == 5){
+				target.damage(1, this); //1 dmg per turn vs Goo
+			} else if (Random.Int(2) == 0) {
+				target.damage(1, this); //0.5 dmg per turn in sewers
+			}
+
 			if (!target.isAlive() && target == Dungeon.hero) {
 				Dungeon.fail( getClass() );
 				GLog.n( Messages.get(this, "ondeath") );

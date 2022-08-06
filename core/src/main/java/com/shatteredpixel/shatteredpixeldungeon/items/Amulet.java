@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,11 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AmuletScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Game;
@@ -50,7 +53,11 @@ public class Amulet extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		actions.add( AC_END );
+		if (hero.buff(AscensionChallenge.class) != null){
+			actions.clear();
+		} else {
+			actions.add(AC_END);
+		}
 		return actions;
 	}
 	
@@ -65,12 +72,11 @@ public class Amulet extends Item {
 	}
 	
 	@Override
-	public boolean doPickUp( Hero hero ) {
-		if (super.doPickUp( hero )) {
+	public boolean doPickUp(Hero hero, int pos) {
+		if (super.doPickUp( hero, pos )) {
 			
 			if (!Statistics.amuletObtained) {
 				Statistics.amuletObtained = true;
-				Badges.validateVictory();
 				hero.spend(-TIME_TO_PICK_UP);
 
 				//add a delayed actor here so pickup behaviour can fully process.
@@ -91,13 +97,24 @@ public class Amulet extends Item {
 	}
 	
 	private void showAmuletScene( boolean showText ) {
-		try {
-			Dungeon.saveAll();
-			AmuletScene.noText = !showText;
-			Game.switchScene( AmuletScene.class );
-		} catch (IOException e) {
-			ShatteredPixelDungeon.reportException(e);
-		}
+		AmuletScene.noText = !showText;
+		Game.switchScene( AmuletScene.class, new Game.SceneChangeCallback() {
+			@Override
+			public void beforeCreate() {
+
+			}
+
+			@Override
+			public void afterCreate() {
+				Badges.validateVictory();
+				Badges.validateChampion(Challenges.activeChallenges());
+				try {
+					Dungeon.saveAll();
+				} catch (IOException e) {
+					ShatteredPixelDungeon.reportException(e);
+				}
+			}
+		});
 	}
 	
 	@Override
@@ -110,4 +127,16 @@ public class Amulet extends Item {
 		return false;
 	}
 
+	@Override
+	public String desc() {
+		String desc = super.desc();
+
+		if (Dungeon.hero.buff(AscensionChallenge.class) == null){
+			desc += "\n\n" + Messages.get(this, "desc_origins");
+		} else {
+			desc += "\n\n" + Messages.get(this, "desc_ascent");
+		}
+
+		return desc;
+	}
 }

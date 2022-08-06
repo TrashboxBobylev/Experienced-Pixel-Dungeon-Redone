@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
@@ -52,7 +53,7 @@ public class PrismaticImage extends NPC {
 	{
 		spriteClass = PrismaticSprite.class;
 		
-		HP = HT = 8;
+		HP = HT = 10;
 		defenseSkill = 1;
 		
 		alignment = Alignment.ALLY;
@@ -148,12 +149,20 @@ public class PrismaticImage extends NPC {
 	
 	@Override
 	public int damageRoll() {
-		return Dungeon.NormalIntRange( 1 + hero.lvl/8, 4 + hero.lvl/2 );
+		if (hero != null) {
+			return Dungeon.NormalIntRange( 2 + hero.lvl/4, 4 + hero.lvl/2 );
+		} else {
+			return Random.NormalIntRange( 2, 4 );
+		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return hero.attackSkill(target);
+		if (hero != null) {
+			return hero.attackSkill(target);
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override
@@ -181,8 +190,8 @@ public class PrismaticImage extends NPC {
 	@Override
 	public int defenseProc(Char enemy, int damage) {
 		damage = super.defenseProc(enemy, damage);
-		if (hero.belongings.armor != null){
-			return hero.belongings.armor.proc( enemy, this, damage );
+		if (hero != null && hero.belongings.armor() != null){
+			return hero.belongings.armor().proc( enemy, this, damage );
 		} else {
 			return damage;
 		}
@@ -192,9 +201,9 @@ public class PrismaticImage extends NPC {
 	public void damage(int dmg, Object src) {
 		
 		//TODO improve this when I have proper damage source logic
-		if (hero.belongings.armor != null && hero.belongings.armor.hasGlyph(AntiMagic.class, this)
+		if (hero != null && hero.belongings.armor() != null && hero.belongings.armor().hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
-			dmg -= AntiMagic.drRoll(hero.belongings.armor.buffedLvl());
+			dmg -= AntiMagic.drRoll(hero.belongings.armor().buffedLvl());
 		}
 		
 		super.damage(dmg, src);
@@ -202,8 +211,8 @@ public class PrismaticImage extends NPC {
 	
 	@Override
 	public float speed() {
-		if (hero.belongings.armor != null){
-			return hero.belongings.armor.speedFactor(this, super.speed());
+		if (hero != null && hero.belongings.armor() != null){
+			return hero.belongings.armor().speedFactor(this, super.speed());
 		}
 		return super.speed();
 	}
@@ -234,8 +243,8 @@ public class PrismaticImage extends NPC {
 	public boolean isImmune(Class effect) {
 		if (effect == Burning.class
 				&& hero != null
-				&& hero.belongings.armor != null
-				&& hero.belongings.armor.hasGlyph(Brimstone.class, this)){
+				&& hero.belongings.armor() != null
+				&& hero.belongings.armor().hasGlyph(Brimstone.class, this)){
 			return true;
 		}
 		return super.isImmune(effect);
@@ -245,7 +254,7 @@ public class PrismaticImage extends NPC {
 		immunities.add( ToxicGas.class );
 		immunities.add( CorrosiveGas.class );
 		immunities.add( Burning.class );
-		immunities.add( Corruption.class );
+		immunities.add( AllyBuff.class );
 	}
 	
 	private class Wandering extends Mob.Wandering{

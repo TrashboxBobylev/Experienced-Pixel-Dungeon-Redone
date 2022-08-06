@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -54,8 +54,8 @@ public class Speck extends Image {
 	
 	public static final int DISCOVER    = 101;
 	public static final int EVOKE       = 102;
-	public static final int MASTERY     = 103;
-	public static final int KIT         = 104;
+	public static final int MASK        = 103;
+	public static final int CROWN       = 104;
 	public static final int RATTLE      = 105;
 	public static final int JET         = 106;
 	public static final int TOXIC       = 107;
@@ -92,6 +92,22 @@ public class Speck extends Image {
 		
 		origin.set( SIZE / 2f );
 	}
+
+	public Speck image( int type ){
+		reset(0, 0, 0, type);
+
+		left = lifespan = Float.POSITIVE_INFINITY;
+		this.type = -1;
+
+		resetColor();
+		scale.set( 1 );
+		speed.set( 0 );
+		acc.set( 0 );
+		angle = 0;
+		angularSpeed = 0;
+
+		return this;
+	}
 	
 	public void reset( int index, float x, float y, int type ) {
 		revive();
@@ -103,8 +119,8 @@ public class Speck extends Image {
 			frame( film.get( LIGHT ) );
 			break;
 		case EVOKE:
-		case MASTERY:
-		case KIT:
+		case MASK:
+		case CROWN:
 		case FORGE:
 			frame( film.get( STAR ) );
 			break;
@@ -171,19 +187,19 @@ public class Speck extends Image {
 			angularSpeed = Random.Float( -180, +180 );
 			lifespan = 1f;
 			break;
-			
-		case KIT:
+
+		case MASK:
 			speed.polar( index * 3.1415926f / 5, 50 );
 			acc.set( -speed.x, -speed.y );
 			angle = index * 36;
 			angularSpeed = 360;
 			lifespan = 1f;
 			break;
-			
-		case MASTERY:
-			speed.set( Random.Int( 2 ) == 0 ? Random.Float( -128, -64 ) : Random.Float( +64, +128 ), 0 );
-			angularSpeed = speed.x < 0 ? -180 : +180;
-			acc.set( -speed.x, 0 );
+
+		case CROWN:
+			acc.set( index % 2 == 0 ? Random.Float( -512, -256 ) : Random.Float( +256, +512 ), 0 );
+			angularSpeed = acc.x < 0 ? -180 : +180;
+			//acc.set( -speed.x, 0 );
 			lifespan = 0.5f;
 			break;
 
@@ -262,7 +278,7 @@ public class Speck extends Image {
 			break;
 			
 		case HEART:
-			speed.set( Random.Int( -10, +10 ), -40 );
+			speed.set( Random.IntRange( -10, +10 ), -40 );
 			angularSpeed = Random.Float( -45, +45 );
 			lifespan = 1f;
 			break;
@@ -389,8 +405,8 @@ public class Speck extends Image {
 				am = p < 0.2f ? p * 5f : (1 - p) * 1.25f;
 				break;
 				
-			case KIT:
-			case MASTERY:
+			case MASK:
+			case CROWN:
 				am = 1 - p * p;
 				break;
 				

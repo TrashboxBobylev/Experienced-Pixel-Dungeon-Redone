@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
@@ -91,14 +92,15 @@ public class TalismanOfForesight extends Artifact {
 	}
 	
 	@Override
-	public void charge(Hero target) {
+	public void charge(Hero target, float amount) {
 		if (charge < chargeCap){
-			charge += 2f;
+			charge += Math.round(2*amount);
 			if (charge >= chargeCap) {
 				charge = chargeCap;
 				partialCharge = 0;
-				GLog.p( Messages.get(Foresight.class, "full_charge") );
+				GLog.p( Messages.get(TalismanOfForesight.class, "full_charge") );
 			}
+			updateQuickslot();
 		}
 	}
 
@@ -160,20 +162,16 @@ public class TalismanOfForesight extends Artifact {
 					}
 
 					if (Dungeon.level.secret[cell]) {
-						Dungeon.level.discover(cell);
+						int oldValue = Dungeon.level.map[cell];
+						GameScene.discoverTile(cell, oldValue);
+						Dungeon.level.discover( cell );
+						ScrollOfMagicMapping.discover(cell);
+						noticed = true;
 
-						if (Dungeon.level.heroFOV[cell]) {
-							int oldValue = Dungeon.level.map[cell];
-							GameScene.discoverTile(cell, Dungeon.level.map[cell]);
-							Dungeon.level.discover( cell );
-							ScrollOfMagicMapping.discover(cell);
-							noticed = true;
-
-							if (oldValue == Terrain.SECRET_TRAP){
-								earnedExp += 10;
-							} else if (oldValue == Terrain.SECRET_DOOR){
-								earnedExp += 100;
-							}
+						if (oldValue == Terrain.SECRET_TRAP){
+							earnedExp += 10;
+						} else if (oldValue == Terrain.SECRET_DOOR){
+							earnedExp += 100;
 						}
 					}
 
@@ -198,8 +196,8 @@ public class TalismanOfForesight extends Artifact {
 				}
 
 				exp += earnedExp;
-				if (exp >= 50 + 50*level() && level() < levelCap) {
-					exp -= 50 + 50*level();
+				if (exp >= 100 + 50*level() && level() < levelCap) {
+					exp -= 100 + 50*level();
 					upgrade();
 					GLog.p( Messages.get(TalismanOfForesight.class, "levelup") );
 				}
@@ -212,13 +210,19 @@ public class TalismanOfForesight extends Artifact {
 					partialCharge ++;
 					charge --;
 				}
+				while (charge < 0){
+					charge++;
+					partialCharge--;
+				}
+				Talent.onArtifactUsed(Dungeon.hero);
 				updateQuickslot();
 				Dungeon.observe();
 				Dungeon.hero.checkVisibleMobs();
 				GameScene.updateFog();
 
 				curUser.sprite.zap(target);
-				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+				curUser.spendAndNext(Actor.TICK);
+				Sample.INSTANCE.play(Assets.Sounds.SCAN);
 				if (noticed) Sample.INSTANCE.play(Assets.Sounds.SECRET);
 
 			}
@@ -307,7 +311,6 @@ public class TalismanOfForesight extends Artifact {
 				float chargeGain = (0.05f+(level()*0.005f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
-                if (partialCharge <= 0) partialCharge = 1;
 
 				if (partialCharge > 1 && charge < chargeCap) {
 					partialCharge--;
@@ -323,7 +326,10 @@ public class TalismanOfForesight extends Artifact {
 		}
 
 		public void charge(int boost){
-			charge = Math.min((charge+boost), chargeCap);
+			if (!cursed) {
+				charge = Math.min((charge + boost), chargeCap);
+				updateQuickslot();
+			}
 		}
 
 		@Override
@@ -348,9 +354,8 @@ public class TalismanOfForesight extends Artifact {
 	public static class CharAwareness extends FlavourBuff {
 
 		public int charID;
-		public int depth = Dungeon.depth;
 
-		private static final String ID = "id";
+		private static final String CHAR_ID = "char_id";
 
 		@Override
 		public void detach() {
@@ -362,13 +367,13 @@ public class TalismanOfForesight extends Artifact {
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			charID = bundle.getInt(ID);
+			charID = bundle.getInt(CHAR_ID);
 		}
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
-			bundle.put(ID, charID);
+			bundle.put(CHAR_ID, charID);
 		}
 
 	}

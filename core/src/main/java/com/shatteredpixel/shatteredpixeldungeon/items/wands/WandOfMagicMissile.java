@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,9 +36,9 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class WandOfMagicMissile extends DamageWand {
@@ -61,7 +61,7 @@ public class WandOfMagicMissile extends DamageWand {
 		Char ch = Actor.findChar( bolt.collisionPos );
 		if (ch != null) {
 
-			processSoulMark(ch, chargesPerCast());
+			wandProc(ch, chargesPerCast());
 			ch.damage(damageRoll(), this);
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
 
@@ -70,7 +70,7 @@ public class WandOfMagicMissile extends DamageWand {
 			//apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
 			for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)){
 				if (wandCharger.wand().buffedLvl() < buffedLvl() || curUser.buff(MagicCharge.class) != null){
-					Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setLevel(buffedLvl());
+					Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
 					break;
 				}
 			}
@@ -85,7 +85,7 @@ public class WandOfMagicMissile extends DamageWand {
 		SpellSprite.show(attacker, SpellSprite.CHARGE);
 		for (Wand.Charger c : attacker.buffs(Wand.Charger.class)){
 			if (c.wand() != this){
-				c.gainCharge(0.33f);
+				c.gainCharge(0.5f);
 			}
 		}
 
@@ -105,24 +105,35 @@ public class WandOfMagicMissile extends DamageWand {
 		public static float DURATION = 4f;
 
 		private int level = 0;
+		private Wand wandJustApplied; //we don't bundle this as it's only used right as the buff is applied
 
-		public void setLevel(int level){
-			this.level = Math.max(level, this.level);
+		public void setup(Wand wand){
+			if (level < wand.buffedLvl()){
+				this.level = wand.buffedLvl();
+				this.wandJustApplied = wand;
+			}
 		}
 
 		@Override
 		public void detach() {
 			super.detach();
-			QuickSlotButton.refresh();
+			updateQuickslot();
 		}
 
 		public int level(){
 			return this.level;
 		}
 
+		//this is used briefly so that a wand of magic missile can't clear the buff it just applied
+		public Wand wandJustApplied(){
+			Wand result = this.wandJustApplied;
+			this.wandJustApplied = null;
+			return result;
+		}
+
 		@Override
 		public int icon() {
-			return BuffIndicator.RECHARGING;
+			return BuffIndicator.UPGRADE;
 		}
 
 		@Override
@@ -143,6 +154,20 @@ public class WandOfMagicMissile extends DamageWand {
 		@Override
 		public String desc() {
 			return Messages.get(this, "desc", level(), dispTurns());
+		}
+
+		private static final String LEVEL = "level";
+
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(LEVEL, level);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			level = bundle.getInt(LEVEL);
 		}
 	}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,7 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -72,7 +74,10 @@ public class Blacksmith extends NPC {
 	
 	@Override
 	protected boolean act() {
-		throwItem();
+		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
+			die(null);
+			return true;
+		}
 		if (Dungeon.level.heroFOV[pos] && !Quest.reforged){
 			Notes.add( Notes.Landmark.TROLL );
 		}
@@ -109,7 +114,7 @@ public class Blacksmith extends NPC {
 			});
 			return true;
 		}
-		
+
 		if (!Quest.given) {
 			
 			Game.runOnRenderThread(new Callback() {
@@ -124,7 +129,8 @@ public class Blacksmith extends NPC {
 							
 							Quest.given = true;
 							Quest.completed = false;
-							
+							Notes.add( Notes.Landmark.TROLL );
+
 							Pickaxe pick = new Pickaxe();
 							if (pick.doPickUp( Dungeon.hero )) {
 								GLog.i( Messages.get(Dungeon.hero, "you_now_have", pick.name() ));
@@ -135,7 +141,7 @@ public class Blacksmith extends NPC {
 					} );
 				}
 			});
-			
+
 		} else if (!Quest.completed) {
 			if (Quest.alternative) {
 				
@@ -153,6 +159,7 @@ public class Blacksmith extends NPC {
 					
 					Quest.completed = true;
 					Quest.reforged = false;
+					Statistics.questScores[2] = 3000;
 				}
 				
 			} else {
@@ -173,6 +180,7 @@ public class Blacksmith extends NPC {
 					
 					Quest.completed = true;
 					Quest.reforged = false;
+					Statistics.questScores[2] = 3000;
 				}
 				
 			}
@@ -220,7 +228,11 @@ public class Blacksmith extends NPC {
 			return Messages.get(Blacksmith.class, "un_ided");
 		}
 		
-		if (item1.cursed || item2.cursed) {
+		if (item1.cursed || item2.cursed ||
+				(item1 instanceof Armor && ((Armor) item1).hasCurseGlyph()) ||
+				(item2 instanceof Armor && ((Armor) item2).hasCurseGlyph()) ||
+				(item1 instanceof Weapon && ((Weapon) item1).hasCurseEnchant()) ||
+				(item2 instanceof Weapon && ((Weapon) item2).hasCurseEnchant())) {
 			return Messages.get(Blacksmith.class, "cursed");
 		}
 		
@@ -298,7 +310,7 @@ public class Blacksmith extends NPC {
 		Dungeon.hero.spendAndNext( 2f );
 		Badges.validateItemLevelAquired( first );
 		Item.updateQuickslot();
-		
+
 		Notes.remove( Notes.Landmark.TROLL );
 	}
 	

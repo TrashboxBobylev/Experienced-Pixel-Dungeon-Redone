@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -42,16 +42,16 @@ public class RotDart extends TippedDart {
 		
 		if (defender.properties().contains(Char.Property.BOSS)
 				|| defender.properties().contains(Char.Property.MINIBOSS)){
-			Buff.affect(defender, Corrosion.class).set(5f, Dungeon.escalatingDepth()/3);
+			Buff.affect(defender, Corrosion.class).set(5f, Dungeon.scalingDepth()/3);
 		} else{
-			Buff.affect(defender, Corrosion.class).set(10f, Dungeon.escalatingDepth());
+			Buff.affect(defender, Corrosion.class).set(10f, Dungeon.scalingDepth());
 		}
 		
 		return super.proc(attacker, defender, damage);
 	}
 	
 	@Override
-	protected float durabilityPerUse() {
-		return 100f;
+	public float durabilityPerUse() {
+		return 20f;
 	}
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -54,6 +54,7 @@ public class BeaconOfReturning extends Spell {
 	}
 	
 	public int returnDepth	= -1;
+	public int returnBranch	= 0;
 	public int returnPos;
 	
 	@Override
@@ -62,7 +63,8 @@ public class BeaconOfReturning extends Spell {
 		if (returnDepth == -1){
 			setBeacon(hero);
 		} else {
-			GameScene.show(new WndOptions(Messages.titleCase(name()),
+			GameScene.show(new WndOptions(new ItemSprite(this),
+					Messages.titleCase(name()),
 					Messages.get(BeaconOfReturning.class, "wnd_body"),
 					Messages.get(BeaconOfReturning.class, "wnd_set"),
 					Messages.get(BeaconOfReturning.class, "wnd_return")){
@@ -96,6 +98,7 @@ public class BeaconOfReturning extends Spell {
 	
 	private void setBeacon(Hero hero ){
 		returnDepth = Dungeon.depth;
+		returnBranch = Dungeon.branch;
 		returnPos = hero.pos;
 		
 		hero.spend( 1f );
@@ -109,48 +112,53 @@ public class BeaconOfReturning extends Spell {
 	}
 	
 	private void returnBeacon( Hero hero ){
-		if (Dungeon.bossLevel()) {
-			GLog.w( Messages.get(this, "preventing") );
-			return;
-		}
 		
-		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
-			Char ch = Actor.findChar(hero.pos + PathFinder.NEIGHBOURS8[i]);
-			if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
-				GLog.w( Messages.get(this, "creatures") );
-				return;
+		if (returnDepth == Dungeon.depth && returnBranch == Dungeon.branch) {
+
+			Char moving = Actor.findChar(returnPos);
+			if (moving != null){
+				moving.pos = returnPos+1;
 			}
-		}
-		
-		if (returnDepth == Dungeon.depth) {
-			ScrollOfTeleportation.appear( hero, returnPos );
-			for(Mob m : Dungeon.level.mobs){
-				if (m.pos == hero.pos){
-					//displace mob
+
+			if (ScrollOfTeleportation.teleportToLocation(hero, returnPos)){
+				if (moving != null){
+					moving.pos = returnPos;
 					for(int i : PathFinder.NEIGHBOURS8){
-						if (Actor.findChar(m.pos+i) == null && Dungeon.level.passable[m.pos + i]){
-							m.pos += i;
-							m.sprite.point(m.sprite.worldToCamera(m.pos));
+						if (Actor.findChar(moving.pos+i) == null
+								&& Dungeon.level.passable[moving.pos + i]
+								&& (!Char.hasProp(moving, Char.Property.LARGE) || Dungeon.level.openSpace[moving.pos + i])){
+							moving.pos += i;
+							moving.sprite.point(moving.sprite.worldToCamera(moving.pos));
 							break;
 						}
 					}
 				}
+			} else {
+				if (moving != null) {
+					moving.pos = returnPos;
+				}
+				return;
 			}
-			Dungeon.level.occupyCell(hero );
-			Dungeon.observe();
-			GameScene.updateFog();
+
 		} else {
-			
-			Buff buff = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
-			if (buff != null) buff.detach();
-			buff = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
-			if (buff != null) buff.detach();
+
+			if (!Dungeon.interfloorTeleportAllowed()) {
+				GLog.w( Messages.get(this, "preventing") );
+				return;
+			}
+
+			TimekeepersHourglass.timeFreeze timeFreeze = Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class);
+			if (timeFreeze != null) timeFreeze.disarmPressedTraps();
+			Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
+			if (timeBubble != null) timeBubble.disarmPressedTraps();
 			
 			InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 			InterlevelScene.returnDepth = returnDepth;
+			InterlevelScene.returnBranch = returnBranch;
 			InterlevelScene.returnPos = returnPos;
 			Game.switchScene( InterlevelScene.class );
 		}
+		hero.spendAndNext( 1f );
 		detach(hero.belongings.backpack);
 	}
 	
@@ -190,7 +198,7 @@ public class BeaconOfReturning extends Spell {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients, divided by output quantity
 		return Math.round(quantity * ((50 + 40) / 5f));
 	}
@@ -201,7 +209,7 @@ public class BeaconOfReturning extends Spell {
 			inputs =  new Class[]{ScrollOfPassage.class, ArcaneCatalyst.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 10;
+			cost = 6;
 			
 			output = BeaconOfReturning.class;
 			outQuantity = 5;

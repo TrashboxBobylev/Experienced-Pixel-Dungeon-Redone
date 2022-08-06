@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -39,7 +39,7 @@ public class PoisonDart extends TippedDart {
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 		
-		Buff.affect( defender, Poison.class ).set( 3 + Dungeon.escalatingDepth() / 3 );
+		Buff.affect( defender, Poison.class ).set( 3 + Dungeon.scalingDepth() / 2 );
 		
 		return super.proc(attacker, defender, damage);
 	}

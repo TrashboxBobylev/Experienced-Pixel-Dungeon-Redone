@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -142,7 +142,7 @@ public class DistortionTrap extends Trap{
 		for (Mob mob : mobs){
 			//manually trigger traps first to avoid sfx spam
 			if ((t = Dungeon.level.traps.get(mob.pos)) != null && t.active){
-				t.disarm();
+				if (t.disarmedByActivation) t.disarm();
 				t.reveal();
 				t.activate();
 			}

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -221,6 +221,10 @@ public class Blob extends Actor {
 		cur = new int[Dungeon.level.length()];
 		off = new int[Dungeon.level.length()];
 	}
+
+	public void onBuildFlagMaps( Level l ){
+		//do nothing by default, only some blobs affect flags
+	}
 	
 	public String tileDesc() {
 		return null;
@@ -237,6 +241,10 @@ public class Blob extends Actor {
 		
 		if (gas == null) {
 			gas = Reflection.newInstance(type);
+			//this ensures that gasses do not get an 'extra turn' if they are added by a mob or buff
+			if (Actor.curActorPriority() < gas.actPriority) {
+				gas.spend(1f);
+			}
 		}
 		
 		if (gas != null){

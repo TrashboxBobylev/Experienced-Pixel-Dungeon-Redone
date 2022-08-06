@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,7 +36,7 @@ public class StewedMeat extends Food {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 8 * quantity;
 	}
 	
@@ -45,7 +45,7 @@ public class StewedMeat extends Food {
 			inputs =  new Class[]{MysteryMeat.class};
 			inQuantity = new int[]{1};
 			
-			cost = 2;
+			cost = 1;
 			
 			output = StewedMeat.class;
 			outQuantity = 1;
@@ -57,7 +57,7 @@ public class StewedMeat extends Food {
 			inputs =  new Class[]{MysteryMeat.class};
 			inQuantity = new int[]{2};
 			
-			cost = 3;
+			cost = 2;
 			
 			output = StewedMeat.class;
 			outQuantity = 2;
@@ -72,7 +72,7 @@ public class StewedMeat extends Food {
 			inputs =  new Class[]{MysteryMeat.class};
 			inQuantity = new int[]{3};
 			
-			cost = 4;
+			cost = 2;
 			
 			output = StewedMeat.class;
 			outQuantity = 3;

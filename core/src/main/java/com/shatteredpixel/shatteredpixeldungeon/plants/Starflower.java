@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Overload;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Starflower extends Plant {
@@ -46,8 +48,10 @@ public class Starflower extends Plant {
 		if (ch != null) {
 			Buff.prolong(ch, Bless.class, Bless.DURATION);
             Buff.prolong(ch, Overload.class, Bless.DURATION);
+			new Flare( 6, 32 ).color(0xFFFF00, true).show( ch.sprite, 2f );
 			if (ch instanceof Hero && ((Hero) ch).isSubclass(HeroSubClass.WARDEN)){
 				Buff.prolong(ch, Recharging.class, Recharging.DURATION);
+				SpellSprite.show( ch, SpellSprite.CHARGE );
 			}
 		}
 
@@ -62,8 +66,13 @@ public class Starflower extends Plant {
 		}
 		
 		@Override
-		public int price() {
+		public int value() {
 			return 30 * quantity;
+		}
+
+		@Override
+		public int energyVal() {
+			return 3 * quantity;
 		}
 	}
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,9 +30,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -53,125 +53,20 @@ import java.util.ArrayList;
 public class ScrollOfUpgrade extends InventoryScroll {
 
     public static final String AC_UPGRADE = "UPGRADE";
-	
+
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_UPGRADE;
-		mode = WndBag.Mode.UPGRADEABLE;
+		preferredBag = Belongings.Backpack.class;
+
+		unique = true;
 	}
 
-    @Override
-    public void execute(Hero hero, String action) {
-        super.execute(hero, action);
+	@Override
+	protected boolean usableOnItem(Item item) {
+		return item.isUpgradable();
+	}
 
-        if (action.equals(AC_UPGRADE)){
-            if (hero.buff(MagicImmune.class) != null){
-                GLog.w( Messages.get(this, "no_magic") );
-            } else if (hero.buff( Blindness.class ) != null) {
-                GLog.w( Messages.get(this, "blinded") );
-            } else if (hero.buff(UnstableSpellbook.bookRecharge.class) != null
-                    && hero.buff(UnstableSpellbook.bookRecharge.class).isCursed()){
-                GLog.n( Messages.get(this, "cursed") );
-            } else {
-                curUser = hero;
-                curItem = detachAll( hero.belongings.backpack );
-                GameScene.selectItem( itemSelector2, mode, inventoryTitle );
-            }
-        }
-    }
-
-    @Override
-    public ArrayList<String> actions(Hero hero) {
-        ArrayList<String> actions = super.actions( hero );
-        if (!anonymous && isIdentified()) actions.add(AC_UPGRADE);
-        return actions;
-    }
-
-    protected static WndBag.Listener itemSelector2 = new WndBag.Listener() {
-        @Override
-        public void onSelect( Item item ) {
-
-            //FIXME this safety check shouldn't be necessary
-            //it would be better to eliminate the curItem static variable.
-            if (!(curItem instanceof InventoryScroll)){
-                return;
-            }
-
-            if (item != null) {
-
-
-                ((InventoryScroll)curItem).readAnimation();
-                upgrade( curUser );
-
-                Degrade.detach( curUser, Degrade.class );
-
-                //logic for telling the user when item properties change from upgrades
-                //...yes this is rather messy
-                if (item instanceof Weapon){
-                    Weapon w = (Weapon) item;
-                    boolean wasCursed = w.cursed;
-                    boolean hadCursedEnchant = w.hasCurseEnchant();
-                    boolean hadGoodEnchant = w.hasGoodEnchant();
-
-                    for (int i = 0; i < curItem.quantity(); i++) w.upgrade();
-
-                    if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
-                        removeCurse( Dungeon.hero );
-                    } else if (w.cursedKnown && wasCursed && !w.cursed){
-                        weakenCurse( Dungeon.hero );
-                    }
-                    if (hadGoodEnchant && !w.hasGoodEnchant()){
-                        GLog.w( Messages.get(Weapon.class, "incompatible") );
-                    }
-
-                } else if (item instanceof Armor){
-                    Armor a = (Armor) item;
-                    boolean wasCursed = a.cursed;
-                    boolean hadCursedGlyph = a.hasCurseGlyph();
-                    boolean hadGoodGlyph = a.hasGoodGlyph();
-
-                    for (int i = 0; i < curItem.quantity(); i++) a.upgrade();
-
-                    if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
-                        removeCurse( Dungeon.hero );
-                    } else if (a.cursedKnown && wasCursed && !a.cursed){
-                        weakenCurse( Dungeon.hero );
-                    }
-                    if (hadGoodGlyph && !a.hasGoodGlyph()){
-                        GLog.w( Messages.get(Armor.class, "incompatible") );
-                    }
-
-                } else if (item instanceof Wand || item instanceof Ring) {
-                    boolean wasCursed = item.cursed;
-
-                    for (int i = 0; i < curItem.quantity(); i++) item.upgrade();
-
-                    if (wasCursed && !item.cursed){
-                        removeCurse( Dungeon.hero );
-                    }
-
-                } else {
-                    for (int i = 0; i < curItem.quantity(); i++) item.upgrade();
-                }
-
-                Badges.validateItemLevelAquired( item );
-                Statistics.upgradesUsed += curItem.quantity();
-                Badges.validateMageUnlock();
-                Sample.INSTANCE.play( Assets.Sounds.READ );
-                Invisibility.dispel();
-
-            } else if (identifiedByUse && !((Scroll)curItem).anonymous) {
-
-                ((InventoryScroll)curItem).confirmCancelation();
-
-            } else if (!((Scroll)curItem).anonymous) {
-
-                curItem.collect( curUser.belongings.backpack );
-
-            }
-        }
-    };
-
-    @Override
+	@Override
 	protected void onItemSelected( Item item ) {
 
 		upgrade( curUser );
@@ -219,14 +114,16 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 			item.upgrade();
 
-			if (wasCursed && !item.cursed){
+			if (item.cursedKnown && wasCursed && !item.cursed){
 				removeCurse( Dungeon.hero );
 			}
 
 		} else {
 			item.upgrade();
 		}
-		
+
+		Talent.onUpgradeScrollUsed( Dungeon.hero );
+
 		Badges.validateItemLevelAquired( item );
 		Statistics.upgradesUsed++;
 		Badges.validateMageUnlock();
@@ -247,12 +144,12 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	}
 	
 	@Override
-	public void empoweredRead() {
-		//does nothing for now, this should never happen.
+	public int value() {
+		return isKnown() ? 50 * quantity : super.value();
 	}
-	
+
 	@Override
-	public int price() {
-		return isKnown() ? 50 * quantity : super.price();
+	public int energyVal() {
+		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -33,31 +33,59 @@ public class DebugUpdates extends UpdateService {
 	private static AvailableUpdateData debugUpdateInfo;
 
 	@Override
-	public void checkForUpdate(boolean useMetered, UpdateResultCallback callback) {
+	public boolean isUpdateable() {
+		return false; //turn on to debug update prompts
+	}
+
+	@Override
+	public boolean supportsBetaChannel() {
+		return true;
+	}
+
+	@Override
+	public void checkForUpdate(boolean useMetered, boolean includeBetas, UpdateResultCallback callback) {
 
 		if (!useMetered && !Game.platform.connectedToUnmeteredNetwork()){
 			callback.onConnectionFailed();
 			return;
 		}
 
-		//turn on to test update UI
-		if (false){
-			debugUpdateInfo = new AvailableUpdateData();
-			debugUpdateInfo.versionCode = Game.versionCode+1;
-			debugUpdateInfo.URL = "http://www.google.com";
+		debugUpdateInfo = new AvailableUpdateData();
+		debugUpdateInfo.versionCode = Game.versionCode+1;
+		debugUpdateInfo.URL = "http://www.google.com";
 
-			callback.onUpdateAvailable(debugUpdateInfo);
-		} else {
-			debugUpdateInfo = null;
-
-			callback.onNoUpdateFound();
-		}
+		callback.onUpdateAvailable(debugUpdateInfo);
 
 	}
 
 	@Override
 	public void initializeUpdate(AvailableUpdateData update) {
-		DeviceCompat.openURI( update.URL );
+		Game.platform.openURI( update.URL );
 	}
 
+	@Override
+	public boolean isInstallable() {
+		return false; //turn on to test install prompts
+	}
+
+	@Override
+	public void initializeInstall() {
+		//does nothing
+	}
+
+	@Override
+	public boolean supportsReviews() {
+		return false; //turn on to debug review prompts
+	}
+
+	@Override
+	public void initializeReview(ReviewResultCallback callback) {
+		//does nothing
+		callback.onComplete();
+	}
+
+	@Override
+	public void openReviewURI() {
+		Game.platform.openURI("https://www.google.com/");
+	}
 }

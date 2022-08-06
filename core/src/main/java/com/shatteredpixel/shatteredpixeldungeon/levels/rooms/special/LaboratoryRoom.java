@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.AlchemyPage;
@@ -65,11 +66,18 @@ public class LaboratoryRoom extends SpecialRoom {
 		Painter.set( level, pot, Terrain.ALCHEMY );
 		
 		int chapter = 1 + Dungeon.escalatingDepth()/5;
-		Blob.seed( pot.x + level.width() * pot.y, 1 + chapter*10 + Random.NormalIntRange(0, 10), Alchemy.class, level );
-		
-		int n = Random.NormalIntRange( 1, 3 );
+		Blob.seed( pot.x + level.width() * pot.y, 1, Alchemy.class, level );
+
+		int pos;
+		do {
+			pos = level.pointToCell(random());
+		} while (
+				level.map[pos] != Terrain.EMPTY_SP ||
+						level.heaps.get( pos ) != null);
+		level.drop( new EnergyCrystal().random(), pos );
+
+		int n = Random.NormalIntRange( 1, 2 );
 		for (int i=0; i < n; i++) {
-			int pos;
 			do {
 				pos = level.pointToCell(random());
 			} while (
@@ -79,19 +87,17 @@ public class LaboratoryRoom extends SpecialRoom {
 		}
 		
 		//guide pages
-		Collection<String> allPages = Document.ALCHEMY_GUIDE.pages();
+		Collection<String> allPages = Document.ALCHEMY_GUIDE.pageNames();
 		ArrayList<String> missingPages = new ArrayList<>();
 		for ( String page : allPages){
-			if (!Document.ALCHEMY_GUIDE.hasPage(page)){
+			if (!Document.ALCHEMY_GUIDE.isPageFound(page)){
 				missingPages.add(page);
 			}
 		}
 		
-		//4 pages in sewers, 6 in prison, 9 in caves+
+		//5 pages in sewers, 10 in prison+
 		int chapterTarget;
-		if (missingPages.size() <= 3){
-			chapterTarget = 3;
-		} else if (missingPages.size() <= 5){
+		if (missingPages.size() <= 5){
 			chapterTarget = 2;
 		} else {
 			chapterTarget = 1;
@@ -105,7 +111,6 @@ public class LaboratoryRoom extends SpecialRoom {
 			for (int i = 0; i < pagesToDrop; i++) {
 				AlchemyPage p = new AlchemyPage();
 				p.page(missingPages.remove(0));
-				int pos;
 				do {
 					pos = level.pointToCell(random());
 				} while (
@@ -114,13 +119,9 @@ public class LaboratoryRoom extends SpecialRoom {
 				level.drop(p, pos);
 			}
 		}
-		
-		if (level instanceof RegularLevel && ((RegularLevel)level).hasPitRoom()){
-			entrance.set( Door.Type.REGULAR );
-		} else {
-			entrance.set( Door.Type.LOCKED );
-			level.addItemToSpawn( new IronKey( Dungeon.depth ) );
-		}
+
+		entrance.set( Door.Type.LOCKED );
+		level.addItemToSpawn( new IronKey( Dungeon.depth ) );
 		
 	}
 	

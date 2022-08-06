@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,12 +30,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class WoollyBomb extends Bomb {
 	
@@ -47,29 +50,34 @@ public class WoollyBomb extends Bomb {
 	public void explode(int cell) {
 		super.explode(cell);
 		
-		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
+		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 4 );
+		ArrayList<Integer> spawnPoints = new ArrayList<>();
 		for (int i = 0; i < PathFinder.distance.length; i++) {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-				if (Dungeon.level.insideMap(i)
-						&& Actor.findChar(i) == null
-						&& !(Dungeon.level.pit[i])) {
-					Sheep sheep = new Sheep();
-					sheep.lifespan = Dungeon.NormalIntRange( 8, 16 );
-					sheep.pos = i;
-					Dungeon.level.occupyCell(sheep);
-					GameScene.add(sheep);
-					CellEmitter.get(i).burst(Speck.factory(Speck.WOOL), 4);
-				}
+				spawnPoints.add(i);
+			}
+		}
+
+		for (int i : spawnPoints){
+			if (Dungeon.level.insideMap(i)
+					&& Actor.findChar(i) == null
+					&& !(Dungeon.level.pit[i])) {
+				Sheep sheep = new Sheep();
+				sheep.lifespan = Dungeon.bossLevel() ? 20 : 200;
+				sheep.pos = i;
+				GameScene.add(sheep);
+				Dungeon.level.occupyCell(sheep);
+				CellEmitter.get(i).burst(Speck.factory(Speck.WOOL), 4);
 			}
 		}
 		
 		Sample.INSTANCE.play(Assets.Sounds.PUFF);
-		
+		Sample.INSTANCE.play(Assets.Sounds.SHEEP);
 		
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 30);
 	}

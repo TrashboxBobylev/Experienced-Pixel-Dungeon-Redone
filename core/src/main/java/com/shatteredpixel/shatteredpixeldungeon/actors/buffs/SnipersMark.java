@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -41,15 +42,22 @@ import com.watabou.utils.Bundle;
 public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 
 	public int object = 0;
+	public int level = 0;
 
 	private static final String OBJECT    = "object";
+	private static final String LEVEL    = "level";
 
 	public static final float DURATION = 4f;
 
 	{
 		type = buffType.POSITIVE;
 	}
-	
+
+	public void set(int object, int level){
+		this.object = object;
+		this.level = level;
+	}
+
 	@Override
 	public boolean attachTo(Char target) {
 		ActionIndicator.setAction(this);
@@ -66,13 +74,14 @@ public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		bundle.put( OBJECT, object );
-
+		bundle.put( LEVEL, level );
 	}
 
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		object = bundle.getInt( OBJECT );
+		level = bundle.getInt( LEVEL );
 	}
 
 	@Override
@@ -96,7 +105,23 @@ public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 	}
 	
 	@Override
-	public Image getIcon() {
+	public String actionName() {
+		SpiritBow bow = Dungeon.hero.belongings.getItem(SpiritBow.class);
+
+		if (bow == null) return null;
+
+		switch (bow.augment){
+			case NONE: default:
+				return Messages.get(this, "action_name_snapshot");
+			case SPEED:
+				return Messages.get(this, "action_name_volley");
+			case DAMAGE:
+				return Messages.get(this, "action_name_sniper");
+		}
+	}
+
+	@Override
+	public Image actionIcon() {
 		return new ItemSprite(ItemSpriteSheet.SPIRIT_BOW, null);
 	}
 	
@@ -120,7 +145,8 @@ public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 		
 		bow.sniperSpecial = true;
 		Buff.detach(target, Preparation.class);
-		
+		bow.sniperSpecialBonusDamage = level*Dungeon.hero.pointsInTalent(Talent.SHARED_UPGRADES)/10f;
+
 		arrow.cast(hero, cell);
 		detach();
 		

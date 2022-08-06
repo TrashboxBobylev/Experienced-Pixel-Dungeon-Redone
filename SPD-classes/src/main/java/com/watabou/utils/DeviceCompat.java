@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.watabou.utils;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.SharedLibraryLoader;
 import com.watabou.noosa.Game;
 
 //TODO migrate to platformSupport class
@@ -35,43 +36,52 @@ public class DeviceCompat {
 	public static boolean supportsFullScreen(){
 		switch (Gdx.app.getType()){
 			case Android:
-				//Android 4.4 KitKat and later, this is for immersive mode
+				//Android 4.4+ supports hiding UI via immersive mode
 				return Gdx.app.getVersion() >= 19;
+			case iOS:
+				//iOS supports hiding UI via drawing into the gesture safe area
+				return Gdx.graphics.getSafeInsetBottom() != 0;
 			default:
 				//TODO implement functionality for other platforms here
 				return true;
 		}
 	}
-	
+
+	public static boolean isAndroid(){
+		return SharedLibraryLoader.isAndroid;
+	}
+
+	public static boolean isiOS(){
+		return SharedLibraryLoader.isIos;
+	}
+
 	public static boolean isDesktop(){
-		return Gdx.app.getType() == Application.ApplicationType.Desktop;
+		return SharedLibraryLoader.isWindows || SharedLibraryLoader.isMac || SharedLibraryLoader.isLinux;
+	}
+
+	public static boolean hasHardKeyboard(){
+		return Gdx.input.isPeripheralAvailable(Input.Peripheral.HardwareKeyboard);
 	}
 
 	public static boolean hasHardKeyboard(){
 		return Gdx.input.isPeripheralAvailable(Input.Peripheral.HardwareKeyboard);
 	}
 	
-	public static boolean legacyDevice(){
-		switch (Gdx.app.getType()){
-			case Android:
-				//Devices prior to Android 4.1 Jelly Bean
-				return Gdx.app.getVersion() < 16;
-			default:
-				//TODO implement functionality for other platforms here
-				return false;
-		}
-	}
-	
 	public static boolean isDebug(){
 		return Game.version.contains("INDEV");
 	}
-	
-	public static void openURI( String URI ){
-		Gdx.net.openURI( URI );
-	}
-	
+
 	public static void log( String tag, String message ){
 		Gdx.app.log( tag, message );
+	}
+
+	public static RectF getSafeInsets(){
+		RectF result = new RectF();
+		result.left =   Gdx.graphics.getSafeInsetLeft();
+		result.top =    Gdx.graphics.getSafeInsetTop();
+		result.right =  Gdx.graphics.getSafeInsetRight();
+		result.bottom = Gdx.graphics.getSafeInsetBottom();
+		return result;
 	}
 
 }

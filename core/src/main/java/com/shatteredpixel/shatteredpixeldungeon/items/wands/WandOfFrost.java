@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
@@ -35,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MagicalFireRoom;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -64,6 +66,21 @@ public class WandOfFrost extends DamageWand {
 			heap.freeze();
 		}
 
+		Fire fire = (Fire) Dungeon.level.blobs.get(Fire.class);
+		if (fire != null && fire.volume > 0) {
+			fire.clear( bolt.collisionPos );
+		}
+
+		MagicalFireRoom.EternalFire eternalFire = (MagicalFireRoom.EternalFire)Dungeon.level.blobs.get(MagicalFireRoom.EternalFire.class);
+		if (eternalFire != null && eternalFire.volume > 0) {
+			eternalFire.clear( bolt.collisionPos );
+			//bolt ends 1 tile short of fire, so check next tile too
+			if (bolt.path.size() > bolt.dist+1){
+				eternalFire.clear( bolt.path.get(bolt.dist+1) );
+			}
+
+		}
+
 		Char ch = Actor.findChar(bolt.collisionPos);
 		if (ch != null){
 
@@ -73,13 +90,14 @@ public class WandOfFrost extends DamageWand {
 				return; //do nothing, can't affect a frozen target
 			}
 			if (ch.buff(Chill.class) != null){
-				//5% less damage per turn of chill remaining
-				damage = (int)Math.round(damage * Math.pow(0.95f, ch.buff(Chill.class).cooldown()));
+				//6.67% less damage per turn of chill remaining, to a max of 10 turns (50% dmg)
+				float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
+				damage = (int)Math.round(damage * Math.pow(0.9333f, chillturns));
 			} else {
 				ch.sprite.burst( 0xFF99CCFF, (int) Math.sqrt(buffedLvl() / 2 + 2));
 			}
 
-			processSoulMark(ch, chargesPerCast());
+			wandProc(ch, chargesPerCast());
 			ch.damage(damage, this);
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 1.1f * Random.Float(0.87f, 1.15f) );
 
@@ -95,7 +113,7 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	@Override
-	protected void fx(Ballistica bolt, Callback callback) {
+	public void fx(Ballistica bolt, Callback callback) {
 		MagicMissile.boltFromChar(curUser.sprite.parent,
 				MagicMissile.FROST,
 				curUser.sprite,
@@ -107,7 +125,7 @@ public class WandOfFrost extends DamageWand {
 	@Override
 	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
 		Chill chill = defender.buff(Chill.class);
-		if (chill != null && chill.cooldown() >= Chill.DURATION){
+		if (chill != null && Random.IntRange(2, (int)Chill.DURATION) <= chill.cooldown()){
 			//need to delay this through an actor so that the freezing isn't broken by taking damage from the staff hit.
 			new FlavourBuff(){
 				{actPriority = VFX_PRIO;}

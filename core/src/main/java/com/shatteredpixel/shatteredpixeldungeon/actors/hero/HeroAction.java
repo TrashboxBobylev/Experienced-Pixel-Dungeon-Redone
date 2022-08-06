@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -67,14 +67,8 @@ public class HeroAction {
 		}
 	}
 	
-	public static class Descend extends HeroAction {
-		public Descend( int stairs ) {
-			this.dst = stairs;
-		}
-	}
-	
-	public static class Ascend extends HeroAction {
-		public Ascend( int stairs ) {
+	public static class LvlTransition extends HeroAction {
+		public LvlTransition(int stairs ) {
 			this.dst = stairs;
 		}
 	}

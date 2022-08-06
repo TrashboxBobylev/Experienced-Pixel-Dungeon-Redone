@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -105,7 +105,7 @@ public class PrismaticGuard extends Buff {
 	}
 	
 	public static int maxHP( Hero hero ){
-		return 8 + (int)Math.floor(hero.lvl * 2.5f);
+		return 10 + (int)Math.floor(hero.lvl * 2.5f); //half of hero's HP
 	}
 	
 	@Override
@@ -121,6 +121,11 @@ public class PrismaticGuard extends Buff {
 	@Override
 	public float iconFadePercent() {
 		return 1f - HP/(float)maxHP();
+	}
+
+	@Override
+	public String iconTextDisplay() {
+		return Integer.toString((int)HP);
 	}
 
 	@Override

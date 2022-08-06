@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
@@ -42,7 +43,6 @@ import com.watabou.utils.Random;
 public class ElixirOfAquaticRejuvenation extends Elixir {
 	
 	{
-		//TODO finish visuals
 		image = ItemSpriteSheet.ELIXIR_AQUA;
 	}
 	
@@ -52,13 +52,14 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 			PotionOfHealing.pharmacophobiaProc(hero);
 		} else {
 			Buff.affect(hero, AquaHealing.class).set(Math.round(hero.HT * 1.5f));
+			Talent.onHealingPotionUsed( hero );
 		}
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
-		return quantity * (30 + 50);
+		return quantity * (30 + 30);
 	}
 	
 	public static class AquaHealing extends Buff {
@@ -77,7 +78,7 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 		@Override
 		public boolean act() {
 			
-			if (Dungeon.level.water[target.pos] && target.HP < target.HT){
+			if (!target.flying && Dungeon.level.water[target.pos] && target.HP < target.HT){
 				float healAmt = GameMath.gate( 1, target.HT/50f, left );
 				healAmt = Math.min(healAmt, target.HT - target.HP);
 				if (Random.Float() < (healAmt % 1)){
@@ -113,7 +114,12 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 			float max = Math.round(target.HT * 1.5f);
 			return Math.max(0, (max - left) / max);
 		}
-		
+
+		@Override
+		public String iconTextDisplay() {
+			return Integer.toString(left);
+		}
+
 		@Override
 		public String toString() {
 			return Messages.get(this, "name");

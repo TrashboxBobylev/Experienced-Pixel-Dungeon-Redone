@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -26,8 +26,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
@@ -46,6 +51,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 public abstract class Scroll extends Item {
 	
@@ -53,22 +59,7 @@ public abstract class Scroll extends Item {
 	
 	protected static final float TIME_TO_READ	= 1f;
 
-	private static final Class<?>[] scrolls = {
-		ScrollOfIdentify.class,
-		ScrollOfMagicMapping.class,
-		ScrollOfRecharging.class,
-		ScrollOfRemoveCurse.class,
-		ScrollOfTeleportation.class,
-		ScrollOfUpgrade.class,
-		ScrollOfRage.class,
-		ScrollOfTerror.class,
-		ScrollOfLullaby.class,
-		ScrollOfTransmutation.class,
-		ScrollOfRetribution.class,
-		ScrollOfMirrorImage.class
-	};
-
-	private static final HashMap<String, Integer> runes = new HashMap<String, Integer>() {
+	private static final LinkedHashMap<String, Integer> runes = new LinkedHashMap<String, Integer>() {
 		{
 			put("KAUNAN",ItemSpriteSheet.SCROLL_KAUNAN);
 			put("SOWILO",ItemSpriteSheet.SCROLL_SOWILO);
@@ -96,7 +87,7 @@ public abstract class Scroll extends Item {
 	
 	@SuppressWarnings("unchecked")
 	public static void initLabels() {
-		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])scrolls, runes );
+		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])Generator.Category.SCROLL.classes, runes );
 	}
 	
 	public static void save( Bundle bundle ) {
@@ -121,7 +112,7 @@ public abstract class Scroll extends Item {
 
 	@SuppressWarnings("unchecked")
 	public static void restore( Bundle bundle ) {
-		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])scrolls, runes, bundle );
+		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])Generator.Category.SCROLL.classes, runes, bundle );
 	}
 	
 	public Scroll() {
@@ -180,14 +171,18 @@ public abstract class Scroll extends Item {
 	}
 	
 	public abstract void doRead();
-	
-	//currently unused. Used to be used for unstable spellbook prior to 0.7.0
-	public void empoweredRead(){}
 
 	protected void readAnimation() {
+		Invisibility.dispel();
 		curUser.spend( TIME_TO_READ );
 		curUser.busy();
 		((HeroSprite)curUser.sprite).read();
+
+		if (curUser.hasTalent(Talent.EMPOWERING_SCROLLS)){
+			Buff.affect(curUser, ScrollEmpower.class).reset();
+			updateQuickslot();
+		}
+
 	}
 	
 	public boolean isKnown() {
@@ -208,14 +203,18 @@ public abstract class Scroll extends Item {
 	}
 	
 	@Override
-	public Item identify() {
-		setKnown();
-		return super.identify();
+	public Item identify( boolean byHero ) {
+		super.identify(byHero);
+
+		if (!isKnown()) {
+			setKnown();
+		}
+		return this;
 	}
 	
 	@Override
 	public String name() {
-		return isKnown() ? name : Messages.get(this, rune);
+		return isKnown() ? super.name() : Messages.get(this, rune);
 	}
 	
 	@Override
@@ -244,14 +243,19 @@ public abstract class Scroll extends Item {
 	}
 	
 	public static boolean allKnown() {
-		return handler.known().size() == scrolls.length;
+		return handler.known().size() == Generator.Category.SCROLL.classes.length;
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 30 * quantity;
 	}
-	
+
+	@Override
+	public int energyVal() {
+		return 6 * quantity;
+	}
+
 	public static class PlaceHolder extends Scroll {
 		
 		{
@@ -276,49 +280,24 @@ public abstract class Scroll extends Item {
 	public static class ScrollToStone extends Recipe {
 		
 		private static HashMap<Class<?extends Scroll>, Class<?extends Runestone>> stones = new HashMap<>();
-		private static HashMap<Class<?extends Scroll>, Integer> amnts = new HashMap<>();
 		static {
 			stones.put(ScrollOfIdentify.class,      StoneOfIntuition.class);
-			amnts.put(ScrollOfIdentify.class,       3);
-			
-			stones.put(ScrollOfLullaby.class,       StoneOfDeepenedSleep.class);
-			amnts.put(ScrollOfLullaby.class,        3);
-			
+			stones.put(ScrollOfLullaby.class,       StoneOfDeepSleep.class);
 			stones.put(ScrollOfMagicMapping.class,  StoneOfClairvoyance.class);
-			amnts.put(ScrollOfMagicMapping.class,   3);
-			
 			stones.put(ScrollOfMirrorImage.class,   StoneOfFlock.class);
-			amnts.put(ScrollOfMirrorImage.class,    3);
-			
 			stones.put(ScrollOfRetribution.class,   StoneOfBlast.class);
-			amnts.put(ScrollOfRetribution.class,    2);
-			
 			stones.put(ScrollOfRage.class,          StoneOfAggression.class);
-			amnts.put(ScrollOfRage.class,           3);
-			
 			stones.put(ScrollOfRecharging.class,    StoneOfShock.class);
-			amnts.put(ScrollOfRecharging.class,     2);
-			
 			stones.put(ScrollOfRemoveCurse.class,   StoneOfDisarming.class);
-			amnts.put(ScrollOfRemoveCurse.class,    2);
-			
 			stones.put(ScrollOfTeleportation.class, StoneOfBlink.class);
-			amnts.put(ScrollOfTeleportation.class,  2);
-			
-			stones.put(ScrollOfTerror.class,        StoneOfAffection.class);
-			amnts.put(ScrollOfTerror.class,         3);
-			
+			stones.put(ScrollOfTerror.class,        StoneOfFear.class);
 			stones.put(ScrollOfTransmutation.class, StoneOfAugmentation.class);
-			amnts.put(ScrollOfTransmutation.class,  2);
-			
 			stones.put(ScrollOfUpgrade.class,       StoneOfEnchantment.class);
-			amnts.put(ScrollOfUpgrade.class,        2);
 		}
 		
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {
 			if (ingredients.size() != 1
-					|| !ingredients.get(0).isIdentified()
 					|| !(ingredients.get(0) instanceof Scroll)
 					|| !stones.containsKey(ingredients.get(0).getClass())){
 				return false;
@@ -339,8 +318,9 @@ public abstract class Scroll extends Item {
 			Scroll s = (Scroll) ingredients.get(0);
 			
 			s.quantity(s.quantity() - 1);
-			
-			return Reflection.newInstance(stones.get(s.getClass())).quantity(amnts.get(s.getClass()));
+			s.identify();
+
+			return Reflection.newInstance(stones.get(s.getClass())).quantity(2);
 		}
 		
 		@Override
@@ -348,7 +328,12 @@ public abstract class Scroll extends Item {
 			if (!testIngredients(ingredients)) return null;
 			
 			Scroll s = (Scroll) ingredients.get(0);
-			return Reflection.newInstance(stones.get(s.getClass())).quantity(amnts.get(s.getClass()));
+
+			if (!s.isKnown()){
+				return new Runestone.PlaceHolder().quantity(2);
+			} else {
+				return Reflection.newInstance(stones.get(s.getClass())).quantity(2);
+			}
 		}
 	}
 }

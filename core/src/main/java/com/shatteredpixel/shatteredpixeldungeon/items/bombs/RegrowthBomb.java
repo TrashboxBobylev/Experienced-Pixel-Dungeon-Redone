@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2019 Evan Debenham
+ * Copyright (C) 2014-2022 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -47,7 +47,6 @@ import java.util.ArrayList;
 public class RegrowthBomb extends Bomb {
 	
 	{
-		//TODO visuals
 		image = ItemSpriteSheet.REGROWTH_BOMB;
 	}
 	
@@ -70,19 +69,16 @@ public class RegrowthBomb extends Bomb {
 		for (int i = 0; i < PathFinder.distance.length; i++) {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
 				Char ch = Actor.findChar(i);
+				int t = Dungeon.level.map[i];
 				if (ch != null){
 					if (ch.alignment == Dungeon.hero.alignment) {
 						//same as a healing potion
 						PotionOfHealing.cure(ch);
 						PotionOfHealing.heal(ch);
 					}
-				} else if ( Dungeon.level.map[i] == Terrain.EMPTY ||
-							Dungeon.level.map[i] == Terrain.EMBERS ||
-							Dungeon.level.map[i] == Terrain.EMPTY_DECO ||
-							Dungeon.level.map[i] == Terrain.GRASS ||
-							Dungeon.level.map[i] == Terrain.HIGH_GRASS ||
-							Dungeon.level.map[i] == Terrain.FURROWED_GRASS){
-					
+				} else if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
+						|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS || t == Terrain.HIGH_GRASS)
+						&& Dungeon.level.plants.get(i) == null){
 					plantCandidates.add(i);
 				}
 				GameScene.add( Blob.seed( i, 10, Regrowth.class ) );
@@ -118,7 +114,7 @@ public class RegrowthBomb extends Bomb {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 30);
 	}
