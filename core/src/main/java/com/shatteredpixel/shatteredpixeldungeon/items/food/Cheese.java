@@ -27,13 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.food;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-
-import java.util.ArrayList;
 
 public class Cheese extends Food {
 	
@@ -49,7 +43,6 @@ public class Cheese extends Food {
 		Buff.affect(hero, Levitation.class, Levitation.DURATION);
 		Buff.affect(hero, Invisibility.class, Invisibility.DURATION);
 		Buff.affect(hero, Haste.class, Haste.DURATION);
-		Buff.affect(hero, EarthImbue.class, EarthImbue.DURATION);
 		Buff.affect(hero, FireImbue.class).set(FireImbue.DURATION);
 		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION);
 		Buff.affect(hero, MagicalSight.class, MagicalSight.DURATION);
@@ -63,7 +56,7 @@ public class Cheese extends Food {
 	}
 	
 	@Override
-	public int price() {
+	public int value() {
 		return 40 * quantity;
 	}
 

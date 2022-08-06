@@ -52,7 +52,7 @@ public class WarHammer extends MeleeWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        curUser.sprite.centerEmitter().start( Speck.factory( Speck.KIT ), 0.05f, 10 );
+        curUser.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
         Buff.affect(attacker, Paralysis.class, Random.Int(4, 8));
         Buff.affect(defender, Paralysis.class, Random.Int(3, 6));
         return super.proc(attacker, defender, damage);

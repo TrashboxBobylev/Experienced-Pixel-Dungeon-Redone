@@ -36,7 +36,7 @@ public class ChaosFishingRod extends FishingRod{
     }
 
     @Override
-    public int price() {
+    public int value() {
         return 50 * Dungeon.escalatingDepth() / 8;
     }
 }

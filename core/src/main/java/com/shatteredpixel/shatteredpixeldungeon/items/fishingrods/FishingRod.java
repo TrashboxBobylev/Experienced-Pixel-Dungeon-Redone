@@ -192,7 +192,7 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
-    public int price() {
+    public int value() {
         return 60 * Dungeon.escalatingDepth() / 5;
     }
 }

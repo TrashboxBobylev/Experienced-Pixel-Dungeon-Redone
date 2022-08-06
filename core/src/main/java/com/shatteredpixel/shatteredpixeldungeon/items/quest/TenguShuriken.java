@@ -49,7 +49,7 @@ public class TenguShuriken extends MissileWeapon {
     }
 
     @Override
-    public float speedFactor(Char owner) {
+    public float baseDelay(Char owner) {
         return 0;
     }
 

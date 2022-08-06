@@ -42,8 +42,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.levels.NewCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DistortionTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -301,7 +301,7 @@ public class BlackMimic extends Mob {
                                 ((MimicSprite.Black)sprite).throww(enemy.pos);
                                 return false;
                             } else {
-                                NewTengu.throwBomb(this, Dungeon.hero);
+                                Tengu.throwBomb(this, Dungeon.hero);
                                 return true;
                             }
                         } else if (lastAbility == SUMMON) {
@@ -449,7 +449,7 @@ public class BlackMimic extends Mob {
 	}
 
     public void onThrowComplete(){
-        NewTengu.throwBomb(this, enemy);
+        Tengu.throwBomb(this, enemy);
         next();
     }
 
@@ -461,7 +461,7 @@ public class BlackMimic extends Mob {
 		if (Dungeon.level.adjacent(pos, target.pos)){
 			int oppositeAdjacent = target.pos + (target.pos - pos);
 			Ballistica trajectory = new Ballistica(target.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
-			WandOfBlastWave.throwChar(target, trajectory, 2, false);
+			WandOfBlastWave.throwChar(target, trajectory, 2, false, true, getClass());
 			if (target == Dungeon.hero){
 				Dungeon.hero.interrupt();
 			}
@@ -639,7 +639,7 @@ public class BlackMimic extends Mob {
 			if (bestpos != pos){
 				Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 
-				Rect gate = NewCavesBossLevel.gate;
+				Rect gate = CavesBossLevel.gate;
 				for (int i : PathFinder.NEIGHBOURS9){
 					if (Dungeon.level.map[pos+i] == Terrain.WALL || Dungeon.level.map[pos+i] == Terrain.WALL_DECO){
 						Point p = Dungeon.level.cellToPoint(pos+i);

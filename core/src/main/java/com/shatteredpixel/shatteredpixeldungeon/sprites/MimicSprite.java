@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.BlackMimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.NewDM300;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
@@ -204,7 +204,7 @@ public class MimicSprite extends MobSprite {
             superchargeSparks.pour(SparkParticle.STATIC, 0.05f);
             superchargeSparks.on = false;
 
-            if (ch instanceof NewDM300 && ((NewDM300) ch).isSupercharged()){
+            if (ch instanceof DM300 && ((DM300) ch).isSupercharged()){
                 superchargeSparks.on = true;
             }
         }
@@ -215,9 +215,9 @@ public class MimicSprite extends MobSprite {
 
             if (superchargeSparks != null){
                 superchargeSparks.visible = visible;
-                if (ch instanceof NewDM300
-                        && ((NewDM300) ch).isSupercharged() != superchargeSparks.on){
-                    superchargeSparks.on = ((NewDM300) ch).isSupercharged();
+                if (ch instanceof DM300
+                        && ((DM300) ch).isSupercharged() != superchargeSparks.on){
+                    superchargeSparks.on = ((DM300) ch).isSupercharged();
                 }
             }
         }

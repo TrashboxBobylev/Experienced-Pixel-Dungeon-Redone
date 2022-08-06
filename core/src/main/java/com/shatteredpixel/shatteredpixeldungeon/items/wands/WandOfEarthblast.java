@@ -108,7 +108,7 @@ public class WandOfEarthblast extends DamageWand {
 				case 9: dmg *= 0.1f; break;
 				case 12: dmg *= 0.04f; break;
 			}
-			processSoulMark(ch, chargesPerCast());
+			wandProc(ch, chargesPerCast());
 			ch.damage(Math.round(dmg), this);
 			if (ch.isAlive()) {
 				Buff.affect(ch, Paralysis.class, Paralysis.DURATION * chargesPerCast());
@@ -125,7 +125,7 @@ public class WandOfEarthblast extends DamageWand {
 	}
 
 	@Override
-	protected void fx( Ballistica bolt, Callback callback ) {
+	public void fx(Ballistica bolt, Callback callback) {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// unlimited distance

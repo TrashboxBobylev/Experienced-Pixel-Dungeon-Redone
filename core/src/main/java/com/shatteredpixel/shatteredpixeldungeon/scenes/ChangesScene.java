@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.*;
+import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
@@ -125,9 +126,6 @@ public class ChangesScene extends PixelScene {
 				break;
 			case 3:
 				v0_7_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 4:
-				v0_6_X_Changes.addAllChanges(changeInfos);
 				break;
 			case 5:
 				v0_5_X_Changes.addAllChanges(changeInfos);
@@ -249,20 +247,6 @@ public class ChangesScene extends PixelScene {
 		if (changesSelected == 2) btn0_6.textColor(Window.TITLE_COLOR);
 		btn0_6.setRect(btn0_7.right() + 1, btn0_8.top(), 27, 14);
 		add(btn0_6);
-		
-		StyledButton btn0_7 = new StyledButton(Chrome.Type.GREY_BUTTON_TR, "0.7"){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				if (changesSelected != 3) {
-					changesSelected = 3;
-					ShatteredPixelDungeon.seamlessResetScene();
-				}
-			}
-		};
-		if (changesSelected == 3) btnOld.textColor(Window.TITLE_COLOR);
-		btnOld.setRect(btn0_6.right() + 1, btn0_8.top(), 33, 14);
-		add(btnOld);
 
 		Archs archs = new Archs();
 		archs.setSize( Camera.main.width, Camera.main.height );

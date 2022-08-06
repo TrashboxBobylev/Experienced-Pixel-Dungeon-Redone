@@ -211,8 +211,6 @@ public class RunicBlade extends MeleeWeapon {
                                                         Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
                                                     } else {
                                                         enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
-                                                        Combo combo = curUser.buff(Combo.class);
-                                                        if (combo != null) combo.miss( enemy );
                                                     }
                                                 } else {
                                                     Dungeon.level.pressCell(cell);
@@ -227,8 +225,8 @@ public class RunicBlade extends MeleeWeapon {
                                                     Dungeon.quickslot.setSlot( slot, curBlade );
                                                     updateQuickslot();
                                                 }
-                                                Buff.affect(curUser, RunicCooldown.class, 40*curBlade.speedFactor(curUser));
-                                                curUser.spendAndNext(curBlade.speedFactor(curUser));
+                                                Buff.affect(curUser, RunicCooldown.class, 40*curBlade.delayFactor(curUser));
+                                                curUser.spendAndNext(curBlade.delayFactor(curUser));
                                             }
                                         });
                     }

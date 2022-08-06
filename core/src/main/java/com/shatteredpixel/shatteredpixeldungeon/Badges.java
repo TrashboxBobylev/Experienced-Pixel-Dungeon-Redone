@@ -49,6 +49,7 @@ public class Badges {
 		MASTERY_MAGE,
 		MASTERY_ROGUE,
 		MASTERY_HUNTRESS,
+		MASTERY_RAT_KING,
 		FOUND_RATMOGRIFY,
 
 		//bronze
@@ -161,6 +162,14 @@ public class Badges {
 		GAMES_PLAYED_4              ( 108, true ),
 		HIGH_SCORE_4                ( 109 ),
 		CHAMPION_1                  ( 110 ),
+
+		WAND_QUEST_1,
+		WAND_QUEST_2,
+		WAND_QUEST_3,
+		WAND_QUEST_4,
+		WAND_QUEST_5,
+		WAND_QUEST_6,
+
 
 		//diamond
 		BOSS_CHALLENGE_5            ( 120 ),
@@ -1039,6 +1048,10 @@ public class Badges {
 	
 	public static boolean isUnlocked( Badge badge ) {
 		return global.contains( badge );
+	}
+
+	public static boolean isObtainedLocally( Badge badge ) {
+		return local.contains( badge );
 	}
 	
 	public static HashSet<Badge> allUnlocked(){

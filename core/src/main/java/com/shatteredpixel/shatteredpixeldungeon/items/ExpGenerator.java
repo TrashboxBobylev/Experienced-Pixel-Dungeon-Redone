@@ -24,14 +24,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.noosa.audio.Sample;
 
 public class ExpGenerator extends Item {
     {
@@ -41,18 +38,18 @@ public class ExpGenerator extends Item {
         stackable = false;
     }
 
-    @Override
-    public boolean doPickUp(Hero hero) {
-        ExpGenerator generator = hero.belongings.getItem(ExpGenerator.class);
-        if (generator == null) return super.doPickUp(hero);
-        else {
-            GameScene.pickUp( this, hero.pos );
-            Sample.INSTANCE.play( Assets.Sounds.ITEM );
-            hero.spendAndNext( TIME_TO_PICK_UP );
-            generator.upgrade();
-            return true;
-        }
-    }
+//    @Override
+//    public boolean doPickUp(Hero hero) {
+//        ExpGenerator generator = hero.belongings.getItem(ExpGenerator.class);
+//        if (generator == null) return super.doPickUp(hero);
+//        else {
+//            GameScene.pickUp( this, hero.pos );
+//            Sample.INSTANCE.play( Assets.Sounds.ITEM );
+//            hero.spendAndNext( TIME_TO_PICK_UP );
+//            generator.upgrade();
+//            return true;
+//        }
+//    }
 
     @Override
     protected void onThrow(int cell) {
@@ -79,7 +76,7 @@ public class ExpGenerator extends Item {
     }
 
     @Override
-    public int price() {
+    public int value() {
         return 120 * quantity * level();
     }
 

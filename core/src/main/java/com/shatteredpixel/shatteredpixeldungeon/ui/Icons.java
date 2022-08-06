@@ -39,6 +39,7 @@ public enum Icons {
 	CHANGES,
 	PREFS,
 	SHPX,
+	BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN,
 
 	//rankings and hero select icons, spacing for 16x16
 	STAIRS,

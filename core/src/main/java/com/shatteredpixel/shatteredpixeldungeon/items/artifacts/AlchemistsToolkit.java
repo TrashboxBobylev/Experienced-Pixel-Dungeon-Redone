@@ -27,8 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
@@ -242,8 +240,6 @@ public class AlchemistsToolkit extends Artifact {
 			//This means that energy absorbed into the kit is recovered in 5 hero levels
 			float chargeGain = (2 + level()) * levelPortion;
 			chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
-			float chargeGain = chargeGain;
-				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 
 			//charge is in increments of 1 energy.

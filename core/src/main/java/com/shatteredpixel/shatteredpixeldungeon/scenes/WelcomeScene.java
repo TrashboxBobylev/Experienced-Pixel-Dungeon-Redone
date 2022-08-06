@@ -24,17 +24,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
-import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.watabou.utils.FileUtils;
 
 public class WelcomeScene extends PixelScene {
 
-	private static int LATEST_UPDATE = ShatteredPixelDungeon.v0_8_1;
+	private static int LATEST_UPDATE = ShatteredPixelDungeon.v1_3_0;
 
 	@Override
 	public void create() {
@@ -67,25 +64,6 @@ public class WelcomeScene extends PixelScene {
 				FileUtils.deleteFile( Rankings.RANKINGS_FILE );
 				ShatteredPixelDungeon.reportException(e);
 			}
-		}
-		
-		//give classes to people with saves that have previously unlocked them
-		if (previousVersion <= ShatteredPixelDungeon.v0_7_0c){
-			Badges.loadGlobal();
-			Badges.addGlobal(Badges.Badge.UNLOCK_MAGE);
-			Badges.addGlobal(Badges.Badge.UNLOCK_ROGUE);
-			if (Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_3)){
-				Badges.addGlobal(Badges.Badge.UNLOCK_HUNTRESS);
-			}
-			Badges.saveGlobal();
-		}
-		
-		if (previousVersion <= ShatteredPixelDungeon.v0_6_5c){
-			Journal.loadGlobal();
-			Document.ALCHEMY_GUIDE.addPage("Potions");
-			Document.ALCHEMY_GUIDE.addPage("Stones");
-			Document.ALCHEMY_GUIDE.addPage("Energy_Food");
-			Journal.saveGlobal();
 		}
 		
 		SPDSettings.version(ShatteredPixelDungeon.versionCode);

@@ -75,6 +75,6 @@ public class Greataxe extends MeleeWeapon {
                 CellEmitter.get(cell + i).burst(Speck.factory(Speck.SCREAM), 2);
             }
         }
-        Dungeon.hero.spendAndNext( speedFactor(Dungeon.hero) );
+        Dungeon.hero.spendAndNext( delayFactor(Dungeon.hero) );
     }
 }

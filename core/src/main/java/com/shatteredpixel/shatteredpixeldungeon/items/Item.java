@@ -44,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.InventoryPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -114,7 +113,7 @@ public class Item implements Bundlable {
 		return Messages.get(this, "ac_" + action);
 	}
 
-	public final boolean doPickUp( Hero hero ) {
+	public boolean doPickUp(Hero hero) {
 		return doPickUp( hero, hero.pos );
 	}
 
@@ -489,7 +488,7 @@ public class Item implements Bundlable {
 	}
 
 	public final int sellPrice(){
-		return price() * 5 * (Dungeon.depth / 5 + 1);
+		return value() * 5 * (Dungeon.depth / 5 + 1);
 	}
 	
 	public Item virtual(){

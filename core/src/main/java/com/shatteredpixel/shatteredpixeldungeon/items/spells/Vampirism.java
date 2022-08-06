@@ -67,7 +67,7 @@ public class Vampirism extends TargetedSpell{
     }
 
     @Override
-    public int price() {
+    public int value() {
         //prices of ingredients, divided by output quantity
         return Math.round(quantity * ((30 + 43.333333f+ 40) / 3f));
     }

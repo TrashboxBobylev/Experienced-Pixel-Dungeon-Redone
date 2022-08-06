@@ -25,10 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.items.ArmorKit;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.AquaBlast;
@@ -48,7 +48,7 @@ public class DKTreasureBag extends TreasureBag {
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
         if (!Dungeon.LimitedDrops.ARMOR_KIT.dropped()){
-            items.add(new ArmorKit());
+            items.add(new KingsCrown());
             Dungeon.LimitedDrops.ARMOR_KIT.drop();
         }
         items.add(new Gold().quantity(Random.Int( 1500 + Dungeon.escalatingDepth() * 175, 2000 + Dungeon.escalatingDepth() * 233 )));

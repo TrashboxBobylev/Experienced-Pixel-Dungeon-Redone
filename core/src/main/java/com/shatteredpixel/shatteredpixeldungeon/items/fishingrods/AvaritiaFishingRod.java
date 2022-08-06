@@ -36,7 +36,7 @@ public class AvaritiaFishingRod extends FishingRod{
     }
 
     @Override
-    public int price() {
+    public int value() {
         return 50 * Dungeon.escalatingDepth() / 8;
     }
 }

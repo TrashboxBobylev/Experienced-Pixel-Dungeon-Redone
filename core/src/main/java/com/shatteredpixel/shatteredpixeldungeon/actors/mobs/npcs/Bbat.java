@@ -72,7 +72,7 @@ public class Bbat extends Mob {
     }
 
     @Override
-    protected float attackDelay() {
+    public float attackDelay() {
         return super.attackDelay() * (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN) ? 0.33f : 0.5f);
     }
 

@@ -115,6 +115,11 @@ public class Marked extends Buff implements ActionIndicator.Action {
     }
 
     @Override
+    public String actionName() {
+        return toString();
+    }
+
+    @Override
     public String desc() {
         String desc = Messages.get(this, "desc");
 
@@ -133,7 +138,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
     }
 
     @Override
-    public Image getIcon() {
+    public Image actionIcon() {
         Image actionIco = new Image(Assets.Sprites.ITEM_ICONS);
         actionIco.frame(ItemSpriteSheet.Icons.film.get(ItemSpriteSheet.Icons.SCROLL_TELEPORT));
         actionIco.scale.set(2f);
@@ -144,6 +149,11 @@ public class Marked extends Buff implements ActionIndicator.Action {
     @Override
     public void doAction() {
         GameScene.selectCell(attack);
+    }
+
+    @Override
+    public boolean usable() {
+        return ActionIndicator.Action.super.usable();
     }
 
     private CellSelector.Listener attack = new CellSelector.Listener() {

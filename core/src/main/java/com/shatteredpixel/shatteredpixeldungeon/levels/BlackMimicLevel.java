@@ -31,7 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.BlackMimic;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -173,11 +176,6 @@ public class BlackMimicLevel extends Level {
 			pylon.pos = i;
 			mobs.add(pylon);
 		}
-	}
-
-	@Override
-	public Actor respawner() {
-		return null;
 	}
 
 	@Override
@@ -330,8 +328,8 @@ public class BlackMimicLevel extends Level {
 		customArenaVisuals.updateState();
 		int pylonsRemaining = 0;
 		for (Mob m : mobs){
-			if (m instanceof NewDM300 || m instanceof BlackMimic){
-				if (m instanceof NewDM300) ((NewDM300) m).loseSupercharge();
+			if (m instanceof DM300 || m instanceof BlackMimic){
+				if (m instanceof DM300) ((DM300) m).loseSupercharge();
 				else ((BlackMimic) m).loseSupercharge();
 				PylonEnergy.energySourceSprite = m.sprite;
 			} else if (m instanceof Pylon){
@@ -770,7 +768,7 @@ public class BlackMimicLevel extends Level {
 							ch.sprite.flash();
 
 							if (ch == Dungeon.hero && !ch.isAlive()) {
-								Dungeon.fail(NewDM300.class);
+								Dungeon.fail(DM300.class);
 								GLog.n( Messages.get(Electricity.class, "ondeath") );
 							}
 						}
@@ -795,7 +793,7 @@ public class BlackMimicLevel extends Level {
 						if (c instanceof Pylon && c.alignment != Char.Alignment.NEUTRAL){
 							energySourceSprite = c.sprite;
 							break;
-						} else if (c instanceof OldDM300){
+						} else if (c instanceof DM300){
 							energySourceSprite = c.sprite;
 						}
 					}

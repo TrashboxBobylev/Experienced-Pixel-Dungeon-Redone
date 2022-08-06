@@ -39,6 +39,7 @@ import com.watabou.noosa.Halo;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.PointF;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class PrisonLevel extends RegularLevel {
 	protected int standardRooms(boolean forceMax) {
 		if (forceMax) return 6;
 		//5 to 6, average 5.5
-		return 5+Random.chances(new float[]{1, 1});
+		return 5+ Random.chances(new float[]{1, 1});
 	}
 	
 	@Override

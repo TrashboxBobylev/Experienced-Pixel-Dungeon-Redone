@@ -29,12 +29,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Callback;
-import com.watabou.utils.ColorMath;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WandOfUnstable extends Wand {
 
@@ -69,7 +65,7 @@ public class WandOfUnstable extends Wand {
     }
 
     @Override
-    protected void fx(Ballistica bolt, Callback callback) {
+    public void fx(Ballistica bolt, Callback callback) {
         wand = Reflection.newInstance(Random.element(wands));
         if (wand != null) {
             wand.level(level());

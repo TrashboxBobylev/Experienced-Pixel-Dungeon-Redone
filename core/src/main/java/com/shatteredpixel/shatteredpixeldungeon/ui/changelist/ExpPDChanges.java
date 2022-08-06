@@ -34,9 +34,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRo
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
@@ -386,7 +386,7 @@ public class ExpPDChanges {
         changes.addButton( new ChangeButton(new ItemSprite(new BlackPsycheChest()), "Dungeon Cycles",
                 "You can enter fourth dungeon cycle."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new ScrollOfAffection()), "Scroll of Affection",
+        changes.addButton( new ChangeButton(new ItemSprite(new ScrollOfSirensSong()), "Scroll of Affection",
                 "Scroll of Affection turns enemies into allies instead of charming."));
 
         changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
@@ -450,7 +450,7 @@ public class ExpPDChanges {
                         "Dev commentary will be added here in the future."));
         changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.SCROLL_TIWAZ, null), new ScrollOfUpgrade().trueName(),
                 "The whole stack of SoU can be applied at once with special action."));
-        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.EXOTIC_CRIMSON, null), new PotionOfAdrenalineSurge().trueName(),
+        changes.addButton( new ChangeButton( new ItemSprite(ItemSpriteSheet.EXOTIC_CRIMSON, null), new PotionOfMastery().trueName(),
                 "This potion replaces Adrenaline Surge and allows to spawn Rat King on any depth."));
         changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other",
                 "_-_ Added escalation data for cycle 3.\n" +

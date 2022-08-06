@@ -39,12 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
+import com.shatteredpixel.shatteredpixeldungeon.plants.*;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -249,9 +244,9 @@ public class SpiritBow extends Weapon {
 				case NONE: default:
 					return 0f;
 				case SPEED:
-					return 1f * RingOfFuror.attackSpeedMultiplier(owner);
+					return 1f * RingOfFuror.attackDelayMultiplier(owner);
 				case DAMAGE:
-					return 2f * RingOfFuror.attackSpeedMultiplier(owner);
+					return 2f * RingOfFuror.attackDelayMultiplier(owner);
 			}
 		} else{
 			return super.baseDelay(owner);

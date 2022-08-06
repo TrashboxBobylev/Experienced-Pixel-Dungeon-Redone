@@ -41,7 +41,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Alignment.ALL
 public class ScrollOfPolymorph extends ExoticScroll {
 	
 	{
-		icon = ItemSpriteSheet.Icons.SCROLL_POLYMORPH;
+		icon = ItemSpriteSheet.Icons.SCROLL_METAMORPH;
 	}
 	
 	@Override

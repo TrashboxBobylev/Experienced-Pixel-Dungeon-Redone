@@ -142,7 +142,7 @@ public class Perks {
             hero.perks.add(perk);
             GLog.p(Messages.get(Perks.class, "perk_obtain", perk.toString()));
             if (hero.sprite != null)
-            hero.sprite.emitter().burst(Speck.factory(Speck.MASTERY), 20);
+            hero.sprite.emitter().burst(Speck.factory(Speck.STAR), 20);
         }
     }
 

@@ -43,7 +43,7 @@ public class KingBlade extends Item {
     }
 
     @Override
-    public int price() {
+    public int value() {
         return quantity * 100;
     }
 }

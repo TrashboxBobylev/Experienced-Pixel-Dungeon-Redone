@@ -24,7 +24,6 @@
 
 package com.watabou.utils;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
@@ -57,10 +56,6 @@ public class DeviceCompat {
 
 	public static boolean isDesktop(){
 		return SharedLibraryLoader.isWindows || SharedLibraryLoader.isMac || SharedLibraryLoader.isLinux;
-	}
-
-	public static boolean hasHardKeyboard(){
-		return Gdx.input.isPeripheralAvailable(Input.Peripheral.HardwareKeyboard);
 	}
 
 	public static boolean hasHardKeyboard(){

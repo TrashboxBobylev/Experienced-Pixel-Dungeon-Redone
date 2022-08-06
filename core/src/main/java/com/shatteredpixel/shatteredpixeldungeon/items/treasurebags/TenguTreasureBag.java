@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.TomeOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguShuriken;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -46,7 +46,7 @@ public class TenguTreasureBag extends TreasureBag {
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
         if (!Dungeon.LimitedDrops.TOME_OF_MASTERY.dropped()){
-            items.add(new TomeOfMastery());
+            items.add(new TengusMask());
             Dungeon.LimitedDrops.TOME_OF_MASTERY.drop();
         }
         items.add(new Gold().quantity(Random.Int( 625 + Dungeon.escalatingDepth() * 96, 1100 + Dungeon.escalatingDepth() * 130 )));

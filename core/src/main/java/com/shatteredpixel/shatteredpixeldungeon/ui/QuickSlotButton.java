@@ -286,10 +286,6 @@ public class QuickSlotButton extends Button {
 	public static void useTargeting(int idx){
 		instance[idx].useTargeting();
 	}
-
-	public static void useTargeting(int idx){
-		instance[idx].useTargeting();
-	}
 	private void useTargeting() {
 
 		if (lastTarget != null &&

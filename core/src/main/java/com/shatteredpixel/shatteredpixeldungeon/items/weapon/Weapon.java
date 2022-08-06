@@ -198,7 +198,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 
 	protected float speedMultiplier(Char owner ){
-		return RingOfFuror.attackSpeedMultiplier(owner);
+		return RingOfFuror.attackDelayMultiplier(owner);
 	}
 
 	@Override
