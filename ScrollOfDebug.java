@@ -708,19 +708,11 @@ public class ScrollOfDebug extends Scroll {
 
             RenderedTextBlock text = PixelScene.renderTextBlock(6);
             text.text(message, width);
-            //text.setPos(titlebar.left(), titlebar.bottom() + 2 * GAP);
-
             while (PixelScene.landscape()
                     && text.bottom() > (PixelScene.MIN_HEIGHT_L - 10)
                     && width < WIDTH_MAX) {
                 text.maxWidth(width += 20);
             }
-
-            //Component comp = new Component();
-            //comp.add(text);
-            //text.setPos(0, GAP);
-            //comp.setSize(text.width(), text.height() + GAP * 2);
-            //resize(width, (int) Math.min((int) comp.bottom() + 2 + titlebar.height() + GAP, maxHeight()));*/
 
             int height = (int)text.bottom();
             int maxHeight = (int)(PixelScene.uiCamera.height * 0.9);
@@ -728,12 +720,22 @@ public class ScrollOfDebug extends Scroll {
             if(needScrollPane) height = maxHeight;
             resize((int)text.width(), height);
             if(needScrollPane) {
-                Component wrapper = new Component();
-                wrapper.setSize(text.width(), text.height());
-                add(scrollPane = new ScrollPane(wrapper));
-                wrapper.add(text);
-                text.setPos(0,0);
-                scrollPane.setSize(wrapper.width(), height);
+                add(scrollPane = new ScrollPane(new Component()) {
+                    {
+                        content.add(text);
+                    }
+                    // vertical margin is required to prevent text from getting cut off.
+                    final float VERTICAL_MARGIN = 1;
+                    @Override
+                    protected void layout() {
+                        text.setPos(0, VERTICAL_MARGIN);
+                        // also set the width of the scroll pane
+                        content.setSize(width = text.right(), text.bottom()+VERTICAL_MARGIN);
+                        width += 2; // padding on the right to cause the controller to be flush against the window.
+                        super.layout();
+                    }
+                });
+                scrollPane.setSize(width, height);
             }
             else {
                 add(text);
