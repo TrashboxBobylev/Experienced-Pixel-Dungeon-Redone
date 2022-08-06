@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -33,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
@@ -41,6 +43,7 @@ import com.watabou.utils.DeviceCompat;
 public class WndHeroInfo extends WndTabbed {
 
 	private HeroInfoTab heroInfo;
+	private PerkyInfoTab perksInfo;
 	private SubclassInfoTab subclassInfo;
 	private ArmorAbilityInfoTab abilityInfo;
 
@@ -81,6 +84,19 @@ public class WndHeroInfo extends WndTabbed {
 			protected void select(boolean value) {
 				super.select(value);
 				heroInfo.visible = heroInfo.active = value;
+			}
+		});
+
+		perksInfo = new PerkyInfoTab(cl);
+		add(perksInfo);
+		perksInfo.setSize(WIDTH, MIN_HEIGHT);
+		finalHeight = (int)Math.max(finalHeight, perksInfo.height());
+
+		add( new IconTab( Icons.get(Icons.TALENT) ){
+			@Override
+			protected void select(boolean value) {
+				super.select(value);
+				perksInfo.visible = perksInfo.active = value;
 			}
 		});
 
@@ -148,6 +164,91 @@ public class WndHeroInfo extends WndTabbed {
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SEAL),
 							new ItemSprite(ItemSpriteSheet.WORN_SHORTSWORD),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					break;
+				case MAGE:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.MAGES_STAFF),
+							new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE),
+							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					break;
+				case ROGUE:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK),
+							Icons.get(Icons.STAIRS),
+							new ItemSprite(ItemSpriteSheet.DAGGER),
+							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					break;
+				case HUNTRESS:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SPIRIT_BOW),
+							new Image(Assets.Environment.TILES_SEWERS, 112, 96, 16, 16),
+							new ItemSprite(ItemSpriteSheet.GLOVES),
+							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					break;
+				case RAT_KING:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
+							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING)
+					};
+					break;
+			}
+			for (Image im : icons) {
+				add(im);
+			}
+
+		}
+
+		@Override
+		protected void layout() {
+			super.layout();
+
+			title.setPos((width-title.width())/2, MARGIN);
+
+			float pos = title.bottom()+4*MARGIN;
+
+			for (int i = 0; i < info.length; i++){
+				info[i].maxWidth((int)width - 20);
+				info[i].setPos(20, pos);
+
+				icons[i].x = (20-icons[i].width())/2;
+				icons[i].y = info[i].top() + (info[i].height() - icons[i].height())/2;
+
+				pos = info[i].bottom() + 4*MARGIN;
+			}
+
+			height = Math.max(height, pos - 4*MARGIN);
+
+		}
+	}
+
+	private static class PerkyInfoTab extends Component {
+
+		private RenderedTextBlock title;
+		private RenderedTextBlock[] info;
+		private Image[] icons;
+
+		public PerkyInfoTab(HeroClass cls){
+			super();
+			title = PixelScene.renderTextBlock(Messages.titleCase(cls.title()), 9);
+			title.hardlight(TITLE_COLOR);
+			add(title);
+
+			String[] desc_entries = cls.perks_desc().split("\n\n");
+
+			info = new RenderedTextBlock[desc_entries.length];
+
+			for (int i = 0; i < desc_entries.length; i++){
+				info[i] = PixelScene.renderTextBlock(desc_entries[i], 6);
+				add(info[i]);
+			}
+
+			switch (cls){
+				case WARRIOR: default:
+					icons = new Image[]{ new TalentIcon(Talent.HEARTY_MEAL),
+							new TalentIcon(Talent.IMPROVISED_PROJECTILES),
+							new TalentIcon(Talent.STRONGMAN),
+							new TalentIcon(Talent.RUNIC_TRANSFERENCE)};
 					break;
 				case MAGE:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.MAGES_STAFF),

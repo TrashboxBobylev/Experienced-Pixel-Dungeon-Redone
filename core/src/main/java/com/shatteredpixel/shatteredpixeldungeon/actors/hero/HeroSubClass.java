@@ -47,7 +47,7 @@ public enum HeroSubClass {
 	SNIPER(HeroIcon.SNIPER),
 	WARDEN(HeroIcon.WARDEN),
 
-	KING(HeroIcon.NONE);
+	KING(HeroIcon.RATKING);
 
 	int icon;
 
