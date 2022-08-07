@@ -312,7 +312,7 @@ public enum Talent {
 			if (hero.cooldown() > 0) {
 				Buff.affect(hero, WarriorFoodImmunity.class, hero.cooldown());
 			}
-			hero.HP = Math.min(hero.HP + 5, hero.HT);
+			hero.HP = Math.min(hero.HP + Dungeon.hero.HT/8, hero.HT);
 			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
 		}
 		if (hero.heroClass == HeroClass.MAGE){

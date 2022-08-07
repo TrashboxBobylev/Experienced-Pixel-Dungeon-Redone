@@ -248,7 +248,8 @@ public class WndHeroInfo extends WndTabbed {
 					icons = new Image[]{ new TalentIcon(Talent.HEARTY_MEAL),
 							new TalentIcon(Talent.IMPROVISED_PROJECTILES),
 							new TalentIcon(Talent.STRONGMAN),
-							new TalentIcon(Talent.RUNIC_TRANSFERENCE)};
+							new TalentIcon(Talent.RUNIC_TRANSFERENCE),
+							new TalentIcon(Talent.SHRUG_IT_OFF)};
 					break;
 				case MAGE:
 					icons = new Image[]{ new TalentIcon(Talent.ENERGIZING_MEAL),

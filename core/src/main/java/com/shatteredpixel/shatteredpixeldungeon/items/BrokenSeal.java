@@ -191,6 +191,9 @@ public class BrokenSeal extends Item {
 		public synchronized boolean act() {
 			if (shielding() < maxShield()) {
 				partialShield += 1/30f;
+				if (Dungeon.hero.heroClass == HeroClass.WARRIOR){
+					partialShield += 1/30f;
+				}
 			}
 			
 			while (partialShield >= 1){
