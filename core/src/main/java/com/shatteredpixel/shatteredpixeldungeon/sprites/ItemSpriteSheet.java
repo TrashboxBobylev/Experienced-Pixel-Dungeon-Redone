@@ -84,19 +84,19 @@ public class ItemSpriteSheet {
 
 	private static final int UNCOLLECTIBLE  =                               xy(1, 2);   //16 slots
 	public static final int GOLD            = UNCOLLECTIBLE+0;
-	public static final int ENERGY          = UNCOLLECTIBLE+1;
+	public static final int ENERGY          = UNCOLLECTIBLE+8;
 
-	public static final int DEWDROP         = UNCOLLECTIBLE+3;
-	public static final int PETAL           = UNCOLLECTIBLE+4;
-	public static final int SANDBAG         = UNCOLLECTIBLE+5;
-	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+6;
+	public static final int DEWDROP         = UNCOLLECTIBLE+1;
+	public static final int PETAL           = UNCOLLECTIBLE+2;
+	public static final int SANDBAG         = UNCOLLECTIBLE+3;
+	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+4;
 	public static final int RUNIC_SHOT = UNCOLLECTIBLE+5;
 	
-	public static final int GUIDE_PAGE      = UNCOLLECTIBLE+8;
-	public static final int ALCH_PAGE       = UNCOLLECTIBLE+9;
+	public static final int GUIDE_PAGE      = UNCOLLECTIBLE+6;
+	public static final int ALCH_PAGE       = UNCOLLECTIBLE+7;
 	
-	public static final int TENGU_BOMB      = UNCOLLECTIBLE+11;
-	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+12;
+	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
+	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
@@ -616,21 +616,21 @@ public class ItemSpriteSheet {
 	private static final int SPELLS         =                               xy(1, 27);  //16 slots
 	public static final int MAGIC_PORTER    = SPELLS+0;
 	public static final int PHASE_SHIFT     = SPELLS+1;
-	public static final int TELE_GRAB       = SPELLS+2;
-	public static final int WILD_ENERGY     = SPELLS+3;
-	public static final int RETURN_BEACON   = SPELLS+4;
-	public static final int SUMMON_ELE      = SPELLS+5;
+	public static final int TELE_GRAB       = SPELLS+15;
+	public static final int WILD_ENERGY     = SPELLS+2;
+	public static final int RETURN_BEACON   = SPELLS+3;
+	public static final int SUMMON_ELE      = SPELLS+14;
 	public static final int VAMPIRISM = SPELLS+4;
 
-	public static final int AQUA_BLAST      = SPELLS+7;
-	public static final int FEATHER_FALL    = SPELLS+8;
-	public static final int RECLAIM_TRAP    = SPELLS+9;
+	public static final int AQUA_BLAST      = SPELLS+5;
+	public static final int FEATHER_FALL    = SPELLS+6;
+	public static final int RECLAIM_TRAP    = SPELLS+7;
     public static final int RESPAWN    = SPELLS+8;
 	
-	public static final int CURSE_INFUSE    = SPELLS+11;
-	public static final int MAGIC_INFUSE    = SPELLS+12;
-	public static final int ALCHEMIZE       = SPELLS+13;
-	public static final int RECYCLE         = SPELLS+14;
+	public static final int CURSE_INFUSE    = SPELLS+9;
+	public static final int MAGIC_INFUSE    = SPELLS+10;
+	public static final int ALCHEMIZE       = SPELLS+11;
+	public static final int RECYCLE         = SPELLS+12;
     public static final int FIREBOOSTER         = SPELLS+13;
 	static{
 		assignItemRect(MAGIC_PORTER,    12, 11);
