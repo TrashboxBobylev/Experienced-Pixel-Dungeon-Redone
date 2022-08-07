@@ -21,22 +21,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndStory;
+import com.shatteredpixel.shatteredpixeldungeon.windows.*;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Game;
@@ -55,6 +46,9 @@ public class MenuPane extends Component {
 	private Image challengeIcon;
 	private BitmapText challengeText;
 	private Button challengeButton;
+
+	private Image cycleIcon;
+	private BitmapText cycleText;
 
 	private JournalButton btnJournal;
 	private MenuButton btnMenu;
@@ -128,6 +122,15 @@ public class MenuPane extends Component {
 			};
 			add(challengeButton);
 		}
+		if (Dungeon.cycle > 0){
+			cycleIcon = Icons.get(Icons.CYCLE_COUNT);
+			add(cycleIcon);
+
+			cycleText = new BitmapText( Integer.toString( Dungeon.cycle ), PixelScene.pixelFont);
+			cycleText.hardlight( 0xCACFC2 );
+			cycleText.measure();
+			add( cycleText );
+		}
 
 		btnJournal = new JournalButton();
 		add( btnJournal );
@@ -180,6 +183,17 @@ public class MenuPane extends Component {
 			PixelScene.align(challengeText);
 
 			challengeButton.setRect(challengeIcon.x, challengeIcon.y, challengeIcon.width(), challengeIcon.height() + challengeText.height());
+		}
+		if (cycleIcon != null){
+			cycleIcon.x = btnJournal.left() - 24 + (10 - cycleIcon.width())/2f - 0.1f;
+			cycleIcon.y = y + 1;
+			if (SPDSettings.interfaceSize() == 0) cycleIcon.y++;
+			PixelScene.align(cycleIcon);
+
+			cycleText.scale.set(PixelScene.align(0.67f));
+			cycleText.x = cycleIcon.x + (cycleIcon.width() - cycleText.width())/2f;
+			cycleText.y = cycleIcon.y + cycleIcon.height();
+			PixelScene.align(cycleText);
 		}
 
 		version.scale.set(PixelScene.align(0.5f));

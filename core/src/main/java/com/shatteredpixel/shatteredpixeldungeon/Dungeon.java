@@ -278,8 +278,12 @@ public class Dungeon {
         Game.switchScene( InterlevelScene.class );
     }
 
+	public static int escalatingDepth(){
+		return escalatingDepth(Dungeon.depth);
+	}
+
     //as we don't increase depth when cycling, we will return virtual depth difficulty
-    public static int escalatingDepth(){
+    public static int escalatingDepth(int depth){
 	    switch (cycle){
             case 0: return depth;
             case 1: return (int) (depth*1.4f +31);
@@ -425,9 +429,9 @@ public class Dungeon {
 	//is usually the dungeon depth, but can be set to 26 when ascending
 	public static int scalingDepth(){
 		if (Dungeon.hero != null && Dungeon.hero.buff(AscensionChallenge.class) != null){
-			return 26;
+			return escalatingDepth(26);
 		} else {
-			return depth;
+			return escalatingDepth();
 		}
 	}
 

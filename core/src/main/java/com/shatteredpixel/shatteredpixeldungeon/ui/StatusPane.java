@@ -38,13 +38,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.watabou.input.GameAction;
-import com.watabou.input.KeyBindings;
 import com.watabou.noosa.*;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.ColorMath;
-
-import java.util.ArrayList;
 
 public class StatusPane extends Component {
 
@@ -73,8 +70,6 @@ public class StatusPane extends Component {
 
 	private BuffIndicator buffs;
 	private Compass compass;
-	private Image cycle;
-	private BitmapText cycleNumber;
 
 	private BusyIndicator busy;
 	private CircleArc counter;
