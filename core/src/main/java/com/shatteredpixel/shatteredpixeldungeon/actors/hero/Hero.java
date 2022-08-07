@@ -61,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -77,6 +78,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
@@ -1959,7 +1962,7 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 
 		boolean circular = pointsInTalent(Talent.WIDE_SEARCH) == 1;
 		int distance = isClass(HeroClass.ROGUE) ? 2 : 1;
-		if (hasTalent(Talent.WIDE_SEARCH)) distance++;
+		if (heroClass == HeroClass.ROGUE) distance++;
 		
 		boolean foresight = buff(Foresight.class) != null;
 		boolean foresightScan = foresight && !Dungeon.level.mapped[pos];
@@ -2068,6 +2071,29 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 		if (intentional) {
 			sprite.showStatus( CharSprite.DEFAULT, Messages.get(this, "search") );
 			sprite.operate( pos );
+			if (heroClass == HeroClass.ROGUE) {
+				ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.INVISI);
+				((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+						MagicMissile.INVISI,
+						sprite,
+						aoe.rays.get(0).path.get(aoe.rays.get(0).dist),
+						() -> {
+							for (int i : PathFinder.NEIGHBOURS8){
+								CellEmitter.get(pos+i).burst(Speck.factory(Speck.DUST, false), 4);
+								Char ch = Actor.findChar(pos+i);
+								if (ch != null && ch.alignment != alignment){
+									Ballistica trajectory = new Ballistica(ch.pos, ch.pos+i, Ballistica.MAGIC_BOLT);
+									if (trajectory.collisionPos != pos+i && !ch.properties().contains(Property.BOSS)) ch.spend(TIME_TO_SEARCH);
+									ch.damage(1 + Dungeon.escalatingDepth() / 5, new WandOfBlastWave());
+									WandOfBlastWave.throwChar(ch, trajectory, 1, false, false, getClass());
+								}
+							}
+							spendAndNext(TIME_TO_SEARCH);
+						}
+				);
+			}
+			else
+				spendAndNext(TIME_TO_SEARCH);
 			if (!Dungeon.level.locked) {
 				if (cursed) {
 					GLog.n(Messages.get(this, "search_distracted"));
@@ -2076,7 +2102,6 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 					Buff.affect(this, Hunger.class).affectHunger(TIME_TO_SEARCH - HUNGER_FOR_SEARCH);
 				}
 			}
-			spendAndNext(TIME_TO_SEARCH);
 			
 		}
 		
@@ -2091,6 +2116,31 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 		}
 
 		return smthFound;
+	}
+
+	public static ConeAOE arrangeBlast(int pos, CharSprite sprite, int type){
+		return arrangeBlast(pos, sprite, type, 1.5f);
+	}
+
+	public static ConeAOE arrangeBlast(int pos, CharSprite sprite, int type, float range) {
+		Ballistica aim;
+		if (pos % Dungeon.level.width() > 10){
+			aim = new Ballistica(pos, pos - 1, Ballistica.WONT_STOP);
+		} else {
+			aim = new Ballistica(pos, pos + 1, Ballistica.WONT_STOP);
+		}
+		ConeAOE aoe = new ConeAOE(aim, range, 360, Ballistica.PROJECTILE);
+		if (sprite.visible) {
+			for (Ballistica ray : aoe.rays) {
+				((MagicMissile) sprite.parent.recycle(MagicMissile.class)).reset(
+						type,
+						sprite,
+						ray.path.get(ray.dist),
+						null
+				);
+			}
+		}
+		return aoe;
 	}
 	
 	public void resurrect() {
@@ -2109,7 +2159,7 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 		for (Item i : belongings){
 			if (i instanceof EquipableItem && i.isEquipped(this)){
 				((EquipableItem) i).activate(this);
-			} else if (i instanceof CloakOfShadows && i.keptThoughLostInvent && hasTalent(Talent.LIGHT_CLOAK)){
+			} else if (i instanceof CloakOfShadows && i.keptThoughLostInvent && heroClass == HeroClass.ROGUE){
 				((CloakOfShadows) i).activate(this);
 			} else if (i instanceof Wand && i.keptThoughLostInvent){
 				if (holster != null && holster.contains(i)){

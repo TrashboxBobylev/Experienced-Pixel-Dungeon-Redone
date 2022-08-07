@@ -259,10 +259,11 @@ public class WndHeroInfo extends WndTabbed {
 							new TalentIcon(Talent.EMPOWERING_SCROLLS)};
 					break;
 				case ROGUE:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK),
-							Icons.get(Icons.STAIRS),
-							new ItemSprite(ItemSpriteSheet.DAGGER),
-							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					icons = new Image[]{ new TalentIcon(Talent.SILENT_STEPS),
+							new TalentIcon(Talent.WIDE_SEARCH),
+							new TalentIcon(Talent.LIGHT_CLOAK),
+							new TalentIcon(Talent.MYSTICAL_UPGRADE),
+							new TalentIcon(Talent.ELEMENTAL_POWER)};
 					break;
 				case HUNTRESS:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SPIRIT_BOW),

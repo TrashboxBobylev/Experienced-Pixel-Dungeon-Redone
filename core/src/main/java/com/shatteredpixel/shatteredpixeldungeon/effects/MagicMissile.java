@@ -25,15 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.CorrosionParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.*;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -75,6 +67,7 @@ public class MagicMissile extends Emitter {
 	public static final int SHAMAN_PURPLE   = 13;
 	public static final int TOXIC_VENT      = 14;
 	public static final int ELMO            = 15;
+	public static final int INVISI          = 16;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -189,6 +182,10 @@ public class MagicMissile extends Emitter {
 			case ELMO:
 				size( 5 );
 				pour( ElmoParticle.FACTORY, 0.01f );
+				break;
+			case INVISI:
+				size( 20 );
+				pour( InvisibleParticle.FACTORY, 0.03f );
 				break;
 
 			case MAGIC_MISS_CONE:
@@ -636,6 +633,66 @@ public class MagicMissile extends Emitter {
 			super.update();
 			
 			am = 1 - left / lifespan;
+		}
+	}
+
+	public static class InvisibleParticle extends PixelParticle.Shrinking {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((InvisibleParticle)emitter.recycle( InvisibleParticle.class )).reset( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		static Integer[] colors = {0xFFe380e3, 0xFF9485c9};
+
+		public static final Emitter.Factory SHARD = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((WardParticle)emitter.recycle( InvisibleParticle.class )).resetUp( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		public InvisibleParticle() {
+			super();
+
+			lifespan = 0.6f;
+
+			color( 0x000000 );
+			alpha(0f);
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+			color( Random.element(colors) );
+
+			left = lifespan;
+			size = 0;
+		}
+
+		public void resetUp( float x, float y){
+			reset(x, y);
+
+			size = 0;
+		}
+
+		@Override
+		public void update() {
+			super.update();
+
+			am = Random.Float();
 		}
 	}
 }

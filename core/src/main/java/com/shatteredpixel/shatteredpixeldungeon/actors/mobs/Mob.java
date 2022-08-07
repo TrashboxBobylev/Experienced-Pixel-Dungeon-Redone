@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
@@ -42,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
@@ -776,8 +778,11 @@ public abstract class Mob extends Char {
             }
         }
 
-		if (Dungeon.hero.grinding && Random.Float() < 0.33f){
+		if (Dungeon.hero.grinding && Dungeon.hero.heroClass == HeroClass.MAGE && Random.Float() < 0.33f){
 			Dungeon.level.drop(Generator.random(Generator.Category.SCROLL), pos).sprite.drop();
+		}
+		if (Dungeon.hero.grinding && Dungeon.hero.heroClass == HeroClass.ROGUE && Random.Float() < 0.25f){
+			Dungeon.level.drop(new Bomb(), pos).sprite.drop();
 		}
 
 		if (buff(OldCavesBossLevel.ArenaBuff.class) != null){
@@ -913,8 +918,8 @@ public abstract class Mob extends Char {
 
 				float enemyStealth = enemy.stealth();
 
-				if (enemy instanceof Hero && ((Hero) enemy).hasTalent(Talent.SILENT_STEPS)){
-					if (Dungeon.level.distance(pos, enemy.pos) >= 4 - ((Hero) enemy).pointsInTalent(Talent.SILENT_STEPS)) {
+				if (enemy instanceof Hero && ((Hero) enemy).heroClass == HeroClass.ROGUE){
+					if (Dungeon.level.distance(pos, enemy.pos) >= 3) {
 						enemyStealth = Float.POSITIVE_INFINITY;
 					}
 				}
