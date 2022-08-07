@@ -178,8 +178,8 @@ public abstract class Wand extends Item {
 
 	//TODO Consider externalizing char awareness buff
 	protected static void wandProc(Char target, int wandLevel, int chargesUsed){
-		if (Dungeon.hero.hasTalent(Talent.ARCANE_VISION)) {
-			int dur = 5 + 5*Dungeon.hero.pointsInTalent(Talent.ARCANE_VISION);
+		if (Dungeon.hero.heroClass == HeroClass.MAGE) {
+			int dur = 10;
 			Buff.append(Dungeon.hero, TalismanOfForesight.CharAwareness.class, dur).charID = target.id();
 		}
 
@@ -329,7 +329,7 @@ public abstract class Wand extends Item {
 			}
 
 			if (charger.target.buff(ScrollEmpower.class) != null){
-				lvl += 3;
+				lvl += Math.max(1, ((Hero)charger.target).lvl / 5);
 			}
 
 			WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
@@ -572,9 +572,8 @@ public abstract class Wand extends Item {
 				int cell = shot.collisionPos;
 				
 				if (target == curUser.pos || cell == curUser.pos) {
-					if (target == curUser.pos && curUser.hasTalent(Talent.SHIELD_BATTERY)){
-						float shield = curUser.HT * (0.04f*curWand.curCharges);
-						if (curUser.pointsInTalent(Talent.SHIELD_BATTERY) == 2) shield *= 1.5f;
+					if (target == curUser.pos && curUser.heroClass == HeroClass.MAGE){
+						float shield = curUser.HT * (0.065f*curWand.curCharges);
 						Buff.affect(curUser, Barrier.class).setShield(Math.round(shield));
 						curWand.curCharges = 0;
 						curUser.sprite.operate(curUser.pos);

@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -38,7 +37,7 @@ public class ScrollEmpower extends Buff {
 	private int left;
 
 	public void reset(){
-		left = Dungeon.hero.pointsInTalent(Talent.EMPOWERING_SCROLLS);
+		left = 3;
 		Item.updateQuickslot();
 	}
 
@@ -82,7 +81,7 @@ public class ScrollEmpower extends Buff {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", Dungeon.hero.pointsInTalent(Talent.EMPOWERING_SCROLLS), left);
+		return Messages.get(this, "desc", Math.max(1,Dungeon.hero.lvl/5), left);
 	}
 
 	private static final String LEFT = "left";

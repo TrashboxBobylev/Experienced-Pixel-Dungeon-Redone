@@ -315,14 +315,9 @@ public enum Talent {
 			hero.HP = Math.min(hero.HP + 5, hero.HT);
 			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
 		}
-		if (hero.hasTalent(EMPOWERING_MEAL)){
-			//2/3 bonus wand damage for next 3 zaps
-			Buff.affect( hero, WandEmpower.class).set(1 + hero.pointsInTalent(EMPOWERING_MEAL), 3);
-			ScrollOfRecharging.charge( hero );
-		}
-		if (hero.hasTalent(ENERGIZING_MEAL)){
+		if (hero.heroClass == HeroClass.MAGE){
 			//5/8 turns of recharging
-			Buff.prolong( hero, Recharging.class, 2 + 3*(hero.pointsInTalent(ENERGIZING_MEAL)) );
+			Buff.prolong( hero, Recharging.class, 9);
 			ScrollOfRecharging.charge( hero );
 			SpellSprite.show(hero, SpellSprite.CHARGE);
 		}
@@ -352,10 +347,6 @@ public enum Talent {
 		// 2x/instant for Warrior (see onItemEquipped)
 		if (item instanceof MeleeWeapon || item instanceof Armor){
 			factor *= 1f + hero.pointsInTalent(ARMSMASTERS_INTUITION);
-		}
-		// 3x/instant for mage (see Wand.wandUsed())
-		if (item instanceof Wand){
-			factor *= 1f + 2*hero.pointsInTalent(SCHOLARS_INTUITION);
 		}
 		// 2x/instant for rogue (see onItemEqupped), also id's type on equip/on pickup
 		if (item instanceof Ring){
@@ -451,6 +442,9 @@ public enum Talent {
 
 	public static void onItemEquipped( Hero hero, Item item ){
 		if (hero.pointsInTalent(ARMSMASTERS_INTUITION) == 2 && (item instanceof Weapon || item instanceof Armor)){
+			item.identify();
+		}
+		if (hero.heroClass == HeroClass.MAGE && item instanceof Wand){
 			item.identify();
 		}
 		if (hero.hasTalent(THIEFS_INTUITION) && item instanceof Ring){

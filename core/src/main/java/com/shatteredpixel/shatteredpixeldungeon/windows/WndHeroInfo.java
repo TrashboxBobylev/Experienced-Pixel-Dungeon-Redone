@@ -251,9 +251,11 @@ public class WndHeroInfo extends WndTabbed {
 							new TalentIcon(Talent.RUNIC_TRANSFERENCE)};
 					break;
 				case MAGE:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.MAGES_STAFF),
-							new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE),
-							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					icons = new Image[]{ new TalentIcon(Talent.ENERGIZING_MEAL),
+							new TalentIcon(Talent.SCHOLARS_INTUITION),
+							new TalentIcon(Talent.SHIELD_BATTERY),
+							new TalentIcon(Talent.ARCANE_VISION),
+							new TalentIcon(Talent.EMPOWERING_SCROLLS)};
 					break;
 				case ROGUE:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK),

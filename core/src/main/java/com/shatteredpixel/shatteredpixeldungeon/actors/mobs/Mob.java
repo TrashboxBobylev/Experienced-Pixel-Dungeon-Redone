@@ -776,6 +776,10 @@ public abstract class Mob extends Char {
             }
         }
 
+		if (Dungeon.hero.grinding && Random.Float() < 0.33f){
+			Dungeon.level.drop(Generator.random(Generator.Category.SCROLL), pos).sprite.drop();
+		}
+
 		if (buff(OldCavesBossLevel.ArenaBuff.class) != null){
 		    Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
             Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
