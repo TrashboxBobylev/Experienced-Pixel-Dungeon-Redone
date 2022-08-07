@@ -1,0 +1,108 @@
+Index: SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java
+--- a/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
++++ b/SPD-classes/src/main/java/com/watabou/utils/PlatformSupport.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+@@ -30,7 +30,12 @@
+
+ import java.util.HashMap;
+
++import com.zrp200.scrollofdebug.PackageTrie;
++
+ public abstract class PlatformSupport {
++	public PackageTrie findClasses(String pckgname) throws ClassNotFoundException {
++		return PackageTrie.getClassesForPackage(pckgname);
++	}
+
+ 	public abstract void updateDisplaySize();
+
+Index: core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
+rename from core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
+rename to SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java
+--- a/core/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
++++ b/SPD-classes/src/main/java/com/zrp200/scrollofdebug/PackageTrie.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+@@ -183,7 +183,7 @@
+                         Class cls = Class.forName(pckgname + '.'
+                                 + file.substring(0, file.length() - 6));
+                         //if(canInstantiate(cls))
+-                        trie.classes.add(cls);
++                            trie.classes.add(cls);
+                     } catch (final NoClassDefFoundError e) {
+                         // do nothing. this class hasn't been found by the
+                         // loader, and we don't care.
+Index: android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java
+--- a/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
++++ b/android/src/main/java/com/shatteredpixel/shatteredpixeldungeon/android/AndroidPlatformSupport.java	(revision f8c6c7e438826b67e02cdf03a63662c5b542a83f)
+@@ -41,12 +41,41 @@
+ import com.watabou.noosa.Game;
+ import com.watabou.utils.PlatformSupport;
+
++import java.io.IOException;
++import java.util.Enumeration;
+ import java.util.HashMap;
+ import java.util.regex.Matcher;
+ import java.util.regex.Pattern;
+
++import dalvik.system.DexFile;
++import com.zrp200.scrollofdebug.PackageTrie;
++
+ public class AndroidPlatformSupport extends PlatformSupport {
+-
++
++	@Override
++	public PackageTrie findClasses(String pkgName) throws ClassNotFoundException {
++		return new PackageTrie() {
++			{
++				try {
++					Enumeration<String> entries = new DexFile(AndroidLauncher.instance
++							.getContext()
++							.getPackageCodePath()
++					).entries();
++					String n; while(entries.hasMoreElements()) {
++						n = entries.nextElement();
++						if(n.contains(pkgName)) try {
++							addClass(Class.forName(n), pkgName);
++						} catch (Exception e) {
++							e.printStackTrace();
++						}
++					}
++				} catch (IOException e) {
++					//e.printStackTrace();
++				}
++			}
++		};
++	}
++
+ 	public void updateDisplaySize(){
+ 		if (SPDSettings.landscape() != null) {
+ 			AndroidLauncher.instance.setRequestedOrientation( SPDSettings.landscape() ?
+Index: core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java
+--- a/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision c274e27faa3fd35390f796fc247964f88b9b0c6e)
++++ b/core/src/main/java/com/zrp200/scrollofdebug/ScrollOfDebug.java	(revision d6e59e2599f290a836c97b151918baaea321106c)
+@@ -629,7 +629,7 @@
+     public static PackageTrie trie = null; // loaded when needed.
+     static {
+         try {
+-            trie = PackageTrie.getClassesForPackage(ROOT);
++            trie = ShatteredPixelDungeon.platform.findClasses(ROOT);
+         } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
+     }
+

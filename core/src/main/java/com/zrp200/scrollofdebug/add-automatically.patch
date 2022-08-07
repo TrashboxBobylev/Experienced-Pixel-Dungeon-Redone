@@ -1,0 +1,45 @@
+Index: core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java
+--- a/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java	(revision 75ef430ee7a0c628947275e24a1bd875e0682559)
++++ b/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/scenes/GameScene.java	(revision 92b61a235df687b3a580e5dba20bea15e6936019)
+@@ -133,6 +133,7 @@
+ import com.watabou.utils.PointF;
+ import com.watabou.utils.Random;
+ import com.watabou.utils.RectF;
++import com.zrp200.scrollofdebug.ScrollOfDebug;
+ 
+ import java.io.IOException;
+ import java.util.ArrayList;
+@@ -203,6 +204,54 @@
+ 			return;
+ 		}
+ 
++		// debug logic...
++		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
++		boolean supported = DeviceCompat.isDebug();
++		if(supported) {
++			if(debug == null) {
++				debug = new ScrollOfDebug();
++				if (!debug.collect()) Dungeon.hero.belongings.backpack.items.add(debug);
++				if (!Dungeon.quickslot.contains(debug)) {
++					int slot = 0;
++					// it'll overwrite the last slot if they are all full.
++					// Perhaps a bit pushy, but the whole point is for it to be available, after all.
++					while (slot < Dungeon.quickslot.SIZE - 1 && Dungeon.quickslot.getItem(slot) != null)
++						slot++;
++					Dungeon.quickslot.setSlot(slot, debug);
++				}
++			}
++		} else if(debug != null) {
++			// attempt to remove scroll of debug automatically.
++			debug.detachAll(Dungeon.hero.belongings.backpack);
++			Dungeon.quickslot.clearItem(debug);
++		}
++
+ 		Dungeon.level.playLevelMusic();
+ 
+ 		SPDSettings.lastClass(Dungeon.hero.heroClass.ordinal());
