@@ -486,6 +486,7 @@ public class Hero extends Char {
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
+			if (belongings.armor().masteryPotionBonus) armDr*=1.2f;
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null)  {

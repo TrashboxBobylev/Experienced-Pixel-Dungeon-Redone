@@ -70,7 +70,8 @@ abstract public class Weapon extends KindOfWeapon {
 		}
 
 		public int damageFactor(int dmg){
-			return Math.round(dmg * damageFactor);
+			int damage = Math.round(dmg * damageFactor);
+			return damage;
 		}
 
 		public float delayFactor(float dly){

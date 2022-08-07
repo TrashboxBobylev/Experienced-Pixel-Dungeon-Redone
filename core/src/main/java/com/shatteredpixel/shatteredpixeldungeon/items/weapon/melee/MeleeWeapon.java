@@ -69,6 +69,7 @@ public class MeleeWeapon extends Weapon {
 				damage += Dungeon.IntRange( 0, exStr );
 			}
 		}
+		if (masteryPotionBonus) damage*=1.2f;
 		
 		return damage;
 	}
