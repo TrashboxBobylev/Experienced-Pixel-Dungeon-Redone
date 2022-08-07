@@ -54,7 +54,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -343,16 +342,7 @@ public class Hero extends Char {
 	}
 
 	public int bonusTalentPoints(int tier){
-		if (lvl < (Talent.tierLevelThresholds[tier]-1)
-				|| (tier == 3 && subClass == HeroSubClass.NONE)
-				|| (tier == 4 && armorAbility == null)) {
-			return 0;
-		} else if (buff(PotionOfDivineInspiration.DivineInspirationTracker.class) != null
-					&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).isBoosted(tier)) {
-			return 2;
-		} else {
-			return 0;
-		}
+		return 0;
 	}
 
 	public String className() {
