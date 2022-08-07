@@ -188,7 +188,7 @@ public enum Talent {
 	public static class RejuvenatingStepsCooldown extends FlavourBuff{
 		public int icon() { return BuffIndicator.TIME; }
 		public void tintIcon(Image icon) { icon.hardlight(0f, 0.35f, 0.15f); }
-		public float iconFadePercent() { return Math.max(0, visualcooldown() / (15 - 5*Dungeon.hero.pointsInTalent(REJUVENATING_STEPS))); }
+		public float iconFadePercent() { return Math.max(0, visualcooldown() / (5)); }
 		public String toString() { return Messages.get(this, "name"); }
 		public String desc() { return Messages.get(this, "desc", dispTurns(visualcooldown())); }
 	};
@@ -329,9 +329,9 @@ public enum Talent {
 			ScrollOfRecharging.charge( hero );
 			SpellSprite.show(hero, SpellSprite.CHARGE, 0, 1, 1);
 		}
-		if (hero.hasTalent(INVIGORATING_MEAL)){
+		if (Dungeon.hero.heroClass == HeroClass.HUNTRESS){
 			//effectively 1/2 turns of haste
-			Buff.prolong( hero, Haste.class, 0.67f+hero.pointsInTalent(INVIGORATING_MEAL));
+			Buff.prolong( hero, Adrenaline.class, 5);
 		}
 	}
 
@@ -341,7 +341,11 @@ public enum Talent {
 
 	public static float itemIDSpeedFactor( Hero hero, Item item ){
 		// 1.75x/2.5x speed with huntress talent
-		float factor = 1f + hero.pointsInTalent(SURVIVALISTS_INTUITION)*0.75f;
+		float factor = 1f;
+
+		if (hero.heroClass == HeroClass.HUNTRESS){
+			factor = 3f;
+		}
 
 		// 2x/instant for Warrior (see onItemEquipped)
 		if (item instanceof MeleeWeapon || item instanceof Armor){

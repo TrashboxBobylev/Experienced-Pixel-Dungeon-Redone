@@ -266,10 +266,11 @@ public class WndHeroInfo extends WndTabbed {
 							new TalentIcon(Talent.ELEMENTAL_POWER)};
 					break;
 				case HUNTRESS:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SPIRIT_BOW),
-							new Image(Assets.Environment.TILES_SEWERS, 112, 96, 16, 16),
-							new ItemSprite(ItemSpriteSheet.GLOVES),
-							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
+					icons = new Image[]{ new TalentIcon(Talent.SURVIVALISTS_INTUITION),
+							new TalentIcon(Talent.REJUVENATING_STEPS),
+							new TalentIcon(Talent.HEIGHTENED_SENSES),
+							new TalentIcon(Talent.INVIGORATING_MEAL),
+							new TalentIcon(Talent.ENERGIZING_UPGRADE)};
 					break;
 				case RAT_KING:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
