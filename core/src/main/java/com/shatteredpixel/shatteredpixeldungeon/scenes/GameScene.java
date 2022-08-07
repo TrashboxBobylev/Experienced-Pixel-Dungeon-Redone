@@ -65,6 +65,7 @@ import com.watabou.noosa.*;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.*;
+import com.zrp200.scrollofdebug.ScrollOfDebug;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -133,6 +134,28 @@ public class GameScene extends PixelScene {
 		if (Dungeon.hero == null || Dungeon.level == null){
 			ShatteredPixelDungeon.switchNoFade(TitleScene.class);
 			return;
+		}
+
+		// debug logic...
+		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
+		boolean supported = DeviceCompat.isDebug();
+		if(supported) {
+			if(debug == null) {
+				debug = new ScrollOfDebug();
+				if (!debug.collect()) Dungeon.hero.belongings.backpack.items.add(debug);
+				if (!Dungeon.quickslot.contains(debug)) {
+					int slot = 0;
+					// it'll overwrite the last slot if they are all full.
+					// Perhaps a bit pushy, but the whole point is for it to be available, after all.
+					while (slot < Dungeon.quickslot.SIZE - 1 && Dungeon.quickslot.getItem(slot) != null)
+						slot++;
+					Dungeon.quickslot.setSlot(slot, debug);
+				}
+			}
+		} else if(debug != null) {
+			// attempt to remove scroll of debug automatically.
+			debug.detachAll(Dungeon.hero.belongings.backpack);
+			Dungeon.quickslot.clearItem(debug);
 		}
 
 		Dungeon.level.playLevelMusic();
