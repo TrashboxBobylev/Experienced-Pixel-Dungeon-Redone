@@ -50,10 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.Camera;
-import com.watabou.noosa.Group;
-import com.watabou.noosa.Image;
-import com.watabou.noosa.Tilemap;
+import com.watabou.noosa.*;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -297,6 +294,8 @@ public class BlackMimicLevel extends Level {
 			boss.pos = pointToCell(Random.element(mainArena.getPoints()));
 		} while (!openSpace[boss.pos] || map[boss.pos] == Terrain.EMPTY_SP);
 		GameScene.add( boss );
+
+		Game.runOnRenderThread(() -> Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true));
 
 	}
 
