@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTileSheet;
 import com.watabou.noosa.Group;
+import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
@@ -59,6 +60,14 @@ public class OldCavesBossLevel extends Level {
 		color2 = 0xb9d661;
 
 		viewDistance = Math.min(6, viewDistance);
+	}
+
+	@Override
+	public void playLevelMusic() {
+		Music.INSTANCE.playTracks(
+				new String[]{Assets.Music.SEWERS_1, Assets.Music.PRISON_1, Assets.Music.CAVES_1, Assets.Music.CITY_1, Assets.Music.HALLS_1},
+				new float[]{1, 1, 1, 1, 1},
+				false);
 	}
 
 	private static final int WIDTH = 32;
