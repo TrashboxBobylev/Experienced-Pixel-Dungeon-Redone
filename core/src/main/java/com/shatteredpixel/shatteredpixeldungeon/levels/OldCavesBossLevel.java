@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
@@ -139,8 +140,9 @@ public class OldCavesBossLevel extends Level {
 		arenaDoor = Random.Int( ROOM_LEFT, ROOM_RIGHT ) + (ROOM_BOTTOM + 1) * width();
 		map[arenaDoor] = Terrain.DOOR;
 		
-		entrance = Random.Int( ROOM_LEFT + 1, ROOM_RIGHT - 1 ) +
+		int entrance = Random.Int( ROOM_LEFT + 1, ROOM_RIGHT - 1 ) +
 			Random.Int( ROOM_TOP + 1, ROOM_BOTTOM - 1 ) * width();
+		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
 		map[entrance] = Terrain.PEDESTAL;
 
 		{
@@ -239,7 +241,7 @@ public class OldCavesBossLevel extends Level {
 	}
 	
 	public Actor respawner() {
-        return new Actor() {
+        return new Respawner() {
 
             {
                 actPriority = BUFF_PRIO; //as if it were a buff.

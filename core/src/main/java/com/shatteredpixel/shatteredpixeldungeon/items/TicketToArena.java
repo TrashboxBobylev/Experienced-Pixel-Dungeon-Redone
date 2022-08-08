@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Game;
@@ -75,10 +76,11 @@ public class TicketToArena extends Item{
                 } catch (Exception e){
                     Game.reportException(e);
                 }
-                Dungeon.depth = 27;
+                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, 28, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
                 InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
                 Game.switchScene( InterlevelScene.class );
             } else {
+                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, depth, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
                 InterlevelScene.mode = InterlevelScene.Mode.RETURN;
                 InterlevelScene.returnDepth = depth;
                 InterlevelScene.returnPos = pos;
