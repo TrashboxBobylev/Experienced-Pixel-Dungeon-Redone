@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -67,7 +68,7 @@ public class BlackPsycheChest extends Item {
         super.execute(hero, action);
 
         if (action.equals(AC_ACCESS)){
-            Dungeon.depth = 26;
+            InterlevelScene.curTransition = new LevelTransition(Dungeon.level, 16 + 25*33, LevelTransition.Type.REGULAR_EXIT, 27, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
             InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
             Game.switchScene( InterlevelScene.class );
         }

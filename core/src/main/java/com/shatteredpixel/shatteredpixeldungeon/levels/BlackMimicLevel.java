@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -53,6 +54,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.Tilemap;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.*;
@@ -64,6 +66,21 @@ public class BlackMimicLevel extends Level {
 	{
 		color1 = 0x534f3e;
 		color2 = 0xb9d661;
+	}
+
+	@Override
+	public void playLevelMusic() {
+		if (locked){
+			Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
+			//if wall isn't broken
+		} else if (map[14 + 13*width()] == Terrain.SIGN){
+			Music.INSTANCE.end();
+		} else {
+			Music.INSTANCE.playTracks(
+					new String[]{Assets.Music.CAVES_1, Assets.Music.CAVES_2, Assets.Music.CAVES_2},
+					new float[]{1, 1, 0.5f},
+					false);
+		}
 	}
 
 	@Override
@@ -126,7 +143,10 @@ public class BlackMimicLevel extends Level {
 		Painter.fill(this, 16, 5, 1, 6, Terrain.EMPTY_SP);
 		Painter.fill(this, 15, 0, 3, 3, Terrain.EXIT);
 
-		exit = 16 + 2*width();
+		int exitCell = 16 + 2*width();
+		LevelTransition exit = new LevelTransition(this, exitCell, LevelTransition.Type.REGULAR_EXIT);
+		exit.set(14, 0, 18, 2);
+		transitions.add(exit);
 
 		CustomTilemap customVisuals = new CityEntrance();
 		customVisuals.setRect(0, 0, width(), 11);
@@ -147,6 +167,13 @@ public class BlackMimicLevel extends Level {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
+
+		//pre-1.3.0 saves, modifies exit transition with custom size
+		if (bundle.contains("exit")){
+			LevelTransition exit = getTransition(LevelTransition.Type.REGULAR_EXIT);
+			exit.set(14, 0, 18, 2);
+			transitions.add(exit);
+		}
 
 		for (CustomTilemap c : customTiles){
 			if (c instanceof ArenaVisuals){
@@ -472,6 +499,7 @@ public class BlackMimicLevel extends Level {
 		}
 
 		Painter.set(this, entrance, Terrain.ENTRANCE);
+		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
 	}
 
 	private static short[] corner1 = {
