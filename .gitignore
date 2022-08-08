@@ -18,3 +18,4 @@ local.properties
 #intellij project files
 *.iml
 *.idea
+/android/debug/
