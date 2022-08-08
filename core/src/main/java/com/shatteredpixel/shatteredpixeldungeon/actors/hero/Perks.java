@@ -63,7 +63,8 @@ public class Perks {
         ADDITIONAL_MONEY,
         BETTER_BARTERING,
         POTIONS,
-        MORE_BAG;
+        MORE_BAG,
+        NO_ONESHOTS;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

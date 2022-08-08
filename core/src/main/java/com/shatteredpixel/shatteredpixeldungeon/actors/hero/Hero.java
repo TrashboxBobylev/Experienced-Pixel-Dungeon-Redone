@@ -1239,6 +1239,10 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 			dmg = Math.round(dmg*0.00f);
 		}
 
+		if (perks.contains(Perks.Perk.NO_ONESHOTS) && dmg >= HT && HP == HT){
+			dmg /= 2;
+		}
+
 		int preHP = HP + shielding();
 		super.damage( dmg, src );
 		int postHP = HP + shielding();
