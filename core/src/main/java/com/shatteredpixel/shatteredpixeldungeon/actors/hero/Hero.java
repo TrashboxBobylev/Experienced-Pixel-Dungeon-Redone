@@ -1607,6 +1607,10 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 			Badges.validateLevelReached();
 		}
 	}
+
+	public static void getExp(int value){
+		Dungeon.hero.earnExp(value, null);
+	}
 	
 	public int maxExp() {
 		return maxExp( lvl );
