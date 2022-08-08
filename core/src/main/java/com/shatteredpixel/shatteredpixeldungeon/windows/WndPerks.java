@@ -65,7 +65,7 @@ public class WndPerks extends Window {
         add( title );
         ArrayList<Perks.Perk> allConducts = perks;
 
-        ScrollPane pane = new ScrollPane(new Component()) {
+        pane = new ScrollPane(new Component()) {
             @Override
             public void onClick(float x, float y) {
                 int size = boxes.size();
