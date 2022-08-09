@@ -27,11 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -84,8 +80,8 @@ abstract public class MissileWeapon extends Weapon {
 	
 	@Override
 	public int min(int lvl) {
-		return  4 * tier +                      //base
-				(tier == 1 ? lvl*2 : 4*lvl);      //level scaling
+		return  3 * tier +                      //base
+				(tier == 1 ? lvl*2 : 3*lvl);      //level scaling
 	}
 	
 	@Override
@@ -95,8 +91,8 @@ abstract public class MissileWeapon extends Weapon {
 	
 	@Override
 	public int max(int lvl) {
-		return  10 * tier +                      //base
-				(tier == 1 ? 4*lvl : tier*2*lvl); //level scaling
+		return  7 * tier +                      //base
+				(tier == 1 ? 3*lvl : tier*2*lvl); //level scaling
 	}
 	
 	public int STRReq(int lvl){

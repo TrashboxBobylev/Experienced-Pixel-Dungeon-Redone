@@ -41,7 +41,7 @@ public class ThrowingClub extends MissileWeapon {
 	
 	@Override
 	public int max(int lvl) {
-		return  8 * tier +                  //8 base, down from 10
+		return  6 * tier +                  //8 base, down from 10
 				(tier*2) * lvl;               //scaling unchanged
 	}
 }

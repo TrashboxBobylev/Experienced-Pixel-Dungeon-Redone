@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -48,7 +47,7 @@ public class ThrowingKnife extends MissileWeapon {
 	
 	@Override
 	public int max(int lvl) {
-		return  12 * tier +                      //6 base, up from 5
+		return  10 * tier +                      //6 base, up from 5
 				(tier == 1 ? 4*lvl : tier*2*lvl); //scaling unchanged
 	}
 
