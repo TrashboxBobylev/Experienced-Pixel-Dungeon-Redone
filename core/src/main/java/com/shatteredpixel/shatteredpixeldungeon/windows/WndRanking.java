@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -92,11 +91,11 @@ public class WndRanking extends WndTabbed {
 	private void createControls() {
 		
 		Icons[] icons =
-			{Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_ON};
+			{Icons.RANKINGS, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_ON};
 		Group[] pages =
-			{new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab(), null};
+			{new StatsTab(), new ItemsTab(), new BadgesTab(), null};
 
-		if (Dungeon.challenges != 0) pages[4] = new ChallengesTab();
+		if (Dungeon.challenges != 0) pages[3] = new ChallengesTab();
 		
 		for (int i=0; i < pages.length; i++) {
 
@@ -243,31 +242,6 @@ public class WndRanking extends WndTabbed {
 			
 			return pos + GAP + txt.height();
 		}
-	}
-
-	private class TalentsTab extends Group{
-
-		public TalentsTab(){
-			super();
-
-			camera = WndRanking.this.camera;
-
-			int tiers = 1;
-			if (Dungeon.hero.lvl >= 6) tiers++;
-			if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass != HeroSubClass.NONE) tiers++;
-			if (Dungeon.hero.lvl >= 20 && Dungeon.hero.armorAbility != null) tiers++;
-			while (Dungeon.hero.talents.size() > tiers){
-				Dungeon.hero.talents.remove(Dungeon.hero.talents.size()-1);
-			}
-
-			TalentsPane p = new TalentsPane(TalentButton.Mode.INFO);
-			add(p);
-			p.setPos(0, 0);
-			p.setSize(WIDTH, HEIGHT);
-			p.setPos(0, 0);
-
-		}
-
 	}
 
 	private class ItemsTab extends Group {
