@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
@@ -359,10 +360,10 @@ abstract public class Weapon extends KindOfWeapon {
 
 		protected float procChanceMultiplier( Char attacker ){
 			float multi = 1f;
-			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.ENRAGED_CATALYST)){
+			if (attacker instanceof Hero && ((Hero) attacker).subClass == HeroSubClass.BERSERKER){
 				Berserk rage = attacker.buff(Berserk.class);
 				if (rage != null) {
-					multi += (rage.rageAmount() * 0.15f) * ((Hero) attacker).pointsInTalent(Talent.ENRAGED_CATALYST);
+					multi += (rage.rageAmount() * 0.15f) * 4;
 				}
 			}
 			if (attacker.buff(Talent.SpiritBladesTracker.class) != null

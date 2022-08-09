@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal.WarriorShield;
@@ -110,9 +111,11 @@ public class Berserk extends Buff {
 			if (powerLossBuffer > 0){
 				powerLossBuffer--;
 			} else {
-				power -= GameMath.gate(0.1f, power, 1f) * 0.067f * Math.pow((target.HP / (float) target.HT), 2);
+				double rageLoss = GameMath.gate(0.1f, this.power, 1f) * 0.067f * Math.pow((target.HP / (float) target.HT), 2);
+				if (Dungeon.hero.subClass == HeroSubClass.BERSERKER) rageLoss *= 0.5f;
+				this.power -= rageLoss;
 
-				if (power <= 0) {
+				if (this.power <= 0) {
 					detach();
 				}
 			}
