@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
+import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
@@ -261,8 +262,42 @@ public class NewsScene extends PixelScene {
 
 	private static class WndArticle extends WndTitledMessage {
 
+		protected static int maxHeight() {
+			return (int) (PixelScene.uiCamera.height * 0.8);
+		}
+
+		ScrollPane sp;
+
 		public WndArticle(NewsArticle article ) {
-			super(News.parseArticleIcon(article), article.title, article.summary);
+			Component titlebar = new IconTitle(News.parseArticleIcon(article), article.title);
+			int width = WIDTH_MIN;
+
+			titlebar.setRect(0, 0, width, 0);
+			add(titlebar);
+
+			RenderedTextBlock text = PixelScene.renderTextBlock(6);
+			text.text(article.summary, width);
+			text.setPos(titlebar.left(), titlebar.bottom() + 2 * GAP);
+
+			while (PixelScene.landscape()
+					&& text.bottom() > (PixelScene.MIN_HEIGHT_L - 10)
+					&& width < 220) {
+				width += 20;
+				titlebar.setRect(0, 0, width, 0);
+				text.setPos( titlebar.left(), titlebar.bottom() + 2*GAP );
+				text.maxWidth(width);
+
+				titlebar.setSize(width, titlebar.height());
+				text.setPos(titlebar.left(), titlebar.bottom() + 2 * GAP);
+			}
+			Component comp = new Component();
+			comp.add(text);
+			text.setPos(0, GAP);
+			comp.setSize(text.width(), text.height() + GAP * 2);
+			resize(width, (int) Math.min((int) comp.bottom() + 2 + titlebar.height() + GAP, maxHeight()));
+
+			add(sp = new ScrollPane(comp));
+			sp.setRect(titlebar.left(), titlebar.bottom() + GAP, comp.width(), Math.min((int) comp.bottom() + 2, maxHeight() - titlebar.bottom() - GAP));
 		}
 
 
