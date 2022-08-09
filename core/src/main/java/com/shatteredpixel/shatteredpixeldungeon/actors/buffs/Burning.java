@@ -92,7 +92,7 @@ public class Burning extends Buff implements Hero.Doom {
 		
 		if (target.isAlive() && !target.isImmune(getClass())) {
 			
-			int damage = Math.round(Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 )*Dungeon.fireDamage);
+			int damage = Math.round(Dungeon.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 )*Dungeon.fireDamage);
 			Buff.detach( target, Chill.class);
 
 			if (target instanceof Hero && target.buff(TimekeepersHourglass.timeStasis.class) == null) {

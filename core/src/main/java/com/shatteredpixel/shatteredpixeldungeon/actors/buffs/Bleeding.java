@@ -35,8 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PointF;
 
-import static com.watabou.utils.Random.NormalFloat;
-
 public class Bleeding extends Buff {
 
 	{
@@ -100,7 +98,7 @@ public class Bleeding extends Buff {
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			level = NormalFloat(level / 2f, level);
+			level = Dungeon.NormalFloat(level / 2f, level);
 			int dmg = Math.round(level);
 			
 			if (dmg > 0) {
