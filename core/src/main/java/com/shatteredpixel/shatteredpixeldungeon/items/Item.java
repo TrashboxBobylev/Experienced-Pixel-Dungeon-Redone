@@ -119,11 +119,16 @@ public class Item implements Bundlable {
 	}
 
 	public boolean doPickUp(Hero hero, int pos) {
+		return doPickUp( hero, hero.pos, TIME_TO_PICK_UP);
+	}
+
+	public boolean doPickUp(Hero hero, int pos, float time) {
 		if (collect( hero.belongings.backpack )) {
 			
 			GameScene.pickUp( this, pos );
 			Sample.INSTANCE.play( Assets.Sounds.ITEM );
-			hero.spendAndNext( TIME_TO_PICK_UP );
+			if (time > 0f)
+				hero.spendAndNext( time );
 			return true;
 			
 		} else {
