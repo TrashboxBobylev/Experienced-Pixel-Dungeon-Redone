@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
@@ -632,7 +633,8 @@ public abstract class Mob extends Char {
 				restoration = Math.round(restoration * 0.4f*Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/3f);
 			}
 			if (restoration > 0) {
-				Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)/3f);
+				if (Dungeon.hero.subClass == HeroSubClass.WARLOCK)
+					Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*1.5f);
 				Dungeon.hero.HP = (int) Math.ceil(Math.min(Dungeon.hero.HT, Dungeon.hero.HP + (restoration * 0.4f)));
 				Dungeon.hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 			}
@@ -742,7 +744,7 @@ public abstract class Mob extends Char {
 
 		if (!(this instanceof Wraith)
 				&& soulMarked
-				&& Random.Float() < (0.4f*Dungeon.hero.pointsInTalent(Talent.NECROMANCERS_MINIONS)/3f)){
+				&& Random.Float() < (Dungeon.hero.subClass == HeroSubClass.WARLOCK ? 0.5f : 0)){
 			Wraith w = Wraith.spawnAt(pos);
 			if (w != null) {
 				Buff.affect(w, Corruption.class);
@@ -817,7 +819,7 @@ public abstract class Mob extends Char {
 
 		//soul eater talent
 		if (buff(SoulMark.class) != null &&
-				Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)){
+				Random.Int(10) < (Dungeon.hero.subClass == HeroSubClass.WARLOCK ? 4 : 0)){
 			Talent.onFoodEaten(Dungeon.hero, 0, null);
 		}
 
