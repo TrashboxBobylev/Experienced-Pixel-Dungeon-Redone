@@ -151,18 +151,18 @@ public class MagesStaff extends MeleeWeapon {
 	public int proc(Char attacker, Char defender, int damage) {
 		if (attacker.buff(Talent.EmpoweredStrikeTracker.class) != null){
 			attacker.buff(Talent.EmpoweredStrikeTracker.class).detach();
-			damage = Math.round( damage * (1f + Dungeon.hero.pointsInTalent(Talent.EMPOWERED_STRIKE)/4f));
+			damage = Math.round( damage * 2f);
 		}
 
 		if (wand.curCharges >= wand.maxCharges && attacker instanceof Hero && Random.Int(5) < ((Hero) attacker).pointsInTalent(Talent.EXCESS_CHARGE)){
 			Buff.affect(attacker, Barrier.class).setShield(buffedLvl()*2);
 		}
 
-		if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.MYSTICAL_CHARGE)){
+		if (attacker instanceof Hero && ((Hero) attacker).subClass == HeroSubClass.BATTLEMAGE){
 			Hero hero = (Hero) attacker;
 			for (Buff b : hero.buffs()){
 				if (b instanceof Artifact.ArtifactBuff && !((Artifact.ArtifactBuff) b).isCursed() ) {
-					((Artifact.ArtifactBuff) b).charge(hero, hero.pointsInTalent(Talent.MYSTICAL_CHARGE)/2f);
+					((Artifact.ArtifactBuff) b).charge(hero, 2f);
 				}
 			}
 		}
