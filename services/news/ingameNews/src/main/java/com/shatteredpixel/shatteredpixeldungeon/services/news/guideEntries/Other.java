@@ -31,14 +31,14 @@ public class Other extends NewsArticle {
         title = "Misc Remarks";
         icon = "ICON: PREFS";
         summary = "There is an other things that you should know about:\n\n" +
-                "_-_ You can upgrade artifacts once they reach +10, for exception of Chalice of Blood.\n\n" +
+                "_-_ You can upgrade artifacts once they reach +10.\n\n" +
                 "_-_ Wands don't have max charge limitation anymore; and Mage's Staff holds 33% more charges compared to wand without staff." +
                 "_-_ Shops now sell more items with more variety over them.\n\n" +
                 "_-_ The inventory space is massively increased, both for backpack and dedicated bags.\n\n" +
                 "_-_ Enchantments and glyphs no longer have a chance of disappearing with upgrading them.\n\n" +
                 "_-_ Rings have massive nerf compared to vanilla Shattered PD.\n\n" +
-                "_-_ _Scroll of Affection_ turns every enemy in your sight into ally.\n\n" +
-                "_-_ _Scroll of Confusion_ is _Scroll of Determination_ now; instead of confusing entities, applies life-steal shielding to hero.";
+                "_-_ _Potion of Mastery_ buffs item's effectiveness by 20%.\n\n" +
+                "_-_ _Scroll of Confusion_ is _Scroll of Determination_ now; instead of confusing entities, it applies life-steal shielding to hero.";
 
     }
 }

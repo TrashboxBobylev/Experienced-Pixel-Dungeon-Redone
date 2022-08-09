@@ -32,7 +32,7 @@ public class ExpGen extends NewsArticle {
         icon = "ITEM: 426";
         summary = "If you want to win your money and prizes efficently, then welcome to arena!\n" +
                 "_-_ _Arena_ is new unique area, which can be accessed with unique tickets, which can be bought at any shops.\n\n" +
-                "_-_ Mobs in _arena_ are strongest in this dungeon, drop no EXP, but have gold and random items as loot.\n\n" +
+                "_-_ Mobs in _arena_ are strongest in this dungeon, drop 50% EXP, but have gold and random items as loot.\n\n" +
                 "_-_ While grinding, you can buy loot bags in arena shop.";
     }
 }
