@@ -100,7 +100,7 @@ public abstract class Elemental extends Mob {
 			return Random.NormalIntRange( 16, 26 );
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-			return Random.NormalIntRange(5*regionScale, 5 + 5*regionScale);
+			return Random.NormalIntRange(6*regionScale, 15 + 10*regionScale);
 		}
 	}
 	
@@ -116,7 +116,7 @@ public abstract class Elemental extends Mob {
 			return 25;
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-			return 5 + 5*regionScale;
+			return 5 + 10*regionScale;
 		}
 	}
 
@@ -124,8 +124,8 @@ public abstract class Elemental extends Mob {
 		summonedALly = true;
 		//sewers are prison are equivalent, otherwise scales as normal (2/2/3/4/5)
 		int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-		defenseSkill = 5*regionScale;
-		HT = 15*regionScale;
+		defenseSkill = 10*regionScale;
+		HT = 30*regionScale;
 	}
 	
 	@Override
