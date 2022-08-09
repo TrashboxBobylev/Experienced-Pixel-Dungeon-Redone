@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
@@ -56,10 +55,10 @@ public class AlchemyBag extends TreasureBag {
         List<Class<? extends Item>> possibleItems = Arrays.asList(
                 BlizzardBrew.class, InfernalBrew.class, ShockingBrew.class,
                 ElixirOfDragonsBlood.class, ElixirOfHoneyedHealing.class, ElixirOfIcyTouch.class, ElixirOfToxicEssence.class,
-                Alchemize.class, AquaBlast.class, BeaconOfReturning.class, FeatherFall.class, MagicalPorter.class,
-                PhaseShift.class, Recycle.class, Vampirism.class,
-                StewedMeat.class, Firebomb.class, Flashbang.class, FrostBomb.class, HolyBomb.class, Noisemaker.class,
-                RegrowthBomb.class, ShockBomb.class, WoollyBomb.class);
+                Alchemize.class, AquaBlast.class, BeaconOfReturning.class, FeatherFall.class, CurseInfusion.class,
+                PhaseShift.class, Recycle.class, Vampirism.class, SummonElemental.class, TelekineticGrab.class, WildEnergy.class,
+                Firebomb.class, Flashbang.class, FrostBomb.class, HolyBomb.class, Noisemaker.class,
+                RegrowthBomb.class, ShockBomb.class, WoollyBomb.class, ArcaneBomb.class, ShrapnelBomb.class);
         int amount = Random.Int(1, 4);
         if (Dungeon.hero.perks.contains(Perks.Perk.MORE_BAG)) amount *= 1.5f;
         items.add(Reflection.newInstance(Random.element(possibleItems)).quantity(amount));
