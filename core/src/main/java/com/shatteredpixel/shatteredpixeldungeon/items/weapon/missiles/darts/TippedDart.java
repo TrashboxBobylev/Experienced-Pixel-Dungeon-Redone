@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -125,8 +125,10 @@ public abstract class TippedDart extends Dart {
 	@Override
 	public float durabilityPerUse() {
 		float use = super.durabilityPerUse();
-		
-		use /= (1 + Dungeon.hero.pointsInTalent(Talent.DURABLE_TIPS));
+
+		if (Dungeon.hero.subClass == HeroSubClass.WARDEN) {
+			use /= 5;
+		}
 
 		//checks both destination and source position
 		float lotusPreserve = 0f;
