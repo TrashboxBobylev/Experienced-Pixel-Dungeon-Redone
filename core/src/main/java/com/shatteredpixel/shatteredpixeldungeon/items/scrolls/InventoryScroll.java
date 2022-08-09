@@ -73,7 +73,7 @@ public abstract class InventoryScroll extends Scroll {
 		} );
 	}
 
-	private String inventoryTitle(){
+	protected String inventoryTitle(){
 		return Messages.get(this, "inv_title");
 	}
 

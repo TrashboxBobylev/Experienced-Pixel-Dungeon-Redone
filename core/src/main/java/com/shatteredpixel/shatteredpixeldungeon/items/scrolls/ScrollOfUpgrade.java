@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -64,6 +66,33 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	@Override
 	protected boolean usableOnItem(Item item) {
 		return item.isUpgradable();
+	}
+
+	@Override
+	public void execute(Hero hero, String action) {
+		super.execute(hero, action);
+
+		if (action.equals(AC_UPGRADE)){
+			if (hero.buff(MagicImmune.class) != null){
+				GLog.w( Messages.get(this, "no_magic") );
+			} else if (hero.buff( Blindness.class ) != null) {
+				GLog.w( Messages.get(this, "blinded") );
+			} else if (hero.buff(UnstableSpellbook.bookRecharge.class) != null
+					&& hero.buff(UnstableSpellbook.bookRecharge.class).isCursed()){
+				GLog.n( Messages.get(this, "cursed") );
+			} else {
+				curUser = hero;
+				curItem = detachAll( hero.belongings.backpack );
+				GameScene.selectItem( itemSelector2);
+			}
+		}
+	}
+
+	@Override
+	public ArrayList<String> actions(Hero hero) {
+		ArrayList<String> actions = super.actions( hero );
+		if (!anonymous || isIdentified()) actions.add(AC_UPGRADE);
+		return actions;
 	}
 
 	@Override
@@ -152,4 +181,49 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	public int energyVal() {
 		return isKnown() ? 8 * quantity : super.energyVal();
 	}
+
+	protected WndBag.ItemSelector itemSelector2 = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return inventoryTitle();
+		}
+
+		@Override
+		public Class<? extends Bag> preferredBag() {
+			return preferredBag;
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return usableOnItem(item);
+		}
+
+		@Override
+		public void onSelect( Item item ) {
+
+			//FIXME this safety check shouldn't be necessary
+			//it would be better to eliminate the curItem static variable.
+			if (!(curItem instanceof InventoryScroll)){
+				return;
+			}
+
+			if (item != null) {
+				for (int i = 0; i < curItem.quantity(); i++)
+					((InventoryScroll)curItem).onItemSelected( item );
+				((InventoryScroll)curItem).readAnimation();
+
+				Sample.INSTANCE.play( Assets.Sounds.READ );
+
+			} else if (identifiedByUse && !((Scroll)curItem).anonymous) {
+
+				((InventoryScroll)curItem).confirmCancelation();
+
+			} else if (!((Scroll)curItem).anonymous) {
+
+				curItem.collect( curUser.belongings.backpack );
+
+			}
+		}
+	};
 }
