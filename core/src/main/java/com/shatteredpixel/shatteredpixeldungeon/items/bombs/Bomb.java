@@ -182,7 +182,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = Dungeon.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+				int dmg = (int) (Dungeon.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2)*Dungeon.fireDamage);
 				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 					dmg *= 2.5f;
 				}
