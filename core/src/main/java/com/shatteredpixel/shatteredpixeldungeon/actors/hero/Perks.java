@@ -134,8 +134,16 @@ public class Perks {
         return damage;
     }
 
+    public static int nextPerkLevel(){
+        int num = 5;
+        for (int i = 0; i < Dungeon.hero.perks.size(); i++){
+            num += 5 + i;
+        }
+        return num;
+    }
+
     public static void earnPerk(Hero hero){
-        if (hero.lvl == (hero.perks.size()+5) && hero.perks.size() <= Perk.values().length){
+        if (hero.perks.size() <= Perk.values().length && hero.lvl == nextPerkLevel()){
             Perk perk;
             do {
                 perk = Random.element(Perk.values());
