@@ -53,7 +53,7 @@ public class RingOfFuror extends Ring {
         float multiplier = 1f;
         if (getBuffedBonus(target, Furor.class) > 0) multiplier = 1.1f;
         if (getBuffedBonus(target, Furor.class) > 1) multiplier += getBuffedBonus(target, Furor.class)*0.001;
-        return 1f / multiplier;
+        return multiplier;
 	}
 
 	public class Furor extends RingBuff {
