@@ -40,17 +40,12 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
-import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.UUID;
+import java.util.*;
 
 public enum Rankings {
 	
@@ -144,7 +139,7 @@ public enum Rankings {
 	//assumes a ranking is loaded, or game is ending
 	public int calculateScore(){
 
-		if (Dungeon.initialVersion > ShatteredPixelDungeon.v1_2_3){
+		if (Dungeon.initialVersion > 453){
 			Statistics.progressScore = Dungeon.hero.lvl * Statistics.deepestFloor * 65;
 			Statistics.progressScore = Math.min(Statistics.progressScore, 50_000);
 
