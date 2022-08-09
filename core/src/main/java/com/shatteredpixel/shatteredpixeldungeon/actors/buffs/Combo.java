@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -38,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
@@ -52,7 +52,6 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Combo extends Buff implements ActionIndicator.Action {
 
@@ -100,7 +99,8 @@ public class Combo extends Buff implements ActionIndicator.Action {
 		comboTime = 5f;
 
 		if (!enemy.isAlive() || (enemy.buff(Corruption.class) != null && enemy.HP == enemy.HT)){
-			comboTime = Math.max(comboTime, 15*((Hero)target).pointsInTalent(Talent.CLEAVE));
+			if (((Hero)target).subClass == HeroSubClass.GLADIATOR)
+				comboTime = Math.max(comboTime, 50);
 		}
 
 		initialComboTime = comboTime;
@@ -339,7 +339,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 					trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.PROJECTILE);
 					//knock them back along that ballistica, ensuring they don't fall into a pit
 					int dist = 2;
-					if (enemy.isAlive() && count >= 7 && hero.pointsInTalent(Talent.ENHANCED_COMBO) >= 1) {
+					if (enemy.isAlive() && count >= 7 && hero.subClass == HeroSubClass.GLADIATOR) {
 						dist++;
 						Buff.prolong(enemy, Vertigo.class, 3);
 					} else if (!enemy.flying) {
@@ -444,7 +444,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 				GLog.w(Messages.get(Combo.class, "bad_target"));
 
 			} else if (!((Hero)target).canAttack(enemy)){
-				if (((Hero) target).pointsInTalent(Talent.ENHANCED_COMBO) < 3
+				if (((Hero) target).subClass == HeroSubClass.GLADIATOR
 					|| Dungeon.level.distance(target.pos, enemy.pos) > 1 + target.buff(Combo.class).count/3){
 					GLog.w(Messages.get(Combo.class, "bad_target"));
 				} else {
