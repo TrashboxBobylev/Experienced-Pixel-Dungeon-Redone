@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
@@ -56,7 +57,55 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.102", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.11", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released August 11th, 2022\n" +
+                            "_-_ 247 days after Experienced Pixel Dungeon 2.10.2\n" +
+                            "_-_ 289 days after Experienced Pixel Dungeon 2.10\n\n" +
+                            "\n" +
+                            "Dev commentary will be added here in the future."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                    "Basically everything between 0.9.2 and 1.3.2.\n\n"+
+                            "_-_ Armor abilities.\n" +
+                            "_-_ Gladiator and Freerunner reworks.\n" +
+                            "_-_ Alchemy rework.\n" +
+                            "_-_ New music.\n" +
+                            "_-_ New desktop UI.\n" +
+                            "_-_ Liquid Metal and Arcane Resin.\n" +
+                            "_-_ Hostile Champions and Badder Bosses challenges.\n" +
+                            "_-_ Ankh overhaul.\n" +
+                            "_-_ Exotic items reworks.\n" +
+                            "_-_ New special rooms.\n" +
+                            "_-_ Armband rework.\n" +
+                            "_-_ Dreamfoil rework.\n" +
+                            "_-_ Ascension challenge."
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Interfaces.BUFFS_LARGE, 80, 32, 16, 16), "Perks",
+                    "_-_ Reworked how frequently perks are gained to make them more accessible.\n" +
+                            "_-_ Nerfed Iron Will to make you take less damage.\n" +
+                            "_-_ Added Steel Will perk." ));
+
+            changes.addButton( new ChangeButton(new ItemSprite(new Whip()), "Weapon changes",
+                    "_-_ Overhauled Whip, Round Shield, Stone Gauntlet and Greatshield.\n" +
+                            "_-_ Buffed Warhammer.\n" +
+                            "_-_ Nerfed Sai.\n" +
+                            "_-_ Nerfed all missile weapons, including Spirit Bow."));
+            changes.addButton( new ChangeButton(HeroSprite.avatar(HeroClass.WARRIOR, 6), "Class tweaks",
+                    "_-_ To make classes more appealing to play compared to Rat King, each one has many new perks to help them progress in dungeon.\n" +
+                            "_-_ This also includes subclasses."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Fixed Ring of Elements's misleading description.\n" +
+                            "_-_ Fixed treasure bags dropping higher tier weapons.\n" +
+                            "_-_ Treasure bags no longer require turns to pick each item.\n" +
+                            "_-_ Changed the coloring of buttons.\n" +
+                            "_-_ Potion of Mastery buffs weapons and armor.\n" +
+                            "_-_ Guide Entries now have a scroll bar."));
+
+
+
+            changes = new ChangeInfo("ExpPD-2.10.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
