@@ -38,6 +38,7 @@ public class Other extends NewsArticle {
                 "_-_ Enchantments and glyphs no longer have a chance of disappearing with upgrading them.\n\n" +
                 "_-_ Rings have massive nerf compared to vanilla Shattered PD.\n\n" +
                 "_-_ _Potion of Mastery_ buffs item's effectiveness by 20%.\n\n" +
+                "_-_ Class armor charges 150% faster.\n\n"+
                 "_-_ _Scroll of Confusion_ is _Scroll of Determination_ now; instead of confusing entities, it applies life-steal shielding to hero.";
 
     }
