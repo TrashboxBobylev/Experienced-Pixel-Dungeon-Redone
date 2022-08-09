@@ -52,14 +52,14 @@ public class Sai extends MeleeWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        DefenseDebuff debuff = Buff.affect(defender, DefenseDebuff.class, 10f);
+        DefenseDebuff debuff = Buff.affect(defender, DefenseDebuff.class, 3.33f);
         debuff.stack += max() / 2;
         return super.proc(attacker, defender, damage);
     }
 
     public static class DefenseDebuff extends FlavourBuff {
 
-        public static final float DURATION = 20f;
+        public static final float DURATION = 3f;
 
         public int stack = 0;
 

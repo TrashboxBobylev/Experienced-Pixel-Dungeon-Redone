@@ -297,7 +297,7 @@ public abstract class Char extends Actor {
 					dr = 0;
 				}
 				if (enemy.buff(Sai.DefenseDebuff.class) != null){
-				    dr -= enemy.buff(Sai.DefenseDebuff.class).stack;
+				    dr = Math.max(0, dr -enemy.buff(Sai.DefenseDebuff.class).stack);
                 }
 			}
 
