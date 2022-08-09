@@ -50,11 +50,17 @@ public class WarHammer extends MeleeWeapon {
 				5*lvl*(tier+1);   //scaling is 5x
 	}
 
-    @Override
+	@Override
+	public int min(int lvl) {
+		return  tier*12 +  //base
+				lvl*10;    //level scaling
+	}
+
+	@Override
     public int proc(Char attacker, Char defender, int damage) {
         curUser.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
-        Buff.affect(attacker, Paralysis.class, Random.Int(4, 8));
-        Buff.affect(defender, Paralysis.class, Random.Int(3, 6));
+        Buff.affect(attacker, Paralysis.class, Random.Int(2, 5));
+        Buff.affect(defender, Paralysis.class, Random.Int(1, 3));
         return super.proc(attacker, defender, damage);
     }
 }
