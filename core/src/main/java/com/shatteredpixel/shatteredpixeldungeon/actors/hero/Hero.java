@@ -65,10 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CreativeGloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dirk;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -94,6 +91,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -1233,6 +1231,33 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 		if (belongings.armor() != null && belongings.armor().hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
 			dmg -= AntiMagic.drRoll(belongings.armor().buffedLvl());
+		}
+
+		if ((belongings.weapon() instanceof Greatshield || belongings.weapon() instanceof RoundShield) &&
+				AntiMagic.RESISTS.contains(src.getClass())){
+			ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.BEACON);
+			PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
+			int finalDmg = dmg;
+			((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+					MagicMissile.INVISI,
+					sprite,
+					aoe.rays.get(0).path.get(aoe.rays.get(0).dist),
+					() -> {
+						for (int i = 0; i < PathFinder.distance.length; i++) {
+							if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+								Char ch = Actor.findChar(i);
+								if (ch != null && ch.alignment != alignment && ch != Dungeon.hero) {
+									int retaliationDamage = (int) (finalDmg *1.5f);
+									if (belongings.weapon() instanceof Greatshield) retaliationDamage*=2;
+									ch.damage(retaliationDamage, Hero.this);
+									Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
+									CellEmitter.center(pos).burst(MagicMissile.SlowParticle.FACTORY, 10);
+								}
+							}
+						}
+					}
+			);
+			dmg *= 0.75;
 		}
 
 		if (buff(Talent.WarriorFoodImmunity.class) != null){

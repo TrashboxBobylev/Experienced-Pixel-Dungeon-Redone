@@ -25,23 +25,38 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 
 public class Whip extends MeleeWeapon {
 
 	{
 		image = ItemSpriteSheet.WHIP;
 		hitSound = Assets.Sounds.HIT;
-		hitSoundPitch = 1.1f;
+		hitSoundPitch = 1.3f;
 
 		internalTier = tier = 3;
-		RCH = 3;    //lots of extra reach
+		RCH = 8;    //lots of extra reach
+		DLY = 1/3f;
+	}
+
+	@Override
+	public int proc(Char attacker, Char defender, int damage) {
+		damage *= GameMath.gate(0.1f,1f - 0.1f*(Math.max(Dungeon.level.distance(attacker.pos, defender.pos), 0)), 1f);
+		return super.proc(attacker, defender, damage);
+	}
+
+	@Override
+	public int min(int lvl) {
+		return tier+lvl;
 	}
 
 	@Override
 	public int max(int lvl) {
-		return  4*(tier+1) +    //16 base, down from 24
-				lvl*(tier+1);     //+4 per level, down from +5
+		return  3*(tier) +    //16 base, down from 24
+				lvl*(tier-1)/2;     //+4 per level, down from +5
 	}
 
 }

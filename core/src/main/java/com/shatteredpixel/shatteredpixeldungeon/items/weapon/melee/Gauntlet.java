@@ -25,7 +25,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
+
+import java.util.ArrayList;
 
 public class Gauntlet extends MeleeWeapon {
 	
@@ -44,4 +50,26 @@ public class Gauntlet extends MeleeWeapon {
 				lvl*Math.round(0.5f*(tier+2));  //+3.5 per level, down from +7
 	}
 
+	private ArrayList<Char> affected = new ArrayList<>();
+
+	private ArrayList<Lightning.Arc> arcs = new ArrayList<>();
+
+	@Override
+	public int proc(Char attacker, Char defender, int damage) {
+		affected.clear();
+		arcs.clear();
+
+		Shocking.arc(attacker, defender, 3, affected, arcs);
+
+		affected.remove(defender); //defender isn't hurt by lightning
+		for (Char ch : affected) {
+			if (ch.alignment != attacker.alignment) {
+				ch.damage(Math.round(damage * 0.75f), Shocking.class);
+			}
+		}
+
+		attacker.sprite.parent.addToFront( new Lightning( arcs, null ) );
+		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+		return super.proc(attacker, defender, damage);
+	}
 }
