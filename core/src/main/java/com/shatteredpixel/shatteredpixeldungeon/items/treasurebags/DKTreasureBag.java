@@ -52,10 +52,10 @@ public class DKTreasureBag extends TreasureBag {
             Dungeon.LimitedDrops.ARMOR_KIT.drop();
         }
         items.add(new Gold().quantity(Random.Int( 1500 + Dungeon.escalatingDepth() * 175, 2000 + Dungeon.escalatingDepth() * 233 )));
-        items.add(Generator.randomUsingDefaults(Generator.Category.ARTIFACT).random());
-        items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON).random());
-        items.add(Generator.randomUsingDefaults(Generator.Category.ARMOR).random());
-        items.add(Generator.randomUsingDefaults(Generator.Category.RING).random());
+        items.add(Generator.randomUsingDefaults(Generator.Category.ARTIFACT));
+        items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON));
+        items.add(Generator.randomUsingDefaults(Generator.Category.ARMOR));
+        items.add(Generator.randomUsingDefaults(Generator.Category.RING));
         if (Dungeon.cycle > 0){
             if (!Dungeon.LimitedDrops.DK_DROPS.dropped()){
                 items.add(new KingBlade());

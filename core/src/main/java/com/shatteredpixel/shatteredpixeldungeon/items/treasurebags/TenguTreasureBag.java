@@ -53,8 +53,8 @@ public class TenguTreasureBag extends TreasureBag {
         items.add(new Shuriken().upgrade(1).quantity(Random.Int(2, 10)));
         if (Dungeon.cycle > 0){
             items.add(new TenguShuriken().random().quantity(Random.Int(1, 3)));
-            for (int i = 0; i < 8; i++) items.add(Generator.randomUsingDefaults(Generator.Category.MISSILE).random());
-            for (int i = 0; i < 2; i++) items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON).random());
+            for (int i = 0; i < 8; i++) items.add(Generator.randomUsingDefaults(Generator.Category.MISSILE));
+            for (int i = 0; i < 2; i++) items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON));
         }
         return items;
     }
