@@ -102,7 +102,11 @@ public class ExpPDChanges {
                             "_-_ Treasure bags no longer require turns to pick each item.\n" +
                             "_-_ Changed the coloring of buttons.\n" +
                             "_-_ Potion of Mastery buffs weapons and armor.\n" +
-                            "_-_ Guide Entries now have a scroll bar."));
+                            "_-_ Guide Entries now have a scroll bar.\n" +
+                            "_-_ Changed score calculation and badges to fit Experienced's progression.\n" +
+                            "_-_ You cannot fall into chasms on Black Mimic stage and arena.\n" +
+                            "_-_ Added crash handling mechanism.\n" +
+                            "_-_ Fixed crash for warhammer's attack."));
 
 
 
