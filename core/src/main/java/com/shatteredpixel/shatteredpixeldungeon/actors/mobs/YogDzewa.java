@@ -229,10 +229,17 @@ public class YogDzewa extends Mob {
 				for (Char ch : affected) {
 
 					if (hit( this, ch, true )) {
+						int dmg = Random.NormalIntRange(20, 30);
+						switch (Dungeon.cycle){
+							case 1: dmg = Random.NormalIntRange(120, 175); break;
+							case 2: dmg = Random.NormalIntRange(370, 502); break;
+							case 3: dmg = Random.NormalIntRange(2650, 4000); break;
+							case 4: dmg = Random.NormalIntRange(179000, 320000); break;
+						}
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
-							ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
+							ch.damage(Math.round(dmg*1.5f), new Eye.DeathGaze());
 						} else {
-							ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
+							ch.damage(dmg, new Eye.DeathGaze());
 						}
 						if (ch == Dungeon.hero) {
 							Statistics.bossScores[4] -= 500;
