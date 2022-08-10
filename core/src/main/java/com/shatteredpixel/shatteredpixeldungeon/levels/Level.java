@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
@@ -1017,7 +1018,11 @@ if (bundle.contains( "respawner" )){
 
 			if (pit[ch.pos]){
 				if (ch == Dungeon.hero) {
-					Chasm.heroFall(ch.pos);
+					if (Dungeon.depth < 26)
+						Chasm.heroFall(ch.pos);
+					else {
+						ScrollOfTeleportation.teleportToLocation(ch, Dungeon.level.entrance());
+					}
 				} else if (ch instanceof Mob) {
 					Chasm.mobFall( (Mob)ch );
 				}

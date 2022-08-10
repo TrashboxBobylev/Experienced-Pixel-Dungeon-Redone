@@ -85,6 +85,13 @@ public class Chasm implements Hero.Doom {
 							}
 
 							@Override
+							protected boolean enabled(int index) {
+								if (index == 0 && Dungeon.depth > 26)
+									return false;
+								return super.enabled(index);
+							}
+
+							@Override
 							protected void onSelect( int index ) {
 								if (index == 0 && elapsed > 0.2f) {
 									if (Dungeon.hero.pos == heroPos) {
