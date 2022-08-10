@@ -1030,7 +1030,7 @@ public class Hero extends Char {
 			} else if (transition.type == LevelTransition.Type.REGULAR_ENTRANCE
 					&& Dungeon.depth == 25
 					//ascension challenge only works on runs started on v1.3+
-					&& Dungeon.initialVersion > ShatteredPixelDungeon.v1_2_3
+					&& Dungeon.initialVersion > 453
 					&& belongings.getItem(Amulet.class) != null
 					&& buff(AscensionChallenge.class) == null) {
 
