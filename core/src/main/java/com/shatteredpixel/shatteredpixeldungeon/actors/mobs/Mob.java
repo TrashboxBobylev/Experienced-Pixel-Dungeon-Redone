@@ -704,7 +704,7 @@ public abstract class Mob extends Char {
 
 				AscensionChallenge.processEnemyKill(this);
 
-				int exp = Dungeon.hero.lvl <= maxLvl ? EXP : 0;
+				int exp = EXP;
 				if (exp > 0) {
 					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
 				}
