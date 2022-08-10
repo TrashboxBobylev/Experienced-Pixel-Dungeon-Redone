@@ -65,6 +65,7 @@ public class ExpPDChanges {
                             "_-_ 247 days after Experienced Pixel Dungeon 2.10.2\n" +
                             "_-_ 289 days after Experienced Pixel Dungeon 2.10\n\n" +
                             "\n" +
+                            "I believe most of feature regressions should be fixed, so I advise ya to actually check for more bugs to surface. Love you all.\n\n"+
                             "Dev commentary will be added here in the future."));
             changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
                     "Basically everything between 0.9.2 and 1.3.2.\n\n"+
