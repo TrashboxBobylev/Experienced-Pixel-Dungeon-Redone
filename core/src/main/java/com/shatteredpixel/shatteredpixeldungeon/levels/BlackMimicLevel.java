@@ -260,6 +260,7 @@ public class BlackMimicLevel extends Level {
 	public void seal() {
 		super.seal();
 
+		int entrance = entrance();
 		set( entrance, Terrain.WALL );
 
 		Heap heap = Dungeon.level.heaps.get( entrance );
@@ -304,7 +305,7 @@ public class BlackMimicLevel extends Level {
 		super.unseal();
 
 		blobs.get(PylonEnergy.class).fullyClear();
-
+		int entrance = entrance();
 		set( entrance, Terrain.ENTRANCE );
 		int i = 14 + 13*width();
 		for (int j = 0; j < 5; j++){
@@ -498,7 +499,7 @@ public class BlackMimicLevel extends Level {
 		}
 
 		Painter.set(this, entrance, Terrain.ENTRANCE);
-		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
+		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE, 25, Dungeon.branch, LevelTransition.Type.REGULAR_EXIT));
 	}
 
 	private static short[] corner1 = {
