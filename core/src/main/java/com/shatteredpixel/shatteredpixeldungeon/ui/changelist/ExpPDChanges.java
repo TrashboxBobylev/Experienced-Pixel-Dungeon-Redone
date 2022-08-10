@@ -63,10 +63,10 @@ public class ExpPDChanges {
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
                     "_-_ Released August 11th, 2022\n" +
                             "_-_ 247 days after Experienced Pixel Dungeon 2.10.2\n" +
-                            "_-_ 289 days after Experienced Pixel Dungeon 2.10\n\n" +
+                            "_-_ 289 days after Experienced Pixel Dungeon 2.10\n" +
                             "\n" +
-                            "I believe most of feature regressions should be fixed, so I advise ya to actually check for more bugs to surface. Love you all.\n\n"+
-                            "Dev commentary will be added here in the future."));
+                            "Welcome to 2nd anniversary of ExpPD! This release implements many changes from Shattered done over this time period,"+
+                            "bringing engine's version to 1.3.2. Enjoy all new features while making builds with new item reworks and class perks!"));
             changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
                     "Basically everything between 0.9.2 and 1.3.2.\n\n"+
                             "_-_ Armor abilities.\n" +
