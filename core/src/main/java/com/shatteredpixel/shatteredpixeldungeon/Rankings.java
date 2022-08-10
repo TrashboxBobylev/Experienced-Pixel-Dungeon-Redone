@@ -140,8 +140,8 @@ public enum Rankings {
 	public int calculateScore(){
 
 		if (Dungeon.initialVersion > 453){
-			Statistics.progressScore = Dungeon.hero.lvl * Statistics.deepestFloor * 65;
-			Statistics.progressScore = Math.min(Statistics.progressScore, 50_000);
+			Statistics.progressScore = Dungeon.hero.lvl * Statistics.deepestFloor * 25;
+			Statistics.progressScore = Math.min(Statistics.progressScore, 250_000);
 
 			if (Statistics.heldItemValue == 0) {
 				for (Item i : Dungeon.hero.belongings) {
@@ -153,7 +153,7 @@ public enum Rankings {
 				}
 			}
 			Statistics.treasureScore = Statistics.goldCollected + Statistics.heldItemValue;
-			Statistics.treasureScore = Math.min(Statistics.treasureScore, 20_000);
+			Statistics.treasureScore = Math.min(Statistics.treasureScore, 100_000);
 
 			Statistics.exploreScore = 0;
 			int scorePerFloor = Statistics.floorsExplored.size * 50;
@@ -190,11 +190,13 @@ public enum Rankings {
 
 		Statistics.chalMultiplier = (float)Math.pow(1.25, Challenges.activeChallenges());
 		Statistics.chalMultiplier = Math.round(Statistics.chalMultiplier*20f)/20f;
+		Statistics.cycleMultiplier = Math.max(1, 2 * (float)Math.pow(10, Dungeon.cycle-1));
+		Statistics.cycleMultiplier = Math.round(Statistics.chalMultiplier*20f)/20f;
 
 		Statistics.totalScore = Statistics.progressScore + Statistics.treasureScore + Statistics.exploreScore
 					+ Statistics.totalBossScore + Statistics.totalQuestScore;
 
-		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier;
+		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier * Statistics.cycleMultiplier;
 
 		return Statistics.totalScore;
 	}

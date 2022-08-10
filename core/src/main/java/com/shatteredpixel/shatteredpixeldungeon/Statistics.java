@@ -51,6 +51,7 @@ public class Statistics {
 	public static int totalQuestScore;
 	public static float winMultiplier;
 	public static float chalMultiplier;
+	public static float cycleMultiplier;
 	public static int totalScore;
 
 	//used for hero unlock badges
@@ -131,6 +132,7 @@ public class Statistics {
 	private static final String TOT_QUEST		= "tot_quest";
 	private static final String WIN_MULT		= "win_mult";
 	private static final String CHAL_MULT		= "chal_mult";
+	private static final String CYCLE_MULT		= "cycle_mult";
 	private static final String TOTAL_SCORE		= "total_score";
 	
 	private static final String UPGRADES	= "upgradesUsed";
@@ -173,6 +175,7 @@ public class Statistics {
 		bundle.put( TOT_QUEST,   totalQuestScore );
 		bundle.put( WIN_MULT,    winMultiplier );
 		bundle.put( CHAL_MULT,   chalMultiplier );
+		bundle.put( CYCLE_MULT,   cycleMultiplier );
 		bundle.put( TOTAL_SCORE, totalScore );
 		
 		bundle.put( UPGRADES,   upgradesUsed );
