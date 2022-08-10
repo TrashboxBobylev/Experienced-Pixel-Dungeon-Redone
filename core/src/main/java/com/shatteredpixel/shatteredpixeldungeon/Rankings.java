@@ -295,7 +295,7 @@ public enum Rankings {
 
 		Dungeon.initialVersion = data.getInt(GAME_VERSION);
 
-		if (Dungeon.initialVersion <= ShatteredPixelDungeon.v1_2_3){
+		if (Dungeon.initialVersion <= 453){
 			Statistics.gameWon = rec.win;
 		}
 		rec.score = calculateScore();

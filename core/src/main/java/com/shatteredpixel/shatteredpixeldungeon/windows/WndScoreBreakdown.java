@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -49,7 +48,7 @@ public class WndScoreBreakdown extends Window {
 		float pos = title.bottom()+2;
 
 		NumberFormat num = NumberFormat.getInstance(Locale.US);
-		if (Dungeon.initialVersion > ShatteredPixelDungeon.v1_2_3) {
+		if (Dungeon.initialVersion > 453) {
 			pos = statSlot(this, Messages.get(this, "progress_title"),
 					num.format(Statistics.progressScore), pos, Statistics.progressScore >= 50_000);
 			pos = addInfo(this, Messages.get(this, "progress_desc"), pos);
@@ -82,7 +81,7 @@ public class WndScoreBreakdown extends Window {
 		}
 		pos = statSlot(this, Messages.get(this, "total"), num.format(Statistics.totalScore), pos, false);
 
-		if (Dungeon.initialVersion <= ShatteredPixelDungeon.v1_2_3){
+		if (Dungeon.initialVersion <= 453){
 			pos = addInfo(this, Messages.get(this, "old_score_desc"), pos);
 		}
 
