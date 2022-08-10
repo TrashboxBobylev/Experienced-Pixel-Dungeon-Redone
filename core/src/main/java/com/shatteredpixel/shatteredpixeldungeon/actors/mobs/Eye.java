@@ -47,6 +47,21 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class Eye extends Mob {
+
+	public static int experience(){
+		switch (Dungeon.cycle){
+			case 0: default:
+				return 13;
+			case 1:
+				return 93;
+			case 2:
+				return 780;
+			case 3:
+				return 18000;
+			case 4:
+				return 6000000;
+		}
+	}
 	
 	{
 		spriteClass = EyeSprite.class;
@@ -55,7 +70,7 @@ public class Eye extends Mob {
 		defenseSkill = 20;
 		viewDistance = Light.DISTANCE;
 		
-		EXP = 13;
+		EXP = experience();
 		maxLvl = 26;
 		
 		flying = true;
@@ -70,22 +85,18 @@ public class Eye extends Mob {
             case 1:
                 HP = HT = 1093;
                 defenseSkill = 85;
-                EXP = 93;
                 break;
             case 2:
                 HP = HT = 18965;
                 defenseSkill = 280;
-                EXP = 780;
                 break;
             case 3:
                 HP = HT = 750000;
                 defenseSkill = 900;
-                EXP = 18000;
                 break;
             case 4:
                 HP = HT = 290000000;
                 defenseSkill = 14000;
-                EXP = 6000000;
                 break;
         }
 	}

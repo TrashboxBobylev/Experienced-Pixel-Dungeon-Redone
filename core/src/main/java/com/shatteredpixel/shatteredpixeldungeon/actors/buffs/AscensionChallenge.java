@@ -41,35 +41,35 @@ public class AscensionChallenge extends Buff {
 
 	private static HashMap<Class<?extends Mob>, Float> modifiers = new HashMap<>();
 	static {
-		modifiers.put(Rat.class,            10f);
-		modifiers.put(Snake.class,          8f);
-		modifiers.put(Gnoll.class,          8f);
-		modifiers.put(Swarm.class,          7f);
-		modifiers.put(Crab.class,           6f);
-		modifiers.put(Slime.class,          6f);
+		modifiers.put(Rat.class,            75f);
+		modifiers.put(Snake.class,          65f);
+		modifiers.put(Gnoll.class,          60f);
+		modifiers.put(Swarm.class,          55f);
+		modifiers.put(Crab.class,           50f);
+		modifiers.put(Slime.class,          45f);
 
-		modifiers.put(Skeleton.class,       4.5f);
-		modifiers.put(Thief.class,          4.5f);
-		modifiers.put(DM100.class,          4f);
-		modifiers.put(Guard.class,          3.5f);
-		modifiers.put(Necromancer.class,    3.5f);
+		modifiers.put(Skeleton.class,       40f);
+		modifiers.put(Thief.class,          36f);
+		modifiers.put(DM100.class,          33f);
+		modifiers.put(Guard.class,          30f);
+		modifiers.put(Necromancer.class,    28f);
 
-		modifiers.put(Bat.class,            2.5f);
-		modifiers.put(Brute.class,          2.25f);
-		modifiers.put(Shaman.class,         2.25f);
-		modifiers.put(Spinner.class,        2f);
-		modifiers.put(DM200.class,          2f);
+		modifiers.put(Bat.class,            24f);
+		modifiers.put(Brute.class,          22f);
+		modifiers.put(Shaman.class,         20f);
+		modifiers.put(Spinner.class,        17f);
+		modifiers.put(DM200.class,          16f);
 
-		modifiers.put(Ghoul.class,          1.67f);
-		modifiers.put(Elemental.class,      1.5f);
-		modifiers.put(Warlock.class,        1.33f);
-		modifiers.put(Monk.class,           1.33f);
-		modifiers.put(Golem.class,          1.25f);
+		modifiers.put(Ghoul.class,          13f);
+		modifiers.put(Elemental.class,      10f);
+		modifiers.put(Warlock.class,        8f);
+		modifiers.put(Monk.class,           8f);
+		modifiers.put(Golem.class,          7f);
 
-		modifiers.put(RipperDemon.class,    1.2f);
-		modifiers.put(Succubus.class,       1.2f);
-		modifiers.put(Eye.class,            1f);
-		modifiers.put(Scorpio.class,        1f);
+		modifiers.put(RipperDemon.class,    7f);
+		modifiers.put(Succubus.class,       6f);
+		modifiers.put(Eye.class,            4f);
+		modifiers.put(Scorpio.class,        4f);
 	}
 
 	public static float statModifier(Char ch){
@@ -164,19 +164,16 @@ public class AscensionChallenge extends Buff {
 		if (m instanceof Ratmogrify.TransmogRat){
 			m = ((Ratmogrify.TransmogRat) m).getOriginal();
 		}
-
-		if (m instanceof RipperDemon){
-			return 10; //reduced due to their numbers
-		} else if (m instanceof Ghoul){
-			return 7; //half of 13, rounded up
-		} else {
-			for (Class<?extends Mob> cls : modifiers.keySet()){
-				if (cls.isAssignableFrom(m.getClass())){
-					return Math.max(13, m.EXP); //same exp as an eye
-				}
+		int xp = m.EXP;
+		for (Class<?extends Mob> cls : modifiers.keySet()){
+			if (cls.isAssignableFrom(m.getClass())){
+				xp = Math.max(Eye.experience(), m.EXP); //same exp as an eye
 			}
 		}
-		return m.EXP;
+		if (m instanceof RipperDemon) xp *= 0.75f;
+		if (m instanceof Ghoul) xp *= 0.5f;
+
+		return xp;
 	}
 
 	{
