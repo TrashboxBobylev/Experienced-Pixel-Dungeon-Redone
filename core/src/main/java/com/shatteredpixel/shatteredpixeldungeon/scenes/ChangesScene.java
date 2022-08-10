@@ -116,28 +116,19 @@ public class ChangesScene extends PixelScene {
 
 		switch (changesSelected){
 			case 0: default:
-				v1_X_Changes.addAllChanges(changeInfos);
+				ExpPDChanges.addAllChanges(changeInfos);
 				break;
 			case 1:
+				v1_X_Changes.addAllChanges(changeInfos);
 				v0_9_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 2:
 				v0_8_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 3:
 				v0_7_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 5:
 				v0_5_X_Changes.addAllChanges(changeInfos);
 				v0_4_X_Changes.addAllChanges(changeInfos);
 				v0_3_X_Changes.addAllChanges(changeInfos);
 				v0_2_X_Changes.addAllChanges(changeInfos);
 				v0_1_X_Changes.addAllChanges(changeInfos);
 				break;
-            case 4:
-                ExpPDChanges.addAllChanges(changeInfos);
-                break;
-
 		}
 
 		ScrollPane list = new ScrollPane( new Component() ){
@@ -196,31 +187,17 @@ public class ChangesScene extends PixelScene {
             @Override
             protected void onClick() {
                 super.onClick();
-                if (changesSelected != 4) {
-                    changesSelected = 4;
+                if (changesSelected != 0) {
+                    changesSelected = 0;
                     ShatteredPixelDungeon.seamlessResetScene();
                 }
             }
         };
-        if (changesSelected == 4) btnEXP.textColor(Window.TITLE_COLOR);
-        btnEXP.setRect(list.left()-4f, list.bottom()+5, 27, 14);
+        if (changesSelected == 0) btnEXP.textColor(Window.TITLE_COLOR);
+        btnEXP.setRect(list.left()-4f, list.bottom()+5, 70, 14);
         add(btnEXP);
 
-		RedButton btn0_8 = new RedButton("v0.8"){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				if (changesSelected != 0) {
-					changesSelected = 0;
-					ShatteredPixelDungeon.seamlessResetScene();
-				}
-			}
-		};
-		if (changesSelected == 0) btn0_8.textColor(Window.TITLE_COLOR);
-		btn0_8.setRect(btnEXP.right() + 1, btnEXP.top(), 27, 14);
-		add(btn0_8);
-		
-		RedButton btn0_7 = new RedButton("v0.7"){
+		RedButton btn0_8 = new RedButton("ShPD"){
 			@Override
 			protected void onClick() {
 				super.onClick();
@@ -230,23 +207,9 @@ public class ChangesScene extends PixelScene {
 				}
 			}
 		};
-		if (changesSelected == 1) btn0_7.textColor(Window.TITLE_COLOR);
-		btn0_7.setRect(btn0_8.right() + 1, btn0_8.top(), 27, 14);
-		add(btn0_7);
-		
-		RedButton btn0_6 = new RedButton("v0.6"){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				if (changesSelected != 2) {
-					changesSelected = 2;
-					ShatteredPixelDungeon.seamlessResetScene();
-				}
-			}
-		};
-		if (changesSelected == 2) btn0_6.textColor(Window.TITLE_COLOR);
-		btn0_6.setRect(btn0_7.right() + 1, btn0_8.top(), 27, 14);
-		add(btn0_6);
+		if (changesSelected == 1) btn0_8.textColor(Window.TITLE_COLOR);
+		btn0_8.setRect(btnEXP.right() + 1, btnEXP.top(), 70, 14);
+		add(btn0_8);
 
 		Archs archs = new Archs();
 		archs.setSize( Camera.main.width, Camera.main.height );
