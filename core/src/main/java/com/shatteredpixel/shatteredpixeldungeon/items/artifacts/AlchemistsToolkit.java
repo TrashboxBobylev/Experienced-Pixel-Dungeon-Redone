@@ -217,7 +217,7 @@ public class AlchemistsToolkit extends Artifact {
 		public boolean act() {
 
 			if (warmUpDelay > 0){
-				if (level() == 10){
+				if (level() >= 10){
 					warmUpDelay = 0;
 				} else if (warmUpDelay == 101){
 					warmUpDelay = 100f;
