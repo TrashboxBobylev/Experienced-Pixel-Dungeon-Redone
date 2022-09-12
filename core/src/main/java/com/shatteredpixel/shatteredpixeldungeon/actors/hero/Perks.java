@@ -143,7 +143,7 @@ public class Perks {
     }
 
     public static void earnPerk(Hero hero){
-        if (hero.perks.size() <= Perk.values().length && hero.lvl == nextPerkLevel()){
+        if (hero.perks.size() < Perk.values().length && hero.lvl == nextPerkLevel()){
             Perk perk;
             do {
                 perk = Random.element(Perk.values());

@@ -69,7 +69,7 @@ public class Amulet extends Item {
 	
 	@Override
 	public boolean doPickUp(Hero hero, int pos, float time) {
-		if (super.doPickUp( hero, pos )) {
+		if (super.doPickUp( hero, pos, time )) {
 			
 			if (!Statistics.amuletObtained) {
 				Statistics.amuletObtained = true;

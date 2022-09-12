@@ -304,7 +304,9 @@ public class BlackMimicLevel extends Level {
 	public void unseal() {
 		super.unseal();
 
-		blobs.get(PylonEnergy.class).fullyClear();
+		Blob pylons = blobs.get(PylonEnergy.class);
+		if (pylons != null)
+			pylons.fullyClear();
 		int entrance = entrance();
 		set( entrance, Terrain.ENTRANCE );
 		int i = 14 + 13*width();
@@ -364,7 +366,9 @@ public class BlackMimicLevel extends Level {
 			}
 		}
 		if (pylonsRemaining > 2) {
-			blobs.get(PylonEnergy.class).fullyClear();
+			Blob pylons = blobs.get(PylonEnergy.class);
+			if (pylons != null)
+				pylons.fullyClear();
 		}
 	}
 
