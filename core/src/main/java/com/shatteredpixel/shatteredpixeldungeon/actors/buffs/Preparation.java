@@ -59,10 +59,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	}
 	
 	public enum AttackLevel{
-		LVL_1( 1, 0.10f, 1),
-		LVL_2( 3, 0.20f, 1),
-		LVL_3( 5, 0.35f, 2),
-		LVL_4( 9, 0.50f, 3);
+		LVL_1( 5, 0.50f, 1),
+		LVL_2( 15, 1.25f, 3),
+		LVL_3( 44, 4.20f, 8),
+		LVL_4( 120, 41.30f, 16);
 
 		final int turnsReq;
 		final float baseDmgBonus;
@@ -76,10 +76,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 
 		//1st index is prep level, 2nd is talent level
 		private static final float[][] KOThresholds = new float[][]{
-				{.03f, .04f, .05f, .06f},
-				{.10f, .13f, .17f, .20f},
-				{.20f, .27f, .33f, .40f},
-				{.50f, .67f, .83f, 1.0f}
+				{.15f, .04f, .05f, .06f},
+				{.27f, .13f, .17f, .20f},
+				{.45f, .27f, .33f, .40f},
+				{1.50f, .67f, .83f, 1.0f}
 		};
 
 		public float KOThreshold(){
@@ -88,10 +88,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 
 		//1st index is prep level, 2nd is talent level
 		private static final int[][] blinkRanges = new int[][]{
-				{1, 1, 2, 2},
-				{2, 3, 4, 5},
-				{3, 4, 6, 7},
-				{4, 6, 8, 10}
+				{2, 1, 2, 2},
+				{6, 3, 4, 6},
+				{12, 4, 6, 7},
+				{24, 6, 8, 10}
 		};
 
 		public int blinkDistance(){
