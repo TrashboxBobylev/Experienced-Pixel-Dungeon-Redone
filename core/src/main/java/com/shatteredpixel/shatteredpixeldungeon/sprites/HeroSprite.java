@@ -197,7 +197,8 @@ public class HeroSprite extends CharSprite {
 		RectF patch = tiers(cl.spritesheet(), frameHeight).get( armorTier );
 		Image avatar = new Image( cl.spritesheet() );
 		RectF frame = avatar.texture.uvRect( 1, 0, frameWidth, frameHeight );
-		frame.shift( patch.left, patch.top );
+		if (patch != null)
+			frame.shift( patch.left, patch.top );
 		avatar.frame( frame );
 
 		return avatar;
