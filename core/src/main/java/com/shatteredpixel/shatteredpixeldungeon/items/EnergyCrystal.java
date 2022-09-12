@@ -54,7 +54,7 @@ public class EnergyCrystal extends Item {
 	}
 
 	@Override
-	public boolean doPickUp(Hero hero, int pos) {
+	public boolean doPickUp(Hero hero, int pos, float time) {
 
 		Dungeon.energy += quantity;
 		//TODO Statistics.goldCollected += quantity;

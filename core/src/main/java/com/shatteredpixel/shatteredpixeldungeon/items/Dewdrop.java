@@ -49,7 +49,7 @@ public class Dewdrop extends Item {
 	}
 	
 	@Override
-	public boolean doPickUp(Hero hero, int pos) {
+	public boolean doPickUp(Hero hero, int pos, float time) {
 		
 		Waterskin flask = hero.belongings.getItem( Waterskin.class );
 		

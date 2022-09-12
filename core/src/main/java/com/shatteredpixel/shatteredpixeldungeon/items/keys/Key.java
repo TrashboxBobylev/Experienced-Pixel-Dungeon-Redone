@@ -50,7 +50,7 @@ public abstract class Key extends Item {
 	}
 
 	@Override
-	public boolean doPickUp(Hero hero, int pos) {
+	public boolean doPickUp(Hero hero, int pos, float time) {
 		GameScene.pickUpJournal(this, pos);
 		WndJournal.last_index = 2;
 		Notes.add(this);

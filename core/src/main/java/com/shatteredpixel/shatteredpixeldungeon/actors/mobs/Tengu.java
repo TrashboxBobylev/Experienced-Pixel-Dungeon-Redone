@@ -24,11 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -734,7 +730,7 @@ public class Tengu extends Mob {
 			}
 			
 			@Override
-			public boolean doPickUp(Hero hero, int pos) {
+			public boolean doPickUp(Hero hero, int pos, float time) {
 				GLog.w( Messages.get(this, "cant_pickup") );
 				return false;
 			}
@@ -1117,7 +1113,7 @@ public class Tengu extends Mob {
 			}
 			
 			@Override
-			public boolean doPickUp(Hero hero, int pos) {
+			public boolean doPickUp(Hero hero, int pos, float time) {
 				GLog.w( Messages.get(this, "cant_pickup") );
 				return false;
 			}

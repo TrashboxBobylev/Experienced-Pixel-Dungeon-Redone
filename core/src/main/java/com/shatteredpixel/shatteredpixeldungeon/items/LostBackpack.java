@@ -43,7 +43,7 @@ public class LostBackpack extends Item {
 	}
 
 	@Override
-	public boolean doPickUp(Hero hero, int pos) {
+	public boolean doPickUp(Hero hero, int pos, float time) {
 		if (hero.buff(LostInventory.class) != null){
 			hero.buff(LostInventory.class).detach();
 		}

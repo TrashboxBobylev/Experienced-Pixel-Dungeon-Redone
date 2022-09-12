@@ -127,12 +127,12 @@ public class Bomb extends Item {
 	}
 
 	@Override
-	public boolean doPickUp(Hero hero, int pos) {
+	public boolean doPickUp(Hero hero, int pos, float time) {
 		if (fuse != null) {
 			GLog.w( Messages.get(this, "snuff_fuse") );
 			fuse = null;
 		}
-		return super.doPickUp(hero, pos);
+		return super.doPickUp(hero, pos, time);
 	}
 
 	public void explode(int cell){
@@ -324,7 +324,7 @@ public class Bomb extends Item {
 		}
 
 		@Override
-		public boolean doPickUp(Hero hero, int pos) {
+		public boolean doPickUp(Hero hero, int pos, float time) {
 			Bomb bomb = new Bomb();
 			bomb.quantity(2);
 			if (bomb.doPickUp(hero, pos)) {
