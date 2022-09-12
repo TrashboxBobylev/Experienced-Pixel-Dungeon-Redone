@@ -28,10 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -705,10 +702,19 @@ public abstract class Mob extends Char {
 				AscensionChallenge.processEnemyKill(this);
 
 				int exp = EXP;
+				if (Dungeon.hero.buff(Bless.class) != null) {
+					exp *= 2;
+				}
 				if (exp > 0) {
 					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
 				}
 				Dungeon.hero.earnExp(exp, getClass());
+				if (Dungeon.hero.perks.contains(Perks.Perk.ADDITIONAL_MONEY)){
+					Dungeon.level.drop(new Gold(Dungeon.Int( 6 + Dungeon.escalatingDepth() * 2, 12 + Dungeon.escalatingDepth() * 4 )), pos).sprite.drop();
+				}
+				if (Dungeon.hero.buff(Overload.class) != null) {
+					Dungeon.level.spawnMob(12);
+				}
 			}
 		}
 	}
