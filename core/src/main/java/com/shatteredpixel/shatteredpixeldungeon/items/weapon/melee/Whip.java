@@ -50,7 +50,7 @@ public class Whip extends MeleeWeapon {
 
 	@Override
 	public int min(int lvl) {
-		return tier+lvl;
+		return tier+lvl/2;
 	}
 
 	@Override
