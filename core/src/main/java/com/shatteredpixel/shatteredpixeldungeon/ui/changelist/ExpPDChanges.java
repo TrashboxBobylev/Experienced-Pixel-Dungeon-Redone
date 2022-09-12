@@ -57,7 +57,35 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.11", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released September 12th, 2022\n" +
+                        "_-_ 30 days after Experienced Pixel Dungeon 2.11\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+            "_-_ Fixed Black Mimic breaking itself on death.\n" +
+                    "_-_ Fixed perks blocking the game if you get beyond level 166.\n" +
+                    "_-_ Fixed dirk having ShPD values for its ability.\n" +
+                    "_-_ Fixed preparation triggering from the cloak.\n" +
+                    "_-_ Fixed collect-related code for items, which fixes phantom gold and other issues.\n" +
+                    "_-_ Fixed pylon on Black Mimic level not outputting their gases.\n" +
+                    "_-_ Fixed scroll of upgrade causing freezes at high levels.\n" +
+                    "_-_ Fixed scroll of upgrade being pseudo-identified.\n" +
+                    "_-_ Fixed Desktop interface not fully displaying the inventory.\n" +
+                    "_-_ Fixed Rat King having 2 velvet pouches.\n" +
+                    "_-_ Fixed experience and overload potions not working.\n" +
+                    "_-_ Fixed Bounty Hunter perk not working.\n" +
+                    "_-_ Fixed toolkit not being able to warm up on +11 and more.\n" +
+                    "_-_ Fixed being able to actually descend into arena from Black Mimic level.\n" +
+                    "_-_ Fixed avatar-related crash.\n" +
+                    "_-_ Fixed amount of traps in cycles being too high sometimes.\n" +
+                    "_-_ Greataxe can be thrown from quickslot and no longer hurts allies.\n" +
+                    "_-_ Nerfed Whip's minimal damage."));
+
+        changes = new ChangeInfo("ExpPD-2.11", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
