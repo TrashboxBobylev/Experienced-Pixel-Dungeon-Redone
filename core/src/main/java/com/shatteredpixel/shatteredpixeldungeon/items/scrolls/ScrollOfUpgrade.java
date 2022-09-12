@@ -91,7 +91,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions( hero );
-		if (!anonymous || isIdentified()) actions.add(AC_UPGRADE);
+		if (isIdentified() || !anonymous) actions.add(AC_UPGRADE);
 		return actions;
 	}
 
@@ -100,6 +100,11 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 		upgrade( curUser );
 
+		upgradeItem(item);
+		Talent.onUpgradeScrollUsed( Dungeon.hero );
+	}
+
+	private void upgradeItem(Item item) {
 		Degrade.detach( curUser, Degrade.class );
 
 		//logic for telling the user when item properties change from upgrades
@@ -151,13 +156,11 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			item.upgrade();
 		}
 
-		Talent.onUpgradeScrollUsed( Dungeon.hero );
-
-		Badges.validateItemLevelAquired( item );
+		Badges.validateItemLevelAquired(item);
 		Statistics.upgradesUsed++;
 		Badges.validateMageUnlock();
 	}
-	
+
 	public static void upgrade( Hero hero ) {
 		hero.sprite.emitter().start( Speck.factory( Speck.UP ), 0.2f, 3 );
 	}
@@ -210,7 +213,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 			if (item != null) {
 				for (int i = 0; i < curItem.quantity(); i++)
-					((InventoryScroll)curItem).onItemSelected( item );
+					((ScrollOfUpgrade)curItem).upgradeItem(item);
 				((InventoryScroll)curItem).readAnimation();
 
 				Sample.INSTANCE.play( Assets.Sounds.READ );
