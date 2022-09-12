@@ -30,8 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
@@ -39,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.BlackMimicLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PylonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -49,6 +49,8 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Pylon extends Mob {
 
@@ -96,6 +98,11 @@ public class Pylon extends Mob {
 		ArrayList<Integer> shockCells = new ArrayList<>();
 
 		shockCells.add(pos + PathFinder.CIRCLE8[targetNeighbor]);
+
+		if (Random.Float() < 0.5f && Dungeon.depth > 26){
+			List<Class<? extends Blob>> blobs = Arrays.asList(ToxicGas.class, ConfusionGas.class, Blizzard.class, Inferno.class, Electricity.class, Web.class);
+			GameScene.add(Blob.seed(pos, 500, Random.element(blobs)));
+		}
 
 		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
 			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+3)%8]);
