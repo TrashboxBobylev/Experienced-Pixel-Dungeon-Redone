@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -40,6 +41,7 @@ public class Greataxe extends MeleeWeapon {
 		image = ItemSpriteSheet.GREATAXE;
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1f;
+        defaultAction = AC_THROW;
 
 		internalTier = tier = 5;
 	}
@@ -63,7 +65,8 @@ public class Greataxe extends MeleeWeapon {
 
             if (!Dungeon.level.solid[cell + i]
                     && !Dungeon.level.pit[cell + i]
-                    && Actor.findChar(cell + i) != null) {
+                    && Actor.findChar(cell + i) != null
+                    && Actor.findChar(cell + i).alignment == Char.Alignment.ENEMY) {
                 KindOfWeapon equipped = Dungeon.hero.belongings.weapon;
                 Dungeon.hero.belongings.weapon = this;
                 boolean hit = Dungeon.hero.attack( Actor.findChar(cell + i) );
