@@ -149,8 +149,34 @@ public class ScrollOfDebug extends Scroll {
                 }
                 lastCommand = text;
 
-                String[] input = text.split(" ");
+                String[] initialInput = text.split(" ");
                 Callback init = null;
+
+                final String[] input;
+
+                String varName = null;
+                if(initialInput.length > 0 && initialInput[0].startsWith("@")) {
+                    // drop from the start, save for later.
+                    varName = initialInput[0].substring(1);
+                    if(varName.isEmpty()) {
+                        if(initialInput.length > 1) GLog.w("warning: remaining arguments were discarded");
+                        // list them all
+                        StringBuilder s = new StringBuilder();
+                        for(Map.Entry e : Variable.getActive().entrySet()) {
+                            s.append("\n_").append(e.getKey()).append("_- ")
+                                    .append(" - ")
+                                    .append(e.getValue());
+                        }
+                        GameScene.show(new HelpWindow("Active Variables: \n" + s));
+                        return;
+                    }
+                    input = Arrays.copyOfRange(initialInput, 1, initialInput.length);
+
+                    // variable-specific actions
+
+                } else input = initialInput;
+
+                if(input.length == 0) return;
 
                 Command command; try { command = Command.valueOf(input[0].toUpperCase()); }
                 catch (Exception e) {
@@ -187,7 +213,9 @@ public class ScrollOfDebug extends Scroll {
                     }
                     GameScene.show(new HelpWindow(output));
                 } else if(input.length > 1) {
-                    Class _cls = trie.findClass(input[1], command.paramClass);
+                    Object storedVariable = Variable.get(input[1]);
+                    Class _cls = storedVariable != null ? storedVariable.getClass()
+                            : trie.findClass(input[1], command.paramClass);
 
                     if(command == Command.INSPECT) {
                         Class cls = _cls;
@@ -271,12 +299,14 @@ public class ScrollOfDebug extends Scroll {
                     if(command == Command.USE) {
                         // alias for inspect when not enough args.
                         if(input.length == 2) onSelect(true, "inspect " + input[1]);
-                        else if(!executeMethod(
-                                cls == Hero.class ? Dungeon.hero
-                                        : cls != null && canInstantiate(cls) ? Reflection.newInstance(cls)
-                                        : null,
-                                cls, input, 2)) {
-                            GLog.w(String.format("No method '%s' was found for %s", input[2], cls));
+                        else {
+                            Object o = storedVariable != null ? storedVariable // use the variable if available.
+                                    : cls == Hero.class ? Dungeon.hero
+                                    : cls != null && canInstantiate(cls) ? Reflection.newInstance(cls)
+                                    : null;
+                            if(!executeMethod(o, cls, input, 2)) {
+                                GLog.w(String.format("No method '%s' was found for %s", input[2], cls));
+                            }
                         }
                         return;
                     }
@@ -284,6 +314,7 @@ public class ScrollOfDebug extends Scroll {
                     boolean valid = true;
                     Object o = null; try {
                         o = Reflection.newInstanceUnhandled(cls);
+                        if(o != null) Variable.put(varName, o);
                     } catch (Exception e) { valid = false; }
                     if (valid) switch (command) {
                         case SPAWN: Mob mob = (Mob)o;
@@ -591,7 +622,9 @@ public class ScrollOfDebug extends Scroll {
         IntMap<Class> delayedChecks = new IntMap<>();
         for(int i=0; i < params.length; i++) {
             Class type = params[i];
-            if (type == int.class || type == Integer.class) {
+            args[i] = Variable.get(input[j]);
+            if(args[i] != null) j++; // successful variable call.
+            else if (type == int.class || type == Integer.class) {
                 // could be a cell.
                 if(input[j].equalsIgnoreCase("cell")) delayedChecks.put(i,Integer.class);
                 else args[i] = Integer.parseInt(input[j]);
