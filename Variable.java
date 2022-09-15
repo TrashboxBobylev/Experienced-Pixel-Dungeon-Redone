@@ -2,6 +2,9 @@ package com.zrp200.scrollofdebug;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
@@ -11,6 +14,17 @@ import java.util.HashMap;
 
 abstract public class Variable<T> {
     private static HashMap<String, Variable> all = new HashMap();
+
+    static void putFromInventory(String key) {
+        GameScene.selectItem(new WndBag.ItemSelector() {
+            @Override
+            public String textPrompt() { return "Select an item"; }
+            @Override
+            public boolean itemSelectable(Item item) { return !(item instanceof ScrollOfDebug); }
+            @Override
+            public void onSelect(Item item) { put(key, item); }
+        });
+    }
 
     static boolean put(String key, Object o) {
         if (key == null) return true; // no variable to store.

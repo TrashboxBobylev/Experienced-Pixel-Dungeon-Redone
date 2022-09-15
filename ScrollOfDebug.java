@@ -173,6 +173,11 @@ public class ScrollOfDebug extends Scroll {
                     input = Arrays.copyOfRange(initialInput, 1, initialInput.length);
 
                     // variable-specific actions
+                    String vCommand = input[0].toLowerCase();
+                    if(vCommand.matches("inv(entory)?")) {
+                        Variable.putFromInventory(varName);
+                        return;
+                    }
 
                 } else input = initialInput;
 
