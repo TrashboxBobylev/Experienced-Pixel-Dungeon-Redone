@@ -40,7 +40,7 @@ public class Guidebook extends Item {
 	}
 
 	@Override
-	public final boolean doPickUp(Hero hero, int pos) {
+	public final boolean doPickUp(Hero hero, int pos, float time) {
 		GameScene.pickUpJournal(this, pos);
 		String page = Document.GUIDE_INTRO;
 		Game.runOnRenderThread(new Callback() {

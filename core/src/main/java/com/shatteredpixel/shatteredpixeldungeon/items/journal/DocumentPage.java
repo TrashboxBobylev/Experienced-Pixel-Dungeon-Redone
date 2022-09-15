@@ -53,7 +53,7 @@ public abstract class DocumentPage extends Item {
 	}
 	
 	@Override
-	public final boolean doPickUp(Hero hero, int pos) {
+	public final boolean doPickUp(Hero hero, int pos, float time) {
 		GameScene.pickUpJournal(this, pos);
 		GameScene.flashForDocument(page());
 		if (document() == Document.ALCHEMY_GUIDE){

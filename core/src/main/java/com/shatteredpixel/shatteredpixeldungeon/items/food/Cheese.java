@@ -61,8 +61,8 @@ public class Cheese extends Food {
 	}
 
 	@Override
-	public boolean doPickUp(Hero hero) {
-		if (super.doPickUp(hero)){
+	public boolean doPickUp(Hero hero, int pos, float time) {
+		if (super.doPickUp(hero, pos, time)){
 			Badges.validateCheese();
 			return true;
 		}

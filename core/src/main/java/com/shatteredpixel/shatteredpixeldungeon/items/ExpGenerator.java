@@ -41,7 +41,7 @@ public class ExpGenerator extends Item {
 //    @Override
 //    public boolean doPickUp(Hero hero) {
 //        ExpGenerator generator = hero.belongings.getItem(ExpGenerator.class);
-//        if (generator == null) return super.doPickUp(hero);
+//        if (generator == null) return super.doPickUp(hero, pos, time)hero);
 //        else {
 //            GameScene.pickUp( this, hero.pos );
 //            Sample.INSTANCE.play( Assets.Sounds.ITEM );
