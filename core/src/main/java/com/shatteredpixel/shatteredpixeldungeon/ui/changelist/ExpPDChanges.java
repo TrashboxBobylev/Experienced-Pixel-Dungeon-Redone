@@ -57,7 +57,26 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released September 15th, 2022\n" +
+                        "_-_ 3 days after Experienced Pixel Dungeon 2.11.1\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.CHALLENGE_ON), "Other Changes",
+                "Tweaked some challenges:" +
+                        "_-_ Food is only 10% as effective instead of 33% (On Diet)\n" +
+                        "_-_ Mobs do not sleep and will not fight for you (Swarm Intelligence)\n" +
+                        "_-_ SoUs no longer drop and farming them takes more exp (Forbidden Runes)"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Fixed certain items causing stack overflow crash.\n" +
+                        "_-_ Fishing rods get upgrades regardless of their position in blacksmith's window.\n" +
+                        "_-_ Nerfed item drop perks for Rogue and Huntress.\n" +
+                        "_-_ Fixed some of new scoring bugs."));
+
+        changes = new ChangeInfo("ExpPD-2.11.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
