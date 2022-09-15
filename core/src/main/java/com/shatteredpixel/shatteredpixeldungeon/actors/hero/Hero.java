@@ -1587,11 +1587,16 @@ if (buff(Talent.SpiritBladesTracker.class) != null
 			}
 		}
 
-        if (totalExp >= 100 + Dungeon.cycle * 25 && grinding){
+		int neededExp = 100 + Dungeon.cycle * 25;
+		if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
+			neededExp *= 2.5f;
+		}
+
+        if (totalExp >= neededExp && grinding){
             boolean souAnnounced = false;
 
-            while (totalExp >= 100 + Dungeon.cycle * 25 ) {
-                totalExp -= 100 + Dungeon.cycle * 25;
+            while (totalExp >= neededExp ) {
+                totalExp -= neededExp;
                 ScrollOfUpgrade sou = new ScrollOfUpgrade();
 
                 if (!sou.collect()){

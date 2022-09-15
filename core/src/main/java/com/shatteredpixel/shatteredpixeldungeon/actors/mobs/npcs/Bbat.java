@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
@@ -96,8 +97,9 @@ public class Bbat extends Mob {
 
         //will never attack something far from their target
         if (enemy != null
-                && Dungeon.level.mobs.contains(enemy)
+                && (Dungeon.level.mobs.contains(enemy) || Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE))
                 && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)){
+            if (enemy instanceof Mob)
             ((Mob)enemy).aggro(this);
             return enemy;
         }

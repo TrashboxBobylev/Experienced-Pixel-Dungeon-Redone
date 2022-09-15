@@ -58,8 +58,8 @@ public class WellFed extends Buff {
 		//25 HP healed in total
 		left = (int)Hunger.STARVING;
 		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			//150 turns if on diet is enabled
-			left /= 3;
+			//45 turns if on diet is enabled
+			left /= 10;
 		}
 	}
 	

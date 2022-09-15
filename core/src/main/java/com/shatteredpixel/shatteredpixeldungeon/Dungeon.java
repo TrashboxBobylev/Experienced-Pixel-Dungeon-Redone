@@ -542,9 +542,9 @@ public class Dungeon {
 	
 	public static boolean souNeeded() {
 		int souLeftThisSet;
-		//3 SOU each floor set, 1.5 (rounded) on forbidden runes challenge
+		//3 SOU each floor set, no scrolls on forbidden runes challenge
 		if (isChallenged(Challenges.NO_SCROLLS)){
-			souLeftThisSet = Math.round(1.5f - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 1.5f));
+			return false;
 		} else {
 			souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
 		}

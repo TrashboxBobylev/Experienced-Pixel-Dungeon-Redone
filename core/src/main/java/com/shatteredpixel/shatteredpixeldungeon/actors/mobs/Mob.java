@@ -195,6 +195,14 @@ public abstract class Mob extends Char {
 			sprite.hideAlert();
 			sprite.hideLost();
 		}
+
+		if (Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE) && state == SLEEPING){
+			state = WANDERING;
+		}
+		if (Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE) && alignment == Alignment.ALLY){
+			intelligentAlly = false;
+			alignment = Alignment.ENEMY;
+		}
 		
 		if (paralysed > 0) {
 			enemySeen = false;
@@ -965,7 +973,6 @@ public abstract class Mob extends Char {
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
 				for (Mob mob : Dungeon.level.mobs) {
 					if (mob.paralysed <= 0
-							&& Dungeon.level.distance(pos, mob.pos) <= 8
 							&& mob.state != mob.HUNTING) {
 						mob.beckon(target);
 					}
@@ -1003,7 +1010,6 @@ public abstract class Mob extends Char {
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
 					if (mob.paralysed <= 0
-							&& Dungeon.level.distance(pos, mob.pos) <= 8
 							&& mob.state != mob.HUNTING) {
 						mob.beckon( target );
 					}

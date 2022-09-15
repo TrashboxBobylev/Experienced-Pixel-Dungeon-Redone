@@ -24,11 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
@@ -108,7 +104,7 @@ public class Food extends Item {
 
 	protected void satisfy( Hero hero ){
 		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			Buff.affect(hero, Hunger.class).satisfy(energy/3f);
+			Buff.affect(hero, Hunger.class).satisfy(energy/10f);
 		} else {
 			Buff.affect(hero, Hunger.class).satisfy(energy);
 		}
