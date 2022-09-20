@@ -3,17 +3,23 @@ package com.zrp200.scrollofdebug;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
+import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.HashMap;
 
 abstract public class Variable<T> {
-    private static HashMap<String, Variable> all = new HashMap();
+    private static final HashMap<String, Variable> all = new HashMap();
 
     static void putFromInventory(String key) {
         GameScene.selectItem(new WndBag.ItemSelector() {
@@ -23,6 +29,48 @@ abstract public class Variable<T> {
             public boolean itemSelectable(Item item) { return !(item instanceof ScrollOfDebug); }
             @Override
             public void onSelect(Item item) { put(key, item); }
+        });
+    }
+
+    static void putFromCell(String key) {
+        GameScene.selectCell(new CellSelector.Listener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onSelect(Integer cell) {
+                if (cell == null || cell == -1) return;
+                // determine objects of interest.
+                // find stuff of interest
+                // accessing private methods :/
+                final ArrayList<Object> objects = new ArrayList<>();
+                final ArrayList<String> objectNames = new ArrayList<>();
+                try {
+                    Method
+                            getObjectsAtCell = GameScene.class.getDeclaredMethod("getObjectsAtCell", int.class),
+                            getObjectNames = GameScene.class.getDeclaredMethod("getObjectNames", ArrayList.class);
+                    // getting around the private declaration
+                    // fixme this may not work properly on mobile.
+                    getObjectNames.setAccessible(true);
+                    getObjectsAtCell.setAccessible(true);
+                    // now using the functions
+                    objects.addAll((ArrayList<Object>) getObjectsAtCell.invoke(null, cell));
+                    objectNames.addAll((ArrayList<String>) getObjectNames.invoke(null, objects));
+                } catch (Exception e) {
+                    // maybe copy paste the shattered implementation?
+                    Game.reportException(e);
+                }
+                if (objects.isEmpty()) {
+                    put(key, cell);
+                } else {
+                    objects.add(0, cell);
+                    objectNames.add(0, "cell (" + cell + ")"); // include the actual value of the cell
+                    GameScene.show(new WndOptions(Messages.get(GameScene.class, "multiple"),
+                            "", objectNames.toArray(new String[0])) {
+                        @Override protected void onSelect(int index) { put(key, objects.get(index)); }
+                    });
+                }
+            }
+
+            @Override public String prompt() { return "Choose a location to target"; }
         });
     }
 
@@ -85,7 +133,15 @@ abstract public class Variable<T> {
     public String toString() {
         T target = getTarget();
         if (target == null) return null;
-        return target.getClass().getSimpleName();
+        Class c = target.getClass();
+        String objectAsString = c.getSimpleName();
+        try {
+            // if we have a pretty toString, use that instead.
+            if (c.isPrimitive() || c.getMethod("toString").getDeclaringClass() != Object.class) {
+                objectAsString = target.toString();
+            }
+        } catch (NoSuchMethodException e) {/*impossible*/}
+        return objectAsString;
     }
 
 //    @Override

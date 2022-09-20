@@ -163,9 +163,7 @@ public class ScrollOfDebug extends Scroll {
                         // list them all
                         StringBuilder s = new StringBuilder();
                         for(Map.Entry e : Variable.getActive().entrySet()) {
-                            s.append("\n_").append(e.getKey()).append("_- ")
-                                    .append(" - ")
-                                    .append(e.getValue());
+                            s.append("\n_").append(e.getKey()).append("_ - ").append(e.getValue());
                         }
                         GameScene.show(new HelpWindow("Active Variables: \n" + s));
                         return;
@@ -173,9 +171,16 @@ public class ScrollOfDebug extends Scroll {
                     input = Arrays.copyOfRange(initialInput, 1, initialInput.length);
 
                     // variable-specific actions
+                    if(input.length == 0){
+                        GLog.i("_@%s_ = %s", varName, Variable.get(varName));
+                        return;
+                    }
                     String vCommand = input[0].toLowerCase();
                     if(vCommand.matches("inv(entory)?")) {
                         Variable.putFromInventory(varName);
+                        return;
+                    } else if(vCommand.matches("cell")) {
+                        Variable.putFromCell(varName);
                         return;
                     }
 
