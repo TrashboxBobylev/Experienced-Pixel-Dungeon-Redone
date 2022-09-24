@@ -130,6 +130,8 @@ public class ScrollOfDebug extends Scroll {
         } catch (Exception e) { return null; } }
     }
 
+    private String storeLocation;
+
     @Override
     public void doRead() {
         collect(); // you don't lose scroll of debug.
@@ -154,11 +156,11 @@ public class ScrollOfDebug extends Scroll {
 
                 final String[] input;
 
-                String varName = null;
+                storeLocation = null;
                 if(initialInput.length > 0 && initialInput[0].startsWith("@")) {
                     // drop from the start, save for later.
-                    varName = initialInput[0].substring(1);
-                    if(varName.isEmpty()) {
+                    storeLocation = initialInput[0].substring(1);
+                    if(storeLocation.isEmpty()) {
                         if(initialInput.length > 1) GLog.w("warning: remaining arguments were discarded");
                         // list them all
                         StringBuilder s = new StringBuilder();
@@ -172,15 +174,15 @@ public class ScrollOfDebug extends Scroll {
 
                     // variable-specific actions
                     if(input.length == 0){
-                        GLog.i("_@%s_ = %s", varName, Variable.get(varName));
+                        GLog.i("_@%s_ = %s", storeLocation, Variable.get(storeLocation));
                         return;
                     }
                     String vCommand = input[0].toLowerCase();
                     if(vCommand.matches("inv(entory)?")) {
-                        Variable.putFromInventory(varName);
+                        Variable.putFromInventory(storeLocation);
                         return;
                     } else if(vCommand.matches("cell")) {
-                        Variable.putFromCell(varName);
+                        Variable.putFromCell(storeLocation);
                         return;
                     }
 
@@ -324,7 +326,7 @@ public class ScrollOfDebug extends Scroll {
                     boolean valid = true;
                     Object o = null; try {
                         o = Reflection.newInstanceUnhandled(cls);
-                        if(o != null) Variable.put(varName, o);
+                        if(o != null) Variable.put(storeLocation, o);
                     } catch (Exception e) { valid = false; }
                     if (valid) switch (command) {
                         case SPAWN: Mob mob = (Mob)o;
@@ -570,6 +572,7 @@ public class ScrollOfDebug extends Scroll {
             Object result = method.invoke(obj, arguments);
             if(result != null) {
                 printMethodOutput(cls,method,method.getModifiers(),result,arguments);
+                if(storeLocation != null) Variable.put(storeLocation, result);
             }
             return true;
         } catch (Exception e) {/*do nothing */}
@@ -594,6 +597,7 @@ public class ScrollOfDebug extends Scroll {
                 // fixme should not have to do this much wrangling
                 field.set(obj, result=getArguments(new Class[]{field.getType()}, args)[0]);
             } else throw new IllegalArgumentException();
+            if(storeLocation != null) Variable.put(storeLocation, result);
             printMethodOutput(cls,field,field.getModifiers(), result);
             return true;
         } catch(Exception e) {/*not a valid match*/}
