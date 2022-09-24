@@ -178,10 +178,10 @@ public class ScrollOfDebug extends Scroll {
                         return;
                     }
                     String vCommand = input[0].toLowerCase();
-                    if(vCommand.matches("inv(entory)?")) {
+                    if(vCommand.matches("i(nv(entory)?)?")) {
                         Variable.putFromInventory(storeLocation);
                         return;
-                    } else if(vCommand.matches("cell")) {
+                    } else if(vCommand.matches("c(ell)?")) {
                         Variable.putFromCell(storeLocation);
                         return;
                     }
