@@ -93,7 +93,16 @@ public class ScrollOfDebug extends Scroll {
                 "<blob> [<amount>]",
                 "Seeds a blob of the specified amount to a targeted tile"),
         USE(Object.class, "<object> method [args]", "Use a specified method from a desired class.", false),
-        INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class.", false);
+        INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class.", false),
+        VARIABLES(null,
+                "- _@_<variable> [ [COMMAND ...] | i[nv] | c[ell] ]",
+                "store the result of a command (or an item from the inventory or something on the map) to a variable that can be referenced later.") {
+            @Override String fullDocumentation(PackageTrie trie) {
+                return documentation()
+                        + "\n\n"
+                        + "The variables can be referenced later with their names for the purposes of methods from commands, as well as the _use_ and _inspect_ commands.";
+            }
+        };
 
         final Class<?> paramClass;
         final String syntax, description;
@@ -126,7 +135,8 @@ public class ScrollOfDebug extends Scroll {
 
 
         static Command get(String string) { try {
-            return valueOf(string.toUpperCase());
+            return string.equals("@") ? VARIABLES
+                    : valueOf(string.toUpperCase());
         } catch (Exception e) { return null; } }
     }
 
