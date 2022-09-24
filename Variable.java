@@ -91,8 +91,23 @@ abstract public class Variable<T> {
         }
         return null;
     }
-    static <T> T get(String key, Class<T> expectedClass) {
+
+    // note this can still have situational weird behavior, but this should mostly prevent unintentional variable usage.
+    static <T> T get(String key, Class<? super T> expectedClass) {
         Object o = get(key);
+        if(expectedClass.isPrimitive()) {
+            // wrap it.
+            Class<?> wrapper;
+            if(expectedClass == int.class) wrapper = Integer.class;
+            else if(expectedClass == char.class) wrapper = Character.class;
+            else try {
+                // all other wrappers are just capitalized primitives
+                wrapper = Class.forName("java.lang." + Messages.capitalize(expectedClass.getSimpleName()));
+            } catch (Exception e) { wrapper = expectedClass; }
+            //change expected class to the wrapper.
+            //noinspection unchecked
+            expectedClass = (Class<? super T>)wrapper;
+        }
         //noinspection unchecked
         return expectedClass.isInstance(o) ? (T)o : null;
     }

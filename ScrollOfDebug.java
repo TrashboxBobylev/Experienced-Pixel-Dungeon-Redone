@@ -632,24 +632,25 @@ public class ScrollOfDebug extends Scroll {
         // todo make a #getArgument(Class, String... input)
         Object[] args = new Object[params.length];
         int j = 0;
-        // currently not implemented.
-        IntMap<Class> delayedChecks = new IntMap<>();
         for(int i=0; i < params.length; i++) {
             Class type = params[i];
-            args[i] = Variable.get(input[j]);
+            args[i] = Variable.get(input[j], type);
             if(args[i] != null) j++; // successful variable call.
             else if (type == int.class || type == Integer.class) {
-                // could be a cell.
-                if(input[j].equalsIgnoreCase("cell")) delayedChecks.put(i,Integer.class);
-                else args[i] = Integer.parseInt(input[j]);
-                j++;
+                args[i] = Integer.parseInt(input[j++]);
             }
             else if (type == float.class || type == Float.class)
                 args[i] = Float.parseFloat(input[j++]);
             else if (type == String.class)
                 args[i] = input[j++];
             else if (type == Boolean.class || type == boolean.class)
-                args[i] = Boolean.getBoolean(input[j++]);
+                args[i] = Boolean.parseBoolean(input[j++]);
+            else if(input[j].equalsIgnoreCase("null")) {
+                // sometimes you want this.
+                args[i] = null;
+                j++;
+                continue;
+            }
             else if (Enum.class.isAssignableFrom(type)) {
                 for (String name : new String[]{
                         input[j], input[j].toUpperCase(), input[j].toLowerCase()
@@ -659,20 +660,24 @@ public class ScrollOfDebug extends Scroll {
                     } catch (IllegalArgumentException e) {/*continue*/}
                 j++;
             }
-            else if(Char.class.isAssignableFrom(type)) {
-                // two subclasses, which means two possible ways for this to go.
-                if(j < input.length && type.isAssignableFrom(Hero.class) && input[j].equalsIgnoreCase("hero")) {
-                    params[i] = Hero.class;
-                    j++;
+            else {
+                // non-primitive object retrieval
+                if(Char.class.isAssignableFrom(type)) {
+                    // two subclasses, which means two possible ways for this to go.
+                    if (type.isAssignableFrom(Hero.class) && input[j].equalsIgnoreCase("hero")) {
+                        params[i] = Hero.class;
+                        j++;
+                    }
                 }
-                if(type == Hero.class) args[i] = curUser; // autofill
-                else delayedChecks.put(i, type);
-            } else args[i] = Class.class.isAssignableFrom(type)
-                    ? trie.findClass(input[j++], Object.class)
-                    : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
-            if (args[i] == null && !delayedChecks.containsKey(i)) throw new IllegalArgumentException();
+                // todo add level autofill
+                args[i] = type == Hero.class ? curUser // autofill hero
+                        : Class.class.isAssignableFrom(type) ? trie.findClass(input[j++], Object.class)
+                        // blindly instantiate, any error indicates invalid method.
+                        : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
+            }
+            // todo determine the exact cases where this is reached.
+            if (args[i] == null) throw new IllegalArgumentException();
         }
-        if(delayedChecks.notEmpty()) throw new IllegalArgumentException(); // currently not supported. logic would go here though.
         return args;
     }
 
