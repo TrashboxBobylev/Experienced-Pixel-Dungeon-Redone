@@ -167,10 +167,10 @@ public class ScrollOfDebug extends Scroll {
                 final String[] input;
 
                 storeLocation = null;
-                if(initialInput.length > 0 && initialInput[0].startsWith("@")) {
+                if(initialInput.length > 0 && initialInput[0].startsWith(Variable.MARKER)) {
                     // drop from the start, save for later.
-                    storeLocation = initialInput[0].substring(1);
-                    if(storeLocation.isEmpty()) {
+                    storeLocation = initialInput[0];
+                    if(storeLocation.length() == 1) {
                         if(initialInput.length > 1) GLog.w("warning: remaining arguments were discarded");
                         // list them all
                         StringBuilder s = new StringBuilder();
@@ -184,7 +184,7 @@ public class ScrollOfDebug extends Scroll {
 
                     // variable-specific actions
                     if(input.length == 0){
-                        GLog.i("_@%s_ = %s", storeLocation, Variable.get(storeLocation));
+                        GLog.i("%s = %s", storeLocation, Variable.get(storeLocation));
                         return;
                     }
                     String vCommand = input[0].toLowerCase();

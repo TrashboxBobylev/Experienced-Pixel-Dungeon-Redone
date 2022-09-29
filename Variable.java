@@ -21,6 +21,8 @@ import java.util.HashMap;
 abstract public class Variable<T> {
     private static final HashMap<String, Variable> all = new HashMap();
 
+    public static final String MARKER = "@";
+
     static void putFromInventory(String key) {
         GameScene.selectItem(new WndBag.ItemSelector() {
             @Override
@@ -85,8 +87,8 @@ abstract public class Variable<T> {
     }
 
     static Object get(String key) {
-        if(key.startsWith("@")) {
-            Variable v = getActive().get(key.substring(1));
+        if(key.startsWith(MARKER)) {
+            Variable v = getActive().get(key);
             if(v != null) return v.getTarget();
         }
         return null;
