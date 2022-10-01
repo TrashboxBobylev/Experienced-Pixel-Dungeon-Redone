@@ -832,6 +832,11 @@ public class ScrollOfDebug extends Scroll {
 
     private static final String CHANGELOG
         = ""
+        +"_1.2.0:"
+            +"\n_-_ Implemented variables! You are now able to store the result of commands that create game objects, as well as anything generated from the use command. You can also store stuff from the map (variable name followed by 'cell' or 'c') and your inventory (variable name followed by 'inv' or 'i')."
+            +"\n_-_ Fixed cases where hero wouldn't be inferred when used in methods"
+            +"\n_-_ Fixed not being able to pass true to methods expecting true or false"
+        +"\n\n"
         +"_1.1.1_:"
             +"\n_-_ methods that have less parameters than given arguments are now ignored, preventing inappropriate hiding of fields"
             +"\n_-_ fields are no longer case sensitive"
