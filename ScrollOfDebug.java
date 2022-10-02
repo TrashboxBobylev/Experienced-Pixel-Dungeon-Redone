@@ -322,7 +322,7 @@ public class ScrollOfDebug extends Scroll {
                                         param.append('>');
                                         // optional handling, currently only hero is handled.
                                         // todo have similar methods be merged, with the offending parameters marked as optional.
-                                        if(c == Hero.class) {
+                                        if(c == Hero.class || c != Object.class && c.isInstance(Dungeon.level)) {
                                             param.insert(0,'[').append(']');
                                         }
                                         message.append(' ').append(param);
@@ -342,10 +342,12 @@ public class ScrollOfDebug extends Scroll {
                         // alias for inspect when not enough args.
                         if(input.length == 2) onSelect(true, "inspect " + input[1]);
                         else {
-                            Object o = storedVariable != null ? storedVariable // use the variable if available.
-                                    : cls == Hero.class ? Dungeon.hero
-                                    : cls != null && canInstantiate(cls) ? Reflection.newInstance(cls)
-                                    : null;
+                            Object o =
+                                    storedVariable != null ? storedVariable : // use the variable if available.
+                                    cls == Hero.class ? Dungeon.hero :
+                                    cls != Object.class && cls.isInstance(Dungeon.level) ? Dungeon.level :
+                                    cls != null && canInstantiate(cls) ? Reflection.newInstance(cls) :
+                                    null;
                             if(!executeMethod(o, cls, input, 2)) {
                                 GLog.w(String.format("No method '%s' was found for %s", input[2], cls));
                             }
@@ -701,11 +703,19 @@ public class ScrollOfDebug extends Scroll {
                         j++;
                     }
                 }
+                else if(type != Object.class && type.isInstance(Dungeon.level)) {
+                    if(input[j].equals("level")) j++; // for easier understanding.
+                    args[i] = Dungeon.level;
+                    continue;
+                }
+
                 // todo add level autofill
-                args[i] = type == Hero.class ? curUser // autofill hero
-                        : Class.class.isAssignableFrom(type) ? trie.findClass(input[j++], Object.class)
+                args[i] =
+                        type == Hero.class ? curUser :// autofill hero
+                        Class.class.isAssignableFrom(type) ? trie.findClass(input[j++], Object.class) :
+                        type != Object.class && type.isInstance(Dungeon.level) ? Dungeon.level : // todo add handling if it is in fact passed
                         // blindly instantiate, any error indicates invalid method.
-                        : Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
+                        Reflection.newInstanceUnhandled(trie.findClass(input[j++], type));
             }
             // todo determine the exact cases where this is reached.
             if (args[i] == null) throw new IllegalArgumentException();
