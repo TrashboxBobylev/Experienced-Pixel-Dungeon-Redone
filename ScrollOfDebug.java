@@ -345,7 +345,7 @@ public class ScrollOfDebug extends Scroll {
                             Object o =
                                     storedVariable != null ? storedVariable : // use the variable if available.
                                     cls == Hero.class ? Dungeon.hero :
-                                    cls != Object.class && cls.isInstance(Dungeon.level) ? Dungeon.level :
+                                    cls != Object.class && cls != null && cls.isInstance(Dungeon.level) ? Dungeon.level :
                                     cls != null && canInstantiate(cls) ? Reflection.newInstance(cls) :
                                     null;
                             if(!executeMethod(o, cls, input, 2)) {
