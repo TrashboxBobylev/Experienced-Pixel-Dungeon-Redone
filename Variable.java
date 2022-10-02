@@ -6,6 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
@@ -58,6 +59,7 @@ abstract public class Variable<T> {
                     objectNames.addAll((ArrayList<String>) getObjectNames.invoke(null, objects));
                 } catch (Exception e) {
                     // maybe copy paste the shattered implementation?
+                    // currently we just pretend nothing else is there.
                     Game.reportException(e);
                 }
                 if (objects.isEmpty()) {
@@ -76,14 +78,13 @@ abstract public class Variable<T> {
         });
     }
 
-    static boolean put(String key, Object o) {
-        if (key == null) return true; // no variable to store.
+    static void put(String key, Object o) {
+        if (key == null) return; // no variable to store.
+        Variable variable;
         if (o instanceof Actor) {
-            all.put(key, new ActorVariable((Actor) o));
-            return true;
-        }
-        else all.put(key, new ObjectVariable(o));
-        return true;
+            all.put(key, variable = new ActorVariable((Actor) o));
+        } else all.put(key, variable = new ObjectVariable(o));
+        GLog.p("%s = %s", key, variable);
     }
 
     static Object get(String key) {
@@ -204,7 +205,7 @@ abstract public class Variable<T> {
                     objectAsString = target.toString();
                 }
             } catch (NoSuchMethodException e) {/*impossible*/}
-            return objectAsString + " (" + id + ")";
+            return objectAsString + " (id=" + id + ")";
         }
 
 //        @Override
