@@ -73,65 +73,84 @@ public class ScrollOfDebug extends Scroll {
     private enum Command {
         HELP(null, // ...
                 "[COMMAND | all]",
-                "Gives more information on commands, or in the case of 'all', all of them."),
+                "Gives more information on commands",
+                "Specifying a command after the help will give an explanation for how to use that command."),
         // todo add more debug-oriented commands
         CHANGES(null, "", "Gives a history of changes to Scroll of Debug."),
         // generation commands.
         GIVE(Item.class,
                 "<item> [+<level>] [x<quantity>] [-f|--force] [<method> [<args..>] ]",
-                "Creates and puts into your inventory the generated item."),
+                "Creates and puts into your inventory the generated item",
+                "Any method specified will be called prior to collection.",
+                "Specifying _level_ will set the level of the item to the indicated amount using Item#level. This is the method called when restoring items from a save file. If it's not giving you want you want, please try passing \"upgrade\" <level> as your method.",
+                "_--force_ (or _-f_ for short) will disable all on-pickup logic (specifically Item#doPickUp) that may be affecting how the item gets collected into your inventory."),
         SPAWN(Mob.class,
-                "<mob> [x<quantity>|(-p|--place)]",
-                "Summons the indicated mob and randomly places them on the depth. -p allows manual placement, though cannot be combined with a quantity argument."),
+                "<mob> [x<quantity>|(-p|--place)] [<method>]",
+                "Creates the indicated mob and places them on the depth.",
+                "Specifying [quantity] will attempt to spawn that many mobs ",
+                "_-p_ allows manual placement, though it cannot be combined with a quantity argument."),
         SET(Trap.class,
                 "<trap>",
                 "Sets a trap at an indicated position"),
         AFFECT(Buff.class,
                 "<buff> [<duration>] [<method> [<args..>]]",
-                "Allows you to attach a buff to a character in sight."),
+                "Allows you to attach a buff to a character in sight.",
+                "This can be potentially hazardous if a buff is applied to something that it was not designed for.",
+                "Specifying _duration_ will attempt to set the duration of the buff. In the cases of buffs that are active in nature (e.g. buffs.Burning), you may need to call a method to properly set its duration.",
+                "The method is called after the buff is attached, or on the existing buff if one existed already. This means you can say \"affect doom detach\" to remove doom from that character."),
         SEED(Blob.class,
                 "<blob> [<amount>]",
-                "Seeds a blob of the specified amount to a targeted tile"),
-        USE(Object.class, "<object> method [args]", "Use a specified method from a desired class.", false),
-        INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class.", false),
+                "Seed a blob of the specified amount to a targeted tile"),
+        USE(Object.class, "<object> method [args]", "Use a specified method from a desired class.",
+                "It may be handy to see _inspect_ to see usable methods for your object",
+                "If you set a variable from this command, the return value of the method will be stored into the variable."),
+        INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class."),
         VARIABLES(null,
-                "- _@_<variable> [ [COMMAND ...] | i[nv] | c[ell] ]",
-                "store the result of a command (or an item from the inventory or something on the map) to a variable that can be referenced later.") {
-            @Override String fullDocumentation(PackageTrie trie) {
-                return documentation()
-                        + "\n\n"
-                        + "The variables can be referenced later with their names for the purposes of methods from commands, as well as the _use_ and _inspect_ commands.";
-            }
-        };
+                "_@_<variable> [ [COMMAND ...] | i[nv] | c[ell] ]",
+                "store game objects for later use as method targets or parameters",
+                "The variables can be referenced later with their names for the purposes of methods from commands, as well as the _use_ and _inspect_ commands.",
+                "You can see all active variable names by typing _@_.",
+                "Specifying \"inv\" (or \"i\") will have the game prompt you to select an item from your inventory.",
+                "Specifying \"cell\" (or \"c\") will allow you to select a tile. ",
+                "When selecting a cell, you may or may not be able to directly select things in the tile you select, depending on the Scroll of Debug implementation.",
+                "Please note that variables are not saved when you close the game."
+        );
 
         final Class<?> paramClass;
-        final String syntax, description;
-        final boolean includeUses;
-        Command(Class<?> paramClass, String syntax, String description, boolean includeUses) {
+        final String syntax;
+        // a short description intended to fit on one line.
+        final String summary;
+        // more details on usage. a length of 1 will be treated as an extended description, more will be treated as a list.
+        final String[] notes;
+
+        Command(Class<?> paramClass, String syntax, String summary, String... notes) {
             this.paramClass = paramClass;
             this.syntax = syntax;
-            this.description = description;
-            this.includeUses = includeUses;
-        }
-        Command(Class<?> paramClass, String syntax, String description) {
-            this(paramClass,syntax,description,true);
+            this.summary = summary;
+            this.notes = notes;
         }
 
         @Override public String toString() { return name().toLowerCase(); }
 
-        String documentation() { return documentation(this, syntax, description); }
+        String documentation() { return documentation(this, syntax, summary); }
         static String documentation(Object command, String syntax, String description) {
             return String.format("_%s_ %s\n%s", command, syntax, description);
         }
 
         // adds more information depending on what the paramClass actually is.
-        String fullDocumentation(PackageTrie trie) {
+        String fullDocumentation(PackageTrie trie, boolean showClasses) {
             String documentation = documentation();
-            if(paramClass != null && includeUses) {
+            if(notes.length > 0) {
+                documentation += "\n";
+                if(notes.length == 1) documentation += "\n" + notes[0];
+                else for(String note : notes) documentation += "\n_-_ " + note;
+            }
+            if(showClasses && paramClass != null && !paramClass.isPrimitive() && paramClass != Object.class) {
                 documentation += "\n\n_Valid Classes_:" + listAllClasses(trie,paramClass);
             }
             return documentation;
         }
+        String fullDocumentation(PackageTrie trie) { return fullDocumentation(trie, true); }
 
 
         static Command get(String string) { try {
@@ -224,11 +243,12 @@ public class ScrollOfDebug extends Scroll {
                             if (all) {
                                 // extensive. help is omitted because we are using help.
                                 if (cmd != Command.HELP) {
-                                    builder.append("\n\n").append(cmd.fullDocumentation(trie));
+                                    builder.append("\n\n")
+                                            .append(cmd.fullDocumentation(trie, false));
                                 }
                             } else {
-                                // by default attempt to shorten the command list as much as possible.
-                                builder.append(String.format("\n_%s_: %s", cmd, cmd.description));
+                                // use documentation. (show syntax in addition to description)
+                                builder.append('\n').appendLine(cmd.documentation());
                             }
                         }
                         output = builder.toString().trim();
@@ -375,7 +395,7 @@ public class ScrollOfDebug extends Scroll {
                                         GameScene.add(mob);
                                         // doing this means that I can't actually let you select cells for methods; it'll be immediately cancelled.
                                         executeMethod(mob,input,3);
-                                        GLog.w("Summoned " + mob.name());
+                                        GLog.w("Spawned " + mob.name());
                                     }
                                 });
                             } else {
@@ -390,7 +410,7 @@ public class ScrollOfDebug extends Scroll {
                                     if(canExecute) canExecute = executeMethod(m, input, qSpecified?3:2);
                                 }
                                 spawned--;
-                                GLog.w("Summoned "
+                                GLog.w("Spawned "
                                         + mob.name()
                                         + (spawned == 1 ? "" : " x" + spawned)
                                 );
@@ -547,11 +567,13 @@ public class ScrollOfDebug extends Scroll {
     }
     @Override public String desc() {
         StringBuilder builder = new StringBuilder();
-        builder.append("A scroll that gives you great power, letting you create virtually any item or mob in the game.")
-                .append("\n\nCommands:");
-        for(Command cmd : Command.values()) builder.append("\n\n_-_ ").append(cmd.documentation());
-        return builder.append("\n"
-                + "\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if they weren't intended to be created spontaneously.")
+        builder.appendLine("A scroll that gives you great power, letting you create virtually any item or mob in the game.")
+                .appendLine("\nSupported Commands:");
+        for(Command cmd : Command.values()) builder.appendLine(
+                // this should hopefully fit on one line.
+                String.format("_- %s_: %s", cmd, cmd.summary)
+        );
+        return builder.append("\nPlease note that some possible inputs may crash the game or cause other unexpected behavior, especially if their targets weren't intended to be created or otherwise used arbitrarily.")
                 .toString();
     }
     @Override public boolean isIdentified() {
