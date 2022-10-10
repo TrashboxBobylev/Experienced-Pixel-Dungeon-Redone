@@ -40,7 +40,7 @@ import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
 
-public class ArcaneBomb extends Bomb {
+public class ArcaneBomb extends Bomb.MagicalBomb {
 	
 	{
 		image = ItemSpriteSheet.ARCANE_BOMB;

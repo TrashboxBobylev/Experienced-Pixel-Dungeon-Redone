@@ -226,6 +226,7 @@ public class YogDzewa extends Mob {
 				if (terrainAffected) {
 					Dungeon.observe();
 				}
+				Invisibility.dispel(this);
 				for (Char ch : affected) {
 
 					if (hit( this, ch, true )) {

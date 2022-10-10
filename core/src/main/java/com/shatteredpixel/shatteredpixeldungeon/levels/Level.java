@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
@@ -664,8 +665,15 @@ if (bundle.contains( "respawner" )){
 
 	public int randomRespawnCell( Char ch ) {
 		int cell;
+		int count = 0;
 		do {
+
+			if (++count > 30) {
+				return -1;
+			}
+
 			cell = Random.Int( length() );
+
 		} while ((Dungeon.level == this && heroFOV[cell])
 				|| !passable[cell]
 				|| (Char.hasProp(ch, Char.Property.LARGE) && !openSpace[cell])
@@ -987,6 +995,7 @@ if (bundle.contains( "respawner" )){
 		int result;
 		do {
 			result = randomRespawnCell( null );
+			if (result == -1) return -1;
 		} while (traps.get(result) != null
 				|| findMob(result) != null);
 		return result;
@@ -1035,6 +1044,10 @@ if (bundle.contains( "respawner" )){
 			if (map[ch.pos] == Terrain.DOOR){
 				Door.enter( ch.pos );
 			}
+		}
+
+		if (ch.isAlive() && ch instanceof Piranha && !water[ch.pos]){
+			ch.die(null);
 		}
 	}
 	

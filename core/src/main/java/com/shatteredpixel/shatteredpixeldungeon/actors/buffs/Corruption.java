@@ -75,13 +75,4 @@ public class Corruption extends AllyBuff {
 		return BuffIndicator.CORRUPT;
 	}
 
-	@Override
-	public String toString() {
-		return Messages.get(this, "name");
-	}
-
-	@Override
-	public String desc() {
-		return Messages.get(this, "desc");
-	}
 }

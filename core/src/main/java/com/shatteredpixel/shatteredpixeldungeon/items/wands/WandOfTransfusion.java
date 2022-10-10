@@ -115,9 +115,9 @@ public class WandOfTransfusion extends Wand {
 					charm.object = curUser.id();
 					charm.ignoreHeroAllies = true;ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f,  (int) Math.sqrt(3 ) );
 				
-				//harm the undead
+				//harms the undead
 				} else {
-					ch.damage((int) (Random.NormalIntRange(3 + buffedLvl()/2, 6+buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
+					ch.damage((int) (Random.NormalIntRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
 					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.sqrt(10 + buffedLvl()));
 					Sample.INSTANCE.play(Assets.Sounds.BURNING);
 				}
@@ -145,7 +145,7 @@ public class WandOfTransfusion extends Wand {
 		if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()){
 			//grants a free use of the staff and shields self
 			freeCharge = true;
-			Buff.affect(attacker, Barrier.class).setShield(2*(5 + buffedLvl()));
+			Buff.affect(attacker, Barrier.class).setShield(Math.round((2*(5 + buffedLvl()))*procChanceMultiplier(attacker)));
 			GLog.p( Messages.get(this, "charged") );
 			attacker.sprite.emitter().burst(BloodParticle.BURST, 20);
 		}

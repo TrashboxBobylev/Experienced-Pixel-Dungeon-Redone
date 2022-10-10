@@ -42,8 +42,9 @@ public class Overgrowth extends Armor.Glyph {
 	
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
-		
-		if ( Dungeon.Int( 20 ) == 0) {
+
+		float procChance = 1/20f * procChanceMultiplier(defender);
+		if ( Dungeon.Float() < procChance ) {
 
 			Plant p = ((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(defender.pos, null);
 

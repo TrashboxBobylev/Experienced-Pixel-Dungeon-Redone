@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms;
 
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.*;
 
 import java.util.ArrayList;
@@ -239,6 +240,10 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 	public boolean canMerge(Level l, Point p, int mergeTerrain){
 		return false;
 	}
+//can be overriden for special merge logic between rooms
+	public void merge(Level l, Room other, Rect merge, int mergeTerrain){
+		Painter.fill(l, merge, mergeTerrain);
+	}
 
 	public boolean addNeigbour( Room other ) {
 		if (neigbours.contains(other))
@@ -326,7 +331,23 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 		}
 		return points;
 	}
-	
+
+	//whether or not an item can be placed here (usually via randomDropCell)
+	public boolean canPlaceItem(Point p, Level l){
+		return inside(p);
+	}
+
+	public final ArrayList<Point> itemPlaceablePoints(Level l){
+		ArrayList<Point> points = new ArrayList<>();
+		for (int i = left; i <= right; i++) {
+			for (int j = top; j <= bottom; j++) {
+				Point p = new Point(i, j);
+				if (canPlaceItem(p, l)) points.add(p);
+			}
+		}
+		return points;
+	}
+
 	//whether or not a character can be placed here (usually via spawn, tele, or wander)
 	public boolean canPlaceCharacter(Point p, Level l){
 		return inside(p);

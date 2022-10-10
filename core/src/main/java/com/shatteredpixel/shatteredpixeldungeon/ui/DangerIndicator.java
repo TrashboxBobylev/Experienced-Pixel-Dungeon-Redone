@@ -58,7 +58,7 @@ public class DangerIndicator extends Tag {
 	
 	@Override
 	public GameAction keyAction() {
-		return SPDAction.TAG_DANGER;
+		return SPDAction.CYCLE;
 	}
 	
 	@Override

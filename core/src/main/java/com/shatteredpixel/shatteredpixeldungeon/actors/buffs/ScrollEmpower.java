@@ -75,11 +75,6 @@ public class ScrollEmpower extends Buff {
 	}
 
 	@Override
-	public String toString() {
-		return Messages.get(this, "name");
-	}
-
-	@Override
 	public String desc() {
 		return Messages.get(this, "desc", Math.max(1,Dungeon.hero.lvl/5), left);
 	}

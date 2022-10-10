@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.painters;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -245,11 +246,13 @@ public abstract class RegularPainter extends Painter {
 						d.type = Room.Door.Type.UNLOCKED;
 					}
 
+					//entrance doors on floor 1 are hidden during tutorial
 					//entrance doors on floor 2 are hidden if the player hasn't picked up 2nd guidebook page
-					if (Dungeon.depth == 2
-							&& !Document.ADVENTURERS_GUIDE.isPageFound(Document.GUIDE_SEARCHING)
-							&& r instanceof EntranceRoom){
-						d.type = Room.Door.Type.HIDDEN;
+					if (r instanceof EntranceRoom || n instanceof EntranceRoom){
+						if ((Dungeon.depth == 1 && SPDSettings.intro())
+							|| (Dungeon.depth == 2 && !Document.ADVENTURERS_GUIDE.isPageFound(Document.GUIDE_SEARCHING))) {
+							d.type = Room.Door.Type.HIDDEN;
+						}
 					}
 				}
 				
@@ -304,7 +307,7 @@ public abstract class RegularPainter extends Painter {
 			}
 
 			if (merge.height() >= 3) {
-				Painter.fill(l, merge.left, merge.top + 1, 1, merge.height()-1, mergeTerrain);
+				r.merge(l, n, new Rect(merge.left, merge.top + 1, merge.left+1, merge.bottom), mergeTerrain);
 				return true;
 			} else {
 				return false;
@@ -328,7 +331,7 @@ public abstract class RegularPainter extends Painter {
 			}
 
 			if (merge.width() >= 3) {
-				Painter.fill(l, merge.left + 1, merge.top, merge.width()-1, 1, mergeTerrain);
+				r.merge(l, n, new Rect(merge.left + 1, merge.top, merge.right, merge.top+1), mergeTerrain);
 				return true;
 			} else {
 				return false;

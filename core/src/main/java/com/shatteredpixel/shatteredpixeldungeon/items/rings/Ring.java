@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -286,7 +287,7 @@ public class Ring extends KindofMisc {
 		levelsToID -= levelPercent;
 		if (levelsToID <= 0){
 			identify();
-			GLog.p( Messages.get(Ring.class, "identify", toString()) );
+			GLog.p( Messages.get(Ring.class, "identify", title()) );
 			Badges.validateItemLevelAquired( this );
 		}
 	}
@@ -301,6 +302,7 @@ public class Ring extends KindofMisc {
 	}
 
 	public static int getBonus(Char target, Class<?extends RingBuff> type){
+		if (target.buff(MagicImmune.class) != null) return 0;
 		int bonus = 0;
 		for (RingBuff buff : target.buffs(type)) {
 			bonus += buff.level();
@@ -309,6 +311,7 @@ public class Ring extends KindofMisc {
 	}
 
 	public static int getBuffedBonus(Char target, Class<?extends RingBuff> type){
+		if (target.buff(MagicImmune.class) != null) return 0;
 		int bonus = -1;
 		for (RingBuff buff : target.buffs(type)) {
 			bonus += buff.buffedLvl();

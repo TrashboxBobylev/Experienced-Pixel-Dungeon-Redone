@@ -118,6 +118,14 @@ public abstract class Wand extends Item {
 
 	public abstract void onHit( MagesStaff staff, Char attacker, Char defender, int damage);
 
+	//not affected by enchantment proc chance changers
+	public static float procChanceMultiplier( Char attacker ){
+		if (attacker.buff(Talent.EmpoweredStrikeTracker.class) != null){
+			return 1f + ((Hero)attacker).pointsInTalent(Talent.EMPOWERED_STRIKE)/3f;
+		}
+		return 1f;
+	}
+
 	public boolean tryToZap( Hero owner, int target ){
 
 		if (owner.buff(MagicImmune.class) != null){
@@ -379,6 +387,13 @@ public abstract class Wand extends Item {
 				identify();
 				GLog.p( Messages.get(Wand.class, "identify") );
 				Badges.validateItemLevelAquired( this );
+			}
+		}
+
+		//inside staff
+		if (charger != null && charger.target == Dungeon.hero && !Dungeon.hero.belongings.contains(this)){
+			if (Dungeon.hero.hasTalent(Talent.EXCESS_CHARGE) && curCharges >= maxCharges){
+				Buff.affect(Dungeon.hero, Barrier.class).setShield(Math.round(buffedLvl()*0.67f*Dungeon.hero.pointsInTalent(Talent.EXCESS_CHARGE)));
 			}
 		}
 		

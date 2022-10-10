@@ -83,7 +83,7 @@ public class BadgesList extends ScrollPane {
 
 	private class ListItem extends Component {
 		
-		private static final float HEIGHT	= 20;
+		private static final float HEIGHT	= 18;
 		
 		private Badges.Badge badge;
 		

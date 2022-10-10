@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -77,7 +79,9 @@ public class CloakOfShadows extends Artifact {
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		if ((isEquipped( hero ) || hero.heroClass == HeroClass.ROGUE)
-				&& !cursed && (charge > 0 || activeBuff != null)) {
+				&& !cursed
+				&& hero.buff(MagicImmune.class) == null
+				&& (charge > 0 || activeBuff != null)) {
 			actions.add(AC_STEALTH);
 		boolean needToSpawn = true;
         for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
@@ -98,6 +102,8 @@ public class CloakOfShadows extends Artifact {
 	public void execute( Hero hero, String action ) {
 
 		super.execute(hero, action);
+
+		if (hero.buff(MagicImmune.class) != null) return;
 
 		if (action.equals( AC_STEALTH )) {
 
@@ -211,6 +217,8 @@ public class CloakOfShadows extends Artifact {
 	
 	@Override
 	public void charge(Hero target, float amount) {
+		if (cursed || target.buff(MagicImmune.class) != null) return;
+
 		if (charge < chargeCap) {
 			if (!isEquipped(target)) amount *= 0.66f;
 			partialCharge += 0.25f*amount;
@@ -259,7 +267,7 @@ public class CloakOfShadows extends Artifact {
 	public class cloakRecharge extends ArtifactBuff{
 		@Override
 		public boolean act() {
-			if (charge < chargeCap) {
+			if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
 				LockedFloor lock = target.buff(LockedFloor.class);
 				if (activeBuff == null && (lock == null || lock.regenOn())) {
 					float missing = (chargeCap - charge);
@@ -281,8 +289,9 @@ public class CloakOfShadows extends Artifact {
 					}
 
 				}
-			} else
+			} else {
 				partialCharge = 0;
+			}
 
 			if (cooldown > 0)
 				cooldown --;
@@ -391,16 +400,6 @@ public class CloakOfShadows extends Artifact {
 		public void fx(boolean on) {
 			if (on) target.sprite.add( CharSprite.State.INVISIBLE );
 			else if (target.invisible == 0) target.sprite.remove( CharSprite.State.INVISIBLE );
-		}
-
-		@Override
-		public String toString() {
-			return Messages.get(this, "name");
-		}
-
-		@Override
-		public String desc() {
-			return Messages.get(this, "desc");
 		}
 
 		@Override

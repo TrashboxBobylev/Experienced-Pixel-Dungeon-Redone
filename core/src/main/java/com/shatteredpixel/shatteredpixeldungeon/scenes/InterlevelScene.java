@@ -71,7 +71,7 @@ public class InterlevelScene extends PixelScene {
 	public static int returnBranch;
 	public static int returnPos;
 	public static boolean cycleTransition;
-	
+
 	public static boolean noStory = false;
 
 	public static boolean fallIntoPit;
@@ -366,10 +366,6 @@ public class InterlevelScene extends PixelScene {
 		if (Dungeon.hero == null) {
 			Mob.clearHeldAllies();
 			Dungeon.init();
-			if (noStory) {
-				Dungeon.chapters.add( WndStory.ID_SEWERS );
-				noStory = false;
-			}
 			GameLog.wipe();
 
 			Level level = Dungeon.newLevel();
@@ -465,11 +461,16 @@ public class InterlevelScene extends PixelScene {
 			Dungeon.hero.resurrect();
 			level = Dungeon.newLevel();
 			Dungeon.hero.pos = level.randomRespawnCell(Dungeon.hero);
+			if (Dungeon.hero.pos == -1) Dungeon.hero.pos = level.entrance();
 
 			for (Item i : preservedItems){
-				level.drop(i, level.randomRespawnCell(null));
+				int pos = level.randomRespawnCell(null);
+				if (pos == -1) pos = level.entrance();
+				level.drop(i, pos);
 			}
-			level.drop(new LostBackpack(), level.randomRespawnCell(null));
+			int pos = level.randomRespawnCell(null);
+			if (pos == -1) pos = level.entrance();
+			level.drop(new LostBackpack(), pos);
 
 		} else {
 			level = Dungeon.level;

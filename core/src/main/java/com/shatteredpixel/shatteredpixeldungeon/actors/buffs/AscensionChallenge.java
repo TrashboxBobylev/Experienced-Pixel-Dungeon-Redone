@@ -206,7 +206,7 @@ public class AscensionChallenge extends Buff {
 	}
 
 	public void saySwitch(){
-		if (Dungeon.bossLevel() || Dungeon.depth == 1){
+		if (Dungeon.bossLevel()){
 			GLog.p(Messages.get(this, "break"));
 		} else {
 			if (Dungeon.depth == 1){
@@ -221,10 +221,7 @@ public class AscensionChallenge extends Buff {
 				GLog.n(Messages.get(this, "beckon"));
 			}
 			if (stacks > 10 || stacks > 5 && Dungeon.depth > 20){
-				//english only until the next update
-				if (Messages.lang() == Languages.ENGLISH) {
-					GLog.h(Messages.get(this, "weaken_info"));
-				}
+				GLog.h(Messages.get(this, "weaken_info"));
 			}
 		}
 	}
@@ -273,11 +270,6 @@ public class AscensionChallenge extends Buff {
 		} else {
 			icon.hardlight(1, 0, 0);
 		}
-	}
-
-	@Override
-	public String toString() {
-		return Messages.get(this, "name");
 	}
 
 	@Override

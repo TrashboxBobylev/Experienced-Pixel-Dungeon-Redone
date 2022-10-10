@@ -48,8 +48,8 @@ public class Sungrass extends Plant {
 	@Override
 	public void activate( Char ch ) {
 		
-		if (ch == Dungeon.hero) {
-			if (Dungeon.hero.isSubclass(HeroSubClass.WARDEN)) {
+		if (ch != null){
+			if (ch instanceof Hero && ((Hero) ch).isSubclass(HeroSubClass.WARDEN)) {
 				Buff.affect(ch, Healing.class).setHeal(ch.HT, 0, 1);
 			} else {
 				Buff.affect(ch, Health.class).boost(ch.HT);
@@ -137,11 +137,6 @@ public class Sungrass extends Plant {
 		@Override
 		public String iconTextDisplay() {
 			return Integer.toString(level);
-		}
-		
-		@Override
-		public String toString() {
-			return Messages.get(this, "name");
 		}
 
 		@Override

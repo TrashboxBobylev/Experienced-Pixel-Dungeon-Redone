@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.Callback;
@@ -52,6 +53,10 @@ public class Pushing extends Actor {
 		this.from = from;
 		this.to = to;
 		this.callback = null;
+
+		if (ch == Dungeon.hero){
+			Camera.main.panFollow(ch.sprite, 20f);
+		}
 	}
 
 	public Pushing( Char ch, int from, int to, Callback callback ) {

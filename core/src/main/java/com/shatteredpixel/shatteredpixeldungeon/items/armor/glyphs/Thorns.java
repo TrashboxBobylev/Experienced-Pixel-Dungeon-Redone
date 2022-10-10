@@ -44,9 +44,12 @@ public class Thorns extends Armor.Glyph {
 		// lvl 0 - 16.7%
 		// lvl 1 - 23.1%
 		// lvl 2 - 28.5%
-		if ( Dungeon.Int( level + 12) >= 10) {
+		float procChance = (level+2f)/(level+12f) * procChanceMultiplier(defender);
+		if ( Dungeon.Float() < procChance ) {
 
-			Buff.affect( attacker, Bleeding.class).set( 4 + level );
+			float powerMulti = Math.max(1f, procChance);
+
+			Buff.affect( attacker, Bleeding.class).set( Math.round((4 + level)*powerMulti) );
 
 		}
 

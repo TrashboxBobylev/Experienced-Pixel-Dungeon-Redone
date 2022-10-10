@@ -40,7 +40,8 @@ public class Stench extends Armor.Glyph {
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 
-		if ( Dungeon.Int( 8 ) == 0) {
+		float procChance = 1/8f * procChanceMultiplier(defender);
+		if ( Dungeon.Float() < procChance ) {
 
 			GameScene.add( Blob.seed( defender.pos, 250, ToxicGas.class ) );
 

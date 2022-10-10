@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -145,7 +146,8 @@ public class Warlock extends Mob implements Callback {
 	
 	protected void zap() {
 		spend( TIME_TO_ZAP );
-		
+
+		Invisibility.dispel(this);
 		if (hit( this, enemy, true )) {
 			//TODO would be nice for this to work on ghost/statues too
 			if (enemy == Dungeon.hero && Random.Int( 2 ) == 0) {

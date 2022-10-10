@@ -412,7 +412,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				healing.pour(Speck.factory(Speck.HEALING), 0.5f);
 				break;
 			case SHIELDED:
-				GameScene.effect( shield = new ShieldHalo( this ));
+				if (shield != null) {
+					shield.killAndErase();
+				}
+				GameScene.effect(shield = new ShieldHalo(this));
 				break;
             case RAGESHIELDED:
                 GameScene.effect( rageShield = new RageHalo( this ));

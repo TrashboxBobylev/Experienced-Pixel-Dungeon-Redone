@@ -70,7 +70,7 @@ public enum Talent {
 	//Warrior T3
 	HOLD_FAST(9, 3), STRONGMAN(10, 3),
 	//Berserker T3
-	ENDLESS_RAGE(11, 3), BERSERKING_STAMINA(12, 3), ENRAGED_CATALYST(13, 3),
+	ENDLESS_RAGE(11, 3), DEATHLESS_FURY(12, 3), ENRAGED_CATALYST(13, 3),
 	//Gladiator T3
 	CLEAVE(14, 3), LETHAL_DEFENSE(15, 3), ENHANCED_COMBO(16, 3),
 	//Heroic Leap T4
@@ -140,8 +140,6 @@ public enum Talent {
 		public int icon() { return BuffIndicator.TIME; }
 		public void tintIcon(Image icon) { icon.hardlight(0.15f, 0.2f, 0.5f); }
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / 50); }
-		public String toString() { return Messages.get(this, "name"); }
-		public String desc() { return Messages.get(this, "desc", dispTurns(visualcooldown())); }
 	};
 	public static class LethalMomentumTracker extends FlavourBuff{};
 	public static class StrikingWaveTracker extends FlavourBuff{};
@@ -189,16 +187,12 @@ public enum Talent {
 		public int icon() { return BuffIndicator.TIME; }
 		public void tintIcon(Image icon) { icon.hardlight(0f, 0.35f, 0.15f); }
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / (5)); }
-		public String toString() { return Messages.get(this, "name"); }
-		public String desc() { return Messages.get(this, "desc", dispTurns(visualcooldown())); }
 	};
 	public static class RejuvenatingStepsFurrow extends CounterBuff{{revivePersists = true;}};
 	public static class SeerShotCooldown extends FlavourBuff{
 		public int icon() { return target.buff(RevealedArea.class) != null ? BuffIndicator.NONE : BuffIndicator.TIME; }
 		public void tintIcon(Image icon) { icon.hardlight(0.7f, 0.4f, 0.7f); }
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / 20); }
-		public String toString() { return Messages.get(this, "name"); }
-		public String desc() { return Messages.get(this, "desc", dispTurns(visualcooldown())); }
 	};
 	public static class SpiritBladesTracker extends FlavourBuff{};
 
@@ -602,7 +596,7 @@ public enum Talent {
 		//tier 3
 		switch (cls){
 			case BERSERKER: default:
-				Collections.addAll(tierTalents, ENDLESS_RAGE, BERSERKING_STAMINA, ENRAGED_CATALYST);
+				Collections.addAll(tierTalents, ENDLESS_RAGE, DEATHLESS_FURY, ENRAGED_CATALYST);
 				break;
 			case GLADIATOR:
 				Collections.addAll(tierTalents, CLEAVE, LETHAL_DEFENSE, ENHANCED_COMBO);
@@ -675,7 +669,6 @@ public enum Talent {
 	}
 
 	public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){
-		//TODO restore replacements
 		if (bundle.contains("replacements")){
 			Bundle replacements = bundle.getBundle("replacements");
 			for (String key : replacements.getKeys()){

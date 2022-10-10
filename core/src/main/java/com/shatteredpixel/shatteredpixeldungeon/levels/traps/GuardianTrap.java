@@ -76,6 +76,8 @@ public class GuardianTrap extends Trap {
 
 			EXP = 0;
 			state = WANDERING;
+
+			levelGenStatue = false;
 		}
 
 		public Guardian(){

@@ -27,10 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.IntroScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -88,16 +88,11 @@ public class WndStartGame extends Window {
 				
 				GamesInProgress.curSlot = slot;
 				Dungeon.hero = null;
-				Dungeon.daily = false;
+				Dungeon.daily = Dungeon.dailyReplay = false;
 				ActionIndicator.action = null;
 				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-				
-				if (SPDSettings.intro()) {
-					SPDSettings.intro( false );
-					Game.switchScene( IntroScene.class );
-				} else {
-					Game.switchScene( InterlevelScene.class );
-				}
+
+				Game.switchScene( InterlevelScene.class );
 			}
 			
 			@Override

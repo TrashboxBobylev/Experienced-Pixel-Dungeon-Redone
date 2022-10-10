@@ -69,16 +69,18 @@ public class Notes {
 	public enum Landmark {
 		WELL_OF_HEALTH,
 		WELL_OF_AWARENESS,
-		WELL_OF_TRANSMUTATION,
 		ALCHEMY,
 		GARDEN,
 		STATUE,
+		SACRIFICIAL_FIRE,
 		SHOP,
 		
 		GHOST,
 		WANDMAKER,
 		TROLL,
-		IMP;
+		IMP,
+
+		DEMON_SPAWNER;
 		
 		public String desc() {
 			return Messages.get(this, name());
@@ -119,7 +121,7 @@ public class Notes {
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
-			bundle.put( LANDMARK, landmark.toString() );
+			bundle.put( LANDMARK, landmark.name() );
 		}
 	}
 	
@@ -140,7 +142,7 @@ public class Notes {
 		
 		@Override
 		public String desc() {
-			return key.toString();
+			return key.title();
 		}
 		
 		public Class<? extends Key> type(){
