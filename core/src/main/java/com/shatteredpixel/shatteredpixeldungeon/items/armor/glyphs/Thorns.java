@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -45,7 +44,7 @@ public class Thorns extends Armor.Glyph {
 		// lvl 1 - 23.1%
 		// lvl 2 - 28.5%
 		float procChance = (level+2f)/(level+12f) * procChanceMultiplier(defender);
-		if ( Dungeon.Float() < procChance ) {
+		if ( Random.Float() < procChance ) {
 
 			float powerMulti = Math.max(1f, procChance);
 

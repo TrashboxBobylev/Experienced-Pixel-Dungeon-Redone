@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -47,7 +46,7 @@ public class Entanglement extends Glyph {
 		final int level = Math.max( 0, armor.buffedLvl() );
 		float procChance = 1/4f * procChanceMultiplier(defender);
 
-		if (Dungeon.Float() < procChance) {
+		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);
 

@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.curses;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -41,7 +40,7 @@ public class Stench extends Armor.Glyph {
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 
 		float procChance = 1/8f * procChanceMultiplier(defender);
-		if ( Dungeon.Float() < procChance ) {
+		if ( Random.Float() < procChance ) {
 
 			GameScene.add( Blob.seed( defender.pos, 250, ToxicGas.class ) );
 
