@@ -77,16 +77,6 @@ public class RingOfWealth extends Ring {
 			if (dropsToRare <= 0){
 				int equipBonus = 0;
 
-				//A second ring of wealth can be at most +1 when calculating wealth bonus for equips
-				//This is to prevent using an upgraded wealth to farm another upgraded wealth and
-				//using the two to get substantially more upgrade value than intended
-				for (Wealth w : target.buffs(Wealth.class)){
-					if (w.buffedLvl() > equipBonus){
-						equipBonus = w.buffedLvl() + Math.min(equipBonus, 2);
-					} else {
-						equipBonus += Math.min(w.buffedLvl(), 2);
-					}
-				}
 				Item i;
 				do {
 					i = genEquipmentDrop(level - 1);

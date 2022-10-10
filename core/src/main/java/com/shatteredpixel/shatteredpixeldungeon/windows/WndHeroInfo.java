@@ -141,7 +141,6 @@ public class WndHeroInfo extends WndTabbed {
 	@Override
 	public void offset(int xOffset, int yOffset) {
 		super.offset(xOffset, yOffset);
-		talentInfo.layout();
 	}
 
 	private static class HeroInfoTab extends Component {
