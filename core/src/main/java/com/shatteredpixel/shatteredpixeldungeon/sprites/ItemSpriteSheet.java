@@ -92,8 +92,8 @@ public class ItemSpriteSheet {
 	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+4;
 	public static final int RUNIC_SHOT = UNCOLLECTIBLE+5;
 	
-	public static final int TENGU_BOMB      = UNCOLLECTIBLE+8;
-	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+9;
+	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
+	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
