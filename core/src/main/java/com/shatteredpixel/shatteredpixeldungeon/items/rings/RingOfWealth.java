@@ -65,8 +65,8 @@ public class RingOfWealth extends Ring {
 
 		//reset (if needed), decrement, and store counts
 		if (triesToDrop == Float.MIN_VALUE) {
-			triesToDrop = Dungeon.NormalIntRange(0, 20);
-			dropsToRare = Dungeon.NormalIntRange(3, 8);
+			triesToDrop = Dungeon.NormalIntRange(4, 12);
+			dropsToRare = Dungeon.NormalIntRange(4, 8);
 		}
 
 		//now handle reward logic
