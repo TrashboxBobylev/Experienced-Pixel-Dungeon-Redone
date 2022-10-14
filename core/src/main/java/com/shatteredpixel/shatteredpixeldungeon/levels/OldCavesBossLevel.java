@@ -277,7 +277,7 @@ public class OldCavesBossLevel extends Level {
                         Buff.affect(mob, ArenaBuff.class);
                     }
                 }
-                spend(respawnCooldown() / 3);
+                spend(respawnCooldown() / 4f);
                 return true;
             }
         };
