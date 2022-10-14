@@ -57,7 +57,24 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released October 14th, 2022\n" +
+                        "_-_ 29 days after Experienced Pixel Dungeon 2.11.2\n" +
+                        "\n" +
+                        "Dev commentary will be added here in the future."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                    "Ported changes from Shattered 1.4.0.\n\n" +
+                            "_-_ This includes Arcana, new landscape hero select, sandals and berserker rework."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Level sizes are more varied.\n" +
+                        "_-_ Significantly buffed scaling of most rings.\n" +
+                        "_-_ Increased the base duration for fishing from 0-20 to 4-12.\n" +
+                        "_-_ Arena mobs spawn 33% faster."));
+
+        changes = new ChangeInfo("ExpPD-2.11.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
