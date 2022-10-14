@@ -38,7 +38,7 @@ public class RingOfTenacity extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.85f - soloVisualBonus()*0.001))));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.85f - soloVisualBonus()*0.0015))));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(15f));
 		}
@@ -52,7 +52,7 @@ public class RingOfTenacity extends Ring {
 	public static float damageMultiplier( Char t ){
         float multiplier = 0.85f;
 		if (getBuffedBonus(t, Tenacity.class) > 0) multiplier = 1.1f;
-		if (getBuffedBonus(t, Tenacity.class) > 1) multiplier -= 0.001f*getBuffedBonus(t, Tenacity.class)*((float)(t.HT - t.HP)/t.HT);
+		if (getBuffedBonus(t, Tenacity.class) > 1) multiplier -= 0.0015f*getBuffedBonus(t, Tenacity.class)*((float)(t.HT - t.HP)/t.HT);
         return multiplier;
 	}
 

@@ -25,9 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -43,7 +40,7 @@ public class RingOfEnergy extends Ring {
 		if (isIdentified()){
 			return Messages.get(this, "stats",
 					new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.01f - 1f)),
-					new DecimalFormat("#.###").format(100f * (1.10f + soloVisualBonus()*0.005f - 1f)));
+					new DecimalFormat("#.###").format(100f * (1.10f + soloVisualBonus()*0.0125f - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats",
 					new DecimalFormat("#.###").format(20f),
@@ -59,14 +56,14 @@ public class RingOfEnergy extends Ring {
 	public static float wandChargeMultiplier( Char target ){
         float multiplier = 1f;
         if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.2f;
-        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.01;
+        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.025;
         return multiplier;
 	}
 
 	public static float artifactChargeMultiplier( Char target ){
         float multiplier = 1f;
         if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.1f;
-        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.005;
+        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.0125;
         return multiplier;
 	}
 	

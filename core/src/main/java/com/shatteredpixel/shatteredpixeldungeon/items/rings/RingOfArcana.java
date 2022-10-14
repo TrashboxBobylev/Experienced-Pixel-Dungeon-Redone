@@ -38,7 +38,7 @@ public class RingOfArcana extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.##").format(100f * (1.20f + soloVisualBonus()*0.0075 - 1f)));
+			return Messages.get(this, "stats", new DecimalFormat("#.##").format(100f * (1.20f + soloVisualBonus()*0.015 - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.##").format(20f));
 		}
@@ -52,7 +52,7 @@ public class RingOfArcana extends Ring {
 	public static float enchantPowerMultiplier(Char target ){
 		float multiplier = 1f;
 		if (getBuffedBonus(target, Arcana.class) > 0) multiplier = 1.2f;
-		if (getBuffedBonus(target, Arcana.class) > 1) multiplier += getBuffedBonus(target, Arcana.class)*0.0075;
+		if (getBuffedBonus(target, Arcana.class) > 1) multiplier += getBuffedBonus(target, Arcana.class)*0.015;
 		return multiplier;
 	}
 

@@ -43,7 +43,7 @@ public class RingOfElements extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.005f))));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}
@@ -76,7 +76,7 @@ public class RingOfElements extends Ring {
 			if (c.isAssignableFrom(effect)){
                 float multiplier = 1f;
                 if (getBuffedBonus(target, Resistance.class) > 0) multiplier = 0.8f;
-                if (getBuffedBonus(target, Resistance.class) > 1) multiplier -= getBuffedBonus(target, Resistance.class)*0.005;
+                if (getBuffedBonus(target, Resistance.class) > 1) multiplier -= getBuffedBonus(target, Resistance.class)*0.0075;
                 return multiplier;
 			}
 		}

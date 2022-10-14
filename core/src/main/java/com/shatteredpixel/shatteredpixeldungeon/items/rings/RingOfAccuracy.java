@@ -38,7 +38,7 @@ public class RingOfAccuracy extends Ring {
 	
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.0075 - 1f)));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.02 - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}
@@ -52,7 +52,7 @@ public class RingOfAccuracy extends Ring {
 	public static float accuracyMultiplier( Char target ){
         float multiplier = 1f;
         if (getBuffedBonus(target, Accuracy.class) > 0) multiplier = 1.2f;
-        if (getBuffedBonus(target, Accuracy.class) > 1) multiplier += getBuffedBonus(target, Accuracy.class)*0.0075;
+        if (getBuffedBonus(target, Accuracy.class) > 1) multiplier += getBuffedBonus(target, Accuracy.class)*0.02;
 		return multiplier;
 	}
 	

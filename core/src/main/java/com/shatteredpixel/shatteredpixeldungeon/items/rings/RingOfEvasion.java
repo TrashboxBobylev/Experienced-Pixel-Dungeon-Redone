@@ -38,7 +38,7 @@ public class RingOfEvasion extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * ((1.20f + soloVisualBonus()*0.001f) - 1f)));
+			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * ((1.20f + soloVisualBonus()*0.0025f) - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}
@@ -52,7 +52,7 @@ public class RingOfEvasion extends Ring {
 	public static float evasionMultiplier( Char target ){
         float multiplier = 1f;
         if (getBuffedBonus(target, Evasion.class) > 0) multiplier = 1.2f;
-        if (getBuffedBonus(target, Evasion.class) > 1) multiplier += getBuffedBonus(target, Evasion.class)*0.001;
+        if (getBuffedBonus(target, Evasion.class) > 1) multiplier += getBuffedBonus(target, Evasion.class)*0.0025;
         return multiplier;
 	}
 
