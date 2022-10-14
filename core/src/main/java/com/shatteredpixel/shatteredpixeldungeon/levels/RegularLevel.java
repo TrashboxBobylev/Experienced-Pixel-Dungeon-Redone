@@ -117,7 +117,7 @@ public abstract class RegularLevel extends Level {
 			do {
 				s = StandardRoom.createRoom();
 			} while (!s.setSizeCat( standards-i ));
-			i += s.sizeCat.roomValue-1;
+			i += Random.Int(Math.round((s.sizeCat.roomValue-1)*1.5f));
 			initRooms.add(s);
 		}
 		
