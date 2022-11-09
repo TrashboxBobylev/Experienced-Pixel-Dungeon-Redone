@@ -3,6 +3,7 @@ package com.zrp200.scrollofdebug;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
 import static java.util.Arrays.copyOfRange;
 
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 
 import com.badlogic.gdx.utils.IntMap;
@@ -39,10 +40,12 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 // Output
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
+import com.watabou.noosa.Game;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -54,7 +57,7 @@ import java.util.regex.Pattern;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v1.1.0
+ * @version v1.2.1
  *
  * @apiNote Compatible with Shattered Pixel Dungeon v1.3.0+, and compatible with any LibGDX Shattered Pixel Dungeon version (post v0.8) with minimal changes.
  * **/
@@ -104,6 +107,7 @@ public class ScrollOfDebug extends Scroll {
                 "It may be handy to see _inspect_ to see usable methods for your object",
                 "If you set a variable from this command, the return value of the method will be stored into the variable."),
         INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class."),
+        GOTO(null, "<depth>", "Sends your character to the indicated depth, generating any depths in between."),
         VARIABLES(null,
                 "_@_<variable> [ [COMMAND ...] | i[nv] | c[ell] ]",
                 "store game objects for later use as method targets or parameters",
@@ -255,6 +259,19 @@ public class ScrollOfDebug extends Scroll {
                     GameScene.show(new HelpWindow(output));
                 } else if(input.length > 1) {
                     Object storedVariable = Variable.get(input[1]);
+
+                    if(command == Command.GOTO) {
+                        if(storedVariable instanceof Integer) {
+                            gotoDepth((Integer)storedVariable);
+                        }
+                        else try {
+                            gotoDepth(Integer.parseInt(input[1]));
+                        } catch (NumberFormatException e) {
+                            GLog.w("Invalid depth provided: " + input[1]);
+                        }
+                        return;
+                    }
+
                     Class _cls = storedVariable != null ? storedVariable.getClass()
                             : trie.findClass(input[1], command.paramClass);
 
@@ -563,6 +580,30 @@ public class ScrollOfDebug extends Scroll {
         });
     }
 
+    // force sends you to the corresponding depth.
+    private static void gotoDepth(int targetDepth) {
+            Mob.holdAllies( Dungeon.level );
+            try { saveAll(); } catch (IOException e) {
+                Game.reportException(e);
+                GLog.w("Unable to save game, aborting.");
+                return;
+            }
+            depth = targetDepth;
+            Level level; try { level = loadLevel(GamesInProgress.curSlot); } catch (IOException e) {
+                if(Game.versionCode < 630) depth--;
+                level = newLevel();
+            }
+            try {
+                // needed for certain implementations of this mechanic.
+                Game.scene().destroy();
+            } catch (Exception e) {
+                // if it fails for some unknown reason I really don't care, move on.
+                Game.reportException(e);
+            }
+            switchLevel(level, -1);
+            Game.switchScene(GameScene.class);
+    }
+
     @Override public String name() {
         return "Scroll of Debug";
     }
@@ -863,6 +904,9 @@ public class ScrollOfDebug extends Scroll {
 
     private static final String CHANGELOG
         = ""
+        +"_1.2.1_:"
+            +"\nImplemented goto, which immediately sends the hero to the targeted depth."
+            +"\n"
         +"_1.2.0_:"
             +"\n_-_ Implemented variables! You are now able to store the result of commands that create game objects, as well as anything generated from the use command. You can also store stuff from the map (variable name followed by 'cell' or 'c') and your inventory (variable name followed by 'inv' or 'i')."
             +"\n_-_ Adjusted some descriptions of commands, and added more detail to their extended descriptions."
