@@ -485,15 +485,16 @@ public class ScrollOfDebug extends Scroll {
                                     return item.collect(container);
                                 }
                             } : item;
+                            String itemName = item.name();
                             if (toPickUp.doPickUp(curUser)) {
                                 // ripped from Hero#actPickUp, kinda.
                                 boolean important = item.unique && (item instanceof Scroll || item instanceof Potion);
-                                String pickupMessage = Messages.get(curUser, "you_now_have", item);
+                                String pickupMessage = Messages.get(curUser, "you_now_have", itemName);
                                 if(important) GLog.p(pickupMessage); else GLog.i(pickupMessage);
                                 // attempt to nullify turn usage.
                                 curUser.spend(-curUser.cooldown());
                             } else {
-                                GLog.n(Messages.get(curUser, "you_cant_have", item.name()));
+                                GLog.n(Messages.get(curUser, "you_cant_have", itemName));
                             }
                             break;
                         case AFFECT:
@@ -554,7 +555,14 @@ public class ScrollOfDebug extends Scroll {
                                             default:
                                                 color = CharSprite.NEUTRAL;
                                         }
-                                        target.sprite.showStatus(color, added.toString());
+                                        String buffName; try {
+                                            // Evan attempted to screw me over by changing toString implementations of buff to a new name() method (see be01254)
+                                            // Unfortunately for him, I can just check for it.
+                                            buffName = (String)added.getClass()
+                                                    .getMethod("name")
+                                                    .invoke(added);
+                                        } catch(Exception e) { buffName = added.toString(); }
+                                        target.sprite.showStatus(color, buffName);
                                     }
                                 }
                             });
@@ -906,6 +914,7 @@ public class ScrollOfDebug extends Scroll {
         = ""
         +"_1.2.1_:"
             +"\nImplemented goto, which immediately sends the hero to the targeted depth."
+            +"\nFixed 1.4.X shattered changes breaking give command text output."
             +"\n"
         +"_1.2.0_:"
             +"\n_-_ Implemented variables! You are now able to store the result of commands that create game objects, as well as anything generated from the use command. You can also store stuff from the map (variable name followed by 'cell' or 'c') and your inventory (variable name followed by 'inv' or 'i')."
