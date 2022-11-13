@@ -8,7 +8,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 // Commands
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -788,7 +787,7 @@ public class ScrollOfDebug extends Scroll {
     static {
         try {
             trie = PackageTrie.getClassesForPackage(ROOT);
-        } catch (ClassNotFoundException e) { ShatteredPixelDungeon.reportException(e); }
+        } catch (ClassNotFoundException e) { Game.reportException(e); }
     }
 
     static String listAllClasses(PackageTrie trie, Class<?> parent) {
