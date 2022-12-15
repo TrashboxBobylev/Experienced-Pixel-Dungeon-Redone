@@ -596,17 +596,17 @@ public class ScrollOfDebug extends Scroll {
                 GLog.w("Unable to save game, aborting.");
                 return;
             }
-            depth = targetDepth;
-            Level level; try { level = loadLevel(GamesInProgress.curSlot); } catch (IOException e) {
-                if(Game.versionCode < 630) depth--;
-                level = newLevel();
-            }
             try {
                 // needed for certain implementations of this mechanic.
                 Game.scene().destroy();
             } catch (Exception e) {
                 // if it fails for some unknown reason I really don't care, move on.
                 Game.reportException(e);
+            }
+            depth = targetDepth;
+            Level level; try { level = loadLevel(GamesInProgress.curSlot); } catch (IOException e) {
+                if(Game.versionCode < 630) depth--;
+                level = newLevel();
             }
             switchLevel(level, -1);
             Game.switchScene(GameScene.class);
