@@ -107,7 +107,7 @@ public class ScrollOfDebug extends Scroll {
                 "It may be handy to see _inspect_ to see usable methods for your object",
                 "If you set a variable from this command, the return value of the method will be stored into the variable."),
         INSPECT(Object.class, "<object>", "Gives a list of supported methods for the indicated class."),
-        GOTO(null, "<depth>", "Sends your character to the indicated depth, generating any depths in between."),
+        GOTO(null, "<depth>", "Sends your character to the indicated depth."),
         VARIABLES(null,
                 "_@_<variable> [ [COMMAND ...] | i[nv] | c[ell] ]",
                 "store game objects for later use as method targets or parameters",
@@ -588,6 +588,15 @@ public class ScrollOfDebug extends Scroll {
         });
     }
 
+    /** level transition was implemented in 1.3.0 **/
+    private static final boolean before1_3_0;
+    static {
+        boolean preRework = false;
+        try {
+            Class.forName(ROOT + ".levels.features.LevelTransition");
+        } catch (ClassNotFoundException e) { preRework = true; }
+        before1_3_0 = preRework;
+    }
     // force sends you to the corresponding depth.
     private static void gotoDepth(int targetDepth) {
             Mob.holdAllies( Dungeon.level );
@@ -605,7 +614,8 @@ public class ScrollOfDebug extends Scroll {
             }
             depth = targetDepth;
             Level level; try { level = loadLevel(GamesInProgress.curSlot); } catch (IOException e) {
-                if(Game.versionCode < 630) depth--;
+                // generating a new level before the feature rework incremented the level automatically.
+                if(before1_3_0) depth--;
                 level = newLevel();
             }
             switchLevel(level, -1);
@@ -757,7 +767,6 @@ public class ScrollOfDebug extends Scroll {
                     continue;
                 }
 
-                // todo add level autofill
                 args[i] =
                         type == Hero.class ? curUser :// autofill hero
                         Class.class.isAssignableFrom(type) ? trie.findClass(input[j++], Object.class) :
