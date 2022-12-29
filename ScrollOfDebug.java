@@ -157,8 +157,8 @@ public class ScrollOfDebug extends Scroll {
 
 
         static Command get(String string) { try {
-            return string.equals("@") ? VARIABLES
-                    : valueOf(string.toUpperCase());
+            return string.equals("@") ? VARIABLES :
+                    valueOf(string.toUpperCase());
         } catch (Exception e) { return null; } }
     }
 
@@ -196,7 +196,7 @@ public class ScrollOfDebug extends Scroll {
                         if(initialInput.length > 1) GLog.w("warning: remaining arguments were discarded");
                         // list them all
                         StringBuilder s = new StringBuilder();
-                        for(Map.Entry e : Variable.getActive().entrySet()) {
+                        for(Map.Entry<String,Variable> e : Variable.assigned.entrySet()) if(e.getValue().isActive()) {
                             s.append("\n_").append(e.getKey()).append("_ - ").append(e.getValue());
                         }
                         GameScene.show(new HelpWindow("Active Variables: \n" + s));
@@ -206,7 +206,7 @@ public class ScrollOfDebug extends Scroll {
 
                     // variable-specific actions
                     if(input.length == 0){
-                        GLog.i("%s = %s", storeLocation, Variable.get(storeLocation));
+                        GLog.p("%s = %s", storeLocation, Variable.toString(storeLocation));
                         return;
                     }
                     String vCommand = input[0].toLowerCase();
