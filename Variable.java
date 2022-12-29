@@ -1,6 +1,5 @@
 package com.zrp200.scrollofdebug;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -10,8 +9,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -151,15 +148,16 @@ abstract public class Variable<T> {
     public String toString() {
         T target = getTarget();
         if (target == null) return null;
-        Class c = target.getClass();
-        String objectAsString = c.getSimpleName();
+        Class<?> c = target.getClass();
         try {
             // if we have a pretty toString, use that instead.
             if (c.isPrimitive() || c.getMethod("toString").getDeclaringClass() != Object.class) {
-                objectAsString = target.toString();
+                return target.toString();
+            } else {
+                // check for dedicated "name" method that is often implemented by game objects
+                return (String)c.getMethod("name").invoke(target);
             }
-        } catch (NoSuchMethodException e) {/*impossible*/}
-        return objectAsString;
+        } catch (Exception e) { return c.getSimpleName(); }
     }
 
 //    @Override
@@ -179,15 +177,12 @@ abstract public class Variable<T> {
         }
     }
 
+    // actors can be retrieved by id instead of by reference
     public static class ActorVariable extends Variable<Actor> {
-        private int id, depth;
-
-        @Deprecated
-        ActorVariable() {} // for Bundling only
+        private final int id;
 
         ActorVariable(Actor actor) {
             id = actor.id();
-            depth = Dungeon.depth;
         }
 
         @Override
@@ -195,29 +190,8 @@ abstract public class Variable<T> {
 
         @Override
         public String toString() {
-            Actor target = getTarget();
-            if (target == null) return null;
-            Class c = target.getClass();
-            String objectAsString = c.getSimpleName();
-            try {
-                // if we have a pretty toString, use that instead.
-                if(c.getMethod("toString").getDeclaringClass() != Object.class) {
-                    objectAsString = target.toString();
-                }
-            } catch (NoSuchMethodException e) {/*impossible*/}
-            return objectAsString + " (id=" + id + ")";
+            String toString = super.toString();
+            return toString != null ? toString + " (id=" + id + ")" : null;
         }
-
-//        @Override
-//        public void storeInBundle(Bundle bundle) {
-//            bundle.put("id", id);
-//            bundle.put("depth", depth);
-//        }
-//
-//        @Override
-//        public void restoreFromBundle(Bundle bundle) {
-//            id = bundle.getInt("id");
-//            depth = bundle.getInt("depth");
-//        }
     }
 }
