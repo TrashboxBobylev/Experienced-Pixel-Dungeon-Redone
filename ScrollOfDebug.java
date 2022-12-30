@@ -57,7 +57,7 @@ import java.util.regex.Pattern;
  *
  * @author  <a href="https://github.com/zrp200/scrollofdebug">
  *              Zrp200
- * @version v1.2.1
+ * @version v1.2.2
  *
  * @apiNote Compatible with Shattered Pixel Dungeon v1.3.0+, and compatible with any LibGDX Shattered Pixel Dungeon version (post v0.8) with minimal changes.
  * **/
@@ -921,9 +921,17 @@ public class ScrollOfDebug extends Scroll {
 
     private static final String CHANGELOG
         = ""
+        +"_1.2.2_:"
+            +"\n_-_ Goto no longer relies on version code in any form."
+            +"\n_-_ Variables now attempt to show their ingame name rather than built-in toString."
+            +"\n_-_ Seeing the value of a specific variable now uses the same template as when setting them."
+            +"\n_-_ Fixed variables being cleared when cancelling a command to set them."
+            +"\n_-_ Fixed goto crash when warping to post-v1.3.0 demon halls."
+            +"\n_-_ Fixed erroneous assertion in goto description; it does not generate depths in between."
+            +"\n"
         +"_1.2.1_:"
-            +"\nImplemented goto, which immediately sends the hero to the targeted depth."
-            +"\nFixed 1.4.X shattered changes breaking give command text output."
+            +"\n_-_ Implemented goto, which immediately sends the hero to the targeted depth."
+            +"\n_-_ Fixed 1.4.X shattered changes breaking give command text output."
             +"\n"
         +"_1.2.0_:"
             +"\n_-_ Implemented variables! You are now able to store the result of commands that create game objects, as well as anything generated from the use command. You can also store stuff from the map (variable name followed by 'cell' or 'c') and your inventory (variable name followed by 'inv' or 'i')."
