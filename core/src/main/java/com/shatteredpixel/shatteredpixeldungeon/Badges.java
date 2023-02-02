@@ -163,12 +163,12 @@ public class Badges {
 		HIGH_SCORE_4                ( 109 ),
 		CHAMPION_1                  ( 110 ),
 
-		WAND_QUEST_1,
-		WAND_QUEST_2,
-		WAND_QUEST_3,
-		WAND_QUEST_4,
-		WAND_QUEST_5,
-		WAND_QUEST_6,
+		WAND_QUEST_1				( 112 ),
+		WAND_QUEST_2				( 113 ),
+		WAND_QUEST_3				( 114 ),
+		WAND_QUEST_4				( 115 ),
+		WAND_QUEST_5				( 116 ),
+		WAND_QUEST_6				( 117 ),
 
 
 		//diamond
@@ -1102,7 +1102,8 @@ public class Badges {
 			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4},
 			{Badge.HIGH_SCORE_1, Badge.HIGH_SCORE_2, Badge.HIGH_SCORE_3, Badge.HIGH_SCORE_4, Badge.HIGH_SCORE_5},
 			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5},
-			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3}
+			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3},
+			{Badge.WAND_QUEST_1, Badge.WAND_QUEST_2, Badge.WAND_QUEST_3, Badge.WAND_QUEST_4, Badge.WAND_QUEST_5, Badge.WAND_QUEST_6}
 	};
 
 	//don't show the later badge if the earlier one isn't unlocked
