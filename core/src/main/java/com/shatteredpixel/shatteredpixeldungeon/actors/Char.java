@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -57,7 +58,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
@@ -68,6 +68,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
@@ -77,10 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.watabou.utils.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -660,13 +659,50 @@ public abstract class Char extends Actor {
 			}
 		}
 
-		if (this instanceof Hero && srcClass != Viscosity.DeferedDamage.class && HP <= 0 &&
-				((Hero) this).perks.contains(IRON_WILL)){
-			HP += dmg;
+		if (this instanceof Hero && ((Hero) this).perks.contains(IRON_WILL) && HP <= HT/2){
 			Camera.main.shake(4, 0.25f);
 			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY);
-			Buff.affect(this, Viscosity.DeferedDamage.class).
-					prolong((int) (dmg * 1.5f));
+
+			//the new effect is just blast's damage
+			Ballistica aim;
+			int aoeSize = 5;
+			int projectileProps = Ballistica.STOP_SOLID | Ballistica.STOP_TARGET;
+			if (pos % Dungeon.level.width() > 10){
+				aim = new Ballistica(pos, pos - 1, Ballistica.WONT_STOP);
+			} else {
+				aim = new Ballistica(pos, pos + 1, Ballistica.WONT_STOP);
+			}
+
+			ConeAOE aoe = new ConeAOE(aim, aoeSize, 360, projectileProps);
+
+			for (Ballistica ray : aoe.outerRays){
+				((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+						MagicMissile.FORCE_CONE,
+						sprite,
+						ray.path.get(ray.dist),
+						null
+				);
+			}
+			int finalDmg = dmg;
+			((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+					MagicMissile.FORCE_CONE,
+					sprite,
+					aim.path.get(aoeSize / 2),
+					new Callback() {
+						@Override
+						public void call() {
+							for (int cell : aoe.cells) {
+								Char mob = Actor.findChar(cell);
+								int damage = Random.NormalIntRange(finalDmg /3, finalDmg/2);
+
+								if (mob != null && damage > 0 && mob.alignment != Char.Alignment.ALLY){
+									mob.damage(damage, src);
+								}
+							}
+						}
+					}
+			);
+
 		}
 
 		if (sprite != null) {
