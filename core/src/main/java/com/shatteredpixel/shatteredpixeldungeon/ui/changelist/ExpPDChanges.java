@@ -57,7 +57,26 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.3", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.4", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released February 02th, 2023\n" +
+                        "_-_ 112 days after Experienced Pixel Dungeon 2.11.3\n" +
+                        "\n" +
+                        "This is first release in Google Play!"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Fixed badges for Wand of Avalanche quest.\n" +
+                        "_-_ Fixed rare crash when Elixir of Luck attempts to replace melee weapon in a shop.\n" +
+                        "_-_ Fixed the rare crash with traps and Integer unboxing.\n" +
+                        "_-_ Fixed Scrolls of Determination and Midas disappearing on reload.\n" +
+                        "_-_ Added more actions into subclass action indicator recycling.\n" +
+                        "_-_ Reworked Iron Will into Iron Reflection: now damages enemies with shockwaves when player is hurt.\n" +
+                        "_-_ Determination Shield buff no longer gets used when player's HP is at full.\n" +
+                        "_-_ Bigger Bags perk is now named in more clear way.\n" +
+                        "_-_ Scroll of Dread is back and has fixed icon."));
+
+        changes = new ChangeInfo("ExpPD-2.11.3", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

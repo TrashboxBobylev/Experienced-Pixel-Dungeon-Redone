@@ -475,7 +475,7 @@ public class Bundle {
 	}
 
 	//useful to turn this off for save data debugging.
-	private static final boolean compressByDefault = false;
+	private static final boolean compressByDefault = true;
 
 	private static final int GZIP_BUFFER = 1024*4; //4 kb
 
