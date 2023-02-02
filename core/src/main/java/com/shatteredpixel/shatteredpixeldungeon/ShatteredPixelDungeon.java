@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfHolyFuror;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
@@ -83,17 +82,11 @@ public class ShatteredPixelDungeon extends Game {
 				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong.class,
 				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection" );
 		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfConfusion" );
-		com.watabou.utils.Bundle.addAlias(
 				PotionOfHolyFuror.class,
 				"com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfHolyFuror" );
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery.class,
 				"com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge" );
-		com.watabou.utils.Bundle.addAlias(
-				ScrollOfMetamorphosis.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPolymorph" );
 		
 	}
 	

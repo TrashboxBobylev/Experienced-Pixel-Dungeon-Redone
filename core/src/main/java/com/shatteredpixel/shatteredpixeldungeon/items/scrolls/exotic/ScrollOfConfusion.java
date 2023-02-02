@@ -35,7 +35,7 @@ import com.watabou.noosa.audio.Sample;
 public class ScrollOfConfusion extends ExoticScroll {
 	
 	{
-		icon = ItemSpriteSheet.Icons.SCROLL_DREAD;
+		icon = ItemSpriteSheet.Icons.SCROLL_CHALLENGE;
 	}
 	
 	@Override
