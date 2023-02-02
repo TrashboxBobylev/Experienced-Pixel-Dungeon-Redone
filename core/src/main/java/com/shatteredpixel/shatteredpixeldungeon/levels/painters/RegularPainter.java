@@ -451,7 +451,7 @@ public abstract class RegularPainter extends Painter {
 
 			Trap trap = Reflection.newInstance(trapClasses[Random.chances( trapChances )]);
 
-			Integer trapPos;
+			Integer trapPos = 0;
 			if (trap.avoidsHallways && !validNonHallways.isEmpty()){
 				trapPos = Random.element(validNonHallways);
 			} else {
