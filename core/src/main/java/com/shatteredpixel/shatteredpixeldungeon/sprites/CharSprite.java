@@ -280,12 +280,6 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public synchronized void zap( int cell, Callback callback ) {
-		animCallback = callback;
-		turnTo( ch.pos, cell );
-		play( zap );
-	}
-
-	public void zap( int cell, Callback callback ) {
 		doAfterAnim(callback,true);
 		zap( cell );
 	}

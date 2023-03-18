@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
+import java.text.DecimalFormat;
 import java.util.HashSet;
 
 public class RingOfElements extends Ring {

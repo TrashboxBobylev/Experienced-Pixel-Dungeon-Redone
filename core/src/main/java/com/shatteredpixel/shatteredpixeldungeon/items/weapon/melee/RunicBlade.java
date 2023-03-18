@@ -41,11 +41,8 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Callback;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -283,11 +280,11 @@ public class RunicBlade extends MeleeWeapon {
         private float maxSize;
         public float sizeJitter = 0;
 
-        public StaffParticle(){
+        public StaffParticle() {
             super();
         }
 
-        public void reset( float x, float y ) {
+        public void reset(float x, float y) {
             revive();
 
             speed.set(0);
@@ -295,40 +292,42 @@ public class RunicBlade extends MeleeWeapon {
             this.x = x;
             this.y = y;
 
-            color( 0x38c3c3 );
+            color(0x38c3c3);
             am = 0.85f;
             setLifespan(3f);
             speed.polar(Random.Float(PointF.PI2), 0.3f);
-            setSize( 1f, 2f);
+            setSize(1f, 2f);
             radiateXY(2.5f);
 
         }
 
-        public void setSize( float minSize, float maxSize ){
+        public void setSize(float minSize, float maxSize) {
             this.minSize = minSize;
             this.maxSize = maxSize;
         }
 
-        public void setLifespan( float life ){
+        public void setLifespan(float life) {
             lifespan = left = life;
         }
 
-        public void shuffleXY(float amt){
+        public void shuffleXY(float amt) {
             x += Random.Float(-amt, amt);
             y += Random.Float(-amt, amt);
         }
 
-        public void radiateXY(float amt){
-            float hypot = (float)Math.hypot(speed.x, speed.y);
-            this.x += speed.x/hypot*amt;
-            this.y += speed.y/hypot*amt;
+        public void radiateXY(float amt) {
+            float hypot = (float) Math.hypot(speed.x, speed.y);
+            this.x += speed.x / hypot * amt;
+            this.y += speed.y / hypot * amt;
         }
 
         @Override
         public void update() {
             super.update();
-            size(minSize + (left / lifespan)*(maxSize-minSize) + Random.Float(sizeJitter));
+            size(minSize + (left / lifespan) * (maxSize - minSize) + Random.Float(sizeJitter));
         }
+
+    }
     @Override
 	public String targetingPrompt() {
 		return Messages.get(this, "prompt");
@@ -377,8 +376,6 @@ public class RunicBlade extends MeleeWeapon {
 	}
 
 	public static class RunicSlashTracker extends FlavourBuff{};
-
-}
 
     public void recharge(){
         charged = true;

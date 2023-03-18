@@ -68,11 +68,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -85,7 +80,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
@@ -667,6 +661,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		float delay = 1f;
 
+		if ( buff(Adrenaline.class) != null) delay /= 1.5f;
+
 		if (!RingOfForce.fightingUnarmed(this)) {
 
 			return delay * belongings.attackingWeapon().delayFactor( this );
@@ -675,7 +671,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			//Normally putting furor speed on unarmed attacks would be unnecessary
 			//But there's going to be that one guy who gets a furor+force ring combo
 			//This is for that one guy, you shall get your fists of fury!
-			float speed = RingOfFuror.attackSpeedMultiplier(this);
+			float speed = RingOfFuror.attackDelayMultiplier(this);
 
 			//ditto for furor + sword dance!
 			if (buff(Scimitar.SwordDance.class) != null){
@@ -689,9 +685,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 			return delay/speed;
 		}
-		if ( buff(Adrenaline.class) != null) delayFactor /= 1.5f;
-
-		return delayFactor;
 	}
 
 	@Override
