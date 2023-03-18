@@ -108,6 +108,15 @@ public class RunicBlade extends MeleeWeapon {
         charged = bundle.getBoolean("charge");
     }
 
+    @Override
+    public String defaultAction() {
+        if (charged){
+            return AC_ZAP;
+        } else {
+            return super.defaultAction();
+        }
+    }
+
     //Essentially it's a tier 4 weapon, with tier 3 base max damage, and tier 5 scaling.
     //equal to tier 4 in damage at +5
 
