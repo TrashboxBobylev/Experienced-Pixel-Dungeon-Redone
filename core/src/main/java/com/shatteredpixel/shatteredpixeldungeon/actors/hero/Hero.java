@@ -405,7 +405,7 @@ public class Hero extends Char {
 		Invisibility.dispel();
 		belongings.thrownWeapon = null;
 
-		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
+		if (hit && isSubclass(HeroSubClass.GLADIATOR) && wasEnemy){
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 
@@ -1581,7 +1581,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				return false;
 			}
 
-			if (subClass == HeroSubClass.FREERUNNER){
+			if (isSubclass(HeroSubClass.FREERUNNER)){
 				Buff.affect(this, Momentum.class).gainStack();
 			}
 
@@ -2043,7 +2043,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		else ((HeroSprite)sprite).hit(15f);
 
-		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
+		if (hit && isSubclass(HeroSubClass.GLADIATOR) && wasEnemy){
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 

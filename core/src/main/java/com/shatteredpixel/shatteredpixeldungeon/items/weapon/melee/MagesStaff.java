@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -171,7 +170,7 @@ public class MagesStaff extends MeleeWeapon {
 		}
 
 		if (wand != null &&
-				attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
+				attacker instanceof Hero && ((Hero)attacker).isSubclass(HeroSubClass.BATTLEMAGE)) {
 			if (wand.curCharges < wand.maxCharges) wand.partialCharge += 0.5f;
 			ScrollOfRecharging.charge((Hero)attacker);
 			wand.onHit(this, attacker, defender, damage);
@@ -353,7 +352,7 @@ public class MagesStaff extends MeleeWeapon {
 			if ((!cursed && !hasCurseEnchant()) || !cursedKnown)    info += " " + wand.statsDesc();
 			else                                                    info += " " + Messages.get(this, "cursed_wand");
 
-			if (Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
+			if (Dungeon.hero.isSubclass(HeroSubClass.BATTLEMAGE)){
 				info += "\n\n" + Messages.get(wand, "bmage_desc");
 			}
 		}

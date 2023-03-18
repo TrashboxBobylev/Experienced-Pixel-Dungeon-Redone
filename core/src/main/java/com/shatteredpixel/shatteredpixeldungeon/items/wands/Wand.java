@@ -253,7 +253,7 @@ public abstract class Wand extends Item {
 			desc += "\n\n" + Messages.get(Wand.class, "not_cursed");
 		}
 
-		if (Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
+		if (Dungeon.hero.isSubclass(HeroSubClass.BATTLEMAGE)){
 			desc += "\n\n" + Messages.get(this, "bmage_desc");
 		}
 
@@ -425,7 +425,7 @@ public abstract class Wand extends Item {
 					//grants 3/5 shielding
 					Buff.affect(Dungeon.hero, Barrier.class).setShield(1 + 2 * Dungeon.hero.pointsInTalent(Talent.BACKUP_BARRIER));
 				}
-				if (Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE) {
+				if (Dungeon.hero.isSubclass(HeroSubClass.BATTLEMAGE)) {
 					Buff.prolong(Dungeon.hero, Talent.EmpoweredStrikeTracker.class, 10f);
 				}
 
