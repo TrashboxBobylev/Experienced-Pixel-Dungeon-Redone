@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,13 +27,13 @@ package com.shatteredpixel.shatteredpixeldungeon.messages;
 import java.util.Locale;
 
 public enum Languages {
-	ENGLISH("english",      "",   Status.REVIEWED,   null, null);
+	ENGLISH("english",      "",   Status._COMPLETE_,   null, null);
 
 	public enum Status{
-		//below 80% complete languages are not added.
-		INCOMPLETE, //80-99% complete
-		UNREVIEWED, //100% complete
-		REVIEWED    //100% reviewed
+		//below 80% translated languages are not added or removed
+		UNFINISHED, //80-99% translated
+		UNREVIEWED, //100% translated
+		_COMPLETE_  //100% reviewed
 	}
 
 	private String name;

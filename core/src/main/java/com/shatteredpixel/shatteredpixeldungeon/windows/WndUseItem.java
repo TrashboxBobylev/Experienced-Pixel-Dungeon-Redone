@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -58,7 +58,7 @@ public class WndUseItem extends WndInfoItem {
 							item.execute( Dungeon.hero, action );
 						}
 						Item.updateQuickslot();
-						if (action == item.defaultAction && item.usesTargeting && owner == null){
+						if (action == item.defaultAction() && item.usesTargeting && owner == null){
 							InventoryPane.useTargeting();
 						}
 					}
@@ -67,7 +67,7 @@ public class WndUseItem extends WndInfoItem {
 				buttons.add(btn);
 				add( btn );
 
-				if (action.equals(item.defaultAction)) {
+				if (action.equals(item.defaultAction())) {
 					btn.textColor( TITLE_COLOR );
 				}
 				

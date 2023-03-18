@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -48,11 +48,13 @@ public class Healing extends Buff {
 	
 	@Override
 	public boolean act(){
-		
-		target.HP = Math.min(target.HT, target.HP + healingThisTick());
 
-		if (target.HP == target.HT && target instanceof Hero){
-			((Hero)target).resting = false;
+		if (target.HP < target.HT) {
+			target.HP = Math.min(target.HT, target.HP + healingThisTick());
+
+			if (target.HP == target.HT && target instanceof Hero) {
+				((Hero) target).resting = false;
+			}
 		}
 		
 		healingLeft -= healingThisTick();

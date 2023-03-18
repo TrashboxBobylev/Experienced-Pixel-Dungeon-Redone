@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -128,7 +128,7 @@ public abstract class YogFist extends Mob {
 			invulnWarned = true;
 			GLog.w(Messages.get(this, "invuln_warn"));
 		}
-		return isNearYog();
+		return isNearYog() || super.isInvulnerable(effect);
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public abstract class YogFist extends Mob {
             case 3: return Random.NormalIntRange(1750, 3200);
             case 4: return Random.NormalIntRange(370000, 480000);
         }
-		return Random.NormalIntRange(0, 15);
+		return super.drRoll() + Random.NormalIntRange(0, 15);
 	}
 
 	{
@@ -344,6 +344,7 @@ public abstract class YogFist extends Mob {
 			spend( 1f );
 
 			Invisibility.dispel(this);
+			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
 				Buff.affect( enemy, Roots.class, 3f );
@@ -507,6 +508,7 @@ public abstract class YogFist extends Mob {
 			spend( 1f );
 
 			Invisibility.dispel(this);
+			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
                 int dmg = Random.NormalIntRange(10, 20);
@@ -579,6 +581,7 @@ public abstract class YogFist extends Mob {
 			spend( 1f );
 
 			Invisibility.dispel(this);
+			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
                 int dmg = Random.NormalIntRange(10, 20);

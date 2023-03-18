@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -109,9 +109,7 @@ public abstract class ElementalSprite extends MobSprite {
 	}
 	
 	public void zap( int cell ) {
-		
-		turnTo( ch.pos , cell );
-		play( zap );
+		super.zap( cell );
 		
 		MagicMissile.boltFromChar( parent,
 				boltType,
@@ -211,8 +209,7 @@ public abstract class ElementalSprite extends MobSprite {
 		//different bolt, so overrides zap
 		@Override
 		public void zap( int cell ) {
-			turnTo( ch.pos , cell );
-			play( zap );
+			super.zap( cell, null );
 			
 			((Elemental)ch).onZapComplete();
 			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));

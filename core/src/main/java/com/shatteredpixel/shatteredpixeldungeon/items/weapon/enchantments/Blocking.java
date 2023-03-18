@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -51,12 +51,14 @@ public class Blocking extends Weapon.Enchantment {
 		int level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 10%
-		// lvl 1 ~ 14%
-		// lvl 2 ~ 18%
-		float procChance = (level+2f)/(level+20f) * procChanceMultiplier(attacker);
+		// lvl 1 ~ 12%
+		// lvl 2 ~ 14%
+		float procChance = (level+4f)/(level+40f) * procChanceMultiplier(attacker);
 		if (Random.Float() < procChance){
+			float powerMulti = Math.max(1f, procChance);
+
 			BlockBuff b = Buff.affect(attacker, BlockBuff.class);
-			b.setShield(attacker.HT/10);
+			b.setShield(Math.round(powerMulti * (2 + weapon.buffedLvl())));
 			attacker.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 5);
 		}
 		

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -346,12 +346,21 @@ public class Ring extends KindofMisc {
 	public class RingBuff extends Buff {
 
         @Override
-        public boolean act() {
-
+        public boolean attachTo( Char target ) {
+			if (super.attachTo( target )) {
+				//if we're loading in and the hero has partially spent a turn, delay for 1 turn
+if (target instanceof Hero && Dungeon.hero == null && cooldown() == 0 && target.cooldown() > 0) {
             spend( TICK );
-
+}
             return true;
-        }
+        }return false;
+		}
+
+		@Override
+		public boolean act() {
+			spend( TICK );
+			return true;
+		}
 
 		public int level(){
 			return Ring.this.soloBonus();

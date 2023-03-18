@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -30,22 +30,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.watabou.noosa.Game;
 
-public class PrismaticSprite extends MobSprite {
-	
-	private static final int FRAME_WIDTH	= 12;
-	private static final int FRAME_HEIGHT	= 15;
-	
-	public PrismaticSprite() {
-		super();
-		
-		texture( Dungeon.hero.heroClass.spritesheet() );
-		updateArmor( 0 );
-		idle();
-	}
-	
+public class PrismaticSprite extends MirrorSprite {
+
 	@Override
-	public void link( Char ch ) {
-		super.link( ch );
+	public void updateArmor() {
 		updateArmor( ((PrismaticImage)ch).armTier );
 	}
 	

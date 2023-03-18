@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,8 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.DeviceCompat;
 
+import com.watabou.utils.DeviceCompat;
+
 public class WndHeroInfo extends WndTabbed {
 
 	private HeroInfoTab heroInfo;
@@ -69,6 +71,9 @@ public class WndHeroInfo extends WndTabbed {
 				break;
 			case RAT_KING:
 				tabIcon = new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING, null);
+				break;
+			case DUELIST:
+				tabIcon = new ItemSprite(ItemSpriteSheet.RAPIER, null);
 				break;
 		}
 
@@ -196,6 +201,12 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING)
 					};
+					break;
+				case DUELIST:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.RAPIER),
+							new ItemSprite(ItemSpriteSheet.WAR_HAMMER),
+							new ItemSprite(ItemSpriteSheet.THROWING_SPIKE),
+							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 			}
 			for (Image im : icons) {

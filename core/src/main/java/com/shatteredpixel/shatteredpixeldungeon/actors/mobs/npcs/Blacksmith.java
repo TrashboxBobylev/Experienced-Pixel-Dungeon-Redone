@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -76,7 +76,7 @@ public class Blacksmith extends NPC {
 			die(null);
 			return true;
 		}
-		if (Dungeon.level.heroFOV[pos] && !Quest.reforged){
+		if (Dungeon.level.visited[pos] && !Quest.reforged){
 			Notes.add( Notes.Landmark.TROLL );
 		}
 		return super.act();
@@ -130,6 +130,7 @@ public class Blacksmith extends NPC {
 							Notes.add( Notes.Landmark.TROLL );
 
 							Pickaxe pick = new Pickaxe();
+							pick.identify();
 							if (pick.doPickUp( Dungeon.hero )) {
 								GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
 							} else {
@@ -150,6 +151,7 @@ public class Blacksmith extends NPC {
 					tell( Messages.get(this, "blood_2") );
 				} else {
 					if (pick.isEquipped( Dungeon.hero )) {
+						pick.cursed = false; //so that it can always be removed
 						pick.doUnequip( Dungeon.hero, false );
 					}
 					pick.detach( Dungeon.hero.belongings.backpack );
@@ -287,7 +289,7 @@ public class Blacksmith extends NPC {
 				Dungeon.level.drop( seal, Dungeon.hero.pos );
 			}
 		}
-		
+
 		if (first.isEquipped( Dungeon.hero )) {
 			((EquipableItem)first).doUnequip( Dungeon.hero, true );
 		}

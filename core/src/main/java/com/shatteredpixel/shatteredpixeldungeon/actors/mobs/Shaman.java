@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -109,7 +109,7 @@ public abstract class Shaman extends Mob {
             case 3: return Random.NormalIntRange(450, 790);
             case 4: return Random.NormalIntRange(10000, 26000);
         }
-		return Random.NormalIntRange(0, 6);
+		return super.drRoll() + Random.NormalIntRange(0, 6);
 	}
 	
 	@Override
@@ -155,6 +155,7 @@ public abstract class Shaman extends Mob {
 		spend( 1f );
 
 		Invisibility.dispel(this);
+		Char enemy = this.enemy;
 		if (hit( this, enemy, true )) {
 			
 			if (Random.Int( 2 ) == 0) {

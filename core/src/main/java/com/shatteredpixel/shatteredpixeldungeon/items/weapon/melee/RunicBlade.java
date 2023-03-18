@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -41,6 +41,10 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -325,7 +329,56 @@ public class RunicBlade extends MeleeWeapon {
             super.update();
             size(minSize + (left / lifespan)*(maxSize-minSize) + Random.Float(sizeJitter));
         }
-    }
+    @Override
+	public String targetingPrompt() {
+		return Messages.get(this, "prompt");
+	}
+
+	@Override
+	protected void duelistAbility(Hero hero, Integer target) {
+		if (target == null) {
+			return;
+		}
+
+		Char enemy = Actor.findChar(target);
+		if (enemy == null || enemy == hero || hero.isCharmedBy(enemy) || !Dungeon.level.heroFOV[target]) {
+			GLog.w(Messages.get(this, "ability_no_target"));
+			return;
+		}
+
+		//we apply here because of projecting
+		RunicSlashTracker tracker = Buff.affect(hero, RunicSlashTracker.class);
+		hero.belongings.abilityWeapon = this;
+		if (!hero.canAttack(enemy)){
+			GLog.w(Messages.get(this, "ability_bad_position"));
+			tracker.detach();
+			hero.belongings.abilityWeapon = null;
+			return;
+		}
+		hero.belongings.abilityWeapon = null;
+
+		hero.sprite.attack(enemy.pos, new Callback() {
+			@Override
+			public void call() {
+				beforeAbilityUsed(hero);
+				AttackIndicator.target(enemy);
+				if (hero.attack(enemy, 1f, 0, Char.INFINITE_ACCURACY)){
+					Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
+					if (!enemy.isAlive()){
+						onAbilityKill(hero);
+					}
+				}
+				tracker.detach();
+				Invisibility.dispel();
+				hero.spendAndNext(hero.attackDelay());
+				afterAbilityUsed(hero);
+			}
+		});
+	}
+
+	public static class RunicSlashTracker extends FlavourBuff{};
+
+}
 
     public void recharge(){
         charged = true;

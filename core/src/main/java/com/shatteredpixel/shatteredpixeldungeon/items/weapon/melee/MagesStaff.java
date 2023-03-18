@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -113,7 +113,13 @@ public class MagesStaff extends MeleeWeapon {
 
 	@Override
 	public void activate( Char ch ) {
+		super.activate(ch);
 		applyWandChargeBuff(ch);
+	}
+
+	@Override
+	public int targetingPos(Hero user, int dst) {
+		return wand.targetingPos(user, dst);
 	}
 
 	@Override

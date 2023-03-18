@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -55,6 +55,9 @@ public class ElixirOfMight extends Elixir {
 		hero.updateHT( true );
 		hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "msg_1" ));
 		GLog.p( Messages.get(this, "msg_2") );
+
+		Badges.validateStrengthAttained();
+		Badges.validateDuelistUnlock();
 	}
 	
 	public String desc() {

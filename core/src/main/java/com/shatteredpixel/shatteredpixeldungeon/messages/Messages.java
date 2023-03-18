@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 
 import java.util.*;
 
+import jdk.vm.ci.meta.Local;
+
 /*
 	Simple wrapper class for libGDX I18NBundles.
 
@@ -43,6 +45,7 @@ public class Messages {
 
 	private static ArrayList<I18NBundle> bundles;
 	private static Languages lang;
+	private static Locale locale;
 
 	public static final String NO_TEXT_FOUND = "!!!NO TEXT FOUND!!!";
 
@@ -50,7 +53,9 @@ public class Messages {
 		return lang;
 	}
 
-
+	public static Locale locale(){
+		return locale;
+	}
 
 	/**
 	 * Setup Methods
@@ -76,12 +81,19 @@ public class Messages {
 		//seeing as missing keys are part of our process, this is faster than throwing an exception
 		I18NBundle.setExceptionOnMissingKey(false);
 
-		bundles = new ArrayList<>();
+		//store language and locale info for various string logic
 		Messages.lang = lang;
-		Locale locale = new Locale(lang.code());
+		if (lang == Languages.ENGLISH){
+			locale = Locale.ENGLISH;
+		} else {
+			locale = new Locale(lang.code());
+		}
 
+		//strictly match the language code when fetching bundles however
+		bundles = new ArrayList<>();
+		Locale bundleLocal = new Locale(lang.code());
 		for (String file : prop_files) {
-			bundles.add(I18NBundle.createBundle(Gdx.files.internal(file), locale));
+			bundles.add(I18NBundle.createBundle(Gdx.files.internal(file), bundleLocal));
 		}
 	}
 
@@ -145,23 +157,29 @@ public class Messages {
 		try {
 			return String.format(Locale.ENGLISH, format, args);
 		} catch (IllegalFormatException e) {
-			ShatteredPixelDungeon.reportException( e );
+			ShatteredPixelDungeon.reportException( new Exception("formatting error for the string: " + format, e) );
 			return format;
 		}
 	}
 
+	private static HashMap<String, DecimalFormat> formatters = new HashMap<>();
+
+	public static String decimalFormat( String format, double number ){
+		if (!formatters.containsKey(format)){
+			formatters.put(format, new DecimalFormat(format, DecimalFormatSymbols.getInstance(Locale.ENGLISH)));
+		}
+		return formatters.get(format).format(number);
+	}
+
 	public static String capitalize( String str ){
 		if (str.length() == 0)  return str;
-		else                    return Character.toTitleCase( str.charAt( 0 ) ) + str.substring( 1 );
+		else                    return str.substring( 0, 1 ).toUpperCase(locale) + str.substring( 1 );
 	}
 
 	//Words which should not be capitalized in title case, mostly prepositions which appear ingame
 	//This list is not comprehensive!
 	private static final HashSet<String> noCaps = new HashSet<>(
-			Arrays.asList(new String[]{
-					//English
-					"a", "an", "and", "of", "by", "to", "the", "x"
-			})
+			Arrays.asList("a", "an", "and", "of", "by", "to", "the", "x", "for")
 	);
 
 	public static String titleCase( String str ){
@@ -182,5 +200,13 @@ public class Messages {
 
 		//Otherwise, use sentence case
 		return capitalize(str);
+	}
+
+	public static String upperCase( String str ){
+		return str.toUpperCase(locale);
+	}
+
+	public static String lowerCase( String str ){
+		return str.toLowerCase(locale);
 	}
 }

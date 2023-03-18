@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -25,8 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -154,14 +157,13 @@ public class Toolbar extends Component {
 
 									@Override
 									public boolean itemSelectable(Item item) {
-										return item.defaultAction != null;
+										return item.defaultAction() != null;
 									}
 
 									@Override
 									public void onSelect(Item item) {
 										if (item != null) {
-											Dungeon.quickslot.setSlot( idx , item );
-											QuickSlotButton.refresh();
+											QuickSlotButton.set(idx, item);
 										}
 									}
 								});
@@ -241,8 +243,15 @@ public class Toolbar extends Component {
 			protected void onClick() {
 				if (Dungeon.hero.ready && !GameScene.cancel()) {
 					Dungeon.hero.waitOrPickup = true;
-					if (Dungeon.level.heaps.get(Dungeon.hero.pos) != null
+					if ((Dungeon.level.heaps.get(Dungeon.hero.pos) != null || Dungeon.hero.canSelfTrample())
 						&& Dungeon.hero.handle(Dungeon.hero.pos)){
+						//trigger hold fast and patient strike here, even if the hero didn't specifically wait
+						if (Dungeon.hero.hasTalent(Talent.HOLD_FAST)){
+							Buff.affect(Dungeon.hero, HoldFast.class).pos = Dungeon.hero.pos;
+						}
+						if (Dungeon.hero.hasTalent(Talent.PATIENT_STRIKE)){
+							Buff.prolong(Dungeon.hero, Talent.PatientStrikeTracker.class, Dungeon.hero.cooldown());
+						}
 						Dungeon.hero.next();
 					} else {
 						examining = false;
@@ -430,11 +439,8 @@ public class Toolbar extends Component {
 								public void onSelect(int idx, boolean alt) {
 									super.onSelect(idx, alt);
 									Item item = items.get(idx);
-									if (alt && item.defaultAction != null) {
+									if (alt && item.defaultAction() != null) {
 										item.execute(Dungeon.hero);
-										if (item.usesTargeting) {
-											QuickSlotButton.useTargeting(idx);
-										}
 									} else {
 										Game.scene().addToFront(new WndUseItem(null, item));
 									}

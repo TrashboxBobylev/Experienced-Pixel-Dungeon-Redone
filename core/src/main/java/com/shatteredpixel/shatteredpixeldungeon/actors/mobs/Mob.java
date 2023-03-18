@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -45,8 +45,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -218,6 +221,13 @@ public abstract class Mob extends Char {
 		
 		boolean enemyInFOV = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
 
+		//prevents action, but still updates enemy seen status
+		if (buff(Feint.AfterImage.FeintConfusion.class) != null){
+			enemySeen = enemyInFOV;
+			spend( TICK );
+			return true;
+		}
+
 		return state.act( enemyInFOV, justAlerted );
 	}
 	
@@ -362,6 +372,16 @@ public abstract class Mob extends Char {
 						closest = curr;
 					}
 				}
+				//if we were going to target the hero, but an afterimage exists, target that instead
+				if (closest == Dungeon.hero){
+					for (Char ch : enemies){
+						if (ch instanceof Feint.AfterImage){
+							closest = ch;
+							break;
+						}
+					}
+				}
+
 				return closest;
 			}
 
@@ -407,7 +427,27 @@ public abstract class Mob extends Char {
 		}
 		return false;
 	}
-	
+
+	private boolean cellIsPathable( int cell ){
+		if (!Dungeon.level.passable[cell]){
+			if (flying || buff(Amok.class) != null){
+				if (!Dungeon.level.avoid[cell]){
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		if (Char.hasProp(this, Char.Property.LARGE) && !Dungeon.level.openSpace[cell]){
+			return false;
+		}
+		if (Actor.findChar(cell) != null){
+			return false;
+		}
+
+		return true;
+	}
+
 	protected boolean getCloser( int target ) {
 		
 		if (rooted || target == pos) {
@@ -420,9 +460,7 @@ public abstract class Mob extends Char {
 
 			path = null;
 
-			if (Actor.findChar( target ) == null
-					&& (Dungeon.level.passable[target] || (flying && Dungeon.level.avoid[target]))
-					&& (!Char.hasProp(this, Char.Property.LARGE) || Dungeon.level.openSpace[target])) {
+			if (cellIsPathable(target)) {
 				step = target;
 			}
 
@@ -476,20 +514,14 @@ public abstract class Mob extends Char {
 			//checks if the next cell along the current path can be stepped into
 			if (!newPath) {
 				int nextCell = path.removeFirst();
-				if (!Dungeon.level.passable[nextCell]
-						|| (!flying && Dungeon.level.avoid[nextCell])
-						|| (Char.hasProp(this, Char.Property.LARGE) && !Dungeon.level.openSpace[nextCell])
-						|| Actor.findChar(nextCell) != null) {
+				if (!cellIsPathable(nextCell)) {
 
 					newPath = true;
 					//If the next cell on the path can't be moved into, see if there is another cell that could replace it
 					if (!path.isEmpty()) {
 						for (int i : PathFinder.NEIGHBOURS8) {
 							if (Dungeon.level.adjacent(pos, nextCell + i) && Dungeon.level.adjacent(nextCell + i, path.getFirst())) {
-								if (Dungeon.level.passable[nextCell+i]
-										&& (flying || !Dungeon.level.avoid[nextCell+i])
-										&& (!Char.hasProp(this, Char.Property.LARGE) || Dungeon.level.openSpace[nextCell+i])
-										&& Actor.findChar(nextCell+i) == null){
+								if (cellIsPathable(nextCell+i)){
 									path.addFirst(nextCell+i);
 									newPath = false;
 									break;
@@ -515,10 +547,7 @@ public abstract class Mob extends Char {
 					if (ignoreChars != null && (full == null || full.size() > 2*ignoreChars.size())){
 						//check if first cell of shorter path is valid. If it is, use new shorter path. Otherwise do nothing and wait.
 						path = ignoreChars;
-						if (!Dungeon.level.passable[ignoreChars.getFirst()]
-								|| (!flying && Dungeon.level.avoid[ignoreChars.getFirst()])
-								|| (Char.hasProp(this, Char.Property.LARGE) && !Dungeon.level.openSpace[ignoreChars.getFirst()])
-								|| Actor.findChar(ignoreChars.getFirst()) != null) {
+						if (!cellIsPathable(ignoreChars.getFirst())) {
 							return false;
 						}
 					} else {
@@ -606,7 +635,7 @@ public abstract class Mob extends Char {
 	public int defenseProc( Char enemy, int damage ) {
 		
 		if (enemy instanceof Hero
-				&& ((Hero) enemy).belongings.weapon() instanceof MissileWeapon){
+				&& ((Hero) enemy).belongings.attackingWeapon() instanceof MissileWeapon){
 			Statistics.thrownAttacks++;
 			Badges.validateHuntressUnlock();
 		}
@@ -616,8 +645,8 @@ public abstract class Mob extends Char {
 			Badges.validateRogueUnlock();
 			//TODO this is somewhat messy, it would be nicer to not have to manually handle delays here
 			// playing the strong hit sound might work best as another property of weapon?
-			if (Dungeon.hero.belongings.weapon() instanceof SpiritBow.SpiritArrow
-				|| Dungeon.hero.belongings.weapon() instanceof Dart){
+			if (Dungeon.hero.belongings.attackingWeapon() instanceof SpiritBow.SpiritArrow
+				|| Dungeon.hero.belongings.attackingWeapon() instanceof Dart){
 				Sample.INSTANCE.playDelayed(Assets.Sounds.HIT_STRONG, 0.125f);
 			} else {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
@@ -665,8 +694,8 @@ public abstract class Mob extends Char {
 
 	public boolean surprisedBy( Char enemy, boolean attacking ){
 		return enemy == Dungeon.hero
-				&& (enemy.invisible > 0 || !enemySeen)
-				&& (!attacking || ((Hero)enemy).canSurpriseAttack());
+				&& (enemy.invisible > 0 || !enemySeen || (fieldOfView != null && !fieldOfView[enemy.pos]))
+				&& (!attacking || enemy.canSurpriseAttack());
 	}
 
 	public void aggro( Char ch ) {
@@ -675,7 +704,13 @@ public abstract class Mob extends Char {
 			state = HUNTING;
 		}
 	}
-	
+
+	public void clearEnemy(){
+		enemy = null;
+		enemySeen = false;
+		if (state == HUNTING) state = WANDERING;
+	}
+
 	public boolean isTargeting( Char ch){
 		return enemy == ch;
 	}
@@ -729,6 +764,10 @@ public abstract class Mob extends Char {
 				if (Dungeon.hero.buff(Overload.class) != null) {
 					Dungeon.level.spawnMob(12);
 				}
+
+				if (Dungeon.hero.subClass == HeroSubClass.MONK){
+					Buff.affect(Dungeon.hero, MonkEnergy.class).gainEnergy(this);
+				}
 			}
 		}
 	}
@@ -747,11 +786,19 @@ public abstract class Mob extends Char {
 		if (alignment == Alignment.ENEMY){
 			rollToDropLoot();
 
-			if (cause == Dungeon.hero
-					&& Dungeon.hero.hasTalent(Talent.LETHAL_MOMENTUM)
-					&& Random.Float() < 0.34f + 0.33f* Dungeon.hero.pointsInTalent(Talent.LETHAL_MOMENTUM)){
-				Buff.affect(Dungeon.hero, Talent.LethalMomentumTracker.class, 1f);
+			if (cause == Dungeon.hero || cause instanceof Weapon || cause instanceof Weapon.Enchantment){
+				if (Dungeon.hero.hasTalent(Talent.LETHAL_MOMENTUM)
+						&& Random.Float() < 0.34f + 0.33f* Dungeon.hero.pointsInTalent(Talent.LETHAL_MOMENTUM)){
+					Buff.affect(Dungeon.hero, Talent.LethalMomentumTracker.class, 0f);
+				}
+				if (Dungeon.hero.heroClass != HeroClass.DUELIST
+						&& Dungeon.hero.hasTalent(Talent.LETHAL_HASTE)
+						&& Dungeon.hero.buff(Talent.LethalHasteCooldown.class) == null){
+					Buff.affect(Dungeon.hero, Talent.LethalHasteCooldown.class, 100f);
+					Buff.affect(Dungeon.hero, Haste.class, 1.67f + Dungeon.hero.pointsInTalent(Talent.LETHAL_HASTE));
+				}
 			}
+
 		}
 
 		if (Dungeon.hero.isAlive() && !Dungeon.level.heroFOV[pos]) {
@@ -907,11 +954,6 @@ public abstract class Mob extends Char {
 	public void yell( String str ) {
 		GLog.newLine();
 		GLog.n( "%s: \"%s\" ", Messages.titleCase(name()), str );
-	}
-
-	//returns true when a mob sees the hero, and is currently targeting them.
-	public boolean focusingHero() {
-		return enemySeen && (target == Dungeon.hero.pos);
 	}
 
 	public interface AiState {

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -104,7 +104,7 @@ public class WandOfCorruption extends Wand {
 				Statistics.qualifiedForBossChallengeBadge = false;
 			}
 
-			float corruptingPower = (3 + buffedLvl()/2f)*(1+ Dungeon.hero.lvl/150f);
+			float corruptingPower = (3 + buffedLvl()/3f)*(1+ Dungeon.hero.lvl/150f);
 			
 			//base enemy resistance is usually based on their exp, but in special cases it is based on other criteria
 			float enemyResist;
@@ -114,7 +114,7 @@ public class WandOfCorruption extends Wand {
 				enemyResist = 1 + Dungeon.escalatingDepth()/2f;
 			} else if (ch instanceof Wraith) {
 				//divide by 5 as wraiths are always at full HP and are therefore ~5x harder to corrupt
-				enemyResist = (1f + Dungeon.scalingDepth()/3f) / 5f;
+				enemyResist = (1f + Dungeon.scalingDepth()/4f) / 5f;
 			} else if (ch instanceof Swarm){
 				//child swarms don't give exp, so we force this here.
 				enemyResist = 1 + AscensionChallenge.AscensionExp(enemy);
@@ -204,10 +204,10 @@ public class WandOfCorruption extends Wand {
 	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
 		int level = Math.max( 0, buffedLvl() );
 
-		// lvl 0 - 25%
-		// lvl 1 - 40%
-		// lvl 2 - 50%
-		float procChance = (level+1f)/(level+4f) * procChanceMultiplier(attacker);
+		// lvl 0 - 16%
+		// lvl 1 - 28.5%
+		// lvl 2 - 37.5%
+		float procChance = (level+1f)/(level+6f) * procChanceMultiplier(attacker);
 		if (Dungeon.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);

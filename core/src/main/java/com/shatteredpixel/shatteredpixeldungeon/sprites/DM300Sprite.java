@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -87,8 +87,7 @@ public class DM300Sprite extends MobSprite {
 
 	public void zap( int cell ) {
 
-		turnTo( ch.pos , cell );
-		play( zap );
+		super.zap( cell );
 
 		MagicMissile.boltFromChar( parent,
 				MagicMissile.TOXIC_VENT,

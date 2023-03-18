@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -38,12 +38,11 @@ public abstract class Brew extends Potion {
 		actions.remove( AC_DRINK );
 		return actions;
 	}
-	
+
 	@Override
-	public void setAction() {
-		defaultAction = AC_THROW;
+	public String defaultAction() {
+		return AC_THROW;
 	}
-	
 	
 	@Override
 	public void doThrow(Hero hero) {

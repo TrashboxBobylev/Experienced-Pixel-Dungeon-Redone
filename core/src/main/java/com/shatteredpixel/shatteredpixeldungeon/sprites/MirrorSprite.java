@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
+import com.watabou.noosa.TextureFilm;
+import com.watabou.utils.PointF;
 
 public class MirrorSprite extends MobSprite {
 	
@@ -45,6 +47,15 @@ public class MirrorSprite extends MobSprite {
 	@Override
 	public void link( Char ch ) {
 		super.link( ch );
+		updateArmor();
+	}
+
+	@Override
+	public void bloodBurstA(PointF from, int damage) {
+		//do nothing
+	}
+
+	public void updateArmor(){
 		updateArmor( ((MirrorImage)ch).armTier );
 	}
 	

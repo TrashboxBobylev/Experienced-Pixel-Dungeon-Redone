@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -119,16 +120,16 @@ public class TimekeepersHourglass extends Artifact {
 									activeBuff = new timeStasis();
 									Talent.onArtifactUsed(Dungeon.hero);
 									activeBuff.attachTo(Dungeon.hero);
-									charge--;
-									updateQuickslot();
 								} else if (index == 1) {
 									GLog.i( Messages.get(TimekeepersHourglass.class, "onfreeze") );
 									GameScene.flash(0x80FFFFFF);
 									Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
+									Invisibility.dispel(Dungeon.hero);
 									activeBuff = new timeFreeze();
 									Talent.onArtifactUsed(Dungeon.hero);
 									activeBuff.attachTo(Dungeon.hero);
+									charge--;
 									((timeFreeze)activeBuff).processTime(0f);
 								}
 							}
@@ -361,16 +362,28 @@ public class TimekeepersHourglass extends Artifact {
 		}
 
 		public void triggerPresses(){
-			for (int cell : presses)
-				Dungeon.level.pressCell(cell);
+			for (int cell : presses){
+				Trap t = Dungeon.level.traps.get(cell);
+				if (t != null){
+					t.trigger();
+				}
+				Plant p = Dungeon.level.plants.get(cell);
+				if (p != null){
+					p.trigger();
+				}
+			}
 
 			presses = new ArrayList<>();
 		}
 
-		public void disarmPressedTraps(){
+		public void disarmPresses(){
 			for (int cell : presses){
 				Trap t = Dungeon.level.traps.get(cell);
-				if (t != null && t.disarmedByActivation) t.disarm();
+				if (t != null && t.disarmedByActivation) {
+					t.disarm();
+				}
+
+				Dungeon.level.uproot(cell);
 			}
 
 			presses = new ArrayList<>();
@@ -474,7 +487,7 @@ public class TimekeepersHourglass extends Artifact {
 
 		@Override
 		public int value() {
-			return 20;
+			return 30;
 		}
 
 		@Override

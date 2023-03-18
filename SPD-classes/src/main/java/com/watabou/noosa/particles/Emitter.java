@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -92,8 +92,6 @@ public class Emitter extends Group {
 
 	public void start( Factory factory, float interval, int quantity ) {
 
-		started = true;
-
 		this.factory = factory;
 		this.lightMode = factory.lightMode();
 		
@@ -104,6 +102,7 @@ public class Emitter extends Group {
 		time = Random.Float( interval );
 		
 		on = true;
+		started = true;
 	}
 
 	public static boolean freezeEmitters = false;
@@ -139,6 +138,8 @@ public class Emitter extends Group {
 	@Override
 	public void revive() {
 		started = false;
+		//some emitters may be killed while not visible, this ensures true is always the default
+		visible = true;
 		super.revive();
 	}
 

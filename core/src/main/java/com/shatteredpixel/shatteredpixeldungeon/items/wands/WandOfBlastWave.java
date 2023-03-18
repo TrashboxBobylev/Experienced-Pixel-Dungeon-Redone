@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -117,7 +117,7 @@ public class WandOfBlastWave extends DamageWand {
 	public static void throwChar(final Char ch, final Ballistica trajectory, int power,
 	                             boolean closeDoors, boolean collideDmg, Class cause){
 		if (ch.properties().contains(Char.Property.BOSS)) {
-			power /= 2;
+			power = (power+1)/2;
 		}
 
 		int dist = Math.min(trajectory.dist, power);
@@ -189,7 +189,22 @@ public class WandOfBlastWave extends DamageWand {
 	@Override
 	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
 		//acts like elastic enchantment
-		new BlastWaveOnHit().proc(staff, attacker, defender, damage);
+		//we delay this with an actor to prevent conflicts with regular elastic
+		//so elastic always fully resolves first, then this effect activates
+		Actor.addDelayed(new Actor() {
+			{
+				actPriority = VFX_PRIO-1; //act after pushing effects
+			}
+
+			@Override
+			protected boolean act() {
+				Actor.remove(this);
+				if (defender.isAlive()) {
+					new BlastWaveOnHit().proc(staff, attacker, defender, damage);
+				}
+				return true;
+			}
+		}, -1);
 	}
 
 	private static class BlastWaveOnHit extends Elastic{

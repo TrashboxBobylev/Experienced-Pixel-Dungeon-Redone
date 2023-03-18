@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -61,14 +61,21 @@ public class WandOfFireblast extends DamageWand {
 		collisionProperties = Ballistica.WONT_STOP;
 	}
 
-	//1x/2x/3x damage
+	//1/2/3 base damage with 1/2/3 scaling based on charges used
 	public int min(int lvl){
 		return (1+lvl) * chargesPerCast();
 	}
 
-	//1x/2x/3x damage
+	//2/8/18 base damage with 2/4/6 scaling based on charges used
 	public int max(int lvl){
-		return (6+2*lvl) * chargesPerCast();
+		switch (chargesPerCast()){
+			case 1: default:
+				return 2 + 2*lvl;
+			case 2:
+				return 2*(4 + 2*lvl);
+			case 3:
+				return 3*(6+2*lvl);
+		}
 	}
 
 	ConeAOE cone;
@@ -193,7 +200,7 @@ public class WandOfFireblast extends DamageWand {
 
 	@Override
 	protected int chargesPerCast() {
-		if (charger != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null){
+		if (cursed || charger != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null){
 			return 1;
 		}
 		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.

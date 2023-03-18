@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -119,7 +119,9 @@ public class DangerIndicator extends Tag {
 			QuickSlotButton.target(target);
 			if (Dungeon.hero.canAttack(target)) AttackIndicator.target(target);
 
-			if (Dungeon.hero.curAction == null) Camera.main.panTo(target.sprite.center(), 5f);
+			if (Dungeon.hero.curAction == null && target.sprite != null) {
+				Camera.main.panTo(target.sprite.center(), 5f);
+			}
 		}
 	}
 

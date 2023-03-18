@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -71,12 +71,12 @@ public class SecretRunestoneRoom extends SecretRoom {
 		do{
 			dropPos = level.pointToCell(random());
 		} while (level.map[dropPos] != Terrain.EMPTY);
-		level.drop( Generator.random(Generator.Category.STONE), dropPos);
+		level.drop( Generator.randomUsingDefaults(Generator.Category.STONE), dropPos);
 		
 		do{
 			dropPos = level.pointToCell(random());
 		} while (level.map[dropPos] != Terrain.EMPTY || level.heaps.get(dropPos) != null);
-		level.drop( Generator.random(Generator.Category.STONE), dropPos);
+		level.drop( Generator.randomUsingDefaults(Generator.Category.STONE), dropPos);
 		
 		do{
 			dropPos = level.pointToCell(random());

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -89,10 +89,6 @@ public class ExoticPotion extends Potion {
 		if (!isKnown()) {
 			handler.know(exoToReg.get(this.getClass()));
 			updateQuickslot();
-			Potion p = Dungeon.hero.belongings.getItem(getClass());
-			if (p != null)  p.setAction();
-			p = Dungeon.hero.belongings.getItem(exoToReg.get(this.getClass()));
-			if (p != null)  p.setAction();
 		}
 	}
 	

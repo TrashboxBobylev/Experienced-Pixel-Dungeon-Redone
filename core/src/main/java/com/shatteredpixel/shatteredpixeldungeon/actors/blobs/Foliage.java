@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -42,7 +42,7 @@ public class Foliage extends Blob {
 
 		int[] map = Dungeon.level.map;
 		
-		boolean visible = false;
+		boolean seen = false;
 
 		int cell;
 		for (int i = area.left; i < area.right; i++) {
@@ -58,7 +58,7 @@ public class Foliage extends Blob {
 						GameScene.updateMap(cell);
 					}
 
-					visible = visible || Dungeon.level.heroFOV[cell];
+					seen = seen || Dungeon.level.visited[cell];
 
 				} else {
 					off[cell] = 0;
@@ -74,7 +74,7 @@ public class Foliage extends Blob {
 			}
 		}
 
-		if (visible) {
+		if (seen) {
 			Notes.add( Notes.Landmark.GARDEN );
 		}
 	}

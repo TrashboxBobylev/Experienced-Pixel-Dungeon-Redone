@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RipperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -122,7 +123,7 @@ public class RipperDemon extends Mob {
             case 3: return Random.NormalIntRange(1200, 2100);
             case 4: return Random.NormalIntRange(90000, 140000);
         }
-		return Random.NormalIntRange(0, 4);
+		return super.drRoll() + Random.NormalIntRange(0, 4);
 	}
 
 	private static final String LAST_ENEMY_POS = "last_enemy_pos";
@@ -176,13 +177,14 @@ public class RipperDemon extends Mob {
 			if (leapPos != -1){
 
 				leapCooldown = Random.NormalIntRange(2, 4);
-				Ballistica b = new Ballistica(pos, leapPos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID);
 
-				//check if leap pos is not obstructed by terrain
-				if (rooted || b.collisionPos != leapPos){
+				if (rooted){
 					leapPos = -1;
 					return true;
 				}
+
+				Ballistica b = new Ballistica(pos, leapPos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID);
+				leapPos = b.collisionPos;
 
 				final Char leapVictim = Actor.findChar(leapPos);
 				final int endPos;
@@ -213,9 +215,14 @@ public class RipperDemon extends Mob {
 					public void call() {
 
 						if (leapVictim != null && alignment != leapVictim.alignment){
-							Buff.affect(leapVictim, Bleeding.class).set(0.75f*damageRoll());
-							leapVictim.sprite.flash();
-							Sample.INSTANCE.play(Assets.Sounds.HIT);
+							if (hit(RipperDemon.this, leapVictim, Char.INFINITE_ACCURACY, false)) {
+								Buff.affect(leapVictim, Bleeding.class).set(0.75f * damageRoll());
+								leapVictim.sprite.flash();
+								Sample.INSTANCE.play(Assets.Sounds.HIT);
+							} else {
+								enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
+								Sample.INSTANCE.play(Assets.Sounds.MISS);
+							}
 						}
 
 						if (endPos != leapPos){

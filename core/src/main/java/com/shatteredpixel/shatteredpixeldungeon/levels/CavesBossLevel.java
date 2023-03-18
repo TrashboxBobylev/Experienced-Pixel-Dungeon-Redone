@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -239,8 +239,6 @@ public class CavesBossLevel extends Level {
 
 	@Override
 	public void occupyCell(Char ch) {
-		super.occupyCell(ch);
-
 		//seal the level when the hero moves near to a pylon, the level isn't already sealed, and the gate hasn't been destroyed
 		int gatePos = pointToCell(new Point(gate.left, gate.top));
 		if (ch == Dungeon.hero && !locked && solid[gatePos]){
@@ -251,6 +249,8 @@ public class CavesBossLevel extends Level {
 				}
 			}
 		}
+
+		super.occupyCell(ch);
 	}
 
 	@Override
@@ -262,12 +262,13 @@ public class CavesBossLevel extends Level {
 		set( entrance, Terrain.WALL );
 
 		Heap heap = Dungeon.level.heaps.get( entrance );
-		if (heap != null) {
+		while (heap != null && !heap.isEmpty()) {
 			int n;
 			do {
-				n = entrance + PathFinder.NEIGHBOURS8[Random.Int( 8 )];
+				n = entrance + PathFinder.NEIGHBOURS8[Random.Int(8)];
 			} while (!Dungeon.level.passable[n]);
-			Dungeon.level.drop( heap.pickUp(), n ).sprite.drop( entrance );
+			Heap dropped = Dungeon.level.drop(heap.pickUp(), n);
+			dropped.seen = heap.seen;
 		}
 
 		Char ch = Actor.findChar( entrance );

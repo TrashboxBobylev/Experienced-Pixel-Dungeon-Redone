@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -180,7 +180,7 @@ public class Guard extends Mob {
             case 3: return Random.NormalIntRange(500, 780);
             case 4: return Random.NormalIntRange(9000, 13000);
         }
-		return Random.NormalIntRange(0, 7);
+		return super.drRoll() + Random.NormalIntRange(0, 7);
 	}
 
 	@Override

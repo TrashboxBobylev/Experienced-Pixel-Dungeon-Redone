@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -36,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MirrorSprite;
@@ -116,16 +118,23 @@ public class MirrorImage extends NPC {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return hero.attackSkill(target);
+		//same base attack skill as hero, benefits from accuracy ring and weapon
+		int attackSkill = 9 + hero.lvl;
+		attackSkill *= RingOfAccuracy.accuracyMultiplier(hero);
+		if (hero.belongings.attackingWeapon() != null){
+			attackSkill *= hero.belongings.attackingWeapon().accuracyFactor(this, target);
+		}
+		return attackSkill;
 	}
 	
 	@Override
 	public int defenseSkill(Char enemy) {
 		if (hero != null) {
 			int baseEvasion = 4 + hero.lvl;
-			int heroEvasion = hero.defenseSkill(enemy);
+			int heroEvasion = (int)((4 + hero.lvl) * RingOfEvasion.evasionMultiplier( hero ));
 			
 			//if the hero has more/less evasion, 50% of it is applied
+			//includes ring of evasion boost
 			return super.defenseSkill(enemy) * (baseEvasion + heroEvasion) / 2;
 		} else {
 			return 0;
@@ -144,10 +153,11 @@ public class MirrorImage extends NPC {
 	
 	@Override
 	public int drRoll() {
+		int dr = super.drRoll();
 		if (hero != null && hero.belongings.weapon() != null){
-			return Dungeon.NormalIntRange(0, hero.belongings.weapon().defenseFactor(this)/2);
+			return dr + Random.NormalIntRange(0, hero.belongings.weapon().defenseFactor(this)/2);
 		} else {
-			return 0;
+			return dr;
 		}
 	}
 	

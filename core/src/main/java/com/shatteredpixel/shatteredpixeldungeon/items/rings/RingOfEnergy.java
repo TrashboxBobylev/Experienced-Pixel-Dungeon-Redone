@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -27,8 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-
-import java.text.DecimalFormat;
 
 public class RingOfEnergy extends Ring {
 
@@ -66,7 +64,11 @@ public class RingOfEnergy extends Ring {
         if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.0125;
         return multiplier;
 	}
-	
+
+	public static float armorChargeMultiplier( Char target ){
+		return (float)Math.pow(1.15, getBuffedBonus(target, Energy.class));
+	}
+
 	public class Energy extends RingBuff {
 	}
 }

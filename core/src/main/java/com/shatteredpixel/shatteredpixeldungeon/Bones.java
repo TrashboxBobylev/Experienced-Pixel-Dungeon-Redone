@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2022 Evan Debenham
+ * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -75,6 +75,12 @@ public class Bones {
 			switch (Dungeon.Int(7)) {
 				case 0:
 					item = hero.belongings.weapon;
+					//if the hero has two weapons (champion), pick the stronger one
+					if (hero.belongings.secondWep != null &&
+							(item == null || hero.belongings.secondWep.trueLevel() > item.trueLevel())){
+						item = hero.belongings.secondWep;
+						break;
+					}
 					break;
 				case 1:
 					item = hero.belongings.armor;
