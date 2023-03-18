@@ -409,7 +409,7 @@ public class Hero extends Char {
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 
-		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
+		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
 			Buff.append( this, Sai.ComboStrikeTracker.class, Sai.ComboStrikeTracker.DURATION);
 		}
 
@@ -2047,7 +2047,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 
-		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
+		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
 			Buff.append( this, Sai.ComboStrikeTracker.class, Sai.ComboStrikeTracker.DURATION);
 		}
 
