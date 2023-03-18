@@ -307,7 +307,7 @@ public abstract class Char extends Actor {
 
 				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
 					dr = 0;
-				} else if (h.subClass == HeroSubClass.MONK) {
+				} else if (h.isSubclass(HeroSubClass.MONK)) {
 					//3 turns with standard attack delay
 					Buff.prolong(h, MonkEnergy.MonkAbility.JustHitTracker.class, 4f);
 				}

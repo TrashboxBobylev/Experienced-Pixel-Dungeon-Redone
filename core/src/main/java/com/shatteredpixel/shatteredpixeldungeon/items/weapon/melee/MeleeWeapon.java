@@ -471,7 +471,7 @@ private static boolean evaluatingTwinUpgrades = false;
 				partialCharge = 0;
 			}
 
-			if (Dungeon.hero.subClass == HeroSubClass.CHAMPION
+			if (Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)
 					&& secondCharges < secondChargeCap()) {
 				if (lock == null || lock.regenOn()) {
 					// 90 to 60 turns per charge without talent
@@ -489,7 +489,7 @@ private static boolean evaluatingTwinUpgrades = false;
 				secondPartialCharge = 0;
 			}
 
-			if (ActionIndicator.action != this && Dungeon.hero.subClass == HeroSubClass.CHAMPION) {
+			if (ActionIndicator.action != this && Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)) {
 				ActionIndicator.setAction(this);
 			}
 
@@ -499,7 +499,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		@Override
 		public void fx(boolean on) {
-			if (on && Dungeon.hero.subClass == HeroSubClass.CHAMPION) {
+			if (on && Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)) {
 				ActionIndicator.setAction(this);
 			}
 		}
@@ -575,7 +575,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		@Override
 		public void doAction() {
-			if (Dungeon.hero.subClass != HeroSubClass.CHAMPION){
+			if (!Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)){
 				return;
 			}
 

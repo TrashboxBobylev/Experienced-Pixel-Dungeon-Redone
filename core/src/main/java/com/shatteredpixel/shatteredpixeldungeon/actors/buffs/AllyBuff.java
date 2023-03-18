@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -69,7 +68,7 @@ public abstract class AllyBuff extends Buff{
 			}
 			hero.earnExp(exp, enemy.getClass());
 
-			if (hero.subClass == HeroSubClass.MONK){
+			if (hero.isSubclass(HeroSubClass.MONK)){
 				Buff.affect(hero, MonkEnergy.class).gainEnergy(enemy);
 			}
 		}

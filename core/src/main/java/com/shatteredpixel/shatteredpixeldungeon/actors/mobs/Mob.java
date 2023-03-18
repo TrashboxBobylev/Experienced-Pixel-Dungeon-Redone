@@ -764,7 +764,7 @@ public abstract class Mob extends Char {
 					Dungeon.level.spawnMob(12);
 				}
 
-				if (Dungeon.hero.subClass == HeroSubClass.MONK){
+				if (Dungeon.hero.isSubclass(HeroSubClass.MONK)){
 					Buff.affect(Dungeon.hero, MonkEnergy.class).gainEnergy(this);
 				}
 			}
