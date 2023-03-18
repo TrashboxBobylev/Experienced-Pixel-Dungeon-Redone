@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 public class CreativeGloves extends MeleeWeapon {
 
 	{
-		image = ItemSpriteSheet.RAPIER;
+		image = ItemSpriteSheet.CREATIVE_GLOVES;
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1.3f;
 
