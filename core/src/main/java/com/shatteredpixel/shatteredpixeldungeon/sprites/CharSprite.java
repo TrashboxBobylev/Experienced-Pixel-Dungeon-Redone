@@ -262,8 +262,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public synchronized void attack( int cell, Callback callback ) {
-		doAfterAnim(callback,true);
-		attack(cell);
+		animCallback = callback;
+		turnTo( ch.pos, cell );
+		play(attack);
 	}
 
 	public void operate( int cell ) {
@@ -271,8 +272,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public synchronized void operate( int cell, Callback callback ) {
-		doAfterAnim(callback,true);
-		operate(cell);
+		animCallback = callback;
+		turnTo( ch.pos, cell );
+		play(operate);
 	}
 
 	public void zap( int cell ) {
@@ -280,8 +282,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public synchronized void zap( int cell, Callback callback ) {
-		doAfterAnim(callback,true);
-		zap( cell );
+		animCallback = callback;
+		turnTo( ch.pos, cell );
+		play(zap);
 	}
 	
 	public void turnTo( int from, int to ) {
