@@ -25,7 +25,19 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 
 public class CreativeGloves extends MeleeWeapon {
 
@@ -48,6 +60,54 @@ public class CreativeGloves extends MeleeWeapon {
 	@Override
 	public int max(int lvl) {
 		return 5;
+	}
+
+	@Override
+	public float abilityChargeUse(Hero hero) {
+		return (Buff.affect(hero, Charger.class).chargeCap());
+	}
+
+	@Override
+	public String targetingPrompt() {
+		return Messages.get(this, "prompt");
+	}
+
+	@Override
+	protected void duelistAbility(Hero hero, Integer target) {
+		if (target == null) {
+			return;
+		}
+
+		Char enemy = Actor.findChar(target);
+		if (enemy == null || enemy == hero || hero.isCharmedBy(enemy) || !Dungeon.level.heroFOV[target]) {
+			GLog.w(Messages.get(this, "ability_no_target"));
+			return;
+		}
+
+		hero.belongings.abilityWeapon = this;
+		if (!hero.canAttack(enemy)){
+			GLog.w(Messages.get(this, "ability_bad_position"));
+			hero.belongings.abilityWeapon = null;
+			return;
+		}
+		hero.belongings.abilityWeapon = null;
+
+		hero.sprite.attack(enemy.pos, new Callback() {
+			@Override
+			public void call() {
+				beforeAbilityUsed(hero);
+				AttackIndicator.target(enemy);
+
+				enemy.damage(enemy.HP, this);
+				enemy.sprite.emitter().burst( ShadowParticle.UP, 15 );
+				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 2f, 0.4f);
+				hero.damage(enemy.HP/2, this);
+
+				Invisibility.dispel();
+
+				afterAbilityUsed(hero);
+			}
+		});
 	}
 
 }
