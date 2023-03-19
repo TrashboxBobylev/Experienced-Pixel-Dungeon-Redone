@@ -25,13 +25,19 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
 
@@ -82,7 +88,56 @@ public class Gauntlet extends MeleeWeapon {
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Sai.comboStrikeAbility(hero, target, 0.20f, this);
+		if (target == null) {
+			return;
+		}
+
+		Char enemy = Actor.findChar(target);
+		if (enemy == null || enemy == hero || hero.isCharmedBy(enemy) || !Dungeon.level.heroFOV[target]) {
+			GLog.w(Messages.get(this, "ability_no_target"));
+			return;
+		}
+
+		hero.belongings.abilityWeapon = this;
+		if (!hero.canAttack(enemy)){
+			GLog.w(Messages.get(this, "ability_bad_position"));
+			hero.belongings.abilityWeapon = null;
+			return;
+		}
+		hero.belongings.abilityWeapon = null;
+
+		hero.sprite.attack(enemy.pos, new Callback() {
+			@Override
+			public void call() {
+				beforeAbilityUsed(hero);
+				AttackIndicator.target(enemy);
+				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
+
+				affected.clear();
+				arcs.clear();
+
+				Shocking.arc(hero, enemy, 10, affected, arcs);
+
+				for (Char ch : affected) {
+					if (ch.alignment != hero.alignment) {
+						ch.damage(Math.round(damageRoll(hero) * 0.6f), Shocking.class);
+						ch.spend(1.5f);
+					}
+				}
+
+				for (int i = 0; i < 4; i++) {
+					hero.sprite.parent.addToFront(new Lightning(arcs, null));
+					Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+				}
+
+				Invisibility.dispel();
+				hero.spendAndNext(hero.attackDelay());
+				if (!enemy.isAlive()){
+					onAbilityKill(hero);
+				}
+				afterAbilityUsed(hero);
+			}
+		});
 	}
 
 }
