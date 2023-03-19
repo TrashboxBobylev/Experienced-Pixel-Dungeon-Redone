@@ -28,15 +28,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
-import java.util.ArrayList;
 import com.watabou.utils.GameMath;
+
+import java.util.ArrayList;
 
 public class Whip extends MeleeWeapon {
 
@@ -67,12 +68,23 @@ public class Whip extends MeleeWeapon {
 				lvl*(tier-1)/2;     //+4 per level, down from +5
 	}
 
+	public static class WhipReachBooster extends Buff {};
+
+	@Override
+	public int reachFactor(Char owner) {
+		if (owner.buff(WhipReachBooster.class) != null)
+			return Char.INFINITE_ACCURACY;
+		else
+			return super.reachFactor(owner);
+	}
+
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 
 		ArrayList<Char> targets = new ArrayList<>();
 
 		hero.belongings.abilityWeapon = this;
+		Buff.affect(hero, WhipReachBooster.class);
 		for (Char ch : Actor.chars()){
 			if (ch.alignment == Char.Alignment.ENEMY
 					&& !hero.isCharmedBy(ch)
@@ -85,6 +97,7 @@ public class Whip extends MeleeWeapon {
 
 		if (targets.isEmpty()) {
 			GLog.w(Messages.get(this, "ability_no_target"));
+			Buff.detach(hero, WhipReachBooster.class);
 			return;
 		}
 
@@ -94,13 +107,14 @@ public class Whip extends MeleeWeapon {
 			public void call() {
 				beforeAbilityUsed(hero);
 				for (Char ch : targets) {
-					hero.attack(ch);
+					hero.attack(ch, 0.8f, 0, 1f);
 					if (!ch.isAlive()){
 						onAbilityKill(hero);
 					}
 				}
 				Invisibility.dispel();
 				hero.spendAndNext(hero.attackDelay());
+				Buff.detach(hero, WhipReachBooster.class);
 				afterAbilityUsed(hero);
 			}
 		});
