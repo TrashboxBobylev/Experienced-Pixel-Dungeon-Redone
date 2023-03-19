@@ -224,7 +224,7 @@ public class MeleeWeapon extends Weapon {
 
 	protected void afterAbilityUsed( Hero hero ){
 		hero.belongings.abilityWeapon = null;
-		if (hero.hasTalent(Talent.COMBINED_LETHALITY)) {
+		if (hero.subClass == HeroSubClass.CHAMPION) {
 			Talent.CombinedLethalityAbilityTracker tracker = hero.buff(Talent.CombinedLethalityAbilityTracker.class);
 			if (tracker == null || tracker.weapon == this || tracker.weapon == null){
 				Buff.affect(hero, Talent.CombinedLethalityAbilityTracker.class, hero.cooldown()).weapon = this;
@@ -289,7 +289,7 @@ public class MeleeWeapon extends Weapon {
 private static boolean evaluatingTwinUpgrades = false;
 	@Override
 	public int buffedLvl() {
-		if (!evaluatingTwinUpgrades && isEquipped(Dungeon.hero) && Dungeon.hero.hasTalent(Talent.TWIN_UPGRADES)){
+		if (!evaluatingTwinUpgrades && isEquipped(Dungeon.hero) && Dungeon.hero.subClass == HeroSubClass.CHAMPION){
 			KindOfWeapon other = null;
 			if (Dungeon.hero.belongings.weapon() != this) other = Dungeon.hero.belongings.weapon();
 			if (Dungeon.hero.belongings.secondWep() != this) other = Dungeon.hero.belongings.secondWep();
@@ -300,7 +300,7 @@ private static boolean evaluatingTwinUpgrades = false;
 				evaluatingTwinUpgrades = false;
 
 				//weaker weapon needs to be 2/1/0 tiers lower, based on talent level
-				if ((tier + (3 - Dungeon.hero.pointsInTalent(Talent.TWIN_UPGRADES))) <= ((MeleeWeapon) other).tier
+				if ((tier) <= ((MeleeWeapon) other).tier
 						&& otherLevel > super.buffedLvl()) {
 					return otherLevel;
 				}
@@ -525,7 +525,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		public float secondChargeMultiplier(){
 			//50% - 75%, depending on talent
-			return 0.5f + 0.0834f*Dungeon.hero.pointsInTalent(Talent.SECONDARY_CHARGE);
+			return 0.75f;
 		}
 
 		public void gainCharge( float charge ){
