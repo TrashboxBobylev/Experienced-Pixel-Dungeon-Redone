@@ -132,7 +132,11 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	
 	@Override
 	public boolean act() {
-		if (Dungeon.hero.justMoved) turnsInvis++;
+		if (Dungeon.hero.justMoved){
+			turnsInvis++;
+			if (Dungeon.hero.buff(Invisibility.class) != null)
+				turnsInvis += 2;
+		}
 		if (AttackLevel.getLvl(turnsInvis).blinkDistance() > 0 && target == Dungeon.hero){
 			ActionIndicator.setAction(this);
 		}
