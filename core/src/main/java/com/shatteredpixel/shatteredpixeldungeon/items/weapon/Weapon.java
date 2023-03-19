@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -395,7 +394,7 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 
 			if (attacker.buff(RunicBlade.RunicSlashTracker.class) != null){
-				multi += 2.5f;
+				multi += 1.75f;
 				attacker.buff(RunicBlade.RunicSlashTracker.class).detach();
 			}
 

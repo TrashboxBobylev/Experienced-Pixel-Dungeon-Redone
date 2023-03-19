@@ -368,6 +368,7 @@ public class RunicBlade extends MeleeWeapon {
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {
+                hero.buff(RunicCooldown.class).detach();
 				beforeAbilityUsed(hero);
 				AttackIndicator.target(enemy);
 				if (hero.attack(enemy, 1f, 0, Char.INFINITE_ACCURACY)){
@@ -383,6 +384,8 @@ public class RunicBlade extends MeleeWeapon {
 			}
 		});
 	}
+
+
 
 	public static class RunicSlashTracker extends FlavourBuff{};
 
