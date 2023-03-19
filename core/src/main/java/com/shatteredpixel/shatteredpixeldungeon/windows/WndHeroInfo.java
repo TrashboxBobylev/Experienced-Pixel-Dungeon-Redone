@@ -40,8 +40,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.DeviceCompat;
 
-import com.watabou.utils.DeviceCompat;
-
 public class WndHeroInfo extends WndTabbed {
 
 	private HeroInfoTab heroInfo;
@@ -287,6 +285,14 @@ public class WndHeroInfo extends WndTabbed {
 							new TalentIcon(Talent.HEIGHTENED_SENSES),
 							new TalentIcon(Talent.INVIGORATING_MEAL),
 							new TalentIcon(Talent.ENERGIZING_UPGRADE)};
+					break;
+				case DUELIST:
+					icons = new Image[]{ new TalentIcon(Talent.STRENGTHENING_MEAL),
+							new TalentIcon(Talent.WEAPON_RECHARGING),
+							new TalentIcon(Talent.SWIFT_EQUIP),
+							new TalentIcon(Talent.INVIGORATING_VICTORY),
+							new TalentIcon(Talent.DIRECTED_POWER)
+					};
 					break;
 				case RAT_KING:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),

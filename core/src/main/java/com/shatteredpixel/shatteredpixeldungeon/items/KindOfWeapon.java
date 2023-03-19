@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -116,11 +117,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 				GLog.n( Messages.get(KindOfWeapon.class, "equip_cursed") );
 			}
 
-			if (hero.hasTalent(Talent.SWIFT_EQUIP)) {
+			if (hero.heroClass == HeroClass.DUELIST) {
 				if (hero.buff(Talent.SwiftEquipCooldown.class) == null){
 					hero.spendAndNext(-hero.cooldown());
-					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 29f)
-							.secondUse = hero.pointsInTalent(Talent.SWIFT_EQUIP) == 2;
+					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 24f)
+							.secondUse = true;
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else if (hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()) {
 					hero.spendAndNext(-hero.cooldown());
@@ -159,11 +160,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 				GLog.n( Messages.get(KindOfWeapon.class, "equip_cursed") );
 			}
 
-			if (hero.hasTalent(Talent.SWIFT_EQUIP)) {
+			if (hero.heroClass == HeroClass.DUELIST) {
 				if (hero.buff(Talent.SwiftEquipCooldown.class) == null){
 					hero.spendAndNext(-hero.cooldown());
-					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 29f)
-							.secondUse = hero.pointsInTalent(Talent.SWIFT_EQUIP) == 2;
+					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 24f)
+							.secondUse = true;
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else if (hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()) {
 					hero.spendAndNext(-hero.cooldown());

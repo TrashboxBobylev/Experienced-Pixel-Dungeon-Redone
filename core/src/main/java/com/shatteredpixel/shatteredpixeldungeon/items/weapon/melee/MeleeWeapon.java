@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -94,7 +95,7 @@ public class MeleeWeapon extends Weapon {
 
 		if (action.equals(AC_ABILITY)){
 			if (!isEquipped(hero)) {
-				if (hero.hasTalent(Talent.SWIFT_EQUIP)){
+				if (hero.heroClass == HeroClass.DUELIST){
 					if (hero.buff(Talent.SwiftEquipCooldown.class) == null
 						|| hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()){
 						execute(hero, AC_EQUIP);
@@ -247,6 +248,10 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	public void onAbilityKill( Hero hero ){
+		if (hero.heroClass == HeroClass.DUELIST){
+			hero.HP = Math.min(hero.HP + hero.lvl, hero.HT);
+			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
+		}
 		if (hero.hasTalent(Talent.LETHAL_HASTE)){
 			//effectively 2/3 turns of haste
 			Buff.prolong(hero, Haste.class, 1.67f+hero.pointsInTalent(Talent.LETHAL_HASTE));
@@ -456,10 +461,10 @@ private static boolean evaluatingTwinUpgrades = false;
 					partialCharge += 1/(45f-1.5f*(chargeCap()-charges)); // 45 to 30 turns per charge
 				}
 
-				int points = ((Hero)target).pointsInTalent(Talent.WEAPON_RECHARGING);
-				if (points > 0 && target.buff(Recharging.class) != null || target.buff(ArtifactRecharge.class) != null){
-					//1 every 10 turns at +1, 6 turns at +2
-					partialCharge += 1/(14f - 4f*points);
+				if (((Hero) target).heroClass == HeroClass.DUELIST &&
+						target.buff(Recharging.class) != null || target.buff(ArtifactRecharge.class) != null){
+					//1 every 5 turns
+					partialCharge += 1/(5f);
 				}
 
 				if (partialCharge >= 1){

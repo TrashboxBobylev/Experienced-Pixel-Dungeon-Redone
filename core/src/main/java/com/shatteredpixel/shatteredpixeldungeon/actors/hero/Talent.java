@@ -47,7 +47,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -234,7 +233,7 @@ public enum Talent {
 	public static class SwiftEquipCooldown extends FlavourBuff{
 		public boolean secondUse;
 		public boolean hasSecondUse(){
-			return secondUse && cooldown() > 24f;
+			return secondUse && cooldown() > 19f;
 		}
 
 		public int icon() { return BuffIndicator.TIME; }
@@ -242,7 +241,7 @@ public enum Talent {
 			if (hasSecondUse()) icon.hardlight(0.85f, 0f, 1.0f);
 			else                icon.hardlight(0.35f, 0f, 0.7f);
 		}
-		public float iconFadePercent() { return GameMath.gate(0, visualcooldown() / 30f, 1); }
+		public float iconFadePercent() { return GameMath.gate(0, visualcooldown() / 25f, 1); }
 
 		private static final String SECOND_USE = "second_use";
 		@Override
@@ -425,15 +424,14 @@ public enum Talent {
 			//2 bonus physical damage for next 2/3 attacks
 			Buff.affect( hero, PhysicalEmpower.class).set(2, 1 + hero.pointsInTalent(STRENGTHENING_MEAL));
 		}
-		if (hero.hasTalent(FOCUSED_MEAL)){
-			if (hero.heroClass == HeroClass.DUELIST){
-				//1/1.5 charge for the duelist
-				Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge(0.5f*(hero.pointsInTalent(FOCUSED_MEAL)+1));
-			} else {
-				// lvl/3 / lvl/2 bonus dmg on next hit for other classes
-				Buff.affect( hero, PhysicalEmpower.class).set(Math.round(hero.lvl / (4f - hero.pointsInTalent(FOCUSED_MEAL))), 1);
-			}
+
+		if (hero.heroClass == HeroClass.DUELIST){
+			//2.5 charge for the duelist
+			Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge(2f);
+			// lvl/3 / lvl/2 bonus dmg on next hit for other classes
+			Buff.affect( hero, PhysicalEmpower.class).set(Math.round(hero.lvl / 2f), 1);
 		}
+
 	}
 
 	public static class WarriorFoodImmunity extends FlavourBuff{

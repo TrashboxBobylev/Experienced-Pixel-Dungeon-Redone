@@ -579,10 +579,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
 
-		if (heroClass != HeroClass.DUELIST
-				&& hasTalent(Talent.WEAPON_RECHARGING)
+		if (heroClass == HeroClass.DUELIST
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
-			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
+			dmg = Math.round(dmg * 1.08f);
 		}
 
 		if (dmg < 0) dmg = 0;
@@ -1257,6 +1256,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			wep = null;
 		} else {
 			wep = belongings.attackingWeapon();
+		}
+
+		if (heroClass == HeroClass.DUELIST){
+			Buff.affect(this, ElementalStrike.DirectedPowerTracker.class, 1f).enchBoost = 0.5f;
 		}
 
 		if (wep != null) damage = wep.proc( this, enemy, damage );
