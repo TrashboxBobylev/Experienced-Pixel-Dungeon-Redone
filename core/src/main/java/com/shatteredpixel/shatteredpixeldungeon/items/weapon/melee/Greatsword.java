@@ -28,14 +28,20 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -60,14 +66,10 @@ public class Greatsword extends MeleeWeapon {
         return Messages.get(this, "stats_desc", 9 + Dungeon.escalatingDepth() * 3);
     }
 
-	@Override
-	public float abilityChargeUse( Hero hero ) {
-		if (hero.buff(Sword.CleaveTracker.class) != null){
-			return 0;
-		} else {
-			return super.abilityChargeUse( hero );
-		}
-	}
+    @Override
+    public float abilityChargeUse(Hero hero) {
+        return 2*super.abilityChargeUse(hero);
+    }
 
 	@Override
 	public String targetingPrompt() {
@@ -76,7 +78,58 @@ public class Greatsword extends MeleeWeapon {
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Sword.cleaveAbility(hero, target, 1.20f, this);
+        if (target == null) {
+            return;
+        }
+
+        Char enemy = Actor.findChar(target);
+        if (enemy == null || enemy == hero || hero.isCharmedBy(enemy) || !Dungeon.level.heroFOV[target]) {
+            GLog.w(Messages.get(this, "ability_no_target"));
+            return;
+        }
+
+        hero.belongings.abilityWeapon = this;
+        if (!hero.canAttack(enemy)){
+            GLog.w(Messages.get(this, "ability_bad_position"));
+            hero.belongings.abilityWeapon = null;
+            return;
+        }
+        hero.belongings.abilityWeapon = null;
+
+        hero.sprite.attack(enemy.pos, new Callback() {
+            @Override
+            public void call() {
+                beforeAbilityUsed(hero);
+                AttackIndicator.target(enemy);
+                if (hero.attack(enemy, 0.5f, 0f, 1f)){
+                    Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
+                }
+                for (Char mob: Dungeon.level.mobs){
+                    if (mob instanceof GuardianKnight){
+                        int pos = 0, count = 0;
+                        do {
+                            if (++count > 30) {
+                                break;
+                            }
+                            pos = Random.Int(Dungeon.level.length());
+                        } while (!Dungeon.level.heroFOV[pos]
+                                || !Dungeon.level.passable[pos]
+                                || Actor.findChar( pos ) != null);
+
+                        if (count > 30) continue;
+
+                        ScrollOfTeleportation.teleportToLocation(mob, pos);
+                    }
+                }
+
+                Invisibility.dispel();
+                hero.spendAndNext(hero.attackDelay());
+                if (!enemy.isAlive()){
+                    onAbilityKill(hero);
+                }
+                afterAbilityUsed(hero);
+            }
+        });
 	}
 
     @Override
