@@ -151,30 +151,28 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 		float enGainMulti = 1f;
 		if (target instanceof Hero) {
 			Hero hero = (Hero) target;
-			if (hero.hasTalent(Talent.UNENCUMBERED_SPIRIT)) {
-				int points = hero.pointsInTalent(Talent.UNENCUMBERED_SPIRIT);
-
+			if (hero.subClass == HeroSubClass.MONK) {
 				if (hero.belongings.armor() != null){
-					if (hero.belongings.armor().tier <= 1 && points >= 3){
+					if (hero.belongings.armor().tier == 1 + Dungeon.cycle*5){
 						enGainMulti += 1.00f;
-					} else if (hero.belongings.armor().tier <= 2 && points >= 2){
+					} else if (hero.belongings.armor().tier == 2 + Dungeon.cycle*5){
 						enGainMulti += 0.50f;
-					} else if (hero.belongings.armor().tier <= 3 && points >= 1){
+					} else if (hero.belongings.armor().tier == 3 + Dungeon.cycle*5){
 						enGainMulti += 0.25f;
 					}
 				}
 
 				if (hero.belongings.weapon() instanceof MeleeWeapon
 						&& hero.buff(RingOfForce.BrawlersStance.class) == null){
-					if (((MeleeWeapon) hero.belongings.weapon()).tier <= 1 && points >= 3){
+					if (((MeleeWeapon) hero.belongings.weapon()).tier <= 1 + Dungeon.cycle*5){
 						enGainMulti += 1.00f;
-					} else if (((MeleeWeapon) hero.belongings.weapon()).tier <= 2 && points >= 2){
+					} else if (((MeleeWeapon) hero.belongings.weapon()).tier == 2 + Dungeon.cycle*5){
 						enGainMulti += 0.50f;
-					} else if (((MeleeWeapon) hero.belongings.weapon()).tier <= 3 && points >= 1){
+					} else if (((MeleeWeapon) hero.belongings.weapon()).tier == 3 + Dungeon.cycle*5){
 						enGainMulti += 0.25f;
 					}
 				} else if (hero.belongings.weapon == null) {
-					if (hero.buff(RingOfForce.Force.class) == null && points >= 3){
+					if (hero.buff(RingOfForce.Force.class) == null){
 						enGainMulti += 1.50f;
 					}
 				}
@@ -200,8 +198,8 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 		energy -= abil.energyCost();
 		cooldown = abil.cooldown();
 
-		if (target instanceof Hero && ((Hero) target).hasTalent(Talent.COMBINED_ENERGY)
-				&& abil.energyCost() >= 5-((Hero) target).pointsInTalent(Talent.COMBINED_ENERGY)) {
+		if (target instanceof Hero && ((Hero) target).subClass == HeroSubClass.MONK
+				&& abil.energyCost() >= 2) {
 			Talent.CombinedEnergyAbilityTracker tracker = target.buff(Talent.CombinedEnergyAbilityTracker.class);
 			if (tracker == null || tracker.wepAbilUsed == false){
 				Buff.prolong(target, Talent.CombinedEnergyAbilityTracker.class, target.cooldown()).energySpent = abil.energyCost();
@@ -219,7 +217,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 	public boolean abilitiesEmpowered( Hero hero ){
 		//100%/85%/70% energy at +1/+2/+3
-		return energy/energyCap() >= 1.15f - 0.15f*hero.pointsInTalent(Talent.MONASTIC_VIGOR);
+		return energy/energyCap() >= 0.7f;
 	}
 
 	public void processCombinedEnergy(Talent.CombinedEnergyAbilityTracker tracker){
