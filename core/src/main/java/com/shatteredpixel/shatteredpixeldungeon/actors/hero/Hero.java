@@ -499,6 +499,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (buff(RoundShield.GuardTracker.class) != null){
 			buff(RoundShield.GuardTracker.class).detach();
+			shieldDamage(lvl);
 			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			return Messages.get(RoundShield.GuardTracker.class, "guarded");
 		}
@@ -1359,28 +1360,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if ((belongings.weapon() instanceof Greatshield || belongings.weapon() instanceof RoundShield) &&
 				AntiMagic.RESISTS.contains(src.getClass())){
-			ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.BEACON);
-			PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
-			int finalDmg = dmg;
-			((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
-					MagicMissile.INVISI,
-					sprite,
-					aoe.rays.get(0).path.get(aoe.rays.get(0).dist),
-					() -> {
-						for (int i = 0; i < PathFinder.distance.length; i++) {
-							if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-								Char ch = Actor.findChar(i);
-								if (ch != null && ch.alignment != alignment && ch != Dungeon.hero) {
-									int retaliationDamage = (int) (finalDmg *1.5f);
-									if (belongings.weapon() instanceof Greatshield) retaliationDamage*=2;
-									ch.damage(retaliationDamage, Hero.this);
-									Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-									CellEmitter.center(pos).burst(MagicMissile.SlowParticle.FACTORY, 10);
-								}
-							}
-						}
-					}
-			);
+			shieldDamage(dmg);
 			dmg *= 0.75;
 		}
 
@@ -1427,7 +1407,32 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			}
 		}
 	}
-	
+
+	private void shieldDamage(int dmg) {
+		ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.BEACON);
+		PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
+		int finalDmg = dmg;
+		((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+				MagicMissile.INVISI,
+				sprite,
+				aoe.rays.get(0).path.get(aoe.rays.get(0).dist),
+				() -> {
+					for (int i = 0; i < PathFinder.distance.length; i++) {
+						if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+							Char ch = Actor.findChar(i);
+							if (ch != null && ch.alignment != alignment && ch != Dungeon.hero) {
+								int retaliationDamage = (int) (finalDmg *1.5f);
+								if (belongings.weapon() instanceof Greatshield) retaliationDamage*=2;
+								ch.damage(retaliationDamage, Hero.this);
+								Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
+								CellEmitter.center(pos).burst(MagicMissile.SlowParticle.FACTORY, 10);
+							}
+						}
+					}
+				}
+		);
+	}
+
 	public void checkVisibleMobs() {
 		ArrayList<Mob> visible = new ArrayList<>();
 
