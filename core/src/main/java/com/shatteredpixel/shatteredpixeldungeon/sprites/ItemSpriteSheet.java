@@ -263,7 +263,7 @@ public class ItemSpriteSheet {
 	public static final int ASSASSINS_BLADE = WEP_TIER4+4;
 	public static final int CROSSBOW        = WEP_TIER4+5;
 	static{
-		assignItemRect(LONGSWORD,       15, 15);
+		assignItemRect(LONGSWORD,       16, 16);
 		assignItemRect(BATTLE_AXE,      16, 16);
 		assignItemRect(FLAIL,           14, 14);
 		assignItemRect(RUNIC_BLADE,     14, 14);
