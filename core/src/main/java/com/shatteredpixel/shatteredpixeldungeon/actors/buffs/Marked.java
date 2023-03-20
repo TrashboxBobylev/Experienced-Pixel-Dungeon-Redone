@@ -153,7 +153,7 @@ public class Marked extends Buff implements ActionIndicator.Action {
 
     @Override
     public boolean usable() {
-        return ActionIndicator.Action.super.usable();
+        return stack >= 1;
     }
 
     private CellSelector.Listener attack = new CellSelector.Listener() {

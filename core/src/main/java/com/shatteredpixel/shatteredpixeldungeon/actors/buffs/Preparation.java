@@ -143,7 +143,12 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		spend(TICK);
 		return true;
 	}
-	
+
+	@Override
+	public boolean usable() {
+		return AttackLevel.getLvl(turnsInvis).blinkDistance() > 0 && target == Dungeon.hero;
+	}
+
 	@Override
 	public void detach() {
 		super.detach();
