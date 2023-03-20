@@ -408,7 +408,10 @@ public class Generator {
 	}
 
 	public static Item random( Category cat ) {
-		if (Dungeon.Int(200) == 0) {
+		if (Dungeon.Int(150) == 0 &&
+			cat != Category.WAND &&
+			cat != Category.WEAPON &&
+			cat != Category.RING) {
 			return new ElixirOfMight();
 		}
 		switch (cat) {
