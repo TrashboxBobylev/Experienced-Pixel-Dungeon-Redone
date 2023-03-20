@@ -228,6 +228,11 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 		}
 	}
 
+	@Override
+	public boolean usable() {
+		return state == State.NORMAL && power >= 1f;
+	}
+
 	public void recover(float percent){
 		if (state == State.RECOVERING && levelRecovery > 0){
 			levelRecovery -= percent;
