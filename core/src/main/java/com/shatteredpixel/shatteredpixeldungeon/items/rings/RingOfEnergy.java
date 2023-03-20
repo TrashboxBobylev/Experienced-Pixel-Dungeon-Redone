@@ -39,11 +39,9 @@ public class RingOfEnergy extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			return Messages.get(this, "stats",
-					new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.01f - 1f)),
 					new DecimalFormat("#.###").format(100f * (1.10f + soloVisualBonus()*0.0125f - 1f)));
 		} else {
 			return Messages.get(this, "typical_stats",
-					new DecimalFormat("#.###").format(20f),
 					new DecimalFormat("#.###").format(10f));
 		}
 	}
@@ -55,8 +53,8 @@ public class RingOfEnergy extends Ring {
 	
 	public static float wandChargeMultiplier( Char target ){
         float multiplier = 1f;
-        if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.2f;
-        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.025;
+        if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.1f;
+        if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.0125;
         return multiplier;
 	}
 
@@ -68,7 +66,10 @@ public class RingOfEnergy extends Ring {
 	}
 
 	public static float armorChargeMultiplier( Char target ){
-		return (float)Math.pow(1.15, getBuffedBonus(target, Energy.class));
+		float multiplier = 1f;
+		if (getBuffedBonus(target, Energy.class) > 0) multiplier = 1.1f;
+		if (getBuffedBonus(target, Energy.class) > 1) multiplier += getBuffedBonus(target, Energy.class)*0.0125;
+		return multiplier;
 	}
 
 	public class Energy extends RingBuff {
