@@ -68,6 +68,7 @@ public class MagicMissile extends Emitter {
 	public static final int TOXIC_VENT      = 14;
 	public static final int ELMO            = 15;
 	public static final int INVISI          = 16;
+	public static final int HOLYEXP         = 17;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -82,6 +83,7 @@ public class MagicMissile extends Emitter {
 	public static final int PURPLE_CONE     = 111;
 	public static final int SPARK_CONE      = 112;
 	public static final int BLOOD_CONE      = 113;
+	public static final int HOLY_EXP_CONE   = 114;
 	
 	public void reset( int type, int from, int to, Callback callback ) {
 		reset( type,
@@ -187,7 +189,10 @@ public class MagicMissile extends Emitter {
 				size( 20 );
 				pour( InvisibleParticle.FACTORY, 0.03f );
 				break;
-
+			case HOLYEXP:
+				size( 6 );
+				pour( HolyExpParticle.FACTORY, 0.01f );
+				break;
 			case MAGIC_MISS_CONE:
 				size( 10 );
 				pour( WhiteParticle.FACTORY, 0.03f );
@@ -239,6 +244,10 @@ public class MagicMissile extends Emitter {
 			case BLOOD_CONE:
 				size( 10 );
 				pour( BloodParticle.FACTORY, 0.03f );
+				break;
+			case HOLY_EXP_CONE:
+				size( 10 );
+				pour( HolyExpParticle.FACTORY, 0.03f );
 				break;
 		}
 
@@ -695,4 +704,5 @@ public class MagicMissile extends Emitter {
 			am = Random.Float();
 		}
 	}
+
 }

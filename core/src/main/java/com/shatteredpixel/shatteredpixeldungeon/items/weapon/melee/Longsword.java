@@ -28,16 +28,25 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Unstable;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
 public class Longsword extends MeleeWeapon {
@@ -146,12 +155,10 @@ public class Longsword extends MeleeWeapon {
 	}
 
 	@Override
-	public float abilityChargeUse( Hero hero ) {
-		if (hero.buff(Sword.CleaveTracker.class) != null){
-			return 0;
-		} else {
-			return super.abilityChargeUse( hero );
-		}
+	public float abilityChargeUse(Hero hero) {
+		return hero.belongings.secondWep() == this ?
+				Buff.affect(hero, Charger.class).secondCharges :
+				Buff.affect(hero, Charger.class).charges;
 	}
 
 	@Override
@@ -159,9 +166,95 @@ public class Longsword extends MeleeWeapon {
 		return Messages.get(this, "prompt");
 	}
 
+	public static class HolyExpEffect extends Buff {
+
+		public int stacks = 0;
+
+		@Override
+		public int icon() {
+			return BuffIndicator.BLESS;
+		}
+
+		@Override
+		public void fx(boolean on) {
+			if (on) target.sprite.add(CharSprite.State.LONGSWORD);
+			else target.sprite.remove(CharSprite.State.LONGSWORD);
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc",
+					Math.round((Math.pow(1.08, stacks) - 1f)*100),
+					Math.round((Math.pow(1.15, stacks) - 1f)*100));
+		}
+
+		public static String STACKS = "stacks";
+
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(STACKS, stacks);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			stacks = bundle.getInt(STACKS);
+		}
+	}
+
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Sword.cleaveAbility(hero, target, 1.23f, this);
+		if (target == null) {
+			return;
+		}
+
+		Ballistica aim = new Ballistica(hero.pos, target, Ballistica.WONT_STOP);
+
+		float chargeUse = abilityChargeUse(hero);
+		int maxDist = 2 + Math.round(chargeUse);
+		int dist = Math.min(aim.dist, maxDist);
+
+		ConeAOE cone = new ConeAOE(aim,
+				dist,
+				90,
+				Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
+
+		for (Ballistica ray : cone.outerRays){
+			((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+					MagicMissile.HOLY_EXP_CONE,
+					hero.sprite,
+					ray.path.get(ray.dist),
+					null
+			);
+		}
+
+		hero.sprite.zap(target);
+		MagicMissile.boltFromChar(curUser.sprite.parent,
+				MagicMissile.HOLY_EXP_CONE,
+				curUser.sprite,
+				aim.path.get(dist / 2),
+				new Callback() {
+					@Override
+					public void call() {
+						beforeAbilityUsed(hero);
+						for (int cell: cone.cells){
+							Char ch = Actor.findChar( cell );
+							if (ch != null) {
+								LongswordWound.hit(ch.pos, 0, 0xf2e153);
+								Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 2f, 0.65f);
+								for (int i = 0; i < 1 + chargeUse/3; i++)
+									Buff.affect(ch, HolyExpEffect.class).stacks++;
+							}
+						}
+
+						Invisibility.dispel();
+						hero.spendAndNext(hero.attackDelay());
+						afterAbilityUsed(hero);
+					}
+				});
+		Sample.INSTANCE.play( Assets.Sounds.ZAP );
+
 	}
 
 }

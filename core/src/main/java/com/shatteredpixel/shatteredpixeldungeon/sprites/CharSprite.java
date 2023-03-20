@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.HolyExpParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -77,7 +78,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected float shadowOffset    = 0.25f;
 
 	public enum State {
-		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, RAGESHIELDED, HEARTS
+		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, RAGESHIELDED, HEARTS, LONGSWORD
 	}
 	private int stunStates = 0;
 
@@ -98,6 +99,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected Emitter levitation;
 	protected Emitter healing;
 	protected Emitter hearts;
+	protected Emitter holyexp;
 
 	protected IceBlock iceBlock;
 	protected DarkBlock darkBlock;
@@ -373,6 +375,13 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					Sample.INSTANCE.play( Assets.Sounds.BURNING );
 				}
 				break;
+			case LONGSWORD:
+				holyexp = emitter();
+				holyexp.pour( HolyExpParticle.FACTORY, 0.0575f );
+				if (visible) {
+					Sample.INSTANCE.play( Assets.Sounds.BURNING );
+				}
+				break;
 			case LEVITATING:
 				levitation = emitter();
 				levitation.pour( Speck.factory( Speck.JET ), 0.02f );
@@ -433,6 +442,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				if (burning != null) {
 					burning.on = false;
 					burning = null;
+				}
+				break;
+			case LONGSWORD:
+				if (holyexp != null) {
+					holyexp.on = false;
+					holyexp = null;
 				}
 				break;
 			case LEVITATING:
@@ -561,6 +576,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		if (hearts != null){
 			hearts.visible = visible;
+		}
+		if (holyexp != null) {
+			holyexp.visible = visible;
 		}
 		if (aura != null){
 			if (aura.parent == null){
