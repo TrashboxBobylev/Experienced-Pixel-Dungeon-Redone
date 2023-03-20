@@ -32,9 +32,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -120,6 +124,30 @@ public class Food extends Item {
 		Buff.affect(hero, Hunger.class).satisfy(foodVal);
 		if (hero.perks.contains(Perks.Perk.MYSTICAL_MEAL)){
 			Buff.affect(hero, ArtifactRecharge.class).prolong(6);
+		}
+		if (hero.perks.contains(Perks.Perk.COLLECT_EVERYTHING) && this instanceof SmallRation){
+			for (Heap h : Dungeon.level.heaps.valueList()){
+				Item item = h.peek();
+				Item toPickUp = new Item() {
+					// create wrapper item that simulates doPickUp while actually just calling collect.
+					{ image = item.image; }
+					@Override public boolean collect(Bag container) {
+						return item.collect(container);
+					}
+				};
+				if (toPickUp.doPickUp(hero)) {
+					// ripped from Hero#actPickUp, kinda.
+					boolean important = item.unique && (item instanceof Scroll || item instanceof Potion);
+					String pickupMessage = Messages.get(hero, "you_now_have", item);
+					if(important) GLog.p(pickupMessage); else GLog.i(pickupMessage);
+					// attempt to nullify turn usage.
+					hero.spend(-hero.cooldown());
+				} else {
+					GLog.n(Messages.get(hero, "you_cant_have", item.name()));
+					h.sprite.drop();
+					return;
+				}
+			}
 		}
 	}
 	

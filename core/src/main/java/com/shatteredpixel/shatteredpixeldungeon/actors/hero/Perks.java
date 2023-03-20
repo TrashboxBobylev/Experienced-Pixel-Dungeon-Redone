@@ -64,7 +64,8 @@ public class Perks {
         BETTER_BARTERING,
         POTIONS,
         MORE_BAG,
-        NO_ONESHOTS;
+        NO_ONESHOTS,
+        COLLECT_EVERYTHING;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");
