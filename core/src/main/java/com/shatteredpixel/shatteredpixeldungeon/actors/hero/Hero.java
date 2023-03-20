@@ -1803,7 +1803,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	
 	public static int maxExp( int lvl ){
 		HeroClass heroClass = Dungeon.hero == null ? GamesInProgress.selectedClass: Dungeon.hero.heroClass;
-		if (heroClass == HeroClass.RAT_KING) return 3 + lvl*4;
+		if (heroClass == HeroClass.RAT_KING) return 4 + Math.round(lvl*4.5f);
 		return 5 + lvl * 5;
 	}
 	
