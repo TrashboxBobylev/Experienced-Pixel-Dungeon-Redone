@@ -110,6 +110,16 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
+	public String targetingPrompt() {
+		return Messages.get(this, "prompt");
+	}
+
+	@Override
+	protected void duelistAbility(Hero hero, Integer target) {
+		Rapier.lungeAbility(hero, target, 3 + level(), this);
+	}
+
+	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add(AC_IMBUE);
