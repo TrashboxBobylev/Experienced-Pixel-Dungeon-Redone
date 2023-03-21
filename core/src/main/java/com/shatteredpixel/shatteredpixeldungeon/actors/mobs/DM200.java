@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM200Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
@@ -104,14 +103,14 @@ public class DM200 extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(30, 47);
             case 2: return Random.NormalIntRange(100, 241);
             case 3: return Random.NormalIntRange(570, 1000);
             case 4: return Random.NormalIntRange(16000, 36000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 8);
+		return Random.NormalIntRange(0, 8);
 	}
 
 	@Override

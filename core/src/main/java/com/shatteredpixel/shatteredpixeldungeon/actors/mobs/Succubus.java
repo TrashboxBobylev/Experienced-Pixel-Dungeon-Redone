@@ -195,14 +195,14 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 63);
             case 2: return Random.NormalIntRange(150, 300);
             case 3: return Random.NormalIntRange(1500, 2400);
             case 4: return Random.NormalIntRange(135000, 190000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+		return Random.NormalIntRange(0, 10);
 	}
 
 	@Override

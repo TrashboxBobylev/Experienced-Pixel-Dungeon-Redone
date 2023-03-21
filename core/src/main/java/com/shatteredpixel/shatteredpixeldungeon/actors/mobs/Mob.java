@@ -688,7 +688,22 @@ public abstract class Mob extends Char {
 		return super.speed() * AscensionChallenge.enemySpeedModifier(this);
 	}
 
-	public final boolean surprisedBy( Char enemy ){
+	public int cycledDrRoll(){
+		switch (Dungeon.cycle){
+			default: return 0;
+			case 1: return 0;
+			case 2: return 0;
+			case 3: return 0;
+			case 4: return 0;
+		}
+	}
+
+	@Override
+	public int drRoll() {
+		return super.drRoll() + cycledDrRoll();
+	}
+
+	public final boolean surprisedBy(Char enemy ){
 		return surprisedBy( enemy, true);
 	}
 

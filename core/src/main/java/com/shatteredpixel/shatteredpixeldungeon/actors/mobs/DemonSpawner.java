@@ -27,13 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -91,14 +85,14 @@ public class DemonSpawner extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(48, 73);
             case 2: return Random.NormalIntRange(185, 365);
             case 3: return Random.NormalIntRange(1800, 3120);
             case 4: return Random.NormalIntRange(130000, 200000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 12);
+		return Random.NormalIntRange(0, 12);
 	}
 
 	@Override

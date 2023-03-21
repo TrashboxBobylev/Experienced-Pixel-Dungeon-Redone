@@ -29,11 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
@@ -132,14 +128,14 @@ public abstract class Elemental extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(24, 50);
             case 2: return Random.NormalIntRange(121, 243);
             case 3: return Random.NormalIntRange(700, 1321);
             case 4: return Random.NormalIntRange(22000, 64000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 5);
 	}
 	
 	protected int rangedCooldown = Random.NormalIntRange( 3, 5 );

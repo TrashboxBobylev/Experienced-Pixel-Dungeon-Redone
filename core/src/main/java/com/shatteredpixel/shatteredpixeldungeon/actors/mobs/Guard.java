@@ -173,14 +173,14 @@ public class Guard extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(15, 30);
             case 2: return Random.NormalIntRange(120, 198);
             case 3: return Random.NormalIntRange(500, 780);
             case 4: return Random.NormalIntRange(9000, 13000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 7);
+		return Random.NormalIntRange(0, 7);
 	}
 
 	@Override

@@ -92,13 +92,13 @@ public class Crab extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
             case 2: return Random.NormalIntRange(76, 150);
             case 3: return Random.NormalIntRange(300, 550);
             case 4: return Random.NormalIntRange(4000, 8500);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 4);
+		return Random.NormalIntRange(0, 4);
 	}
 }

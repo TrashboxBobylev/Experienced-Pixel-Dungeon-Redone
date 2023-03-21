@@ -105,14 +105,14 @@ public class Monk extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(20, 30);
             case 2: return Random.NormalIntRange(60, 193);
             case 3: return Random.NormalIntRange(700, 1000);
             case 4: return Random.NormalIntRange(26000, 73000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 2);
+		return Random.NormalIntRange(0, 2);
 	}
 	
 	@Override

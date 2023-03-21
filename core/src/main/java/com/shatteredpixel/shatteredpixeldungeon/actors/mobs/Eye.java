@@ -126,14 +126,14 @@ public class Eye extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 74);
             case 2: return Random.NormalIntRange(178, 334);
             case 3: return Random.NormalIntRange(1750, 2800);
             case 4: return Random.NormalIntRange(200000, 300000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+		return Random.NormalIntRange(0, 10);
 	}
 	
 	private Ballistica beam;

@@ -160,14 +160,14 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 20);
             case 2: return Random.NormalIntRange(60, 137);
             case 3: return Random.NormalIntRange(380, 625);
             case 4: return Random.NormalIntRange(5000, 10000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 3);
+		return Random.NormalIntRange(0, 3);
 	}
 
 	@Override

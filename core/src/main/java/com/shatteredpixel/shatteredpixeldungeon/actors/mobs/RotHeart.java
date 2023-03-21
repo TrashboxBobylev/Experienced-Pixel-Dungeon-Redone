@@ -132,12 +132,12 @@ public class RotHeart extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 28);
             case 2: return Random.NormalIntRange(100, 184);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 5);
 	}
 	
 	{

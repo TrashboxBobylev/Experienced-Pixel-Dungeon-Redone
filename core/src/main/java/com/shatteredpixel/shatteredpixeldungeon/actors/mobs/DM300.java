@@ -120,14 +120,14 @@ public class DM300 extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(38, 53);
             case 2: return Random.NormalIntRange(120, 275);
             case 3: return Random.NormalIntRange(562, 1310);
             case 4: return Random.NormalIntRange(19000, 45000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+		return Random.NormalIntRange(0, 10);
 	}
 
 	public int pylonsActivated = 0;

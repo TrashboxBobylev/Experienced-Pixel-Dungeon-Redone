@@ -91,13 +91,13 @@ public class Gnoll extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(6, 17);
             case 2: return Random.NormalIntRange(69, 130);
             case 3: return Random.NormalIntRange(275, 500);
             case 4: return Random.NormalIntRange(3000, 6000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 2);
+		return Random.NormalIntRange(0, 2);
 	}
 }

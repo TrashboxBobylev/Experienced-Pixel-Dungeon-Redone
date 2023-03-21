@@ -109,14 +109,14 @@ public class Ghoul extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(22, 43);
             case 2: return Random.NormalIntRange(100, 211);
             case 3: return Random.NormalIntRange(621, 1111);
             case 4: return Random.NormalIntRange(18000, 46000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 4);
+		return Random.NormalIntRange(0, 4);
 	}
 
 	@Override

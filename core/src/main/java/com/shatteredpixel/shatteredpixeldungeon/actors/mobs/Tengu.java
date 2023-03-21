@@ -139,14 +139,14 @@ public class Tengu extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(10, 24);
             case 2: return Random.NormalIntRange(80, 195);
             case 3: return Random.NormalIntRange(400, 800);
             case 4: return Random.NormalIntRange(8000, 14000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 5);
 	}
 
 	boolean loading = false;

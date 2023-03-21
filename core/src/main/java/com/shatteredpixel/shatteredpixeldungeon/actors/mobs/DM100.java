@@ -106,14 +106,14 @@ public class DM100 extends Mob implements Callback {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 24);
             case 2: return Random.NormalIntRange(60, 160);
             case 3: return Random.NormalIntRange(370, 660);
             case 4: return Random.NormalIntRange(6000, 11000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 4);
+		return Random.NormalIntRange(0, 4);
 	}
 	
 	@Override

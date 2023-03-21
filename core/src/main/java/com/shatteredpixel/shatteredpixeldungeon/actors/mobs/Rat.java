@@ -97,14 +97,14 @@ public class Rat extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(5, 15);
             case 2: return Random.NormalIntRange(60, 100);
             case 3: return Random.NormalIntRange(250, 434);
             case 4: return Random.NormalIntRange(2000, 4500);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 1);
+		return Random.NormalIntRange(0, 1);
 	}
 
 	private static final String RAT_ALLY = "rat_ally";

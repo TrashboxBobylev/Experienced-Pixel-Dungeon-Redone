@@ -705,13 +705,13 @@ public class YogDzewa extends Mob {
 		}
 
 		@Override
-		public int drRoll() {
+		public int cycledDrRoll() {
             switch (Dungeon.cycle){
                 case 1: return Random.NormalIntRange(40, 63);
                 case 2: return Random.NormalIntRange(125, 248);
                 case 3: return Random.NormalIntRange(1600, 2800);
             }
-			return super.drRoll() + Random.NormalIntRange(0, 4);
+			return Random.NormalIntRange(0, 4);
 		}
 
 	}

@@ -158,14 +158,14 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 15);
             case 2: return Random.NormalIntRange(130, 178);
             case 3: return Random.NormalIntRange(330, 600);
             case 4: return Random.NormalIntRange(5000, 10000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 2);
+		return Random.NormalIntRange(0, 2);
 	}
 
 	@Override

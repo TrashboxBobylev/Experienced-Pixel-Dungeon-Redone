@@ -123,7 +123,7 @@ public class BlackMimic extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(80, 200);
             case 2: return Random.NormalIntRange(700, 1000);

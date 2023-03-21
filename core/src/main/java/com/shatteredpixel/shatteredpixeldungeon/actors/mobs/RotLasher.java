@@ -124,12 +124,12 @@ public class RotLasher extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(14, 34);
             case 2: return Random.NormalIntRange(140, 234);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 8);
+		return Random.NormalIntRange(0, 8);
 	}
 	
 	{

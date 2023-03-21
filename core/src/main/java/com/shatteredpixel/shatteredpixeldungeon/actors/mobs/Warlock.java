@@ -108,14 +108,14 @@ public class Warlock extends Mob implements Callback {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(30, 59);
             case 2: return Random.NormalIntRange(112, 276);
             case 3: return Random.NormalIntRange(900, 1600);
             case 4: return Random.NormalIntRange(40000, 96000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 8);
+		return Random.NormalIntRange(0, 8);
 	}
 	
 	@Override

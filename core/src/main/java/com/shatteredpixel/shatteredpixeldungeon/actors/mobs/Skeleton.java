@@ -146,14 +146,14 @@ public class Skeleton extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(10, 24);
             case 2: return Random.NormalIntRange(95, 170);
             case 3: return Random.NormalIntRange(360, 625);
             case 4: return Random.NormalIntRange(5000, 10000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 5);
 	}
 
 }

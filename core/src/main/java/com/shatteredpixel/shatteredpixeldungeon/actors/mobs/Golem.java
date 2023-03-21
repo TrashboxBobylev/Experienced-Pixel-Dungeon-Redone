@@ -106,14 +106,14 @@ public class Golem extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(40, 68);
             case 2: return Random.NormalIntRange(160, 333);
             case 3: return Random.NormalIntRange(1100, 1800);
             case 4: return Random.NormalIntRange(70000, 125000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 12);
+		return Random.NormalIntRange(0, 12);
 	}
 
 	@Override

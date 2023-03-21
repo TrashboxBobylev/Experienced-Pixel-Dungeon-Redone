@@ -116,14 +116,14 @@ public class RipperDemon extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(34, 64);
             case 2: return Random.NormalIntRange(100, 217);
             case 3: return Random.NormalIntRange(1200, 2100);
             case 4: return Random.NormalIntRange(90000, 140000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 4);
+		return Random.NormalIntRange(0, 4);
 	}
 
 	private static final String LAST_ENEMY_POS = "last_enemy_pos";

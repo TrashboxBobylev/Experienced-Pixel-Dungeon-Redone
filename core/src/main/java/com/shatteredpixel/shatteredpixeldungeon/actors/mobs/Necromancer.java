@@ -105,14 +105,14 @@ public class Necromancer extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(8, 28);
             case 2: return Random.NormalIntRange(75, 180);
             case 3: return Random.NormalIntRange(400, 700);
             case 4: return Random.NormalIntRange(7000, 12000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+		return Random.NormalIntRange(0, 5);
 	}
 	
 	@Override

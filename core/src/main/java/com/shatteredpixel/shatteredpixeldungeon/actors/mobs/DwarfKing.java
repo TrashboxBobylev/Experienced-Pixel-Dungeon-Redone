@@ -121,14 +121,14 @@ public class DwarfKing extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(38, 65);
             case 2: return Random.NormalIntRange(140, 295);
             case 3: return Random.NormalIntRange(1100, 1980);
             case 4: return Random.NormalIntRange(90000, 170000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+		return Random.NormalIntRange(0, 10);
 	}
 
 	private int phase = 1;

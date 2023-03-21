@@ -181,14 +181,14 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(50, 89);
             case 2: return Random.NormalIntRange(250, 430);
             case 3: return Random.NormalIntRange(1750, 3200);
             case 4: return Random.NormalIntRange(370000, 480000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 15);
+		return Random.NormalIntRange(0, 15);
 	}
 
 	{

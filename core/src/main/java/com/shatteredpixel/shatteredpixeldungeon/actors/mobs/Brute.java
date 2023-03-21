@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BruteSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -111,14 +110,14 @@ public class Brute extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public int cycledDrRoll() {
         switch (Dungeon.cycle){
             case 1: return Random.NormalIntRange(20, 39);
             case 2: return Random.NormalIntRange(120, 231);
             case 3: return Random.NormalIntRange(500, 890);
             case 4: return Random.NormalIntRange(10000, 22000);
         }
-		return super.drRoll() + Random.NormalIntRange(0, 8);
+		return Random.NormalIntRange(0, 8);
 	}
 
 	@Override
