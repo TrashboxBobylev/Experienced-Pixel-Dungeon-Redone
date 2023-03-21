@@ -36,9 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -128,22 +125,12 @@ public class Food extends Item {
 		if (hero.perks.contains(Perks.Perk.COLLECT_EVERYTHING) && this instanceof SmallRation){
 			for (Heap h : Dungeon.level.heaps.valueList()){
 				Item item = h.peek();
-				Item toPickUp = new Item() {
-					// create wrapper item that simulates doPickUp while actually just calling collect.
-					{ image = item.image; }
-					@Override public boolean collect(Bag container) {
-						return item.collect(container);
-					}
-				};
-				if (toPickUp.doPickUp(hero)) {
-					// ripped from Hero#actPickUp, kinda.
-					boolean important = item.unique && (item instanceof Scroll || item instanceof Potion);
-					String pickupMessage = Messages.get(hero, "you_now_have", item);
-					if(important) GLog.p(pickupMessage); else GLog.i(pickupMessage);
-					// attempt to nullify turn usage.
-					hero.spend(-hero.cooldown());
+				if (item.doPickUp(hero, h.pos)) {
+					h.pickUp();
+					hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
+					GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
 				} else {
-					GLog.n(Messages.get(hero, "you_cant_have", item.name()));
+					GLog.w(Messages.get(this, "cant_grab"));
 					h.sprite.drop();
 					return;
 				}
