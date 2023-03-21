@@ -187,7 +187,7 @@ public abstract class FishingRod extends Item {
     @Override
     public String desc() {
         String desc = super.desc();
-        desc += "\n\n" + Messages.get(FishingRod.class, "basics");
+        desc += "\n\n" + Messages.get(FishingRod.class, "basics", Math.round(amplifier*100), fishingStr);
         return desc;
     }
 
