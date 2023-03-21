@@ -43,7 +43,6 @@ public class WndPerks extends Window {
     private static final int BTN_HEIGHT    = 18;
     private static final int GAP        = 1;
 
-    private boolean editable;
     private ArrayList<IconButton> infos = new ArrayList<>();
     private ArrayList<ConduitBox> boxes = new ArrayList<>();
     private ScrollPane pane;
@@ -52,7 +51,6 @@ public class WndPerks extends Window {
 
         super();
 
-        this.editable = editable;
         resize(WIDTH, HEIGHT);
 
         RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 12 );
@@ -63,7 +61,6 @@ public class WndPerks extends Window {
         );
         PixelScene.align(title);
         add( title );
-        ArrayList<Perks.Perk> allConducts = perks;
 
         pane = new ScrollPane(new Component()) {
             @Override
@@ -77,10 +74,9 @@ public class WndPerks extends Window {
                 size = infos.size();
                 for (int i = 0; i < size; i++) {
                     if (infos.get(i).inside(x, y)) {
-                        int index = i;
 
-                        String message = allConducts.get(index).desc();
-                        String title = Messages.titleCase(allConducts.get(index).toString());
+                        String message = perks.get(i).desc();
+                        String title = Messages.titleCase(perks.get(i).toString());
                         ShatteredPixelDungeon.scene().add(
                                 new WndTitledMessage(
                                         Icons.get(Icons.INFO),
@@ -97,11 +93,11 @@ public class WndPerks extends Window {
         Component content = pane.content();
 
         float pos = 2;
-        for (Perks.Perk i : allConducts) {
+        for (Perks.Perk i : perks) {
 
             final String challenge = i.toString();
 
-            ConduitBox cb = new ConduitBox( challenge);
+            ConduitBox cb = new ConduitBox(challenge);
             cb.active = editable;
             cb.conduct = i;
 
@@ -132,7 +128,7 @@ public class WndPerks extends Window {
         super.onBackPressed();
     }
 
-    public class ConduitBox extends RedButton {
+    public static class ConduitBox extends RedButton {
 
         public Perks.Perk conduct;
 
