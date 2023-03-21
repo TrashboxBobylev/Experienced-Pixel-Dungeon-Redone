@@ -184,7 +184,7 @@ public class Blacksmith extends NPC {
 				}
 				
 			}
-		} else if (!Quest.reforged) {
+		} else if (!Quest.reforged && Dungeon.gold >= getGold()) {
 			
 			Game.runOnRenderThread(new Callback() {
 				@Override
@@ -195,7 +195,8 @@ public class Blacksmith extends NPC {
 			
 		} else {
 			
-			tell( Messages.get(this, "get_lost") );
+			tell( Messages.get(this, "get_lost",
+					getGold()));
 			
 		}
 
@@ -307,13 +308,18 @@ public class Blacksmith extends NPC {
 				Dungeon.level.drop( first, Dungeon.hero.pos );
 			}
 		}
+		Dungeon.gold -= getGold();
 		Dungeon.hero.spendAndNext( 2f );
 		Badges.validateItemLevelAquired( first );
 		Item.updateQuickslot();
 
 		Notes.remove( Notes.Landmark.TROLL );
 	}
-	
+
+	public static int getGold() {
+		return (45 + 15 * Dungeon.escalatingDepth()) * 25;
+	}
+
 	@Override
 	public int defenseSkill( Char enemy ) {
 		return INFINITE_EVASION;

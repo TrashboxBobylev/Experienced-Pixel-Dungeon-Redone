@@ -65,7 +65,7 @@ public class WndBlacksmith extends Window {
 		titlebar.setRect( 0, 0, WIDTH, 0 );
 		add( titlebar );
 		
-		RenderedTextBlock message = PixelScene.renderTextBlock( Messages.get(this, "prompt"), 6 );
+		RenderedTextBlock message = PixelScene.renderTextBlock( Messages.get(this, "prompt", Blacksmith.getGold()), 6 );
 		message.maxWidth( WIDTH);
 		message.setPos(0, titlebar.bottom() + GAP);
 		add( message );
