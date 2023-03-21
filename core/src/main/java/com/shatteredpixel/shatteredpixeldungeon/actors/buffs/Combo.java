@@ -184,9 +184,13 @@ public class Combo extends Buff implements ActionIndicator.Action {
 		} else {
 			icon = new ItemSprite(new Item(){ {image = ItemSpriteSheet.WEAPON_HOLDER; }});
 		}
-
 		icon.tint(getHighestMove().tintColor);
 		return icon;
+	}
+
+	@Override
+	public boolean usable() {
+		return getHighestMove() != null && canUseMove(getHighestMove());
 	}
 
 	@Override
