@@ -379,7 +379,7 @@ public class Dungeon {
             level = new BlackMimicLevel();
             break;
         case 28:
-            level = new OldCavesBossLevel();
+            level = new ArenaLevel();
             break;
 		default:level = new DeadEndLevel();
 					Statistics.deepestFloor--;

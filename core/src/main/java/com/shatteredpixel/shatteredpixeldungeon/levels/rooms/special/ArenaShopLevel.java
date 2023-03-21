@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
@@ -102,7 +101,7 @@ public class ArenaShopLevel extends ShopRoom{
                 } while (level.heaps.get( cell ) != null || level.findMob( cell ) != null);
             }
 
-            level.drop( item, cell ).type = Heap.Type.FOR_SALE;
+            level.drop( item, cell ).type = Heap.Type.FOR_ARENA_SALE;
         }
 
     }

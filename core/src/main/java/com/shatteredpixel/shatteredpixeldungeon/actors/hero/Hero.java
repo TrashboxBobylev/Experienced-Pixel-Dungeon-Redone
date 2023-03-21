@@ -902,7 +902,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			ready();
 			
 			Heap heap = Dungeon.level.heaps.get( dst );
-			if (heap != null && heap.type == Type.FOR_SALE && heap.size() == 1) {
+			if (heap != null && heap.type.forSale() && heap.size() == 1) {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
@@ -1028,7 +1028,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		if (Dungeon.level.adjacent( pos, dst ) || pos == dst) {
 			
 			Heap heap = Dungeon.level.heaps.get( dst );
-			if (heap != null && (heap.type != Type.HEAP && heap.type != Type.FOR_SALE)) {
+			if (heap != null && (heap.type != Type.HEAP && !heap.type.forSale())) {
 				
 				if ((heap.type == Type.LOCKED_CHEST && Notes.keyCount(new GoldenKey(Dungeon.depth)) < 1)
 					|| (heap.type == Type.CRYSTAL_CHEST && Notes.keyCount(new CrystalKey(Dungeon.depth)) < 1)){
@@ -1649,12 +1649,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				//moving to an item doesn't auto-pickup when enemies are near...
 				&& (visibleEnemies.size() == 0 || cell == pos ||
 				//...but only for standard heaps. Chests and similar open as normal.
-				(heap.type != Type.HEAP && heap.type != Type.FOR_SALE))) {
+				(heap.type != Type.HEAP && !heap.type.forSale()))) {
 
 			switch (heap.type) {
 			case HEAP:
 				curAction = new HeroAction.PickUp( cell );
 				break;
+			case FOR_ARENA_SALE:
 			case FOR_SALE:
 				curAction = heap.size() == 1 && heap.peek().value() > 0 ?
 					new HeroAction.Buy( cell ) :

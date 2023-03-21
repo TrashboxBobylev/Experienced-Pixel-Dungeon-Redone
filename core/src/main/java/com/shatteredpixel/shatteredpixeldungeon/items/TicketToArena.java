@@ -26,7 +26,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -79,6 +81,7 @@ public class TicketToArena extends Item{
                 InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, 28, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
                 InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
                 Game.switchScene( InterlevelScene.class );
+                Buff.affect(hero, ArenaLevel.ArenaCounter.class);
             } else {
                 InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, depth, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
                 InterlevelScene.mode = InterlevelScene.Mode.RETURN;
@@ -86,6 +89,7 @@ public class TicketToArena extends Item{
                 InterlevelScene.returnPos = pos;
                 Game.switchScene( InterlevelScene.class );
                 detach(hero.belongings.backpack);
+                Buff.detach(hero, ArenaLevel.ArenaCounter.class);
             }
         }
     }

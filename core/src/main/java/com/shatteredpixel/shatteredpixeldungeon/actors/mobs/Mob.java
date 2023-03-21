@@ -52,8 +52,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.levels.OldCavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
@@ -764,7 +764,8 @@ public abstract class Mob extends Char {
 				if (Dungeon.hero.perks.contains(Perks.Perk.ADDITIONAL_MONEY)){
 					Dungeon.level.drop(new Gold(Dungeon.Int( 6 + Dungeon.escalatingDepth() * 2, 12 + Dungeon.escalatingDepth() * 4 )), pos).sprite.drop();
 				}
-				if (Dungeon.hero.buff(Overload.class) != null) {
+				if (Dungeon.hero.buff(Overload.class) != null ||
+						this.buff(Overload.class) != null) {
 					Dungeon.level.spawnMob(12);
 				}
 
@@ -783,8 +784,6 @@ public abstract class Mob extends Char {
 			if (EXP % 2 == 1) EXP += Random.Int(2);
 			EXP /= 2;
 		}
-
-		if (buff(OldCavesBossLevel.ArenaBuff.class) != null) EXP /= 2;
 
 		if (alignment == Alignment.ENEMY){
 			rollToDropLoot();
@@ -862,7 +861,7 @@ public abstract class Mob extends Char {
 			Dungeon.energy += quantity;
 		}
 
-		if (buff(OldCavesBossLevel.ArenaBuff.class) != null){
+		if (buff(ArenaLevel.ArenaBuff.class) != null){
 		    Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
             Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
             Dungeon.level.drop(Generator.random(), pos).sprite.drop();

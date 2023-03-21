@@ -29,13 +29,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
@@ -53,13 +55,11 @@ import com.watabou.utils.Rect;
 
 import java.util.ArrayList;
 
-public class OldCavesBossLevel extends Level {
+public class ArenaLevel extends Level {
 	
 	{
 		color1 = 0x534f3e;
 		color2 = 0xb9d661;
-
-		viewDistance = Math.min(6, viewDistance);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class OldCavesBossLevel extends Level {
 		Music.INSTANCE.playTracks(
 				new String[]{Assets.Music.SEWERS_1, Assets.Music.PRISON_1, Assets.Music.CAVES_1, Assets.Music.CITY_1, Assets.Music.HALLS_1},
 				new float[]{1, 1, 1, 1, 1},
-				false);
+				true);
 	}
 
 	private static final int WIDTH = 32;
@@ -192,7 +192,7 @@ public class OldCavesBossLevel extends Level {
 					} while (heaps.get( cell ) != null || findMob( cell ) != null);
 				}
 
-				drop( item, cell ).type = Heap.Type.FOR_SALE;
+				drop( item, cell ).type = Heap.Type.FOR_ARENA_SALE;
 			}
 		}
 		
@@ -248,39 +248,11 @@ public class OldCavesBossLevel extends Level {
 	@Override
 	protected void createMobs() {
 	}
+
+	public static class ArenaCounter extends CounterBuff {}
 	
 	public Actor respawner() {
-        return new Respawner() {
-
-            {
-                actPriority = BUFF_PRIO; //as if it were a buff.
-            }
-
-            @Override
-            protected boolean act() {
-                float count = 0;
-
-                for (Mob mob : mobs.toArray(new Mob[0])){
-                    if (mob.alignment == Char.Alignment.ENEMY && !mob.properties().contains(Char.Property.MINIBOSS)) {
-                        count += mob.spawningWeight();
-                    }
-                }
-
-                if (count < 100) {
-
-                    Mob mob = createMob();
-                    mob.state = mob.WANDERING;
-                    mob.pos = randomRespawnCell( mob );
-                    if (Dungeon.hero.isAlive() && mob.pos != -1 && distance(Dungeon.hero.pos, mob.pos) >= 4) {
-                        GameScene.add( mob );
-                        mob.beckon( Dungeon.hero.pos );
-                        Buff.affect(mob, ArenaBuff.class);
-                    }
-                }
-                spend(respawnCooldown() / 4f);
-                return true;
-            }
-        };
+        return new ArenaRespawner();
     }
 
     public static class ArenaBuff extends Buff {
@@ -336,5 +308,60 @@ public class OldCavesBossLevel extends Level {
 		super.addVisuals();
 		CityLevel.addCityVisuals(this, visuals);
 		return visuals;
+	}
+
+	public static class ArenaRespawner extends Respawner {
+
+		{
+			actPriority = BUFF_PRIO; //as if it were a buff.
+		}
+
+		@Override
+		protected boolean act() {
+			float count = 0;
+
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+				if (mob.alignment == Char.Alignment.ENEMY && !mob.properties().contains(Char.Property.MINIBOSS)) {
+					count += mob.spawningWeight();
+				}
+			}
+
+			if (count < 100) {
+
+				Mob mob = Dungeon.level.createMob();
+				mob.state = mob.WANDERING;
+				mob.pos = Dungeon.level.randomRespawnCell( mob );
+				if (Dungeon.hero.isAlive() && mob.pos != -1 && Dungeon.level.distance(Dungeon.hero.pos, mob.pos) >= 4) {
+					GameScene.add( mob );
+					mob.beckon( Dungeon.hero.pos );
+					Buff.affect(mob, ArenaBuff.class);
+					if (Dungeon.hero.buff(ArenaCounter.class) != null){
+						Dungeon.hero.buff(ArenaCounter.class).countUp(Actor.TICK);
+						int power = (int) Dungeon.hero.buff(ArenaCounter.class).count();
+						if (power >= 3){
+							for (int i = 0; i < 1 + power/3; i++){
+								Buff.affect(mob, Longsword.HolyExpEffect.class).stacks++;
+							}
+						}
+						if (power >= 5){
+							Buff.affect(mob, Stamina.class, power * 3);
+							mob.aggro(Dungeon.hero);
+						}
+						if (power >= 10){
+							Buff.affect(mob, ElixirOfAquaticRejuvenation.AquaHealing.class)
+									.set(power*5);
+						}
+						if (power >= 13){
+							Buff.affect(mob, Overload.class, 200f);
+						}
+						if (power >= 20){
+							Buff.affect(mob, RageShield.class).set(power*4);
+						}
+					}
+				}
+			}
+			spend(Dungeon.level.respawnCooldown() / 5f);
+			return true;
+		}
 	}
 }

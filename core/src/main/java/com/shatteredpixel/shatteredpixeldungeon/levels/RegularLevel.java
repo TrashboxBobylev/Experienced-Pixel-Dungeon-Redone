@@ -649,7 +649,7 @@ public abstract class RegularLevel extends Level {
 		for (Heap h : heaps.valueList()){
 			if (h.autoExplored) continue;
 
-			if (!h.seen || (h.type != Heap.Type.HEAP && h.type != Heap.Type.FOR_SALE && h.type != Heap.Type.CRYSTAL_CHEST)){
+			if (!h.seen || (h.type != Heap.Type.HEAP && !h.type.forSale() && h.type != Heap.Type.CRYSTAL_CHEST)){
 				return false;
 			}
 			for (Item i : h.items){

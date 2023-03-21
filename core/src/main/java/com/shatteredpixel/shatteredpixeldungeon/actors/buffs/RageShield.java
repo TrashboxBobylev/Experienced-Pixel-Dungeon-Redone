@@ -120,7 +120,7 @@ public class RageShield extends Buff {
             }
 
             for (Char ch : affected){
-                if (left > 0 && ch.alignment == Char.Alignment.ENEMY && target.HP < target.HT) {
+                if (left > 0 && ch.alignment != target.alignment && target.HP < target.HT) {
                     target.sprite.parent.add(new Beam.HealthRay(target.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(ch.pos)));
                     float drain = ch.HT / 20f + 1;
                     if (Dungeon.level.adjacent(target.pos, ch.pos)){

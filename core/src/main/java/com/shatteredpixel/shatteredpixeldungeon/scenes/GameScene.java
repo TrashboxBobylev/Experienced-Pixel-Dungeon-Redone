@@ -1510,6 +1510,7 @@ public class GameScene extends PixelScene {
 						textLines.add(0, Messages.get(GameScene.class, "pick_up"));
 						break;
 					case FOR_SALE:
+					case FOR_ARENA_SALE:
 						textLines.add(0, Messages.get(GameScene.class, "purchase"));
 						break;
 					default:

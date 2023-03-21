@@ -885,7 +885,8 @@ if (bundle.contains( "respawner" )){
 				GameScene.add( heap );
 			}
 			
-		} else if (heap.type == Heap.Type.LOCKED_CHEST || heap.type == Heap.Type.CRYSTAL_CHEST) {
+		} else if (heap.type == Heap.Type.LOCKED_CHEST || heap.type == Heap.Type.CRYSTAL_CHEST
+			|| heap.type == Heap.Type.FOR_ARENA_SALE) {
 			
 			int n;
 			do {

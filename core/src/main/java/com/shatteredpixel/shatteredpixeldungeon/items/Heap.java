@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.DocumentPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
@@ -53,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Reflection;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +68,12 @@ public class Heap implements Bundlable {
 		CRYSTAL_CHEST,
 		TOMB,
 		SKELETON,
-		REMAINS
+		REMAINS,
+		FOR_ARENA_SALE;
+
+		public boolean forSale(){
+			return this == FOR_ARENA_SALE || this == FOR_SALE;
+		}
 	}
 	public Type type = Type.HEAP;
 	
@@ -129,6 +134,10 @@ public class Heap implements Bundlable {
 			destroy();
 			return null;
 		}
+		if (type == Type.FOR_ARENA_SALE) {
+			Item clone = getClone(items.peek());
+			items.addFirst(clone);
+		}
 		Item item = items.removeFirst();
 		if (items.isEmpty()) {
 			destroy();
@@ -138,14 +147,22 @@ public class Heap implements Bundlable {
 		
 		return item;
 	}
-	
+
+	public static Item getClone(Item toClone) {
+		Bundle lol = new Bundle();
+		toClone.storeInBundle(lol);
+		Item clone = Reflection.newInstance(toClone.getClass());
+		clone.restoreFromBundle(lol);
+		return clone;
+	}
+
 	public Item peek() {
 		return items.peek();
 	}
 	
 	public void drop( Item item ) {
 		
-		if (item.stackable && type != Type.FOR_SALE) {
+		if (item.stackable && !type.forSale()) {
 			
 			for (Item i : items) {
 				if (i.isSimilar( item )) {
@@ -158,7 +175,7 @@ public class Heap implements Bundlable {
 		}
 
 		//lost backpack must always be on top of a heap
-		if ((item.dropsDownHeap && type != Type.FOR_SALE) || peek() instanceof LostBackpack) {
+		if ((item.dropsDownHeap && !type.forSale()) || peek() instanceof LostBackpack) {
 			items.add( item );
 		} else {
 			items.addFirst( item );
@@ -358,6 +375,7 @@ public class Heap implements Bundlable {
 	public String title(){
 		switch(type){
 			case FOR_SALE:
+			case FOR_ARENA_SALE:
 				Item i = peek();
 				if (size() == 1) {
 					return Messages.get(this, "for_sale", Shopkeeper.sellPrice(i), i.title());
