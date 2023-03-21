@@ -34,10 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
@@ -60,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMi
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -2321,6 +2319,34 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (foresight){
 			GameScene.updateFog(pos, Foresight.DISTANCE+1);
+		}
+
+		if (perks.contains(Perks.Perk.RAT_SUMMONS)){
+			ArrayList<Integer> spawnPoints = new ArrayList<>();
+
+			for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+				int p = pos + PathFinder.NEIGHBOURS8[i];
+				if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+					spawnPoints.add( p );
+				}
+			}
+
+			int ratsToSpawn = Dungeon.cycle+1;
+
+			while (ratsToSpawn > 0 && spawnPoints.size() > 0) {
+				int index = Random.index( spawnPoints );
+
+				Rat rat = new Rat();
+				rat.alignment = Char.Alignment.ALLY;
+				rat.state = rat.HUNTING;
+				Buff.affect(rat, AscensionChallenge.AscensionBuffBlocker.class);
+				GameScene.add( rat );
+				ScrollOfTeleportation.appear( rat, spawnPoints.get( index ) );
+				Buff.affect(rat, Adrenaline.class, 25f);
+
+				spawnPoints.remove( index );
+				ratsToSpawn--;
+			}
 		}
 
 		return smthFound;
