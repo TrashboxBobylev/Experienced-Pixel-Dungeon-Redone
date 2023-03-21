@@ -2321,7 +2321,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			GameScene.updateFog(pos, Foresight.DISTANCE+1);
 		}
 
-		if (perks.contains(Perks.Perk.RAT_SUMMONS)){
+		if (perks.contains(Perks.Perk.RAT_SUMMONS) && intentional){
 			ArrayList<Integer> spawnPoints = new ArrayList<>();
 
 			for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
