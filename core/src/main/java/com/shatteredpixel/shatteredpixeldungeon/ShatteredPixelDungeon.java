@@ -49,6 +49,14 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+		//pre-v2.14
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel.class,
+				"com.shatteredpixel.shatteredpixeldungeon.levels.OldCavesBossLevel" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel.ArenaBuff.class,
+				"com.shatteredpixel.shatteredpixeldungeon.levels.OldCavesBossLevel$ArenaBuff" );
+
 		//pre-v1.3.0
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding.class,
