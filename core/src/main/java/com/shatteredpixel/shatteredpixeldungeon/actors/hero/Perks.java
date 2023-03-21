@@ -144,6 +144,14 @@ public class Perks {
         return num;
     }
 
+    public static void debugEarnPerk(String string){
+        Perk perk = Perk.valueOf(string);
+        Dungeon.hero.perks.add(perk);
+        GLog.p(Messages.get(Perks.class, "perk_obtain", perk.toString()));
+        if (Dungeon.hero.sprite != null)
+            Dungeon.hero.sprite.emitter().burst(Speck.factory(Speck.STAR), 20);
+    }
+
     public static void earnPerk(Hero hero){
         if (hero.perks.size() < Perk.values().length && hero.lvl == nextPerkLevel()){
             Perk perk;
