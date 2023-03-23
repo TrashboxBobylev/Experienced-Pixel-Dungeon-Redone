@@ -66,7 +66,8 @@ public class Perks {
         MORE_BAG,
         NO_ONESHOTS,
         COLLECT_EVERYTHING,
-        RAT_SUMMONS;
+        RAT_SUMMONS,
+        GRASS_HEALING;
 
         public String desc() {
             return Messages.get(Perks.class, name() + ".desc");

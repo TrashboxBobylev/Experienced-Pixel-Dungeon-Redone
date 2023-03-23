@@ -57,10 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.GameMath;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -469,6 +466,35 @@ public enum Talent {
 			} else {
 				int shieldToGive = Math.round( hero.HT * (0.025f * (1+hero.pointsInTalent(RESTORED_WILLPOWER))));
 				Buff.affect(hero, Barrier.class).setShield(shieldToGive);
+			}
+		}
+		if (hero.perks.contains(Perks.Perk.GRASS_HEALING)){
+			int radius = 2;
+			Rect update = new Rect(
+					(hero.pos % Dungeon.level.width()) - radius,
+					(hero.pos / Dungeon.level.width()) - radius,
+					(hero.pos % Dungeon.level.width()) - radius + 2*radius,
+					(hero.pos / Dungeon.level.width()) - radius + 2*radius);
+			for (Point lol: update.getPoints()){
+				int cell = Dungeon.level.pointToCell(lol);
+				Char ch = Actor.findChar(cell);
+				if (ch != null && ch.alignment == Char.Alignment.ENEMY){
+					Buff.affect(ch, Roots.class, 3f);
+				}
+				if (Dungeon.level.map[cell] == Terrain.EMPTY ||
+						Dungeon.level.map[cell] == Terrain.EMBERS ||
+						Dungeon.level.map[cell] == Terrain.EMPTY_DECO){
+					Level.set(cell, Terrain.GRASS);
+					GameScene.updateMap(cell);
+				}
+				CellEmitter.get(cell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
+				int t = Dungeon.level.map[cell];
+				if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
+						|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS)
+						&& Dungeon.level.plants.get(cell) == null){
+					Level.set(cell, Terrain.HIGH_GRASS);
+					GameScene.updateMap(cell);
+				}
 			}
 		}
 		if (hero.hasTalent(RESTORED_NATURE)){
