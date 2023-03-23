@@ -152,8 +152,11 @@ public class Bbat extends Mob {
                 target = Dungeon.hero.pos;
                 //always move towards the hero when wandering
                 if (getCloser( target )) {
-                    if (target != Dungeon.hero.pos)
-                        spend( 1 / speed() );
+                    if (target != Dungeon.hero.pos) {
+                        spend(1 / speed());
+                    } else {
+                        spend(1 / 100f);
+                    }
                     return moveSprite( oldPos, pos );
                 } else {
                     spend( TICK );
