@@ -125,7 +125,7 @@ if (sprite != null) {
 
 	//shopkeepers are greedy!
 	public static int sellPrice(Item item){
-		return item.value() * 5 * (Dungeon.depth / 5 + 1);
+		return item.value() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
 	}
 
 	public static WndBag sell() {
