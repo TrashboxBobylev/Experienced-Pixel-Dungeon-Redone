@@ -94,7 +94,7 @@ public class WandOfFrost extends DamageWand {
 				float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
 				damage = (int)Math.round(damage * Math.pow(0.9333f, chillturns));
 			} else {
-				ch.sprite.burst( 0xFF99CCFF, (int) Math.sqrt(buffedLvl() / 2 + 2));
+				ch.sprite.burst( 0xFF99CCFF, (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
 			}
 
 			wandProc(ch, chargesPerCast());

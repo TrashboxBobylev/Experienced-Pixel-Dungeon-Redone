@@ -94,7 +94,7 @@ public class WandOfTransfusion extends Wand {
 				
 				ch.HP += healing;
 				
-				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING),  (int) Math.sqrt(2 + buffedLvl() / 2));
+				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING),  (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
 				ch.sprite.showStatus(CharSprite.POSITIVE, "+%dHP", healing + shielding);
 				
 				if (!freeCharge) {
@@ -113,12 +113,13 @@ public class WandOfTransfusion extends Wand {
 				if (!ch.properties().contains(Char.Property.UNDEAD)) {
 					Charm charm = Buff.affect(ch, Charm.class, Charm.DURATION/2f);
 					charm.object = curUser.id();
-					charm.ignoreHeroAllies = true;ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f,  (int) Math.sqrt(3 ) );
+					charm.ignoreHeroAllies = true;
+					ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f,  (int) Math.sqrt(3 ) );
 				
 				//harms the undead
 				} else {
 					ch.damage((int) (Random.NormalIntRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
-					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.sqrt(10 + buffedLvl()));
+					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.min(Math.sqrt(10 + buffedLvl()), 1000));
 					Sample.INSTANCE.play(Assets.Sounds.BURNING);
 				}
 
