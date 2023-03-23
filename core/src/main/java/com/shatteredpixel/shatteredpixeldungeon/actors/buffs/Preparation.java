@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroAction;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
@@ -99,6 +100,9 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		}
 		
 		public boolean canKO(Char defender){
+			if (defender instanceof DwarfKing){
+				return defender.HP < defender.HT / 6;
+			}
 			if (defender.properties().contains(Char.Property.MINIBOSS)
 					|| defender.properties().contains(Char.Property.BOSS)){
 				return (defender.HP/(float)defender.HT) < (KOThreshold()/5f);
