@@ -1,16 +1,9 @@
 package com.zrp200.scrollofdebug;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
-import static java.util.Arrays.copyOfRange;
-
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-
-import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-// Commands
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -37,20 +30,24 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
-
 import com.watabou.noosa.Game;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
 import static java.util.Arrays.copyOfRange;
+
+import java.lang.Float;
 
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
