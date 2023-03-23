@@ -91,7 +91,7 @@ public class DwarfKing extends Mob {
                 EXP = 400000;
                 break;
             case 4:
-                HP = HT = 1200000000;
+                HP = HT = 180000000;
                 defenseSkill = 7000;
                 EXP = 99999999;
                 break;
@@ -239,7 +239,7 @@ public class DwarfKing extends Mob {
 					spend(3 * TICK);
 					summonsMade += 2;
 					return true;
-				} else if (shielding() <= (HT * 2 / 3f) && summonsMade < 12){
+				} else if (shielding() <= (HT / 3 * 2) && summonsMade < 12){
 					if (summonsMade == 6) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -255,7 +255,7 @@ public class DwarfKing extends Mob {
 					summonsMade += 3;
 					spend(3*TICK);
 					return true;
-				} else if (shielding() <= (HT / 3f) && summonsMade < 18) {
+				} else if (shielding() <= (HT / 3) && summonsMade < 18) {
 					if (summonsMade == 12) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -289,7 +289,7 @@ public class DwarfKing extends Mob {
 					spend(3 * TICK);
 					summonsMade++;
 					return true;
-				} else if (shielding() <= HT * 2 /3 && summonsMade < 8) {
+				} else if (shielding() <= HT / 3 * 2 && summonsMade < 8) {
 					if (summonsMade == 4) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -509,8 +509,10 @@ public class DwarfKing extends Mob {
 
 		if (phase == 1) {
 			int dmgTaken = preHP - HP;
-			abilityCooldown -= dmgTaken/8f;
-			summonCooldown -= dmgTaken/8f;
+			if (Dungeon.cycle == 0) {
+				abilityCooldown -= dmgTaken / 8f;
+				summonCooldown -= dmgTaken / 8f;
+			}
 			if (HP <= HT / 6) {
 				HP = HT / 6;
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
@@ -791,7 +793,7 @@ public class DwarfKing extends Mob {
 			super.detach();
 			for (Mob m : Dungeon.level.mobs){
 				if (m instanceof DwarfKing){
-					int damage = m.HT / 12;
+					int damage = m.HT / (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 18 : 12);
 					m.damage(damage, this);
 				}
 			}
