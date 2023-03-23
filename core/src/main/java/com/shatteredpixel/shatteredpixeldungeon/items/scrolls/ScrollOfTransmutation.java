@@ -57,6 +57,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 public class ScrollOfTransmutation extends InventoryScroll {
 	
 	{
@@ -90,28 +92,28 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		} else {
 			if (result != item) {
 				int slot = Dungeon.quickslot.getSlot(item);
-				if (item.isEquipped(Dungeon.hero)) {
+				if (item.isEquipped(hero)) {
 					item.cursed = false; //to allow it to be unequipped
-					if (item instanceof KindOfWeapon && Dungeon.hero.belongings.secondWep() == item){
-						((EquipableItem) item).doUnequip(Dungeon.hero, false);
-						((KindOfWeapon) result).equipSecondary(Dungeon.hero);
+					if (item instanceof KindOfWeapon && hero.belongings.secondWep() == item){
+						((EquipableItem) item).doUnequip(hero, false);
+						((KindOfWeapon) result).equipSecondary(hero);
 					} else {
-						((EquipableItem) item).doUnequip(Dungeon.hero, false);
-						((EquipableItem) result).doEquip(Dungeon.hero);
+						((EquipableItem) item).doUnequip(hero, false);
+						((EquipableItem) result).doEquip(hero);
 					}
-					Dungeon.hero.spend(-Dungeon.hero.cooldown()); //cancel equip/unequip time
+					hero.spend(-hero.cooldown()); //cancel equip/unequip time
 				} else {
-					item.detach(Dungeon.hero.belongings.backpack);
+					item.detach(hero.belongings.backpack);
 					if (!result.collect()) {
 						Dungeon.level.drop(result, curUser.pos).sprite.drop();
-					} else if (Dungeon.hero.belongings.getSimilar(result) != null){
-						result = Dungeon.hero.belongings.getSimilar(result);
+					} else if (hero.belongings.getSimilar(result) != null){
+						result = hero.belongings.getSimilar(result);
 					}
 				}
 				if (slot != -1
 						&& result.defaultAction() != null
 						&& !Dungeon.quickslot.isNonePlaceholder(slot)
-						&& Dungeon.hero.belongings.contains(result)){
+						&& hero.belongings.contains(result)){
 					Dungeon.quickslot.setSlot(slot, result);
 				}
 			}
@@ -242,19 +244,27 @@ public class ScrollOfTransmutation extends InventoryScroll {
 	}
 	
 	private static Artifact changeArtifact( Artifact a ) {
-		Artifact n;
+		Artifact n, m = null;
+		if (a.isEquipped(hero)){
+			if (hero.belongings.artifact() == a && hero.belongings.misc() instanceof Artifact)
+				m = (Artifact) hero.belongings.misc();
+			else if (hero.belongings.misc() == a && hero.belongings.artifact() != null)
+				m = hero.belongings.artifact();
+		}
+
 		do {
 			n = Generator.randomArtifact();
-		} while ( n != null && (Challenges.isItemBlocked(n) || n.getClass() == a.getClass()));
+		} while ( n != null && ((m != null && n.getClass() == m.getClass()) ||
+				Challenges.isItemBlocked(n) || n.getClass() == a.getClass()));
 		
 		if (n != null){
 
 			if (a instanceof DriedRose){
 				if (((DriedRose) a).ghostWeapon() != null){
-					Dungeon.level.drop(((DriedRose) a).ghostWeapon(), Dungeon.hero.pos);
+					Dungeon.level.drop(((DriedRose) a).ghostWeapon(), hero.pos);
 				}
 				if (((DriedRose) a).ghostArmor() != null){
-					Dungeon.level.drop(((DriedRose) a).ghostArmor(), Dungeon.hero.pos);
+					Dungeon.level.drop(((DriedRose) a).ghostArmor(), hero.pos);
 				}
 			}
 
