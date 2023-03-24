@@ -34,6 +34,6 @@ public class Blacky extends NewsArticle {
                 "_-_ You can now combine different items to get their combined levels in one item! There is two rules, that determine, which item should receive upgrades:\n" +
                 "More powerful item gets upgrades, like plate armor will inherit level from mail armor.\n" +
                 "If items are equal or simply don't have tiers, the highest upgraded item gets all upgrades. This doesn't apply to fishing rods, they will inherit upgrades from other item in any case.\n\n" +
-                "_-_Another change is blacksmith being infinite. You can use his offering on as many items as you wish.";
+                "_-_ Another change is blacksmith being infinite. You can use his offering on as many items as you wish, but you need to pay some money to use reforging.";
     }
 }

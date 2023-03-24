@@ -40,6 +40,7 @@ public class Overhaul extends NewsArticle {
                 "_-_ _Mace_ have immense might that allows it to shoot laser beams on attacks.\n\n"+
                 "_-_ _Warhammers_ are extremely strong, but stun both attacker and target.\n\n"+
                 "_-_ _Shields_ will reflect magical damage dealt to their owner.\n\n"+
+                "_-_ _Longsword_ will slash adjacent enemies with holy damage that triggers enchantments.\n\n"+
                 "_-_ _Stone Gauntlets_ deal lightning damage to nearby enemies.\n\n"+
                 "_-_ _Whips_ will attack 3 times per turn with 8 tiles range but deal less damage with higher distance.\n\n"+
                 "_-_ _Displacing Dart_ can ignore walls and other enemies, but get damage penalty.\n\n" +

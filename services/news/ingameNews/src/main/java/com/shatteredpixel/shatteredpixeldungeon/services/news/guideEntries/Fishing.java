@@ -35,6 +35,6 @@ public class Fishing extends NewsArticle {
                 "_-_ To start, use CAST action on fishing rod and point into water. There should be a fishing hook on this water.\n\n" +
                 "_-_ Now simple wait (in-game turns, not real time), until the hook will glow. It's time to use UNCAST action.\n\n" +
                 "_-_ The hook will grab some item on it's way and drop it right under your foots.\n\n" +
-                "There is a fishing rods for each stage of game (not chapters, but cycles, of which we will get talk later).";
+                "There is a fishing rods for each stage of game (not chapters, but cycles, of which we will get to talk later).";
     }
 }

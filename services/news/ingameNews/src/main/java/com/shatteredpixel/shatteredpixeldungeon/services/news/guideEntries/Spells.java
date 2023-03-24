@@ -32,7 +32,7 @@ public class Spells extends NewsArticle {
         icon ="ITEM: 420";
         summary = "You can make or find three new spells.\n\n" +
                 "_-_ _Vampirism_ drains health from enemy and gives it back in form of regeneration.\n\n" +
-                "_-_ _Overpopulation_ decreased timer of mob's respawn and their max amount on the floor.\n\n" +
+                "_-_ _Overpopulation_ decreased timer of mob's respawn and increases their max amount on the floor.\n\n" +
                 "_-_ _Fire Empower_ increases fire's damage by 10% with each usage.";
     }
 }
