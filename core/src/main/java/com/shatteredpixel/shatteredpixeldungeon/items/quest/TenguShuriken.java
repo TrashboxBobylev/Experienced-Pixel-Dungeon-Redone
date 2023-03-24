@@ -38,7 +38,7 @@ public class TenguShuriken extends MissileWeapon {
         hitSound = Assets.Sounds.HIT_STAB;
         hitSoundPitch = 1.4f;
 
-        tier = 2;
+        internalTier = tier = 2;
         baseUses = 25;
     }
 
