@@ -29,9 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RustyShield;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.SuperPickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ReclaimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -54,7 +56,10 @@ public class DM300TreasureBag extends TreasureBag {
         if (Dungeon.cycle > 0){
             if (!Dungeon.LimitedDrops.DM_DROPS.dropped()){
                 items.add(new CapeOfThorns());
-                items.add(new RustyShield());;
+                items.add(new RustyShield());
+                if (Dungeon.cycle > 1){
+                    items.add(new SuperPickaxe());
+                }
                 Dungeon.LimitedDrops.DM_DROPS.drop();
             }
             for (int i = 0; i < 20; i++) items.add(Generator.randomUsingDefaults(Generator.Category.SCROLL).random());
@@ -62,6 +67,10 @@ public class DM300TreasureBag extends TreasureBag {
             items.add(Generator.randomUsingDefaults(Generator.Category.FOOD));
             items.add(new ReclaimTrap().quantity(10));
             items.add(new CurseInfusion().quantity(10));
+        }
+        if (Dungeon.cycle > 1){
+            items.add(new MetalShard().quantity(Random.Int(5, 15)));
+            for (int i = 0; i < 50; i++) items.add(Generator.random(Bomb.class));
         }
         return items;
     }
