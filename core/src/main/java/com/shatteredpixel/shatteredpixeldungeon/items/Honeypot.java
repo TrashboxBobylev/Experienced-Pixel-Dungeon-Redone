@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -119,6 +120,10 @@ public class Honeypot extends Item {
 			Bee bee = new Bee();
 			bee.spawn( Dungeon.scalingDepth() );
 			bee.setPotInfo( pos, owner );
+			if (Dungeon.hero.perks.contains(Perks.Perk.FRIENDLY_BEES)){
+				bee.alignment = Char.Alignment.ALLY;
+				bee.setPotInfo(-1, null);
+			}
 			bee.HP = bee.HT;
 			bee.pos = newPos;
 			
