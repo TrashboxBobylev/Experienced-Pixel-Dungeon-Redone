@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -91,6 +92,8 @@ public class Electricity extends Blob {
 							((Wand) toShock).gainCharge(0.333f);
 						} else if (toShock instanceof MagesStaff){
 							((MagesStaff) toShock).gainCharge(0.333f);
+						} else if (toShock instanceof TenguBomb){
+							((TenguBomb) toShock).gainCharge(0.333f);
 						}
 					}
 					

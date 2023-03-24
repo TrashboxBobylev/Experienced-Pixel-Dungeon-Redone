@@ -29,6 +29,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguShuriken;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -55,6 +57,10 @@ public class TenguTreasureBag extends TreasureBag {
             items.add(new TenguShuriken().random().quantity(Random.Int(1, 3)));
             for (int i = 0; i < 8; i++) items.add(Generator.randomUsingDefaults(Generator.Category.MISSILE));
             for (int i = 0; i < 2; i++) items.add(Generator.randomUsingDefaults(Generator.Category.WEAPON));
+        }
+        if (Dungeon.cycle > 1){
+            items.add(new TenguBomb());
+            for (int i = 0; i < 16; i++) items.add(new Bomb());
         }
         return items;
     }

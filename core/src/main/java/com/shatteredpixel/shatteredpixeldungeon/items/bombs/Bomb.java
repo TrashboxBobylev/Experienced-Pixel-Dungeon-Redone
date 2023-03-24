@@ -79,7 +79,7 @@ public class Bomb extends Item {
 	public Fuse fuse;
 
 	//FIXME using a static variable for this is kinda gross, should be a better way
-	private static boolean lightingFuse = false;
+	public static boolean lightingFuse = false;
 
 	private static final String AC_LIGHTTHROW = "LIGHTTHROW";
 
@@ -183,10 +183,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = (int) (Dungeon.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2)*Dungeon.fireDamage);
-				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
-					dmg *= 2.5f;
-				}
+				int dmg = damageRoll();
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -213,7 +210,23 @@ public class Bomb extends Item {
 			}
 		}
 	}
-	
+
+	public static int damageRoll() {
+		int dmg = (Dungeon.NormalIntRange(minDamage(), maxDamage()));
+		if (Dungeon.hero.heroClass == HeroClass.ROGUE){
+			dmg *= 2.5f;
+		}
+		return dmg;
+	}
+
+	public static int maxDamage() {
+		return Math.round((10 + Dungeon.scalingDepth() * 2)*Dungeon.fireDamage);
+	}
+
+	public static int minDamage() {
+		return Math.round((5 + Dungeon.scalingDepth())*Dungeon.fireDamage);
+	}
+
 	@Override
 	public boolean isUpgradable() {
 		return false;
