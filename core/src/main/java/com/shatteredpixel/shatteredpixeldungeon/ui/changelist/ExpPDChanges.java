@@ -39,9 +39,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.TenguTreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
@@ -57,7 +59,65 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.11.4", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.14", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released March 24th, 2023\n" +
+                        "_-_ 50 days after Experienced Pixel Dungeon 2.11.4\n" +
+                        "_-_ 225 days after Experienced Pixel Dungeon 2.11\n" +
+                        "\n" +
+                        "This release ports Shattered 2.0 and finally adds some new content into the game."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                "Ported changes from Shattered 2.0.\n\n" +
+                        "_-_ This includes Duelist, Pickaxe rework, misc item buffs and improvements."));
+        changes.addButton( new ChangeButton(new ItemSprite(new TicketToArena()), "Arena Changes",
+                        "Overhauled arena to make it more exciting to play:\n\n"+
+                        "_-_ Increased spawn rate from 400% to 500%.\n" +
+                        "_-_ Added the mechanic of increasing mob's aggression and power with amount of monsters already spawned.\n" +
+                        "_-_ Arena shop items are no longer actually consumed.\n" +
+                        "_-_ Removed reduced view distance and EXP nerf."));
+        changes.addButton( new ChangeButton(new Image(Assets.Interfaces.BUFFS_LARGE, 80, 32, 16, 16), "Perks",
+                        "_-_ Added Ratforcements, Magnetic Meal, Friendly Bees and Restored Nature perks." ));
+        changes.addButton( new ChangeButton(new ItemSprite(new TenguTreasureBag()), "Treasure Bag additions",
+                "Added some new stuff into boss treasure bags on second cycle:\n\n" +
+                        "_-_ _Electrical Explosive_ (Tengu) is reusable bomb that arcs over enemies and charges up, but accumulates the chance to break.\n" +
+                        "_-_ _Throwing Mining Tool_ (DM-300) is special tool that can be thrown into walls or enemies to destroy them. It cannot pierce through walls.\n" +
+                        "_-_ _Creature Summoning Beacon_ (Dwarf King) is lost technology that allows to increase enemy spawn rate and their limit to ludicrous numbers. Use with care."));
+        changes.addButton( new ChangeButton(new ItemSprite(new Longsword()), "Weapon changes",
+                        "_-_ Most of weapons changed by Experienced Redone also have their Duelist weapon ability changed to fit better with the mod.\n" +
+                                "_-_ Longsword has been overhauled to damage several enemies at once, akin to Minecraft's sweeping edge swords; its Duelist ability was also changed to cast a cone of holy energy that inflicts special debuff, which increases the damage done to enemies and their experience drops.\n" +
+                                "_-_ Mage's Staff gets rapier lunge as Duelist ability, for Rat King users."));
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.DUELIST, 1), HeroClass.DUELIST.title(),
+                        "_-_ Duelist gets her exclusive perks, both for base class and subclasses.\n" +
+                                "_-_ Rat King now can use weapon abilities and Champion and Monk powers."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.BUFFS), "Other balance tweaks",
+                        "_-_ Blacksmith now requires a payment in gold to be usable. It scales with dungeon cycles.\n" +
+                                "_-_ Nerfed Rat King's experience bar to 4(+4.5 per level).\n" +
+                                "_-_ DM300's pylons damage now scales with Dungeon cycles.\n" +
+                                "_-_ Item prices now scale with Dungeon cycles.\n" +
+                                "_-_ Bee's attack speed now scales with Dungeon cycles.\n" +
+                                "_-_ Dwarf King is now immune to being killed full health by Dirk's preparation.\n" +
+                                "_-_ Monk's max energy is capped at 50."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                        "_-_ Updated the in-game guide with new information.\n" +
+                                "_-_ Capped all wands that have scaled their on-hit particles with level at 1000 particles.\n" +
+                                "_-_ Attempting to fix the issue with transmuting equipped artifacts and getting identical ones.\n" +
+                                "_-_ Attempting to fix cloak of shadows' recharge at high levels.\n" +
+                                "_-_ Fixed the issue with missile weapons causing a crash when being transmuted.\n" +
+                                "_-_ Fixed the issue where DK would get stuck due to arithmetic issues with summoning phase.\n" +
+                                "_-_ Decreased Dwarf King's HP in cycle 4 to 180 millions.\n" +
+                                "_-_ Added the info about fishing rod's stats into description.\n" +
+                                "_-_ Actually made 2.11.2's fishing rod reforge fix work.\n" +
+                                "_-_ Fixed blacksmith not taking different kinds of items.\n" +
+                                "_-_ Bbat now instantly crosses any distances when going back to hero.\n" +
+                                "_-_ Attempt to fix the issue with ability to use certain subclass abilities as Rat King when shouldn't.\n" +
+                                "_-_ Black mimic's level is considered a boss level.\n" +
+                                "_-_ Fadeleaf now chooses true depth while teleporting warden.\n" +
+                                "_-_ Elixir of Luck no longer can replace categories of items, given by questgivers.\n" +
+                                "_-_ Increased the chance of Elixir of Luck's appearing to 0.67%."));
+
+        changes = new ChangeInfo("ExpPD-2.11.4", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
