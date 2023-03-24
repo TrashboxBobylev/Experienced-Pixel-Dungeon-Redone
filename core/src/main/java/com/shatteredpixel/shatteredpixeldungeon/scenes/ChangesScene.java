@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.*;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v2_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
@@ -44,7 +43,7 @@ import java.util.ArrayList;
 
 public class ChangesScene extends PixelScene {
 	
-	public static int changesSelected = 4;
+	public static int changesSelected = 0;
 
 	private NinePatch rightPanel;
 	private IconTitle changeTitle;
@@ -119,7 +118,7 @@ public class ChangesScene extends PixelScene {
 			case 0: default:
 				ExpPDChanges.addAllChanges(changeInfos);
 				break;
-			case 2:
+			case 1:
 				v2_X_Changes.addAllChanges(changeInfos);
 				v1_X_Changes.addAllChanges(changeInfos);
 				v0_9_X_Changes.addAllChanges(changeInfos);
