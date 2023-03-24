@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BeeSprite;
 import com.watabou.utils.Bundle;
@@ -125,6 +124,11 @@ public class Bee extends Mob {
 			((Mob)enemy).aggro( this );
 		}
 		return damage;
+	}
+
+	@Override
+	public float attackDelay() {
+		return super.attackDelay() / (Dungeon.cycle+1);
 	}
 
 	@Override
