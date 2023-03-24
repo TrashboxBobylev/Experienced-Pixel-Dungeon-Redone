@@ -639,7 +639,7 @@ if (bundle.contains( "respawner" )){
 	}
 
 	public float respawnCooldown(){
-		float respawn_timer = Math.max(1f, Dungeon.respawn_timer);
+		float respawn_timer = Dungeon.getRespawnTimer();
 		if (Statistics.amuletObtained){
 			if (Dungeon.depth == 1){
 				//very fast spawns on floor 1! 0/2/4/6/8/10/12, etc.
@@ -656,6 +656,8 @@ if (bundle.contains( "respawner" )){
 	}
 
 	public boolean spawnMob(int disLimit){
+		if (Dungeon.hero.buff(OverloadBeacon.TemporaryOverload.class) != null)
+			disLimit = 0;
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
 		Mob mob = createMob();

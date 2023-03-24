@@ -190,7 +190,7 @@ public abstract class RegularLevel extends Level {
 			else                            return 10;
 		}
 
-		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3);
+		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3) + Dungeon.getAdditionalMobs();
 		if (feeling == Feeling.LARGE){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}

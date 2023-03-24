@@ -25,10 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
+import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.AquaBlast;
@@ -66,6 +63,10 @@ public class DKTreasureBag extends TreasureBag {
             items.add(new AquaBlast().quantity(50));
             items.add(new ArcaneCatalyst().quantity(50));
             items.add(new AlchemicalCatalyst().quantity(50));
+        }
+        if (Dungeon.cycle > 1){
+            items.add(new OverloadBeacon().quantity(2));
+            for (int i = 0; i < 3; i++) items.addAll(new BiggerGambleBag().items());
         }
         return items;
     }

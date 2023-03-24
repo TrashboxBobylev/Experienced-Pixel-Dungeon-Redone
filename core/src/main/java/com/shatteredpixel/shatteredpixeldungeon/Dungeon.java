@@ -32,10 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -169,8 +166,10 @@ public class Dungeon {
 
 	public static int gold;
 	public static int cycle;
+
 	public static float respawn_timer;
 	public static int additionalMobs;
+
 	public static float fireDamage;
 	public static int luck;
 	public static int energy;
@@ -532,6 +531,18 @@ public class Dungeon {
 			Dungeon.droppedItems.put( depth, dropped = new ArrayList<>() );
 		}
 		dropped.add( item );
+	}
+
+	public static float getRespawnTimer() {
+		if (Dungeon.hero.buff(OverloadBeacon.TemporaryOverload.class) != null)
+			return 0.25f;
+		return respawn_timer;
+	}
+
+	public static int getAdditionalMobs() {
+		if (Dungeon.hero.buff(OverloadBeacon.TemporaryOverload.class) != null)
+			return 1000;
+		return additionalMobs;
 	}
 
 	public static boolean posNeeded() {
