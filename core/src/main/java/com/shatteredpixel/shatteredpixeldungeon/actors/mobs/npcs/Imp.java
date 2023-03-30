@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -204,7 +205,8 @@ public class Imp extends NPC {
 		}
 		
 		public static void spawn( CityLevel level ) {
-			if (!spawned && Dungeon.depth > 16 && Random.Int( 20 - Dungeon.depth ) == 0) {
+			if (!spawned && (Dungeon.depth == PsycheChest.questDepth ||
+					(Dungeon.depth > 16 && Random.Int( 20 - Dungeon.depth ) == 0))) {
 				
 				Imp npc = new Imp();
 				do {
@@ -245,6 +247,7 @@ public class Imp extends NPC {
                     case 2: reward.upgrade(29); break;
                 }
 				reward.cursed = true;
+				PsycheChest.questDepth = -1;
 			}
 		}
 		

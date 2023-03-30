@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -284,7 +285,8 @@ public class Ghost extends NPC {
 		}
 		
 		public static void spawn( SewerLevel level ) {
-			if (!spawned && Dungeon.depth > 1 && Dungeon.Int( 5 - Dungeon.depth ) == 0) {
+			if (!spawned && (Dungeon.depth == PsycheChest.questDepth ||
+					(Dungeon.depth > 1 && Dungeon.Int( 5 - Dungeon.depth ) == 0))) {
 				
 				Ghost ghost = new Ghost();
 				do {
@@ -340,6 +342,8 @@ public class Ghost extends NPC {
 					enchant = Weapon.Enchantment.random();
 					glyph = Armor.Glyph.random();
 				}
+
+				PsycheChest.questDepth = -1;
 
 			}
 		}

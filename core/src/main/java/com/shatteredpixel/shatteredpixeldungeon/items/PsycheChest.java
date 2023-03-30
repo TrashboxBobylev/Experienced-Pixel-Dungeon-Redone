@@ -53,6 +53,8 @@ public class PsycheChest extends Item {
 
     private static final ItemSprite.Glowing BLOODY = new ItemSprite.Glowing( 0x550000 );
 
+    public static int questDepth;
+
     @Override
     public ArrayList<String> actions(Hero hero ) {
         ArrayList<String> actions = super.actions( hero );
@@ -91,22 +93,34 @@ public class PsycheChest extends Item {
             switch (Dungeon.depth){
                 case 2: case 3: case 4:
                     for (Mob m: Dungeon.level.mobs){
-                        if (m instanceof Ghost) Ghost.Quest.reset();
+                        if (m instanceof Ghost) {
+                            questDepth = Dungeon.depth;
+                            Ghost.Quest.reset();
+                        }
                     }
                      break;
                 case 7: case 8: case 9:
                     for (Mob m: Dungeon.level.mobs){
-                        if (m instanceof Wandmaker) Wandmaker.Quest.reset();
+                        if (m instanceof Wandmaker) {
+                            questDepth = Dungeon.depth;
+                            Wandmaker.Quest.reset();
+                        }
                     }
                     break;
                 case 12: case 13: case 14:
                     for (Mob m: Dungeon.level.mobs){
-                        if (m instanceof Blacksmith) Blacksmith.Quest.reset();
+                        if (m instanceof Blacksmith) {
+                            questDepth = Dungeon.depth;
+                            Blacksmith.Quest.reset();
+                        }
                     }
                     break;
                 case 17: case 18: case 19:
                     for (Mob m: Dungeon.level.mobs){
-                        if (m instanceof Imp) Imp.Quest.reset();
+                        if (m instanceof Imp) {
+                            questDepth = Dungeon.depth;
+                            Imp.Quest.reset();
+                        }
                     }
                     break;
             }

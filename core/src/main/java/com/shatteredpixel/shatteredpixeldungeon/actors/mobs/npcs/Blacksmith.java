@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.KeyToTruth;
@@ -392,13 +393,15 @@ public class Blacksmith extends NPC {
 		}
 		
 		public static ArrayList<Room> spawn( ArrayList<Room> rooms ) {
-			if (!spawned && Dungeon.depth > 11 && Random.Int( 15 - Dungeon.depth ) == 0) {
+			if (!spawned && (Dungeon.depth == PsycheChest.questDepth ||
+					(Dungeon.depth > 11 && Random.Int( 15 - Dungeon.depth ) == 0))) {
 				
 				rooms.add(new BlacksmithRoom());
 				spawned = true;
                 alternative = Dungeon.cycle == 0 && Random.Int(2) == 0;
 
-				
+
+				PsycheChest.questDepth = -1;
 				given = false;
 				
 			}
