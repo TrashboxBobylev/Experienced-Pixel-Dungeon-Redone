@@ -1695,8 +1695,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	
 	public void earnExp( int exp, Class source ) {
 
-
-
 		this.exp += exp;
 		this.totalExp += exp;
 		float percent = exp/(float)maxExp();
@@ -1742,21 +1740,22 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
         if (totalExp >= neededExp && grinding){
-            boolean souAnnounced = false;
+			int souCount = 0;
 
             while (totalExp >= neededExp ) {
                 totalExp -= neededExp;
-                ScrollOfUpgrade sou = new ScrollOfUpgrade();
-
-                if (!sou.collect()){
-                    Dungeon.level.drop(sou, pos);
-                } else if (!souAnnounced){
-                    GLog.p( Messages.get(this, "you_now_have", sou.name()) );
-					new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
-                    souAnnounced = true;
-                }
+                souCount++;
             }
 
+			ScrollOfUpgrade sou = new ScrollOfUpgrade();
+			sou.quantity(souCount);
+
+			if (!sou.collect()){
+				Dungeon.level.drop(sou, pos);
+			} else {
+				GLog.p( Messages.get(this, "you_now_have", sou.name()) );
+				new Flare(6, 28).color(0x38FF48, true).show(sprite, 3.67f);
+			}
         }
 
 		boolean levelUp = false;
