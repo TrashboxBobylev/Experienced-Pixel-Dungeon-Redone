@@ -801,6 +801,10 @@ public abstract class Mob extends Char {
 			EXP = (int) Math.round(EXP * Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks));
 		}
 
+		if (this.buff(Overload.class) != null) {
+			Dungeon.level.spawnMob(6);
+		}
+
 		if (alignment == Alignment.ENEMY){
 			rollToDropLoot();
 

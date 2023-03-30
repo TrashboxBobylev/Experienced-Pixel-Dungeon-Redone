@@ -591,13 +591,13 @@ if (bundle.contains( "respawner" )){
 
 	private Respawner respawner;
 
-	public Actor respawner(){
+	public Respawner respawner(){
 		return new Respawner();
 	}
 
 	public Actor addRespawner() {
 		if (respawner == null){
-			respawner = (Respawner) respawner();
+			respawner = respawner();
 			Actor.addDelayed(respawner, respawnCooldown());
 		} else {
 			Actor.add(respawner);

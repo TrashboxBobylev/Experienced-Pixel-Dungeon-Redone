@@ -251,7 +251,8 @@ public class ArenaLevel extends Level {
 
 	public static class ArenaCounter extends CounterBuff {}
 	
-	public Actor respawner() {
+	@Override
+	public Respawner respawner() {
         return new ArenaRespawner();
     }
 
