@@ -232,7 +232,7 @@ public class TenguBomb extends Bomb {
             int dmg = Math.round(damageRoll() * 3f * charge * multipler);
 
             target.damage(dmg, new WandOfLightning());
-            if (Random.Float() < 0.6f * charge)
+            if (Random.Float() < 0.6f * charge && target.alignment == Char.Alignment.ENEMY)
                 Buff.affect(target, Longsword.HolyExpEffect.class).stacks++;
             if (target == Dungeon.hero) Camera.main.shake( 2, 0.3f );
             target.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
