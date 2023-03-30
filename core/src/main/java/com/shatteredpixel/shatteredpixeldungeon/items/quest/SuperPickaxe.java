@@ -84,84 +84,86 @@ public class SuperPickaxe extends Item {
         Char enemy = Actor.findChar( cell );
         QuickSlotButton.target(enemy);
 
-        final float delay = castDelay(user, dst);
-        final Item item = this;
+        if (Dungeon.level.insideMap(cell)) {
+            final float delay = castDelay(user, dst);
+            final Item item = this;
 
-        if (enemy != null && new Ballistica( user.pos, enemy.pos, Ballistica.PROJECTILE ).collisionPos == enemy.pos) {
-            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
-                    reset(user.sprite,
-                            enemy.sprite,
-                            item,
-                            new Callback() {
-                                @Override
-                                public void call() {
-                                    boolean success = false;
-                                    curUser = user;
-                                    if (user.attack(enemy, 2.5f, 0, 0.25f)) {
-                                        Sample.INSTANCE.play(Assets.Sounds.HIT);
-                                        success = true;
-                                    }
-                                    Invisibility.dispel();
-                                    if (user.buff(Talent.LethalMomentumTracker.class) != null){
-                                        user.buff(Talent.LethalMomentumTracker.class).detach();
-                                        user.next();
-                                    } else {
-                                        user.spendAndNext(delay);
-                                    }
-                                    if (!success){
-                                        ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
-                                                reset(cell, user.pos,
-                                                        item, new Callback() {
-                                                            @Override
-                                                            public void call() {
-
-                                                            }
-                                                        });
-                                    }
-                                }
-                            });
-        } else {
-            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
-                    reset(user.sprite,
-                            cell,
-                            item,
-                            new Callback() {
-                                @Override
-                                public void call() {
-                                    curUser = user;
-                                    boolean success = false;
-                                    if (cell != Dungeon.level.entrance && cell != Dungeon.level.exit
-                                            && !Dungeon.level.openSpace[cell]){
-                                        int tile = Dungeon.level.map[cell];
-                                        Level.set(cell, Terrain.EMPTY);
-                                        if (new Ballistica( user.pos, cell, Ballistica.PROJECTILE ).collisionPos ==
-                                            cell) {
+            if (enemy != null && new Ballistica( user.pos, enemy.pos, Ballistica.PROJECTILE ).collisionPos == enemy.pos) {
+                ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                        reset(user.sprite,
+                                enemy.sprite,
+                                item,
+                                new Callback() {
+                                    @Override
+                                    public void call() {
+                                        boolean success = false;
+                                        curUser = user;
+                                        if (user.attack(enemy, 2.5f, 0, 0.25f)) {
+                                            Sample.INSTANCE.play(Assets.Sounds.HIT);
                                             success = true;
-                                            Dungeon.level.buildFlagMaps();
-                                            Dungeon.level.cleanWalls();
-                                            GameScene.updateMap();
-                                            CellEmitter.bottom(cell).burst(Speck.factory(Speck.ROCK), 4);
-                                            Sample.INSTANCE.play(Assets.Sounds.ROCKS);
-                                            Camera.main.shake(3, 0.7f);
+                                        }
+                                        Invisibility.dispel();
+                                        if (user.buff(Talent.LethalMomentumTracker.class) != null){
+                                            user.buff(Talent.LethalMomentumTracker.class).detach();
+                                            user.next();
                                         } else {
-                                            Level.set(cell, tile);
+                                            user.spendAndNext(delay);
+                                        }
+                                        if (!success){
+                                            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                                                    reset(cell, user.pos,
+                                                            item, new Callback() {
+                                                                @Override
+                                                                public void call() {
+
+                                                                }
+                                                            });
                                         }
                                     }
-                                    user.spendAndNext(delay);
-                                    if (!success){
-                                        Sample.INSTANCE.play(Assets.Sounds.MISS);
-                                        ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
-                                                reset(cell,
-                                                        user.pos,
-                                                        item, new Callback() {
-                                                            @Override
-                                                            public void call() {
+                                });
+            } else {
+                ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                        reset(user.sprite,
+                                cell,
+                                item,
+                                new Callback() {
+                                    @Override
+                                    public void call() {
+                                        curUser = user;
+                                        boolean success = false;
+                                        if (cell != Dungeon.level.entrance && cell != Dungeon.level.exit
+                                                && !Dungeon.level.openSpace[cell]){
+                                            int tile = Dungeon.level.map[cell];
+                                            Level.set(cell, Terrain.EMPTY);
+                                            if (new Ballistica( user.pos, cell, Ballistica.PROJECTILE ).collisionPos ==
+                                                cell) {
+                                                success = true;
+                                                Dungeon.level.buildFlagMaps();
+                                                Dungeon.level.cleanWalls();
+                                                GameScene.updateMap();
+                                                CellEmitter.bottom(cell).burst(Speck.factory(Speck.ROCK), 4);
+                                                Sample.INSTANCE.play(Assets.Sounds.ROCKS);
+                                                Camera.main.shake(3, 0.7f);
+                                            } else {
+                                                Level.set(cell, tile);
+                                            }
+                                        }
+                                        user.spendAndNext(delay);
+                                        if (!success){
+                                            Sample.INSTANCE.play(Assets.Sounds.MISS);
+                                            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                                                    reset(cell,
+                                                            user.pos,
+                                                            item, new Callback() {
+                                                                @Override
+                                                                public void call() {
 
-                                                            }
-                                                        });
+                                                                }
+                                                            });
+                                        }
                                     }
-                                }
-                            });
+                                });
+            }
         }
     }
 }
