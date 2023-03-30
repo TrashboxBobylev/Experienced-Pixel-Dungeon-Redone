@@ -59,7 +59,28 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.14", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released March 31st, 2023\n" +
+                        "_-_ 7 days after Experienced Pixel Dungeon 2.14"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                        "_-_ Fixed Throwing Mining Tool crashing the game when thrown out of map.\n" +
+                                "_-_ Magnetic Meal now only picks up items from regular heaps.\n" +
+                                "_-_ Fixed Wrath of Excalibur buff not granting bonus experience from enemies.\n" +
+                                "_-_ Fixed Electrical Explosive inflicting Wrath of Excalibur on player's allies and player themselves.\n" +
+                                "_-_ Fixed fishing rods not listing their full fishing power.\n" +
+                                "_-_ Fixed misc crashes on Black Mimic boss.\n" +
+                                "_-_ Fate Lock now can properly reset and respawn questgiver NPCs.\n" +
+                                "_-_ Fixed Broken Seal not being reapplied on rat king's armor, when he gets class armor.\n" +
+                                "_-_ Fixed crash with Mace if its beam cannot reach its target somehow.\n" +
+                                "_-_ Fixed Overload buff not working on Arena monsters.\n" +
+                                "_-_ Significantly optimized getting Scrolls of Upgrade from Fate Lock's grinding functionality."
+                ));
+
+
+        changes = new ChangeInfo("ExpPD-2.14", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
