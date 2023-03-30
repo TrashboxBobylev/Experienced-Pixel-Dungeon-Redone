@@ -420,27 +420,28 @@ public class BlackMimic extends Mob {
 	}
 
 	public void ventGas( Char target ){
-		Dungeon.hero.interrupt();
+		if (target != null) {
+			Dungeon.hero.interrupt();
 
-		int gasVented = 0;
+			int gasVented = 0;
 
-		Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
+			Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
-		for (int i : trajectory.subPath(0, trajectory.dist)){
-			GameScene.add(Blob.seed(i, 200, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
-			gasVented += 20;
-		}
-
-		GameScene.add(Blob.seed(trajectory.collisionPos, 290, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
-
-		if (gasVented < 250){
-			int toVentAround = (int)Math.ceil((250 - gasVented)/8f);
-			for (int i : PathFinder.NEIGHBOURS8){
-				GameScene.add(Blob.seed(pos+i, toVentAround, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
+			for (int i : trajectory.subPath(0, trajectory.dist)) {
+				GameScene.add(Blob.seed(i, 200, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
+				gasVented += 20;
 			}
 
-		}
+			GameScene.add(Blob.seed(trajectory.collisionPos, 290, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
 
+			if (gasVented < 250) {
+				int toVentAround = (int) Math.ceil((250 - gasVented) / 8f);
+				for (int i : PathFinder.NEIGHBOURS8) {
+					GameScene.add(Blob.seed(pos + i, toVentAround, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
+				}
+
+			}
+		}
 	}
 
 	public void onSlamComplete(){
@@ -455,62 +456,64 @@ public class BlackMimic extends Mob {
 
 	public void dropRocks( Char target ) {
 
-		Dungeon.hero.interrupt();
-		final int rockCenter;
+		if (target != null) {
+			Dungeon.hero.interrupt();
+			final int rockCenter;
 
-		if (Dungeon.level.adjacent(pos, target.pos)){
-			int oppositeAdjacent = target.pos + (target.pos - pos);
-			Ballistica trajectory = new Ballistica(target.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
-			WandOfBlastWave.throwChar(target, trajectory, 2, false, true, getClass());
-			if (target == Dungeon.hero){
-				Dungeon.hero.interrupt();
-			}
-			rockCenter = trajectory.path.get(Math.min(trajectory.dist, 2));
-		} else {
-			rockCenter = target.pos;
-		}
-
-		//we handle this through an actor as it gives us fine-grainted control over when the blog acts vs. when the hero acts
-		//FIXME this is really messy to just get some fine-grained control. would be nice to build this into blob functionality, or just not use blobs for this at all
-		Actor a = new Actor() {
-
-			{
-				actPriority = HERO_PRIO+1;
-			}
-
-			@Override
-			protected boolean act() {
-
-				//pick an adjacent cell to the hero as a safe cell. This cell is less likely to be in a wall or containing hazards
-				int safeCell;
-				do {
-					safeCell = rockCenter + PathFinder.NEIGHBOURS8[Random.Int(8)];
-				} while (safeCell == pos
-						|| (Dungeon.level.solid[safeCell] && Random.Int(2) == 0)
-						|| (Blob.volumeAt(safeCell, BlackMimicLevel.PylonEnergy.class) > 0 && Random.Int(2) == 0));
-
-				int start = rockCenter - Dungeon.level.width() * 3 - 3;
-				int pos;
-				for (int y = 0; y < 7; y++) {
-					pos = start + Dungeon.level.width() * y;
-					for (int x = 0; x < 7; x++) {
-						if (!Dungeon.level.insideMap(pos)) {
-							pos++;
-							continue;
-						}
-						//add rock cell to pos, if it is not solid, and isn't the safecell
-						if (!Dungeon.level.solid[pos] && pos != safeCell && Random.Int(Dungeon.level.distance(rockCenter, pos)) == 0) {
-							//don't want to overly punish players with slow move or attack speed
-							GameScene.add(Blob.seed(pos, 1, FallingRocks.class));
-						}
-						pos++;
-					}
+			if (Dungeon.level.adjacent(pos, target.pos)){
+				int oppositeAdjacent = target.pos + (target.pos - pos);
+				Ballistica trajectory = new Ballistica(target.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
+				WandOfBlastWave.throwChar(target, trajectory, 2, false, true, getClass());
+				if (target == Dungeon.hero){
+					Dungeon.hero.interrupt();
 				}
-				Actor.remove(this);
-				return true;
+				rockCenter = trajectory.path.get(Math.min(trajectory.dist, 2));
+			} else {
+				rockCenter = target.pos;
 			}
-		};
-		Actor.addDelayed(a, Math.min(target.cooldown(), 3*TICK));
+
+			//we handle this through an actor as it gives us fine-grainted control over when the blog acts vs. when the hero acts
+			//FIXME this is really messy to just get some fine-grained control. would be nice to build this into blob functionality, or just not use blobs for this at all
+			Actor a = new Actor() {
+
+				{
+					actPriority = HERO_PRIO+1;
+				}
+
+				@Override
+				protected boolean act() {
+
+					//pick an adjacent cell to the hero as a safe cell. This cell is less likely to be in a wall or containing hazards
+					int safeCell;
+					do {
+						safeCell = rockCenter + PathFinder.NEIGHBOURS8[Random.Int(8)];
+					} while (safeCell == pos
+							|| (Dungeon.level.solid[safeCell] && Random.Int(2) == 0)
+							|| (Blob.volumeAt(safeCell, BlackMimicLevel.PylonEnergy.class) > 0 && Random.Int(2) == 0));
+
+					int start = rockCenter - Dungeon.level.width() * 3 - 3;
+					int pos;
+					for (int y = 0; y < 7; y++) {
+						pos = start + Dungeon.level.width() * y;
+						for (int x = 0; x < 7; x++) {
+							if (!Dungeon.level.insideMap(pos)) {
+								pos++;
+								continue;
+							}
+							//add rock cell to pos, if it is not solid, and isn't the safecell
+							if (!Dungeon.level.solid[pos] && pos != safeCell && Random.Int(Dungeon.level.distance(rockCenter, pos)) == 0) {
+								//don't want to overly punish players with slow move or attack speed
+								GameScene.add(Blob.seed(pos, 1, FallingRocks.class));
+							}
+							pos++;
+						}
+					}
+					Actor.remove(this);
+					return true;
+				}
+			};
+			Actor.addDelayed(a, Math.min(target.cooldown(), 3*TICK));
+		}
 
 	}
 
