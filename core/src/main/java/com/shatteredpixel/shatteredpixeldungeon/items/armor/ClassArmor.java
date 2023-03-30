@@ -100,11 +100,12 @@ abstract public class ClassArmor extends Armor {
 	public static ClassArmor upgrade (Hero owner, Armor armor ) {
 		
 		ClassArmor classArmor = null;
+		BrokenSeal seal = null;
 		
 		switch (owner.heroClass) {
 		case WARRIOR:
 			classArmor = new WarriorArmor();
-			BrokenSeal seal = armor.checkSeal();
+			seal = armor.checkSeal();
 			if (seal != null) {
 				classArmor.affixSeal(seal);
 			}
@@ -118,12 +119,16 @@ abstract public class ClassArmor extends Armor {
 		case HUNTRESS:
 			classArmor = new HuntressArmor();
 			break;
-			case DUELIST:
-				classArmor = new DuelistArmor();
-				break;
-			case RAT_KING:
-				classArmor = new RatKingArmor();
-				break;
+		case DUELIST:
+			classArmor = new DuelistArmor();
+			break;
+		case RAT_KING:
+			classArmor = new RatKingArmor();
+			seal = armor.checkSeal();
+			if (seal != null) {
+				classArmor.affixSeal(seal);
+			}
+			break;
 		}
 		
 		classArmor.level(armor.trueLevel());
