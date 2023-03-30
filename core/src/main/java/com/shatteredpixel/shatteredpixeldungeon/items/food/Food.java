@@ -124,15 +124,17 @@ public class Food extends Item {
 		}
 		if (hero.perks.contains(Perks.Perk.COLLECT_EVERYTHING) && this instanceof SmallRation){
 			for (Heap h : Dungeon.level.heaps.valueList()){
-				Item item = h.peek();
-				if (item.doPickUp(hero, h.pos)) {
-					h.pickUp();
-					hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
-					GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
-				} else {
-					GLog.w(Messages.get(this, "cant_grab"));
-					h.sprite.drop();
-					return;
+				if (h.type == Heap.Type.HEAP) {
+					Item item = h.peek();
+					if (item.doPickUp(hero, h.pos)) {
+						h.pickUp();
+						hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
+						GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
+					} else {
+						GLog.w(Messages.get(this, "cant_grab"));
+						h.sprite.drop();
+						return;
+					}
 				}
 			}
 		}
