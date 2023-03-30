@@ -769,9 +769,6 @@ public abstract class Mob extends Char {
 				if (Dungeon.hero.buff(Bless.class) != null) {
 					exp *= 2;
 				}
-				if (buff(Longsword.HolyExpEffect.class) != null){
-					exp *= Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks);
-				}
 				if (exp > 0) {
 					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
 				}
@@ -798,6 +795,10 @@ public abstract class Mob extends Char {
 			//50% chance to round up, 50% to round down
 			if (EXP % 2 == 1) EXP += Random.Int(2);
 			EXP /= 2;
+		}
+
+		if (buff(Longsword.HolyExpEffect.class) != null){
+			EXP = (int) Math.round(EXP * Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks));
 		}
 
 		if (alignment == Alignment.ENEMY){
