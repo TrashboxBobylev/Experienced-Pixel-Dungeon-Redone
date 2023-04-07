@@ -114,6 +114,22 @@ public class Wandmaker extends NPC {
 						@Override
 						public void hide() {
 							super.hide();
+
+							Item questItem;
+							switch (Quest.type) {
+								case 1:
+								default:
+									questItem = Dungeon.hero.belongings.getItem(CorpseDust.class);
+									break;
+								case 2:
+									questItem = Dungeon.hero.belongings.getItem(Embers.class);
+									break;
+								case 3:
+									questItem = Dungeon.hero.belongings.getItem(Rotberry.Seed.class);
+									break;
+							}
+							questItem.detach( Dungeon.hero.belongings.backpack );
+
 							Dungeon.hero.belongings.getItem(Cheese.class).detach(Dungeon.hero.belongings.backpack);
 							Item wand = new WandOfUnstable().identify();
 							if (wand.doPickUp( Dungeon.hero )) {
