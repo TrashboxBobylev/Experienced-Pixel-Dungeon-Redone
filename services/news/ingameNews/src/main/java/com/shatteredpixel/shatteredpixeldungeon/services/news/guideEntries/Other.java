@@ -40,7 +40,8 @@ public class Other extends NewsArticle {
                 "_-_ _Potion of Mastery_ buffs item's effectiveness by 20%.\n\n" +
                 "_-_ Class armor charges 150% faster.\n\n"+
                 "_-_ Bees will grow more aggressive with cycles, increasing their attack speed.\n\n"+
-                "_-_ _Scroll of Challenge_ is _Scroll of Determination_ now; instead of confusing entities, it applies life-steal shielding to hero.";
+                "_-_ _Scroll of Challenge_ is _Scroll of Determination_ now; instead of confusing entities, it applies life-steal shielding to hero.\n\n" +
+                "_-_ _Scroll of Divination_, once it has done its intended function, will attempt to identify every item in inventory with 33% chance.";
 
     }
 }
