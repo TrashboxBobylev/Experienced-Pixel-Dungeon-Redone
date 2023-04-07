@@ -53,6 +53,7 @@ public class RatKing extends NPC {
 
     public boolean ghastly = false;
     public int counter = 0;
+	public int level = 1;
 
 	{
 		spriteClass = RatKingSprite.class;
@@ -131,15 +132,18 @@ public class RatKing extends NPC {
 		if (barter.items.size() > 0){
 		    if (!Dungeon.hero.perks.contains(Perks.Perk.BETTER_BARTERING) || Random.Int(3) != 0)
 		        barter.items.remove(barter.items.size() - 1);
-            Item item;
-            do {
-		            item = Generator.random();
-                } while (item instanceof Gold);
-            if (++counter == 50){
-                counter = 0;
-                item = new Cheese();
-            }
-            item.cast(this, Dungeon.hero.pos);
+			for (int i = 0; i < level; i++) {
+				Item item;
+				do {
+					item = Generator.random();
+				} while (item instanceof Gold);
+				if (++counter == 40) {
+					counter = 0;
+					level++;
+					item = new Cheese();
+				}
+				item.cast(this, Dungeon.hero.pos);
+			}
 
             spend(2f);
         }
@@ -259,6 +263,7 @@ public class RatKing extends NPC {
         super.storeInBundle(bundle);
         bundle.put("h", ghastly);
         bundle.put("e", counter);
+		bundle.put("n", level);
     }
 
     @Override
@@ -268,5 +273,8 @@ public class RatKing extends NPC {
         if (bundle.contains("e")){
             counter = bundle.getInt("e");
         }
+		if (bundle.contains("n")){
+			level = bundle.getInt("n");
+		}
     }
 }

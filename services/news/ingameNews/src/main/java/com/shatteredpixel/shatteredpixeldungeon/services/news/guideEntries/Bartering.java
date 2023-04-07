@@ -32,6 +32,7 @@ public class Bartering extends NewsArticle {
         icon = "sprites/ratking.png, 0, 0, 16, 17";
         summary = "While resetting floors of dungeon is efficient way to get more items, sometimes you need some exact types of items, like weapons or potions of healing.\n\n" +
                 "It's when you need Rat King. He has any kind of item in his endless treasures and can share them with you... if you have other treasures for them.\n" +
-                "There is one small exception: he will never give you an even one piece of gold.";
+                "There is one small exception: he will never give you an even one piece of gold.\n\n" +
+                "Continuous bartering can give you something special and increase the amount of stuff per each barter.";
     }
 }
