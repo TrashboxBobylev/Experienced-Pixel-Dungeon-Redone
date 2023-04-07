@@ -68,9 +68,11 @@ public class RatKingHeroSprite extends HeroSprite {
             die();
     }
 
+    public static TextureFilm ratKiers;
+
     @Override
     public TextureFilm tiers() {
-        if(tiers == null) tiers = tiers(Assets.Sprites.RAT_KING_HERO, FRAME_HEIGHT);
-        return tiers;
+        if(ratKiers == null) ratKiers = tiers(Assets.Sprites.RAT_KING_HERO, FRAME_HEIGHT);
+        return ratKiers;
     }
 }
