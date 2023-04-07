@@ -59,7 +59,21 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released April 08th, 2023\n" +
+                        "_-_ 8 days after Experienced Pixel Dungeon 2.14.1"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Fixed the crash for Preparation buff.\n" +
+                        "_-_ Fixed the crash for Rat King, after he is being selected after other hero classes.\n" +
+                        "_-_ Giving Cheese to Wandmaker now takes out other items, related to his quest.\n" +
+                        "_-_ Buffed bartering with Rat King.\n" +
+                        "_-_ Added info about Scroll of Divination into guide."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.14.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
