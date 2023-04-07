@@ -39,7 +39,6 @@ import com.badlogic.gdx.backends.android.AndroidAudio;
 import com.badlogic.gdx.backends.android.AsynchronousAndroidAudio;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import com.rohitss.uceh.UCEHandler;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
@@ -72,7 +71,7 @@ public class AndroidLauncher extends AndroidApplication {
 			return;
 		}
 
-		new UCEHandler.Builder(this).setUCEHEnabled(true).build();
+//		new UCEHandler.Builder(this).setUCEHEnabled(true).build();
 
 		//there are some things we only need to set up on first launch
 		if (instance == null) {
