@@ -476,10 +476,13 @@ public abstract class RegularPainter extends Painter {
 				Integer trapPos = Random.element(validCells);
 				validCells.remove(trapPos); //removes the integer object, not at the index
 
-				Trap trap = Reflection.newInstance(trapClasses[Random.chances( trapChances )]).reveal();
-				l.setTrap( trap, trapPos );
-				//some traps will not be hidden
-				l.map[trapPos] = trap.visible ? Terrain.TRAP : Terrain.SECRET_TRAP;
+				if (trapPos != null) {
+
+					Trap trap = Reflection.newInstance(trapClasses[Random.chances(trapChances)]).reveal();
+					l.setTrap(trap, trapPos);
+					//some traps will not be hidden
+					l.map[trapPos] = trap.visible ? Terrain.TRAP : Terrain.SECRET_TRAP;
+				}
 			}
 		}
 	}
