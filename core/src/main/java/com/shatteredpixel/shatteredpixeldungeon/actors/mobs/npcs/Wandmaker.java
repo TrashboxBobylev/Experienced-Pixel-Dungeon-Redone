@@ -128,7 +128,8 @@ public class Wandmaker extends NPC {
 									questItem = Dungeon.hero.belongings.getItem(Rotberry.Seed.class);
 									break;
 							}
-							questItem.detach( Dungeon.hero.belongings.backpack );
+							if (questItem != null)
+								questItem.detach( Dungeon.hero.belongings.backpack );
 
 							Dungeon.hero.belongings.getItem(Cheese.class).detach(Dungeon.hero.belongings.backpack);
 							Item wand = new WandOfUnstable().identify();
