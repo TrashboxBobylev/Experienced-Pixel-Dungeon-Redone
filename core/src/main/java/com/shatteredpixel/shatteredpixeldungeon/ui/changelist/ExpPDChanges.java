@@ -59,7 +59,20 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released April 09th, 2023\n" +
+                        "_-_ 2 days after Experienced Pixel Dungeon 2.14.2"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Fixed the crash for Wandmaker Cheese quest part.\n" +
+                        "_-_ Fixed the crash for some levels with too much traps that there is no space for them.\n" +
+                        "_-_ Fixed the crash with fishing hooks following player.\n" +
+                        "_-_ Fixed the crash with some weapon transmutation."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.14.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
