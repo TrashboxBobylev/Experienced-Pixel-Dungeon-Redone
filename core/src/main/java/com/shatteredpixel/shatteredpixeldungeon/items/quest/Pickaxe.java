@@ -68,7 +68,7 @@ public class Pickaxe extends MeleeWeapon {
 		unique = true;
 		bones = false;
 
-		tier = 2;
+		internalTier = tier = 2;
 	}
 	
 	public boolean bloodStained = false;
