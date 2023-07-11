@@ -77,14 +77,16 @@ public class RatKing extends NPC {
 	protected Char chooseEnemy() {
 		return null;
 	}
-	
+
 	@Override
 	public void damage( int dmg, Object src ) {
+		//do nothing
 	}
-	
+
 	@Override
-	public void add( Buff buff ) {
-	    if (buff instanceof Barter || buff instanceof MirrorImage.MirrorInvis) super.add(buff);
+	public boolean add( Buff buff ) {
+	    if (buff instanceof Barter || buff instanceof MirrorImage.MirrorInvis) return super.add(buff);
+		return false;
 	}
 	
 	@Override
@@ -97,7 +99,7 @@ public class RatKing extends NPC {
 	@Override
 	protected void onAdd() {
 		super.onAdd();
-		if (Dungeon.depth != 5 && !ghastly){
+		if (firstAdded && Dungeon.depth != 5 && !ghastly){
 			yell(Messages.get(this, "confused"));
 		}
 	}

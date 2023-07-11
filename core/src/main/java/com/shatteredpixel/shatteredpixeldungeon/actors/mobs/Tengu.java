@@ -153,10 +153,11 @@ public class Tengu extends Mob {
 
 	//Tengu is immune to debuffs and damage when removed from the level
 	@Override
-	public void add(Buff buff) {
+	public boolean add(Buff buff) {
 		if (Actor.chars().contains(this) || buff instanceof Doom || loading){
-			super.add(buff);
+			return super.add(buff);
 		}
+		return false;
 	}
 
 	@Override
@@ -180,8 +181,8 @@ public class Tengu extends Mob {
 		
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null) {
-			int multiple = state == PrisonBossLevel.State.FIGHT_START ? 1 : 4;
-			lock.addTime(dmg*multiple);
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(2*dmg/3f);
+			else                                                    lock.addTime(dmg);
 		}
 		
 		//phase 2 of the fight is over
@@ -667,17 +668,17 @@ public class Tengu extends Mob {
 								}
 							}
 						}
-
-						Heap h = Dungeon.level.heaps.get(cell);
-						if (h != null) {
-							for (Item i : h.items.toArray(new Item[0])) {
-								if (i instanceof BombItem) {
-									h.remove(i);
-								}
-							}
-						}
 					}
 
+				}
+
+				Heap h = Dungeon.level.heaps.get(bombPos);
+				if (h != null) {
+					for (Item i : h.items.toArray(new Item[0])) {
+						if (i instanceof BombItem) {
+							h.remove(i);
+						}
+					}
 				}
 				Sample.INSTANCE.play(Assets.Sounds.BLAST);
 				detach();

@@ -39,21 +39,9 @@ import com.watabou.input.KeyEvent;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.*;
 import com.watabou.noosa.BitmapText.Font;
-import com.watabou.noosa.Camera;
-import com.watabou.noosa.ColorBlock;
-import com.watabou.noosa.Game;
-import com.watabou.noosa.Gizmo;
-import com.watabou.noosa.Image;
-import com.watabou.noosa.Scene;
-import com.watabou.noosa.Visual;
 import com.watabou.noosa.ui.Component;
 import com.watabou.noosa.ui.Cursor;
-import com.watabou.utils.Callback;
-import com.watabou.utils.DeviceCompat;
-import com.watabou.utils.GameMath;
-import com.watabou.utils.PointF;
-import com.watabou.utils.Reflection;
-import com.watabou.utils.Signal;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 
@@ -235,7 +223,9 @@ public class PixelScene extends Scene {
 				}
 
 				cameraShift.invScale(Camera.main.zoom);
-				if (cameraShift.length() > 0 && Camera.main.scrollable){
+				cameraShift.x *= Camera.main.edgeScroll.x;
+				cameraShift.y *= Camera.main.edgeScroll.y;
+				if (cameraShift.length() > 0){
 					Camera.main.shift(cameraShift);
 				}
 				ControllerHandler.updateControllerPointer(virtualCursorPos, true);
@@ -378,6 +368,11 @@ public class PixelScene extends Scene {
 				}
 			}
 		});
+	}
+	
+	public static void shake( float magnitude, float duration){
+		magnitude *= SPDSettings.screenShake();
+		Camera.main.shake(magnitude, duration);
 	}
 	
 	protected static class Fader extends ColorBlock {

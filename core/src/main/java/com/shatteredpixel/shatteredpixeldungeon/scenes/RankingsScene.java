@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndDailies;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndRanking;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
@@ -333,11 +332,7 @@ public class RankingsScene extends PixelScene {
 		
 		@Override
 		protected void onClick() {
-			if (rec.gameData != null) {
-				parent.add( new WndRanking( rec ) );
-			} else {
-				parent.add( new WndError( Messages.get(RankingsScene.class, "no_info") ) );
-			}
+			parent.add( new WndRanking( rec ) );
 		}
 	}
 }

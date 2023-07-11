@@ -84,13 +84,15 @@ public class Wandmaker extends NPC {
 	public int defenseSkill( Char enemy ) {
 		return INFINITE_EVASION;
 	}
-	
+
 	@Override
 	public void damage( int dmg, Object src ) {
+		//do nothing
 	}
-	
+
 	@Override
-	public void add( Buff buff ) {
+	public boolean add( Buff buff ) {
+		return false;
 	}
 	
 	@Override
@@ -365,7 +367,7 @@ public class Wandmaker extends NPC {
 				spawned = true;
 
 				given = false;
-				wand1 = (Wand) Generator.random(Generator.Category.WAND);
+				wand1 = (Wand) Generator.randomUsingDefaults(Generator.Category.WAND);
 				wand1.cursed = false;
 				wand1.upgrade();
                 switch (Dungeon.cycle){
@@ -374,7 +376,7 @@ public class Wandmaker extends NPC {
                 }
 
 				do {
-					wand2 = (Wand) Generator.random(Generator.Category.WAND);
+					wand2 = (Wand) Generator.randomUsingDefaults(Generator.Category.WAND);
 				} while (wand2.getClass().equals(wand1.getClass()));
 				wand2.cursed = false;
 				wand2.upgrade();

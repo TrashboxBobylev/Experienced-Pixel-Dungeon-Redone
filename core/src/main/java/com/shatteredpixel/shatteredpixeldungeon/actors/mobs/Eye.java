@@ -147,15 +147,18 @@ public class Eye extends Mob {
 		if (beamCooldown == 0) {
 			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);
 
-			if (enemy.invisible == 0 && !isCharmedBy(enemy) && fieldOfView[enemy.pos] && aim.subPath(1, aim.dist).contains(enemy.pos)){
+			if (enemy.invisible == 0 && !isCharmedBy(enemy) && fieldOfView[enemy.pos]
+					&& (super.canAttack(enemy) || aim.subPath(1, aim.dist).contains(enemy.pos))){
 				beam = aim;
-				beamTarget = aim.collisionPos;
+				beamTarget = enemy.pos;
 				return true;
-			} else
+			} else {
 				//if the beam is charged, it has to attack, will aim at previous location of target.
 				return beamCharged;
-		} else
+			}
+		} else {
 			return super.canAttack(enemy);
+		}
 	}
 
 	@Override
@@ -176,7 +179,8 @@ public class Eye extends Mob {
 	@Override
 	protected boolean doAttack( Char enemy ) {
 
-		if (beamCooldown > 0) {
+		beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
+		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos))) {
 			return super.doAttack(enemy);
 		} else if (!beamCharged){
 			((EyeSprite)sprite).charge( enemy.pos );
@@ -187,7 +191,6 @@ public class Eye extends Mob {
 
 			spend( attackDelay() );
 			
-			beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
 			if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[beam.collisionPos] ) {
 				sprite.zap( beam.collisionPos );
 				return false;
@@ -252,7 +255,7 @@ public class Eye extends Mob {
 
 				if (!ch.isAlive() && ch == Dungeon.hero) {
 					Badges.validateDeathFromEnemyMagic();
-					Dungeon.fail( getClass() );
+					Dungeon.fail( this );
 					GLog.n( Messages.get(this, "deathgaze_kill") );
 				}
 			} else {

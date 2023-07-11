@@ -199,7 +199,7 @@ public class RingOfWealth extends Ring {
 		int floorset = (Dungeon.depth)/5;
 		switch (Random.Int(5)){
 			default: case 0: case 1:
-				MeleeWeapon w = Generator.randomWeapon(floorset);
+				MeleeWeapon w = Generator.randomWeapon(floorset, true);
 				if (!w.hasGoodEnchant() && Dungeon.Int(10) < level)      w.enchant();
 				else if (w.hasCurseEnchant())                           w.enchant(null);
 				result = w;
@@ -211,7 +211,7 @@ public class RingOfWealth extends Ring {
 				result = a;
 				break;
 			case 3:
-				result = Generator.random(Generator.Category.RING);
+				result = Generator.randomUsingDefaults(Generator.Category.RING);
 				break;
 			case 4:
 				result = Generator.random(Generator.Category.ARTIFACT);

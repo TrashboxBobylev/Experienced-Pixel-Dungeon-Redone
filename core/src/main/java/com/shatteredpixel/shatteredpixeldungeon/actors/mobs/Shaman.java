@@ -106,10 +106,11 @@ public abstract class Shaman extends Mob {
         }
 		return Random.NormalIntRange(0, 6);
 	}
-	
+
 	@Override
 	protected boolean canAttack( Char enemy ) {
-		return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
+		return super.canAttack(enemy)
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
 
 	@Override
@@ -126,8 +127,9 @@ public abstract class Shaman extends Mob {
 	}
 
 	protected boolean doAttack(Char enemy ) {
-		
-		if (Dungeon.level.adjacent( pos, enemy.pos )) {
+
+		if (Dungeon.level.adjacent( pos, enemy.pos )
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
 			
 			return super.doAttack( enemy );
 			
@@ -170,7 +172,7 @@ public abstract class Shaman extends Mob {
 			
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromEnemyMagic();
-				Dungeon.fail( getClass() );
+				Dungeon.fail( this );
 				GLog.n( Messages.get(this, "bolt_kill") );
 			}
 		} else {

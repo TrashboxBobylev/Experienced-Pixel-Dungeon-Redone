@@ -35,8 +35,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
 
-import javax.print.Doc;
-
 public class MenuPane extends Component {
 
 	private Image bg;

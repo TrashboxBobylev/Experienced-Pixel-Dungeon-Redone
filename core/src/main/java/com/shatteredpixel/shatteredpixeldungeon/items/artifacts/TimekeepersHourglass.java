@@ -27,11 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -235,11 +231,10 @@ public class TimekeepersHourglass extends Artifact {
 		@Override
 		public boolean act() {
 
-			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeCap
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
-					&& (lock == null || lock.regenOn())) {
+					&& Regeneration.regenOn()) {
 				//90 turns to charge at full, 60 turns to charge at 0/10
 				float chargeGain = 1 / (90f - (chargeCap - charge)*3f);
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
@@ -431,6 +426,11 @@ public class TimekeepersHourglass extends Artifact {
 		@Override
 		public String iconTextDisplay() {
 			return Integer.toString((int)turnsToCost);
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc", Messages.decimalFormat("#.##", turnsToCost));
 		}
 
 		private static final String PRESSES = "presses";

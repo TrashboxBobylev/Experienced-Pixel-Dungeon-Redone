@@ -115,11 +115,14 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public void add(Buff buff) {
-		super.add(buff);
-		if (state == PASSIVE && buff.type == Buff.buffType.NEGATIVE){
-			state = HUNTING;
+	public boolean add(Buff buff) {
+		if (super.add(buff)) {
+			if (state == PASSIVE && buff.type == Buff.buffType.NEGATIVE) {
+				state = HUNTING;
+			}
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -137,7 +140,7 @@ public class Statue extends Mob {
 		damage = super.attackProc( enemy, damage );
 		damage = weapon.proc( this, enemy, damage );
 		if (!enemy.isAlive() && enemy == Dungeon.hero){
-			Dungeon.fail(getClass());
+			Dungeon.fail(this);
 			GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
 		}
 		return damage;

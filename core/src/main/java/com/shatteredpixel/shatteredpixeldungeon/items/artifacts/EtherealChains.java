@@ -28,11 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Chains;
@@ -43,9 +39,9 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -176,11 +172,6 @@ public class EtherealChains extends Artifact {
 		if (chargeUse > charge) {
 			GLog.w( Messages.get(this, "no_charge") );
 			return;
-		} else {
-			charge -= chargeUse;
-			Invisibility.dispel(hero);
-			Talent.onArtifactUsed(hero);
-			updateQuickslot();
 		}
 		
 		hero.busy();
@@ -198,6 +189,11 @@ public class EtherealChains extends Artifact {
 						Dungeon.observe();
 						GameScene.updateFog();
 						hero.spendAndNext(1f);
+
+						charge -= chargeUse;
+						Invisibility.dispel(hero);
+						Talent.onArtifactUsed(hero);
+						updateQuickslot();
 					}
 				}));
 				hero.next();
@@ -210,6 +206,7 @@ public class EtherealChains extends Artifact {
 
 		//don't pull if rooted
 		if (hero.rooted){
+			PixelScene.shake( 1, 1f );
 			GLog.w( Messages.get(EtherealChains.class, "rooted") );
 			return;
 		}
@@ -240,11 +237,6 @@ public class EtherealChains extends Artifact {
 		if (chargeUse > charge){
 			GLog.w( Messages.get(EtherealChains.class, "no_charge") );
 			return;
-		} else {
-			charge -= chargeUse;
-			Invisibility.dispel(hero);
-			Talent.onArtifactUsed(hero);
-			updateQuickslot();
 		}
 		
 		hero.busy();
@@ -262,6 +254,11 @@ public class EtherealChains extends Artifact {
 						hero.spendAndNext(1f);
 						Dungeon.observe();
 						GameScene.updateFog();
+
+						charge -= chargeUse;
+						Invisibility.dispel(hero);
+						Talent.onArtifactUsed(hero);
+						updateQuickslot();
 					}
 				}));
 				hero.next();
@@ -307,11 +304,10 @@ public class EtherealChains extends Artifact {
 		@Override
 		public boolean act() {
 			int chargeTarget = 5+(level()*2);
-			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charge < chargeTarget
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
-					&& (lock == null || lock.regenOn())) {
+					&& Regeneration.regenOn()) {
 				//gains a charge in 40 - 2*missingCharge turns
 				float chargeGain = (1 / (40f - (chargeTarget - charge)*2f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);

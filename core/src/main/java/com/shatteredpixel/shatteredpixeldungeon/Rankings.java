@@ -74,7 +74,7 @@ public enum Rankings {
 	public Record latestDailyReplay = null; //not stored, only meant to be temp
 	public LinkedHashMap<Long, Integer> dailyScoreHistory = new LinkedHashMap<>();
 
-	public void submit( boolean win, Class cause ) {
+	public void submit( boolean win, Object cause ) {
 
 		load();
 		
@@ -92,7 +92,7 @@ public enum Rankings {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ROOT);
 		rec.date = format.format(new Date(Game.realTime));
 
-		rec.cause = cause;
+		rec.cause = cause instanceof Class ? (Class)cause : cause.getClass();
 		rec.win		= win;
 		rec.heroClass	= Dungeon.hero.heroClass;
 		rec.armorTier	= Dungeon.hero.tier();
@@ -241,6 +241,11 @@ public enum Rankings {
 	public static final String DAILY_REPLAY	= "daily_replay";
 
 	public void saveGameData(Record rec){
+		if (Dungeon.hero == null){
+			rec.gameData = null;
+			return;
+		}
+
 		rec.gameData = new Bundle();
 
 		Belongings belongings = Dungeon.hero.belongings;
@@ -314,6 +319,8 @@ public enum Rankings {
 		Dungeon.quickslot.reset();
 		QuickSlotButton.reset();
 		Toolbar.swappedQuickslots = false;
+
+		if (data == null) return;
 
 		Bundle handler = data.getBundle(HANDLERS);
 		Scroll.restore(handler);

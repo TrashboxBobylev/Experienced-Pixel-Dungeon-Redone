@@ -113,7 +113,18 @@ public abstract class Mob extends Char {
 	protected boolean alerted = false;
 
 	protected static final float TIME_TO_WAKE_UP = 1f;
-	
+
+	protected boolean firstAdded = true;
+	protected void onAdd(){
+		if (firstAdded) {
+			//modify health for ascension challenge if applicable, only on first add
+			float percent = HP / (float) HT;
+			HT = Math.round(HT * AscensionChallenge.statModifier(this));
+			HP = Math.round(HT * percent);
+			firstAdded = false;
+		}
+	}
+
 	private static final String STATE	= "state";
 	private static final String SEEN	= "seen";
 	private static final String TARGET	= "target";
@@ -173,6 +184,9 @@ public abstract class Mob extends Char {
 		if (bundle.contains(ENEMY_ID)) {
 			enemyID = bundle.getInt(ENEMY_ID);
 		}
+
+		//no need to actually save this, must be false
+		firstAdded = false;
 	}
 
 	//mobs need to remember their targets after every actor is added
@@ -359,16 +373,20 @@ public abstract class Mob extends Char {
 			if (enemies.isEmpty()){
 				return null;
 			} else {
-				//go after the closest potential enemy, preferring enemies that can be attacked, and the hero if two are equidistant
+				//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
+				PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
 				Char closest = null;
+
 				for (Char curr : enemies){
 					if (closest == null){
 						closest = curr;
 					} else if (canAttack(closest) && !canAttack(curr)){
 						continue;
 					} else if ((canAttack(curr) && !canAttack(closest))
-							|| (Dungeon.level.distance(pos, curr.pos) < Dungeon.level.distance(pos, closest.pos))
-							|| (Dungeon.level.distance(pos, curr.pos) == Dungeon.level.distance(pos, closest.pos) && curr == Dungeon.hero)){
+							|| (PathFinder.distance[curr.pos] < PathFinder.distance[closest.pos])){
+						closest = curr;
+					} else if ( curr == Dungeon.hero &&
+							(PathFinder.distance[curr.pos] == PathFinder.distance[closest.pos]) || (canAttack(curr) && canAttack(closest))){
 						closest = curr;
 					}
 				}
@@ -390,30 +408,36 @@ public abstract class Mob extends Char {
 	}
 	
 	@Override
-	public void add( Buff buff ) {
-		super.add( buff );
-		if (buff instanceof Amok || buff instanceof AllyBuff) {
-			state = HUNTING;
-		} else if (buff instanceof Terror || buff instanceof Dread) {
-			state = FLEEING;
-		} else if (buff instanceof Sleep) {
-			state = SLEEPING;
-			postpone( Sleep.SWS );
+	public boolean add( Buff buff ) {
+		if (super.add( buff )) {
+			if (buff instanceof Amok || buff instanceof AllyBuff) {
+				state = HUNTING;
+			} else if (buff instanceof Terror || buff instanceof Dread) {
+				state = FLEEING;
+			} else if (buff instanceof Sleep) {
+				state = SLEEPING;
+				postpone(Sleep.SWS);
+			}
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
-	public void remove( Buff buff ) {
-		super.remove( buff );
-		if ((buff instanceof Terror && buff(Dread.class) == null)
-				|| (buff instanceof Dread && buff(Terror.class) == null)) {
-			if (enemySeen) {
-				sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "rage"));
-				state = HUNTING;
-			} else {
-				state = WANDERING;
+	public boolean remove( Buff buff ) {
+		if (super.remove( buff )) {
+			if ((buff instanceof Terror && buff(Dread.class) == null)
+					|| (buff instanceof Dread && buff(Terror.class) == null)) {
+				if (enemySeen) {
+					sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "rage"));
+					state = HUNTING;
+				} else {
+					state = WANDERING;
+				}
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	protected boolean canAttack( Char enemy ) {
@@ -709,7 +733,7 @@ public abstract class Mob extends Char {
 
 	public boolean surprisedBy( Char enemy, boolean attacking ){
 		return enemy == Dungeon.hero
-				&& (enemy.invisible > 0 || !enemySeen || (fieldOfView != null && !fieldOfView[enemy.pos]))
+				&& (enemy.invisible > 0 || !enemySeen || (fieldOfView != null && fieldOfView.length == Dungeon.level.length() && !fieldOfView[enemy.pos]))
 				&& (!attacking || enemy.canSurpriseAttack());
 	}
 
@@ -834,7 +858,7 @@ public abstract class Mob extends Char {
 		if (!(this instanceof Wraith)
 				&& soulMarked
 				&& Random.Float() < (Dungeon.hero.subClass == HeroSubClass.WARLOCK ? 0.5f : 0)){
-			Wraith w = Wraith.spawnAt(pos);
+			Wraith w = Wraith.spawnAt(pos, false);
 			if (w != null) {
 				Buff.affect(w, Corruption.class);
 				if (Dungeon.level.heroFOV[pos]) {

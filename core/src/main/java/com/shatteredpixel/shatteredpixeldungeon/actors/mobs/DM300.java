@@ -46,12 +46,12 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM300Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.*;
@@ -347,7 +347,7 @@ public class DM300 extends Mob {
 	public void move(int step, boolean travelling) {
 		super.move(step, travelling);
 
-		if (travelling) Camera.main.shake( supercharged ? 3 : 1, 0.25f );
+		if (travelling) PixelScene.shake( supercharged ? 3 : 1, 0.25f );
 
 		if (Dungeon.level.map[step] == Terrain.INACTIVE_TRAP && state == HUNTING) {
 
@@ -434,7 +434,7 @@ public class DM300 extends Mob {
 		if (Dungeon.level.adjacent(pos, target.pos)){
 			int oppositeAdjacent = target.pos + (target.pos - pos);
 			Ballistica trajectory = new Ballistica(target.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
-			WandOfBlastWave.throwChar(target, trajectory, 2, false, false, getClass());
+			WandOfBlastWave.throwChar(target, trajectory, 2, false, false, this);
 			if (target == Dungeon.hero){
 				Dungeon.hero.interrupt();
 			}
@@ -444,7 +444,7 @@ public class DM300 extends Mob {
 		} else if (fieldOfView[target.pos] && Dungeon.level.distance(pos, target.pos) == 2) {
 			int oppositeAdjacent = target.pos + (target.pos - pos);
 			Ballistica trajectory = new Ballistica(target.pos, oppositeAdjacent, Ballistica.MAGIC_BOLT);
-			WandOfBlastWave.throwChar(target, trajectory, 1, false, false, getClass());
+			WandOfBlastWave.throwChar(target, trajectory, 1, false, false, this);
 			if (target == Dungeon.hero){
 				Dungeon.hero.interrupt();
 			}
@@ -502,7 +502,10 @@ public class DM300 extends Mob {
 		int dmgTaken = preHP - HP;
 		if (dmgTaken > 0) {
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-			if (lock != null && !isImmune(src.getClass())) lock.addTime(dmgTaken*1.5f);
+			if (lock != null && !isImmune(src.getClass())){
+				if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/2f);
+				else                                                    lock.addTime(dmgTaken);
+			}
 		}
 
 		int threshold;
@@ -652,7 +655,7 @@ public class DM300 extends Mob {
 				if (bestpos != pos) {
 					move(bestpos);
 				}
-				Camera.main.shake( 5, 1f );
+				PixelScene.shake( 5, 1f );
 
 				return true;
 			}
@@ -711,7 +714,7 @@ public class DM300 extends Mob {
 				}
 			}
 
-			Camera.main.shake( 3, 0.7f );
+			PixelScene.shake( 3, 0.7f );
 			Sample.INSTANCE.play(Assets.Sounds.ROCKS);
 
 			detach();

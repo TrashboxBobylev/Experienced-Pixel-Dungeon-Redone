@@ -164,8 +164,9 @@ public abstract class Level implements Bundlable {
 	public void create() {
 
 		Random.pushGenerator( Dungeon.seedCurDepth() );
-		
-		if (!(Dungeon.bossLevel())) {
+
+		//TODO maybe just make this part of RegularLevel?
+		if (!Dungeon.bossLevel() && Dungeon.branch == 0) {
 
 			addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
@@ -481,6 +482,9 @@ if (bundle.contains( "respawner" )){
 	}
 
 	public LevelTransition getTransition(LevelTransition.Type type){
+		if (transitions.isEmpty()){
+			return null;
+		}
 		for (LevelTransition transition : transitions){
 			//if we don't specify a type, prefer to return any entrance
 			if (type == null &&
@@ -490,7 +494,7 @@ if (bundle.contains( "respawner" )){
 				return transition;
 			}
 		}
-		return (type == null && !transitions.isEmpty() ? transitions.get(0) : null);
+		return type != null ? getTransition(null) : transitions.get(0);
 	}
 
 	public LevelTransition getTransition(int cell){
@@ -514,6 +518,15 @@ if (bundle.contains( "respawner" )){
 		//iron stomach does not persist through chasm falling
 		Talent.WarriorFoodImmunity foodImmune = Dungeon.hero.buff(Talent.WarriorFoodImmunity.class);
 		if (foodImmune != null) foodImmune.detach();
+
+		//spend the hero's partial turns,  so the hero cannot take partial turns between floors
+		Dungeon.hero.spendToWhole();
+		for (Char ch : Actor.chars()){
+			//also adjust any mobs that are now ahead of the hero due to this
+			if (ch.cooldown() < Dungeon.hero.cooldown()){
+				ch.spendToWhole();
+			}
+		}
 	}
 
 	public void seal(){
@@ -1030,7 +1043,7 @@ if (bundle.contains( "respawner" )){
 					&& ch == Dungeon.hero && Dungeon.hero.heroClass == HeroClass.HUNTRESS
 					&& ch.buff(Talent.RejuvenatingStepsCooldown.class) == null){
 
-				if (Dungeon.hero.buff(LockedFloor.class) != null && !Dungeon.hero.buff(LockedFloor.class).regenOn()){
+				if (!Regeneration.regenOn()){
 					set(ch.pos, Terrain.FURROWED_GRASS);
 				} else if (ch.buff(Talent.RejuvenatingStepsFurrow.class) != null && ch.buff(Talent.RejuvenatingStepsFurrow.class).count() >= 200) {
 					set(ch.pos, Terrain.FURROWED_GRASS);
@@ -1064,7 +1077,7 @@ if (bundle.contains( "respawner" )){
 		}
 
 		if (ch.isAlive() && ch instanceof Piranha && !water[ch.pos]){
-			ch.die(null);
+			((Piranha) ch).dieOnLand();
 		}
 	}
 	
@@ -1304,7 +1317,7 @@ if (bundle.contains( "respawner" )){
 			}
 
 			for (TalismanOfForesight.HeapAwareness h : c.buffs(TalismanOfForesight.HeapAwareness.class)){
-				if (Dungeon.depth != h.depth) continue;
+				if (Dungeon.depth != h.depth || Dungeon.branch != h.branch) continue;
 				for (int i : PathFinder.NEIGHBOURS9) heroMindFov[h.pos+i] = true;
 			}
 
@@ -1321,7 +1334,7 @@ if (bundle.contains( "respawner" )){
 			}
 
 			for (RevealedArea a : c.buffs(RevealedArea.class)){
-				if (Dungeon.depth != a.depth) continue;
+				if (Dungeon.depth != a.depth || Dungeon.branch != a.branch) continue;
 				for (int i : PathFinder.NEIGHBOURS9) heroMindFov[a.pos+i] = true;
 			}
 

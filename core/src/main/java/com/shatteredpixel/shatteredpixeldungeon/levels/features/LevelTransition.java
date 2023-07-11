@@ -23,18 +23,16 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.features;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Point;
-import com.watabou.utils.Random;
-import com.watabou.utils.Rect;
+import com.watabou.utils.*;
 
 public class LevelTransition extends Rect implements Bundlable {
 
 	public enum Type {
 		SURFACE,
 		REGULAR_ENTRANCE,
-		REGULAR_EXIT;
+		REGULAR_EXIT,
+		BRANCH_ENTRANCE,
+		BRANCH_EXIT;
 	}
 
 	public Type type;

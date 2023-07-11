@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
@@ -71,13 +70,13 @@ public class AssassinsBlade extends MeleeWeapon {
 	}
 
 	@Override
-	public float abilityChargeUse( Hero hero ) {
-		return 2*super.abilityChargeUse(hero);
+	protected int baseChargeUse(Hero hero, Char target){
+		return 2;
 	}
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Dagger.sneakAbility(hero, 4, this);
+		Dagger.sneakAbility(hero, 6, this);
 	}
 
 }

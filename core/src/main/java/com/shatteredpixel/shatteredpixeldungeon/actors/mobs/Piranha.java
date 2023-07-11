@@ -69,7 +69,7 @@ public class Piranha extends Mob {
 	protected boolean act() {
 		
 		if (!Dungeon.level.water[pos]) {
-			die( null );
+			dieOnLand();
 			return true;
 		} else {
 			return super.act();
@@ -102,7 +102,11 @@ public class Piranha extends Mob {
 		}
 		return super.surprisedBy(enemy, attacking);
 	}
-	
+
+	public void dieOnLand(){
+		die( null );
+	}
+
 	@Override
 	public void die( Object cause ) {
 		super.die( cause );
@@ -192,6 +196,14 @@ public class Piranha extends Mob {
 			}
 			
 			return super.act(enemyInFOV, justAlerted);
+		}
+	}
+
+	public static Piranha random(){
+		if (Random.Int(50) == 0){
+			return new PhantomPiranha();
+		} else {
+			return new Piranha();
 		}
 	}
 }

@@ -24,16 +24,13 @@
 
 package com.watabou.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.ui.Cursor;
-import com.watabou.utils.GameMath;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Signal;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.HashMap;
 
 public class PointerEvent {
@@ -124,6 +121,10 @@ public class PointerEvent {
 		}
 		return lastHoverPos.clone();
 	}
+
+	public static void setHoverPos(PointF pos){
+		lastHoverPos.set(pos);
+	}
 	
 	public static synchronized void addPointerEvent( PointerEvent event ){
 		pointerEvents.add( event );
@@ -145,15 +146,6 @@ public class PointerEvent {
 				lastHoverPos.set(p.current);
 				pointerSignal.dispatch(p);
 				hovered = true;
-			}
-		}
-
-		//add drag events for any emulated presses
-		if (hovered){
-			for (int i = 10+LEFT; i <= 10+FORWARD; i++){
-				if (activePointers.containsKey(i)){
-					Game.inputHandler.emulateDrag(i-10);
-				}
 			}
 		}
 
@@ -185,6 +177,11 @@ public class PointerEvent {
 			}
 		}
 		pointerEvents.clear();
+
+		//add drag events for any emulated presses
+		if (hovered && activePointers.containsKey(ControllerHandler.CONTROLLER_POINTER_ID)){
+			Game.inputHandler.emulateDrag(ControllerHandler.CONTROLLER_POINTER_ID);
+		}
 	}
 
 	public static synchronized void clearPointerEvents(){
