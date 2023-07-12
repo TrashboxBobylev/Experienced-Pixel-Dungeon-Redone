@@ -212,11 +212,56 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			}
 
 			if (item != null) {
-				for (int i = 0; i < curItem.quantity(); i++)
-					((ScrollOfUpgrade)curItem).upgradeItem(item);
+				// time for some copypaste
+				Degrade.detach( curUser, Degrade.class );
+
+				if (item instanceof Weapon){
+					Weapon w = (Weapon) item;
+					boolean wasCursed = w.cursed;
+					boolean hadCursedEnchant = w.hasCurseEnchant();
+
+					for (int i = 0; i < curItem.quantity(); i++)
+						w.upgrade();
+
+					if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
+						removeCurse( Dungeon.hero );
+					} else if (w.cursedKnown && wasCursed && !w.cursed){
+						weakenCurse( Dungeon.hero );
+					}
+
+				} else if (item instanceof Armor){
+					Armor a = (Armor) item;
+					boolean wasCursed = a.cursed;
+					boolean hadCursedGlyph = a.hasCurseGlyph();
+
+					for (int i = 0; i < curItem.quantity(); i++)
+						a.upgrade();
+
+					if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
+						removeCurse( Dungeon.hero );
+					} else if (a.cursedKnown && wasCursed && !a.cursed){
+						weakenCurse( Dungeon.hero );
+					}
+
+				} else if (item instanceof Wand || item instanceof Ring) {
+					boolean wasCursed = item.cursed;
+
+					for (int i = 0; i < curItem.quantity(); i++)
+						item.upgrade();
+
+					if (item.cursedKnown && wasCursed && !item.cursed){
+						removeCurse( Dungeon.hero );
+					}
+				} else {
+					for (int i = 0; i < curItem.quantity(); i++)
+						item.upgrade();
+				}
 				((InventoryScroll)curItem).readAnimation();
 
 				Sample.INSTANCE.play( Assets.Sounds.READ );
+				Badges.validateItemLevelAquired(item);
+				Statistics.upgradesUsed += curItem.quantity();
+				Badges.validateMageUnlock();
 
 			} else if (identifiedByUse && !((Scroll)curItem).anonymous) {
 
