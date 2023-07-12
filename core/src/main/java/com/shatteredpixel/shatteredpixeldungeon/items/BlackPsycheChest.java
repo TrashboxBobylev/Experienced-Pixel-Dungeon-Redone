@@ -68,7 +68,7 @@ public class BlackPsycheChest extends Item {
         super.execute(hero, action);
 
         if (action.equals(AC_ACCESS)){
-            InterlevelScene.curTransition = new LevelTransition(Dungeon.level, 16 + 25*33, LevelTransition.Type.REGULAR_EXIT, 27, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
+            InterlevelScene.curTransition = new LevelTransition(Dungeon.level, 16 + 25*33, LevelTransition.Type.BRANCH_EXIT, 27, Dungeon.BRANCH_BLACK, LevelTransition.Type.BRANCH_ENTRANCE);
             InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
             Game.switchScene( InterlevelScene.class );
         }

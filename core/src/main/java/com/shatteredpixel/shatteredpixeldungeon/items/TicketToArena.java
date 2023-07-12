@@ -64,28 +64,31 @@ public class TicketToArena extends Item{
     }
 
     public int depth;
+    public int branch;
     public int pos;
 
     @Override
     public void execute(Hero hero, String action) {
         super.execute(hero, action);
         if (action.equals(AC_USE)){
-            if (Dungeon.depth != 28){
+            if (Dungeon.branch != Dungeon.BRANCH_ARENA){
                 depth = Dungeon.depth;
+                branch = Dungeon.branch;
                 pos = hero.pos;
                 try {
                     Dungeon.saveLevel(GamesInProgress.curSlot);
                 } catch (Exception e){
                     Game.reportException(e);
                 }
-                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, 28, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
+                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.BRANCH_EXIT, 28, Dungeon.BRANCH_ARENA, LevelTransition.Type.BRANCH_ENTRANCE);
                 InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
                 Game.switchScene( InterlevelScene.class );
                 Buff.affect(hero, ArenaLevel.ArenaCounter.class);
             } else {
-                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, depth, Dungeon.branch, LevelTransition.Type.REGULAR_ENTRANCE);
+//                InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.BRANCH_ENTRANCE, depth, branch, LevelTransition.Type.BRANCH_EXIT);
                 InterlevelScene.mode = InterlevelScene.Mode.RETURN;
                 InterlevelScene.returnDepth = depth;
+                InterlevelScene.returnBranch = branch;
                 InterlevelScene.returnPos = pos;
                 Game.switchScene( InterlevelScene.class );
                 detach(hero.belongings.backpack);
@@ -95,12 +98,14 @@ public class TicketToArena extends Item{
     }
 
     private static final String DEPTH	= "depth";
+    private static final String BRANCH	= "branch";
     private static final String POS		= "pos";
 
     @Override
     public void storeInBundle( Bundle bundle ) {
         super.storeInBundle( bundle );
         bundle.put( DEPTH, depth );
+        bundle.put( BRANCH, branch );
         if (depth != -1) {
             bundle.put( POS, pos);
         }
@@ -110,6 +115,10 @@ public class TicketToArena extends Item{
     public void restoreFromBundle( Bundle bundle ) {
         super.restoreFromBundle(bundle);
         depth	= bundle.getInt( DEPTH );
+        if (bundle.contains(BRANCH))
+            branch	= bundle.getInt( BRANCH );
+        else
+            branch = Dungeon.BRANCH_NORMAL;
         pos	= bundle.getInt( POS );
     }
 

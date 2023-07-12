@@ -163,6 +163,10 @@ public class Dungeon {
 	// 0 is the default path
 	// 1 is for quest sub-floors
 	public static int branch;
+	public static final int BRANCH_NORMAL = 0;
+	public static final int BRANCH_QUESTS = 1;
+	public static final int BRANCH_ARENA  = 2;
+	public static final int BRANCH_BLACK  = 3;
 
 	//keeps track of what levels the game should try to load instead of creating fresh
 	public static ArrayList<Integer> generatedLevels = new ArrayList<>();
@@ -369,12 +373,6 @@ public class Dungeon {
 		case 26:
 			level = new LastLevel();
 			break;
-        case 27:
-            level = new BlackMimicLevel();
-            break;
-        case 28:
-            level = new ArenaLevel();
-            break;
 		default:level = new DeadEndLevel();
 			}
 		} else if (branch == 1) {
@@ -388,7 +386,20 @@ public class Dungeon {
 				default:
 					level = new DeadEndLevel();
 			}
-		} else {
+		} else if (branch == BRANCH_ARENA){
+			if (depth == 28) {
+				level = new ArenaLevel();
+			} else {
+				level = new DeadEndLevel();
+			}
+		} else if (branch == BRANCH_BLACK){
+			if (depth == 27) {
+				level = new BlackMimicLevel();
+			} else {
+				level = new DeadEndLevel();
+			}
+		}
+		else {
 			level = new DeadEndLevel();
 		}
 
