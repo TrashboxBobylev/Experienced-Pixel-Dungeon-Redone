@@ -67,8 +67,8 @@ public class Greatsword extends MeleeWeapon {
     }
 
     @Override
-    public float abilityChargeUse(Hero hero) {
-        return 2*super.abilityChargeUse(hero);
+    public float abilityChargeUse(Hero hero, Char target) {
+        return 2*super.abilityChargeUse(hero, target);
     }
 
 	@Override
@@ -99,7 +99,7 @@ public class Greatsword extends MeleeWeapon {
         hero.sprite.attack(enemy.pos, new Callback() {
             @Override
             public void call() {
-                beforeAbilityUsed(hero);
+                beforeAbilityUsed(hero, enemy);
                 AttackIndicator.target(enemy);
                 if (hero.attack(enemy, 0.5f, 0f, 1f)){
                     Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
@@ -125,7 +125,7 @@ public class Greatsword extends MeleeWeapon {
                 Invisibility.dispel();
                 hero.spendAndNext(hero.attackDelay());
                 if (!enemy.isAlive()){
-                    onAbilityKill(hero);
+                    onAbilityKill(hero, enemy);
                 }
                 afterAbilityUsed(hero);
             }

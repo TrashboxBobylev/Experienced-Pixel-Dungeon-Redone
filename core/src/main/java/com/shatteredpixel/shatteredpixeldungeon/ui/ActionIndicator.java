@@ -163,7 +163,7 @@ public class ActionIndicator extends Tag {
 	public static boolean setAction(Action action){
 		if(!action.usable() || ActionIndicator.action == action) return false;
 		ActionIndicator.action = action;
-		updateIcon();
+		refresh();
 		return true;
 	}
 

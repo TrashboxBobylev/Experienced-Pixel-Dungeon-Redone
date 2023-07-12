@@ -253,7 +253,7 @@ public class MeleeWeapon extends Weapon {
 		}
 	}
 
-	public void onAbilityKill( Hero hero, Char killed ){
+	public static void onAbilityKill( Hero hero, Char killed ){
 		if (hero.heroClass == HeroClass.DUELIST){
 			hero.HP = Math.min(hero.HP + hero.lvl, hero.HT);
 			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
@@ -268,7 +268,7 @@ public class MeleeWeapon extends Weapon {
 		return 1; //abilities use 1 charge by default
 	}
 
-	public final float abilityChargeUse(Hero hero, Char target){
+	public float abilityChargeUse(Hero hero, Char target){
 		float chargeUse = baseChargeUse(hero, target);
 		if (hero.buff(Talent.CounterAbilityTacker.class) != null){
 			chargeUse = Math.max(0, chargeUse-0.5f*hero.pointsInTalent(Talent.COUNTER_ABILITY));

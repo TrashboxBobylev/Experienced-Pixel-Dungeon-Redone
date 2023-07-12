@@ -83,7 +83,7 @@ public class SmokeBomb extends ArmorAbility {
 
 		if (target != hero.pos && hero.rooted){
 				PixelScene.shake( 1, 1f );
-				return;
+				return false;
 			}
 
 			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), limit);

@@ -116,7 +116,7 @@ public class MagesStaff extends MeleeWeapon {
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Rapier.lungeAbility(hero, target, 3 + level(), this);
+		Rapier.lungeAbility(hero, target, 1,3 + level(), this);
 	}
 
 	@Override
