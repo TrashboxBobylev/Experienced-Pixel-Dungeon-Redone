@@ -26,10 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
-import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
+import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
@@ -104,6 +101,8 @@ public class YogDzewa extends Mob {
 	private static final int MIN_SUMMON_CD = 10;
 	private static final int MAX_SUMMON_CD = 15;
 
+	public int takenDamage;
+
 	private static Class getPairedFist(Class fist){
 		if (fist == YogFist.BurningFist.class) return YogFist.SoiledFist.class;
 		if (fist == YogFist.SoiledFist.class) return YogFist.BurningFist.class;
@@ -167,6 +166,13 @@ public class YogDzewa extends Mob {
 		return INFINITE_ACCURACY;
 	}
 
+	public int phaseLife(int phase){
+		if (phase == 4)
+			return HT/10;
+		else
+			return HT - HT/10*3*phase;
+	}
+
 	@Override
 	protected boolean act() {
 		//char logic
@@ -200,6 +206,16 @@ public class YogDzewa extends Mob {
 			summonCooldown = -15; //summon a burst of minions!
 			phase = 5;
 			BossHealthBar.bleed(true);
+		}
+
+		int healingTarget = Dungeon.hero.HT / 15;
+		if (YogFist.isNearYog(Dungeon.hero.pos))
+			healingTarget *= 2;
+
+		if (takenDamage >= healingTarget && Dungeon.level.heroFOV[pos]){
+			takenDamage -= healingTarget;
+			Dungeon.hero.damage(healingTarget, new Eye.DeathGaze());
+			stealLife(Dungeon.hero, healingTarget);
 		}
 
 		if (phase == 0){
@@ -386,29 +402,8 @@ public class YogDzewa extends Mob {
 		return phase == 0 || findFist() != null || super.isInvulnerable(effect);
 	}
 
-	@Override
-	public void damage( int dmg, Object src ) {
-        if (Dungeon.cycle == 4) dmg /= 2;
-		int preHP = HP;
-		super.damage( dmg, src );
-
-
-
-		if (phase == 0 || findFist() != null) return;
-
-		if (phase < 4) {
-			HP = Math.max(HP, HT - HT/10*3 * phase);
-		} else if (phase == 4) {
-			HP = Math.max(HP, HT/10);
-		}
-		int dmgTaken = preHP - HP;
-
-		if (dmgTaken > 0) {
-			abilityCooldown -= dmgTaken / 10f;
-			summonCooldown -= dmgTaken / 10f;
-		}
-
-		if (phase < 4 && HP <= HT - HT/10*3 *phase){
+	private void phaseTransition(){
+		if (phase < 4 && HP <= phaseLife(phase)){
 
 			phase++;
 
@@ -430,6 +425,26 @@ public class YogDzewa extends Mob {
 			if (summonCooldown < 5) summonCooldown = 5;
 
 		}
+	}
+
+	@Override
+	public void damage( int dmg, Object src ) {
+        if (Dungeon.cycle == 4) dmg /= 2;
+		int preHP = HP;
+		super.damage( dmg, src );
+
+		if (phase == 0 || findFist() != null) return;
+
+		HP = Math.max(HP, phaseLife(phase));
+		int dmgTaken = preHP - HP;
+		takenDamage += dmgTaken / 1.5f;
+
+		if (dmgTaken > 0) {
+			abilityCooldown -= Dungeon.cycle + 1;
+			summonCooldown -= Dungeon.cycle + 1;
+		}
+
+		phaseTransition();
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null){
@@ -511,6 +526,25 @@ public class YogDzewa extends Mob {
 					(mob instanceof Larva || mob instanceof YogRipper || mob instanceof YogEye || mob instanceof YogScorpio)) {
 				mob.aggro(ch);
 			}
+		}
+	}
+
+	public void stealLife(Char target, long amount){
+		phaseTransition();
+
+		int healCap = phaseLife(phase-1);
+		if (HP + amount > healCap)
+			amount -= HP + amount - healCap;
+		if (amount <= 0)
+			return;
+
+		sprite.parent.add(new Beam.HealthRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(target.pos)));
+
+		HP += amount;
+
+		if (sprite.visible){
+			sprite.showStatus(CharSprite.POSITIVE, "+%dHP", amount);
+			sprite.emitter().burst(Speck.factory(Speck.HEALING), 50);
 		}
 	}
 
@@ -597,6 +631,7 @@ public class YogDzewa extends Mob {
 
 	private static final String ABILITY_CD = "ability_cd";
 	private static final String SUMMON_CD = "summon_cd";
+	private static final String TAKEN_DMG = "takenDamage";
 
 	private static final String FIST_SUMMONS = "fist_summons";
 	private static final String REGULAR_SUMMONS = "regular_summons";
@@ -611,6 +646,7 @@ public class YogDzewa extends Mob {
 
 		bundle.put(ABILITY_CD, abilityCooldown);
 		bundle.put(SUMMON_CD, summonCooldown);
+		bundle.put(TAKEN_DMG, takenDamage);
 
 		bundle.put(FIST_SUMMONS, fistSummons.toArray(new Class[0]));
 		bundle.put(CHALLENGE_SUMMONS, challengeSummons.toArray(new Class[0]));
@@ -645,6 +681,9 @@ public class YogDzewa extends Mob {
 		for (int i : bundle.getIntArray(TARGETED_CELLS)){
 			targetedCells.add(i);
 		}
+
+		if (bundle.contains(TAKEN_DMG))
+			takenDamage = bundle.getInt(TAKEN_DMG);
 	}
 
 	public static class Larva extends Mob {
@@ -717,6 +756,15 @@ public class YogDzewa extends Mob {
 			return Random.NormalIntRange(0, 4);
 		}
 
+		@Override
+		public int attackProc(Char enemy, int damage) {
+			for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()){
+				if (mob instanceof YogDzewa && mob.isAlive()){
+					((YogDzewa) mob).stealLife(enemy, damage / 2);
+				}
+			}
+			return super.attackProc(enemy, damage);
+		}
 	}
 
 	//used so death to yog's ripper demons have their own rankings description
@@ -725,17 +773,47 @@ public class YogDzewa extends Mob {
 			maxLvl = -2;
 			properties.add(Property.BOSS_MINION);
 		}
+
+		@Override
+		public int attackProc(Char enemy, int damage) {
+			for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()){
+				if (mob instanceof YogDzewa && mob.isAlive()){
+					((YogDzewa) mob).stealLife(enemy, damage / 2);
+				}
+			}
+			return super.attackProc(enemy, damage);
+		}
 	}
 	public static class YogEye extends Eye {
 		{
 			maxLvl = -2;
 			properties.add(Property.BOSS_MINION);
 		}
+
+		@Override
+		public int attackProc(Char enemy, int damage) {
+			for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()){
+				if (mob instanceof YogDzewa && mob.isAlive()){
+					((YogDzewa) mob).stealLife(enemy, damage / 2);
+				}
+			}
+			return super.attackProc(enemy, damage);
+		}
 	}
 	public static class YogScorpio extends Scorpio {
 		{
 			maxLvl = -2;
 			properties.add(Property.BOSS_MINION);
+		}
+
+		@Override
+		public int attackProc(Char enemy, int damage) {
+			for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()){
+				if (mob instanceof YogDzewa && mob.isAlive()){
+					((YogDzewa) mob).stealLife(enemy, damage / 2);
+				}
+			}
+			return super.attackProc(enemy, damage);
 		}
 	}
 }
