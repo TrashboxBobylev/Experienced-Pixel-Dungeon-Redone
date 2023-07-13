@@ -77,7 +77,7 @@ public class MimicSprite extends MobSprite {
 
 		throww = attack.clone();
 		zap = attack.clone();
-        slam = new Animation( 5, true );
+        slam = new Animation( 15, true );
         slam.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 1+c, 1+c, 1+c);
 
 		die = new Animation( 5, false );
