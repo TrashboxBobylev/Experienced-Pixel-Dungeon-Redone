@@ -725,7 +725,7 @@ public abstract class Char extends Actor {
 			finalChance *= (float)Math.pow( ((HT - HP) / (float)HT), 2);
 
 			if (Random.Float() < finalChance) {
-				int extraDmg = Math.round(HP*resist(Grim.class));
+				int extraDmg = Math.round(finalChance*resist(Grim.class)/10f);
 				dmg += extraDmg;
 				HP -= extraDmg;
 
