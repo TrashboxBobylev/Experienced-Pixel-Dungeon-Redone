@@ -213,7 +213,8 @@ public class BlackMimic extends Mob {
 						turnsSinceLastAbility = 0;
 						spend(TICK);
 
-						GLog.w(Messages.get(this, "vent"));
+						if (!isCopy)
+							GLog.w(Messages.get(this, "vent"));
 						if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 							sprite.zap(enemy.pos);
 							return false;
@@ -250,7 +251,8 @@ public class BlackMimic extends Mob {
 						abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 
 						if (lastAbility == GAS) {
-							GLog.w(Messages.get(this, "vent"));
+							if (!isCopy)
+								GLog.w(Messages.get(this, "vent"));
 							if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 								sprite.zap(enemy.pos);
 								return false;
@@ -260,7 +262,8 @@ public class BlackMimic extends Mob {
 								return true;
 							}
 						} else if (lastAbility == ROCKS) {
-							GLog.w(Messages.get(this, "rocks"));
+							if (!isCopy)
+								GLog.w(Messages.get(this, "rocks"));
 							if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
                                 ((MimicSprite.Black)sprite).slam(enemy.pos);
 								return false;
@@ -270,7 +273,8 @@ public class BlackMimic extends Mob {
 								return true;
 							}
 						} else if (lastAbility == BOMB){
-                            GLog.w(Messages.get(this, "bomb"));
+							if (!isCopy)
+                            	GLog.w(Messages.get(this, "bomb"));
                             if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
                                 ((MimicSprite.Black)sprite).throww(enemy.pos);
                                 return false;
@@ -279,7 +283,8 @@ public class BlackMimic extends Mob {
                                 return true;
                             }
                         } else if (lastAbility == SUMMON) {
-                            GLog.w(Messages.get(this, "summon"));
+							if (!isCopy)
+                            	GLog.w(Messages.get(this, "summon"));
                             DistortionTrap trap = new DistortionTrap();
                             do {
                                 trap.pos = Dungeon.level.pointToCell(Random.element(mainArena.getPoints()));
@@ -297,7 +302,9 @@ public class BlackMimic extends Mob {
                                 }
                             }
                             if (!respawnPoints.isEmpty()) {
-                                if (Random.Float() < 0.5f) {
+								float chance = 0.5f;
+								if (isCopy) chance /= 2;
+                                if (Random.Float() < chance) {
                                     BlackMimic mimic = new BlackMimic();
                                     int index = Random.index( respawnPoints );
                                     mimic.isCopy = true;
@@ -356,7 +363,7 @@ public class BlackMimic extends Mob {
 			}
 
 			if (Dungeon.level.heroFOV[step]) {
-				if (buff(Barrier.class) == null) {
+				if (buff(Barrier.class) == null && !isCopy) {
 					GLog.w(Messages.get(this, "shield"));
 				}
 				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
@@ -379,7 +386,8 @@ public class BlackMimic extends Mob {
 		if (!BossHealthBar.isAssigned()) {
 			BossHealthBar.assignBoss(this);
 			turnsSinceLastAbility = 0;
-			yell(Messages.get(this, "notice"));
+			if (!isCopy)
+				yell(Messages.get(this, "notice"));
 			for (Char ch : Actor.chars()){
 				if (ch instanceof DriedRose.GhostHero){
 					((DriedRose.GhostHero) ch).sayBoss();
@@ -656,6 +664,9 @@ public class BlackMimic extends Mob {
 		String desc = super.description();
 		if (supercharged) {
 			desc += "\n\n" + Messages.get(this, "desc_supercharged");
+		}
+		if (isCopy){
+			desc += "\n\n" + Messages.get(this, "desc_clone");
 		}
 		return desc;
 	}

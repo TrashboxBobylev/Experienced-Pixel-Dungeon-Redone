@@ -198,6 +198,10 @@ public class MimicSprite extends MobSprite {
         @Override
         public void link(Char ch) {
             super.link(ch);
+            if (ch instanceof BlackMimic && ((BlackMimic) ch).isCopy){
+                hardlight(0x333333);
+                alpha(0.75f);
+            }
 
             superchargeSparks = emitter();
             superchargeSparks.autoKill = false;
