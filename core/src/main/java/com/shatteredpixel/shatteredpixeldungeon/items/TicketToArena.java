@@ -124,6 +124,6 @@ public class TicketToArena extends Item{
 
     @Override
     public int value() {
-        return 120 * quantity;
+        return 210 * quantity;
     }
 }

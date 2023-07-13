@@ -907,7 +907,6 @@ public abstract class Mob extends Char {
 
 		if (buff(ArenaLevel.ArenaBuff.class) != null){
 		    Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
-            Dungeon.level.drop(new Gold().random(), pos).sprite.drop();
             Dungeon.level.drop(Generator.random(), pos).sprite.drop();
             Dungeon.level.drop(RingOfWealth.genConsumableDrop(-5), pos).sprite.drop();
         }

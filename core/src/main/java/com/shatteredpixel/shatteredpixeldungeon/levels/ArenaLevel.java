@@ -327,6 +327,9 @@ public class ArenaLevel extends Level {
 				}
 			}
 
+			ArenaCounter counter = Dungeon.hero.buff(ArenaCounter.class);
+			float timerBasis = 5f;
+
 			if (count < 100) {
 
 				Mob mob = Dungeon.level.createMob();
@@ -336,9 +339,10 @@ public class ArenaLevel extends Level {
 					GameScene.add( mob );
 					mob.beckon( Dungeon.hero.pos );
 					Buff.affect(mob, ArenaBuff.class);
-					if (Dungeon.hero.buff(ArenaCounter.class) != null){
-						Dungeon.hero.buff(ArenaCounter.class).countUp(Actor.TICK);
-						int power = (int) Dungeon.hero.buff(ArenaCounter.class).count();
+					if (counter != null){
+						counter.countUp(Actor.TICK);
+						int power = (int) counter.count();
+						timerBasis = 5f + power / 8f;
 						if (power >= 3){
 							for (int i = 0; i < 1 + power/3; i++){
 								Buff.affect(mob, Longsword.HolyExpEffect.class).stacks++;
@@ -361,7 +365,7 @@ public class ArenaLevel extends Level {
 					}
 				}
 			}
-			spend(Dungeon.level.respawnCooldown() / 5f);
+			spend(Dungeon.level.respawnCooldown() / timerBasis);
 			return true;
 		}
 	}
