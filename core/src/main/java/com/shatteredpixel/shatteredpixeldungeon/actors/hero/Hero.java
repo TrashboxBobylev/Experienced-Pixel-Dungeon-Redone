@@ -1726,7 +1726,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				//moving to a transition doesn't automatically trigger it when enemies are near
 				&& (visibleEnemies.size() == 0 || cell == pos)
 				&& !Dungeon.level.locked
-				&& Dungeon.branch != Dungeon.BRANCH_ARENA
+				&& Dungeon.isAscensionPossible()
 				&& (Dungeon.depth < 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
 
 			curAction = new HeroAction.LvlTransition( cell );
