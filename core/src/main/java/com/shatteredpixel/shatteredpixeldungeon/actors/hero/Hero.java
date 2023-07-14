@@ -1789,7 +1789,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			}
 		}
 
-		int neededExp = 100 + Dungeon.cycle * 25;
+		int neededExp = 100 + Dungeon.cycle * 75;
 		if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
 			neededExp *= 2.5f;
 		}
