@@ -42,91 +42,91 @@ import java.util.ArrayList;
 //removed from drops, here for pre-1.1.0 saves
 public class OverloadBeacon extends Item {
 
-	private static final String AC_USE = "USE";
+    private static final String AC_USE = "USE";
 
-	{
-		image = ItemSpriteSheet.BEACON;
+    {
+        image = ItemSpriteSheet.BEACON;
 
-		stackable = true;
+        stackable = true;
 
-		defaultAction = AC_USE;
+        defaultAction = AC_USE;
 
-		bones = true;
-	}
+        bones = true;
+    }
 
-	@Override
-	public ArrayList<String> actions(Hero hero) {
-		ArrayList<String> actions = super.actions(hero);
-		actions.add(AC_USE);
-		return actions;
-	}
+    @Override
+    public ArrayList<String> actions(Hero hero) {
+        ArrayList<String> actions = super.actions(hero);
+        actions.add(AC_USE);
+        return actions;
+    }
 
-	@Override
-	public void execute(Hero hero, String action) {
+    @Override
+    public void execute(Hero hero, String action) {
 
-		super.execute(hero, action);
+        super.execute(hero, action);
 
-		if (action.equals(AC_USE)) {
-			detach( hero.belongings.backpack );
-			Sample.INSTANCE.play( Assets.Sounds.BEACON );
-			Sample.INSTANCE.play( Assets.Sounds.BURNING );
-			Sample.INSTANCE.play(Assets.Sounds.DESCEND);
-			Buff.affect(hero, TemporaryOverload.class, 150f);
-			for (int i : PathFinder.NEIGHBOURS9){
-				CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 50);
-			}
-			hero.spendAndNext(1f);
-		}
+        if (action.equals(AC_USE)) {
+            detach( hero.belongings.backpack );
+            Sample.INSTANCE.play( Assets.Sounds.BEACON );
+            Sample.INSTANCE.play( Assets.Sounds.BURNING );
+            Sample.INSTANCE.play(Assets.Sounds.DESCEND);
+            Buff.affect(hero, TemporaryOverload.class, 150f);
+            for (int i : PathFinder.NEIGHBOURS9){
+                CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 50);
+            }
+            hero.spendAndNext(1f);
+        }
 
-	}
+    }
 
-	@Override
-	public boolean isUpgradable() {
-		return false;
-	}
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
 
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
+    @Override
+    public boolean isIdentified() {
+        return true;
+    }
 
-	@Override
-	public int value() {
-		return 125 * quantity;
-	}
+    @Override
+    public int value() {
+        return 125 * quantity;
+    }
 
-	public static class TemporaryOverload extends FlavourBuff {
-		public static final float DURATION	= 150f;
+    public static class TemporaryOverload extends FlavourBuff {
+        public static final float DURATION	= 150f;
 
-		{
-			type = buffType.POSITIVE;
-			announced = true;
-		}
+        {
+            type = buffType.POSITIVE;
+            announced = true;
+        }
 
-		@Override
-		public int icon() {
-			return BuffIndicator.INVERT_MARK;
-		}
+        @Override
+        public int icon() {
+            return BuffIndicator.INVERT_MARK;
+        }
 
-		@Override
-		public float iconFadePercent() {
-			return Math.max(0, (DURATION - visualcooldown()) / DURATION);
-		}
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+        }
 
-		@Override
-		public void tintIcon(Image icon) {
-			icon.hardlight(0f, 0f, 1f);
-		}
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0f, 0f, 1f);
+        }
 
-		@Override
-		public String toString() {
-			return Messages.get(this, "name");
-		}
+        @Override
+        public String toString() {
+            return Messages.get(this, "name");
+        }
 
-		@Override
-		public String desc() {
-			return Messages.get(this, "desc", dispTurns());
-		}
-	}
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", dispTurns());
+        }
+    }
 
 }

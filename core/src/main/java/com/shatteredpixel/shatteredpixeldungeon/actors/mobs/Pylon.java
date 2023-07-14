@@ -187,11 +187,12 @@ public class Pylon extends Mob {
 	}
 
 	@Override
-	public void add(Buff buff) {
+	public boolean add(Buff buff) {
 		//immune to all buffs/debuffs when inactive
 		if (alignment != Alignment.NEUTRAL) {
-			super.add(buff);
+			return super.add(buff);
 		}
+		return false;
 	}
 
 	@Override
@@ -205,6 +206,12 @@ public class Pylon extends Mob {
 		if (dmg >= 15 + Dungeon.cycle * 60 && Dungeon.cycle < 2){
 			//takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
 			dmg = 14 + Dungeon.cycle * 60 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;
+		}
+
+		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+		if (lock != null && !isImmune(src.getClass())){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/2f);
+			else                                                    lock.addTime(dmg);
 		}
 		super.damage(dmg, src);
 	}

@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
@@ -43,7 +42,7 @@ public class LifeLink extends FlavourBuff {
 	public void detach() {
 		super.detach();
 		Char ch = (Char)Actor.findById(object);
-		if (!target.isAlive() && ch != null){
+		if (!target.isActive() && ch != null){
 			for (LifeLink l : ch.buffs(LifeLink.class)){
 				if (l.object == target.id()){
 					l.detach();

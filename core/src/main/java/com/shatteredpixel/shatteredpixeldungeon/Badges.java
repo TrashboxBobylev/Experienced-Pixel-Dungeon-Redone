@@ -234,14 +234,7 @@ public class Badges {
 
 	private static final HashMap<String, String> renamedBadges = new HashMap<>();
 	static{
-		//v1.1.0 (some names were from before 1.1.0, but conversion was added then)
-		renamedBadges.put("BAG_BOUGHT_SEED_POUCH",      "BAG_BOUGHT_VELVET_POUCH");
-		renamedBadges.put("BAG_BOUGHT_WAND_HOLSTER",    "BAG_BOUGHT_MAGICAL_HOLSTER");
-
-		renamedBadges.put("POTIONS_COOKED_1", "ITEMS_CRAFTED_1");
-		renamedBadges.put("POTIONS_COOKED_2", "ITEMS_CRAFTED_2");
-		renamedBadges.put("POTIONS_COOKED_3", "ITEMS_CRAFTED_3");
-		renamedBadges.put("POTIONS_COOKED_4", "ITEMS_CRAFTED_4");
+		//no renamed badges currently
 	}
 
 	public static HashSet<Badge> restore( Bundle bundle ) {
@@ -311,8 +304,12 @@ public class Badges {
 		}
 	}
 
-	public static void saveGlobal() {
-		if (saveNeeded) {
+	public static void saveGlobal(){
+		saveGlobal(false);
+	}
+
+	public static void saveGlobal(boolean force) {
+		if (saveNeeded || force) {
 			
 			Bundle bundle = new Bundle();
 			store( bundle, global );
@@ -539,6 +536,10 @@ public class Badges {
 		// Note that artifacts should never trigger this badge as they are alternatively upgraded
 		if (!item.levelKnown || item instanceof Artifact) {
 			return;
+		}
+
+		if (item instanceof MeleeWeapon){
+			validateDuelistUnlock();
 		}
 		
 		Badge badge = null;
@@ -959,15 +960,19 @@ public class Badges {
 			badge = Badge.GAMES_PLAYED_1;
 		}
 		if (Rankings.INSTANCE.totalNumber >= 25 || Rankings.INSTANCE.wonNumber >= 3) {
+			unlock(badge);
 			badge = Badge.GAMES_PLAYED_2;
 		}
 		if (Rankings.INSTANCE.totalNumber >= 50 || Rankings.INSTANCE.wonNumber >= 5) {
+			unlock(badge);
 			badge = Badge.GAMES_PLAYED_3;
 		}
 		if (Rankings.INSTANCE.totalNumber >= 200 || Rankings.INSTANCE.wonNumber >= 10) {
+			unlock(badge);
 			badge = Badge.GAMES_PLAYED_4;
 		}
 		if (Rankings.INSTANCE.totalNumber >= 1000 || Rankings.INSTANCE.wonNumber >= 25) {
+			unlock(badge);
 			badge = Badge.GAMES_PLAYED_5;
 		}
 

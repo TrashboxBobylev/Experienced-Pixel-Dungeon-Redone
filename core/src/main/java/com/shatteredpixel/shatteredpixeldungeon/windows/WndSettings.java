@@ -32,14 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
 import com.shatteredpixel.shatteredpixeldungeon.services.updates.Updates;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
-import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.watabou.input.ControllerHandler;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.Game;
@@ -227,6 +220,7 @@ public class WndSettings extends WndTabbed {
 		OptionSlider optBrightness;
 		OptionSlider optVisGrid;
 		OptionSlider optFollowIntensity;
+		OptionSlider optScreenShake;
 
 		@Override
 		protected void createChildren() {
@@ -331,6 +325,16 @@ public class WndSettings extends WndTabbed {
 			optFollowIntensity.setSelectedValue(SPDSettings.cameraFollow());
 			add(optFollowIntensity);
 
+			optScreenShake = new OptionSlider(Messages.get(this, "screenshake"),
+					Messages.get(this, "off"), Messages.get(this, "high"), 0, 4) {
+				@Override
+				protected void onChange() {
+					SPDSettings.screenShake(getSelectedValue());
+				}
+			};
+			optScreenShake.setSelectedValue(SPDSettings.screenShake());
+			add(optScreenShake);
+
 		}
 
 		@Override
@@ -375,14 +379,18 @@ public class WndSettings extends WndTabbed {
 			if (width > 200){
 				optBrightness.setRect(0, bottom + GAP, width/2-GAP/2, SLIDER_HEIGHT);
 				optVisGrid.setRect(optBrightness.right() + GAP, optBrightness.top(), width/2-GAP/2, SLIDER_HEIGHT);
+
+				optFollowIntensity.setRect(0, optVisGrid.bottom() + GAP, width/2-GAP/2, SLIDER_HEIGHT);
+				optScreenShake.setRect(optFollowIntensity.right() + GAP, optFollowIntensity.top(), width/2-GAP/2, SLIDER_HEIGHT);
 			} else {
 				optBrightness.setRect(0, bottom + GAP, width, SLIDER_HEIGHT);
 				optVisGrid.setRect(0, optBrightness.bottom() + GAP, width, SLIDER_HEIGHT);
+
+				optFollowIntensity.setRect(0, optVisGrid.bottom() + GAP, width, SLIDER_HEIGHT);
+				optScreenShake.setRect(0, optFollowIntensity.bottom() + GAP, width, SLIDER_HEIGHT);
 			}
 
-			optFollowIntensity.setRect(0, optVisGrid.bottom() + GAP, width, SLIDER_HEIGHT);
-
-			height = optFollowIntensity.bottom();
+			height = optScreenShake.bottom();
 		}
 
 	}

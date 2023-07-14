@@ -38,8 +38,11 @@ public class BlindingDart extends TippedDart {
 	
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-		
-		Buff.affect(defender, Blindness.class, Blindness.DURATION);
+
+		//when processing charged shot, only blind enemies
+		if (!processingChargedShot || attacker.alignment != defender.alignment) {
+			Buff.affect(defender, Blindness.class, Blindness.DURATION);
+		}
 		
 		return super.proc(attacker, defender, damage);
 	}

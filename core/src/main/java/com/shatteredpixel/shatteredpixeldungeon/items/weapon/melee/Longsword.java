@@ -155,7 +155,7 @@ public class Longsword extends MeleeWeapon {
 	}
 
 	@Override
-	public float abilityChargeUse(Hero hero) {
+	public float abilityChargeUse(Hero hero, Char target) {
 		return hero.belongings.secondWep() == this ?
 				Buff.affect(hero, Charger.class).secondCharges :
 				Buff.affect(hero, Charger.class).charges;
@@ -210,8 +210,9 @@ public class Longsword extends MeleeWeapon {
 		}
 
 		Ballistica aim = new Ballistica(hero.pos, target, Ballistica.WONT_STOP);
+		Char enemy = Actor.findChar(target);
 
-		float chargeUse = abilityChargeUse(hero);
+		float chargeUse = abilityChargeUse(hero, enemy);
 		int maxDist = 2 + Math.round(chargeUse);
 		int dist = Math.min(aim.dist, maxDist);
 
@@ -237,7 +238,7 @@ public class Longsword extends MeleeWeapon {
 				new Callback() {
 					@Override
 					public void call() {
-						beforeAbilityUsed(hero);
+						beforeAbilityUsed(hero, enemy);
 						for (int cell: cone.cells){
 							Char ch = Actor.findChar( cell );
 							if (ch != null) {

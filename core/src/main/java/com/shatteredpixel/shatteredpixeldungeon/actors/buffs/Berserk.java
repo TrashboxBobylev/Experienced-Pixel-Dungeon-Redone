@@ -33,11 +33,15 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal.WarriorShield;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
@@ -118,7 +122,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 					BuffIndicator.refreshHero();
 					if (!target.isAlive()){
 						target.die(this);
-						if (!target.isAlive()) Dungeon.fail(this.getClass());
+						if (!target.isAlive()) Dungeon.fail(this);
 					}
 				}
 
@@ -127,7 +131,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 				power = 0f;
 				if (!target.isAlive()){
 					target.die(this);
-					if (!target.isAlive()) Dungeon.fail(this.getClass());
+					if (!target.isAlive()) Dungeon.fail(this);
 				}
 
 			}
@@ -141,14 +145,15 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 
 				if (power < 1f){
 					ActionIndicator.clearAction(this);
+				} else {
+					ActionIndicator.refresh();
 				}
 
 				if (this.power <= 0) {
 					detach();
 				}
 			}
-		} else if (state == State.RECOVERING && levelRecovery == 0
-				&& (target.buff(LockedFloor.class) == null || target.buff(LockedFloor.class).regenOn())){
+		} else if (state == State.RECOVERING && levelRecovery == 0 && Regeneration.regenOn()){
 			turnRecovery--;
 			if (turnRecovery <= 0){
 				turnRecovery = 0;
@@ -251,9 +256,22 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 	}
 
 	@Override
-	public Image actionIcon() {
-		//TODO, should look into these in general honestly
-		return new BuffIcon(BuffIndicator.FURY, true);
+	public int actionIcon() {
+		return HeroIcon.BERSERK;
+	}
+
+	@Override
+	public Visual secondaryVisual() {
+		BitmapText txt = new BitmapText(PixelScene.pixelFont);
+		txt.text((int) (power * 100) + "%");
+		txt.hardlight(CharSprite.POSITIVE);
+		txt.measure();
+		return txt;
+	}
+
+	@Override
+	public int indicatorColor() {
+		return 0x660000;
 	}
 
 	@Override

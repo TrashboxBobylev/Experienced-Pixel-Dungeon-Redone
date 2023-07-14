@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
@@ -41,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.StatueSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -67,8 +70,8 @@ public class Greatsword extends MeleeWeapon {
     }
 
     @Override
-    public float abilityChargeUse(Hero hero) {
-        return 2*super.abilityChargeUse(hero);
+    public float abilityChargeUse(Hero hero, Char target) {
+        return 2*super.abilityChargeUse(hero, target);
     }
 
 	@Override
@@ -99,7 +102,7 @@ public class Greatsword extends MeleeWeapon {
         hero.sprite.attack(enemy.pos, new Callback() {
             @Override
             public void call() {
-                beforeAbilityUsed(hero);
+                beforeAbilityUsed(hero, enemy);
                 AttackIndicator.target(enemy);
                 if (hero.attack(enemy, 0.5f, 0f, 1f)){
                     Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
@@ -125,7 +128,7 @@ public class Greatsword extends MeleeWeapon {
                 Invisibility.dispel();
                 hero.spendAndNext(hero.attackDelay());
                 if (!enemy.isAlive()){
-                    onAbilityKill(hero);
+                    onAbilityKill(hero, enemy);
                 }
                 afterAbilityUsed(hero);
             }
@@ -160,11 +163,50 @@ public class Greatsword extends MeleeWeapon {
             state = WANDERING;
             spriteClass = GuardianSprite.class;
             alignment = Alignment.ALLY;
+            Buff.affect(this, TickDebuff.class);
         }
 
         public GuardianKnight() {
             HP = HT = 9 + Dungeon.escalatingDepth() * 4;
             defenseSkill = 4 + Dungeon.escalatingDepth();
+        }
+
+        public static class TickDebuff extends Buff {
+
+            private float partialHP = 0;
+
+            private final String PART_HP = "partialHP";
+
+            @Override
+            public void storeInBundle(Bundle bundle) {
+                super.storeInBundle(bundle);
+                bundle.put(PART_HP, partialHP);
+            }
+
+            @Override
+            public void restoreFromBundle(Bundle bundle) {
+                super.restoreFromBundle(bundle);
+                if (bundle.contains(PART_HP))
+                    partialHP = bundle.getFloat(PART_HP);
+            }
+
+            @Override
+            public boolean act() {
+                if (target.isAlive()) {
+                    float regen = 1f / (target.HT / 150f);
+                    if (target.HP > 0) {
+                        partialHP += regen;
+                        if (partialHP >= 1){
+                            target.damage((int)partialHP, new Doom());
+                            partialHP -= (int)partialHP;
+                        }
+                    }
+                    spend( TICK );
+                } else {
+                    diactivate();
+                }
+                return true;
+            }
         }
 
         @Override

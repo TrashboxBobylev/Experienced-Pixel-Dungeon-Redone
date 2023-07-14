@@ -6,7 +6,7 @@ This guide covers a few technical changes developers will likely want to make wh
 
 There are a number of variables defined in the root [build.gradle](/build.gradle) file that you may want to change:
 - `appName` defines the user-visible name of your app. You must change this to whatever you wish to call your game.
-- `appPackageName` defines the internal name of your app. Android and iOS use this name to distinguish your app from others and Desktop uses it and appName to determine the game's save directory. You must change this from its initial value. You should use the format com.<dev name>.<game name>
+- `appPackageName` defines the internal name of your app. Android and iOS use this name to distinguish your app from others and Desktop uses it and appName to determine the game's save directory. You must change this from its initial value. You should use the format `com.<dev name>.<game name>`
 - `appVersionCode` defines the internal version number of your app. You want to increment this whenever releasing a new update. Read the next section for more details on this one.
 - `appVersionName` defines the user-visible version name of your app. Change this to whatever you like, and increment it whenever you release a new update.
 
@@ -67,7 +67,7 @@ Shattered Pixel Dungeon supporters a number of languages which are translated vi
 If you plan to add new text to the game, maintaining these translations may be difficult or impossible, and so you may wish to remove them:
 - In [Languages.java](/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/messages/Languages.java) remove all of the enum constants except for ENGLISH.
 - In the [messages resource folders](/core/src/main/assets/messages) remove all of the .properties files which include an underscore followed by a language code (e.g. remove actors_ru.properties, but not actors.properties)
-- Finally remove the language picker by commenting out the line `add( langsTab );` in [WndSettings.java](/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/windows/WndSettings.java)
+- Finally remove the language picker by commenting out the lines `add( langs );` and `add( langsTab );` in [WndSettings.java](/core/src/main/java/com/shatteredpixel/shatteredpixeldungeon/windows/WndSettings.java)
 - Optionally, if you are multilingual or have translators and wish to retain some languages, do not comment out the language picker and only remove the enums/resources for the languages you won't be using.
 
 If you want to have a language other than English as the base language, you can simply remove the .properties files that do not have a language code, and remove the underscore+language code from the language you want to use. The game will consider this language to be English internally however, so you may want to look into where the ENGLISH variable is used and make adjustments accordingly, and possibly rename it.

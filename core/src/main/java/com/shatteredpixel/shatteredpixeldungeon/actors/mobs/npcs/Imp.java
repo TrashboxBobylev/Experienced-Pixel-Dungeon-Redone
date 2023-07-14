@@ -82,13 +82,15 @@ public class Imp extends NPC {
 	public int defenseSkill( Char enemy ) {
 		return INFINITE_EVASION;
 	}
-	
+
 	@Override
 	public void damage( int dmg, Object src ) {
+		//do nothing
 	}
-	
+
 	@Override
-	public void add( Buff buff ) {
+	public boolean add( Buff buff ) {
+		return false;
 	}
 	
 	@Override
@@ -239,7 +241,7 @@ public class Imp extends NPC {
 				given = false;
 				
 				do {
-					reward = (Ring)Generator.random( Generator.Category.RING );
+					reward = (Ring)Generator.randomUsingDefaults( Generator.Category.RING );
 				} while (reward.cursed);
 				reward.upgrade( 2 );
                 switch (Dungeon.cycle){

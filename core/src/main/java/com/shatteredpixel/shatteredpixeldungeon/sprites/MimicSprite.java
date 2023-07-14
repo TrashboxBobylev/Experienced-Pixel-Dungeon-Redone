@@ -77,7 +77,7 @@ public class MimicSprite extends MobSprite {
 
 		throww = attack.clone();
 		zap = attack.clone();
-        slam = new Animation( 5, true );
+        slam = new Animation( 15, true );
         slam.frames( frames, 0+c, 0+c, 0+c, 0+c, 0+c, 1+c, 1+c, 1+c, 1+c);
 
 		die = new Animation( 5, false );
@@ -198,6 +198,10 @@ public class MimicSprite extends MobSprite {
         @Override
         public void link(Char ch) {
             super.link(ch);
+            if (ch instanceof BlackMimic && ((BlackMimic) ch).isCopy){
+                hardlight(0x333333);
+                alpha(0.75f);
+            }
 
             superchargeSparks = emitter();
             superchargeSparks.autoKill = false;

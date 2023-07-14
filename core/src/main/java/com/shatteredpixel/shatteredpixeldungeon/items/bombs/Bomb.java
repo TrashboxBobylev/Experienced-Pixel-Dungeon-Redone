@@ -201,7 +201,7 @@ public class Bomb extends Item {
 						Badges.validateDeathFromFriendlyMagic();
 					}
 					GLog.n(Messages.get(this, "ondeath"));
-					Dungeon.fail(Bomb.class);
+					Dungeon.fail(this);
 				}
 			}
 			

@@ -94,13 +94,16 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public void add(Buff buff) {
-		super.add(buff);
-		if (buff.type == Buff.buffType.NEGATIVE && alignment == Alignment.NEUTRAL){
-			alignment = Alignment.ENEMY;
-			stopHiding();
-			if (sprite != null) sprite.idle();
+	public boolean add(Buff buff) {
+		if (super.add(buff)) {
+			if (buff.type == Buff.buffType.NEGATIVE && alignment == Alignment.NEUTRAL) {
+				alignment = Alignment.ENEMY;
+				stopHiding();
+				if (sprite != null) sprite.idle();
+			}
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -125,9 +128,12 @@ public class Mimic extends Mob {
 	protected boolean act() {
 		if (alignment == Alignment.NEUTRAL && state != PASSIVE){
 			alignment = Alignment.ENEMY;
-			GLog.w(Messages.get(this, "reveal") );
-			CellEmitter.get(pos).burst(Speck.factory(Speck.STAR), 10);
-			Sample.INSTANCE.play(Assets.Sounds.MIMIC);
+			if (sprite != null) sprite.idle();
+			if (Dungeon.level.heroFOV[pos]) {
+				GLog.w(Messages.get(this, "reveal") );
+				CellEmitter.get(pos).burst(Speck.factory(Speck.STAR), 10);
+				Sample.INSTANCE.play(Assets.Sounds.MIMIC);
+			}
 		}
 		return super.act();
 	}
@@ -167,6 +173,15 @@ public class Mimic extends Mob {
 			alignment = Alignment.ENEMY;
 			Dungeon.hero.spendAndNext(1f);
 		}
+	}
+
+	@Override
+	public int defenseProc(Char enemy, int damage) {
+		if (state == PASSIVE){
+			alignment = Alignment.ENEMY;
+			stopHiding();
+		}
+		return super.defenseProc(enemy, damage);
 	}
 
 	@Override
@@ -294,16 +309,16 @@ public class Mimic extends Mob {
 					reward = new Gold().random();
 					break;
 				case 1:
-					reward = Generator.randomMissile();
+					reward = Generator.randomMissile(true);
 					break;
 				case 2:
 					reward = Generator.randomArmor();
 					break;
 				case 3:
-					reward = Generator.randomWeapon();
+					reward = Generator.randomWeapon(true);
 					break;
 				case 4:
-					reward = Generator.random(Generator.Category.RING);
+					reward = Generator.randomUsingDefaults(Generator.Category.RING);
 					break;
 			}
 		} while (reward == null || Challenges.isItemBlocked(reward));

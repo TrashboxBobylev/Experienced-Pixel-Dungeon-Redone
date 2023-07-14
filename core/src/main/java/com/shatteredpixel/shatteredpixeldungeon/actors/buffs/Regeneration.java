@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.watabou.utils.Bundle;
 
 public class Regeneration extends Buff {
@@ -78,11 +79,10 @@ public class Regeneration extends Buff {
 			regen = 1f / regen;
 
 			if (target.HP < regencap() && !((Hero)target).isStarving()) {
-				LockedFloor lock = target.buff(LockedFloor.class);
-				if (target.HP > 0 && (lock == null || lock.regenOn())) {
+				if (regenOn()) {
 					partialHP += regen;
 					if (partialHP >= 1){
-						target.HP = Math.min(target.HP + (int)partialHP, target.HT);
+						target.HP = Math.max(target.HP + (int)partialHP, target.HT);
 						partialHP -= (int)partialHP;
 						if (target.HP == regencap()) {
 							((Hero) target).resting = false;
@@ -104,5 +104,16 @@ public class Regeneration extends Buff {
 	
 	public int regencap(){
 		return target.HT;
+	}
+
+	public static boolean regenOn(){
+		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+		if (lock != null && !lock.regenOn()){
+			return false;
+		}
+		if (Dungeon.level instanceof MiningLevel){
+			return false; //this is mainly for the current test sub-level
+		}
+		return true;
 	}
 }

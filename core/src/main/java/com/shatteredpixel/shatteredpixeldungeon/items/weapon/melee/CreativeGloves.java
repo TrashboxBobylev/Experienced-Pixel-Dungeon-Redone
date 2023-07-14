@@ -63,7 +63,7 @@ public class CreativeGloves extends MeleeWeapon {
 	}
 
 	@Override
-	public float abilityChargeUse(Hero hero) {
+	public float abilityChargeUse(Hero hero, Char target) {
 		return (Buff.affect(hero, Charger.class).chargeCap());
 	}
 
@@ -95,7 +95,7 @@ public class CreativeGloves extends MeleeWeapon {
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {
-				beforeAbilityUsed(hero);
+				beforeAbilityUsed(hero, enemy);
 				AttackIndicator.target(enemy);
 
 				enemy.damage(enemy.HP, this);

@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
-import com.watabou.input.ControllerHandler;
 import com.watabou.input.*;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
@@ -175,7 +174,7 @@ public class CellSelector extends ScrollArea {
 	
 	@Override
 	protected void onPointerDown( PointerEvent event ) {
-
+		camera.edgeScroll.set(-1);
 		if (event != curEvent && another == null) {
 					
 			if (curEvent.type == PointerEvent.Type.UP) {
@@ -198,6 +197,7 @@ public class CellSelector extends ScrollArea {
 	
 	@Override
 	protected void onPointerUp( PointerEvent event ) {
+		camera.edgeScroll.set(1);
 		if (pinching && (event == curEvent || event == another)) {
 			
 			pinching = false;

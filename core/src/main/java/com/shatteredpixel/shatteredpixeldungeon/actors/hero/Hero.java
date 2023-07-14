@@ -54,6 +54,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -70,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWea
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -78,10 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.SurfaceScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.*;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -95,7 +95,6 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
-import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.*;
@@ -141,7 +140,7 @@ public class Hero extends Char {
 	private int defenseSkill = 5;
 
 	public boolean ready = false;
-	private boolean damageInterrupt = true;
+	public boolean damageInterrupt = true;
 	public HeroAction curAction = null;
 	public HeroAction lastAction = null;
 
@@ -184,8 +183,8 @@ public class Hero extends Char {
 		int curHT = HT;
 		
 		HT = 20 + 5*(lvl-1) + HTBoost;
-		float multiplier = RingOfMight.HTMultiplier(this);
-		HT = Math.round(multiplier * HT);
+		int multiplier = RingOfMight.HTMultiplier(this);
+		HT = Math.round(multiplier + HT);
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
 			HT += buff(ElixirOfMight.HTBoost.class).boost();
@@ -408,7 +407,7 @@ public class Hero extends Char {
 		}
 
 		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
-			Buff.append( this, Sai.ComboStrikeTracker.class, Sai.ComboStrikeTracker.DURATION);
+			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
 		}
 
 		return hit;
@@ -430,7 +429,7 @@ public class Hero extends Char {
 		}
 
 		if (buff(Scimitar.SwordDance.class) != null){
-			accuracy *= 0.8f;
+			accuracy *= 1.25f;
 		}
 
 		if (!RingOfForce.fightingUnarmed(this)) {
@@ -466,7 +465,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (buff(Quarterstaff.DefensiveStance.class) != null){
-			evasion *= 2;
+			evasion *= 3;
 		}
 
 		if (paralysed > 0) {
@@ -502,8 +501,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			return Messages.get(RoundShield.GuardTracker.class, "guarded");
 		}
 
-		if (buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
-			buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class).detach();
+		if (buff(MonkEnergy.MonkAbility.Focus.FocusActivation.class) != null){
+			buff(MonkEnergy.MonkAbility.Focus.FocusActivation.class).detach();
 			if (sprite != null && sprite.visible) {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			}
@@ -525,7 +524,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (belongings.armor().masteryPotionBonus) armDr*=1.2f;
 			if (armDr > 0) dr += armDr;
 		}
-		if (belongings.weapon() != null)  {
+		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
 			int wepDr = Dungeon.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
@@ -549,16 +548,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
-
-			if (heroClass != HeroClass.DUELIST
-					&& hasTalent(Talent.LIGHTWEIGHT_CHARGE)
-					&& wep instanceof MeleeWeapon) {
-				if (((MeleeWeapon) wep).tier == 2) {
-					dmg = Math.round(dmg * (1f + 0.067f*pointsInTalent(Talent.LIGHTWEIGHT_CHARGE)));
-				} else if (((MeleeWeapon) wep).tier == 3) {
-					dmg = Math.round(dmg * (1f + 0.05f*pointsInTalent(Talent.LIGHTWEIGHT_CHARGE)));
-				}
-			}
 
 			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
 		} else {
@@ -784,7 +773,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			} else if (curAction instanceof HeroAction.Unlock) {
 				actResult = actUnlock((HeroAction.Unlock) curAction);
 				
-			} else if (curAction instanceof HeroAction.LvlTransition) {
+			} else if (curAction instanceof HeroAction.Mine) {
+				actResult = actMine( (HeroAction.Mine)curAction );
+
+			}else if (curAction instanceof HeroAction.LvlTransition) {
 				actResult = actTransition( (HeroAction.LvlTransition)curAction );
 				
 			} else if (curAction instanceof HeroAction.Attack) {
@@ -858,7 +850,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			return true;
 
 		//Hero moves in place if there is grass to trample
-		} else if (canSelfTrample()){
+		} else if (pos == action.dst && canSelfTrample()){
 			canSelfTrample = false;
 			Dungeon.level.pressCell(pos);
 			spendAndNext( 1 / speed() );
@@ -1024,7 +1016,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	private boolean actOpenChest( HeroAction.OpenChest action ) {
 		int dst = action.dst;
 		if (Dungeon.level.adjacent( pos, dst ) || pos == dst) {
-			
+			path = null;
+
 			Heap heap = Dungeon.level.heaps.get( dst );
 			if (heap != null && (heap.type != Type.HEAP && !heap.type.forSale())) {
 				
@@ -1040,7 +1033,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				switch (heap.type) {
 				case TOMB:
 					Sample.INSTANCE.play( Assets.Sounds.TOMB );
-					Camera.main.shake( 1, 0.5f );
+					PixelScene.shake( 1, 0.5f );
 					break;
 				case SKELETON:
 				case REMAINS:
@@ -1070,7 +1063,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	private boolean actUnlock( HeroAction.Unlock action ) {
 		int doorCell = action.dst;
 		if (Dungeon.level.adjacent( pos, doorCell )) {
-			
+			path = null;
+
 			boolean hasKey = false;
 			int door = Dungeon.level.map[doorCell];
 			
@@ -1113,16 +1107,68 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			return false;
 		}
 	}
+
+	public boolean actMine(HeroAction.Mine action){
+		if (Dungeon.level.adjacent(pos, action.dst)){
+			path = null;
+			if ((Dungeon.level.map[action.dst] == Terrain.WALL || Dungeon.level.map[action.dst] == Terrain.WALL_DECO)
+				&& Dungeon.level.insideMap(action.dst)){
+				sprite.attack(action.dst, new Callback() {
+					@Override
+					public void call() {
+
+						if (Dungeon.level.map[action.dst] == Terrain.WALL_DECO){
+							DarkGold gold = new DarkGold();
+							if (gold.doPickUp( Dungeon.hero )) {
+								GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", gold.name())) );
+							} else {
+								Dungeon.level.drop( gold, pos ).sprite.drop();
+							}
+							CellEmitter.center( action.dst ).burst( Speck.factory( Speck.STAR ), 7 );
+							Sample.INSTANCE.play( Assets.Sounds.EVOKE );
+						} else {
+							CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 2 );
+							Sample.INSTANCE.play( Assets.Sounds.MINE );
+						}
+
+						PixelScene.shake(0.5f, 0.5f);
+
+						Level.set( action.dst, Terrain.EMPTY_DECO );
+						for (int i : PathFinder.NEIGHBOURS9) {
+							Dungeon.level.discoverable[action.dst + i] = true;
+						}
+						for (int i : PathFinder.NEIGHBOURS9) {
+							GameScene.updateMap( action.dst+i );
+						}
+
+						Dungeon.observe();
+
+						spendAndNext(TICK);
+					}
+				});
+			} else {
+				ready();
+			}
+			return false;
+		} else if (getCloser( action.dst )) {
+
+			return true;
+
+		} else {
+			ready();
+			return false;
+		}
+	}
 	
 	private boolean actTransition(HeroAction.LvlTransition action ) {
 		int stairs = action.dst;
 		LevelTransition transition = Dungeon.level.getTransition(stairs);
 
 		if (rooted) {
-			Camera.main.shake(1, 1f);
+			PixelScene.shake(1, 1f);
 			ready();
 			return false;
-		} else if (transition != null && transition.inside(pos)) {
+		} else if (!Dungeon.level.locked && transition != null && transition.inside(pos)) {
 
 			if (transition.type == LevelTransition.Type.SURFACE){
 				if (belongings.getItem( Amulet.class ) == null) {
@@ -1175,8 +1221,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 				Level.beforeTransition();
 				InterlevelScene.curTransition = transition;
-				//TODO probably want to make this more flexible when more types exist
-				if (transition.type == LevelTransition.Type.REGULAR_EXIT) {
+				if (transition.type == LevelTransition.Type.REGULAR_EXIT
+					|| transition.type == LevelTransition.Type.BRANCH_EXIT) {
 					InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
 				} else {
 					InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
@@ -1239,7 +1285,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				Buff.affect(this, HoldFast.class).pos = pos;
 		}
 		if (hasTalent(Talent.PATIENT_STRIKE)){
-			Buff.prolong(this, Talent.PatientStrikeTracker.class, cooldown());
+			Buff.affect(Dungeon.hero, Talent.PatientStrikeTracker.class).pos = Dungeon.hero.pos;
 			}
 			sprite.showStatus( CharSprite.DEFAULT, Messages.get(this, "wait") );
 		}
@@ -1513,7 +1559,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			return false;
 
 		if (rooted) {
-			Camera.main.shake( 1, 1f );
+			PixelScene.shake( 1, 1f );
 			return false;
 		}
 		
@@ -1581,6 +1627,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					Chasm.heroJump(this);
 					interrupt();
 				} else {
+					flying = false;
+					remove(buff(Levitation.class)); //directly remove to prevent cell pressing
 					Chasm.heroFall(target);
 				}
 				canSelfTrample = false;
@@ -1630,7 +1678,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		Char ch = Actor.findChar( cell );
 		Heap heap = Dungeon.level.heaps.get( cell );
-		
+
 		if (Dungeon.level.map[cell] == Terrain.ALCHEMY && cell != pos) {
 			
 			curAction = new HeroAction.Alchemy( cell );
@@ -1642,6 +1690,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			} else {
 				curAction = new HeroAction.Attack( ch );
 			}
+
+		//TODO perhaps only trigger this if hero is already adjacent? reducing mistaps
+		} else if (Dungeon.level instanceof MiningLevel &&
+					belongings.getItem(Pickaxe.class) != null &&
+				(Dungeon.level.map[cell] == Terrain.WALL || Dungeon.level.map[cell] == Terrain.WALL_DECO)){
+
+			curAction = new HeroAction.Mine( cell );
 
 		} else if (heap != null
 				//moving to an item doesn't auto-pickup when enemies are near...
@@ -1671,8 +1726,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				//moving to a transition doesn't automatically trigger it when enemies are near
 				&& (visibleEnemies.size() == 0 || cell == pos)
 				&& !Dungeon.level.locked
-				&& Dungeon.depth != 28
-				&& (Dungeon.depth < 28 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
+				&& Dungeon.isAscensionPossible()
+				&& (Dungeon.depth < 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
 
 			curAction = new HeroAction.LvlTransition( cell );
 			
@@ -1734,7 +1789,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			}
 		}
 
-		int neededExp = 100 + Dungeon.cycle * 25;
+		int neededExp = 100 + Dungeon.cycle * 75;
 		if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
 			neededExp *= 2.5f;
 		}
@@ -1810,14 +1865,15 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public void add( Buff buff ) {
+	public boolean add( Buff buff ) {
 
-		if (buff(TimekeepersHourglass.timeStasis.class) != null)
-			return;
+		if (buff(TimekeepersHourglass.timeStasis.class) != null) {
+			return false;
+		}
 
-		super.add( buff );
+		boolean added = super.add( buff );
 
-		if (sprite != null && buffs().contains(buff)) {
+		if (sprite != null && added) {
 			String msg = buff.heroMessage();
 			if (msg != null){
 				GLog.w(msg);
@@ -1830,13 +1886,17 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		
 		BuffIndicator.refreshHero();
+
+		return added;
 	}
 	
 	@Override
-	public void remove( Buff buff ) {
-		super.remove( buff );
-
-		BuffIndicator.refreshHero();
+	public boolean remove( Buff buff ) {
+		if (super.remove( buff )) {
+			BuffIndicator.refreshHero();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -2035,7 +2095,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	
 	@Override
 	public void onAttackComplete() {
-		
+
+		if (enemy == null){
+			curAction = null;
+			super.onAttackComplete();
+			return;
+		}
+
 		AttackIndicator.target(enemy);
 		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
@@ -2054,7 +2120,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
-			Buff.append( this, Sai.ComboStrikeTracker.class, Sai.ComboStrikeTracker.DURATION);
+			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
 		}
 
 		RingOfForce.BrawlersStance brawlStance = buff(RingOfForce.BrawlersStance.class);
@@ -2136,7 +2202,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		curAction = null;
 
-		super.onOperateComplete();
+		if (!ready) {
+			super.onOperateComplete();
+		}
 	}
 
 	@Override

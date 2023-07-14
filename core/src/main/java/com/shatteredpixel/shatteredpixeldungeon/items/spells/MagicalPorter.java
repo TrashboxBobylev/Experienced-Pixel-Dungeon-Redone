@@ -32,8 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-import java.util.ArrayList;
-
 //beacon was removed from drops, here for pre-1.1.0 saves
 public class MagicalPorter extends InventorySpell {
 	
@@ -60,11 +58,6 @@ public class MagicalPorter extends InventorySpell {
 		
 		Item result = item.detachAll(curUser.belongings.backpack);
 		int portDepth = 5 * (1 + Dungeon.depth/5);
-		ArrayList<Item> ported = Dungeon.portedItems.get(portDepth);
-		if (ported == null) {
-			Dungeon.portedItems.put(portDepth, ported = new ArrayList<>());
-		}
-		ported.add(result);
 		
 	}
 	

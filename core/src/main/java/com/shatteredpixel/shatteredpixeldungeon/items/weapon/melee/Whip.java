@@ -82,6 +82,7 @@ public class Whip extends MeleeWeapon {
 	protected void duelistAbility(Hero hero, Integer target) {
 
 		ArrayList<Char> targets = new ArrayList<>();
+		Char closest = null;
 
 		hero.belongings.abilityWeapon = this;
 		Buff.affect(hero, WhipReachBooster.class);
@@ -91,6 +92,9 @@ public class Whip extends MeleeWeapon {
 					&& Dungeon.level.heroFOV[ch.pos]
 					&& hero.canAttack(ch)){
 				targets.add(ch);
+				if (closest == null || Dungeon.level.trueDistance(hero.pos, closest.pos) > Dungeon.level.trueDistance(hero.pos, ch.pos)){
+					closest = ch;
+				}
 			}
 		}
 		hero.belongings.abilityWeapon = null;
@@ -102,14 +106,15 @@ public class Whip extends MeleeWeapon {
 		}
 
 		throwSound();
+		Char finalClosest = closest;
 		hero.sprite.attack(hero.pos, new Callback() {
 			@Override
 			public void call() {
-				beforeAbilityUsed(hero);
+				beforeAbilityUsed(hero, finalClosest);
 				for (Char ch : targets) {
 					hero.attack(ch, 0.8f, 0, 1f);
 					if (!ch.isAlive()){
-						onAbilityKill(hero);
+						onAbilityKill(hero, ch);
 					}
 				}
 				Invisibility.dispel();

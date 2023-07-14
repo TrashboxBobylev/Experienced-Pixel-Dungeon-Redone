@@ -56,7 +56,7 @@ public class Repulsion extends Armor.Glyph {
 					Math.round(2 * powerMulti),
 					true,
 					true,
-					getClass());
+					this);
 		}
 		
 		return damage;

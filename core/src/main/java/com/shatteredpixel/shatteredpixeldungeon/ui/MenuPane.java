@@ -35,8 +35,6 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
 
-import javax.print.Doc;
-
 public class MenuPane extends Component {
 
 	private Image bg;
@@ -70,7 +68,7 @@ public class MenuPane extends Component {
 		bg = new Image(Assets.Interfaces.MENU);
 		add(bg);
 
-		depthIcon = Icons.get(Dungeon.level.feeling);
+		depthIcon = Icons.get(Dungeon.branch);
 		add(depthIcon);
 
 		depthText = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.pixelFont);
@@ -164,6 +162,7 @@ public class MenuPane extends Component {
 		depthIcon.x = btnJournal.left() - 7 + (7 - depthIcon.width())/2f - 0.1f;
 		depthIcon.y = y + 1;
 		if (SPDSettings.interfaceSize() == 0) depthIcon.y++;
+		if (Dungeon.branch == Dungeon.BRANCH_BLACK) depthIcon.y--;
 		PixelScene.align(depthIcon);
 
 		depthText.scale.set(PixelScene.align(0.67f));

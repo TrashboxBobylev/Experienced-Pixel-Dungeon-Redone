@@ -25,11 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
@@ -40,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MirrorSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
@@ -82,7 +79,13 @@ public class Feint extends ArmorAbility {
 			return;
 		}
 
-		if (!Dungeon.level.passable[target] || Actor.findChar(target) != null){
+		if (Dungeon.hero.rooted){
+			PixelScene.shake( 1, 1f );
+			GLog.w(Messages.get(this, "bad_location"));
+			return;
+		}
+
+		if (Dungeon.level.solid[target] || Actor.findChar(target) != null){
 			GLog.w(Messages.get(this, "bad_location"));
 			return;
 		}
@@ -97,6 +100,7 @@ public class Feint extends ArmorAbility {
 				}
 				hero.pos = target;
 				Dungeon.level.occupyCell(hero);
+				Invisibility.dispel();
 				hero.spendAndNext(1f);
 			}
 		});
@@ -177,26 +181,28 @@ public class Feint extends ArmorAbility {
 
 		@Override
 		public int defenseSkill(Char enemy) {
-			if (enemy instanceof Mob){
-				((Mob) enemy).clearEnemy();
-			}
-			Buff.affect(enemy, FeintConfusion.class, 1);
-			if (enemy.sprite != null) enemy.sprite.showLost();
-			if (Dungeon.hero.hasTalent(Talent.FEIGNED_RETREAT)){
-				Buff.prolong(Dungeon.hero, Haste.class, 2f*Dungeon.hero.pointsInTalent(Talent.FEIGNED_RETREAT));
-			}
-			if (Dungeon.hero.hasTalent(Talent.EXPOSE_WEAKNESS)){
-				Buff.prolong(enemy, Vulnerable.class, Dungeon.hero.pointsInTalent(Talent.EXPOSE_WEAKNESS));
-			}
-			if (Dungeon.hero.hasTalent(Talent.COUNTER_ABILITY)){
-				Buff.prolong(Dungeon.hero, Talent.CounterAbilityTacker.class, 3f);
+			if (enemy.alignment == Alignment.ENEMY) {
+				if (enemy instanceof Mob) {
+					((Mob) enemy).clearEnemy();
+				}
+				Buff.affect(enemy, FeintConfusion.class, 1);
+				if (enemy.sprite != null) enemy.sprite.showLost();
+				if (Dungeon.hero.hasTalent(Talent.FEIGNED_RETREAT)) {
+					Buff.prolong(Dungeon.hero, Haste.class, 2f * Dungeon.hero.pointsInTalent(Talent.FEIGNED_RETREAT));
+				}
+				if (Dungeon.hero.hasTalent(Talent.EXPOSE_WEAKNESS)) {
+					Buff.prolong(enemy, Vulnerable.class, 2f * Dungeon.hero.pointsInTalent(Talent.EXPOSE_WEAKNESS));
+				}
+				if (Dungeon.hero.hasTalent(Talent.COUNTER_ABILITY)) {
+					Buff.prolong(Dungeon.hero, Talent.CounterAbilityTacker.class, 3f);
+				}
 			}
 			return 0;
 		}
 
 		@Override
-		public void add( Buff buff ) {
-
+		public boolean add( Buff buff ) {
+			return false;
 		}
 
 		{

@@ -35,11 +35,15 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -138,12 +142,29 @@ public class Marked extends Buff implements ActionIndicator.Action {
     }
 
     @Override
-    public Image actionIcon() {
-        Image actionIco = new Image(Assets.Sprites.ITEM_ICONS);
-        actionIco.frame(ItemSpriteSheet.Icons.film.get(ItemSpriteSheet.Icons.SCROLL_TELEPORT));
-        actionIco.scale.set(2f);
+    public int actionIcon() {
+        return HeroIcon.MARKED;
+    }
+
+    @Override
+    public Visual primaryVisual() {
+        Image actionIco = new HeroIcon(this);
         tintIcon(actionIco);
         return actionIco;
+    }
+
+    @Override
+    public Visual secondaryVisual() {
+        BitmapText txt = new BitmapText(PixelScene.pixelFont);
+        txt.text(Integer.toString(Math.min(9, stack)));
+        txt.hardlight(CharSprite.POSITIVE);
+        txt.measure();
+        return txt;
+    }
+
+    @Override
+    public int indicatorColor() {
+        return 0x888888;
     }
 
     @Override

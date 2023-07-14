@@ -68,7 +68,7 @@ public class DwarfKing extends Mob {
 	{
 		spriteClass = KingSprite.class;
 
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 450 : 300;
+		HP = HT = 25 * theSubjectConstant();
 		EXP = 40;
 		defenseSkill = 22;
 
@@ -76,26 +76,30 @@ public class DwarfKing extends Mob {
 		properties.add(Property.UNDEAD);
         switch (Dungeon.cycle){
             case 1:
-                HP = HT = 3876;
+                HP = HT = 323 * theSubjectConstant();
                 defenseSkill = 89;
                 EXP = 725;
                 break;
             case 2:
-                HP = HT = 60300;
+                HP = HT = 5025 * theSubjectConstant();
                 defenseSkill = 324;
                 EXP = 25000;
                 break;
             case 3:
-                HP = HT = 1500000;
+                HP = HT = 125000 * theSubjectConstant();
                 defenseSkill = 780;
                 EXP = 400000;
                 break;
             case 4:
-                HP = HT = 180000000;
+                HP = HT = 15000000 * theSubjectConstant();
                 defenseSkill = 7000;
                 EXP = 99999999;
                 break;
         }
+	}
+
+	private int theSubjectConstant(){
+		return Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 18 : 12;
 	}
 
 	@Override
@@ -239,7 +243,7 @@ public class DwarfKing extends Mob {
 					spend(3 * TICK);
 					summonsMade += 2;
 					return true;
-				} else if (shielding() <= (HT / 3 * 2) && summonsMade < 12){
+				} else if (shielding() <= (HT - HT * theSubjectConstant()*6) && summonsMade < 12){
 					if (summonsMade == 6) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -255,7 +259,7 @@ public class DwarfKing extends Mob {
 					summonsMade += 3;
 					spend(3*TICK);
 					return true;
-				} else if (shielding() <= (HT / 3) && summonsMade < 18) {
+				} else if (shielding() <= (HT - HT * theSubjectConstant()*12) && summonsMade < 18) {
 					if (summonsMade == 12) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -289,7 +293,7 @@ public class DwarfKing extends Mob {
 					spend(3 * TICK);
 					summonsMade++;
 					return true;
-				} else if (shielding() <= HT / 3 * 2 && summonsMade < 8) {
+				} else if (shielding() <= (HT - HT * theSubjectConstant() * 4) && summonsMade < 8) {
 					if (summonsMade == 4) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -303,7 +307,7 @@ public class DwarfKing extends Mob {
 					summonsMade++;
 					spend(TICK);
 					return true;
-				} else if (shielding() <= HT / 3 && summonsMade < 12) {
+				} else if (shielding() <= (HT - HT * theSubjectConstant() * 8) && summonsMade < 12) {
 					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 					yell(Messages.get(this, "wave_3"));
@@ -505,7 +509,10 @@ public class DwarfKing extends Mob {
 		super.damage(dmg, src);
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null && !isImmune(src.getClass())) lock.addTime(dmg/3);
+		if (lock != null && !isImmune(src.getClass())){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/5f);
+			else                                                    lock.addTime(dmg/3f);
+		}
 
 		if (phase == 1) {
 			int dmgTaken = preHP - HP;
@@ -738,7 +745,7 @@ public class DwarfKing extends Mob {
 
 		@Override
 		public void fx(boolean on) {
-			if (on && particles == null) {
+			if (on && (particles == null || particles.parent == null)) {
 				particles = CellEmitter.get(pos);
 
 				if (summon == DKGolem.class){

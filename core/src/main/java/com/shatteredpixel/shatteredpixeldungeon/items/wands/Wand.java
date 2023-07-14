@@ -579,7 +579,12 @@ public abstract class Wand extends Item {
 					if (target == curUser.pos && curUser.heroClass == HeroClass.MAGE){
 
 						if (curUser.buff(MagicImmune.class) != null){
-							GLog.w( Messages.get(this, "no_magic") );
+							GLog.w( Messages.get(Wand.class, "no_magic") );
+							return;
+						}
+
+						if (curWand.curCharges == 0){
+							GLog.w( Messages.get(Wand.class, "fizzles") );
 							return;
 						}
 
@@ -590,7 +595,7 @@ public abstract class Wand extends Item {
 						Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
 						ScrollOfRecharging.charge(curUser);
 						updateQuickslot();
-						curUser.spend(Actor.TICK);
+						curUser.spendAndNext(Actor.TICK);
 						return;
 					}
 					GLog.i( Messages.get(Wand.class, "self_target") );
@@ -721,8 +726,7 @@ public abstract class Wand extends Item {
 			float turnsToCharge = (float) (BASE_CHARGE_DELAY
 					+ (getScalingChargeAddition() * Math.pow(scalingFactor, missingCharges)));
 
-			LockedFloor lock = target.buff(LockedFloor.class);
-			if (lock == null || lock.regenOn())
+			if (Regeneration.regenOn())
 				partialCharge += (1f/turnsToCharge) * RingOfEnergy.wandChargeMultiplier(target);
 
 			for (Recharging bonus : target.buffs(Recharging.class)){

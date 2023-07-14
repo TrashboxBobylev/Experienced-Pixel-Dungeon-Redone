@@ -59,7 +59,7 @@ public class Elastic extends Weapon.Enchantment {
 					Math.round(2 * powerMulti),
 					!(weapon instanceof MissileWeapon || weapon instanceof SpiritBow),
 					true,
-					getClass());
+					this);
 		}
 		
 		return damage;

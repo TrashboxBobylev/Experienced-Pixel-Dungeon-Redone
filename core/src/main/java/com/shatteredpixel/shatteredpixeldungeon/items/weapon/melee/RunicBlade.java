@@ -214,7 +214,7 @@ public class RunicBlade extends MeleeWeapon {
                                                 Char enemy = Actor.findChar( cell );
                                                 if (enemy != null && enemy != curUser) {
                                                     if (Char.hit(curUser, enemy, true)) {
-                                                        int dmg = curBlade.damageRoll(curUser);
+                                                        int dmg = curBlade.damageRoll(curUser)*2;
                                                         enemy.damage(dmg, curBlade);
                                                         if (curUser.isSubclass(HeroSubClass.GLADIATOR)) Buff.affect( curUser, Combo.class ).hit( enemy );
                                                         curBlade.proc(curUser, enemy, dmg);
@@ -235,7 +235,7 @@ public class RunicBlade extends MeleeWeapon {
                                                     Dungeon.quickslot.setSlot( slot, curBlade );
                                                     updateQuickslot();
                                                 }
-                                                Buff.affect(curUser, RunicCooldown.class, 40*curBlade.delayFactor(curUser));
+                                                Buff.affect(curUser, RunicCooldown.class, 30*curBlade.delayFactor(curUser));
                                                 curUser.spendAndNext(curBlade.delayFactor(curUser));
                                             }
                                         });
@@ -368,13 +368,13 @@ public class RunicBlade extends MeleeWeapon {
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {
-                hero.buff(RunicCooldown.class).detach();
-				beforeAbilityUsed(hero);
+                Buff.detach(hero, RunicCooldown.class);
+				beforeAbilityUsed(hero, enemy);
 				AttackIndicator.target(enemy);
 				if (hero.attack(enemy, 1f, 0, Char.INFINITE_ACCURACY)){
 					Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
 					if (!enemy.isAlive()){
-						onAbilityKill(hero);
+						onAbilityKill(hero, enemy);
 					}
 				}
 				tracker.detach();
@@ -384,8 +384,6 @@ public class RunicBlade extends MeleeWeapon {
 			}
 		});
 	}
-
-
 
 	public static class RunicSlashTracker extends FlavourBuff{};
 

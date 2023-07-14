@@ -26,8 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
@@ -162,6 +162,7 @@ public class SewerBossLevel extends SewerLevel {
 		for (Point p : roomEntrance.getPoints()){
 			int cell = pointToCell(p);
 			if (passable[cell]
+					&& roomEntrance.inside(p)
 					&& Actor.findChar(cell) == null
 					&& (!Char.hasProp(ch, Char.Property.LARGE) || openSpace[cell])){
 				candidates.add(cell);

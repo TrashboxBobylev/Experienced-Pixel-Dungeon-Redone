@@ -82,8 +82,11 @@ public enum Icons {
 	BACKPACK_LRG,
 	TALENT,
 	MAGNIFY,
+	SNAKE,
 	BUFFS,
 	ENERGY,
+	ARENA,
+	FINAL_MIMIC,
 	COPY,
 	PASTE,
 	COIN_SML,
@@ -227,10 +230,10 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 208, 32, 15, 10 ) );
 				break;
 			case LEFTARROW:
-				icon.frame( icon.texture.uvRectBySize( 224, 32, 14, 8 ) );
+				icon.frame( icon.texture.uvRectBySize( 224, 32, 14, 9 ) );
 				break;
 			case RIGHTARROW:
-				icon.frame( icon.texture.uvRectBySize( 240, 32, 14, 8 ) );
+				icon.frame( icon.texture.uvRectBySize( 240, 32, 14, 9 ) );
 				break;
 			case CALENDAR:
 				icon.frame( icon.texture.uvRectBySize( 240, 16, 15, 12 ) );
@@ -266,14 +269,20 @@ public enum Icons {
 			case MAGNIFY:
 				icon.frame( icon.texture.uvRectBySize( 144, 48, 14, 14 ) );
 				break;
+			case SNAKE:
+				icon.frame( icon.texture.uvRectBySize( 160, 48,  9, 13 ) );
+				break;
 			case BUFFS:
-				icon.frame( icon.texture.uvRectBySize( 160, 48, 16, 15 ) );
+				icon.frame( icon.texture.uvRectBySize( 176, 48, 16, 15 ) );
 				break;
 			case ENERGY:
-				icon.frame( icon.texture.uvRectBySize( 176, 48, 16, 16 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 48, 16, 16 ) );
+				break;
+			case FINAL_MIMIC:
+				icon.frame( icon.texture.uvRectBySize( 192, 80, 9, 8 ) );
 				break;
 			case COPY:
-				icon.frame( icon.texture.uvRectBySize( 192, 48, 13, 13 ) );
+				icon.frame( icon.texture.uvRectBySize( 224, 48, 13, 13 ) );
 				break;
 			case PASTE:
 				icon.frame( icon.texture.uvRectBySize( 208, 48, 13, 13 ) );
@@ -418,6 +427,17 @@ public enum Icons {
 			return new ItemSprite(ItemSpriteSheet.CHEESE);
 		default:
 			return null;
+		}
+	}
+
+	public static Image get(int branch){
+		switch (branch){
+			case Dungeon.BRANCH_NORMAL: default:
+				return get(Dungeon.level.feeling);
+			case Dungeon.BRANCH_ARENA:
+				return get(COIN_SML);
+			case Dungeon.BRANCH_BLACK:
+				return get(FINAL_MIMIC);
 		}
 	}
 

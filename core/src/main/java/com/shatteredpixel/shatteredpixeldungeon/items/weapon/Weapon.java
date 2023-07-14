@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -63,9 +62,9 @@ abstract public class Weapon extends KindOfWeapon {
     public int internalTier;
 
     public enum Augment {
-		SPEED   (0.7f, 0.6667f),
-		DAMAGE  (1.5f, 1.6667f),
-		NONE	(1.0f, 1.0000f);
+		SPEED   (0.7f, 2/3f),
+		DAMAGE  (1.5f, 5/3f),
+		NONE	(1.0f, 1f);
 
 		private float damageFactor;
 		private float delayFactor;
@@ -253,17 +252,7 @@ abstract public class Weapon extends KindOfWeapon {
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
 	}
-	
-	//overrides as other things can equip these
-	@Override
-	public int buffedLvl() {
-		if (isEquipped( Dungeon.hero ) || Dungeon.hero.belongings.contains( this )){
-			return super.buffedLvl();
-		} else {
-			return level();
-		}
-	}
-	
+
 	@Override
 	public Item upgrade() {
 		return upgrade(false);
@@ -283,9 +272,7 @@ abstract public class Weapon extends KindOfWeapon {
 		
 		cursed = false;
 
-		Item result = super.upgrade();
-		Badges.validateDuelistUnlock();
-		return result;
+		return super.upgrade();
 	}
 	
 	@Override
@@ -394,7 +381,7 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 
 			if (attacker.buff(RunicBlade.RunicSlashTracker.class) != null){
-				multi += 1.75f;
+				multi += 2.25f;
 				attacker.buff(RunicBlade.RunicSlashTracker.class).detach();
 			}
 
@@ -410,10 +397,6 @@ abstract public class Weapon extends KindOfWeapon {
 			if (attacker.buff(Talent.StrikingWaveTracker.class) != null
 					&& ((Hero)attacker).pointsInTalent(Talent.STRIKING_WAVE) == 4){
 				multi += 0.2f;
-			}
-
-			if (attacker.buff(MonkEnergy.MonkAbility.FlurryEmpowerTracker.class) != null){
-				multi *= 0.75f;
 			}
 
 			return multi;

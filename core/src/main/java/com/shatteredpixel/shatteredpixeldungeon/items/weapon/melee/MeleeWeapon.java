@@ -40,11 +40,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
@@ -111,11 +114,11 @@ public class MeleeWeapon extends Weapon {
 				GLog.w(Messages.get(this, "ability_low_str"));
 				usesTargeting = false;
 			} else if (hero.belongings.weapon == this &&
-					(Buff.affect(hero, Charger.class).charges + Buff.affect(hero, Charger.class).partialCharge) < abilityChargeUse(hero)) {
+					(Buff.affect(hero, Charger.class).charges + Buff.affect(hero, Charger.class).partialCharge) < abilityChargeUse(hero, null)) {
 				GLog.w(Messages.get(this, "ability_no_charge"));
 				usesTargeting = false;
 			} else if (hero.belongings.secondWep == this &&
-					(Buff.affect(hero, Charger.class).secondCharges + Buff.affect(hero, Charger.class).secondPartialCharge) < abilityChargeUse(hero)) {
+					(Buff.affect(hero, Charger.class).secondCharges + Buff.affect(hero, Charger.class).secondPartialCharge) < abilityChargeUse(hero, null)) {
 				GLog.w(Messages.get(this, "ability_no_charge"));
 				usesTargeting = false;
 			} else {
@@ -147,7 +150,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public boolean doEquip(Hero hero) {
 		if (super.doEquip(hero)){
-			ActionIndicator.updateIcon();
+			ActionIndicator.refresh();
 			return true;
 		}
 		return false;
@@ -156,7 +159,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public boolean equipSecondary(Hero hero) {
 		if (super.equipSecondary(hero)){
-			ActionIndicator.updateIcon();
+			ActionIndicator.refresh();
 			return true;
 		}
 		return false;
@@ -165,7 +168,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public boolean doUnequip(Hero hero, boolean collect, boolean single) {
 		if (super.doUnequip(hero, collect, single)){
-			ActionIndicator.updateIcon();
+			ActionIndicator.refresh();
 			return true;
 		}
 		return false;
@@ -189,18 +192,18 @@ public class MeleeWeapon extends Weapon {
 		//do nothing by default
 	}
 
-	protected void beforeAbilityUsed(Hero hero ){
+	protected void beforeAbilityUsed(Hero hero, Char target){
 		hero.belongings.abilityWeapon = this;
 		Charger charger = Buff.affect(hero, Charger.class);
 
 		if (Dungeon.hero.belongings.weapon == this) {
-			charger.partialCharge -= abilityChargeUse(hero);
+			charger.partialCharge -= abilityChargeUse(hero, target);
 			while (charger.partialCharge < 0 && charger.charges > 0) {
 				charger.charges--;
 				charger.partialCharge++;
 			}
 		} else {
-			charger.secondPartialCharge -= abilityChargeUse(hero);
+			charger.secondPartialCharge -= abilityChargeUse(hero, target);
 			while (charger.secondPartialCharge < 0 && charger.secondCharges > 0) {
 				charger.secondCharges--;
 				charger.secondPartialCharge++;
@@ -224,6 +227,9 @@ public class MeleeWeapon extends Weapon {
 
 	protected void afterAbilityUsed( Hero hero ){
 		hero.belongings.abilityWeapon = null;
+		if (hero.hasTalent(Talent.PRECISE_ASSAULT)){
+			Buff.prolong(hero, Talent.PreciseAssaultTracker.class, hero.cooldown()+4f);
+		}
 		if (hero.subClass == HeroSubClass.CHAMPION) {
 			Talent.CombinedLethalityAbilityTracker tracker = hero.buff(Talent.CombinedLethalityAbilityTracker.class);
 			if (tracker == null || tracker.weapon == this || tracker.weapon == null){
@@ -247,7 +253,7 @@ public class MeleeWeapon extends Weapon {
 		}
 	}
 
-	public void onAbilityKill( Hero hero ){
+	public static void onAbilityKill( Hero hero, Char killed ){
 		if (hero.heroClass == HeroClass.DUELIST){
 			hero.HP = Math.min(hero.HP + hero.lvl, hero.HT);
 			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
@@ -258,15 +264,14 @@ public class MeleeWeapon extends Weapon {
 		}
 	}
 
-	public float abilityChargeUse( Hero hero ){
-		float chargeUse = 1f;
+	protected int baseChargeUse(Hero hero, Char target){
+		return 1; //abilities use 1 charge by default
+	}
+
+	public float abilityChargeUse(Hero hero, Char target){
+		float chargeUse = baseChargeUse(hero, target);
 		if (hero.buff(Talent.CounterAbilityTacker.class) != null){
 			chargeUse = Math.max(0, chargeUse-0.5f*hero.pointsInTalent(Talent.COUNTER_ABILITY));
-		}
-		if (hero.hasTalent(Talent.LIGHTWEIGHT_CHARGE) && tier <= 3){
-			// T1/2/3 get 25/20/15% charge use reduction at +3
-			float chargeUseReduction = (0.30f-.05f*tier) * (hero.pointsInTalent(Talent.LIGHTWEIGHT_CHARGE)/3f);
-			chargeUse *= 1f - chargeUseReduction;
 		}
 		return chargeUse;
 	}
@@ -314,6 +319,29 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
     @Override
+	public float accuracyFactor(Char owner, Char target) {
+		float ACC = super.accuracyFactor(owner, target);
+
+		if (owner instanceof Hero
+				&& ((Hero) owner).hasTalent(Talent.PRECISE_ASSAULT)
+				//does not trigger on ability attacks
+				&& ((Hero) owner).belongings.abilityWeapon != this) {
+			if (((Hero) owner).heroClass != HeroClass.DUELIST) {
+				//persistent +10%/20%/30% ACC for other heroes
+				ACC *= 1f + 0.1f * ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT);
+			} else if (this instanceof Flail && owner.buff(Flail.SpinAbilityTracker.class) != null){
+				//do nothing, this is not a regular attack so don't consume preciase assault
+			} else if (owner.buff(Talent.PreciseAssaultTracker.class) != null) {
+				// 2x/4x/8x ACC for duelist if she just used a weapon ability
+				ACC *= Math.pow(2, ((Hero) owner).pointsInTalent(Talent.PRECISE_ASSAULT));
+				owner.buff(Talent.PreciseAssaultTracker.class).detach();
+			}
+		}
+
+		return ACC;
+	}
+
+	@Override
 	public int damageRoll(Char owner) {
 		int damage = augment.damageFactor(super.damageRoll( owner ));
 
@@ -455,10 +483,9 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		@Override
 		public boolean act() {
-			LockedFloor lock = target.buff(LockedFloor.class);
 			if (charges < chargeCap()){
-				if (lock == null || lock.regenOn()){
-					partialCharge += 1/(45f-1.5f*(chargeCap()-charges)); // 45 to 30 turns per charge
+				if (Regeneration.regenOn()){
+					partialCharge += 1/(40f-(chargeCap()-charges)); // 40 to 30 turns per charge
 				}
 
 				if (((Hero) target).heroClass == HeroClass.DUELIST &&
@@ -478,10 +505,10 @@ private static boolean evaluatingTwinUpgrades = false;
 
 			if (Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)
 					&& secondCharges < secondChargeCap()) {
-				if (lock == null || lock.regenOn()) {
-					// 90 to 60 turns per charge without talent
-					// up to 60 to 40 turns per charge at max talent level
-					secondPartialCharge += secondChargeMultiplier() / (45f-2.5f*(secondChargeCap()-secondCharges));
+				if (Regeneration.regenOn()) {
+					// 80 to 60 turns per charge without talent
+					// up to 53.333 to 40 turns per charge at max talent level
+					secondPartialCharge += secondChargeMultiplier() / (40f-(secondChargeCap()-secondCharges));
 				}
 
 				if (secondPartialCharge >= 1) {
@@ -570,12 +597,38 @@ private static boolean evaluatingTwinUpgrades = false;
 		}
 
 		@Override
-		public Image actionIcon() {
+		public int actionIcon() {
+			return HeroIcon.WEAPON_SWAP;
+		}
+
+		@Override
+		public Visual primaryVisual() {
+			Image ico;
 			if (Dungeon.hero.belongings.weapon == null){
-				return new ItemSprite(ItemSpriteSheet.WEAPON_HOLDER);
+				ico = new HeroIcon(this);
  			} else {
-				return new ItemSprite(Dungeon.hero.belongings.weapon);
+				ico = new ItemSprite(Dungeon.hero.belongings.weapon);
 			}
+			ico.width += 4; //shift slightly to the left to separate from smaller icon
+			return ico;
+		}
+
+		@Override
+		public Visual secondaryVisual() {
+			Image ico;
+			if (Dungeon.hero.belongings.secondWep == null){
+				ico = new HeroIcon(this);
+			} else {
+				ico = new ItemSprite(Dungeon.hero.belongings.secondWep);
+			}
+			ico.scale.set(PixelScene.align(0.51f));
+			ico.brightness(0.6f);
+			return ico;
+		}
+
+		@Override
+		public int indicatorColor() {
+			return 0x5500BB;
 		}
 
 		@Override
@@ -598,6 +651,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 			ActionIndicator.setAction(this);
 			Item.updateQuickslot();
+			AttackIndicator.updateState();
 		}
 	}
 

@@ -31,8 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-import java.text.DecimalFormat;
-
 public class RingOfMight extends Ring {
 
 	{
@@ -80,9 +78,9 @@ public class RingOfMight extends Ring {
 	
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", soloBuffedBonus()-1, new DecimalFormat("#.###").format(100f * ((1.10f + soloVisualBonus()*0.0025f) - 1f)));
+			return Messages.get(this, "stats", soloBuffedBonus()-1, (soloBuffedBonus()-1)*2);
 		} else {
-			return Messages.get(this, "typical_stats", 0, new DecimalFormat("#.###").format(10f));
+			return Messages.get(this, "typical_stats", 0, 2);
 		}
 	}
 
@@ -95,11 +93,11 @@ public class RingOfMight extends Ring {
 		return (getBuffedBonus(target, Might.class) >= 1) ? getBuffedBonus(target, Might.class) : 0;
     }
 	
-	public static float HTMultiplier( Char target ){
-        float multiplier = 1f;
-        if (getBuffedBonus(target, Might.class) == 1) multiplier = 1.1f;
-        if (getBuffedBonus(target, Might.class) > 1) multiplier += getBuffedBonus(target, Might.class)*0.0025;
-        return multiplier;
+	public static int HTMultiplier( Char target ){
+		int multiplier = 0;
+		if (getBuffedBonus(target, Might.class) == 1) multiplier = 2;
+		if (getBuffedBonus(target, Might.class) > 1) multiplier += getBuffedBonus(target, Might.class)*2;
+		return multiplier;
 	}
 
 	public class Might extends RingBuff {

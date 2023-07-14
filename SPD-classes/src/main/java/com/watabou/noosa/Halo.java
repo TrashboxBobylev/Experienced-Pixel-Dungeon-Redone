@@ -25,9 +25,7 @@
 package com.watabou.noosa;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.watabou.gltextures.SmartTexture;
 import com.watabou.gltextures.TextureCache;
-import com.watabou.glwrap.Texture;
 
 public class Halo extends Image {
 	

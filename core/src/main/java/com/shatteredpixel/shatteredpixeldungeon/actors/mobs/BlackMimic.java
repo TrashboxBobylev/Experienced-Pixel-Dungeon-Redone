@@ -67,9 +67,9 @@ public class BlackMimic extends Mob {
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 6000;
+		HP = HT = 900 + Dungeon.hero.lvl*15;
 		EXP = 2000;
-		defenseSkill = 60;
+		defenseSkill = 20 + Dungeon.hero.lvl / 2;
 
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
@@ -78,23 +78,15 @@ public class BlackMimic extends Mob {
 		properties.add(Property.LARGE);
         switch (Dungeon.cycle){
             case 1:
-                HP = HT = 60000;
-                defenseSkill = 250;
                 EXP = 6000;
                 break;
             case 2:
-                HP = HT = 900000;
-                defenseSkill = 720;
                 EXP = 500000;
                 break;
             case 3:
-                HP = HT = 80000000;
-                defenseSkill = 2500;
                 EXP = 25000000;
                 break;
             case 4:
-                HP = HT = 2000000000;
-                defenseSkill = 50000;
                 EXP = 2100000000;
                 break;
         }
@@ -102,35 +94,17 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public int damageRoll() {
-        switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(140, 325);
-            case 2: return Random.NormalIntRange(1000, 1560);
-            case 3: return Random.NormalIntRange(6700, 12900);
-            case 4: return Random.NormalIntRange(800000, 1200000);
-        }
-		return Random.NormalIntRange( 50, 99 );
+		return Random.NormalIntRange( Dungeon.hero.HT / 4, Dungeon.hero.HT / 3 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
-        switch (Dungeon.cycle){
-            case 1: return 320;
-            case 2: return 1128;
-            case 3: return 4000;
-            case 4: return 60000;
-        }
-		return 60;
+		return 20 + Math.round(Dungeon.hero.lvl / 1.33f);
 	}
 
 	@Override
 	public int cycledDrRoll() {
-        switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(80, 200);
-            case 2: return Random.NormalIntRange(700, 1000);
-            case 3: return Random.NormalIntRange(5000, 9000);
-            case 4: return Random.NormalIntRange(423000, 520000);
-        }
-		return Random.NormalIntRange(0, 70);
+		return Random.NormalIntRange(Dungeon.hero.lvl / 10, Dungeon.hero.lvl);
 	}
 
 	public int pylonsActivated = 0;
@@ -239,7 +213,8 @@ public class BlackMimic extends Mob {
 						turnsSinceLastAbility = 0;
 						spend(TICK);
 
-						GLog.w(Messages.get(this, "vent"));
+						if (!isCopy)
+							GLog.w(Messages.get(this, "vent"));
 						if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 							sprite.zap(enemy.pos);
 							return false;
@@ -276,7 +251,8 @@ public class BlackMimic extends Mob {
 						abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 
 						if (lastAbility == GAS) {
-							GLog.w(Messages.get(this, "vent"));
+							if (!isCopy)
+								GLog.w(Messages.get(this, "vent"));
 							if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 								sprite.zap(enemy.pos);
 								return false;
@@ -286,7 +262,8 @@ public class BlackMimic extends Mob {
 								return true;
 							}
 						} else if (lastAbility == ROCKS) {
-							GLog.w(Messages.get(this, "rocks"));
+							if (!isCopy)
+								GLog.w(Messages.get(this, "rocks"));
 							if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
                                 ((MimicSprite.Black)sprite).slam(enemy.pos);
 								return false;
@@ -296,7 +273,8 @@ public class BlackMimic extends Mob {
 								return true;
 							}
 						} else if (lastAbility == BOMB){
-                            GLog.w(Messages.get(this, "bomb"));
+							if (!isCopy)
+                            	GLog.w(Messages.get(this, "bomb"));
                             if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
                                 ((MimicSprite.Black)sprite).throww(enemy.pos);
                                 return false;
@@ -305,7 +283,8 @@ public class BlackMimic extends Mob {
                                 return true;
                             }
                         } else if (lastAbility == SUMMON) {
-                            GLog.w(Messages.get(this, "summon"));
+							if (!isCopy)
+                            	GLog.w(Messages.get(this, "summon"));
                             DistortionTrap trap = new DistortionTrap();
                             do {
                                 trap.pos = Dungeon.level.pointToCell(Random.element(mainArena.getPoints()));
@@ -323,7 +302,9 @@ public class BlackMimic extends Mob {
                                 }
                             }
                             if (!respawnPoints.isEmpty()) {
-                                if (Random.Float() < 0.5f) {
+								float chance = 0.5f;
+								if (isCopy) chance /= 2;
+                                if (Random.Float() < chance) {
                                     BlackMimic mimic = new BlackMimic();
                                     int index = Random.index( respawnPoints );
                                     mimic.isCopy = true;
@@ -382,7 +363,7 @@ public class BlackMimic extends Mob {
 			}
 
 			if (Dungeon.level.heroFOV[step]) {
-				if (buff(Barrier.class) == null) {
+				if (buff(Barrier.class) == null && !isCopy) {
 					GLog.w(Messages.get(this, "shield"));
 				}
 				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
@@ -405,7 +386,8 @@ public class BlackMimic extends Mob {
 		if (!BossHealthBar.isAssigned()) {
 			BossHealthBar.assignBoss(this);
 			turnsSinceLastAbility = 0;
-			yell(Messages.get(this, "notice"));
+			if (!isCopy)
+				yell(Messages.get(this, "notice"));
 			for (Char ch : Actor.chars()){
 				if (ch instanceof DriedRose.GhostHero){
 					((DriedRose.GhostHero) ch).sayBoss();
@@ -682,6 +664,9 @@ public class BlackMimic extends Mob {
 		String desc = super.description();
 		if (supercharged) {
 			desc += "\n\n" + Messages.get(this, "desc_supercharged");
+		}
+		if (isCopy){
+			desc += "\n\n" + Messages.get(this, "desc_clone");
 		}
 		return desc;
 	}

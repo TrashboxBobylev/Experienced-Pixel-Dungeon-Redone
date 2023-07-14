@@ -22,11 +22,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -34,8 +36,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -117,18 +121,18 @@ public abstract class YogFist extends Mob {
 
 	private boolean invulnWarned = false;
 
-	protected boolean isNearYog(){
+	public static boolean isNearYog(int pos){
 		int yogPos = Dungeon.level.exit() + 3*Dungeon.level.width();
 		return Dungeon.level.distance(pos, yogPos) <= 4;
 	}
 
 	@Override
 	public boolean isInvulnerable(Class effect) {
-		if (isNearYog() && !invulnWarned){
+		if (isNearYog(pos) && !invulnWarned){
 			invulnWarned = true;
 			GLog.w(Messages.get(this, "invuln_warn"));
 		}
-		return isNearYog() || super.isInvulnerable(effect);
+		return isNearYog(pos) || super.isInvulnerable(effect);
 	}
 
 	@Override
@@ -148,6 +152,19 @@ public abstract class YogFist extends Mob {
 				zap();
 				return true;
 			}
+		}
+	}
+
+	@Override
+	public void damage(int dmg, Object src) {
+		int preHP = HP;
+		super.damage(dmg, src);
+		int dmgTaken = HP - preHP;
+
+		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+		if (dmgTaken > 0 && lock != null){
+			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/4f);
+			else                                                    lock.addTime(dmgTaken/2f);
 		}
 	}
 
@@ -280,6 +297,9 @@ public abstract class YogFist extends Mob {
 
 		{
 			immunities.add(Frost.class);
+
+			resistances.add(StormCloud.class);
+			resistances.add(GeyserTrap.class);
 		}
 
 	}
@@ -402,7 +422,9 @@ public abstract class YogFist extends Mob {
 
 		@Override
 		public void damage(int dmg, Object src) {
-			if (!isInvulnerable(src.getClass()) && !(src instanceof Bleeding)){
+			if (!isInvulnerable(src.getClass())
+					&& !(src instanceof Bleeding)
+					&& buff(Sickle.HarvestBleedTracker.class) == null){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg < 0){
 					return;
@@ -523,7 +545,7 @@ public abstract class YogFist extends Mob {
 
 				if (!enemy.isAlive() && enemy == Dungeon.hero) {
 					Badges.validateDeathFromEnemyMagic();
-					Dungeon.fail( getClass() );
+					Dungeon.fail( this );
 					GLog.n( Messages.get(Char.class, "kill", name()) );
 				}
 
@@ -600,7 +622,7 @@ public abstract class YogFist extends Mob {
 
 				if (!enemy.isAlive() && enemy == Dungeon.hero) {
 					Badges.validateDeathFromEnemyMagic();
-					Dungeon.fail( getClass() );
+					Dungeon.fail( this );
 					GLog.n( Messages.get(Char.class, "kill", name()) );
 				}
 

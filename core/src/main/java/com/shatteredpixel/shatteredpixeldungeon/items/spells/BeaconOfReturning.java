@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -144,7 +145,9 @@ public class BeaconOfReturning extends Spell {
 				}
 			}
 
-			if (!ScrollOfTeleportation.teleportToLocation(hero, returnPos)){
+			if (ScrollOfTeleportation.teleportToLocation(hero, returnPos)){
+				hero.spendAndNext( 1f );
+			} else {
 				return;
 			}
 
@@ -156,13 +159,13 @@ public class BeaconOfReturning extends Spell {
 			}
 
 			Level.beforeTransition();
+			Invisibility.dispel();
 			InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 			InterlevelScene.returnDepth = returnDepth;
 			InterlevelScene.returnBranch = returnBranch;
 			InterlevelScene.returnPos = returnPos;
 			Game.switchScene( InterlevelScene.class );
 		}
-		hero.spendAndNext( 1f );
 		detach(hero.belongings.backpack);
 	}
 	
@@ -203,8 +206,8 @@ public class BeaconOfReturning extends Spell {
 	
 	@Override
 	public int value() {
-		//prices of ingredients, divided by output quantity
-		return Math.round(quantity * ((50 + 40) / 5f));
+		//prices of ingredients, divided by output quantity, rounds down
+		return (int)((50 + 40) * (quantity/5f));
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {

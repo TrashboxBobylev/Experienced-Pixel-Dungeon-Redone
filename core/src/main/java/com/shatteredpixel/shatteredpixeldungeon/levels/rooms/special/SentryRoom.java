@@ -281,7 +281,7 @@ public class SentryRoom extends SpecialRoom {
 				Dungeon.hero.damage(Random.NormalIntRange(2 + Dungeon.depth / 2, 4 + Dungeon.depth), new Eye.DeathGaze());
 				if (!Dungeon.hero.isAlive()) {
 					Badges.validateDeathFromEnemyMagic();
-					Dungeon.fail(getClass());
+					Dungeon.fail(this);
 					GLog.n(Messages.capitalize(Messages.get(Char.class, "kill", name())));
 				}
 			} else {
@@ -301,10 +301,12 @@ public class SentryRoom extends SpecialRoom {
 
 		@Override
 		public void damage( int dmg, Object src ) {
+			//do nothing
 		}
 
 		@Override
-		public void add( Buff buff ) {
+		public boolean add( Buff buff ) {
+			return false;
 		}
 
 		@Override

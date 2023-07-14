@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon;
 
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfHolyFuror;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.TitleScene;
@@ -37,14 +36,13 @@ import com.watabou.utils.PlatformSupport;
 public class ShatteredPixelDungeon extends Game {
 
 	//variable constants for specific older versions of shattered, used for data conversion
-	//versions older than v1.0.3 are no longer supported, and data from them is ignored
-	public static final int v1_0_3  = 574;
-	public static final int v1_1_2  = 588;
+	//versions older than v1.2.3 are no longer supported, and data from them is ignored
 	public static final int v1_2_3  = 628;
 	public static final int v1_3_2  = 648;
 	public static final int v1_4_3  = 668;
 
-	public static final int v2_0_0  = 684;
+	public static final int v2_0_2  = 700;
+	public static final int v2_1_0  = 722;
 	
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
@@ -74,30 +72,6 @@ public class ShatteredPixelDungeon extends Game {
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive.class,
 				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Fragile" );
-
-		//pre-v1.2.0
-		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.CleansingDart.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.SleepDart" );
-
-		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.CrystalVaultRoom.class,
-				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.VaultRoom" );
-
-		//pre-v1.1.0
-		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDread.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPetrification" );
-		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAffection" );
-		com.watabou.utils.Bundle.addAlias(
-				PotionOfHolyFuror.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfHolyFuror" );
-		com.watabou.utils.Bundle.addAlias(
-				com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery.class,
-				"com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfAdrenalineSurge" );
-		
 	}
 	
 	@Override

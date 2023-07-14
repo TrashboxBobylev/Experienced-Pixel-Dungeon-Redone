@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.TenguTreasure
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -59,7 +60,47 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.14.3", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.15", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released July 14th, 2023\n" +
+                        "_-_ 97 days after Experienced Pixel Dungeon 2.14.3\n" +
+                        "_-_ 338 days after Experienced Pixel Dungeon 2.14\n" +
+                        "\n" +
+                        "This release ports everything up to Shattered 2.1.4 and fixes some stale bugs and balance issues."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                "Ported changes from Shattered 2.1.\n\n" +
+                        "_-_ This includes new weapons, new rare variants, new testing mining level and Shopkeeper dialogue/buyback."));
+        changes.addButton( new ChangeButton(new ItemSprite(new TicketToArena()), "Arena Changes",
+                        "_-_ Now exists in its own subworld and has its own level icon.\n" +
+                        "_-_ Increased ticket's base cost by 75%.\n" +
+                        "_-_ Mob spawning speed increases with each mob killed.\n" +
+                        "_-_ Mobs drop 50% less bonus gold."));
+        changes.addButton( new ChangeButton(new ItemSprite(new Greatsword()), "Weapon changes",
+                "_Greatsword:_\n" +
+                        "_-_ Resprited.\n" +
+                        "_-_ Stone knights now constantly lose 0.67% of their max HP per turn.\n" +
+                        "\n" +
+                        "_Runic Blade:_\n" +
+                        "_-_ Blade's magic deals double damage.\n" +
+                        "_-_ Decreased runic cooldown from 40 to 30.\n" +
+                        "_-_ _Runic Slash_ ability no longer crashes the game, its enchantment boost is also increased from +175% to +225%."));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.MIMIC, 0, 48, 16, 16), "Black Mimic changes",
+                "_-_ Now exists in its own subworld and has its own level icon.\n" +
+                        "_-_ All Black Mimic's stats now scale with player's level and max HP, regardless of cycle. The only cycle change left for now is rewarded XP and 72% damage reduction during 4th cycle.\n" +
+                        "_-_ Black Mimic's clones have their own sprite shading, no longer announce their attacks and have less chance to spawn another clone.\n" +
+                        "_-_ Black Mimic's crushing rocks attack slam takes much less time as animation."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Recoded how Dwarf King's phase progressing and HP for cycles is handled, hopefully fixing softlock issues.\n" +
+                        "_-_ Yog-Dzewa now can steal life both via healing off taken damage from player and minions retrieving some of their attack damage as lifesteal for Yog.\n" +
+                        "_-_ Scroll of Determination's shielding no longer targets its host's allies and NPCs like shopkeepers.\n" +
+                        "_-_ Reworked Ring of Might to give 2 HP per upgrade level instead of 0.25% of max HP per level.\n" +
+                        "_-_ Increased the scaling in Scroll of Upgrade's drop XP requirement per cycle from 25 to 75.\n" +
+                        "_-_ \"USE ALL UPGRADES\" option for Scroll of Upgrade now should cause less lag on using."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.14.3", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

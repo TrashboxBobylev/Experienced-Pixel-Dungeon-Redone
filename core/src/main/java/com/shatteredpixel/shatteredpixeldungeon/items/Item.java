@@ -180,7 +180,10 @@ public class Item implements Bundlable {
 	}
 	
 	public void execute( Hero hero ) {
-		execute( hero, defaultAction() );
+		String action = defaultAction();
+		if (action != null) {
+			execute(hero, defaultAction());
+		}
 	}
 	
 	protected void onThrow( int cell ) {
@@ -362,7 +365,9 @@ public class Item implements Bundlable {
 	//returns the level of the item, after it may have been modified by temporary boosts/reductions
 	//note that not all item properties should care about buffs/debuffs! (e.g. str requirement)
 	public int buffedLvl(){
-		if (Dungeon.hero.buff( Degrade.class ) != null) {
+		//only the hero can be affected by Degradation
+		if (Dungeon.hero.buff( Degrade.class ) != null
+			&& (isEquipped( Dungeon.hero ) || Dungeon.hero.belongings.contains( this ))) {
 			return Degrade.reduceLevel(level());
 		} else {
 			return level();

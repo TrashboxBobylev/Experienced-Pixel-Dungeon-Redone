@@ -109,7 +109,7 @@ public class Gauntlet extends MeleeWeapon {
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {
-				beforeAbilityUsed(hero);
+				beforeAbilityUsed(hero, enemy);
 				AttackIndicator.target(enemy);
 				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
 
@@ -133,7 +133,7 @@ public class Gauntlet extends MeleeWeapon {
 				Invisibility.dispel();
 				hero.spendAndNext(hero.attackDelay());
 				if (!enemy.isAlive()){
-					onAbilityKill(hero);
+					onAbilityKill(hero, enemy);
 				}
 				afterAbilityUsed(hero);
 			}

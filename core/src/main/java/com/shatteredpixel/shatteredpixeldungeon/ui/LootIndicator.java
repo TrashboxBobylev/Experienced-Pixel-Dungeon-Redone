@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.input.GameAction;
 
 public class LootIndicator extends Tag {
@@ -39,7 +38,7 @@ public class LootIndicator extends Tag {
 	private int lastQuantity = 0;
 	
 	public LootIndicator() {
-		super( 0x1F75CC );
+		super( 0x185898 );
 		
 		setSize( SIZE, SIZE );
 		

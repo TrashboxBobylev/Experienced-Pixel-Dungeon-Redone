@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
@@ -80,11 +81,16 @@ public class SmokeBomb extends ArmorAbility {
 			return false;
 		}
 
-		PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), limit);
+		if (target != hero.pos && hero.rooted){
+				PixelScene.shake( 1, 1f );
+				return false;
+			}
 
-		if ( PathFinder.distance[target] == Integer.MAX_VALUE ||
-				!Dungeon.level.heroFOV[target] ||
-				ch != null) {
+			PathFinder.buildDistanceMap(hero.pos, BArray.not(Dungeon.level.solid,null), limit);
+
+			if ( PathFinder.distance[target] == Integer.MAX_VALUE ||
+					!Dungeon.level.heroFOV[target] ||
+					(target != hero.pos && Actor.findChar( target ) != null)) {
 
 			GLog.w( Messages.get(SmokeBomb.class, "fov") );
 			return false;
