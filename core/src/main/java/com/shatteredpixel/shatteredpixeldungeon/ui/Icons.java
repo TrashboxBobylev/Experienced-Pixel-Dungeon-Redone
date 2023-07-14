@@ -85,6 +85,8 @@ public enum Icons {
 	SNAKE,
 	BUFFS,
 	ENERGY,
+	ARENA,
+	FINAL_MIMIC,
 	COPY,
 	PASTE,
 	COIN_SML,
@@ -276,6 +278,9 @@ public enum Icons {
 			case ENERGY:
 				icon.frame( icon.texture.uvRectBySize( 192, 48, 16, 16 ) );
 				break;
+			case FINAL_MIMIC:
+				icon.frame( icon.texture.uvRectBySize( 192, 80, 9, 8 ) );
+				break;
 			case COPY:
 				icon.frame( icon.texture.uvRectBySize( 224, 48, 13, 13 ) );
 				break;
@@ -422,6 +427,17 @@ public enum Icons {
 			return new ItemSprite(ItemSpriteSheet.CHEESE);
 		default:
 			return null;
+		}
+	}
+
+	public static Image get(int branch){
+		switch (branch){
+			case Dungeon.BRANCH_NORMAL: default:
+				return get(Dungeon.level.feeling);
+			case Dungeon.BRANCH_ARENA:
+				return get(COIN_SML);
+			case Dungeon.BRANCH_BLACK:
+				return get(FINAL_MIMIC);
 		}
 	}
 
