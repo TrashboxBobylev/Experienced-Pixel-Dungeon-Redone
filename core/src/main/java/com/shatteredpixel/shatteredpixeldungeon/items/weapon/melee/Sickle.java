@@ -43,7 +43,7 @@ public class Sickle extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1f;
 
-		tier = 2;
+		internalTier = tier = 2;
 		ACC = 0.68f; //32% penalty to accuracy
 	}
 
