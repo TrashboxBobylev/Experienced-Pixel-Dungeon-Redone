@@ -60,7 +60,21 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.15", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released July 16th, 2023\n" +
+                        "_-_ 2 days after Experienced Pixel Dungeon 2.15"));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed Dwarf King phase 2 not progressing at all.\n" +
+                        "_-_ Fixed the crash with weapons being replaced with Elixir of Luck in some cases.\n" +
+                        "_-_ Fixed the crash with Runic Blade recharge effect trying to appear on dying.\n" +
+                        "_-_ Fixed the crash with some of Disintegration usages.\n" +
+                        "_-_ Fixed the crash with new Shattered weapons transmutation."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.15", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
