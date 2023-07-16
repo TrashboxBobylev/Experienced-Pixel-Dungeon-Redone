@@ -34,7 +34,7 @@ public class Katana extends MeleeWeapon {
 		hitSound = Assets.Sounds.HIT_SLASH;
 		hitSoundPitch = 1.1f;
 
-		tier = 4;
+		internalTier = tier = 4;
 	}
 
 	@Override

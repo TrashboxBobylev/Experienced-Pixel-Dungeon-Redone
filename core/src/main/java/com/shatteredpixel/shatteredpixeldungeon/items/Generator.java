@@ -44,6 +44,7 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -426,6 +427,8 @@ public class Generator {
 		if (Dungeon.Int(150) == 0 &&
 			cat != Category.WAND &&
 			cat != Category.WEAPON &&
+			!Arrays.asList(wepTiers).contains(cat) &&
+			!Arrays.asList(misTiers).contains(cat) &&
 			cat != Category.RING) {
 			return new ElixirOfMight();
 		}

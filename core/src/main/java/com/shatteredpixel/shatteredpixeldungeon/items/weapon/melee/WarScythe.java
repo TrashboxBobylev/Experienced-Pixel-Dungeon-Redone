@@ -34,7 +34,7 @@ public class WarScythe extends MeleeWeapon {
         hitSound = Assets.Sounds.HIT_SLASH;
         hitSoundPitch = 0.9f;
 
-        tier = 5;
+        internalTier = tier = 5;
         ACC = 0.8f; //20% penalty to accuracy
     }
 

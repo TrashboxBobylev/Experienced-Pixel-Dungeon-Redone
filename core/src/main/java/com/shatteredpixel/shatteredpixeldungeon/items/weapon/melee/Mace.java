@@ -63,6 +63,7 @@ public class Mace extends MeleeWeapon {
     public int proc(Char attacker, Char defender, int damage) {
 	    if (attacker == Dungeon.hero && defender != null) {
 			WandOfDisintegration wand = ((WandOfDisintegration)(new WandOfDisintegration().upgrade(level())));
+			curUser = Dungeon.hero;
 	    	wand.fx(
 	    		new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_SOLID),
 				new Callback() {
