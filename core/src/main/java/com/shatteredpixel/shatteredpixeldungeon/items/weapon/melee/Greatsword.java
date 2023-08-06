@@ -145,7 +145,11 @@ public class Greatsword extends MeleeWeapon {
                     && attacker == Dungeon.hero) {
 
                 GuardianKnight guardianKnight = new GuardianKnight();
-                guardianKnight.weapon = this;
+                Greatsword copy = new Greatsword();
+                copy.level(level());
+                copy.enchant(enchantment);
+                copy.augment = augment;
+                guardianKnight.weapon = copy;
                 guardianKnight.pos = attacker.pos + i;
                 guardianKnight.aggro(defender);
                 GameScene.add(guardianKnight);
