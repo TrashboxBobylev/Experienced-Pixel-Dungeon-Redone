@@ -493,7 +493,7 @@ public class BlackMimicLevel extends Level {
 		}
 
 		Painter.set(this, entrance, Terrain.ENTRANCE);
-		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE, 25, Dungeon.branch, LevelTransition.Type.REGULAR_EXIT));
+		transitions.add(new LevelTransition(this, entrance, LevelTransition.Type.REGULAR_ENTRANCE, 25, Dungeon.BRANCH_NORMAL, LevelTransition.Type.REGULAR_EXIT));
 	}
 
 	private static short[] corner1 = {

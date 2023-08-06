@@ -1727,7 +1727,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				&& (visibleEnemies.size() == 0 || cell == pos)
 				&& !Dungeon.level.locked
 				&& Dungeon.isAscensionPossible()
-				&& (Dungeon.depth < 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
+				&& ((Dungeon.depth < 26 || (Dungeon.branch == Dungeon.BRANCH_BLACK && Dungeon.hero.belongings.getItem(Amulet.class) != null))
+					|| Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
 
 			curAction = new HeroAction.LvlTransition( cell );
 			
