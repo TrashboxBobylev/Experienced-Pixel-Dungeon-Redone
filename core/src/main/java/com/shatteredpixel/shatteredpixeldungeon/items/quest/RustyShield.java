@@ -52,6 +52,6 @@ public class RustyShield extends Item {
 
     @Override
     public void onHeroGainExp(float levelPercent, Hero hero) {
-        Buff.affect(hero, ArcaneArmor.class).set((int) (hero.buff(ArcaneArmor.class).level() + hero.HT / 100 * levelPercent), 10);
+        Buff.affect(hero, ArcaneArmor.class).set((int) (hero.buff(ArcaneArmor.class).level() + hero.HT / 100 * levelPercent), 2);
     }
 }

@@ -60,7 +60,32 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.1", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 7th, 2023\n" +
+                        "_-_ 22 days after Experienced Pixel Dungeon 2.15.1"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Nerfed Scroll of Determination's efficiency by 2x.\n" +
+                        "_-_ Changed Arena's respawn rate to be both more manageable and less going overboard with time.\n" +
+                        "_-_ Arena no longer applies Wrath of Excalibur to its spawns, preventing gaining massive amounts of EXP for free.\n" +
+                        "_-_ Rusty Shield's magic protection now degrades every 2 turns instead of 10.\n" +
+                        "_-_ Increased the damage of Electrical Explosive's by 4x.\n" +
+                        "_-_ Black Mimic now attempts to move and attack at same speed as hero does.\n" +
+                        "_-_ Black Mimic is now immune to Paralysis.\n" +
+                        "_-_ Rewritten Black Fate Lock's dialogue to fix typos and misunderstandings.\n" +
+                        "_-_ Ticket to Arena now mentions how to return from Arena."
+        ));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed regeneration always healing to max health.\n" +
+                        "_-_ Fixed the crash with Guardian Knights having invalid weapon.\n" +
+                        "_-_ Fixed the inability to start ascension challenge.\n" +
+                        "_-_ Fixed the levels not resetting on going for new cycle.\n" +
+                        "_-_ Fixed the ability to switch actions where it is unnecessary."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.15.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

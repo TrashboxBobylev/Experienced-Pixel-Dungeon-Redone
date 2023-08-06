@@ -290,6 +290,7 @@ public class Dungeon {
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
         Generator.generalReset();
+		generatedLevels.clear();
 		BeaconOfReturning beacon = Dungeon.hero.belongings.getItem(BeaconOfReturning.class);
 		if (beacon != null) beacon.returnDepth = -1;
 		InterlevelScene.curTransition = new LevelTransition(Dungeon.level, -1, LevelTransition.Type.REGULAR_EXIT, 1, Dungeon.branch, null);

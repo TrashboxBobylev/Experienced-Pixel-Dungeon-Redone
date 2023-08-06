@@ -82,7 +82,7 @@ public class Regeneration extends Buff {
 				if (regenOn()) {
 					partialHP += regen;
 					if (partialHP >= 1){
-						target.HP = Math.max(target.HP + (int)partialHP, target.HT);
+						target.HP = Math.min(target.HP + (int)partialHP, target.HT);
 						partialHP -= (int)partialHP;
 						if (target.HP == regencap()) {
 							((Hero) target).resting = false;

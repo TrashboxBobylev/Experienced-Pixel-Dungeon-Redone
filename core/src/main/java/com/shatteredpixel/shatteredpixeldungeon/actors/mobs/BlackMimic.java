@@ -377,7 +377,12 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public float speed() {
-		return super.speed() * (supercharged ? 3 : 1);
+		return (Dungeon.hero != null ? Dungeon.hero.speed() : super.speed()) * (supercharged ? 3 : 1);
+	}
+
+	@Override
+	public float attackDelay() {
+		return  (Dungeon.hero != null ? Dungeon.hero.attackDelay() : super.attackDelay());
 	}
 
 	@Override
@@ -673,6 +678,7 @@ public class BlackMimic extends Mob {
 
 	{
 		immunities.add(Sleep.class);
+		immunities.add(Paralysis.class);
 		immunities.add(CorrosoGas.class);
 
 		resistances.add(Terror.class);

@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAq
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ArenaShopLevel;
@@ -328,7 +327,7 @@ public class ArenaLevel extends Level {
 			}
 
 			ArenaCounter counter = Dungeon.hero.buff(ArenaCounter.class);
-			float timerBasis = 5f;
+			float timerBasis = 6.5f;
 
 			if (count < 100) {
 
@@ -342,12 +341,7 @@ public class ArenaLevel extends Level {
 					if (counter != null){
 						counter.countUp(Actor.TICK);
 						int power = (int) counter.count();
-						timerBasis = 5f + power / 8f;
-						if (power >= 3){
-							for (int i = 0; i < 1 + power/3; i++){
-								Buff.affect(mob, Longsword.HolyExpEffect.class).stacks++;
-							}
-						}
+						timerBasis = 6.5f + power / 40f;
 						if (power >= 5){
 							Buff.affect(mob, Stamina.class, power * 3);
 							mob.aggro(Dungeon.hero);
