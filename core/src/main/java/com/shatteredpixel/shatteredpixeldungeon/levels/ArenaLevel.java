@@ -327,7 +327,7 @@ public class ArenaLevel extends Level {
 			}
 
 			ArenaCounter counter = Dungeon.hero.buff(ArenaCounter.class);
-			float timerBasis = 5f;
+			float timerBasis = 6.5f;
 
 			if (count < 100) {
 
@@ -341,7 +341,7 @@ public class ArenaLevel extends Level {
 					if (counter != null){
 						counter.countUp(Actor.TICK);
 						int power = (int) counter.count();
-						timerBasis = 5f + power / 8f;
+						timerBasis = 6.5f + power / 40f;
 						if (power >= 5){
 							Buff.affect(mob, Stamina.class, power * 3);
 							mob.aggro(Dungeon.hero);
