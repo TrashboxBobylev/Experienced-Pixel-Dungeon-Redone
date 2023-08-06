@@ -229,7 +229,7 @@ public class TenguBomb extends Bomb {
             float multipler = 0.4f + (0.6f/affected.size());
             //if the main target is in water, all affected take full damage
             if (Actor.findChar(cell) != null && Dungeon.level.water[cell]) multipler = 1f;
-            int dmg = Math.round(damageRoll() * 3f * charge * multipler);
+            int dmg = Math.round(damageRoll() * 12f * charge * multipler);
 
             target.damage(dmg, new WandOfLightning());
             if (Random.Float() < 0.6f * charge && target.alignment == Char.Alignment.ENEMY)
