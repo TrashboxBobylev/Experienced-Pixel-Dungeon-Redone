@@ -217,6 +217,7 @@ public class ActionIndicator extends Tag {
 		void doAction();
 
 		default boolean usable() { return true; }
+		default boolean isSelectable() { return action != this && usable(); }
 
 	}
 
