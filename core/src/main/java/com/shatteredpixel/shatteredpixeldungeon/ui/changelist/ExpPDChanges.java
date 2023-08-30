@@ -60,7 +60,23 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 30th, 2023\n" +
+                        "_-_ 23 days after Experienced Pixel Dungeon 2.15.2"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Updated Android target version to API 33.\n" +
+                        "_-_ Added ability to specify how many upgrades you want to use at once."
+        ));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed the exploit with rat king being able to give massive amount of loot if trapped.\n" +
+                        "_-_ Reverted the buff to Magic Charge buff, which caused wands to be very overpowered.\n" +
+                        "_-_ Actually fixed the inability to ascend from Black Mimic level.\n" +
+                        "_-_ Actually fixed the Scroll of Determination hitting NPCs."
+        ));
+        changes = new ChangeInfo("ExpPD-2.15.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
