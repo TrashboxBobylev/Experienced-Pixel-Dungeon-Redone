@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ import java.util.ArrayList;
 public class ScrollOfUpgrade extends InventoryScroll {
 
     public static final String AC_UPGRADE = "UPGRADE";
+	public static final String AC_UPGRADE_AMOUNT = "UPGRADE_AMOUNT";
 
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_UPGRADE;
@@ -72,7 +74,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	public void execute(Hero hero, String action) {
 		super.execute(hero, action);
 
-		if (action.equals(AC_UPGRADE)){
+		if (action.equals(AC_UPGRADE) || action.equals(AC_UPGRADE_AMOUNT)){
 			if (hero.buff(MagicImmune.class) != null){
 				GLog.w( Messages.get(this, "no_magic") );
 			} else if (hero.buff( Blindness.class ) != null) {
@@ -81,9 +83,35 @@ public class ScrollOfUpgrade extends InventoryScroll {
 					&& hero.buff(UnstableSpellbook.bookRecharge.class).isCursed()){
 				GLog.n( Messages.get(this, "cursed") );
 			} else {
-				curUser = hero;
-				curItem = detachAll( hero.belongings.backpack );
-				GameScene.selectItem( itemSelector2);
+				if (action.equals(AC_UPGRADE)) {
+					curUser = hero;
+					curItem = detachAll(hero.belongings.backpack);
+					GameScene.selectItem(itemSelector2);
+				} else {
+					curUser = hero;
+					GameScene.show(new WndTextInput("Enter amount of upgrades to be used:", null, "", 15, false,
+							"Accept", "Cancel") {
+						@Override public void onSelect(boolean positive, String text) {
+							if(!positive) return;
+							int number = 0;
+							try {
+								number = Integer.parseInt(text);
+							} catch (NumberFormatException e){
+								GLog.w("No valid number was entered.");
+								return;
+							}
+							if (number != 0){
+								curItem = null;
+								curItem = split(number);
+								updateQuickslot();
+								if (curItem != null){
+									curItem.onDetach( );
+								}
+								GameScene.selectItem(itemSelector2);
+							}
+						}
+					});
+				}
 			}
 		}
 	}
@@ -91,7 +119,11 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions( hero );
-		if (isIdentified() && !anonymous) actions.add(AC_UPGRADE);
+		if (isIdentified() && !anonymous) {
+			actions.add(AC_UPGRADE);
+			if (quantity() > 1)
+				actions.add(AC_UPGRADE_AMOUNT);
+		}
 		return actions;
 	}
 

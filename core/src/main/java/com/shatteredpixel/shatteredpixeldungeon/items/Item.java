@@ -350,7 +350,7 @@ public class Item implements Bundlable {
 		return level == item.level && getClass() == item.getClass();
 	}
 
-	protected void onDetach(){}
+	public void onDetach(){}
 
 	//returns the true level of the item, ignoring all modifiers aside from upgrades
 	public final int trueLevel(){
