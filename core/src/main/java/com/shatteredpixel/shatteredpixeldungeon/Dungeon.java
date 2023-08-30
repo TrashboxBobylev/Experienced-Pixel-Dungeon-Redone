@@ -169,7 +169,7 @@ public class Dungeon {
 	public static final int BRANCH_BLACK  = 3;
 
 	public static boolean isAscensionPossible(){
-		return branch != BRANCH_ARENA && branch != BRANCH_BLACK;
+		return branch != BRANCH_ARENA;
 	}
 
 	//keeps track of what levels the game should try to load instead of creating fresh
