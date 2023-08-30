@@ -125,7 +125,7 @@ public class RatKing extends NPC {
         }
         Heap heap = Dungeon.level.heaps.get(pos );
         Barter barter = Buff.affect(this, Barter.class);
-		if (heap != null){
+		if (heap != null && heap.peek().throwPos(this, Dungeon.hero.pos) == Dungeon.hero.pos){
 		    Item item = heap.pickUp();
 		    barter.stick(item);
             CellEmitter.get( pos ).burst( Speck.factory( Speck.WOOL ), 6 );
