@@ -113,7 +113,7 @@ public class RageShield extends Buff {
             for (int i = 0; i < FOV.length; i++) {
                 if (FOV[i]) {
                     Char ch = Actor.findChar(i);
-                    if (ch != null && (ch.alignment != target.alignment || ch.alignment != Char.Alignment.NEUTRAL)){
+                    if (ch != null && (ch.alignment != target.alignment && ch.alignment != Char.Alignment.NEUTRAL)){
                         affected.add(ch);
                     }
                 }
