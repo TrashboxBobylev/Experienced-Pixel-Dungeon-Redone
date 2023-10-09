@@ -121,6 +121,6 @@ dependencies {
     implementation "org.lwjgl:lwjgl-tinyfd:3.3.1:natives-linux"
     implementation "org.lwjgl:lwjgl-tinyfd:3.3.1:natives-linux-arm64"
 
-    implementation project(':services:updates:githubUpdates')
+    implementation project(':services:updates:debugUpdates')
     implementation project(':services:news:ingameNews')
 }
