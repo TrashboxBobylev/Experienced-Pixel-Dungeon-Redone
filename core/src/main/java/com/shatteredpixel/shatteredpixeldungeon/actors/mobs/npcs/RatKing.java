@@ -128,17 +128,17 @@ public class RatKing extends NPC {
             CellEmitter.get( pos ).burst( Speck.factory( Speck.WOOL ), 6 );
             Sample.INSTANCE.play( Assets.Sounds.PUFF );
         }
-		if (barter.items.size() > 0){
+		if (!barter.items.isEmpty()){
 		    if (!Dungeon.hero.perks.contains(Perks.Perk.BETTER_BARTERING) || Random.Int(3) != 0)
 		        barter.items.remove(barter.items.size() - 1);
-			for (int i = 0; i < level; i++) {
+			for (int i = 0; i < level*(Dungeon.cycle+1); i++) {
 				Item item;
 				do {
 					item = Generator.random();
 				} while (item instanceof Gold);
-				if (++counter == 40) {
+				if (++counter >= 30*level) {
 					counter = 0;
-					level++;
+					level = Math.min(level+1, 15);
 					item = new Cheese();
 				}
 				item.cast(this, Dungeon.hero.pos);
