@@ -25,9 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 public class Cheese extends Food {
 	
@@ -40,19 +45,30 @@ public class Cheese extends Food {
 	protected void satisfy(Hero hero) {
 		super.satisfy( hero );
 		Buff.affect(hero, WellFed.class).reset();
-		Buff.affect(hero, Levitation.class, Levitation.DURATION);
-		Buff.affect(hero, Invisibility.class, Invisibility.DURATION);
-		Buff.affect(hero, Haste.class, Haste.DURATION);
-		Buff.affect(hero, FireImbue.class).set(FireImbue.DURATION);
-		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION);
-		Buff.affect(hero, MagicalSight.class, MagicalSight.DURATION);
-		Buff.affect(hero, MindVision.class, MindVision.DURATION);
-		Buff.affect(hero, Bless.class, Bless.DURATION);
-		Buff.affect(hero, AdrenalineSurge.class).reset(2, 1000);
-		Buff.affect(hero, Adrenaline.class, Adrenaline.DURATION);
-		Buff.affect(hero, BlobImmunity.class, BlobImmunity.DURATION);
-		Buff.affect(hero, Recharging.class, Recharging.DURATION);
-		Buff.affect(hero, ToxicImbue.class).set(ToxicImbue.DURATION);
+		Buff.affect(hero, Invisibility.class, Invisibility.DURATION * 0.66f);
+		Buff.affect(hero, Haste.class, Haste.DURATION * 0.66f);
+		Buff.affect(hero, FireImbue.class).set(FireImbue.DURATION * 0.66f);
+		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION * 0.66f);
+		Buff.affect(hero, MindVision.class, MindVision.DURATION * 0.66f);
+		Buff.affect(hero, Bless.class, Bless.DURATION * 0.66f);
+		Buff.affect(hero, AdrenalineSurge.class).reset(2, 666);
+		Buff.affect(hero, Adrenaline.class, Adrenaline.DURATION * 0.66f);
+		Buff.affect(hero, BlobImmunity.class, BlobImmunity.DURATION * 0.66f);
+		Buff.affect(hero, Recharging.class, Recharging.DURATION * 0.66f);
+		Buff.affect(hero, ToxicImbue.class).set(ToxicImbue.DURATION * 0.66f);
+		for (Heap h : Dungeon.level.heaps.valueList()){
+			if (h.type == Heap.Type.HEAP) {
+				Item item = h.peek();
+				if (item.doPickUp(hero, h.pos)) {
+					h.pickUp();
+					hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
+					GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
+				} else {
+					GLog.w(Messages.get(this, "cant_grab"));
+					h.sprite.drop();
+				}
+			}
+		}
 	}
 	
 	@Override
