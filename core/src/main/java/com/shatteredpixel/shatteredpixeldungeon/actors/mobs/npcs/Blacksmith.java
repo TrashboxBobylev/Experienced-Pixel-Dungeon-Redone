@@ -269,7 +269,7 @@ public class Blacksmith extends NPC {
                 second = item1;
             }
         }
-		if (second.level() > first.level() || first instanceof FishingRod) {
+		if (second.level() > first.level() && !(first instanceof FishingRod)) {
 		    Item temp = first;
 			first = second;
 			second = temp;
