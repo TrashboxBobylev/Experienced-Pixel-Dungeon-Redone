@@ -341,8 +341,8 @@ public abstract class Wand extends Item {
 			}
 
 			WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
-			if (buff != null){
-				return buff.level() + lvl;
+			if (buff != null && buff.level() > lvl){
+				return buff.level();
 			}
 		}
 		return lvl;

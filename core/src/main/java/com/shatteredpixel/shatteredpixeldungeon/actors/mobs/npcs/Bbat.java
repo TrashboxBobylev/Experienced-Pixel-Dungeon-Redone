@@ -119,10 +119,12 @@ public class Bbat extends Mob {
         }
     }
 
+    public static final int RECHARGE_AMOUNT = 50;
+
     @Override
     public void damage(int dmg, Object src) {
         super.damage(dmg, src);
-        Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(dmg*2);
+        Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(((float)dmg / (float)HT)*RECHARGE_AMOUNT);
     }
 
     @Override

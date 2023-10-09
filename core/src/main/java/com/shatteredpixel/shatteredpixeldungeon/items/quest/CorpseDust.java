@@ -78,7 +78,7 @@ public class CorpseDust extends Item {
 	}
 
 	@Override
-	protected void onDetach() {
+    public void onDetach() {
 		DustGhostSpawner spawner = Dungeon.hero.buff(DustGhostSpawner.class);
 		if (spawner != null){
 			spawner.dispel();

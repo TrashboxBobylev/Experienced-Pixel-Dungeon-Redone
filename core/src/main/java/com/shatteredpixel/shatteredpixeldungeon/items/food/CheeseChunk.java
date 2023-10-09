@@ -24,38 +24,32 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class Cheese extends Food {
+public class CheeseChunk extends Food {
 	
 	{
-		image = ItemSpriteSheet.CHEESE;
-		energy = Hunger.STARVING*10f;
+		image = ItemSpriteSheet.CHEESE_CHUNK;
+		energy = Hunger.STARVING*2f;
 	}
 	
 	@Override
 	protected void satisfy(Hero hero) {
 		super.satisfy( hero );
 		Buff.affect(hero, WellFed.class).reset();
-		Buff.affect(hero, Invisibility.class, Invisibility.DURATION * 0.66f);
-		Buff.affect(hero, Haste.class, Haste.DURATION * 0.66f);
-		Buff.affect(hero, FireImbue.class).set(FireImbue.DURATION * 0.66f);
-		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION * 0.66f);
-		Buff.affect(hero, MindVision.class, MindVision.DURATION * 0.66f);
-		Buff.affect(hero, Bless.class, Bless.DURATION * 0.66f);
-		Buff.affect(hero, AdrenalineSurge.class).reset(2, 666);
-		Buff.affect(hero, Adrenaline.class, Adrenaline.DURATION * 0.66f);
-		Buff.affect(hero, BlobImmunity.class, BlobImmunity.DURATION * 0.66f);
-		Buff.affect(hero, Recharging.class, Recharging.DURATION * 0.66f);
-		Buff.affect(hero, ToxicImbue.class).set(ToxicImbue.DURATION * 0.66f);
+		Buff.affect(hero, Haste.class, Haste.DURATION * 0.25f);
+		Buff.affect(hero, Bless.class, Bless.DURATION * 0.25f);
+		Buff.affect(hero, AdrenalineSurge.class).reset(2, 100);
+		Buff.affect(hero, Adrenaline.class, Adrenaline.DURATION * 0.25f);
 		for (Heap h : Dungeon.level.heaps.valueList()){
 			if (h.type == Heap.Type.HEAP) {
 				Item item = h.peek();
@@ -73,15 +67,18 @@ public class Cheese extends Food {
 	
 	@Override
 	public int value() {
-		return 40 * quantity;
+		return 20 * quantity;
 	}
 
-	@Override
-	public boolean doPickUp(Hero hero, int pos, float time) {
-		if (super.doPickUp(hero, pos, time)){
-			Badges.validateCheese();
-			return true;
+	public static class oneMeat extends Recipe.SimpleRecipe{
+		{
+			inputs =  new Class[]{Cheese.class, Torch.class};
+			inQuantity = new int[]{1, 1};
+
+			cost = 12;
+
+			output = CheeseChunk.class;
+			outQuantity = 3;
 		}
-		return false;
 	}
 }

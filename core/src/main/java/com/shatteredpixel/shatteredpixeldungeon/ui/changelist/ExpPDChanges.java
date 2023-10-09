@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
@@ -60,7 +61,54 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.2", true, "");
+        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.4", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released October 10th, 2023\n" +
+                        "_-_ 41 days after Experienced Pixel Dungeon 2.15.3"));
+        changes.addButton( new ChangeButton(new ItemSprite(new CheeseChunk()), "Cheese and related things",
+                "_-_ Nerfed Cheese's positive effects by 25%.\n" +
+                        "_-_ Now has the same effect as Magnetic Meal.\n" +
+                        "_-_ Added Cheese Chunks, that serve as trigger for Magnetic Meal-like effects, with weaker effects of Cheese.\n" +
+                        "_-_ Cheese chunks can be obtained from Rat King leaving levels or by cooking Cheese with torches."));
+        changes.addButton( new ChangeButton(HeroSprite.avatar(HeroClass.RAT_KING, 6), "Rat King Bartering",
+                        "- The amount of items from bartering now scales with Dungeon cycles.\n" +
+                        "- The amount of bartering needed for Cheese now scales with bartering's levelling.\n" +
+                        "- The base amount of bartering to get Cheese has been reduced to 30.\n" +
+                        "- The bartering levelling is now capped at 15."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Artifact Recharge boost from Bbat's being damaged is now capped at 50 for their entire HP bar.\n" +
+                        "_-_ Tengu's shurikens are now unbreakable.\n" +
+                        "_-_ Nerfed Rusty Shield: \n" +
+                        "* its boost now decays 2x faster\n" +
+                        "* reduced the amount of magic armor it gives by 2x\n" +
+                        "_-_ Fishing Rods are now actually prioritized in reforging.\n" +
+                        "_-_ Removed ghastly property of Rat King, due to it being unused."
+        ));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Attempted to fix the crash from having too much luck when getting weapon drops from ghost and slime.\n" +
+                        "_-_ Fixed the crash with Runic Blade's cooldown.\n" +
+                        "_-_ Fixed Tengu's mask having missing string in higher Dungeon cycles."
+        ));
+
+        changes = new ChangeInfo("ExpPD-2.15.3", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                "_-_ Released August 30th, 2023\n" +
+                        "_-_ 23 days after Experienced Pixel Dungeon 2.15.2"));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Updated Android target version to API 33.\n" +
+                        "_-_ Added ability to specify how many upgrades you want to use at once."
+        ));
+        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed the exploit with rat king being able to give massive amount of loot if trapped.\n" +
+                        "_-_ Reverted the buff to Magic Charge buff, which caused wands to be very overpowered.\n" +
+                        "_-_ Actually fixed the inability to ascend from Black Mimic level.\n" +
+                        "_-_ Actually fixed the Scroll of Determination hitting NPCs."
+        ));
+        changes = new ChangeInfo("ExpPD-2.15.2", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

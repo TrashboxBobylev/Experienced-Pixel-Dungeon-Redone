@@ -169,7 +169,7 @@ public class Dungeon {
 	public static final int BRANCH_BLACK  = 3;
 
 	public static boolean isAscensionPossible(){
-		return branch != BRANCH_ARENA && branch != BRANCH_BLACK;
+		return branch != BRANCH_ARENA;
 	}
 
 	//keeps track of what levels the game should try to load instead of creating fresh
@@ -1134,6 +1134,7 @@ public class Dungeon {
 	}
 
 	//luck-augmented RNG
+	public enum LuckDirection {UP, DOWN};
 	public static int Int(int max){
 		int highest = Integer.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
@@ -1180,10 +1181,17 @@ public class Dungeon {
 	}
 
 	public static float Float(float max){
+		return Float(max, LuckDirection.UP);
+	}
+
+	public static float Float(float max, LuckDirection direction){
 		float highest = Float.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
 			float roll = Random.Float(max);
-			if (roll > highest) highest = roll;
+			switch (direction){
+				case UP: if (roll > highest) highest = roll; break;
+				case DOWN: if (roll < highest) highest = roll; break;
+			}
 		}
 		return highest;
 	}
@@ -1216,7 +1224,7 @@ public class Dungeon {
 			sum += chances[i];
 		}
 
-		float value = Float( sum );
+		float value = Float( sum, LuckDirection.DOWN );
 		sum = 0;
 		for (int i=0; i < length; i++) {
 			sum += chances[i];

@@ -39,7 +39,7 @@ public class TenguShuriken extends MissileWeapon {
         hitSoundPitch = 1.4f;
 
         internalTier = tier = 2;
-        baseUses = 25;
+        baseUses = 2500; //is unbreakable
     }
 
     @Override

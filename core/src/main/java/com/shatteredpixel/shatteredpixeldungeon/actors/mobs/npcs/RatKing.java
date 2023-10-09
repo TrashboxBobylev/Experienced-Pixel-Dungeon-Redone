@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
@@ -51,7 +52,6 @@ import java.util.Collection;
 
 public class RatKing extends NPC {
 
-    public boolean ghastly = false;
     public int counter = 0;
 	public int level = 1;
 
@@ -99,49 +99,49 @@ public class RatKing extends NPC {
 	@Override
 	protected void onAdd() {
 		super.onAdd();
-		if (firstAdded && Dungeon.depth != 5 && !ghastly){
+		if (firstAdded && Dungeon.depth != 5){
 			yell(Messages.get(this, "confused"));
 		}
 	}
 
 	@Override
 	protected boolean act() {
-        if (!ghastly) {
-            if (Dungeon.depth < 5){
-                if (pos == Dungeon.level.exit()){
-                    destroy();
-                    sprite.killAndErase();
-                } else {
-                    target = Dungeon.level.exit();
-                }
-            } else if (Dungeon.depth > 5){
-                if (pos == Dungeon.level.entrance()){
-                    destroy();
-                    sprite.killAndErase();
-                } else {
-                    target = Dungeon.level.entrance();
-                }
-            }
-        }
+		if (Dungeon.depth < 5){
+			if (pos == Dungeon.level.exit()){
+				destroy();
+				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
+				sprite.killAndErase();
+			} else {
+				target = Dungeon.level.exit();
+			}
+		} else if (Dungeon.depth > 5){
+			if (pos == Dungeon.level.entrance()){
+				destroy();
+				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
+				sprite.killAndErase();
+			} else {
+				target = Dungeon.level.entrance();
+			}
+		}
         Heap heap = Dungeon.level.heaps.get(pos );
         Barter barter = Buff.affect(this, Barter.class);
-		if (heap != null){
+		if (heap != null && heap.peek().throwPos(this, Dungeon.hero.pos) == Dungeon.hero.pos){
 		    Item item = heap.pickUp();
 		    barter.stick(item);
             CellEmitter.get( pos ).burst( Speck.factory( Speck.WOOL ), 6 );
             Sample.INSTANCE.play( Assets.Sounds.PUFF );
         }
-		if (barter.items.size() > 0){
+		if (!barter.items.isEmpty()){
 		    if (!Dungeon.hero.perks.contains(Perks.Perk.BETTER_BARTERING) || Random.Int(3) != 0)
 		        barter.items.remove(barter.items.size() - 1);
-			for (int i = 0; i < level; i++) {
+			for (int i = 0; i < level*(Dungeon.cycle+1); i++) {
 				Item item;
 				do {
 					item = Generator.random();
 				} while (item instanceof Gold);
-				if (++counter == 40) {
+				if (++counter >= 30*level) {
 					counter = 0;
-					level++;
+					level = Math.min(level+1, 15);
 					item = new Cheese();
 				}
 				item.cast(this, Dungeon.hero.pos);
@@ -219,7 +219,7 @@ public class RatKing extends NPC {
 	public String description() {
 		return ((RatKingSprite)sprite).festive ?
 				Messages.get(this, "desc_festive")
-				: ghastly ? Messages.get(this, "ghastly") : super.description();
+				: super.description();
 	}
 
     public static class Barter extends Buff {
@@ -263,7 +263,6 @@ public class RatKing extends NPC {
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
-        bundle.put("h", ghastly);
         bundle.put("e", counter);
 		bundle.put("n", level);
     }
@@ -271,7 +270,6 @@ public class RatKing extends NPC {
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        ghastly = bundle.getBoolean("h");
         if (bundle.contains("e")){
             counter = bundle.getInt("e");
         }

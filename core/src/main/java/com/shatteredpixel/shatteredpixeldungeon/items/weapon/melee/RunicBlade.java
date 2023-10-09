@@ -406,8 +406,8 @@ public class RunicBlade extends MeleeWeapon {
                     updateQuickslot();
                 }
             }
-            if (Dungeon.hero.isAlive())
-                SpellSprite.show(Dungeon.hero, SpellSprite.CHARGE);
+            if (target.isAlive())
+                SpellSprite.show(target, SpellSprite.CHARGE);
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
             super.detach();
         }
