@@ -675,6 +675,7 @@ public class ItemSpriteSheet {
 	public static final int BLAND_CHUNKS= FOOD+11;
 	public static final int CHEESE      = FOOD+12;
 	public static final int PHANTOM_MEAT= FOOD+13;
+	public static final int CHEESE_CHUNK= FOOD+14;
 	static{
 		assignItemRect(MEAT,        15, 11);
 		assignItemRect(STEAK,       15, 11);
@@ -690,6 +691,7 @@ public class ItemSpriteSheet {
 		assignItemRect(BLAND_CHUNKS,14, 6);
 		assignItemRect(CHEESE,      16, 12);
 		assignItemRect(PHANTOM_MEAT,15, 11);
+		assignItemRect(CHEESE_CHUNK,10, 8);
 	}
 
 	private static final int QUEST  =                                       xy(1, 29);  //32 slots

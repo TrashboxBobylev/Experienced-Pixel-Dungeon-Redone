@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
@@ -108,6 +109,7 @@ public class RatKing extends NPC {
 		if (Dungeon.depth < 5){
 			if (pos == Dungeon.level.exit()){
 				destroy();
+				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
 				sprite.killAndErase();
 			} else {
 				target = Dungeon.level.exit();
@@ -115,6 +117,7 @@ public class RatKing extends NPC {
 		} else if (Dungeon.depth > 5){
 			if (pos == Dungeon.level.entrance()){
 				destroy();
+				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
 				sprite.killAndErase();
 			} else {
 				target = Dungeon.level.entrance();
