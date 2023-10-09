@@ -51,7 +51,6 @@ import java.util.Collection;
 
 public class RatKing extends NPC {
 
-    public boolean ghastly = false;
     public int counter = 0;
 	public int level = 1;
 
@@ -99,30 +98,28 @@ public class RatKing extends NPC {
 	@Override
 	protected void onAdd() {
 		super.onAdd();
-		if (firstAdded && Dungeon.depth != 5 && !ghastly){
+		if (firstAdded && Dungeon.depth != 5){
 			yell(Messages.get(this, "confused"));
 		}
 	}
 
 	@Override
 	protected boolean act() {
-        if (!ghastly) {
-            if (Dungeon.depth < 5){
-                if (pos == Dungeon.level.exit()){
-                    destroy();
-                    sprite.killAndErase();
-                } else {
-                    target = Dungeon.level.exit();
-                }
-            } else if (Dungeon.depth > 5){
-                if (pos == Dungeon.level.entrance()){
-                    destroy();
-                    sprite.killAndErase();
-                } else {
-                    target = Dungeon.level.entrance();
-                }
-            }
-        }
+		if (Dungeon.depth < 5){
+			if (pos == Dungeon.level.exit()){
+				destroy();
+				sprite.killAndErase();
+			} else {
+				target = Dungeon.level.exit();
+			}
+		} else if (Dungeon.depth > 5){
+			if (pos == Dungeon.level.entrance()){
+				destroy();
+				sprite.killAndErase();
+			} else {
+				target = Dungeon.level.entrance();
+			}
+		}
         Heap heap = Dungeon.level.heaps.get(pos );
         Barter barter = Buff.affect(this, Barter.class);
 		if (heap != null && heap.peek().throwPos(this, Dungeon.hero.pos) == Dungeon.hero.pos){
@@ -219,7 +216,7 @@ public class RatKing extends NPC {
 	public String description() {
 		return ((RatKingSprite)sprite).festive ?
 				Messages.get(this, "desc_festive")
-				: ghastly ? Messages.get(this, "ghastly") : super.description();
+				: super.description();
 	}
 
     public static class Barter extends Buff {
@@ -263,7 +260,6 @@ public class RatKing extends NPC {
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
-        bundle.put("h", ghastly);
         bundle.put("e", counter);
 		bundle.put("n", level);
     }
@@ -271,7 +267,6 @@ public class RatKing extends NPC {
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        ghastly = bundle.getBoolean("h");
         if (bundle.contains("e")){
             counter = bundle.getInt("e");
         }
