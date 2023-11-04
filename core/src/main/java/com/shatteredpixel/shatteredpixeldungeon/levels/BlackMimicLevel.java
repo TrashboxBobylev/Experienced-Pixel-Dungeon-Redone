@@ -70,7 +70,7 @@ public class BlackMimicLevel extends Level {
 		if (locked){
 			Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
 			//if wall isn't broken
-		} else if (map[14 + 13*width()] == Terrain.SIGN){
+		} else if (map[14 + 13*width()] == Terrain.CUSTOM_DECO){
 			Music.INSTANCE.end();
 		} else {
 			Music.INSTANCE.playTracks(
@@ -105,7 +105,7 @@ public class BlackMimicLevel extends Level {
 		setSize(WIDTH, HEIGHT);
 
 		//These signs are visually overridden with custom tile visuals
-		Painter.fill(this, gate, Terrain.SIGN);
+		Painter.fill(this, gate, Terrain.CUSTOM_DECO);
 
 		//set up main boss arena
 		Painter.fillEllipse(this, mainArena, Terrain.EMPTY);
@@ -336,7 +336,7 @@ public class BlackMimicLevel extends Level {
 		}
 
 		for( int i = (mainArena.top-1)*width; i <length; i++){
-			if (map[i] == Terrain.INACTIVE_TRAP || map[i] == Terrain.WATER || map[i] == Terrain.SIGN){
+			if (map[i] == Terrain.INACTIVE_TRAP || map[i] == Terrain.WATER || map[i] == Terrain.CUSTOM_DECO){
 				GameScene.add(Blob.seed(i, 1, PylonEnergy.class));
 			}
 		}

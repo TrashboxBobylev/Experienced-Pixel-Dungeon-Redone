@@ -33,7 +33,7 @@ import java.util.Collections;
 
 public class WelcomeScene extends PixelScene {
 
-	private static int LATEST_UPDATE = ShatteredPixelDungeon.v2_1_0;
+	private static int LATEST_UPDATE = 222;
 
 	//used so that the game does not keep showing the window forever if cleaning fails
 	private static boolean triedCleaningTemp = false;

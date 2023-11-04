@@ -525,24 +525,24 @@ public enum Talent {
 					(hero.pos % Dungeon.level.width()) - radius + 2*radius,
 					(hero.pos / Dungeon.level.width()) - radius + 2*radius);
 			for (Point lol: update.getPoints()){
-				int cell = Dungeon.level.pointToCell(lol);
-				Char ch = Actor.findChar(cell);
+				int toCell = Dungeon.level.pointToCell(lol);
+				Char ch = Actor.findChar(toCell);
 				if (ch != null && ch.alignment == Char.Alignment.ENEMY){
 					Buff.affect(ch, Roots.class, 3f);
 				}
-				if (Dungeon.level.map[cell] == Terrain.EMPTY ||
-						Dungeon.level.map[cell] == Terrain.EMBERS ||
-						Dungeon.level.map[cell] == Terrain.EMPTY_DECO){
-					Level.set(cell, Terrain.GRASS);
-					GameScene.updateMap(cell);
+				if (Dungeon.level.map[toCell] == Terrain.EMPTY ||
+						Dungeon.level.map[toCell] == Terrain.EMBERS ||
+						Dungeon.level.map[toCell] == Terrain.EMPTY_DECO){
+					Level.set(toCell, Terrain.GRASS);
+					GameScene.updateMap(toCell);
 				}
-				CellEmitter.get(cell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
-				int t = Dungeon.level.map[cell];
+				CellEmitter.get(toCell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
+				int t = Dungeon.level.map[toCell];
 				if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
 						|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS)
-						&& Dungeon.level.plants.get(cell) == null){
-					Level.set(cell, Terrain.HIGH_GRASS);
-					GameScene.updateMap(cell);
+						&& Dungeon.level.plants.get(toCell) == null){
+					Level.set(toCell, Terrain.HIGH_GRASS);
+					GameScene.updateMap(toCell);
 				}
 			}
 		}
