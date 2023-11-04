@@ -24,7 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.updates;
 
-//TODO with install and review functionality, this service is less and less just about updates
+//TODO with review functionality, this service is about more than just updates
 // perhaps rename to PlatformService, StoreService, DistributionService, etc?
 public abstract class UpdateService {
 
@@ -34,8 +34,8 @@ public abstract class UpdateService {
 		public abstract void onConnectionFailed();
 	}
 
-	//whether the app is updateable via an ingame prompt (e.g. not a demo or an android instant app)
-	public abstract boolean isUpdateable();
+	//whether the service supports offering update notifications via an ingame prompt
+	public abstract boolean supportsUpdatePrompts();
 
 	//whether the service supports an opt-in channel for betas
 	public abstract boolean supportsBetaChannel();
@@ -44,15 +44,11 @@ public abstract class UpdateService {
 
 	public abstract void initializeUpdate( AvailableUpdateData update );
 
-	//whether the app installable via an ingame prompt (e.g. a demo, or an android instant app)
-	public abstract boolean isInstallable();
-
-	public abstract void initializeInstall();
-
 	public static abstract class ReviewResultCallback {
 		public abstract void onComplete();
 	}
 
+	//whether the service supports prompts to review the game via and ingame prompt
 	public abstract boolean supportsReviews();
 
 	public abstract void initializeReview( ReviewResultCallback callback );

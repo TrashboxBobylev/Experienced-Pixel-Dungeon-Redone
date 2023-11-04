@@ -324,7 +324,7 @@ public abstract class Actor implements Bundlable {
 	}
 	
 	public static void addDelayed( Actor actor, float delay ) {
-		add( actor, now + delay );
+		add( actor, now + Math.max(delay, 0) );
 	}
 	
 	private static synchronized void add( Actor actor, float time ) {

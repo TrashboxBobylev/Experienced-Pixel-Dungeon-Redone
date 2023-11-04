@@ -36,8 +36,8 @@ public class ScrollEmpower extends Buff {
 
 	private int left;
 
-	public void reset(){
-		left = 3;
+	public void reset(int left){
+		this.left = left;
 		Item.updateQuickslot();
 	}
 
@@ -76,7 +76,7 @@ public class ScrollEmpower extends Buff {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", Math.max(1,Dungeon.hero.lvl/5), left);
+		return Messages.get(this, "desc", 2, left);
 	}
 
 	private static final String LEFT = "left";
