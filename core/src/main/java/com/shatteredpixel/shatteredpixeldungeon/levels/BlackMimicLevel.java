@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.*;
 import com.watabou.noosa.audio.Music;
@@ -68,15 +69,16 @@ public class BlackMimicLevel extends Level {
 	@Override
 	public void playLevelMusic() {
 		if (locked){
-			Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true);
+			if (BossHealthBar.isBleeding()){
+				Music.INSTANCE.play(Assets.Music.BLACK_MIMIC_BOSS_FINALE, true);
+			} else {
+				Music.INSTANCE.play(Assets.Music.BLACK_MIMIC_BOSS, true);
+			}
 			//if wall isn't broken
 		} else if (map[14 + 13*width()] == Terrain.CUSTOM_DECO){
 			Music.INSTANCE.end();
 		} else {
-			Music.INSTANCE.playTracks(
-					new String[]{Assets.Music.CAVES_1, Assets.Music.CAVES_2, Assets.Music.CAVES_2},
-					new float[]{1, 1, 0.5f},
-					false);
+			Music.INSTANCE.play(Assets.Music.BLACK_MIMIC_ARENA, true);
 		}
 	}
 
@@ -286,7 +288,7 @@ public class BlackMimicLevel extends Level {
 		} while (!openSpace[boss.pos] || map[boss.pos] == Terrain.EMPTY_SP);
 		GameScene.add( boss );
 
-		Game.runOnRenderThread(() -> Music.INSTANCE.play(Assets.Music.CAVES_BOSS, true));
+		Game.runOnRenderThread(() -> Music.INSTANCE.play(Assets.Music.BLACK_MIMIC_BOSS, true));
 
 	}
 

@@ -152,6 +152,10 @@ public class Assets {
 		public static final String HALLS_TENSE          = "music/halls_tense.ogg";
 		public static final String HALLS_BOSS           = "music/halls_boss.ogg";
 		public static final String HALLS_BOSS_FINALE    = "music/halls_boss_finale.ogg";
+
+		public static final String BLACK_MIMIC_ARENA          = "music/black_mimic_arena.ogg";
+		public static final String BLACK_MIMIC_BOSS           = "music/black_mimic.ogg";
+		public static final String BLACK_MIMIC_BOSS_FINALE    = "music/black_mimic_finale.ogg";
 	}
 
 	public static class Sounds {

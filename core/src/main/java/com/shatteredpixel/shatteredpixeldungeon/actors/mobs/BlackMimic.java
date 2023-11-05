@@ -54,6 +54,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MimicSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Camera;
+import com.watabou.noosa.Game;
+import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.*;
 
@@ -560,6 +562,17 @@ public class BlackMimic extends Mob {
 		} else {
 			yell(Messages.get(this, "pylons_destroyed"));
 			BossHealthBar.bleed(true);
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+						@Override
+						public void call() {
+							Music.INSTANCE.play(Assets.Music.BLACK_MIMIC_BOSS_FINALE, true);
+						}
+					});
+				}
+			});
 		}
 	}
 

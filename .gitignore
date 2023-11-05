@@ -19,3 +19,4 @@ local.properties
 *.iml
 *.idea
 /android/debug/
+/core/src/main/assets/music/desktop.ini
