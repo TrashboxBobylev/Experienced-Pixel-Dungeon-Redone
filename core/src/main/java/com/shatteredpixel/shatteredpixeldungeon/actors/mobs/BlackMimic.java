@@ -414,7 +414,7 @@ public class BlackMimic extends Mob {
 
 			Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
-			for (int i : trajectory.subPath(0, trajectory.dist)) {
+			for (int i : trajectory.subPath(0, trajectory.collisionPos)) {
 				GameScene.add(Blob.seed(i, 200, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
 				gasVented += 20;
 			}
@@ -424,9 +424,8 @@ public class BlackMimic extends Mob {
 			if (gasVented < 250) {
 				int toVentAround = (int) Math.ceil((250 - gasVented) / 8f);
 				for (int i : PathFinder.NEIGHBOURS8) {
-					GameScene.add(Blob.seed(pos + i, toVentAround, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
+					GameScene.add(Blob.seed(trajectory.collisionPos + i, toVentAround, CorrosoGas.class).setStr(Dungeon.escalatingDepth() / 2));
 				}
-
 			}
 		}
 	}
