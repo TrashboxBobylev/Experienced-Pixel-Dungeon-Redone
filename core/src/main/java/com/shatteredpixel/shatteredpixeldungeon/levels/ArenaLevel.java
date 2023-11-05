@@ -63,10 +63,7 @@ public class ArenaLevel extends Level {
 
 	@Override
 	public void playLevelMusic() {
-		Music.INSTANCE.playTracks(
-				new String[]{Assets.Music.SEWERS_1, Assets.Music.PRISON_1, Assets.Music.CAVES_1, Assets.Music.CITY_1, Assets.Music.HALLS_1},
-				new float[]{1, 1, 1, 1, 1},
-				true);
+		Music.INSTANCE.play(Assets.Music.ARENA, true);
 	}
 
 	private static final int WIDTH = 32;
@@ -84,12 +81,12 @@ public class ArenaLevel extends Level {
 	
 	@Override
 	public String tilesTex() {
-		return Assets.Environment.TILES_CITY;
+		return Assets.Environment.TILES_ARENA;
 	}
 	
 	@Override
 	public String waterTex() {
-		return Assets.Environment.WATER_CITY;
+		return Assets.Environment.WATER_ARENA;
 	}
 	
 	private static final String DOOR	= "door";
@@ -133,7 +130,7 @@ public class ArenaLevel extends Level {
 
 		exit = space.left + space.width()/2 + (space.top - 1) * width();
 		
-		map[exit] = Terrain.LOCKED_EXIT;
+		map[exit] = Terrain.WALL_DECO;
 
 		Painter.fill( this, ROOM_LEFT - 1, ROOM_TOP - 1,
 			ROOM_RIGHT - ROOM_LEFT + 3, ROOM_BOTTOM - ROOM_TOP + 3, Terrain.WALL );
