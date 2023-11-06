@@ -109,7 +109,7 @@ public class MeleeWeapon extends Weapon {
 				} else if (hero.heroClass == HeroClass.DUELIST) {
 					GLog.w(Messages.get(this, "ability_need_equip"));
 				}
-			} else if (hero.heroClass != HeroClass.DUELIST){
+			} else if (!hero.isClass(HeroClass.DUELIST)){
 				//do nothing
 			} else if (STRReq() > hero.STR()){
 				GLog.w(Messages.get(this, "ability_low_str"));
