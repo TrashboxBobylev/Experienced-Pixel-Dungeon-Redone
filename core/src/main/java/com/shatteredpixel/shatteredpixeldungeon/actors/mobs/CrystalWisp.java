@@ -48,6 +48,29 @@ public class CrystalWisp extends Mob{
 		flying = true;
 
 		properties.add(Property.INORGANIC);
+
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 320;
+				defenseSkill = 48;
+				EXP = 34;
+				break;
+			case 2:
+				HP = HT = 4600;
+				defenseSkill = 225;
+				EXP = 321;
+				break;
+			case 3:
+				HP = HT = 80000;
+				defenseSkill = 500;
+				EXP = 3000;
+				break;
+			case 4:
+				HP = HT = 7000000;
+				defenseSkill = 3000;
+				EXP = 74000;
+				break;
+		}
 	}
 
 	public CrystalWisp(){
@@ -75,17 +98,35 @@ public class CrystalWisp extends Mob{
 
 	@Override
 	public int damageRoll() {
+		switch (Dungeon.cycle) {
+			case 1: return Random.NormalIntRange(50, 55);
+			case 2: return Random.NormalIntRange(240, 275);
+			case 3: return Random.NormalIntRange(800, 900);
+			case 4: return Random.NormalIntRange(14000, 18500);
+		}
 		return Random.NormalIntRange( 5, 10 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+		switch (Dungeon.cycle){
+			case 1: return 72;
+			case 2: return 275;
+			case 3: return 760;
+			case 4: return 3600;
+		}
 		return 18;
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 5);
+	public int cycledDrRoll() {
+		switch (Dungeon.cycle){
+			case 1: return Random.NormalIntRange(13, 28);
+			case 2: return Random.NormalIntRange(70, 170);
+			case 3: return Random.NormalIntRange(500, 700);
+			case 4: return Random.NormalIntRange(8000, 16000);
+		}
+		return Random.NormalIntRange(0, 4);
 	}
 
 	@Override
@@ -124,6 +165,12 @@ public class CrystalWisp extends Mob{
 		if (hit( this, enemy, true )) {
 
 			int dmg = Random.NormalIntRange( 5, 10 );
+			switch (Dungeon.cycle) {
+				case 1: dmg = Random.NormalIntRange(50, 55); break;
+				case 2: dmg = Random.NormalIntRange(240, 275); break;
+				case 3: dmg = Random.NormalIntRange(800, 900); break;
+				case 4: dmg = Random.NormalIntRange(14000, 18500); break;
+			}
 			enemy.damage( dmg, new LightBeam() );
 
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
