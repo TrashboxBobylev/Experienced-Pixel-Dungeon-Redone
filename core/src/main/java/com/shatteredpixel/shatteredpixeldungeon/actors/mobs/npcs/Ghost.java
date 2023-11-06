@@ -53,8 +53,6 @@ import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
-import com.watabou.utils.Random;
-import com.watabou.utils.Reflection;
 
 public class Ghost extends NPC {
 
@@ -318,7 +316,7 @@ public class Ghost extends NPC {
 				depth = Dungeon.depth;
 
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1})){
+				switch (Dungeon.chances(new float[]{0, 0, 10, 6, 3, 1})){
 					default:
 					case 2: armor = new LeatherArmor(); break;
 					case 3: armor = new MailArmor();    break;
@@ -326,7 +324,7 @@ public class Ghost extends NPC {
 					case 5: armor = new PlateArmor();   break;
 				}
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				int wepTier = Random.chances(new float[]{0, 0, 10, 6, 3, 1});
+				int wepTier = Dungeon.chances(new float[]{0, 0, 10, 6, 3, 1});
 				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
 
 				//clear weapon's starting properties
