@@ -25,17 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -51,11 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CrystalSpireSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Callback;
-import com.watabou.utils.GameMath;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 
@@ -65,6 +51,20 @@ public class CrystalSpire extends Mob {
 		//this translates to roughly 33/27/23/20/18/16 pickaxe hits at +0/1/2/3/4/5
 		HP = HT = 300;
 		spriteClass = CrystalSpireSprite.class;
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 1600;
+				break;
+			case 2:
+				HP = HT = 19564;
+				break;
+			case 3:
+				HP = HT = 900000;
+				break;
+			case 4:
+				HP = HT = 12000000;
+				break;
+		}
 
 		//acts after other mobs, which makes baiting crystal guardians more consistent
 		actPriority = MOB_PRIO-1;
@@ -79,7 +79,7 @@ public class CrystalSpire extends Mob {
 	}
 
 	private float abilityCooldown;
-	private static final int ABILITY_CD = 15;
+	private static final int ABILITY_CD = 12;
 
 	private ArrayList<ArrayList<Integer>> targetedCells = new ArrayList<>();
 
@@ -124,11 +124,17 @@ public class CrystalSpire extends Mob {
 				Char ch = Actor.findChar(i);
 
 				if (ch != null && !(ch instanceof CrystalWisp || ch instanceof CrystalSpire)){
-					int dmg = Random.NormalIntRange(6, 15);
+					int dmg = Random.NormalIntRange(12, 30);
+					switch (Dungeon.cycle) {
+						case 1: dmg = Random.NormalIntRange(96, 124); break;
+						case 2: dmg = Random.NormalIntRange(500, 648); break;
+						case 3: dmg = Random.NormalIntRange(1790, 2400); break;
+						case 4: dmg = Random.NormalIntRange(34000, 52000); break;
+					}
 
 					//guardians are hit harder by the attack
 					if (ch instanceof CrystalGuardian) {
-						dmg += 12; //18-27 damage
+						dmg *= 1.5f; //18-27 damage
 						Buff.prolong(ch, Cripple.class, 30f);
 					}
 					ch.damage(dmg, CrystalSpire.this);
@@ -314,6 +320,8 @@ public class CrystalSpire extends Mob {
 					//does its own special damage calculation that's only influenced by pickaxe level and augment
 					//we pretend the spire is the owner here so that properties like hero str or or other equipment do not factor in
 					int dmg = p.damageRoll(CrystalSpire.this);
+
+					dmg = Math.min(dmg, HT / 10);
 
 					damage(dmg, p);
 					abilityCooldown -= dmg/10f;
