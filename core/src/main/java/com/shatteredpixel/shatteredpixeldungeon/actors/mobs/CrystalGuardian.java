@@ -56,6 +56,29 @@ public class CrystalGuardian extends Mob{
 
 		properties.add(Property.INORGANIC);
 		properties.add(Property.MINIBOSS);
+
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 835;
+				defenseSkill = 45;
+				EXP = 52;
+				break;
+			case 2:
+				HP = HT = 8760;
+				defenseSkill = 210;
+				EXP = 515;
+				break;
+			case 3:
+				HP = HT = 195000;
+				defenseSkill = 620;
+				EXP = 5100;
+				break;
+			case 4:
+				HP = HT = 22500000;
+				defenseSkill = 4750;
+				EXP = 195000;
+				break;
+		}
 	}
 
 	private boolean recovering = false;
@@ -68,7 +91,7 @@ public class CrystalGuardian extends Mob{
 	protected boolean act() {
 		if (recovering){
 			throwItems();
-			HP = Math.min(HT, HP+5);
+			HP = Math.min(HT, HP+HP/20);
 			if (Dungeon.level.heroFOV[pos]) {
 				sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 			}
@@ -84,11 +107,23 @@ public class CrystalGuardian extends Mob{
 
 	@Override
 	public int damageRoll() {
+		switch (Dungeon.cycle) {
+			case 1: return Random.NormalIntRange(60, 70);
+			case 2: return Random.NormalIntRange(280, 350);
+			case 3: return Random.NormalIntRange(1300, 1475);
+			case 4: return Random.NormalIntRange(20000, 45000);
+		}
 		return Random.NormalIntRange( 10, 16 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+		switch (Dungeon.cycle){
+			case 1: return 85;
+			case 2: return 335;
+			case 3: return 800;
+			case 4: return 4600;
+		}
 		return 20;
 	}
 
@@ -105,8 +140,14 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 10);
+	public int cycledDrRoll() {
+		switch (Dungeon.cycle){
+			case 1: return Random.NormalIntRange(30, 60);
+			case 2: return Random.NormalIntRange(100, 270);
+			case 3: return Random.NormalIntRange(570, 1300);
+			case 4: return Random.NormalIntRange(16000, 42000);
+		}
+		return Random.NormalIntRange(0, 10);
 	}
 
 	@Override
