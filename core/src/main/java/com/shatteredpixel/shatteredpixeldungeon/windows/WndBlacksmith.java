@@ -162,20 +162,22 @@ public class WndBlacksmith extends Window {
 		smith.enable(Blacksmith.Quest.favor >= 2000);
 		buttons.add(smith);
 
-		RedButton cashOut = new RedButton(Messages.get(this, "cashout"), 6){
+		int cashOutModifier = (int) Math.pow(Dungeon.cycle + 1, 5);
+
+		RedButton cashOut = new RedButton(Messages.get(this, "cashout", cashOutModifier), 6){
 			@Override
 			protected void onClick() {
 				GameScene.show(new WndOptions(
 						troll.sprite(),
 						Messages.titleCase( troll.name() ),
-						Messages.get(WndBlacksmith.class, "cashout_verify", Blacksmith.Quest.favor),
+						Messages.get(WndBlacksmith.class, "cashout_verify", Blacksmith.Quest.favor*cashOutModifier),
 						Messages.get(WndBlacksmith.class, "cashout_yes"),
 						Messages.get(WndBlacksmith.class, "cashout_no")
 				){
 					@Override
 					protected void onSelect(int index) {
 						if (index == 0){
-							new Gold(Blacksmith.Quest.favor).doPickUp(Dungeon.hero, Dungeon.hero.pos);
+							new Gold(Blacksmith.Quest.favor*cashOutModifier).doPickUp(Dungeon.hero, Dungeon.hero.pos);
 							Blacksmith.Quest.favor = 0;
 							WndBlacksmith.this.hide();
 						}
