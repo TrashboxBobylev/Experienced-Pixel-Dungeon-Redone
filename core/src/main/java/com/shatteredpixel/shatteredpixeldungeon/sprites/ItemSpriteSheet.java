@@ -295,6 +295,21 @@ public class ItemSpriteSheet {
 		assignItemRect(WAR_SCYTHE,  14, 15);
 	}
 
+	private static final int WEP_TIERBLACK      =                               xy(9, 9);   //8 slots
+	public static final int STARHAMMER      = WEP_TIERBLACK+0;
+	public static final int GROWTHSWORD     = WEP_TIERBLACK+1;
+	public static final int FIRINGWHIP      = WEP_TIERBLACK+2;
+	public static final int GREEDSTAFF      = WEP_TIERBLACK+3;
+	public static final int PHANTDAGGER     = WEP_TIERBLACK+4;
+
+	static{
+		assignItemRect(STARHAMMER,  16, 16);
+		assignItemRect(GROWTHSWORD, 15, 16);
+		assignItemRect(FIRINGWHIP,  14, 14);
+		assignItemRect(GREEDSTAFF,  16, 16);
+		assignItemRect(PHANTDAGGER, 12, 12);
+	}
+
 	                                                                                    //8 free slots
 
 	private static final int MISSILE_WEP    =                               xy(1, 10);  //16 slots. 3 per tier + bow
