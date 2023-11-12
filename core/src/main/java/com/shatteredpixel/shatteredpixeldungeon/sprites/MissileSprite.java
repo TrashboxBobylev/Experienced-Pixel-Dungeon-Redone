@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.SuperPickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.StarlightSmasher;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -108,6 +109,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		ANGULAR_SPEEDS.put(TenguSprite.TenguShuriken.class,      2160);
 
 		ANGULAR_SPEEDS.put(SuperPickaxe.class, 2880);
+		ANGULAR_SPEEDS.put(StarlightSmasher.class, 2880);
 	}
 
 	//TODO it might be nice to have a source and destination angle, to improve thrown weapon visuals
@@ -161,6 +163,8 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 			speed *= 1.5f;
 		} else if (item instanceof SuperPickaxe){
 			speed *= 3f;
+		} else if (item instanceof StarlightSmasher && ((StarlightSmasher) item).starlight_power){
+			speed *= 1.75f;
 		}
 		
 		PosTweener tweener = new PosTweener( this, to, d.length() / speed );
