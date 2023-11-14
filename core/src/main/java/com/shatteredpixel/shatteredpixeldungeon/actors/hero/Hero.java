@@ -62,12 +62,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GleamingStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -1361,6 +1363,16 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		if (rockArmor != null) {
 			damage = rockArmor.absorb(damage);
 		}
+
+		if (buff(GleamingStaff.GuardTracker.class) != null && Dungeon.Int(2) == 0){
+			BiggerGambleBag lootbag = new BiggerGambleBag();
+			sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.025f, 20);
+			if (!lootbag.doPickUp(this, pos, 0f)) {
+				Dungeon.level.drop(lootbag, pos).sprite.drop();
+			} else {
+				GLog.i(Messages.get(Hero.class, "you_now_have", lootbag.name()));
+			}
+		}
 		
 		return super.defenseProc( enemy, damage );
 	}
@@ -1401,6 +1413,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
 		if (thorns != null) {
 			dmg = thorns.proc(dmg, (src instanceof Char ? (Char)src : null),  this);
+		}
+
+		if (buff(GleamingStaff.GuardTracker.class) != null){
+			dmg *= 3;
 		}
 
 		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
