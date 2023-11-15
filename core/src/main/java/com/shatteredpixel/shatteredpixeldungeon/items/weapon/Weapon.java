@@ -95,6 +95,10 @@ abstract public class Weapon extends KindOfWeapon {
 	public boolean curseInfusionBonus = false;
 	public boolean masteryPotionBonus = false;
 
+	public static float hardenBoost(int upgrades){
+		return 0.0015f * upgrades;
+	}
+
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
 		

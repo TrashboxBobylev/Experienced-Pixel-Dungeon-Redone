@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
@@ -42,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
@@ -269,7 +269,7 @@ public class Armor extends EquipableItem {
 	}
 
 	public final int DRMax(){
-		return DRMax(buffedLvl());
+		return Math.round(DRMax(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public int DRMax(int lvl){
@@ -286,7 +286,7 @@ public class Armor extends EquipableItem {
 	}
 
 	public final int DRMin(){
-		return DRMin(buffedLvl());
+		return Math.round(DRMin(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public int DRMin(int lvl){
@@ -454,11 +454,10 @@ public class Armor extends EquipableItem {
 		
 		if (glyph != null  && (cursedKnown || !glyph.curse())) {
 			info += "\n\n" +  Messages.capitalize(Messages.get(Armor.class, "inscribed", glyph.name()));
-			if (glyphHardened) info += " " + Messages.get(Armor.class, "glyph_hardened");
 			info += " " + glyph.desc();
-		} else if (glyphHardened){
-			info += "\n\n" + Messages.get(Armor.class, "hardened_no_glyph");
 		}
+
+		if (glyphHardened) info += " " + Messages.get(Armor.class, "glyph_hardened", Messages.decimalFormat("#.##", 100f * Weapon.hardenBoost(buffedLvl())));
 		
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Armor.class, "cursed_worn");

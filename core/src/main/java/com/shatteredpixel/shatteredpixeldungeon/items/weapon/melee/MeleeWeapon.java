@@ -353,7 +353,17 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		return damage;
 	}
-	
+
+	@Override
+	public int min() {
+		return Math.round(super.min()*(1f + hardenBoost(buffedLvl())));
+	}
+
+	@Override
+	public int max() {
+		return Math.round(super.max()*(1f + hardenBoost(buffedLvl())));
+	}
+
 	@Override
 	public String info() {
 
@@ -388,11 +398,10 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		if (enchantment != null && (cursedKnown || !enchantment.curse())){
 			info += "\n\n" + Messages.capitalize(Messages.get(Weapon.class, "enchanted", enchantment.name()));
-			if (enchantHardened) info += " " + Messages.get(Weapon.class, "enchant_hardened");
 			info += " " + enchantment.desc();
-		} else if (enchantHardened){
-			info += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
 		}
+
+		if (enchantHardened) info += " " + Messages.get(Weapon.class, "enchant_hardened", Messages.decimalFormat("#.##", 100f * hardenBoost(buffedLvl())));
 
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Weapon.class, "cursed_worn");
