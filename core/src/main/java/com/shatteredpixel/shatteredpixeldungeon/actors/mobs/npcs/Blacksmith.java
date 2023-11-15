@@ -31,7 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.items.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.PsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.KeyToTruth;
@@ -41,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
@@ -56,6 +60,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -550,20 +555,16 @@ public class Blacksmith extends NPC {
 			return rooms;
 		}
 
+		public static Class<BlacksmithWeapon>[] smithWeapons = new Class[]{StarlightSmasher.class, RegrowingSlasher.class, FiringSnapper.class, GleamingStaff.class, FantasmalStabber.class};
+
 		public static void generateRewards( boolean useDecks ){
 			smithRewards = new ArrayList<>();
-			smithRewards.add(Generator.randomWeapon(3, useDecks));
-			smithRewards.add(Generator.randomWeapon(3, useDecks));
-			ArrayList<Item> toUndo = new ArrayList<>();
+			smithRewards.add(Reflection.newInstance(smithWeapons[Random.Int(smithWeapons.length)]));
+			smithRewards.add(Reflection.newInstance(smithWeapons[Random.Int(smithWeapons.length)]));
 			while (smithRewards.get(0).getClass() == smithRewards.get(1).getClass()) {
-				if (useDecks)   toUndo.add(smithRewards.get(1));
 				smithRewards.remove(1);
-				smithRewards.add(Generator.randomWeapon(3, useDecks));
+				smithRewards.add(Reflection.newInstance(smithWeapons[Random.Int(smithWeapons.length)]));
 			}
-			for (Item i : toUndo){
-				Generator.undoDrop(i);
-			}
-			smithRewards.add(Generator.randomArmor(3));
 
 			//15%:+0, 55%:+1, 20%:+2, 5%:+3
 			int rewardLevel;
@@ -578,12 +579,12 @@ public class Blacksmith extends NPC {
 				rewardLevel = 3;
 			}
 
+			rewardLevel = (int) Math.pow(rewardLevel, Dungeon.cycle + 1);
+
 			for (Item i : smithRewards){
 				i.level(rewardLevel);
 				if (i instanceof Weapon) {
 					((Weapon) i).enchant(null);
-				} else if (i instanceof Armor){
-					((Armor) i).inscribe(null);
 				}
 				i.cursed = false;
 			}
