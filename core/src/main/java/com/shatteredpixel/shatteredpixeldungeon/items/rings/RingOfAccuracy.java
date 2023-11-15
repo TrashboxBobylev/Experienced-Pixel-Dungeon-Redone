@@ -43,7 +43,7 @@ public class RingOfAccuracy extends Ring {
 					new DecimalFormat("#.###").format(100f * (1.20f + soloVisualBonus()*0.02 - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Accuracy.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, combinedBuffedBonus(Dungeon.hero, Accuracy.class)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (1.20f + combinedBuffedBonus(Dungeon.hero, Accuracy.class)*0.02 - 1f)));
 			}
 			return info;
 		} else {

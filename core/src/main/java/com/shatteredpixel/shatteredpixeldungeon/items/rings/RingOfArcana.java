@@ -43,7 +43,7 @@ public class RingOfArcana extends Ring {
 					new DecimalFormat("#.##").format(100f * (1.20f + soloVisualBonus()*0.015 - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Arcana.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.175f, combinedBuffedBonus(Dungeon.hero, Arcana.class)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (1.20f + combinedBuffedBonus(Dungeon.hero, Arcana.class)*0.015 - 1f)));
 			}
 			return info;
 		} else {

@@ -83,7 +83,7 @@ public class RingOfMight extends Ring {
 					soloBuffedBonus()-1, (soloBuffedBonus()-1)*2);
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Might.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						getBonus(Dungeon.hero, Might.class), Messages.decimalFormat("#.##", 100f * (Math.pow(1.035, combinedBuffedBonus(Dungeon.hero, Might.class)) - 1f)));
+						combinedBuffedBonus(Dungeon.hero, Might.class)-1, (combinedBuffedBonus(Dungeon.hero, Might.class)-1)*2);
 			}
 			return info;
 		} else {

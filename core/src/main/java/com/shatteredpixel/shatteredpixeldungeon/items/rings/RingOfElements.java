@@ -48,7 +48,7 @@ public class RingOfElements extends Ring {
 					new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Resistance.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, combinedBuffedBonus(Dungeon.hero, Resistance.class)))));
+						Messages.decimalFormat("#.##", 100f * (1f - (0.80f - combinedBuffedBonus(Dungeon.hero, Resistance.class)*0.0075f))));
 			}
 			return info;
 		} else {

@@ -43,7 +43,7 @@ public class RingOfHaste extends Ring {
 					new DecimalFormat("#.###").format(100f * ((1.10f + soloVisualBonus()*0.0015f) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Haste.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.2f, combinedBuffedBonus(Dungeon.hero, Haste.class)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * ((1.10f + combinedBuffedBonus(Dungeon.hero, Haste.class)*0.0015f) - 1f)));
 			}
 			return info;
 		} else {

@@ -43,7 +43,7 @@ public class RingOfEvasion extends Ring {
 					new DecimalFormat("#.###").format(100f * ((1.20f + soloVisualBonus()*0.0025f) - 1f)));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Evasion.class)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.125f, combinedBuffedBonus(Dungeon.hero, Evasion.class)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * ((1.20f + combinedBuffedBonus(Dungeon.hero, Evasion.class)*0.0025f) - 1f)));
 			}
 			return info;
 		} else {
