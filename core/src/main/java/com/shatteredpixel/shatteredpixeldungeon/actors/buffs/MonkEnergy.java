@@ -253,6 +253,11 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 	}
 
 	@Override
+	public boolean usable() {
+		return cooldown == 0 && energy >= 1;
+	}
+
+	@Override
 	public void doAction() {
 		GameScene.show(new WndMonkAbilities(this));
 	}

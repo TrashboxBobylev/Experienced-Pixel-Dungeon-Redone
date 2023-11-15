@@ -603,6 +603,11 @@ private static boolean evaluatingTwinUpgrades = false;
 		}
 
 		@Override
+		public boolean usable() {
+			return Dungeon.hero.subClass == HeroSubClass.CHAMPION;
+		}
+
+		@Override
 		public Visual primaryVisual() {
 			Image ico;
 			if (Dungeon.hero.belongings.weapon == null){
