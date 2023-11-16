@@ -624,7 +624,7 @@ public class Blacksmith extends NPC {
 			favor = 0;
 			DarkGold gold = Dungeon.hero.belongings.getItem(DarkGold.class);
 			if (gold != null){
-				favor += Math.min(2000, gold.quantity()*50);
+				favor += Math.min(3000, gold.quantity()*75);
 				gold.detachAll(Dungeon.hero.belongings.backpack);
 			}
 
@@ -638,7 +638,7 @@ public class Blacksmith extends NPC {
 			pick.detach(Dungeon.hero.belongings.backpack);
 			Quest.pickaxe = pick;
 
-			if (bossBeaten) favor += 1000;
+			if (bossBeaten) favor += 1500;
 
 			Statistics.questScores[2] = favor;
 		}
