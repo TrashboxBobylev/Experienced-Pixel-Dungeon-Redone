@@ -109,7 +109,10 @@ public class Statue extends Mob {
 	
 	@Override
 	public float attackDelay() {
-		return super.attackDelay()*weapon.delayFactor( this );
+		if (weapon != null)
+			return super.attackDelay()*weapon.delayFactor( this );
+		else
+			return super.attackDelay();
 	}
 
 	@Override
