@@ -297,7 +297,6 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
-							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING)
 					};
 					break;
