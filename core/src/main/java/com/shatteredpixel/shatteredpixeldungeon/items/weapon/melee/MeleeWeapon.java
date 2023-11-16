@@ -401,7 +401,7 @@ private static boolean evaluatingTwinUpgrades = false;
 			info += " " + enchantment.desc();
 		}
 
-		if (enchantHardened) info += " " + Messages.get(Weapon.class, "enchant_hardened", Messages.decimalFormat("#.##", 100f * hardenBoost(buffedLvl())));
+		if (enchantHardened) info += "\n\n" + Messages.get(Weapon.class, "enchant_hardened", Messages.decimalFormat("#.##", 100f * hardenBoost(buffedLvl())));
 
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Weapon.class, "cursed_worn");

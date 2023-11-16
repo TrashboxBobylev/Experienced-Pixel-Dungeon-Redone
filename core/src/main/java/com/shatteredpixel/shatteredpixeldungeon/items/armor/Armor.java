@@ -462,7 +462,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 			info += " " + glyph.desc();
 		}
 
-		if (glyphHardened) info += " " + Messages.get(Armor.class, "glyph_hardened", Messages.decimalFormat("#.##", 100f * Weapon.hardenBoost(buffedLvl())));
+		if (glyphHardened) info += "\n\n" + Messages.get(Armor.class, "glyph_hardened", Messages.decimalFormat("#.##", 100f * Weapon.hardenBoost(buffedLvl())));
 		
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Armor.class, "cursed_worn");

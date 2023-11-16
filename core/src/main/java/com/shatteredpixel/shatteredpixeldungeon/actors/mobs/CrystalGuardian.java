@@ -91,7 +91,7 @@ public class CrystalGuardian extends Mob{
 	protected boolean act() {
 		if (recovering){
 			throwItems();
-			HP = Math.min(HT, HP+HP/20);
+			HP = Math.min(HT, HP+(Math.max(1, HP/20)));
 			if (Dungeon.level.heroFOV[pos]) {
 				sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 			}
