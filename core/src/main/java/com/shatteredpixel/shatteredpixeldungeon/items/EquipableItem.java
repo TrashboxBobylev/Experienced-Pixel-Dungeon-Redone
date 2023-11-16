@@ -162,4 +162,8 @@ public abstract class EquipableItem extends Item {
 	}
 
 	public void activate( Char ch ){}
+
+	public interface Tierable {
+		int tier();
+	}
 }

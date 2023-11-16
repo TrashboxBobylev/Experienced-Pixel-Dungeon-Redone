@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
+import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
@@ -53,7 +54,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-abstract public class Weapon extends KindOfWeapon {
+abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tierable {
 
 	public float    ACC = 1f;	// Accuracy modifier
 	public float	DLY	= 1f;	// Speed modifier
@@ -259,6 +260,11 @@ abstract public class Weapon extends KindOfWeapon {
 		int level = super.level();
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
+	}
+
+	@Override
+	public int tier() {
+		return tier;
 	}
 
 	@Override
