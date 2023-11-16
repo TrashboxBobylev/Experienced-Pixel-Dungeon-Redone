@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -182,7 +181,7 @@ public class Bestiary {
 						Scorpio.class, Scorpio.class, Scorpio.class));
             case 28:
                 //every unique and dangerous enemy
-                    return new ArrayList<>(Arrays.asList(Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class));
+                    return new ArrayList<>(Arrays.asList(Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class, Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class, OOFThief.class));
 		}
 		
 	}

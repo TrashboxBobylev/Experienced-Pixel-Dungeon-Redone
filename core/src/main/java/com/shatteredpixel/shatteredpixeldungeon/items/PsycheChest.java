@@ -124,6 +124,13 @@ public class PsycheChest extends Item {
                     }
                     break;
             }
+            for (Heap heap: Dungeon.level.heaps.valueList()) {
+                if (heap.type.forSale()) {
+                    if (heap.peek().wereOofed && !Dungeon.oofedItems.contains(heap.peek())){
+                        Dungeon.oofedItems.add(heap.items.removeFirst());
+                    }
+                }
+            }
             InterlevelScene.mode = InterlevelScene.Mode.RESET;
             if (hero.HP > hero.HT / 2) hero.HP -= hero.HT / 2;
             Game.switchScene(InterlevelScene.class);

@@ -136,6 +136,8 @@ public class WndTradeItem extends WndInfoItem {
 				buy( heap );
 			}
 		};
+		if (heap.peek().wereOofed)
+			btnBuy.textColor(0xf5eaa2);
 		btnBuy.setRect( 0, pos + GAP, width, BTN_HEIGHT );
 		btnBuy.icon(new ItemSprite(ItemSpriteSheet.GOLD));
 		btnBuy.enable( price <= Dungeon.gold );
@@ -153,6 +155,7 @@ public class WndTradeItem extends WndInfoItem {
 					if (thievery.steal(item)) {
 						Hero hero = Dungeon.hero;
 						Item item = heap.pickUp();
+						item.wereOofed = false;
 						hide();
 
 						if (!item.doPickUp(hero)) {
@@ -253,6 +256,7 @@ public class WndTradeItem extends WndInfoItem {
 		
 		int price = Shopkeeper.sellPrice( item );
 		Dungeon.gold -= price;
+		item.wereOofed = false;
 		
 		if (!item.doPickUp( Dungeon.hero )) {
 			Dungeon.level.drop( item, heap.pos ).sprite.drop();

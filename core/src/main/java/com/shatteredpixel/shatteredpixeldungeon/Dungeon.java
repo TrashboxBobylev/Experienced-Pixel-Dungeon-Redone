@@ -95,6 +95,7 @@ public class Dungeon {
 		SHAMAN_WAND,
 		DM200_EQUIP,
 		GOLEM_EQUIP,
+		OOF_DROP,
 
 		//containers
 		VELVET_POUCH,
@@ -185,6 +186,8 @@ public class Dungeon {
 	public static int gold;
 	public static int cycle;
 
+	public static ArrayList<Item> oofedItems = new ArrayList<>();
+
 	public static float respawn_timer;
 	public static int additionalMobs;
 
@@ -252,6 +255,7 @@ public class Dungeon {
 		depth = 1;
 		branch = 0;
 		generatedLevels.clear();
+		oofedItems.clear();
 
 		gold = 0;
 		cycle = 0;
@@ -653,6 +657,7 @@ public class Dungeon {
 	private static final String ENERGY		= "energy";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
+	private static final String OOFED       = "oofed";
 	private static final String LEVEL		= "level";
 	private static final String LIMDROPS    = "limited_drops";
 	private static final String CHAPTERS	= "chapters";
@@ -720,6 +725,8 @@ public class Dungeon {
 				bundleArr[i] = generatedLevels.get(i);
 			}
 			bundle.put( GENERATED_LEVELS, bundleArr);
+
+			bundle.put( OOFED, oofedItems);
 
 			Scroll.save( bundle );
 			Potion.save( bundle );
@@ -871,6 +878,11 @@ public class Dungeon {
 			for (int i = 1; i <= Statistics.deepestFloor; i++){
 				generatedLevels.add(i);
 			}
+		}
+
+		oofedItems.clear();
+		for (Bundlable i: bundle.getCollection(OOFED)){
+			oofedItems.add((Item) i);
 		}
 
 		droppedItems = new SparseArray<>();

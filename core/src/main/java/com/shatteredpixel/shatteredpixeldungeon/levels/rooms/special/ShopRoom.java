@@ -222,6 +222,15 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( new ScrollOfRemoveCurse() );
 		itemsToSpawn.add( new ScrollOfMagicMapping() );
 
+		if (!Dungeon.oofedItems.isEmpty()) {
+			Item lol = Dungeon.oofedItems.get(Random.index(Dungeon.oofedItems));
+			if (lol != null){
+				lol.wereOofed = true;
+				itemsToSpawn.add(lol);
+				Dungeon.oofedItems.remove(lol);
+			}
+		}
+
 		for (int i=0; i < 2; i++)
 			itemsToSpawn.add( Random.Int(2) == 0 ?
 					Generator.randomUsingDefaults( Generator.Category.POTION ) :

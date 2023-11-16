@@ -98,6 +98,8 @@ public class Item implements Bundlable {
 
 	// whether an item can be included in heroes remains
 	public boolean bones = false;
+
+	public boolean wereOofed = false;
 	
 	public static final Comparator<Item> itemComparator = new Comparator<Item>() {
 		@Override
@@ -558,6 +560,7 @@ public class Item implements Bundlable {
 	private static final String CURSED_KNOWN	= "cursedKnown";
 	private static final String QUICKSLOT		= "quickslotpos";
 	private static final String KEPT_LOST       = "kept_lost";
+	private static final String WERE_OOFED      = "were_oofed";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -570,6 +573,7 @@ public class Item implements Bundlable {
 			bundle.put( QUICKSLOT, Dungeon.quickslot.getSlot(this) );
 		}
 		bundle.put( KEPT_LOST, keptThoughLostInvent );
+		bundle.put( WERE_OOFED, wereOofed);
 	}
 	
 	@Override
@@ -577,6 +581,7 @@ public class Item implements Bundlable {
 		quantity	= bundle.getInt( QUANTITY );
 		levelKnown	= bundle.getBoolean( LEVEL_KNOWN );
 		cursedKnown	= bundle.getBoolean( CURSED_KNOWN );
+		wereOofed = bundle.getBoolean(WERE_OOFED);
 		
 		int level = bundle.getInt( LEVEL );
 		if (level > 0) {

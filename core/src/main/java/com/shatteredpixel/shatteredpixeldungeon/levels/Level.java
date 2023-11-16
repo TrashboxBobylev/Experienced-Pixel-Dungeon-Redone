@@ -37,10 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WindParticle;
@@ -456,6 +453,8 @@ if (bundle.contains( "respawner" )){
 		}
 
 		Mob m = Reflection.newInstance(mobsToSpawn.remove(0));
+		if (Dungeon.cycle > 0 && Random.Int(2222) == 0)
+			m = Reflection.newInstance(OOFThief.class);
 		ChampionEnemy.rollForChampion(m);
 		return m;
 	}
