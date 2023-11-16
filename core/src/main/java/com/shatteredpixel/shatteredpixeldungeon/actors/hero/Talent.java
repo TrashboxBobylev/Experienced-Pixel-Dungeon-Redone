@@ -57,8 +57,10 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
-import com.watabou.utils.*;
 
 import java.util.*;
 
@@ -515,35 +517,6 @@ public enum Talent {
 				// 5/7.5% of max HP
 				int shieldToGive = Math.round( factor * hero.HT * (0.025f * (1+hero.pointsInTalent(LIQUID_WILLPOWER))));
 				Buff.affect(hero, Barrier.class).setShield(shieldToGive);
-			}
-		}
-		if (hero.perks.contains(Perks.Perk.GRASS_HEALING)){
-			int radius = 2;
-			Rect update = new Rect(
-					(hero.pos % Dungeon.level.width()) - radius,
-					(hero.pos / Dungeon.level.width()) - radius,
-					(hero.pos % Dungeon.level.width()) - radius + 2*radius,
-					(hero.pos / Dungeon.level.width()) - radius + 2*radius);
-			for (Point lol: update.getPoints()){
-				int toCell = Dungeon.level.pointToCell(lol);
-				Char ch = Actor.findChar(toCell);
-				if (ch != null && ch.alignment == Char.Alignment.ENEMY){
-					Buff.affect(ch, Roots.class, 3f);
-				}
-				if (Dungeon.level.map[toCell] == Terrain.EMPTY ||
-						Dungeon.level.map[toCell] == Terrain.EMBERS ||
-						Dungeon.level.map[toCell] == Terrain.EMPTY_DECO){
-					Level.set(toCell, Terrain.GRASS);
-					GameScene.updateMap(toCell);
-				}
-				CellEmitter.get(toCell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
-				int t = Dungeon.level.map[toCell];
-				if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
-						|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS)
-						&& Dungeon.level.plants.get(toCell) == null){
-					Level.set(toCell, Terrain.HIGH_GRASS);
-					GameScene.updateMap(toCell);
-				}
 			}
 		}
 		if (hero.hasTalent(LIQUID_NATURE)){
