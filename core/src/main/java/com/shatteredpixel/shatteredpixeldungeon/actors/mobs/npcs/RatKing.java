@@ -146,7 +146,8 @@ public class RatKing extends NPC {
 					level = Math.min(level+1, 15);
 					item = new Cheese();
 				}
-				item.cast(this, Dungeon.hero.pos);
+				if (item.throwPos(this, Dungeon.hero.pos) == Dungeon.hero.pos)
+					item.cast(this, Dungeon.hero.pos);
 			}
 
             spend(2f);
