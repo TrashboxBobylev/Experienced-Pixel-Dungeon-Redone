@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -92,6 +93,8 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 			return ((Weapon)item).hasCurseEnchant();
 		} else if (item instanceof Armor){
 			return ((Armor)item).hasCurseGlyph();
+		} else if (item instanceof CorpseDust){
+			return true;
 		} else {
 			return false;
 		}
@@ -142,6 +145,11 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 			}
 			if (item instanceof Wand){
 				((Wand) item).updateLevel();
+			}
+			if (item instanceof CorpseDust){
+				item.detach( hero.belongings.backpack );
+				hero.sprite.emitter().start( ShadowParticle.UP, 0.01f, 100 );
+				procced = true;
 			}
 		}
 		
