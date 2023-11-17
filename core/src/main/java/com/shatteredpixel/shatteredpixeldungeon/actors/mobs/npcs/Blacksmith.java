@@ -566,10 +566,10 @@ public class Blacksmith extends NPC {
 				smithRewards.add(Reflection.newInstance(smithWeapons[Random.Int(smithWeapons.length)]));
 			}
 
-			//15%:+0, 55%:+1, 20%:+2, 5%:+3
+			//30%:+0, 45%:+1, 20%:+2, 5%:+3
 			int rewardLevel;
 			float itemLevelRoll = Random.Float();
-			if (itemLevelRoll < 0.2f){
+			if (itemLevelRoll < 0.3f){
 				rewardLevel = 0;
 			} else if (itemLevelRoll < 0.75f){
 				rewardLevel = 1;

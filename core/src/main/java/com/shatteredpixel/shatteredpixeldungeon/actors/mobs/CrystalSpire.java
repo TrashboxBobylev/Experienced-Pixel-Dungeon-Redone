@@ -66,6 +66,8 @@ public class CrystalSpire extends Mob {
 				break;
 		}
 
+		EXP = 20;
+
 		//acts after other mobs, which makes baiting crystal guardians more consistent
 		actPriority = MOB_PRIO-1;
 
@@ -201,6 +203,7 @@ public class CrystalSpire extends Mob {
 				abilityCooldown += ABILITY_CD;
 
 				spend(GameMath.gate(TICK, (int)Math.ceil(Dungeon.hero.cooldown()), 3*TICK));
+				Dungeon.hero.interrupt();
 			} else {
 				abilityCooldown -= 1;
 				spend(TICK);
@@ -298,6 +301,11 @@ public class CrystalSpire extends Mob {
 	}
 
 	@Override
+	public boolean isInvulnerable(Class effect) {
+		return effect != Pickaxe.class;
+	}
+
+	@Override
 	public boolean add( Buff buff ) {
 		return false; //immune to all buffs and debuffs
 	}
@@ -336,6 +344,11 @@ public class CrystalSpire extends Mob {
 						Sample.INSTANCE.playDelayed(Assets.Sounds.ROCKS, 0.1f);
 						PixelScene.shake( 3, 0.7f );
 						Blacksmith.Quest.beatBoss();
+
+						if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
+							fieldOfView = new boolean[Dungeon.level.length()];
+							Dungeon.level.updateFieldOfView( CrystalSpire.this, fieldOfView );
+						}
 
 						for (int i = 0; i < Dungeon.level.length(); i++){
 							if (fieldOfView[i] && Dungeon.level.map[i] == Terrain.MINE_CRYSTAL){
