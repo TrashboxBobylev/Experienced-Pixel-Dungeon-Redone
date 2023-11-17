@@ -114,7 +114,8 @@ public class ExpPDChanges {
                             "_-_ Added lines for some NPCs, when they encounter Rat King.\n" +
                             "_-_ Added new \"cheesy cheest\" bag for artifacts and rings, that can be obtained after getting Cheese for first time.\n" +
                             "_-_ Added a music track for Black Mimic fight.\n" +
-                            "_-_ Added a way to get rid of corpse dust."
+                            "_-_ Added a way to get rid of corpse dust.\n" +
+                            "_-_ Changed feedback message because of recent events."
             ));
             changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
                     "_-_ Fixed the crash with Restored Nature perk attempting to access out-of-bounds areas.\n" +
