@@ -186,13 +186,12 @@ public class WndHeroInfo extends WndTabbed {
 					break;
 				case HUNTRESS:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SPIRIT_BOW),
-							new Image(Assets.Environment.TILES_SEWERS, 112, 80, 16, 16),
+							new Image(Assets.Environment.TILES_SEWERS, 32, 64, 16, 16),
 							new ItemSprite(ItemSpriteSheet.GLOVES),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 				case RAT_KING:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
-							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
@@ -269,22 +268,19 @@ public class WndHeroInfo extends WndTabbed {
 					icons = new Image[]{ new TalentIcon(Talent.ENERGIZING_MEAL),
 							new TalentIcon(Talent.SCHOLARS_INTUITION),
 							new TalentIcon(Talent.SHIELD_BATTERY),
-							new TalentIcon(Talent.ARCANE_VISION),
-							new TalentIcon(Talent.EMPOWERING_SCROLLS)};
+							new TalentIcon(Talent.ARCANE_VISION)};
 					break;
 				case ROGUE:
 					icons = new Image[]{ new TalentIcon(Talent.SILENT_STEPS),
 							new TalentIcon(Talent.WIDE_SEARCH),
 							new TalentIcon(Talent.LIGHT_CLOAK),
-							new TalentIcon(Talent.MYSTICAL_UPGRADE),
 							new TalentIcon(Talent.ELEMENTAL_POWER)};
 					break;
 				case HUNTRESS:
 					icons = new Image[]{ new TalentIcon(Talent.SURVIVALISTS_INTUITION),
 							new TalentIcon(Talent.REJUVENATING_STEPS),
 							new TalentIcon(Talent.HEIGHTENED_SENSES),
-							new TalentIcon(Talent.INVIGORATING_MEAL),
-							new TalentIcon(Talent.ENERGIZING_UPGRADE)};
+							new TalentIcon(Talent.INVIGORATING_MEAL)};
 					break;
 				case DUELIST:
 					icons = new Image[]{ new TalentIcon(Talent.STRENGTHENING_MEAL),
@@ -296,7 +292,6 @@ public class WndHeroInfo extends WndTabbed {
 					break;
 				case RAT_KING:
 					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
-							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),
 							new ItemSprite(ItemSpriteSheet.ARMOR_RAT_KING),

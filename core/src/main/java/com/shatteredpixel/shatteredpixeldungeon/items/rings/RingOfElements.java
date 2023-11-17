@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -43,7 +44,13 @@ public class RingOfElements extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
+			String info = Messages.get(this, "stats",
+					new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Resistance.class)){
+				info += "\n\n" + Messages.get(this, "combined_stats",
+						Messages.decimalFormat("#.##", 100f * (1f - (0.80f - combinedBuffedBonus(Dungeon.hero, Resistance.class)*0.0075f))));
+			}
+			return info;
 		} else {
 			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
 		}

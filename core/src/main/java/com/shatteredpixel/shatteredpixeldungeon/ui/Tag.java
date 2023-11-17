@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.NinePatch;
 
@@ -58,7 +59,12 @@ public class Tag extends Button {
 		bg.hardlight( r, g, b );
 		add( bg );
 	}
-	
+
+	@Override
+	protected void onClick() {
+		GameScene.tagDisappeared = false;
+	}
+
 	@Override
 	protected void layout() {
 		

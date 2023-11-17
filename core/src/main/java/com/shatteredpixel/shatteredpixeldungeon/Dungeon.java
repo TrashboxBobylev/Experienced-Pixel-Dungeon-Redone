@@ -52,7 +52,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.GameLog;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
@@ -96,6 +95,7 @@ public class Dungeon {
 		SHAMAN_WAND,
 		DM200_EQUIP,
 		GOLEM_EQUIP,
+		OOF_DROP,
 
 		//containers
 		VELVET_POUCH,
@@ -146,6 +146,14 @@ public class Dungeon {
 				}
 				
 			}
+
+			//pre-v2.2.0 saves
+			if (Dungeon.version < 750
+					&& Dungeon.isChallenged(Challenges.NO_SCROLLS)
+					&& UPGRADE_SCROLLS.count > 0){
+				//we now count SOU fully, and just don't drop every 2nd one
+				UPGRADE_SCROLLS.count += UPGRADE_SCROLLS.count-1;
+			}
 		}
 
 	}
@@ -177,6 +185,8 @@ public class Dungeon {
 
 	public static int gold;
 	public static int cycle;
+
+	public static ArrayList<Item> oofedItems = new ArrayList<>();
 
 	public static float respawn_timer;
 	public static int additionalMobs;
@@ -245,6 +255,7 @@ public class Dungeon {
 		depth = 1;
 		branch = 0;
 		generatedLevels.clear();
+		oofedItems.clear();
 
 		gold = 0;
 		cycle = 0;
@@ -492,13 +503,17 @@ public class Dungeon {
 	}
 
 	public static void switchLevel( final Level level, int pos ) {
-		
+
+		//Position of -2 specifically means trying to place the hero the exit
 		if (pos == -2){
 			LevelTransition t = level.getTransition(LevelTransition.Type.REGULAR_EXIT);
 			if (t != null) pos = t.cell();
 		}
 
-		if (pos < 0 || pos >= level.length() || (!level.passable[pos] && !level.avoid[pos])){
+		//Place hero at the entrance if they are out of the map (often used for pox = -1)
+		// or if they are in solid terrain (except in the mining level, where that happens normally)
+		if (pos < 0 || pos >= level.length()
+				|| (!(level instanceof MiningLevel) && !level.passable[pos] && !level.avoid[pos])){
 			pos = level.getTransition(null).cell();
 		}
 		
@@ -646,6 +661,7 @@ public class Dungeon {
 	private static final String ENERGY		= "energy";
 	private static final String DROPPED     = "dropped%d";
 	private static final String PORTED      = "ported%d";
+	private static final String OOFED       = "oofed";
 	private static final String LEVEL		= "level";
 	private static final String LIMDROPS    = "limited_drops";
 	private static final String CHAPTERS	= "chapters";
@@ -713,6 +729,8 @@ public class Dungeon {
 				bundleArr[i] = generatedLevels.get(i);
 			}
 			bundle.put( GENERATED_LEVELS, bundleArr);
+
+			bundle.put( OOFED, oofedItems);
 
 			Scroll.save( bundle );
 			Potion.save( bundle );
@@ -864,6 +882,11 @@ public class Dungeon {
 			for (int i = 1; i <= Statistics.deepestFloor; i++){
 				generatedLevels.add(i);
 			}
+		}
+
+		oofedItems.clear();
+		for (Bundlable i: bundle.getCollection(OOFED)){
+			oofedItems.add((Item) i);
 		}
 
 		droppedItems = new SparseArray<>();
@@ -1092,6 +1115,8 @@ public class Dungeon {
 			BArray.and( passable, Dungeon.level.openSpace, passable );
 		}
 
+		ch.modifyPassable(passable);
+
 		if (chars) {
 			for (Char c : Actor.chars()) {
 				if (vis[c.pos]) {
@@ -1112,7 +1137,7 @@ public class Dungeon {
 	public static int findStep(Char ch, int to, boolean[] pass, boolean[] visible, boolean chars ) {
 
 		if (Dungeon.level.adjacent( ch.pos, to )) {
-			return Actor.findChar( to ) == null && (pass[to] || Dungeon.level.avoid[to]) ? to : -1;
+			return Actor.findChar( to ) == null && pass[to] ? to : -1;
 		}
 
 		return PathFinder.getStep( ch.pos, to, findPassable(ch, pass, visible, chars) );
@@ -1120,16 +1145,21 @@ public class Dungeon {
 	}
 	
 	public static int flee( Char ch, int from, boolean[] pass, boolean[] visible, boolean chars ) {
-		//only consider chars impassable if our retreat path runs into them
 		boolean[] passable = findPassable(ch, pass, visible, false, true);
 		passable[ch.pos] = true;
 
-		int step = PathFinder.getStepBack( ch.pos, from, passable );
-		while (step != -1 && Actor.findChar(step) != null && chars){
-			passable[step] = false;
-			step = PathFinder.getStepBack( ch.pos, from, passable );
+		//only consider other chars impassable if our retreat step may collide with them
+		if (chars) {
+			for (Char c : Actor.chars()) {
+				if (c.pos == from || Dungeon.level.adjacent(c.pos, ch.pos)) {
+					passable[c.pos] = false;
+				}
+			}
 		}
-		return step;
+
+		//chars affected by terror have a shorter lookahead and can't approach the fear source
+		boolean canApproachFromPos = ch.buff(Terror.class) == null && ch.buff(Dread.class) == null;
+		return PathFinder.getStepBack( ch.pos, from, canApproachFromPos ? 8 : 4, passable, canApproachFromPos );
 		
 	}
 

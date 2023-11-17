@@ -252,10 +252,9 @@ Dungeon.daily = Dungeon.dailyReplay = false;
 		public void update() {
 			super.update();
 
-			if (!updateShown && (Updates.updateAvailable() || Updates.isInstallable())){
+			if (!updateShown && Updates.updateAvailable()){
 				updateShown = true;
-				if (Updates.isInstallable())    text(Messages.get(TitleScene.class, "install"));
-				else                            text(Messages.get(TitleScene.class, "update"));
+				text(Messages.get(TitleScene.class, "update"));
 			}
 
 			if (updateShown){
@@ -265,10 +264,7 @@ Dungeon.daily = Dungeon.dailyReplay = false;
 
 		@Override
 		protected void onClick() {
-			if (Updates.isInstallable()){
-				Updates.launchInstall();
-
-			} else if (Updates.updateAvailable()){
+			if (Updates.updateAvailable()){
 				AvailableUpdateData update = Updates.updateData();
 
 				ShatteredPixelDungeon.scene().addToFront( new WndOptions(

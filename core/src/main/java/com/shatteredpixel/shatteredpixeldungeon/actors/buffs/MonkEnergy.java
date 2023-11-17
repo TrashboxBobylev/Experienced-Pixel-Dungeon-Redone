@@ -81,7 +81,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 	@Override
 	public float iconFadePercent() {
-		return Math.max(0, cooldown/MAX_COOLDOWN);
+		return GameMath.gate(0, cooldown/MAX_COOLDOWN, 1);
 	}
 
 	@Override
@@ -188,7 +188,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 	public void abilityUsed( MonkAbility abil ){
 		energy -= abil.energyCost();
-		cooldown = abil.cooldown();
+		cooldown = abil.cooldown() + (int)target.cooldown();
 
 		if (target instanceof Hero && ((Hero) target).subClass == HeroSubClass.MONK
 				&& abil.energyCost() >= 2) {
@@ -253,6 +253,11 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 	}
 
 	@Override
+	public boolean usable() {
+		return cooldown == 0 && energy >= 1;
+	}
+
+	@Override
 	public void doAction() {
 		GameScene.show(new WndMonkAbilities(this));
 	}
@@ -298,7 +303,6 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 			@Override
 			public int cooldown() {
-				//1 less turn as no time is spent flurrying
 				return Dungeon.hero.buff(JustHitTracker.class) != null ? 0 : 5;
 			}
 
@@ -385,8 +389,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 			@Override
 			public int cooldown() {
-				//1 less if focus was instant
-				return Buff.affect(Dungeon.hero, MonkEnergy.class).abilitiesEmpowered(Dungeon.hero) ? 5 : 6;
+				return 5;
 			}
 
 			@Override
@@ -445,7 +448,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 			@Override
 			public int cooldown() {
-				return 5; //1 less turn as no time is spent dashing
+				return 5;
 			}
 
 			@Override
@@ -512,7 +515,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 			@Override
 			public int cooldown() {
-				return 6;
+				return 5;
 			}
 
 			@Override
@@ -556,7 +559,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 							Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
 						}
 
-						if (enemy.isAlive() && oldPos == enemy.pos){
+						if (oldPos == enemy.pos){
 							//trace a ballistica to our target (which will also extend past them
 							Ballistica trajectory = new Ballistica(hero.pos, enemy.pos, Ballistica.STOP_TARGET);
 							//trim it to just be the part that goes past them
@@ -564,7 +567,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 							//knock them back along that ballistica
 							WandOfBlastWave.throwChar(enemy, trajectory, 6, true, false, hero);
 
-							if (trajectory.dist > 0) {
+							if (trajectory.dist > 0 && enemy.isActive()) {
 								Buff.affect(enemy, Paralysis.class, Math.min( 6, trajectory.dist));
 							}
 						}
@@ -585,7 +588,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 									//knock them back along that ballistica
 									WandOfBlastWave.throwChar(ch, trajectory, 6, true, false, hero);
 
-									if (trajectory.dist > 0) {
+									if (trajectory.dist > 0 && enemy.isActive()) {
 										Buff.affect(ch, Paralysis.class, Math.min( 6, trajectory.dist));
 									}
 								}
@@ -604,9 +607,8 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 			}
 
 			@Override
-			//longer to account for turns spent meditating
 			public int cooldown() {
-				return 10;
+				return 5;
 			}
 
 			@Override
@@ -637,6 +639,11 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 				}
 
 				Actor.addDelayed(new Actor() {
+
+					{
+						actPriority = VFX_PRIO;
+					}
+
 					@Override
 					protected boolean act() {
 						Buff.affect(hero, Recharging.class, 8f);
@@ -647,6 +654,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 				}, hero.cooldown()-1);
 
 				hero.next();
+				hero.busy();
 				Buff.affect(hero, MonkEnergy.class).abilityUsed(this);
 			}
 

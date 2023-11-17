@@ -168,6 +168,8 @@ public class Greatsword extends MeleeWeapon {
             spriteClass = GuardianSprite.class;
             alignment = Alignment.ALLY;
             Buff.affect(this, TickDebuff.class);
+
+            levelGenStatue = false;
         }
 
         public GuardianKnight() {

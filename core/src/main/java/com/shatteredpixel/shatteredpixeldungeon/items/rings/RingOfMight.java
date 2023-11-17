@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -78,7 +79,13 @@ public class RingOfMight extends Ring {
 	
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", soloBuffedBonus()-1, (soloBuffedBonus()-1)*2);
+			String info = Messages.get(this, "stats",
+					soloBuffedBonus()-1, (soloBuffedBonus()-1)*2);
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Might.class)){
+				info += "\n\n" + Messages.get(this, "combined_stats",
+						combinedBuffedBonus(Dungeon.hero, Might.class)-1, (combinedBuffedBonus(Dungeon.hero, Might.class)-1)*2);
+			}
+			return info;
 		} else {
 			return Messages.get(this, "typical_stats", 0, 2);
 		}

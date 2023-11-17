@@ -62,12 +62,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.FantasmalStabber;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GleamingStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -81,22 +84,20 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.*;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.tweeners.Delayer;
 import com.watabou.utils.*;
 
 import java.util.ArrayList;
@@ -457,9 +458,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		evasion *= RingOfEvasion.evasionMultiplier( this );
 
 		if (buff(Talent.RestoredAgilityTracker.class) != null){
-			if (pointsInTalent(Talent.RESTORED_AGILITY) == 1){
+			if (pointsInTalent(Talent.LIQUID_AGILITY) == 1){
 				evasion *= 4f;
-			} else if (pointsInTalent(Talent.RESTORED_AGILITY) == 2){
+			} else if (pointsInTalent(Talent.LIQUID_AGILITY) == 2){
 				return INFINITE_EVASION;
 			}
 		}
@@ -846,7 +847,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (getCloser( action.dst )) {
 			canSelfTrample = false;
-			if (belongings.weapon instanceof Dirk) Buff.affect(this, Preparation.class);
+			if (belongings.weapon instanceof Dirk || belongings.weapon instanceof FantasmalStabber) Buff.affect(this, Preparation.class);
 			return true;
 
 		//Hero moves in place if there is grass to trample
@@ -1111,29 +1112,68 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	public boolean actMine(HeroAction.Mine action){
 		if (Dungeon.level.adjacent(pos, action.dst)){
 			path = null;
-			if ((Dungeon.level.map[action.dst] == Terrain.WALL || Dungeon.level.map[action.dst] == Terrain.WALL_DECO)
+			if ((Dungeon.level.map[action.dst] == Terrain.WALL
+					|| Dungeon.level.map[action.dst] == Terrain.WALL_DECO
+					|| Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL
+					|| Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER)
 				&& Dungeon.level.insideMap(action.dst)){
 				sprite.attack(action.dst, new Callback() {
 					@Override
 					public void call() {
 
+						boolean crystalAdjacent = false;
+						for (int i : PathFinder.NEIGHBOURS8) {
+							if (Dungeon.level.map[action.dst + i] == Terrain.MINE_CRYSTAL){
+								crystalAdjacent = true;
+								break;
+							}
+						}
+
+						//1 hunger spent total
 						if (Dungeon.level.map[action.dst] == Terrain.WALL_DECO){
 							DarkGold gold = new DarkGold();
 							if (gold.doPickUp( Dungeon.hero )) {
-								GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", gold.name())) );
+								DarkGold existing = Dungeon.hero.belongings.getItem(DarkGold.class);
+								if (existing != null && existing.quantity()%5 == 0){
+									if (existing.quantity() >= 40) {
+										GLog.p(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+									} else {
+										GLog.i(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+									}
+								}
+								spend(-Actor.TICK); //picking up the gold doesn't spend a turn here
 							} else {
 								Dungeon.level.drop( gold, pos ).sprite.drop();
 							}
+							PixelScene.shake(0.5f, 0.5f);
 							CellEmitter.center( action.dst ).burst( Speck.factory( Speck.STAR ), 7 );
 							Sample.INSTANCE.play( Assets.Sounds.EVOKE );
-						} else {
+							Level.set( action.dst, Terrain.EMPTY_DECO );
+
+							//mining gold doesn't break crystals
+							crystalAdjacent = false;
+
+						//4 hunger spent total
+						} else if (Dungeon.level.map[action.dst] == Terrain.WALL){
+							buff(Hunger.class).affectHunger(-3);
+							PixelScene.shake(0.5f, 0.5f);
 							CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 2 );
 							Sample.INSTANCE.play( Assets.Sounds.MINE );
+							Level.set( action.dst, Terrain.EMPTY_DECO );
+
+						//1 hunger spent total
+						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL){
+							Splash.at(action.dst, 0xFFFFFF, 5);
+							Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+							Level.set( action.dst, Terrain.EMPTY );
+
+						//1 hunger spent total
+						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER){
+							Splash.at(action.dst, ColorMath.random( 0x444444, 0x777766 ), 5);
+							Sample.INSTANCE.play( Assets.Sounds.MINE, 0.6f );
+							Level.set( action.dst, Terrain.EMPTY );
 						}
 
-						PixelScene.shake(0.5f, 0.5f);
-
-						Level.set( action.dst, Terrain.EMPTY_DECO );
 						for (int i : PathFinder.NEIGHBOURS9) {
 							Dungeon.level.discoverable[action.dst + i] = true;
 						}
@@ -1141,9 +1181,35 @@ if (buff(RoundShield.GuardTracker.class) != null){
 							GameScene.updateMap( action.dst+i );
 						}
 
-						Dungeon.observe();
+						if (crystalAdjacent){
+							sprite.parent.add(new Delayer(0.2f){
+								@Override
+								protected void onComplete() {
+									boolean broke = false;
+									for (int i : PathFinder.NEIGHBOURS8) {
+										if (Dungeon.level.map[action.dst+i] == Terrain.MINE_CRYSTAL){
+											Splash.at(action.dst+i, 0xFFFFFF, 5);
+											Level.set( action.dst+i, Terrain.EMPTY );
+											broke = true;
+										}
+									}
+									if (broke){
+										Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+									}
 
-						spendAndNext(TICK);
+									for (int i : PathFinder.NEIGHBOURS9) {
+										GameScene.updateMap( action.dst+i );
+									}
+									spendAndNext(TICK);
+									ready();
+								}
+							});
+						} else {
+							spendAndNext(TICK);
+							ready();
+						}
+
+						Dungeon.observe();
 					}
 				});
 			} else {
@@ -1168,67 +1234,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			PixelScene.shake(1, 1f);
 			ready();
 			return false;
+
 		} else if (!Dungeon.level.locked && transition != null && transition.inside(pos)) {
 
-			if (transition.type == LevelTransition.Type.SURFACE){
-				if (belongings.getItem( Amulet.class ) == null) {
-					Game.runOnRenderThread(new Callback() {
-						@Override
-						public void call() {
-							GameScene.show( new WndMessage( Messages.get(Hero.this, "leave") ) );
-						}
-					});
-					ready();
-				} else {
-					Statistics.ascended = true;
-					Badges.silentValidateHappyEnd();
-					Dungeon.win( Amulet.class );
-					Dungeon.deleteGame( GamesInProgress.curSlot, true );
-					Game.switchScene( SurfaceScene.class );
-				}
-
-			} else if (transition.type == LevelTransition.Type.REGULAR_ENTRANCE
-					&& Dungeon.depth == 25
-					//ascension challenge only works on runs started on v1.3+
-					&& Dungeon.initialVersion > 453
-					&& belongings.getItem(Amulet.class) != null
-					&& buff(AscensionChallenge.class) == null) {
-
-				Game.runOnRenderThread(new Callback() {
-					@Override
-					public void call() {
-						GameScene.show( new WndOptions( new ItemSprite(ItemSpriteSheet.AMULET),
-								Messages.get(Amulet.class, "ascent_title"),
-								Messages.get(Amulet.class, "ascent_desc"),
-								Messages.get(Amulet.class, "ascent_yes"),
-								Messages.get(Amulet.class, "ascent_no")){
-							@Override
-							protected void onSelect(int index) {
-								if (index == 0){
-									Buff.affect(Hero.this, AscensionChallenge.class);
-									Statistics.highestAscent = 25;
-									actTransition(action);
-								}
-							}
-						} );
-					}
-				});
-				ready();
-
-			} else {
-
+			if (Dungeon.level.activateTransition(this, transition)){
 				curAction = null;
-
-				Level.beforeTransition();
-				InterlevelScene.curTransition = transition;
-				if (transition.type == LevelTransition.Type.REGULAR_EXIT
-					|| transition.type == LevelTransition.Type.BRANCH_EXIT) {
-					InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-				} else {
-					InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-				}
-				Game.switchScene(InterlevelScene.class);
-
+			} else {
+				ready();
 			}
 
 			return false;
@@ -1352,6 +1364,16 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		if (rockArmor != null) {
 			damage = rockArmor.absorb(damage);
 		}
+
+		if (buff(GleamingStaff.GuardTracker.class) != null && Dungeon.Int(2) == 0){
+			BiggerGambleBag lootbag = new BiggerGambleBag();
+			sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.025f, 20);
+			if (!lootbag.doPickUp(this, pos, 0f)) {
+				Dungeon.level.drop(lootbag, pos).sprite.drop();
+			} else {
+				GLog.i(Messages.get(Hero.class, "you_now_have", lootbag.name()));
+			}
+		}
 		
 		return super.defenseProc( enemy, damage );
 	}
@@ -1392,6 +1414,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
 		if (thorns != null) {
 			dmg = thorns.proc(dmg, (src instanceof Char ? (Char)src : null),  this);
+		}
+
+		if (buff(GleamingStaff.GuardTracker.class) != null){
+			dmg *= 3;
 		}
 
 		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
@@ -1694,7 +1720,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		//TODO perhaps only trigger this if hero is already adjacent? reducing mistaps
 		} else if (Dungeon.level instanceof MiningLevel &&
 					belongings.getItem(Pickaxe.class) != null &&
-				(Dungeon.level.map[cell] == Terrain.WALL || Dungeon.level.map[cell] == Terrain.WALL_DECO)){
+				(Dungeon.level.map[cell] == Terrain.WALL
+						|| Dungeon.level.map[cell] == Terrain.WALL_DECO
+						|| Dungeon.level.map[cell] == Terrain.MINE_CRYSTAL
+						|| Dungeon.level.map[cell] == Terrain.MINE_BOULDER)){
 
 			curAction = new HeroAction.Mine( cell );
 
@@ -1857,7 +1886,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	
 	public static int maxExp( int lvl ){
 		HeroClass heroClass = Dungeon.hero == null ? GamesInProgress.selectedClass: Dungeon.hero.heroClass;
-		if (heroClass == HeroClass.RAT_KING) return 4 + Math.round(lvl*4.5f);
 		return 5 + lvl * 5;
 	}
 	
@@ -2461,15 +2489,15 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		for (Item i : belongings){
 			if (i instanceof EquipableItem && i.isEquipped(this)){
 				((EquipableItem) i).activate(this);
-			} else if (i instanceof CloakOfShadows && i.keptThoughLostInvent && heroClass == HeroClass.ROGUE){
+			} else if (i instanceof CloakOfShadows && i.keptThroughLostInventory() && heroClass == HeroClass.ROGUE){
 				((CloakOfShadows) i).activate(this);
-			} else if (i instanceof Wand && i.keptThoughLostInvent){
+			} else if (i instanceof Wand && i.keptThroughLostInventory()){
 				if (holster != null && holster.contains(i)){
 					((Wand) i).charge(this, MagicalHolster.HOLSTER_SCALE_FACTOR);
 				} else {
 					((Wand) i).charge(this);
 				}
-			} else if (i instanceof MagesStaff && i.keptThoughLostInvent){
+			} else if (i instanceof MagesStaff && i.keptThroughLostInventory()){
 				((MagesStaff) i).applyWandChargeBuff(this);
 			}
 		}

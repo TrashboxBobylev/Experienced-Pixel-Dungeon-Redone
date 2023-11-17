@@ -196,6 +196,7 @@ public class ShopRoom extends SpecialRoom {
 		w.identify(false);
 		itemsToSpawn.add(w);
 		itemsToSpawn.add(new PotionOfExperience());
+		if (Badges.isUnlocked(Badges.Badge.WAND_QUEST_1) && Dungeon.hero.belongings.getItem(CheeseCheest.class) == null) itemsToSpawn.add(new CheeseCheest());
 
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
@@ -220,6 +221,15 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( new ScrollOfIdentify() );
 		itemsToSpawn.add( new ScrollOfRemoveCurse() );
 		itemsToSpawn.add( new ScrollOfMagicMapping() );
+
+		if (!Dungeon.oofedItems.isEmpty()) {
+			Item lol = Dungeon.oofedItems.get(Random.index(Dungeon.oofedItems));
+			if (lol != null){
+				lol.wereOofed = true;
+				itemsToSpawn.add(lol);
+				Dungeon.oofedItems.remove(lol);
+			}
+		}
 
 		for (int i=0; i < 2; i++)
 			itemsToSpawn.add( Random.Int(2) == 0 ?

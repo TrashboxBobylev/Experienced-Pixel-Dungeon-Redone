@@ -111,9 +111,6 @@ public class Regeneration extends Buff {
 		if (lock != null && !lock.regenOn()){
 			return false;
 		}
-		if (Dungeon.level instanceof MiningLevel){
-			return false; //this is mainly for the current test sub-level
-		}
 		return true;
 	}
 }

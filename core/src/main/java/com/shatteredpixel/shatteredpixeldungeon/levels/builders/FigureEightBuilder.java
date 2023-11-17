@@ -133,7 +133,7 @@ public class FigureEightBuilder extends RegularBuilder {
 		ArrayList<Room> secondLoopTemp = new ArrayList<>();
 		secondLoopTemp.add(landmarkRoom);
 		secondLoopTemp.addAll(roomsToLoop);
-		secondLoopTemp.add((secondLoopTemp.size()+1)/2, exit);
+		if (exit != null) secondLoopTemp.add((secondLoopTemp.size()+1)/2, exit);
 
 		secondLoop = new ArrayList<>();
 		for (Room r : secondLoopTemp){
@@ -244,7 +244,9 @@ public class FigureEightBuilder extends RegularBuilder {
 		roomsToBranch.addAll(multiConnections);
 		roomsToBranch.addAll(singleConnections);
 		weightRooms(branchable);
-		createBranches(rooms, branchable, roomsToBranch, branchTunnelChances);
+		if (!createBranches(rooms, branchable, roomsToBranch, branchTunnelChances)){
+			return null;
+		}
 		
 		findNeighbours(rooms);
 		

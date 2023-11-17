@@ -295,6 +295,21 @@ public class ItemSpriteSheet {
 		assignItemRect(WAR_SCYTHE,  14, 15);
 	}
 
+	private static final int WEP_TIERBLACK      =                               xy(9, 9);   //8 slots
+	public static final int STARHAMMER      = WEP_TIERBLACK+0;
+	public static final int GROWTHSWORD     = WEP_TIERBLACK+1;
+	public static final int FIRINGWHIP      = WEP_TIERBLACK+2;
+	public static final int GREEDSTAFF      = WEP_TIERBLACK+3;
+	public static final int PHANTDAGGER     = WEP_TIERBLACK+4;
+
+	static{
+		assignItemRect(STARHAMMER,  16, 16);
+		assignItemRect(GROWTHSWORD, 15, 16);
+		assignItemRect(FIRINGWHIP,  14, 14);
+		assignItemRect(GREEDSTAFF,  16, 16);
+		assignItemRect(PHANTDAGGER, 12, 12);
+	}
+
 	                                                                                    //8 free slots
 
 	private static final int MISSILE_WEP    =                               xy(1, 10);  //16 slots. 3 per tier + bow
@@ -724,6 +739,7 @@ public class ItemSpriteSheet {
 	public static final int BANDOLIER   = BAGS+4;
 	public static final int HOLSTER     = BAGS+5;
 	public static final int VIAL        = BAGS+6;
+	public static final int CHEEST      = BAGS+7;
 	static{
 		assignItemRect(WATERSKIN,   16, 14);
 		assignItemRect(BACKPACK,    16, 16);
@@ -732,6 +748,7 @@ public class ItemSpriteSheet {
 		assignItemRect(BANDOLIER,   15, 16);
 		assignItemRect(HOLSTER,     15, 16);
 		assignItemRect(VIAL,        12, 12);
+		assignItemRect(CHEEST,      16, 14);
 	}
 
 	private static final int TREASURE_BAGS =                       xy(1, 30);

@@ -128,12 +128,13 @@ public abstract class Wand extends Item {
 
 	public boolean tryToZap( Hero owner, int target ){
 
-		if (owner.buff(MagicImmune.class) != null){
+		if (owner.buff(WildMagic.WildMagicTracker.class) == null && owner.buff(MagicImmune.class) != null){
 			GLog.w( Messages.get(this, "no_magic") );
 			return false;
 		}
 
-		if ( curCharges >= chargesPerCast()){
+		//if we're using wild magic, then assume we have charges
+		if ( owner.buff(WildMagic.WildMagicTracker.class) != null || curCharges >= chargesPerCast()){
 			return true;
 		} else {
 			GLog.w(Messages.get(this, "fizzles"));
@@ -325,6 +326,22 @@ public abstract class Wand extends Item {
 		int lvl = super.buffedLvl();
 
 		if (charger != null && charger.target != null) {
+
+			//inside staff, still need to apply degradation
+			if (charger.target == Dungeon.hero
+					&& !Dungeon.hero.belongings.contains(this)
+					&& Dungeon.hero.buff( Degrade.class ) != null){
+				lvl = Degrade.reduceLevel(lvl);
+			}
+
+			if (charger.target.buff(ScrollEmpower.class) != null){
+				lvl += 2;
+			}
+
+			if (curCharges == 1 && charger.target instanceof Hero && ((Hero)charger.target).hasTalent(Talent.DESPERATE_POWER)){
+				lvl += ((Hero)charger.target).pointsInTalent(Talent.DESPERATE_POWER);
+			}
+
 			if (charger.target.buff(WildMagic.WildMagicTracker.class) != null){
 				int bonus = 4 + ((Hero)charger.target).pointsInTalent(Talent.WILD_POWER);
 				if (Random.Int(2) == 0) bonus++;

@@ -70,6 +70,7 @@ public class ResumeIndicator extends Tag {
 
 	@Override
 	protected void onClick() {
+		super.onClick();
 		if (Dungeon.hero.ready) {
 			Dungeon.hero.resume();
 		}

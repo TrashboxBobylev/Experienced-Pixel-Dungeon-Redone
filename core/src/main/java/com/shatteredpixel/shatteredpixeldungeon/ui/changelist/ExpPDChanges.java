@@ -47,11 +47,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greataxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.StarlightSmasher;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.*;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
@@ -61,7 +60,72 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("ExpPD-2.15.4", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.16", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released November 17th, 2023\n" +
+                            "_-_ 38 days after Experienced Pixel Dungeon 2.15.4\n" +
+                            "_-_ 126 days after Experienced Pixel Dungeon 2.15\n" +
+                            "\n" +
+                            "This release ports Shattered PD 2.2.1's source code and actually adds some new content."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered ports",
+                    "Ported changes from Shattered 2.2.1.\n\n" +
+                            "_-_ This includes a brand new quest in the caves, almost 20 minutes of new music, and substantial improvements to the prison and sewers quests."));
+            changes.addButton( new ChangeButton(new BlacksmithSprite(), "Blacksmith Quest",
+                    "Implemented new blacksmith quest, with some changes:\n\n" +
+                            "_-_ Increased amount of favor granted by 50%.\n" +
+                            "_-_ All crystal quest enemies and boss now have dungeon cycles stats defined.\n" +
+                            "_-_ Crystal Spire has shorter attack cooldown and does doubled damage.\n\n" +
+                            "_-_ Reforge favor is significantly cheaper and still uses Experienced's rules.\n" +
+                            "_-_ Harden favor is reworked to grant percentage boost to weapon's damage and armor's defense, that scales with upgrades.\n" +
+                            "_-_ Upgrade favor is replaced by Extract favor, which allows to \"extract\" all upgrades from certain item in form of scrolls.\n" +
+                            "_-_ Smith favor now costs 2500 points (so it is effectively only usable once) and grants player a choice from unique blacksmith weapons instead of randomly generated equipment.\n" +
+                            "_-_ Cash out favor now depends on cycling, giving more gold with higher progression."));
+            changes.addButton( new ChangeButton(new ItemSprite(new StarlightSmasher()), "Blacksmith Weapons",
+                    "Added five unique weapons, obtainable through new blacksmith quest, with unique effects and ability to scale up their damage in dungeon cycling.\n" +
+                            "_-_ Starlight Smasher: huge crystal hammer, that can charge through hitting enemies to be thrown for devastating 3x3 attack.\n" +
+                            "_-_ Regrowing Slasher: plant-themed sword, that can heal and buff you and your allies with plant effects.\n" +
+                            "_-_ Firing Snapper: firey and throny whip, that can be swung through enemies and blast them with explosions and flames.\n" +
+                            "_-_ Gleaming Staff: gold-covered staff, that protects its user and can create lucky bags from hitting enemies.\n" +
+                            "_-_ Fantasmal Stabber: tiny and sharp dagger, that stabs very quickly, pierces through armor and recharges magical equipment while doing so."));
+            changes.addButton( new ChangeButton(new OofSprite(), "OOF Thief",
+                    "Implemented a new thief-like enemy, _the OOF thief_:\n\n" +
+                            "_-_ It spawns in Arena, or replaces any normal enemy with 1/2222 chance past cycle 0.\n" +
+                            "_-_ It is 2.5x stronger than normal thieves.\n" +
+                            "_-_ It attacks 3 times in a row and moves at 3x speed, but frequently stumbles while doing so.\n" +
+                            "_-_ It attempts a steal every 4 hits and doesn't run away while successfully stealing an item.\n" +
+                            "_-_ It can steal any unequipped item, including hero items and bags with all their content.\n" +
+                            "_-_ After hitting its target 12 times, OOF thief will teleport away.\n" +
+                            "_-_ Once its HP is brought to 0, it enters desperation mode, setting its HP to 1 and becoming invulnerable for 3 turns; while in desperation mode, OOF moves and attacks twice as fast.\n" +
+                            "_-_ It doesn't drop any EXP, but drops big lucky bags with 50% chance.\n\n" +
+                            "_-_ Stolen items can be recovered from shops for 5x of their normal price. Items stolen by OOF thieves have different text on buy button when seen in shops."
+                    ));
+            changes.addButton( new ChangeButton(new Image(Assets.Environment.TILES_ARENA,0, 0, 16, 16), "Arena changes",
+                    "_-_ Now has its own tileset and music track.\n" +
+                            "_-_ Reduced amount of gold arena enemies drop by 35%.\n" +
+                            "_-_ OOF thieves can spawn on it."));
+            changes.addButton( new ChangeButton(HeroSprite.avatar(HeroClass.RAT_KING, 6), "Rat King Bartering",
+                    "_-_ The rewards from bartering will not be thrown if they cannot reach hero's position.\n" +
+                            "_-_ Immovable characters can no longer bounce off items into Rat King.\n" +
+                            "_-_ Fixed the crash with Rat King trying to send his rewards as he is leaving current level."));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Removed Rat King's smaller XP requirement perk.\n" +
+                            "_-_ Added lines for some NPCs, when they encounter Rat King.\n" +
+                            "_-_ Added new \"cheesy cheest\" bag for artifacts and rings, that can be obtained after getting Cheese for first time.\n" +
+                            "_-_ Added a music track for Black Mimic fight.\n" +
+                            "_-_ Added a way to get rid of corpse dust.\n" +
+                            "_-_ Changed feedback message because of recent events."
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed the crash with Restored Nature perk attempting to access out-of-bounds areas.\n" +
+                            "_-_ Fixed action indicator button not working properly for Champion and Monk subclasses and Preparation effect.\n" +
+                            "_-_ Fixed Hunter getting Preparation after subclassing.\n" +
+                            "_-_ Attempted to fix the crash with statues by marking Greatsword's knights as non-natural statues.\n" +
+                            "_-_ Attempted to fix things that are still present after 2.15.4 (blerghhhhhhhhhhh)."
+            ));
+
+        changes = new ChangeInfo("ExpPD-2.15.4", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

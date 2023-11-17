@@ -32,8 +32,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Perks;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
@@ -41,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.*;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.*;
@@ -52,9 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
-import com.watabou.utils.Reflection;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,6 +124,9 @@ public class Potion extends Item {
 	protected static ItemStatusHandler<Potion> handler;
 	
 	protected String color;
+
+	//affects how strongly on-potion talents trigger from this potion
+	protected float talentFactor = 1;
 	
 	{
 		stackable = true;
@@ -268,6 +275,41 @@ public class Potion extends Item {
 		Sample.INSTANCE.play( Assets.Sounds.DRINK );
 		
 		hero.sprite.operate( hero.pos );
+
+		if (!anonymous){
+			Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+			if (this instanceof PotionOfHealing && hero.perks.contains(Perks.Perk.GRASS_HEALING)){
+				int radius = 2;
+				Rect update = new Rect(
+						(hero.pos % Dungeon.level.width()) - radius,
+						(hero.pos / Dungeon.level.width()) - radius,
+						(hero.pos % Dungeon.level.width()) - radius + 2*radius,
+						(hero.pos / Dungeon.level.width()) - radius + 2*radius);
+				for (Point lol: update.getPoints()){
+					int cell = Dungeon.level.pointToCell(lol);
+					if (cell >= 0 && cell <= Dungeon.level.width()) {
+						Char ch = Actor.findChar(cell);
+						if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
+							Buff.affect(ch, Roots.class, 3f);
+						}
+						if (Dungeon.level.map[cell] == Terrain.EMPTY ||
+								Dungeon.level.map[cell] == Terrain.EMBERS ||
+								Dungeon.level.map[cell] == Terrain.EMPTY_DECO) {
+							Level.set(cell, Terrain.GRASS);
+							GameScene.updateMap(cell);
+						}
+						CellEmitter.get(cell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
+						int t = Dungeon.level.map[cell];
+						if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
+								|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS)
+								&& Dungeon.level.plants.get(cell) == null) {
+							Level.set(cell, Terrain.HIGH_GRASS);
+							GameScene.updateMap(cell);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -280,6 +322,10 @@ public class Potion extends Item {
 
 			Dungeon.level.pressCell( cell );
 			shatter( cell );
+
+			if (!anonymous){
+				Talent.onPotionUsed(curUser, cell, talentFactor);
+			}
 			
 		}
 	}

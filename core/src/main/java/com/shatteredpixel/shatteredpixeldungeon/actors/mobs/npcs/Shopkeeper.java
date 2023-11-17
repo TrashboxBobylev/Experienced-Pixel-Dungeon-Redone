@@ -119,7 +119,10 @@ if (sprite != null) {
 				if (ShatteredPixelDungeon.scene() instanceof GameScene) {
 					CellEmitter.get(heap.pos).burst(ElmoParticle.FACTORY, 4);
 				}
-				if (heap.size() == 1) {
+				if (heap.peek().wereOofed && !Dungeon.oofedItems.contains(heap.peek())){
+					Dungeon.oofedItems.add(heap.items.removeFirst());
+				}
+				if (heap.size() <= 1) {
 					heap.destroy();
 				} else {
 					heap.items.remove(heap.size()-1);
@@ -136,7 +139,9 @@ if (sprite != null) {
 
 	//shopkeepers are greedy!
 	public static int sellPrice(Item item){
-		return item.value() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
+		int i = item.value() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
+		if (item.wereOofed) i *= 5;
+		return i;
 	}
 
 	public static WndBag sell() {

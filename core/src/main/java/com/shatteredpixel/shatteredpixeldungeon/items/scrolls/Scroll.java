@@ -25,9 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
@@ -75,7 +77,10 @@ public abstract class Scroll extends Item {
 	protected static ItemStatusHandler<Scroll> handler;
 	
 	protected String rune;
-	
+
+	//affects how strongly on-scroll talents trigger from this scroll
+	protected float talentFactor = 1;
+
 	{
 		stackable = true;
 		defaultAction = AC_READ;
@@ -158,8 +163,6 @@ public abstract class Scroll extends Item {
 					&& !(this instanceof ScrollOfRemoveCurse || this instanceof ScrollOfAntiMagic)){
 				GLog.n( Messages.get(this, "cursed") );
 			} else {
-				curUser = hero;
-				curItem = detach( hero.belongings.backpack );
 				doRead();
 			}
 			
@@ -174,9 +177,8 @@ public abstract class Scroll extends Item {
 		curUser.busy();
 		((HeroSprite)curUser.sprite).read();
 
-		if (curUser.heroClass == HeroClass.MAGE){
-			Buff.affect(curUser, ScrollEmpower.class).reset();
-			updateQuickslot();
+		if (!anonymous) {
+			Talent.onScrollUsed(curUser, curUser.pos, talentFactor);
 		}
 
 	}

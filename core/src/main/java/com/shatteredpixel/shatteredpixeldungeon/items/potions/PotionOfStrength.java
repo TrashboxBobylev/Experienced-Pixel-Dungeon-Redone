@@ -37,6 +37,8 @@ public class PotionOfStrength extends Potion {
 		icon = ItemSpriteSheet.Icons.POTION_STRENGTH;
 
 		unique = true;
+
+		talentFactor = 2f;
 	}
 	
 	@Override

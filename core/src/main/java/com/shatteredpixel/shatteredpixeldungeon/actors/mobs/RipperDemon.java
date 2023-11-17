@@ -226,7 +226,7 @@ public class RipperDemon extends Mob {
 						}
 
 						if (endPos != leapPos){
-							Actor.addDelayed(new Pushing(RipperDemon.this, leapPos, endPos), -1);
+							Actor.add(new Pushing(RipperDemon.this, leapPos, endPos));
 						}
 
 						pos = endPos;

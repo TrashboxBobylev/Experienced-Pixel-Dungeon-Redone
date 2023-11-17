@@ -37,10 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bestiary;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WindParticle;
@@ -66,9 +63,9 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -140,7 +137,8 @@ public abstract class Level implements Bundlable {
 	protected ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
 	protected Group visuals;
-	
+	protected Group wallVisuals;
+
 	public int color1 = 0x004400;
 	public int color2 = 0x88CC44;
 
@@ -170,21 +168,23 @@ public abstract class Level implements Bundlable {
 
 			addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
-			if (Dungeon.isChallenged(Challenges.DARKNESS)){
-				addItemToSpawn( new Torch() );
-			}
-
 			if (Dungeon.posNeeded()) {
-				addItemToSpawn( new PotionOfStrength() );
 				Dungeon.LimitedDrops.STRENGTH_POTIONS.count++;
+				addItemToSpawn( new PotionOfStrength() );
 			}
 			if (Dungeon.souNeeded()) {
-				addItemToSpawn( new ScrollOfUpgrade() );
 				Dungeon.LimitedDrops.UPGRADE_SCROLLS.count++;
+				//every 2nd scroll of upgrade is removed with forbidden runes challenge on
+				//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
+				//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
+				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
+				if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count%2 != 0){
+					addItemToSpawn(new ScrollOfUpgrade());
+				}
 			}
 			if (Dungeon.asNeeded()) {
-				addItemToSpawn( new Stylus() );
 				Dungeon.LimitedDrops.ARCANE_STYLI.count++;
+				addItemToSpawn( new Stylus() );
 			}
 			//one scroll of transmutation is guaranteed to spawn somewhere on chapter 2-4
 			int enchChapter = (int)((Dungeon.seed / 10) % 3) + 1;
@@ -218,10 +218,6 @@ public abstract class Level implements Bundlable {
 					case 4:
 						feeling = Feeling.LARGE;
 						addItemToSpawn(Generator.random(Generator.Category.FOOD));
-						//add a second torch to help with the larger floor
-						if (Dungeon.isChallenged(Challenges.DARKNESS)){
-							addItemToSpawn( new Torch() );
-						}
 						break;
 					case 5:
 						feeling = Feeling.TRAPS;
@@ -457,6 +453,8 @@ if (bundle.contains( "respawner" )){
 		}
 
 		Mob m = Reflection.newInstance(mobsToSpawn.remove(0));
+		if (Dungeon.cycle > 0 && Random.Int(2222) == 0)
+			m = Reflection.newInstance(OOFThief.class);
 		ChampionEnemy.rollForChampion(m);
 		return m;
 	}
@@ -504,6 +502,24 @@ if (bundle.contains( "respawner" )){
 			}
 		}
 		return null;
+	}
+
+	//returns true if we immediately transition, false otherwise
+	public boolean activateTransition(Hero hero, LevelTransition transition){
+		if (locked){
+			return false;
+		}
+
+		beforeTransition();
+		InterlevelScene.curTransition = transition;
+		if (transition.type == LevelTransition.Type.REGULAR_EXIT
+				|| transition.type == LevelTransition.Type.BRANCH_EXIT) {
+			InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+		} else {
+			InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+		}
+		Game.switchScene(InterlevelScene.class);
+		return true;
 	}
 
 	//some buff effects have special logic or are cancelled from the hero before transitioning levels
@@ -578,7 +594,19 @@ if (bundle.contains( "respawner" )){
 		}
 		return visuals;
 	}
-	
+
+	//for visual effects that should render above wall overhang tiles
+	public Group addWallVisuals(){
+		if (wallVisuals == null || wallVisuals.parent == null){
+			wallVisuals = new Group();
+		} else {
+			wallVisuals.clear();
+			wallVisuals.camera = null;
+		}
+		return wallVisuals;
+	}
+
+
 	public int mobLimit() {
 		return 0;
 	}
@@ -921,10 +949,6 @@ if (bundle.contains( "respawner" )){
 	}
 	
 	public Plant plant( Plant.Seed seed, int pos ) {
-		
-		if (Dungeon.isChallenged(Challenges.NO_HERBALISM)){
-			return null;
-		}
 
 		Plant plant = plants.get( pos );
 		if (plant != null) {
@@ -939,7 +963,12 @@ if (bundle.contains( "respawner" )){
 			set(pos, Terrain.GRASS, this);
 			GameScene.updateMap(pos);
 		}
-		
+
+		//we have to get this far as grass placement has RNG implications in levelgen
+		if (Dungeon.isChallenged(Challenges.NO_HERBALISM)){
+			return null;
+		}
+
 		plant = seed.couch( pos, this );
 		plants.put( pos, plant );
 		
@@ -1406,6 +1435,7 @@ if (bundle.contains( "respawner" )){
 			case Terrain.EMPTY:
 			case Terrain.EMPTY_SP:
 			case Terrain.EMPTY_DECO:
+			case Terrain.CUSTOM_DECO_EMPTY:
 			case Terrain.SECRET_TRAP:
 				return Messages.get(Level.class, "floor_name");
 			case Terrain.GRASS:
@@ -1442,8 +1472,6 @@ if (bundle.contains( "respawner" )){
 				return Messages.get(Level.class, "locked_exit_name");
 			case Terrain.UNLOCKED_EXIT:
 				return Messages.get(Level.class, "unlocked_exit_name");
-			case Terrain.SIGN:
-				return Messages.get(Level.class, "sign_name");
 			case Terrain.WELL:
 				return Messages.get(Level.class, "well_name");
 			case Terrain.EMPTY_WELL:
@@ -1487,8 +1515,6 @@ if (bundle.contains( "respawner" )){
 				return Messages.get(Level.class, "locked_exit_desc");
 			case Terrain.BARRICADE:
 				return Messages.get(Level.class, "barricade_desc");
-			case Terrain.SIGN:
-				return Messages.get(Level.class, "sign_desc");
 			case Terrain.INACTIVE_TRAP:
 				return Messages.get(Level.class, "inactive_trap_desc");
 			case Terrain.STATUE:

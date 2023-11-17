@@ -111,6 +111,7 @@ public class RatKing extends NPC {
 				destroy();
 				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
 				sprite.killAndErase();
+				return super.act();
 			} else {
 				target = Dungeon.level.exit();
 			}
@@ -119,6 +120,7 @@ public class RatKing extends NPC {
 				destroy();
 				Dungeon.level.drop(new CheeseChunk(), pos).sprite.drop();
 				sprite.killAndErase();
+				return super.act();
 			} else {
 				target = Dungeon.level.entrance();
 			}
@@ -144,7 +146,8 @@ public class RatKing extends NPC {
 					level = Math.min(level+1, 15);
 					item = new Cheese();
 				}
-				item.cast(this, Dungeon.hero.pos);
+				if (item.throwPos(this, Dungeon.hero.pos) == Dungeon.hero.pos)
+					item.cast(this, Dungeon.hero.pos);
 			}
 
             spend(2f);

@@ -97,30 +97,28 @@ public class MeleeWeapon extends Weapon {
 		super.execute(hero, action);
 
 		if (action.equals(AC_ABILITY)){
+			usesTargeting = false;
 			if (!isEquipped(hero)) {
 				if (hero.heroClass == HeroClass.DUELIST){
 					if (hero.buff(Talent.SwiftEquipCooldown.class) == null
 						|| hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()){
 						execute(hero, AC_EQUIP);
-					} else {
+					} else if (hero.heroClass == HeroClass.DUELIST) {
 						GLog.w(Messages.get(this, "ability_need_equip"));
-						usesTargeting = false;
 					}
-				} else {
+				} else if (hero.heroClass == HeroClass.DUELIST) {
 					GLog.w(Messages.get(this, "ability_need_equip"));
-					usesTargeting = false;
 				}
+			} else if (!hero.isClass(HeroClass.DUELIST)){
+				//do nothing
 			} else if (STRReq() > hero.STR()){
 				GLog.w(Messages.get(this, "ability_low_str"));
-				usesTargeting = false;
 			} else if (hero.belongings.weapon == this &&
 					(Buff.affect(hero, Charger.class).charges + Buff.affect(hero, Charger.class).partialCharge) < abilityChargeUse(hero, null)) {
 				GLog.w(Messages.get(this, "ability_no_charge"));
-				usesTargeting = false;
 			} else if (hero.belongings.secondWep == this &&
 					(Buff.affect(hero, Charger.class).secondCharges + Buff.affect(hero, Charger.class).secondPartialCharge) < abilityChargeUse(hero, null)) {
 				GLog.w(Messages.get(this, "ability_no_charge"));
-				usesTargeting = false;
 			} else {
 
 				if (targetingPrompt() == null){
@@ -355,7 +353,17 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		return damage;
 	}
-	
+
+	@Override
+	public int min() {
+		return Math.round(super.min()*(1f + hardenBoost(buffedLvl())));
+	}
+
+	@Override
+	public int max() {
+		return Math.round(super.max()*(1f + hardenBoost(buffedLvl())));
+	}
+
 	@Override
 	public String info() {
 
@@ -392,6 +400,8 @@ private static boolean evaluatingTwinUpgrades = false;
 			info += "\n\n" + Messages.capitalize(Messages.get(Weapon.class, "enchanted", enchantment.name()));
 			info += " " + enchantment.desc();
 		}
+
+		if (enchantHardened) info += "\n\n" + Messages.get(Weapon.class, "enchant_hardened", Messages.decimalFormat("#.##", 100f * hardenBoost(buffedLvl())));
 
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Weapon.class, "cursed_worn");
@@ -599,6 +609,11 @@ private static boolean evaluatingTwinUpgrades = false;
 		@Override
 		public int actionIcon() {
 			return HeroIcon.WEAPON_SWAP;
+		}
+
+		@Override
+		public boolean usable() {
+			return Dungeon.hero.subClass == HeroSubClass.CHAMPION;
 		}
 
 		@Override

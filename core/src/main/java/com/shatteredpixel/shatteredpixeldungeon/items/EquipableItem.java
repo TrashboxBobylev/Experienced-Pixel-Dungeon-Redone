@@ -130,7 +130,7 @@ public abstract class EquipableItem extends Item {
 
 		if (cursed
 				&& hero.buff(MagicImmune.class) == null
-				&& (hero.buff(LostInventory.class) == null || keptThoughLostInvent)) {
+				&& (hero.buff(LostInventory.class) == null || keptThroughLostInventory())) {
 			GLog.w(Messages.get(EquipableItem.class, "unequip_cursed"));
 			return false;
 		}
@@ -162,4 +162,8 @@ public abstract class EquipableItem extends Item {
 	}
 
 	public void activate( Char ch ){}
+
+	public interface Tierable {
+		int tier();
+	}
 }

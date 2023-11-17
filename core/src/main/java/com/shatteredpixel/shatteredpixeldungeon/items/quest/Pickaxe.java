@@ -34,10 +34,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -52,6 +54,7 @@ import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
 
+//various code in here supports old blacksmith quest logic from before v2.2.0
 public class Pickaxe extends MeleeWeapon {
 	
 	public static final String AC_MINE	= "MINE";
@@ -81,7 +84,13 @@ public class Pickaxe extends MeleeWeapon {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		actions.add( AC_MINE );
+		if (Blacksmith.Quest.oldMiningQuest()) {
+			actions.add(AC_MINE);
+		}
+		if (Dungeon.level instanceof MiningLevel){
+			actions.remove(AC_DROP);
+			actions.remove(AC_THROW);
+		}
 		return actions;
 	}
 	
@@ -138,7 +147,7 @@ public class Pickaxe extends MeleeWeapon {
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
-		if (!bloodStained && defender instanceof Bat) {
+		if (Blacksmith.Quest.oldBloodQuest() && !bloodStained && defender instanceof Bat) {
 			Actor.add(new Actor() {
 
 				{
@@ -161,11 +170,19 @@ public class Pickaxe extends MeleeWeapon {
 	}
 
 	@Override
+	public boolean keptThroughLostInventory() {
+		//pickaxe is always kept when it's needed for the mining level
+		return super.keptThroughLostInventory() || Dungeon.level instanceof MiningLevel;
+	}
+
+	@Override
 	public String defaultAction() {
 		if (Dungeon.hero.isClass(HeroClass.DUELIST) && isEquipped(Dungeon.hero)){
 			return AC_ABILITY;
-		} else {
+		} else if (Blacksmith.Quest.oldMiningQuest()) {
 			return AC_MINE;
+		} else {
+			return super.defaultAction();
 		}
 	}
 

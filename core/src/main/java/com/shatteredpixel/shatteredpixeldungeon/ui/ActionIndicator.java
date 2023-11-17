@@ -140,6 +140,7 @@ public class ActionIndicator extends Tag {
 
 	@Override
 	protected void onClick() {
+		super.onClick();
 		if (action != null && Dungeon.hero.ready) {
 			action.doAction();
 		}

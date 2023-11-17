@@ -39,15 +39,16 @@ public class RotLasher extends Mob {
 	{
 		spriteClass = RotLasherSprite.class;
 
-		HP = HT = 40;
+		HP = HT = 80;
 		defenseSkill = 0;
 
 		EXP = 1;
 
 		loot = Generator.Category.SEED;
-		lootChance = 1f;
+		lootChance = 0.75f;
 
 		state = WANDERING = new Waiting();
+		viewDistance = 1;
 
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.MINIBOSS);
@@ -97,12 +98,12 @@ public class RotLasher extends Mob {
 
 	@Override
 	protected boolean getCloser(int target) {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean getFurther(int target) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -111,7 +112,7 @@ public class RotLasher extends Mob {
             case 1: return Random.NormalIntRange(45, 63);
             case 2: return Random.NormalIntRange(250, 324);
         }
-		return Random.NormalIntRange(8, 15);
+		return Random.NormalIntRange(10, 20);
 	}
 
 	@Override
@@ -120,7 +121,7 @@ public class RotLasher extends Mob {
             case 1: return 60;
             case 2: return 280;
         }
-		return 15;
+		return 25;
 	}
 
 	@Override
@@ -136,5 +137,12 @@ public class RotLasher extends Mob {
 		immunities.add( ToxicGas.class );
 	}
 
-	private class Waiting extends Mob.Wandering{}
+	private class Waiting extends Mob.Wandering{
+
+		@Override
+		protected boolean noticeEnemy() {
+			spend(TICK);
+			return super.noticeEnemy();
+		}
+	}
 }

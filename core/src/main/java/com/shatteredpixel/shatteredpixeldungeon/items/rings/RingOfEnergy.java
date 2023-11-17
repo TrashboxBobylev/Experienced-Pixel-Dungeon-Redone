@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -38,8 +39,13 @@ public class RingOfEnergy extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats",
+			String info = Messages.get(this, "stats",
 					new DecimalFormat("#.###").format(100f * (1.10f + soloVisualBonus()*0.0125f - 1f)));
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Energy.class)){
+				info += "\n\n" + Messages.get(this, "combined_stats",
+						Messages.decimalFormat("#.##", 100f * (1.10f + combinedBuffedBonus(Dungeon.hero, Energy.class)*0.0125f - 1f)));
+			}
+			return info;
 		} else {
 			return Messages.get(this, "typical_stats",
 					new DecimalFormat("#.###").format(10f));

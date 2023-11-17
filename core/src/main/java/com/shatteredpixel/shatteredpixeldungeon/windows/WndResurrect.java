@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ItemButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -50,9 +51,9 @@ public class WndResurrect extends Window {
 
 	public static Object instance;
 
-	private WndBlacksmith.ItemButton btnItem1;
-	private WndBlacksmith.ItemButton btnItem2;
-	private WndBlacksmith.ItemButton btnPressed;
+	private ItemButton btnItem1;
+	private ItemButton btnItem2;
+	private ItemButton btnPressed;
 
 	RedButton btnContinue;
 	
@@ -73,7 +74,7 @@ public class WndResurrect extends Window {
 		message.setPos(0, titlebar.bottom() + GAP);
 		add( message );
 
-		btnItem1 = new WndBlacksmith.ItemButton() {
+		btnItem1 = new ItemButton() {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem1;
@@ -84,7 +85,7 @@ public class WndResurrect extends Window {
 		btnItem1.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.bottom() + BTN_GAP, BTN_SIZE, BTN_SIZE );
 		add( btnItem1 );
 
-		btnItem2 = new WndBlacksmith.ItemButton() {
+		btnItem2 = new ItemButton() {
 			@Override
 			protected void onClick() {
 				btnPressed = btnItem2;
@@ -104,11 +105,11 @@ public class WndResurrect extends Window {
 
 				ankh.detach(Dungeon.hero.belongings.backpack);
 
-				if (btnItem1.item != null){
-					btnItem1.item.keptThoughLostInvent = true;
+				if (btnItem1.item() != null){
+					btnItem1.item().keptThoughLostInvent = true;
 				}
-				if (btnItem2.item != null){
-					btnItem2.item.keptThoughLostInvent = true;
+				if (btnItem2.item() != null){
+					btnItem2.item().keptThoughLostInvent = true;
 				}
 				
 				InterlevelScene.mode = InterlevelScene.Mode.RESURRECT;
@@ -139,7 +140,7 @@ public class WndResurrect extends Window {
 			if (item != null && btnPressed.parent != null) {
 				btnPressed.item( item );
 
-				if (btnItem1.item == btnItem2.item){
+				if (btnItem1.item() == btnItem2.item()){
 					if (btnPressed == btnItem1){
 						btnItem2.clear();
 					} else {

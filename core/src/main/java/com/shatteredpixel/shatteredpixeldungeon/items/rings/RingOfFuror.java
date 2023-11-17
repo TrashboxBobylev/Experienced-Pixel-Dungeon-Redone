@@ -24,11 +24,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.rings;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-
-import java.text.DecimalFormat;
 
 public class RingOfFuror extends Ring {
 
@@ -38,9 +37,15 @@ public class RingOfFuror extends Ring {
 
 	public String statsInfo() {
 		if (isIdentified()){
-			return Messages.get(this, "stats", new DecimalFormat("#.###").format(100f * ((1.10f + soloVisualBonus()*0.00225f) - 1f)));
+			String info = Messages.get(this, "stats",
+					Messages.decimalFormat("#.##", 100f * ((1.1f + soloVisualBonus()*0.00225f) - 1f)));
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Furor.class)){
+				info += "\n\n" + Messages.get(this, "combined_stats",
+						Messages.decimalFormat("#.##", 100f * ((1.1f + combinedBuffedBonus(Dungeon.hero, Furor.class)*0.00225f) - 1f)));
+			}
+			return info;
 		} else {
-			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(10f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 9.051f));
 		}
 	}
 
