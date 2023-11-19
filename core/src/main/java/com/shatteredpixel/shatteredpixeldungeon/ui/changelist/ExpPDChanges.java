@@ -60,7 +60,22 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.16", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.1", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released November 19th, 2023\n" +
+                            "_-_ 2 days after Experienced Pixel Dungeon 2.16\n\n" +
+                            "HOTFIXES TIME!!!"));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Updated some of innate hero perk icons to make more sense.\n" +
+                            "_-_ Removed the artifact upgrading to equivalent level when transmuted."
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed the crash with fifth innate hero perks not having an icon."
+            ));
+
+            changes = new ChangeInfo("ExpPD-2.16", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
