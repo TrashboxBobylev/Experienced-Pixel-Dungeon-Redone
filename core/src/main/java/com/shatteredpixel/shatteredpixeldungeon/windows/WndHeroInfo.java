@@ -268,19 +268,22 @@ public class WndHeroInfo extends WndTabbed {
 					icons = new Image[]{ new TalentIcon(Talent.ENERGIZING_MEAL),
 							new TalentIcon(Talent.SCHOLARS_INTUITION),
 							new TalentIcon(Talent.SHIELD_BATTERY),
-							new TalentIcon(Talent.ARCANE_VISION)};
+							new TalentIcon(Talent.ARCANE_VISION),
+							new TalentIcon(Talent.INSCRIBED_POWER)};
 					break;
 				case ROGUE:
 					icons = new Image[]{ new TalentIcon(Talent.SILENT_STEPS),
 							new TalentIcon(Talent.WIDE_SEARCH),
 							new TalentIcon(Talent.LIGHT_CLOAK),
-							new TalentIcon(Talent.ELEMENTAL_POWER)};
+							new TalentIcon(Talent.SHADOW_BLADE),
+							new TalentIcon(Talent.DEATHLY_DURABILITY)};
 					break;
 				case HUNTRESS:
 					icons = new Image[]{ new TalentIcon(Talent.SURVIVALISTS_INTUITION),
 							new TalentIcon(Talent.REJUVENATING_STEPS),
 							new TalentIcon(Talent.HEIGHTENED_SENSES),
-							new TalentIcon(Talent.INVIGORATING_MEAL)};
+							new TalentIcon(Talent.INVIGORATING_MEAL),
+							new TalentIcon(Talent.FOLLOWUP_STRIKE)};
 					break;
 				case DUELIST:
 					icons = new Image[]{ new TalentIcon(Talent.STRENGTHENING_MEAL),
