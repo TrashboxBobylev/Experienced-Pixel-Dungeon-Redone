@@ -29,5 +29,6 @@ sourceCompatibility = targetCompatibility = appJavaCompatibility
 
 dependencies {
     implementation project(':SPD-classes')
+    implementation project(':core')
     api project(':services')
 }
