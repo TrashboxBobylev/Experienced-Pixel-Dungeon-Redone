@@ -24,20 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class Bbat extends NewsArticle {
     {
-        title = "Rogue Assistant";
+        title = Messages.get(this, "title");
         icon = "sprites/bbat.png, 0, 0, 15, 15";
-        summary = "In the darkness of dungeon, it isn't easy to obtain friends. But if you are rogue...\n\n" +
-                "Bbat is a special ally that follows you and attacks mobs.\n\n" +
-                "_-_ It grows with your level ups.\n\n" +
-                "_-_When damaged, slightly charges your cloak.\n\n" +
-                "_-_On death, gives cooldown in which bbat cannot be resummoned. Once cooldown is expired, you can summon bbat with your cloak.\n\n" +
-                "If you want to play with bbat more, then you can choose _Hunter_ subclass.\n\n" +
-                "_-_ Hunter's bbat loses some damage, but gains increased attack speed and ability to mark targets.\n" +
-                "Marks stack to each other and allow you to teleport behind target and ambush it with ton of debuffs.\n\n" +
-                "_-_ While marks can be used to inflict debuffs and move across the floor, you can also let bbat defeat enemy because bbat deals more damage to marked enemy.";
+        summary = Messages.get(this, "summary");
     }
 }

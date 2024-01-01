@@ -24,16 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class Blacky extends NewsArticle {
     {
-        title = "Combining Items";
+        title = Messages.get(this, "title");
         icon = "sprites/blacksmith.png, 0, 0, 13, 16";
-        summary = "Blacksmith got some game-changing changes.\n\n" +
-                "_-_ You can now combine different items to get their combined levels in one item! There is two rules, that determine, which item should receive upgrades:\n" +
-                "More powerful item gets upgrades, like plate armor will inherit level from mail armor.\n" +
-                "If items are equal or simply don't have tiers, the highest upgraded item gets all upgrades. This doesn't apply to fishing rods, they will inherit upgrades from other item in any case.\n\n" +
-                "_-_ Another change is blacksmith being infinite. You can use his offering on as many items as you wish, but you need to pay some money to use reforging.";
+        summary = Messages.get(this, "summary");
     }
 }

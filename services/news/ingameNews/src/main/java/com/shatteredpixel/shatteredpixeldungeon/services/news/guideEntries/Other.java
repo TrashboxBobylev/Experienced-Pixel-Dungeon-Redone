@@ -24,24 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class Other extends NewsArticle {
     {
-        title = "Misc Remarks";
+        title = Messages.get(this, "title");
         icon = "ICON: PREFS";
-        summary = "There is an other things that you should know about:\n\n" +
-                "_-_ You can upgrade artifacts once they reach +10.\n\n" +
-                "_-_ Wands don't have max charge limitation anymore; and Mage's Staff holds 33% more charges compared to wand without staff." +
-                "_-_ Shops now sell more items with more variety over them.\n\n" +
-                "_-_ The inventory space is massively increased, both for backpack and dedicated bags.\n\n" +
-                "_-_ Enchantments and glyphs no longer have a chance of disappearing with upgrading them.\n\n" +
-                "_-_ Rings have massive nerf compared to vanilla Shattered PD.\n\n" +
-                "_-_ _Potion of Mastery_ buffs item's effectiveness by 20%.\n\n" +
-                "_-_ Class armor charges 150% faster.\n\n"+
-                "_-_ Bees will grow more aggressive with cycles, increasing their attack speed.\n\n"+
-                "_-_ _Scroll of Challenge_ is _Scroll of Determination_ now; instead of confusing entities, it applies life-steal shielding to hero.\n\n" +
-                "_-_ _Scroll of Divination_, once it has done its intended function, will attempt to identify every item in inventory with 33% chance.";
-
+        summary = Messages.get(this, "summary");
     }
 }

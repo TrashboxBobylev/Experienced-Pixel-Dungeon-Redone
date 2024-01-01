@@ -24,18 +24,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 import java.util.Date;
 
 public class FateLock extends NewsArticle {
     {
-        title = "Controlling Fate";
+        title = Messages.get(this, "title");
         icon = "ITEM: 40";
-        summary = "Once you control destiny, you can achieve everything. To some extent.\n\n" +
-                "The Fate Lock is given to at beginning of the game and provides several options:\n\n" +
-                "_-_ You can activate it to enable an ability to get random items from any killed mob with 33%. Also, once you get 100 experience, you are given the Scroll of Upgrade and timer is reset.\n" +
-                "      Experience accumulating works regardless of lock being activated, so you can disable and re-enable lock to get burst of upgrades.\n\n" +
-                "_-_ You can reset current dungeon floor to make all enemies, rooms and items regenerate. It damages you for 50% of your total HP, so prepare healing, if you want to conquer dungeon repeatedly.";
+        summary = Messages.get(this, "summary");
     }
 }
