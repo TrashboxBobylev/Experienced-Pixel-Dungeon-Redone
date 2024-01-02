@@ -113,7 +113,8 @@ public class Dungeon {
 		LORE_PRISON,
 		LORE_CAVES,
 		LORE_CITY,
-		LORE_HALLS;
+		LORE_HALLS,
+		CHEESY_CHEEST;
 
 		public int count = 0;
 
@@ -296,7 +297,7 @@ public class Dungeon {
         Imp.Quest.reset();
         droppedItems = new SparseArray<>();
         for (LimitedDrops a : LimitedDrops.values())
-            if (a != LimitedDrops.BBAT)  a.count = 0;
+            if (a != LimitedDrops.BBAT && a != LimitedDrops.CHEESY_CHEEST)  a.count = 0;
         Notes.reset();
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
