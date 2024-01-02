@@ -126,4 +126,9 @@ public class TicketToArena extends Item{
     public int value() {
         return 210 * quantity;
     }
+
+    @Override
+    public boolean canBeOofed() {
+        return false;
+    }
 }

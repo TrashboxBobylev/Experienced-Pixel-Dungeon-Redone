@@ -354,7 +354,11 @@ public class Belongings implements Iterable<Item> {
 	public Item randomUnequipped() {
 		if (owner.buff(LostInventory.class) != null) return null;
 
-		return Random.element( backpack.items );
+		Item item;
+		do {
+			item = Random.element(backpack.items);
+		} while (item == null || item.canBeOofed());
+		return item;
 	}
 	
 	public int charge( float charge ) {

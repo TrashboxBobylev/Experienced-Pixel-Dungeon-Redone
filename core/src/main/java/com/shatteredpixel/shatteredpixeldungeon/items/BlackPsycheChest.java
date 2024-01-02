@@ -52,6 +52,11 @@ public class BlackPsycheChest extends Item {
         return false;
     }
 
+    @Override
+    public boolean canBeOofed() {
+        return false;
+    }
+
     private static final String AC_ACCESS = "ACCESS";
     private static final String AC_RESET = "RESET";
 
