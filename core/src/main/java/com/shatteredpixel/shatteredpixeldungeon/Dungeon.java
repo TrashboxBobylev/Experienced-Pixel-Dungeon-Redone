@@ -1211,16 +1211,20 @@ public class Dungeon {
 	}
 
 	public static float Float(float max){
-		return Float(max, LuckDirection.UP);
+		return Float(max, LuckDirection.DOWN);
 	}
 
 	public static float Float(float max, LuckDirection direction){
 		float highest = Float.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
 			float roll = Random.Float(max);
-			switch (direction){
-				case UP: if (roll > highest) highest = roll; break;
-				case DOWN: if (roll < highest) highest = roll; break;
+			if (i == 0)
+				highest = roll;
+			else {
+				switch (direction) {
+					case UP: if (roll > highest) highest = roll; break;
+					case DOWN: if (roll < highest) highest = roll; break;
+				}
 			}
 		}
 		return highest;
@@ -1254,7 +1258,7 @@ public class Dungeon {
 			sum += chances[i];
 		}
 
-		float value = Float( sum, LuckDirection.DOWN );
+		float value = Float( sum, LuckDirection.UP );
 		sum = 0;
 		for (int i=0; i < length; i++) {
 			sum += chances[i];
@@ -1284,7 +1288,7 @@ public class Dungeon {
 			return null;
 		}
 
-		float value = Float( sum );
+		float value = Float( sum, LuckDirection.UP );
 
 		sum = probs[0];
 		for (int i=0; i < size; i++) {
