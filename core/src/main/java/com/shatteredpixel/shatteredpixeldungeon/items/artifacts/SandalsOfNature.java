@@ -169,7 +169,7 @@ public class SandalsOfNature extends Artifact {
 	@Override
 	public String name() {
 		if (level() == 0)   return super.name();
-		else                return Messages.get(this, "name_" + level());
+		else                return Messages.get(this, "name_" + Math.min(3, level()));
 	}
 
 	@Override
