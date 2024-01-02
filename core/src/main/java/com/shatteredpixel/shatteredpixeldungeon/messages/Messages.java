@@ -69,6 +69,7 @@ public class Messages {
 			Assets.Messages.MISC,
 			Assets.Messages.PLANTS,
 			Assets.Messages.SCENES,
+			Assets.Messages.SERVICES,
 			Assets.Messages.UI,
 			Assets.Messages.WINDOWS
 	};

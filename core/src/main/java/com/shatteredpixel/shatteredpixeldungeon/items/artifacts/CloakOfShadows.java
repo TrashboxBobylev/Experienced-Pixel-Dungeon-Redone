@@ -141,8 +141,8 @@ public class CloakOfShadows extends Artifact {
                     if (respawnPoints.size() > 0){
                         Bbat bat = new Bbat();
                         bat.pos = respawnPoints.get(Random.index( respawnPoints ));
-                        bat.HP = bat.HT = 8 + Bbat.level * 2;
-                        ((Bbat) bat).defenseSkill = 13 + Bbat.level*2;
+                        bat.HP = bat.HT = 8 + Bbat.level * 3;
+                        ((Bbat) bat).defenseSkill = 13 + Bbat.level*3;
                         bat.state = bat.WANDERING;
                         GameScene.add(bat);
                         bat.sprite.emitter().burst(Speck.factory(Speck.SMOKE), 10);

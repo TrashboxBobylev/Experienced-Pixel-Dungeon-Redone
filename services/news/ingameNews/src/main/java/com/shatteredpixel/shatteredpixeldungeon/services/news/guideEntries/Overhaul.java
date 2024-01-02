@@ -25,29 +25,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 
 public class Overhaul extends NewsArticle {
     {
-        title = "Overhauled Weapons";
+        title = Messages.get(this, "title");
         icon = "ITEM: 128";
-        summary = "Some weapons in new Dungeon have significantly changed properties:\n\n" +
-                "_-_ _Greatsword_ summons knight statues around you to help in fighting monsters. They have same weapon as you, but significantly less HP, than common animated statues.\n\n" +
-                "_-_ _Greataxe_ now has ranged ability: on throwing it, you can do devastating 3x3 attack.\n\n" +
-                "_-_ _Sai_ is now able to progressively decrease armor on successful hits.\n\n" +
-                "_-_ _Runic Blade_ now can shoot magical blades, that have all properties of magical and melee attacks at once. But the blade after casting needs some recharge.\n\n" +
-                "_-_ _Kunai_ on surprise attack gives buff to all melee weapons in your possession.\n\n" +
-                "_-_ _Javelin_ on killing hits can create single consumable item like fishing.\n\n" +
-                "_-_ _Mace_ have immense might that allows it to shoot laser beams on attacks.\n\n"+
-                "_-_ _Warhammers_ are extremely strong, but stun both attacker and target.\n\n"+
-                "_-_ _Shields_ will reflect magical damage dealt to their owner.\n\n"+
-                "_-_ _Longsword_ will slash adjacent enemies with holy damage that triggers enchantments.\n\n"+
-                "_-_ _Stone Gauntlets_ deal lightning damage to nearby enemies.\n\n"+
-                "_-_ _Whips_ will attack 3 times per turn with 8 tiles range but deal less damage with higher distance.\n\n"+
-                "_-_ _Displacing Dart_ can ignore walls and other enemies, but get damage penalty.\n\n" +
-                "_-_ _Adrenaline Dart_ has instant attack speed, but also have damage penalty.\n\n" +
-                "_-_ _Holy Dart_ dooms enemies on hits.\n\n" +
-                "_-_ _Trident_ generates small amount of gold on each hit.\n\n" +
-                "_-_ Any _Grim_ weapon now deal additional damage based on health of enemy, instead of butchering enemies." +
-                "";
+        summary = Messages.get(this, "summary");
     }
 }

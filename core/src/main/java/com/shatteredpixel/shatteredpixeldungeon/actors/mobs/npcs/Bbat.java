@@ -45,13 +45,14 @@ public class Bbat extends Mob {
     public static int level = 1;
 
     {
-        HP = HT = 10;
-        defenseSkill = 15;
+        HP = HT = 11;
+        defenseSkill = 16;
         baseSpeed = 2f;
         spriteClass = BbatSprite.class;
         alignment = Alignment.ALLY;
         WANDERING = new Wandering();
         intelligentAlly = true;
+        flying = true;
     }
 
     public static void saveLevel(Bundle bundle){
@@ -79,7 +80,7 @@ public class Bbat extends Mob {
 
     @Override
     public int attackSkill(Char target) {
-        return 10 + level * 2;
+        return 10 + level * 3;
     }
 
     @Override
@@ -112,8 +113,8 @@ public class Bbat extends Mob {
         if (Dungeon.level != null) {
             for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
                 if (mob instanceof Bbat) {
-                    mob.HP = mob.HT = 8 + level * 2;
-                    ((Bbat) mob).defenseSkill = 13 + level * 2;
+                    mob.HP = mob.HT = 8 + level * 3;
+                    mob.defenseSkill = 13 + level * 3;
                 }
             }
         }

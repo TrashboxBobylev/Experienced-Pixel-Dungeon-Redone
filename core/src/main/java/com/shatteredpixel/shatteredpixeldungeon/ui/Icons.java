@@ -96,6 +96,7 @@ public enum Icons {
 	SCROLL_HOLDER,
 	WAND_HOLSTER,
 	POTION_BANDOLIER,
+	CHEESY_CHEEST,
 
 	//icons that appear in the game itself, variable spacing
 	TARGET,
@@ -307,6 +308,9 @@ public enum Icons {
 				break;
 			case POTION_BANDOLIER:
 				icon.frame( icon.texture.uvRectBySize( 241, 64, 10, 10 ) );
+				break;
+			case CHEESY_CHEEST:
+				icon.frame( icon.texture.uvRectBySize( 201, 75, 10, 10 ) );
 				break;
 
 			case TARGET:

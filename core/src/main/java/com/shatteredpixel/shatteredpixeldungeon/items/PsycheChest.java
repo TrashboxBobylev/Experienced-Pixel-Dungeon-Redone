@@ -143,4 +143,9 @@ public class PsycheChest extends Item {
     public ItemSprite.Glowing glowing() {
         return Dungeon.hero.grinding ? BLOODY : null;
     }
+
+    @Override
+    public boolean canBeOofed() {
+        return false;
+    }
 }

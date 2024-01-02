@@ -45,6 +45,20 @@ public class CheeseCheest extends Bag {
 		}
 	}
 
+	@Override
+	public boolean collect(Bag container) {
+		if (super.collect( container )) {
+
+			if (!Dungeon.LimitedDrops.CHEESY_CHEEST.dropped()){
+				Dungeon.LimitedDrops.CHEESY_CHEEST.drop();
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public int capacity(){
 		return 36;
 	}

@@ -60,7 +60,35 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.1", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.2", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released January 2nd, 2024\n" +
+                            "_-_ 44 days after Experienced Pixel Dungeon 2.16.1"));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Implemented Chinese translation by catandA.\n" +
+                            "_-_ Fully removed Shattered's hardening behavior.\n" +
+                            "_-_ Regrowing Slasher's barkskin no longer stacks as a buff many times.\n" +
+                            "_-_ Shortened the description of Rat King's crown.\n" +
+                            "_-_ Tweaked Incredibly Cheesy Cheest:\n" +
+                            "* now has its own icon\n" +
+                            "* can no longer be bought in multiple quantities\n" +
+                            "_-_ Buffed Bbat:\n" +
+                            "* now flies\n" +
+                            "* increased HP from 10(+2) to 11(+3)\n" +
+                            "* increased evasion from 15(+2) to 16(+3)\n" +
+                            "* increased accuracy from 12(+2) to 13(+3)\n" +
+                            "_-_ Some very important items, like Ticket to Arena and Psyche Locks, can no longer be stolen or \"oofed\" at all."
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed the Incredibly Cheesy Cheest duplication glitch.\n" +
+                            "_-_ Fixed Sandals of Nature displaying !!!NO TEXT FOUND!!! when upgraded.\n" +
+                            "_-_ Fixed Chalice of Blood displaying incorrect regeneration speed before +10.\n" +
+                            "_-_ Fixed the lack of rare enchantments/glyphs when enchanting things."
+            ));
+
+            changes = new ChangeInfo("ExpPD-2.16.1", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",

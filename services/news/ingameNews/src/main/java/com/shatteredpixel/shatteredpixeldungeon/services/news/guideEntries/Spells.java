@@ -24,15 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class Spells extends NewsArticle {
     {
-        title ="New Spells";
+        title = Messages.get(this, "title");
         icon ="ITEM: 420";
-        summary = "You can make or find three new spells.\n\n" +
-                "_-_ _Vampirism_ drains health from enemy and gives it back in form of regeneration.\n\n" +
-                "_-_ _Overpopulation_ decreased timer of mob's respawn and increases their max amount on the floor.\n\n" +
-                "_-_ _Fire Empower_ increases fire's damage by 10% with each usage.";
+        summary = Messages.get(this, "summary");
     }
 }

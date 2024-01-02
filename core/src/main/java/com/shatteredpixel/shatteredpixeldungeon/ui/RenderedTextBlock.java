@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.RenderedText;
@@ -232,7 +234,8 @@ public class RenderedTextBlock extends Component {
 
 				//this is so that words split only by highlighting are still grouped in layout
 				//Chinese/Japanese always render every character separately without spaces however
-				while (j < words.size() && words.get(j) != SPACE && words.get(j) != NEWLINE){
+				while (Messages.lang() != Languages.CHINESE
+						&& j < words.size() && words.get(j) != SPACE && words.get(j) != NEWLINE){
 					fullWidth += words.get(j).width() - 0.667f;
 					j++;
 				}
