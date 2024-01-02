@@ -24,17 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class Resets extends NewsArticle {
     {
-        title = "Dungeon Cycles";
+        title = Messages.get(this, "title");
         icon = "ITEM: 39";
-        summary = "With beating Yog, everything just begins to take shape.\n\n" +
-                "Instead of Amulet of Yendor, you will meet Black Fate Lock. From that point you can:\n\n" +
-                "_-_ end the game by fighting Black Mimic which is a very powerful boss that uses abilities of every other boss in the game. This guide will not cover the strategy against him, you should see it by yourself.\n\n" +
-                "or\n\n" +
-                "_-_ enter a new loop in your adventure, called Cycle. With each new cycle, everything becomes stronger and more powerful, both enemies and weapons. You can reobtain some valuable items, like boss drops, potions of strength or artifacts.\n" +
-                "The escalation stops on entering fifth cycle, any further resets will stay on the same difficulty.";
+        summary = Messages.get(this, "summary");
     }
 }

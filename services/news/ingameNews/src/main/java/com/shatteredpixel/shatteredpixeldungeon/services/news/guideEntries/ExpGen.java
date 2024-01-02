@@ -24,15 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.services.news.guideEntries;
 
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 
 public class ExpGen extends NewsArticle {
     {
-        title = "Arena";
+        title = Messages.get(this, "title");
         icon = "ITEM: 426";
-        summary = "If you want to win your money and prizes efficiently, then welcome to arena!\n" +
-                "_-_ _Arena_ is new unique area, which can be accessed with unique tickets, which can be bought at any shops.\n\n" +
-                "_-_ Mobs in _arena_ are strongest in this dungeon and grow stronger with the time spent there, but have gold and random items as loot.\n\n" +
-                "_-_ While grinding, you can buy loot bags in arena shop. They can be bought as many times as you wish.";
+        summary = Messages.get(this, "summary");
     }
 }
