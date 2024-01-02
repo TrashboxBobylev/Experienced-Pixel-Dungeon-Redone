@@ -280,13 +280,13 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 			}
 		} else if (enchantment != null) {
 			//chance to lose harden buff is 10/20/40/80/100% when upgrading from +6/7/8/9/10
-			if (enchantHardened){
+			/*if (enchantHardened){
 				if (level() >= 6 && Random.Float(10) < Math.pow(2, level()-6)){
 					enchantHardened = false;
 				}
 
 			//chance to remove curse is a static 33%
-			} else if (hasCurseEnchant()) {
+			} else */if (hasCurseEnchant()) {
 				if (Random.Int(3) == 0) enchant(null);
 			}
 		}
