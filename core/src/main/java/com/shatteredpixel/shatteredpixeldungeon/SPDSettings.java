@@ -368,7 +368,7 @@ public static void playMusicInBackground( boolean value ){
 	}
 	
 	public static boolean systemFont(){
-		return getBoolean(KEY_SYSTEMFONT, false);
+		return getBoolean(KEY_SYSTEMFONT, language() == Languages.CHINESE);
 	}
 
 	//Connectivity
