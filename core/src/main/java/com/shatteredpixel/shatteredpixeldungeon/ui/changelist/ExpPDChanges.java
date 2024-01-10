@@ -60,7 +60,20 @@ import java.util.ArrayList;
 public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.2", true, "");
+
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.3", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released January 10th, 2023\n" +
+                            "_-_ 8 days after Experienced Pixel Dungeon 2.16.2"));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed the crash with slimes by removing the luck part.\n" +
+                            "_-_ Fixed OOF thief issues with stealing only important items and nothing else.\n" +
+                            "_-_ Attempted to fix the statue attack animation crash."
+            ));
+
+            changes = new ChangeInfo("ExpPD-2.16.2", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
