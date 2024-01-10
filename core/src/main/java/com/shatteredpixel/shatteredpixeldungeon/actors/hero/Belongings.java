@@ -357,7 +357,7 @@ public class Belongings implements Iterable<Item> {
 		Item item;
 		do {
 			item = Random.element(backpack.items);
-		} while (item == null || item.canBeOofed());
+		} while (item == null || !item.canBeOofed());
 		return item;
 	}
 	
