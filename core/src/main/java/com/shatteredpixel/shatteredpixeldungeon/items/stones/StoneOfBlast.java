@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -35,7 +35,7 @@ public class StoneOfBlast extends Runestone {
 	
 	@Override
 	protected void activate(int cell) {
-		new Bomb.MagicalBomb().explode(cell);
+		new Bomb.ConjuredBomb().explode(cell);
 	}
 	
 }

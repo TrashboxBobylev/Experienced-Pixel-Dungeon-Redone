@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -92,7 +92,7 @@ public class StoneOfAggression extends Runestone {
 
 		@Override
 		public void detach() {
-			//if our target is an enemy, reset the aggro of any enemies targeting it
+			//if our target is an enemy, reset any enemy-to-enemy aggro involving it
 			if (target.isAlive()) {
 				if (target.alignment == Char.Alignment.ENEMY) {
 					for (Mob m : Dungeon.level.mobs) {

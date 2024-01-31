@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -747,7 +747,16 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			} else {
 				ready();
 			}
-			
+
+			//if we just loaded into a level and have a search buff, make sure to process them
+			if(Actor.now() == 0){
+				if (buff(Foresight.class) != null){
+					search(false);
+				} else if (buff(TalismanOfForesight.Foresight.class) != null){
+					buff(TalismanOfForesight.Foresight.class).checkAwareness();
+				}
+			}
+
 			actResult = false;
 			
 		} else {
@@ -823,6 +832,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		curAction = null;
 		GameScene.resetKeyHold();
+		resting = false;
 	}
 	
 	public void resume() {
@@ -960,6 +970,15 @@ if (buff(RoundShield.GuardTracker.class) != null){
 							|| item instanceof Key
 							|| item instanceof Guidebook) {
 						//Do Nothing
+					} else if (item instanceof DarkGold) {
+						DarkGold existing = belongings.getItem(DarkGold.class);
+						if (existing != null){
+							if (existing.quantity() >= 40) {
+								GLog.p(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+							} else {
+								GLog.i(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+							}
+						}
 					} else {
 
 						//TODO make all unique items important? or just POS / SOU?
@@ -1169,9 +1188,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 						//1 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER){
-							Splash.at(action.dst, ColorMath.random( 0x444444, 0x777766 ), 5);
+							Splash.at(action.dst, 0x555555, 5);
 							Sample.INSTANCE.play( Assets.Sounds.MINE, 0.6f );
-							Level.set( action.dst, Terrain.EMPTY );
+							Level.set( action.dst, Terrain.EMPTY_DECO );
 						}
 
 						for (int i : PathFinder.NEIGHBOURS9) {
@@ -1266,7 +1285,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					&& buff(Talent.AggressiveBarrierCooldown.class) == null
 					&& (HP / (float)HT) < 0.20f*(1+pointsInTalent(Talent.AGGRESSIVE_BARRIER))){
 				Buff.affect(this, Barrier.class).setShield(3);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, "3", FloatingText.SHIELDING);
 				Buff.affect(this, Talent.AggressiveBarrierCooldown.class, 50f);
+
 			}
 			sprite.attack( enemy.pos );
 
@@ -1374,7 +1395,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				GLog.i(Messages.get(Hero.class, "you_now_have", lootbag.name()));
 			}
 		}
-		
+
 		return super.defenseProc( enemy, damage );
 	}
 	
@@ -1387,7 +1408,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		// unless the player recently hit 'continue moving', in which case this is ignored
 		if (!(src instanceof Hunger || src instanceof Viscosity.DeferedDamage) && damageInterrupt) {
 			interrupt();
-			resting = false;
 		}
 
 		if (this.buff(Drowsy.class) != null){
@@ -1426,6 +1446,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		if (belongings.armor() != null && belongings.armor().hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
 			dmg -= AntiMagic.drRoll(this, belongings.armor().buffedLvl());
+			dmg = Math.max(dmg, 0);
 		}
 
 		if ((belongings.weapon() instanceof Greatshield || belongings.weapon() instanceof RoundShield) &&
@@ -1472,7 +1493,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				}
 				//hero gets interrupted on taking serious damage, regardless of any other factor
 				interrupt();
-				resting = false;
 				damageInterrupt = true;
 			}
 		}
@@ -1551,11 +1571,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		
 		if (newMob) {
-			interrupt();
 			if (resting){
 				Dungeon.observe();
-				resting = false;
 			}
+			interrupt();
 		}
 
 		visibleEnemies = visible;
@@ -1711,7 +1730,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			
 		} else if (fieldOfView[cell] && ch instanceof Mob) {
 
-			if (ch.alignment != Alignment.ENEMY && ch.buff(Amok.class) == null) {
+			if (((Mob) ch).heroShouldInteract()) {
 				curAction = new HeroAction.Interact( ch );
 			} else {
 				curAction = new HeroAction.Attack( ch );
@@ -1955,7 +1974,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (ankh != null) {
 			interrupt();
-			resting = false;
 
 			if (ankh.isBlessed()) {
 				this.HP = HT ;
@@ -2443,6 +2461,11 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				spawnPoints.remove( index );
 				ratsToSpawn--;
 			}
+		}
+
+
+		if (talisman != null){
+			talisman.checkAwareness();
 		}
 
 		return smthFound;

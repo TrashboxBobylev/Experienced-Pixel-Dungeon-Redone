@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -78,7 +78,9 @@ public class DungeonTerrainTilemap extends DungeonTilemap {
 						DungeonTileSheet.RAISED_MINE_CRYSTAL,
 						pos);
 			} else if (tile == Terrain.MINE_BOULDER) {
-				return DungeonTileSheet.RAISED_MINE_BOULDER;
+				return DungeonTileSheet.getVisualWithAlts(
+						DungeonTileSheet.RAISED_MINE_BOULDER,
+						pos);
 			} else if (tile == Terrain.ALCHEMY) {
 				return DungeonTileSheet.RAISED_ALCHEMY_POT;
 			} else if (tile == Terrain.BARRICADE) {

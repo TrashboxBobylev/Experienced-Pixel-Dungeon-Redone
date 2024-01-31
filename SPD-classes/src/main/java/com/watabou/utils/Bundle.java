@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -512,6 +512,7 @@ public class Bundle {
 			try {
 				json = new JSONTokener(jsonString).nextValue();
 			} catch (Exception e){
+				//TODO support for v1.1.X saves has been dropped, can probably remove this soon
 				//if the string can't be tokenized, it may be written by v1.1.X, which used libGDX JSON.
 				// Some of these are written in a 'minified' format, some have duplicate keys.
 				// We read them in with the libGDX JSON code, fix duplicates, write as full JSON

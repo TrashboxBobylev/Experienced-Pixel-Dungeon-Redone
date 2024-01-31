@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -97,6 +97,7 @@ public class EntranceRoom extends StandardRoom {
 						Random.IntRange( top + 1, bottom - 2 )));
 			} while (pos == level.entrance() || level.findMob(level.entrance()) != null);
 			level.drop( new Guidebook(), pos );
+			Document.ADVENTURERS_GUIDE.deletePage(Document.GUIDE_INTRO);
 		}
 
 		//places the third guidebook page on floor 2

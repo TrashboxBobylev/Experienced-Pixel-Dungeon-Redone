@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -261,8 +261,10 @@ public class QuickSlotButton extends Button {
 		}
 	};
 
+	public static int lastVisible = instance.length;
+
 	public static void set(Item item){
-		for (int i = 0; i < instance.length; i++) {
+		for (int i = 0; i < lastVisible; i++) {
 			if (select(i) == null || select(i) == item) {
 				set(i, item);
 				return;

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -170,6 +170,11 @@ public class AndroidPlatformSupport extends PlatformSupport {
 					|| activeNetwork.getType() == ConnectivityManager.TYPE_BLUETOOTH
 					|| activeNetwork.getType() == ConnectivityManager.TYPE_ETHERNET);
 		}
+	}
+
+	@Override
+	public boolean supportsVibration() {
+		return true; //always true on Android
 	}
 
 	/* FONT SUPPORT */

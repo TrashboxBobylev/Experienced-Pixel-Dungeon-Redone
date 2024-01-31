@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -179,6 +179,9 @@ public class FileUtils {
 	public static Bundle bundleFromFile( String fileName ) throws IOException{
 		try {
 			FileHandle file = getFileHandle( fileName );
+			if (!file.exists() || file.isDirectory() || file.length() == 0) {
+				throw new IOException("file does not exist!");
+			}
 			return bundleFromStream(file.read());
 		} catch (GdxRuntimeException e){
 			//game classes expect an IO exception, so wrap the GDX exception in that

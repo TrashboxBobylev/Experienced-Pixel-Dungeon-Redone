@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -39,7 +39,7 @@ import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
 
-public class HolyBomb extends Bomb.MagicalBomb {
+public class HolyBomb extends Bomb {
 	
 	{
 		image = ItemSpriteSheet.HOLY_BOMB;
@@ -75,13 +75,15 @@ public class HolyBomb extends Bomb.MagicalBomb {
 				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 					damage *= 2.5f;
 				}
-				ch.damage(damage, this);
+				ch.damage(damage, new HolyDamage());
 			}
 		}
 		
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 	}
-	
+
+	public static class HolyDamage{}
+
 	@Override
 	public int value() {
 		//prices of ingredients

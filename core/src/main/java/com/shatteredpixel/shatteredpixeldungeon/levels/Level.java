@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
  * Copyright (C) 2019-2020 Trashbox Bobylev
@@ -316,21 +316,8 @@ public abstract class Level implements Bundlable {
 		mapped	= bundle.getBooleanArray( MAPPED );
 
 		transitions = new ArrayList<>();
-		if (bundle.contains(TRANSITIONS)){
-			for (Bundlable b : bundle.getCollection( TRANSITIONS )){
-				transitions.add((LevelTransition) b);
-			}
-		//pre-1.3.0 saves, converts old entrance/exit to new transitions
-		} else {
-			if (bundle.contains("entrance")){
-				transitions.add(new LevelTransition(
-						this,
-						bundle.getInt("entrance"),
-						Dungeon.depth == 1 ? LevelTransition.Type.SURFACE : LevelTransition.Type.REGULAR_ENTRANCE));
-			}
-			if (bundle.contains("exit")){
-				transitions.add(new LevelTransition(this, bundle.getInt("exit"), LevelTransition.Type.REGULAR_EXIT));
-			}
+		for (Bundlable b : bundle.getCollection( TRANSITIONS )){
+			transitions.add((LevelTransition) b);
 		}
 
 		locked      = bundle.getBoolean( LOCKED );
@@ -537,10 +524,10 @@ if (bundle.contains( "respawner" )){
 
 		//spend the hero's partial turns,  so the hero cannot take partial turns between floors
 		Dungeon.hero.spendToWhole();
-		for (Char ch : Actor.chars()){
-			//also adjust any mobs that are now ahead of the hero due to this
-			if (ch.cooldown() < Dungeon.hero.cooldown()){
-				ch.spendToWhole();
+		for (Actor a : Actor.all()){
+			//also adjust any other actors that are now ahead of the hero due to this
+			if (a.cooldown() < Dungeon.hero.cooldown()){
+				a.spendToWhole();
 			}
 		}
 	}
@@ -1212,21 +1199,24 @@ if (bundle.contains( "respawner" )){
 			if (modifiableBlocking == null || modifiableBlocking.length != Dungeon.level.losBlocking.length){
 				modifiableBlocking = new boolean[Dungeon.level.losBlocking.length];
 			}
-
-			if ((c instanceof Hero && ((Hero) c).isSubclass(HeroSubClass.WARDEN))
-				|| c instanceof YogFist.SoiledFist) {
-				if (blocking == null) {
-					System.arraycopy(Dungeon.level.losBlocking, 0, modifiableBlocking, 0, modifiableBlocking.length);
-					blocking = modifiableBlocking;
-				}
-				for (int i = 0; i < blocking.length; i++){
-					if (blocking[i] && (Dungeon.level.map[i] == Terrain.HIGH_GRASS || Dungeon.level.map[i] == Terrain.FURROWED_GRASS)){
-						blocking[i] = false;
+//grass is see-through by some specific entities, but not during the fungi quest
+			if (!(Dungeon.level instanceof  MiningLevel) || Blacksmith.Quest.Type() != Blacksmith.Quest.FUNGI){
+				if ((c instanceof Hero && ((Hero) c).isSubclass(HeroSubClass.WARDEN))
+						|| c instanceof YogFist.SoiledFist || c instanceof GnollGeomancer) {
+					if (blocking == null) {
+						System.arraycopy(Dungeon.level.losBlocking, 0, modifiableBlocking, 0, modifiableBlocking.length);
+						blocking = modifiableBlocking;
+					}
+					for (int i = 0; i < blocking.length; i++) {
+						if (blocking[i] && (Dungeon.level.map[i] == Terrain.HIGH_GRASS || Dungeon.level.map[i] == Terrain.FURROWED_GRASS)) {
+							blocking[i] = false;
+						}
 					}
 				}
 			}
 
-			if (c.alignment != Char.Alignment.ALLY
+			//allies and specific enemies can see through shrouding fog
+			if ((c.alignment != Char.Alignment.ALLY && !(c instanceof GnollGeomancer))
 					&& Dungeon.level.blobs.containsKey(SmokeScreen.class)
 					&& Dungeon.level.blobs.get(SmokeScreen.class).volume > 0) {
 				if (blocking == null) {

@@ -35,6 +35,7 @@ import com.watabou.noosa.Image;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class News {
 
@@ -125,7 +126,7 @@ public class News {
 	}
 
 	public static String parseArticleDate(NewsArticle article){
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(article.date);
 		return cal.get(Calendar.YEAR)
 				+ "-" + String.format("%02d", cal.get(Calendar.MONTH)+1)
