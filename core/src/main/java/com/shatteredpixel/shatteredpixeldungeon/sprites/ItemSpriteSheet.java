@@ -702,7 +702,7 @@ public class ItemSpriteSheet {
 	public static final int BLAND_CHUNKS= FOOD+9;
 	public static final int CHEESE      = FOOD+10;
 	public static final int PHANTOM_MEAT= FOOD+11;
-	public static final int CHEESE_CHUNK= FOOD+14;
+	public static final int CHEESE_CHUNK= FOOD+12;
 	static{
 		assignItemRect(MEAT,        15, 11);
 		assignItemRect(STEAK,       15, 11);
