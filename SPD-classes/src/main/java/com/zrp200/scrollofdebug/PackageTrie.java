@@ -24,8 +24,6 @@
 
 package com.zrp200.scrollofdebug;
 
-import sun.net.www.protocol.file.FileURLConnection;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -169,7 +167,7 @@ public class PackageTrie {
 
                     if (connection instanceof JarURLConnection) {
                         checkJarFile((JarURLConnection) connection, pckgname, root);
-                    } else if (connection instanceof FileURLConnection) {
+                    } else if ("file".equals(url.getProtocol())) {
                         try {
                             checkDirectory(
                                     new File(URLDecoder.decode(url.getPath(),
