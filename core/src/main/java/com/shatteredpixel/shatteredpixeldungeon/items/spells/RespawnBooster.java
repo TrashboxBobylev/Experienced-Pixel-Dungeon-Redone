@@ -27,8 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
@@ -43,11 +45,16 @@ public class RespawnBooster extends Spell{
     protected void onCast(Hero hero) {
         if (Dungeon.respawn_timer > 1) {
             Dungeon.respawn_timer = (int) GameMath.gate(1, Dungeon.respawn_timer - 2, 50);
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "-2", FloatingText.RESPAWN_BOOST);
         }
         else {
             Dungeon.respawn_timer = Dungeon.respawn_timer * 0.7f;
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "-30%", FloatingText.RESPAWN_BOOST);
         }
-        if (Dungeon.respawn_timer % 3 == 0 || Dungeon.respawn_timer <= 0.7f) Dungeon.additionalMobs = Dungeon.additionalMobs + 1;
+        if (Dungeon.respawn_timer % 3 == 0 || Dungeon.respawn_timer <= 0.7f){
+            Dungeon.additionalMobs = Dungeon.additionalMobs + 1;
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "+1", FloatingText.MOB_BOOST);
+        }
 
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 10);

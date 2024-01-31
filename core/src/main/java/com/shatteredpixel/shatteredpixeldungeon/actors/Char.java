@@ -37,18 +37,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CrystalSpire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -63,11 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetributio
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
@@ -76,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocki
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Longsword;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.FiringSnapper;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.ShockingDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -838,10 +830,9 @@ public abstract class Char extends Actor {
 			}
 
 			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
+			if (src instanceof Burning || src instanceof FiringSnapper) icon = FloatingText.BURNING;
 			if (src instanceof Chill || src instanceof Frost)        icon = FloatingText.FROST;
 			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
 			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
 			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
 			if (src instanceof ToxicGas)                                icon = FloatingText.TOXIC;

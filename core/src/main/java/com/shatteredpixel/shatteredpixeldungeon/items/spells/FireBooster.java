@@ -27,9 +27,11 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.PathFinder;
 
@@ -41,6 +43,7 @@ public class FireBooster extends Spell {
     @Override
     protected void onCast(Hero hero) {
         Dungeon.fireDamage *= 1.1f;
+        hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "+1.1x", FloatingText.FIRE_BOOST);
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(FlameParticle.FACTORY, 10);
         }

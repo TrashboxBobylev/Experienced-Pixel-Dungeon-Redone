@@ -52,10 +52,10 @@ public class ElixirOfMight extends Elixir {
 		identify();
 		
 		Dungeon.luck++;
+		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.LUCK);
 		
 		hero.updateHT( true );
-		hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "msg_1" ));
-		GLog.p( Messages.get(this, "msg_2") );
+		GLog.p( Messages.get(this, "msg") );
 
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();

@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.plants.*;
@@ -69,10 +70,9 @@ public class RegrowingSlasher extends BlacksmithWeapon {
             int previousLife = ch.HP;
             ch.HP = Math.min(ch.HP + heal, ch.HT);
             if (attacker.fieldOfView[ch.pos]) {
-                ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 2);
                 ch.sprite.emitter().burst(LeafParticle.GENERAL, 4);
                 if (previousLife != ch.HP)
-                    ch.sprite.showStatus(CharSprite.POSITIVE, Integer.toString(heal));
+                    ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
                 else {
                     if (Barkskin.currentLevel(attacker) != heal)
                         attacker.sprite.showStatus(0x8e6629, Integer.toString(heal*5));

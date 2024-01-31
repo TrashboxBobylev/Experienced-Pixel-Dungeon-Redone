@@ -443,8 +443,9 @@ public enum Talent {
 			if (hero.cooldown() > 0) {
 				Buff.affect(hero, WarriorFoodImmunity.class, hero.cooldown());
 			}
-			hero.HP = Math.min(hero.HP + Dungeon.hero.HT/8, hero.HT);
-			hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
+			int healing = Dungeon.hero.HT / 8;
+			hero.HP = Math.min(hero.HP + healing, hero.HT);
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
 		}
 		if (hero.heroClass == HeroClass.MAGE){
 			//5/8 turns of recharging

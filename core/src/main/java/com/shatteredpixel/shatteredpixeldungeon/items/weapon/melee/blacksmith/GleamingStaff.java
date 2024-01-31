@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -87,7 +88,7 @@ public class GleamingStaff extends BlacksmithWeapon {
             defender.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.025f, 20);
             Dungeon.level.drop(lootbag, defender.pos).sprite.drop();
         } else {
-            defender.sprite.showStatus(0xF3F600, Integer.toString(COMBO_COUNT - counter));
+            defender.sprite.showStatusWithIcon(0xF3F600, Integer.toString(COMBO_COUNT - counter), FloatingText.GOLD);
         }
 
         return super.proc(attacker, defender, damage);

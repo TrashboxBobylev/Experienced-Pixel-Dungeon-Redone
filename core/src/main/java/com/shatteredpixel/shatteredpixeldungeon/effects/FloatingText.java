@@ -29,11 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.watabou.noosa.Camera;
-import com.watabou.noosa.Game;
-import com.watabou.noosa.Image;
-import com.watabou.noosa.RenderedText;
-import com.watabou.noosa.TextureFilm;
+import com.watabou.noosa.*;
 import com.watabou.utils.Callback;
 import com.watabou.utils.SparseArray;
 
@@ -75,10 +71,14 @@ public class FloatingText extends RenderedTextBlock {
 	public static int SHIELDING = 19;
 	public static int EXPERIENCE= 20;
 	public static int STRENGTH  = 21;
+	public static int LUCK      = 22;
 
 	//currency icons
 	public static int GOLD      = 23;
 	public static int ENERGY    = 24;
+	public static int FIRE_BOOST    = 25;
+	public static int RESPAWN_BOOST = 26;
+	public static int MOB_BOOST     = 27;
 
 	private Image icon;
 	private boolean iconLeft;
