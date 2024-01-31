@@ -94,7 +94,7 @@ public class ItemSpriteSheet {
 	
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
-	public static final int GEO_BOULDER     = UNCOLLECTIBLE+10;
+	public static final int GEO_BOULDER     = UNCOLLECTIBLE+11;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
@@ -213,14 +213,14 @@ public class ItemSpriteSheet {
 		assignItemRect(NEW_TENGU_BOMB,  9,  15);
 	}
 
-	private static final int FISHING_HOOKS = xy(1, 6);
-	public static final int BASIC_HOOK = FISHING_HOOKS+0;
-	public static final int GOLDEN_HOOK = FISHING_HOOKS+1;
-	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS+2;
-	public static final int AVARITIA_HOOK = FISHING_HOOKS+3;
-    public static final int CHAOS_HOOK = FISHING_HOOKS+4;
+	private static final int FISHING_HOOKS = xy(16, 6);
+	public static final int BASIC_HOOK = FISHING_HOOKS-4;
+	public static final int GOLDEN_HOOK = FISHING_HOOKS-3;
+	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-2;
+	public static final int AVARITIA_HOOK = FISHING_HOOKS-1;
+    public static final int CHAOS_HOOK = FISHING_HOOKS-0;
 	static {
-        for (int i = FISHING_HOOKS; i < FISHING_HOOKS+5; i++)
+        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-5; i--)
             assignItemRect(i, 14, 13);
     }
 
@@ -785,7 +785,7 @@ public class ItemSpriteSheet {
 		assignItemRect(CHEEST,      16, 14);
 	}
 
-	private static final int TREASURE_BAGS =                       xy(1, 30);
+	private static final int TREASURE_BAGS =                       xy(1, 26);
 	public static final int GOO_BAG = TREASURE_BAGS+0;
     public static final int TENGU_BAG = TREASURE_BAGS+1;
     public static final int DM300_BAG = TREASURE_BAGS+2;
