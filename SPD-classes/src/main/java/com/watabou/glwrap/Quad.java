@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,7 @@ package com.watabou.glwrap;
 
 import com.badlogic.gdx.Gdx;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
+import java.nio.*;
 
 public class Quad {
 

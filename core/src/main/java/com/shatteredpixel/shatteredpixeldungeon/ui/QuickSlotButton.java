@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
-import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
@@ -38,11 +34,11 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.watabou.input.GameAction;
 import com.watabou.noosa.Image;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
 public class QuickSlotButton extends Button {

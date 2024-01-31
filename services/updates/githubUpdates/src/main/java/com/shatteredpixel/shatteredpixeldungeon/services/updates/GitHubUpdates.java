@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,13 +29,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.DeviceCompat;
-import com.watabou.utils.GameSettings;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLProtocolException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GitHubUpdates extends UpdateService {
 
