@@ -213,7 +213,7 @@ public class DriedRose extends Artifact {
 	}
 	
 	public int ghostStrength(){
-		return 13 + level()/2;
+		return (int) (13 + level()/2);
 	}
 
 	@Override
@@ -252,7 +252,7 @@ public class DriedRose extends Artifact {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		if (weapon != null){
 			return -1;
 		}
@@ -319,7 +319,7 @@ public class DriedRose extends Artifact {
 			image = ItemSpriteSheet.ARTIFACT_ROSE2;
 
 		//For upgrade transferring via well of transmutation
-		droppedPetals = Math.max( level(), droppedPetals );
+		droppedPetals = (int) Math.max( level(), droppedPetals );
 		
 		if (ghost != null){
 			ghost.updateRose();
@@ -565,7 +565,7 @@ public class DriedRose extends Artifact {
 			//same dodge as the hero
 			defenseSkill = (Dungeon.hero.lvl+4);
 			if (rose == null) return;
-			HT = 20 + 8*rose.level();
+			HT = (int) (20 + 8*rose.level());
 		}
 
 		@Override
@@ -628,7 +628,7 @@ public class DriedRose extends Artifact {
 		public int attackProc(Char enemy, int damage) {
 			damage = super.attackProc(enemy, damage);
 			if (rose != null && rose.weapon != null) {
-				damage = rose.weapon.proc( this, enemy, damage );
+				damage = (int) rose.weapon.proc( this, enemy, damage );
 				if (!enemy.isAlive() && enemy == Dungeon.hero){
 					Dungeon.fail(this);
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
@@ -640,7 +640,7 @@ public class DriedRose extends Artifact {
 		@Override
 		public int defenseProc(Char enemy, int damage) {
 			if (rose != null && rose.armor != null) {
-				damage = rose.armor.proc( enemy, this, damage );
+				damage = (int) rose.armor.proc( enemy, this, damage );
 			}
 			return super.defenseProc(enemy, damage);
 		}
@@ -704,10 +704,10 @@ public class DriedRose extends Artifact {
 		public int drRoll() {
 			int dr = super.drRoll();
 			if (rose != null && rose.armor != null){
-				dr += Random.NormalIntRange( rose.armor.DRMin(), rose.armor.DRMax());
+				dr += Random.NormalLongRange( rose.armor.DRMin(), rose.armor.DRMax());
 			}
 			if (rose != null && rose.weapon != null){
-				dr += Random.NormalIntRange( 0, rose.weapon.defenseFactor( this ));
+				dr += Random.NormalLongRange( 0, rose.weapon.defenseFactor( this ));
 			}
 			return dr;
 		}

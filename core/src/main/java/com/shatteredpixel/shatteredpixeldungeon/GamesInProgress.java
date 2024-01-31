@@ -175,7 +175,7 @@ public class GamesInProgress {
 		public int level;
 		public int str;
 		public int strBonus;
-		public int exp;
+		public long exp;
 		public int hp;
 		public int ht;
 		public int shld;
@@ -183,15 +183,15 @@ public class GamesInProgress {
 		public HeroSubClass subClass;
 		public int armorTier;
 		
-		public int goldCollected;
+		public long goldCollected;
 		public int maxDepth;
 	}
 	
 	public static final Comparator<GamesInProgress.Info> scoreComparator = new Comparator<GamesInProgress.Info>() {
 		@Override
 		public int compare(GamesInProgress.Info lhs, GamesInProgress.Info rhs ) {
-			int lScore = (lhs.level * lhs.maxDepth * 100) + lhs.goldCollected;
-			int rScore = (rhs.level * rhs.maxDepth * 100) + rhs.goldCollected;
+			long lScore = (lhs.level * lhs.maxDepth * 100) + lhs.goldCollected;
+			long rScore = (rhs.level * rhs.maxDepth * 100) + rhs.goldCollected;
 			return (int)Math.signum( rScore - lScore );
 		}
 	};

@@ -99,7 +99,7 @@ public class Statue extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return weapon.damageRoll(this);
+		return (int) weapon.damageRoll(this);
 	}
 	
 	@Override
@@ -120,7 +120,7 @@ public class Statue extends Mob {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this));
+		return (int) (super.drRoll() + Random.NormalLongRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this)));
 	}
 	
 	@Override
@@ -147,7 +147,7 @@ public class Statue extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
-		damage = weapon.proc( this, enemy, damage );
+		damage = (int) weapon.proc( this, enemy, damage );
 		if (!enemy.isAlive() && enemy == Dungeon.hero){
 			Dungeon.fail(this);
 			GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );

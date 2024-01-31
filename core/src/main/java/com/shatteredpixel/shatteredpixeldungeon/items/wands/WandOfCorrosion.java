@@ -58,7 +58,7 @@ public class WandOfCorrosion extends Wand {
 
 	@Override
 	public void onZap(Ballistica bolt) {
-		CorrosiveGas gas = Blob.seed(bolt.collisionPos, 50 + 10 * buffedLvl(), CorrosiveGas.class);
+		CorrosiveGas gas = Blob.seed(bolt.collisionPos, (int) (50 + 10 * buffedLvl()), CorrosiveGas.class);
 		CellEmitter.get(bolt.collisionPos).burst(Speck.factory(Speck.CORROSION), 10 );
 		gas.setStrength((int) ((2 + buffedLvl())*(1+ Dungeon.hero.lvl/150f)), getClass());
 		GameScene.add(gas);
@@ -92,8 +92,8 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, buffedLvl() );
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, buffedLvl() );
 
 		// lvl 0 - 33%
 		// lvl 1 - 50%

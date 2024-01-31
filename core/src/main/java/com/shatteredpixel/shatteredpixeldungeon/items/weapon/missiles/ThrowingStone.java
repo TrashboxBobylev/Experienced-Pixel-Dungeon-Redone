@@ -42,7 +42,7 @@ public class ThrowingStone extends MissileWeapon {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return super.value()/2; //half normal value
 	}
 }

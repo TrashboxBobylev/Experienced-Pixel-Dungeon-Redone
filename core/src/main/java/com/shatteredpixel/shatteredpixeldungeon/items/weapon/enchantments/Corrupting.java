@@ -41,8 +41,8 @@ public class Corrupting extends Weapon.Enchantment {
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x440066 );
 	
 	@Override
-	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, weapon.buffedLvl() );
+	public long proc(Weapon weapon, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, weapon.buffedLvl() );
 		
 		// lvl 0 - 20%
 		// lvl 1 ~ 23%

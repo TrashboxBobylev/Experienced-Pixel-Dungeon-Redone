@@ -278,23 +278,23 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return  tier*2 +  //base
 				lvl*2;    //level scaling
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //base
 				lvl*(tier+1);   //level scaling
 	}
 
-	public int STRReq(int lvl){
+	public int STRReq(long lvl){
 		return STRReq(tier, lvl);
 	}
 private static boolean evaluatingTwinUpgrades = false;
 	@Override
-	public int buffedLvl() {
+	public long buffedLvl() {
 		if (!evaluatingTwinUpgrades && isEquipped(Dungeon.hero) && Dungeon.hero.subClass == HeroSubClass.CHAMPION){
 			KindOfWeapon other = null;
 			if (Dungeon.hero.belongings.weapon() != this) other = Dungeon.hero.belongings.weapon();
@@ -302,7 +302,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 			if (other instanceof MeleeWeapon) {
 				evaluatingTwinUpgrades = true;
-				int otherLevel = other.buffedLvl();
+				long otherLevel = other.buffedLvl();
 				evaluatingTwinUpgrades = false;
 
 				//weaker weapon needs to be 2/1/0 tiers lower, based on talent level
@@ -343,8 +343,8 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
 	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll( owner ));
+	public long damageRoll(Char owner) {
+		long damage = augment.damageFactor(super.damageRoll( owner ));
 
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
@@ -358,12 +358,12 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
 	@Override
-	public int min() {
+	public long min() {
 		return Math.round(super.min()*(1f + hardenBoost(buffedLvl())));
 	}
 
 	@Override
-	public int max() {
+	public long max() {
 		return Math.round(super.max()*(1f + hardenBoost(buffedLvl())));
 	}
 
@@ -456,7 +456,7 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		int price = 20 * tier;
 		if (hasGoodEnchant()) {
 			price *= 1.5;

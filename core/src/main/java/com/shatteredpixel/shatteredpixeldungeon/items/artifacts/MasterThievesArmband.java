@@ -130,7 +130,7 @@ public class MasterThievesArmband extends Artifact {
 
 							boolean surprised = ((Mob) ch).surprisedBy(curUser, false);
 							float lootMultiplier = 1f + 0.1f*level();
-							int debuffDuration = 3 + level()/2;
+							int debuffDuration = (int) (3 + level()/2);
 
 							Invisibility.dispel(curUser);
 
@@ -309,7 +309,7 @@ public class MasterThievesArmband extends Artifact {
 		}
 
 		public int chargesToUse(Item item){
-			int value = item.value();
+			long value = item.value();
 			float valUsing = 0;
 			int chargesUsed = 0;
 			while (valUsing < value && chargesUsed < charge){

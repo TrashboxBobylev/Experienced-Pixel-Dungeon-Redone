@@ -58,7 +58,7 @@ public class ExpGenerator extends Item {
         } else {
             com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator generator = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator();
             generator.pos = cell;
-            generator.set(level());
+//            generator.set(level());
 
             GameScene.add( generator );
             ScrollOfTeleportation.appear(generator, cell);
@@ -66,17 +66,17 @@ public class ExpGenerator extends Item {
     }
 
     @Override
-    public int level() {
+    public long level() {
         return super.level() + 1;
     }
 
     @Override
-    public int visiblyUpgraded() {
+    public long visiblyUpgraded() {
         return super.level();
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 120 * quantity * level();
     }
 

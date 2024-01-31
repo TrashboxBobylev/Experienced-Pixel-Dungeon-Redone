@@ -48,7 +48,7 @@ public class Gloves extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		if (Dungeon.hero.buff(AttackBuff.class) != null){
 			return  (int)(3f*(tier+1)) +    //6 base, down from 10
 					lvl*tier + Dungeon.hero.buff(AttackBuff.class).stack;
@@ -58,7 +58,7 @@ public class Gloves extends MeleeWeapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		if (damage == 0) Buff.affect(attacker, AttackBuff.class, 2f).stack++;
 		return super.proc(attacker, defender, damage);
 	}

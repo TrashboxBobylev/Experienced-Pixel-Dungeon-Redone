@@ -297,7 +297,7 @@ public class WndBlacksmith extends Window {
 						first = first.split(1);
 					}
 
-					int level = first.trueLevel();
+					long level = first.trueLevel();
 					first.level(level+second.trueLevel()+1); //prevents on-upgrade effects like enchant/glyph removal
 					if (first instanceof MissileWeapon && !Dungeon.hero.belongings.contains(first)) {
 						if (!first.collect()){
@@ -442,7 +442,7 @@ public class WndBlacksmith extends Window {
 				Blacksmith.Quest.upgrades++;
 
 				ScrollOfUpgrade upgrades = new ScrollOfUpgrade();
-				int trueLevel = item.trueLevel();
+				long trueLevel = item.trueLevel();
 				upgrades.quantity(trueLevel);
 				if (!upgrades.doPickUp(Dungeon.hero, Dungeon.hero.pos, 0f)) {
 					Dungeon.level.drop(upgrades, Dungeon.hero.pos).sprite.drop();

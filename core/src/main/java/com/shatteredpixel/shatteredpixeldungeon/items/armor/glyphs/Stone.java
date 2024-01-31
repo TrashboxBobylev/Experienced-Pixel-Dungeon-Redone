@@ -34,7 +34,7 @@ public class Stone extends Armor.Glyph {
 	private static ItemSprite.Glowing GREY = new ItemSprite.Glowing( 0x222222 );
 
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 		
 		testing = true;
 		float evasion = defender.defenseSkill(attacker);

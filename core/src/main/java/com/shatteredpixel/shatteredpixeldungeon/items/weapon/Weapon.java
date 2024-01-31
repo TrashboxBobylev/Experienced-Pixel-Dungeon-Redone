@@ -75,9 +75,8 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 			delayFactor = dly;
 		}
 
-		public int damageFactor(int dmg){
-			int damage = Math.round(dmg * damageFactor);
-			return damage;
+		public long damageFactor(long dmg){
+            return Math.round(dmg * damageFactor);
 		}
 
 		public float delayFactor(float dly){
@@ -96,12 +95,12 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	public boolean curseInfusionBonus = false;
 	public boolean masteryPotionBonus = false;
 
-	public static float hardenBoost(int upgrades){
+	public static float hardenBoost(long upgrades){
 		return 0.0015f * upgrades;
 	}
 
 	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		
 		if (enchantment != null && attacker.buff(MagicImmune.class) == null) {
 			damage = enchantment.proc( this, attacker, defender, damage );
@@ -246,9 +245,9 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 		return req;
 	}
 
-	public abstract int STRReq(int lvl);
+	public abstract int STRReq(long lvl);
 
-	protected static int STRReq(int tier, int lvl){
+	protected static int STRReq(int tier, long lvl){
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
@@ -256,8 +255,8 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	}
 
 	@Override
-	public int level() {
-		int level = super.level();
+	public long level() {
+		long level = super.level();
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
 	}
@@ -388,7 +387,7 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 		};
 		
 			
-		public abstract int proc( Weapon weapon, Char attacker, Char defender, int damage );
+		public abstract long proc( Weapon weapon, Char attacker, Char defender, long damage );
 
 		protected float procChanceMultiplier( Char attacker ){
 			return genericProcChanceMultiplier( attacker );

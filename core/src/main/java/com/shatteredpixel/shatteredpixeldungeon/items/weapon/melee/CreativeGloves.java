@@ -53,12 +53,12 @@ public class CreativeGloves extends MeleeWeapon {
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return 1;
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return 5;
 	}
 

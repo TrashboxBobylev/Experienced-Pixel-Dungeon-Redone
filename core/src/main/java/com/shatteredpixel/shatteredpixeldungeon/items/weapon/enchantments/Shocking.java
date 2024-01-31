@@ -44,8 +44,8 @@ public class Shocking extends Weapon.Enchantment {
 	private static ItemSprite.Glowing WHITE = new ItemSprite.Glowing( 0xFFFFFF, 0.5f );
 
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		int level = Math.max( 0, weapon.buffedLvl() );
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 25%
 		// lvl 1 - 40%

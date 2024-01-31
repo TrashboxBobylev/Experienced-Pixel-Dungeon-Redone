@@ -94,7 +94,7 @@ public class Recycle extends InventorySpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((50 + 40) * (quantity/12f));
 	}

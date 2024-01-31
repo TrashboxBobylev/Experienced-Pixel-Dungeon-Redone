@@ -51,12 +51,12 @@ public class PotionOfExperience extends Potion {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 50 * quantity : super.value();
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }

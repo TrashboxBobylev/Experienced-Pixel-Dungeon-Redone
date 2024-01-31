@@ -124,6 +124,20 @@ public class Random {
 		return result % max;
 	}
 
+	public static long Long( long min, long max ) {
+		return min + Long(max - min);
+	}
+
+	//returns a uniformly distributed int in the range [min, max]
+	public static long LongRange( long min, long max ) {
+		return min + Long(max - min + 1);
+	}
+
+	//returns a triangularly distributed int in the range [min, max]
+	public static long NormalLongRange( long min, long max ) {
+		return min + (int)((Float() + Float()) * (max - min + 1) / 2f);
+	}
+
 	//returns an index from chances, the probability of each index is the weight values in changes
 	public static int chances( float[] chances ) {
 		

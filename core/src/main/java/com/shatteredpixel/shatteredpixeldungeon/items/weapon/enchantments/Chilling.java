@@ -38,8 +38,8 @@ public class Chilling extends Weapon.Enchantment {
 	private static ItemSprite.Glowing TEAL = new ItemSprite.Glowing( 0x00FFFF );
 	
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		int level = Math.max( 0, weapon.buffedLvl() );
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 25%
 		// lvl 1 - 40%

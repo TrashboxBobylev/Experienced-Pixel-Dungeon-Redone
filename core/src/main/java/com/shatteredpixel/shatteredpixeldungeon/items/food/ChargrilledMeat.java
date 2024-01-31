@@ -35,11 +35,11 @@ public class ChargrilledMeat extends Food {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 8 * quantity;
 	}
 	
-	public static Food cook( int quantity ) {
+	public static Food cook( long quantity ) {
 		ChargrilledMeat result = new ChargrilledMeat();
 		result.quantity = quantity;
 		return result;

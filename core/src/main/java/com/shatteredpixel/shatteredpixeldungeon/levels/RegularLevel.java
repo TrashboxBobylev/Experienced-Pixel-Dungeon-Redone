@@ -377,7 +377,7 @@ public abstract class RegularLevel extends Level {
 			}
 
 			if ((toDrop instanceof Artifact && Random.Int(2) == 0) ||
-					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
+					(toDrop.isUpgradable() && Random.Long(4 - toDrop.level()) == 0)){
 
 				if (Dungeon.depth > 1 && Random.Int(10) == 0 && findMob(cell) == null){
 					mobs.add(Mimic.spawnAt(cell, GoldenMimic.class, toDrop));

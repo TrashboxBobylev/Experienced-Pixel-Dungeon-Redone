@@ -85,12 +85,12 @@ public class AlchemicalCatalyst extends Potion {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 40 * quantity;
 }
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return 8 * quantity;
 	}
 
@@ -115,7 +115,7 @@ public class AlchemicalCatalyst extends Potion {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (i instanceof Plant.Seed){
 					return 0;

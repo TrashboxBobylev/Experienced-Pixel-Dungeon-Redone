@@ -64,7 +64,7 @@ public class CheeseCheest extends Bag {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 650 * (Dungeon.cycle + 1);
 	}
 

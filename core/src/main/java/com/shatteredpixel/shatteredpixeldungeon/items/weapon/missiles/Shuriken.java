@@ -41,7 +41,7 @@ public class Shuriken extends MissileWeapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5 * tier +                      //8 base, down from 10
 				(tier == 1 ? 4*lvl : tier*lvl*2); //scaling unchanged
 	}

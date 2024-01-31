@@ -48,7 +48,7 @@ public class GambleBag extends TreasureBag {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 175 * quantity;
     }
 }

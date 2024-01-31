@@ -65,17 +65,17 @@ public class StarlightSmasher extends BlacksmithWeapon {
     public boolean starlight_power = false;
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return super.min(lvl)*10;
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return super.max(lvl)*8;
     }
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
         Buff.affect(attacker, Paralysis.class, Random.Int(2, 6));
         Buff.affect(defender, Paralysis.class, Random.Int(2, 4));

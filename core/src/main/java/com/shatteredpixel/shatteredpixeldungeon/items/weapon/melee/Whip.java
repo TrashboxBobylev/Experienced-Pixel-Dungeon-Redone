@@ -52,18 +52,18 @@ public class Whip extends MeleeWeapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		damage *= GameMath.gate(0.1f,1f - 0.1f*(Math.max(Dungeon.level.distance(attacker.pos, defender.pos), 0)), 1f);
 		return super.proc(attacker, defender, damage);
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return tier+lvl/2;
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  3*(tier) +    //16 base, down from 24
 				lvl*(tier-1)/2;     //+4 per level, down from +5
 	}

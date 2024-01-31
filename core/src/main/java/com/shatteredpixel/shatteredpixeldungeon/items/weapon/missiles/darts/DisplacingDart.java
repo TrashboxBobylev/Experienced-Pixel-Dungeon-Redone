@@ -35,7 +35,7 @@ public class DisplacingDart extends TippedDart {
 	}
 	
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		return super.proc(attacker, defender, damage);
 	}
 
@@ -45,12 +45,12 @@ public class DisplacingDart extends TippedDart {
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return super.max(lvl) * 4 / 3;
     }
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return super.min(lvl) * 4 / 3;
     }
 }

@@ -35,24 +35,24 @@ import com.watabou.utils.Random;
 //wands with AOE effects count here (e.g. fireblast), but wands with indrect damage do not (e.g. venom, transfusion)
 public abstract class DamageWand extends Wand{
 
-	public int min(){
-		return (int) (min(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
+	public long min(){
+		return Math.round(min(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
 	}
 
-	public abstract int min(int lvl);
+	public abstract long min(long lvl);
 
-	public int max(){
-		return (int) (max(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
+	public long max(){
+		return Math.round(max(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
 	}
 
-	public abstract int max(int lvl);
+	public abstract long max(long lvl);
 
-	public int damageRoll(){
+	public long damageRoll(){
 		return damageRoll(buffedLvl());
 	}
 
-	public int damageRoll(int lvl){
-		int dmg = Random.NormalIntRange(min(lvl), max(lvl));
+	public long damageRoll(long lvl){
+		long dmg = Random.NormalLongRange(min(lvl), max(lvl));
 		WandEmpower emp = Dungeon.hero.buff(WandEmpower.class);
 		if (emp != null){
 			dmg += emp.dmgBoost;

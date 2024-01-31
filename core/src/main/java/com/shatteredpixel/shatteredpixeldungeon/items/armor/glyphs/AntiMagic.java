@@ -101,7 +101,7 @@ public class AntiMagic extends Armor.Glyph {
 	}
 	
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 		//no proc effect, see:
 		// Hero.damage
 		// GhostHero.damage
@@ -111,7 +111,7 @@ public class AntiMagic extends Armor.Glyph {
 		return damage;
 	}
 	
-	public static int drRoll( Char ch, int level ){
+	public static int drRoll( Char ch, long level ){
 		return Dungeon.NormalIntRange(
 				Math.round(level * genericProcChanceMultiplier(ch)),
 				Math.round((3 + (level*1.5f)) * genericProcChanceMultiplier(ch)));

@@ -462,7 +462,7 @@ public class Wandmaker extends NPC {
 
 				//or hero is in the ritual room and all 4 candles are with them
 				if (((RegularLevel) Dungeon.level).room(Dungeon.hero.pos) instanceof RitualSiteRoom) {
-					int candles = 0;
+					long candles = 0;
 					if (Dungeon.hero.belongings.getItem(CeremonialCandle.class) != null){
 						candles += Dungeon.hero.belongings.getItem(CeremonialCandle.class).quantity();
 					}

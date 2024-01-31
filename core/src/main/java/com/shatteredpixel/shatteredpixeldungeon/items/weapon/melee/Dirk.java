@@ -44,20 +44,20 @@ public class Dirk extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return (int) (6*(tier) +    //12 base, down from 18
 						lvl*(tier*0.66f));   //scaling down to 1.32
 	}
 	
 	@Override
-	public int damageRoll(Char owner) {
+	public long damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
 			Char enemy = hero.enemy();
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 67% toward max to max on surprise, instead of min to max.
-				int diff = max() - min();
-				int damage = augment.damageFactor(Random.NormalIntRange(
+				long diff = max() - min();
+				long damage = augment.damageFactor(Random.NormalLongRange(
 						min() + Math.round(diff*0.67f),
 						max()));
 				int exStr = hero.STR() - STRReq();

@@ -59,11 +59,11 @@ public class WandOfEarthblast extends DamageWand {
 		collisionProperties = Ballistica.STOP_TARGET;
 	}
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return (int) ((4+lvl*2) * ((chargesPerCast())));
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return (int) ((25+5*lvl) * ((chargesPerCast())));
 	}
 
@@ -100,7 +100,7 @@ public class WandOfEarthblast extends DamageWand {
 			}
 		}
 		for (Char ch : affectedChars){
-			int dmg = damageRoll();
+			long dmg = damageRoll();
 			switch (Dungeon.level.distance(ch.pos, Dungeon.hero.pos)){
 				case 3: dmg *= 0.66f; break;
 				case 5: dmg *= 0.33f; break;
@@ -119,7 +119,7 @@ public class WandOfEarthblast extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like blazing enchantment
 		new Blazing().proc( staff, attacker, defender, damage);
 	}
@@ -205,7 +205,7 @@ public class WandOfEarthblast extends DamageWand {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 1;
 		}
 

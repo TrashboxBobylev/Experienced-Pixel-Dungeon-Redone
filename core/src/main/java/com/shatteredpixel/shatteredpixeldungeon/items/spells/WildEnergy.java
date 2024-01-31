@@ -67,7 +67,7 @@ public class WildEnergy extends TargetedSpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((50 + 50) * (quantity/5f));
 	}

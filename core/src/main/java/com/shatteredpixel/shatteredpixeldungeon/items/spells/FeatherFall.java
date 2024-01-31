@@ -84,7 +84,7 @@ public class FeatherFall extends Spell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((30 + 40) * (quantity/2f));
 	}

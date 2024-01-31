@@ -184,7 +184,7 @@ public class Dungeon {
 	//keeps track of what levels the game should try to load instead of creating fresh
 	public static ArrayList<Integer> generatedLevels = new ArrayList<>();
 
-	public static int gold;
+	public static long gold;
 	public static int cycle;
 
 	public static ArrayList<Item> oofedItems = new ArrayList<>();
@@ -194,7 +194,7 @@ public class Dungeon {
 
 	public static float fireDamage;
 	public static int luck;
-	public static int energy;
+	public static long energy;
 
 	public static HashSet<Integer> chapters;
 
@@ -258,14 +258,14 @@ public class Dungeon {
 		generatedLevels.clear();
 		oofedItems.clear();
 
-		gold = 0;
+		gold = 0L;
 		cycle = 0;
 		Bbat.level = 1;
 		respawn_timer = 50;
 		additionalMobs = 0;
 		fireDamage = 1;
 		luck = 1;
-		energy = 0;
+		energy = 0L;
 
 		droppedItems = new SparseArray<>();
 
@@ -865,8 +865,8 @@ public class Dungeon {
 		depth = bundle.getInt( DEPTH );
 		branch = bundle.getInt( BRANCH );
 
-		gold = bundle.getInt( GOLD );
-		energy = bundle.getInt( ENERGY );
+		gold = bundle.getLong( GOLD );
+		energy = bundle.getLong( ENERGY );
 
 		cycle = bundle.getInt( CYCLE);
 		respawn_timer = bundle.getFloat(RESPAWN_TIMER);
@@ -1201,6 +1201,33 @@ public class Dungeon {
 		int highest = Integer.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
 			int roll = Random.NormalIntRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static long Long(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.Long(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static long LongRange(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.LongRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static long NormalLongRange(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.NormalLongRange(min, max);
 			if (roll > highest) highest = roll;
 		}
 		return highest;

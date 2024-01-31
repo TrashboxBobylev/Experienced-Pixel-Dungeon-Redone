@@ -54,13 +54,13 @@ public class Mace extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //20 base, down from 24
 				lvl*(tier+2);   //+5
 	}
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
 	    if (attacker == Dungeon.hero && defender != null) {
 			WandOfDisintegration wand = ((WandOfDisintegration)(new WandOfDisintegration().upgrade(level())));
 			curUser = Dungeon.hero;

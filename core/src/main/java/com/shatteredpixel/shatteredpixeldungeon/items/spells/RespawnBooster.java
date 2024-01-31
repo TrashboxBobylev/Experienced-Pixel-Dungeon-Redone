@@ -63,7 +63,7 @@ public class RespawnBooster extends Spell{
     }
 
     @Override
-    public int value() {
+    public long value() {
         //prices of ingredients, divided by output quantity
         return Math.round(quantity * ((50 + 43.333333f + 40)));
     }

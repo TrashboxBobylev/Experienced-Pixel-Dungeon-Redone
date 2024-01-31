@@ -43,7 +43,7 @@ public class ElixirOfArcaneArmor extends Elixir {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return quantity * (60 + 30);
 	}

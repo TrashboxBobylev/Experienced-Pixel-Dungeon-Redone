@@ -38,13 +38,13 @@ public class Katana extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  4*(tier+1) +    //20 base, down from 25
 				lvl*(tier+1);   //scaling unchanged
 	}
 
 	@Override
-	public int defenseFactor( Char owner ) {
+	public long defenseFactor( Char owner ) {
 		return 3;	//3 extra defence
 	}
 

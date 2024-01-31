@@ -106,13 +106,13 @@ public class MirrorImage extends NPC {
 	
 	@Override
 	public int damageRoll() {
-		int damage;
+		long damage;
 		if (hero.belongings.weapon() != null){
 			damage = hero.belongings.weapon().damageRoll(this);
 		} else {
 			damage = hero.damageRoll(); //handles ring of force
 		}
-		return (damage+1)/2; //half hero damage, rounded up
+		return (int) ((damage+1)/2); //half hero damage, rounded up
 	}
 	
 	@Override
@@ -154,7 +154,7 @@ public class MirrorImage extends NPC {
 	public int drRoll() {
 		int dr = super.drRoll();
 		if (hero != null && hero.belongings.weapon() != null){
-			return dr + Random.NormalIntRange(0, hero.belongings.weapon().defenseFactor(this)/2);
+			return (int) (dr + Random.NormalLongRange(0, hero.belongings.weapon().defenseFactor(this)/2));
 		} else {
 			return dr;
 		}
@@ -173,7 +173,7 @@ public class MirrorImage extends NPC {
 			((Mob)enemy).aggro( this );
 		}
 		if (hero.belongings.weapon() != null){
-			damage = hero.belongings.weapon().proc( this, enemy, damage );
+			damage = (int) hero.belongings.weapon().proc( this, enemy, damage );
 			if (!enemy.isAlive() && enemy == Dungeon.hero){
 				Dungeon.fail(this);
 				GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );

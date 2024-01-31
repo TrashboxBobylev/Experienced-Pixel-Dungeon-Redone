@@ -257,7 +257,7 @@ public class Bomb extends Item {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 20 * quantity;
 	}
 	
@@ -415,7 +415,7 @@ public class Bomb extends Item {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (validIngredients.containsKey(i.getClass())){
 					return (bombCosts.get(validIngredients.get(i.getClass())));

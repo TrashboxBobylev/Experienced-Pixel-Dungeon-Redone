@@ -200,8 +200,8 @@ public class WndHero extends WndTabbed {
 			pos += GAP + txt.height();
 		}
 		
-		private void statSlot( String label, int value ) {
-			statSlot( label, Integer.toString( value ) );
+		private void statSlot(String label, long value ) {
+			statSlot( label, Long.toString( value ) );
 		}
 		
 		public float height() {

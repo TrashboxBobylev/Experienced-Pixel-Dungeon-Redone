@@ -216,19 +216,19 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int min(){
+	public long min(){
 		return min(buffedLvl());
 	}
 
-	public int max(){
+	public long max(){
 		return max(buffedLvl());
 	}
 
-	abstract public int min(int lvl);
-	abstract public int max(int lvl);
+	abstract public long min(long lvl);
+	abstract public long max(long lvl);
 
-	public int damageRoll( Char owner ) {
-		return Dungeon.NormalIntRange( min(), max() );
+	public long damageRoll( Char owner ) {
+		return Dungeon.NormalLongRange( min(), max() );
 	}
 	
 	public float accuracyFactor( Char owner, Char target ) {
@@ -259,11 +259,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int defenseFactor( Char owner ) {
+	public long defenseFactor( Char owner ) {
 		return 0;
 	}
 	
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		return damage;
 	}
 

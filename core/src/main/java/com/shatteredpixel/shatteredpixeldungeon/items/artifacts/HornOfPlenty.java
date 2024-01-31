@@ -100,7 +100,7 @@ public class HornOfPlenty extends Artifact {
 				}
 
 				Hunger hunger = Buff.affect(Dungeon.hero, Hunger.class);
-				int chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
+				long chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
 				if (chargesToUse > charge) chargesToUse = charge;
 
 				//always use 1 charge if snacking
@@ -195,7 +195,7 @@ public class HornOfPlenty extends Artifact {
 	}
 
 	@Override
-	public void level(int value) {
+	public void level(long value) {
 		super.level(value);
 		chargeCap = 5 + level()/2;
 	}
@@ -219,7 +219,7 @@ public class HornOfPlenty extends Artifact {
 		}
 		if (storedFoodEnergy >= Hunger.HUNGRY){
 			int upgrades = storedFoodEnergy / (int)Hunger.HUNGRY;
-			upgrades = Math.min(upgrades, 10 - level());
+			upgrades = (int) Math.min(upgrades, 10 - level());
 			upgrade(upgrades);
 			storedFoodEnergy -= upgrades * Hunger.HUNGRY;
 			if (level() == 10){

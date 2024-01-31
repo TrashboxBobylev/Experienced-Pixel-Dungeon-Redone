@@ -51,7 +51,7 @@ public class FireBooster extends Spell {
     }
 
     @Override
-    public int value() {
+    public long value() {
         //prices of ingredients, divided by output quantity
         return Math.round(quantity * ((30 + 50 + 40)));
     }

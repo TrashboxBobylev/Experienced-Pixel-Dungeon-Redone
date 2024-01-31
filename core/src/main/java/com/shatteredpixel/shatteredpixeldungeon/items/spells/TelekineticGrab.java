@@ -115,7 +115,7 @@ public class TelekineticGrab extends TargetedSpell {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((10 + 40) * (quantity/6f));
 	}

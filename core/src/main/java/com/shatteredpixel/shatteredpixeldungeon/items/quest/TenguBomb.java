@@ -379,7 +379,7 @@ public class TenguBomb extends Bomb {
     }
 
     @Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return quantity * 85;
 	}

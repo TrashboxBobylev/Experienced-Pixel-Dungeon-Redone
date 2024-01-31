@@ -147,7 +147,7 @@ public class Pasty extends Food {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 20 * quantity;
 	}
 
@@ -159,7 +159,7 @@ public class Pasty extends Food {
 		}
 
 		@Override
-		public int value() {
+		public long value() {
 			return 10 * quantity;
 		}
 	}

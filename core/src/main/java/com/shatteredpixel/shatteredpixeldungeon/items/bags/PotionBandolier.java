@@ -49,7 +49,7 @@ public class PotionBandolier extends Bag {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 40;
 	}
 

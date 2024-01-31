@@ -47,7 +47,7 @@ public class MeatPie extends Food {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 40 * quantity;
 	}
 	
@@ -78,7 +78,7 @@ public class MeatPie extends Food {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 6;
 		}
 		

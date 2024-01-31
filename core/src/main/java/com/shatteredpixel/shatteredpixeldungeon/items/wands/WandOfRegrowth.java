@@ -209,7 +209,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
 		boolean grass = false;
 		int terr = Dungeon.level.map[attacker.pos];
@@ -222,7 +222,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		if (grass) {
-			int level = Math.max(0, staff.buffedLvl());
+			long level = Math.max(0, staff.buffedLvl());
 
 			// lvl 0 - 16%
 			// lvl 1 - 21%
@@ -403,11 +403,11 @@ public class WandOfRegrowth extends Wand {
 			viewDistance = 1;
 		}
 
-		private int wandLvl = 0;
+		private long wandLvl = 0;
 
-		private void setLevel( int lvl ){
+		private void setLevel( long lvl ){
 			wandLvl = lvl;
-			HP = HT = 25 + 3*lvl;
+			HP = HT = (int) (25 + 3*lvl);
 		}
 
 		public boolean inRange(int pos){

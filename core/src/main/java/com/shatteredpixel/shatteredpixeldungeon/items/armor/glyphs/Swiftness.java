@@ -33,7 +33,7 @@ public class Swiftness extends Armor.Glyph {
 	private static ItemSprite.Glowing YELLOW = new ItemSprite.Glowing( 0xFFFF00 );
 
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 		//no proc effect, see armor.speedfactor for effect.
 		return damage;
 	}

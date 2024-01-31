@@ -101,7 +101,7 @@ public class PotionOfPurity extends Potion {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 40 * quantity : super.value();
 	}
 }

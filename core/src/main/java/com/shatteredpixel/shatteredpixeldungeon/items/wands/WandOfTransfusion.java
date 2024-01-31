@@ -85,7 +85,7 @@ public class WandOfTransfusion extends Wand {
 				// 5% of max hp
 				int selfDmg = Math.round(curUser.HT*0.05f);
 				
-				int healing = selfDmg + 3*buffedLvl();
+				int healing = (int) (selfDmg + 3*buffedLvl());
 				int shielding = (ch.HP + healing) - ch.HT;
 				if (shielding > 0){
 					healing -= shielding;
@@ -115,8 +115,8 @@ public class WandOfTransfusion extends Wand {
 			} else if (ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) {
 
 				//grant a self-shield, and...
-				Buff.affect(curUser, Barrier.class).setShield((5 + buffedLvl()));
-curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(5+buffedLvl()), FloatingText.SHIELDING);
+				Buff.affect(curUser, Barrier.class).setShield((int) (5 + buffedLvl()));
+curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl()), FloatingText.SHIELDING);
 
 				//charms living enemies
 				if (!ch.properties().contains(Char.Property.UNDEAD)) {
@@ -127,7 +127,7 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(5+buffed
 				
 				//harms the undead
 				} else {
-					ch.damage((int) (Random.NormalIntRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
+					ch.damage((int) (Random.NormalLongRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
 					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.min(Math.sqrt(10 + buffedLvl()), 1000));
 					Sample.INSTANCE.play(Assets.Sounds.BURNING);
 				}
@@ -151,7 +151,7 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(5+buffed
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()){
 			//grants a free use of the staff and shields self
 			freeCharge = true;

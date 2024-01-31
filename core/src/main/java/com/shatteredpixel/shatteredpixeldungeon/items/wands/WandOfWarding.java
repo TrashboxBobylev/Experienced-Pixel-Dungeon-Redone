@@ -159,8 +159,8 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, staff.buffedLvl() );
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, staff.buffedLvl() );
 
 		// lvl 0 - 20%
 		// lvl 1 - 33%
@@ -200,7 +200,7 @@ public class WandOfWarding extends Wand {
 	public static class Ward extends NPC {
 
 		public int tier = 1;
-		private int wandLevel = 1;
+		private long wandLevel = 1;
 
 		public int totalZaps = 0;
 
@@ -221,7 +221,7 @@ public class WandOfWarding extends Wand {
 			return Messages.get(this, "name_" + tier );
 		}
 
-		public void upgrade(int wandLevel ){
+		public void upgrade(long wandLevel ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -258,11 +258,11 @@ public class WandOfWarding extends Wand {
 
 		}
 
-		public void wandHeal( int wandLevel ){
+		public void wandHeal( long wandLevel ){
 			wandHeal( wandLevel, 1f );
 		}
 
-		public void wandHeal( int wandLevel, float healFactor ){
+		public void wandHeal( long wandLevel, float healFactor ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -326,7 +326,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = (int) (Random.NormalIntRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
+			int dmg = (int) (Random.NormalLongRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){

@@ -58,7 +58,7 @@ public class ShockingBrew extends Brew {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return quantity * (40 + 40);
 	}

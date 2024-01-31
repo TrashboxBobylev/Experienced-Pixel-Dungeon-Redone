@@ -60,7 +60,7 @@ public class PotionOfLiquidFlame extends Potion {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 30 * quantity : super.value();
 	}
 }

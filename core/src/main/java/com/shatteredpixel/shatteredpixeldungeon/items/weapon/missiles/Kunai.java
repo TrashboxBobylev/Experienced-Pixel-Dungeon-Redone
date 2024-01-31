@@ -57,21 +57,21 @@ public class Kunai extends MissileWeapon {
 	}
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
 	    if (defender instanceof Mob && ((Mob) defender).surprisedBy(attacker)){
-            Buff.affect(attacker, WeaponCharge.class, 15f).stack = level()*level() + 2;
+            Buff.affect(attacker, WeaponCharge.class, 15f).stack = (int) (level()*level() + 2);
         }
         return super.proc(attacker, defender, damage);
     }
 
     @Override
-	public int damageRoll(Char owner) {
+	public long damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 60% toward max to max on surprise, instead of min to max.
-				int diff = max() - min();
-				int damage = augment.damageFactor(Dungeon.NormalIntRange(
+				long diff = max() - min();
+				long damage = augment.damageFactor(Dungeon.NormalLongRange(
 						min() + Math.round(diff*0.6f),
 						max()));
 				int exStr = hero.STR() - STRReq();

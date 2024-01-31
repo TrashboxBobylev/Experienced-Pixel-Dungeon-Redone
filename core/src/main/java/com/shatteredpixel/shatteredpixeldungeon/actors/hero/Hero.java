@@ -156,8 +156,8 @@ public class Hero extends Char {
 	public float awareness;
 	
 	public int lvl = 1;
-	public int exp = 0;
-	public int totalExp = 0;
+	public long exp = 0;
+	public long totalExp = 0;
 
 	public boolean grinding = false;
 
@@ -286,7 +286,7 @@ public class Hero extends Char {
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.level = bundle.getInt( LEVEL );
 		info.str = bundle.getInt( STRENGTH );
-		info.exp = bundle.getInt( EXPERIENCE );
+		info.exp = bundle.getLong( EXPERIENCE );
 		info.hp = bundle.getInt( Char.TAG_HP );
 		info.ht = bundle.getInt( Char.TAG_HT );
 		info.shld = bundle.getInt( Char.TAG_SHLD );
@@ -518,7 +518,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		int dr = super.drRoll();
 
 		if (belongings.armor() != null) {
-			int armDr = Dungeon.NormalIntRange( belongings.armor().DRMin(), belongings.armor().DRMax());
+			long armDr = Dungeon.NormalLongRange( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
@@ -526,7 +526,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			int wepDr = Dungeon.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
+			long wepDr = Dungeon.NormalLongRange( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}
@@ -545,7 +545,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	@Override
 	public int damageRoll() {
 		KindOfWeapon wep = belongings.attackingWeapon();
-		int dmg;
+		long dmg;
 
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
@@ -574,7 +574,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (dmg < 0) dmg = 0;
-		return dmg;
+		return (int) dmg;
 	}
 	
 	@Override
@@ -1340,7 +1340,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			Buff.affect(this, ElementalStrike.DirectedPowerTracker.class, 1f).enchBoost = 0.5f;
 		}
 
-		if (wep != null) damage = wep.proc( this, enemy, damage );
+		if (wep != null) damage = (int) wep.proc( this, enemy, damage );
 		damage = Talent.onAttackProc( this, enemy, damage );
 
 		damage = Perks.onAttackProc( this, enemy, damage );
@@ -1356,7 +1356,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					@Override
 					protected boolean act() {
 						if (enemy.isAlive()) {
-							int bonusTurns = hasTalent(Talent.SHARED_UPGRADES) ? wep.buffedLvl() : 0;
+							int bonusTurns = hasTalent(Talent.SHARED_UPGRADES) ? (int) wep.buffedLvl() : 0;
 							Buff.prolong(Hero.this, SnipersMark.class, SnipersMark.DURATION + bonusTurns).set(enemy.id(), bonusTurns);
 						}
 						Actor.remove(this);
@@ -1378,7 +1378,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		
 		if (belongings.armor() != null) {
-			damage = belongings.armor().proc( enemy, this, damage );
+			damage = (int) belongings.armor().proc( enemy, this, damage );
 		}
 
 		WandOfLivingEarth.RockArmor rockArmor = buff(WandOfLivingEarth.RockArmor.class);
@@ -1797,7 +1797,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		return true;
 	}
 	
-	public void earnExp( int exp, Class source ) {
+	public void earnExp( long exp, Class source ) {
 
 		this.exp += exp;
 		this.totalExp += exp;
@@ -1899,13 +1899,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		Dungeon.hero.earnExp(value, null);
 	}
 
-	public int maxExp() {
+	public long maxExp() {
 		return maxExp( lvl );
 	}
 	
-	public static int maxExp( int lvl ){
+	public static long maxExp( int lvl ){
 		HeroClass heroClass = Dungeon.hero == null ? GamesInProgress.selectedClass: Dungeon.hero.heroClass;
-		return 5 + lvl * 5;
+		return 5 + lvl * 5L;
 	}
 	
 	public boolean isStarving() {

@@ -74,7 +74,7 @@ public class WandOfUnstable extends Wand {
     }
 
     @Override
-    public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+    public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
         wand = Reflection.newInstance(Random.element(wands));
         if (wand != null) {
             wand.level(level());

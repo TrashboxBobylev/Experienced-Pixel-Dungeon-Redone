@@ -43,7 +43,7 @@ public class BattleAxe extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //25 base, down from 30
 				lvl*(tier+2);   //+6
 	}

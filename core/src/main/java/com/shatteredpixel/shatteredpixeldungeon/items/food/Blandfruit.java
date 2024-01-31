@@ -145,7 +145,7 @@ public class Blandfruit extends Food {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 20 * quantity;
 	}
 
@@ -261,7 +261,7 @@ public class Blandfruit extends Food {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 2;
 		}
 		

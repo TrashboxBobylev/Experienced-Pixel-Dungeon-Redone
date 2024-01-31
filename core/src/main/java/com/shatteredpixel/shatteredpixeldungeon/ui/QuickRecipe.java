@@ -79,7 +79,7 @@ public class QuickRecipe extends Component {
 	public QuickRecipe(Recipe r, ArrayList<Item> inputs, final Item output) {
 		
 		ingredients = inputs;
-		int cost = r.cost(inputs);
+		long cost = r.cost(inputs);
 		boolean hasInputs = true;
 		this.inputs = new ArrayList<>();
 		for (final Item in : inputs) {
@@ -97,7 +97,7 @@ public class QuickRecipe extends Component {
 			};
 			
 			ArrayList<Item> similar = Dungeon.hero.belongings.getAllSimilar(in);
-			int quantity = 0;
+			long quantity = 0;
 			for (Item sim : similar) {
 				//if we are looking for a specific item, it must be IDed
 				if (sim.getClass() != in.getClass() || sim.isIdentified()) quantity += sim.quantity();
@@ -188,11 +188,11 @@ public class QuickRecipe extends Component {
 			super( icon );
 		}
 		
-		public arrow( Image icon, int count ){
+		public arrow(Image icon, long count ){
 			super( icon );
 			hotArea.blockLevel = PointerArea.NEVER_BLOCK;
 
-			text = new BitmapText( Integer.toString(count), PixelScene.pixelFont);
+			text = new BitmapText( Long.toString(count), PixelScene.pixelFont);
 			text.measure();
 			add(text);
 		}

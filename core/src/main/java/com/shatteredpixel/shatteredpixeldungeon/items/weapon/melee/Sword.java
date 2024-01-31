@@ -51,7 +51,7 @@ public class Sword extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  6*(tier+1) +    //24
 				lvl*(tier+2);   //+5
 	}

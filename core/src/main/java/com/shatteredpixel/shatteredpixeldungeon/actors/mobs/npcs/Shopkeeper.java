@@ -138,8 +138,8 @@ if (sprite != null) {
 	}
 
 	//shopkeepers are greedy!
-	public static int sellPrice(Item item){
-		int i = item.value() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
+	public static long sellPrice(Item item){
+		long i = item.value() * 5 * (Dungeon.escalatingDepth() / 5 + 1);
 		if (item.wereOofed) i *= 5;
 		return i;
 	}

@@ -50,7 +50,7 @@ public class FrozenCarpaccio extends Food {
 		effect(hero);
 	}
 	
-	public int value() {
+	public long value() {
 		return 10 * quantity;
 	}
 

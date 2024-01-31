@@ -76,7 +76,7 @@ public class HighGrass {
 				Level.set(pos, Terrain.GRASS);
 			}
 			
-			int naturalismLevel = 0;
+			long naturalismLevel = 0;
 			
 			if (ch != null) {
 				SandalsOfNature.Naturalism naturalism = ch.buff( SandalsOfNature.Naturalism.class );
@@ -125,12 +125,12 @@ public class HighGrass {
 			
 			if (naturalismLevel >= 0) {
 				// Seed, scales from 1/25 to 1/9
-				if (Random.Int(25 - (naturalismLevel * 4)) == 0) {
+				if (Random.Long(25 - (naturalismLevel * 4)) == 0) {
 					level.drop(Generator.random(Generator.Category.SEED), pos).sprite.drop();
 				}
 				
 				// Dew, scales from 1/6 to 1/4
-				if (Random.Int(6 - naturalismLevel/2) == 0) {
+				if (Random.Long(6 - naturalismLevel/2) == 0) {
 					level.drop(new Dewdrop(), pos).sprite.drop();
 				}
 			}

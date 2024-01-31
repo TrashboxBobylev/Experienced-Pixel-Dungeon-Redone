@@ -67,17 +67,17 @@ public class FiringSnapper extends BlacksmithWeapon {
     }
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return super.min(lvl)/2;
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return super.max(lvl)/2;
     }
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         Ballistica path = new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_TARGET | Ballistica.STOP_SOLID);
         for (int cell: path.subPath(1, path.dist)){
             CellEmitter.center(cell).burst(BlastParticle.FACTORY, 10);
@@ -110,7 +110,7 @@ public class FiringSnapper extends BlacksmithWeapon {
                         continue;
                     }
 
-                    int dmg = super.proc(attacker, ch, Math.round(damage*1.0f));
+                    int dmg = (int) super.proc(attacker, ch, Math.round(damage*1.0f));
 
                     //those not at the center of the blast take less damage
                     if (ch.pos != cell){

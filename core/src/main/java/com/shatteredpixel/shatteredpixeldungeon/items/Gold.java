@@ -49,7 +49,7 @@ public class Gold extends Item {
 		this( 1 );
 	}
 	
-	public Gold( int value ) {
+	public Gold(long value ) {
 		this.quantity = value;
 	}
 	
@@ -66,7 +66,7 @@ public class Gold extends Item {
 		Badges.validateGoldCollected();
 
 		GameScene.pickUp( this, pos );
-		hero.sprite.showStatusWithIcon( CharSprite.NEUTRAL, Integer.toString(quantity), FloatingText.GOLD );
+		hero.sprite.showStatusWithIcon( CharSprite.NEUTRAL, Long.toString(quantity), FloatingText.GOLD );
 		hero.spendAndNext( TIME_TO_PICK_UP );
 		
 		Sample.INSTANCE.play( Assets.Sounds.GOLD, 1, 1, Random.Float( 0.9f, 1.1f ) );

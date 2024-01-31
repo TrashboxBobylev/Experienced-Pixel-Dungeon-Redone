@@ -242,7 +242,7 @@ public class Ring extends KindofMisc {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		int price = 75;
 		if (cursed && cursedKnown) {
 			price /= 2;
@@ -291,8 +291,8 @@ public class Ring extends KindofMisc {
 	}
 
 	@Override
-	public int buffedLvl() {
-		int lvl = super.buffedLvl();
+	public long buffedLvl() {
+		long lvl = super.buffedLvl();
 		if (Dungeon.hero.buff(EnhancedRings.class) != null){
 			lvl++;
 		}
@@ -318,7 +318,7 @@ public class Ring extends KindofMisc {
 	}
 
 	//just used for ring descriptions
-	public int soloBonus(){
+	public long soloBonus(){
 		if (cursed){
 			return Math.min( 0, Ring.this.level()-2 );
 		} else {
@@ -327,7 +327,7 @@ public class Ring extends KindofMisc {
 	}
 
 	//just used for ring descriptions
-	public int soloBuffedBonus(){
+	public long soloBuffedBonus(){
 		if (cursed){
 			return Math.min( 0, Ring.this.buffedLvl()-2 );
 		} else {
@@ -335,7 +335,7 @@ public class Ring extends KindofMisc {
 		}
 	}
 
-    public int soloVisualBonus(){
+    public long soloVisualBonus(){
         if (cursed){
             return Math.min( 0, Ring.this.buffedLvl()-2 );
         } else {
@@ -344,7 +344,7 @@ public class Ring extends KindofMisc {
     }
 
 	//just used for ring descriptions
-	public int combinedBonus(Hero hero){
+	public long combinedBonus(Hero hero){
 		int bonus = 0;
 		if (hero.belongings.ring() != null && hero.belongings.ring().getClass() == getClass()){
 			bonus += hero.belongings.ring().soloBonus();
@@ -356,7 +356,7 @@ public class Ring extends KindofMisc {
 	}
 
 	//just used for ring descriptions
-	public int combinedBuffedBonus(Hero hero){
+	public long combinedBuffedBonus(Hero hero){
 		int bonus = 0;
 		if (hero.belongings.ring() != null && hero.belongings.ring().getClass() == getClass()){
 			bonus += hero.belongings.ring().soloBuffedBonus();
@@ -386,11 +386,11 @@ if (target instanceof Hero && Dungeon.hero == null && cooldown() == 0 && target.
 			return true;
 		}
 
-		public int level(){
+		public long level(){
 			return Ring.this.soloBonus();
 		}
 
-		public int buffedLvl(){
+		public long buffedLvl(){
 			return Ring.this.soloBuffedBonus();
 		}
 

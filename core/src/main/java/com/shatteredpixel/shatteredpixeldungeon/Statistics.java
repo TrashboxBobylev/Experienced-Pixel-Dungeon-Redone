@@ -29,7 +29,7 @@ import com.watabou.utils.SparseArray;
 
 public class Statistics {
 
-	public static int goldCollected;
+	public static long goldCollected;
 	public static int deepestFloor;
 	public static int highestAscent;
 	public static int enemiesSlain;
@@ -41,8 +41,8 @@ public class Statistics {
 	//These are used for score calculation
 	// some are built incrementally, most are assigned when full score is calculated
 	public static int progressScore;
-	public static int heldItemValue;
-	public static int treasureScore;
+	public static long heldItemValue;
+	public static long treasureScore;
 	public static SparseArray<Boolean> floorsExplored = new SparseArray<>();
 	public static int exploreScore;
 	public static int[] bossScores = new int[5];
@@ -52,10 +52,10 @@ public class Statistics {
 	public static float winMultiplier;
 	public static float chalMultiplier;
 	public static float cycleMultiplier;
-	public static int totalScore;
+	public static long totalScore;
 
 	//used for hero unlock badges
-	public static int upgradesUsed;
+	public static long upgradesUsed;
 	public static int sneakAttacks;
 	public static int thrownAttacks;
 

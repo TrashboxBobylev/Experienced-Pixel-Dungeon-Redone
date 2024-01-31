@@ -245,12 +245,12 @@ public abstract class Scroll extends Item {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 30 * quantity;
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return 6 * quantity;
 	}
 
@@ -305,7 +305,7 @@ public abstract class Scroll extends Item {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 0;
 		}
 		

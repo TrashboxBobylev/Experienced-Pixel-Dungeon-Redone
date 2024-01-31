@@ -39,8 +39,8 @@ public class Blazing extends Weapon.Enchantment {
 	private static ItemSprite.Glowing ORANGE = new ItemSprite.Glowing( 0xFF4400 );
 	
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		int level = Math.max( 0, weapon.buffedLvl() );
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 33%
 		// lvl 1 - 50%

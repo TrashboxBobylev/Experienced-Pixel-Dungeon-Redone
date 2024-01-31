@@ -51,7 +51,7 @@ public abstract class Recipe {
 	
 	public abstract boolean testIngredients(ArrayList<Item> ingredients);
 	
-	public abstract int cost(ArrayList<Item> ingredients);
+	public abstract long cost(ArrayList<Item> ingredients);
 	
 	public abstract Item brew(ArrayList<Item> ingredients);
 	
@@ -96,7 +96,7 @@ public abstract class Recipe {
 				}
 			}
 			
-			for (int i : needed){
+			for (long i : needed){
 				if (i > 0){
 					return false;
 				}
@@ -105,7 +105,7 @@ public abstract class Recipe {
 			return true;
 		}
 		
-		public final int cost(ArrayList<Item> ingredients){
+		public final long cost(ArrayList<Item> ingredients){
 			return cost;
 		}
 		

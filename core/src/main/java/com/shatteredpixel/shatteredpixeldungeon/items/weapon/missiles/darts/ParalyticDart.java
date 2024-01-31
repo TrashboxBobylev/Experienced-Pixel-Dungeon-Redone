@@ -36,7 +36,7 @@ public class ParalyticDart extends TippedDart {
 	}
 	
 	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		//when processing charged shot, only stun enemies
 		if (!processingChargedShot || attacker.alignment != defender.alignment) {
 			Buff.prolong(defender, Paralysis.class, 5f);

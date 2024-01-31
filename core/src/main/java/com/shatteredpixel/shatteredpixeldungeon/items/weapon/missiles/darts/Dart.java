@@ -79,7 +79,7 @@ public class Dart extends MissileWeapon {
 	}
 	
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		if (bow != null){
 			return  (tier+3) +                    //4 base
 					bow.buffedLvl() + lvl; //+1 per level or bow level
@@ -90,7 +90,7 @@ public class Dart extends MissileWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		if (bow != null){
 			return  4*(tier+3) +                       //12 base
                     (tier+2)*bow.buffedLvl() + (tier+1)*lvl; //+3 per bow level, +2 per level (default scaling +2)
@@ -138,14 +138,14 @@ public class Dart extends MissileWeapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		if (bow != null
 				//only apply enchant effects to enemies when processing charged shot
 				&& (!processingChargedShot || attacker.alignment != defender.alignment)){
 			damage = bow.proc(attacker, defender, damage);
 		}
 
-		int dmg = super.proc(attacker, defender, damage);
+		long dmg = super.proc(attacker, defender, damage);
 		if (!processingChargedShot) {
 			processChargedShot(defender, damage);
 		}
@@ -168,7 +168,7 @@ public class Dart extends MissileWeapon {
 
 	protected boolean processingChargedShot = false;
 	private int chargedShotPos;
-	protected void processChargedShot( Char target, int dmg ){
+	protected void processChargedShot( Char target, long dmg ){
 		//don't update xbow here, as dart may be the active weapon atm
 		processingChargedShot = true;
 		if (chargedShotPos != -1 && bow != null && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null) {
@@ -220,7 +220,7 @@ public class Dart extends MissileWeapon {
 
 		updateCrossbow();
 		if (bow != null && !bow.isIdentified()){
-			int level = bow.level();
+			long level = bow.level();
 			//temporarily sets the level of the bow to 0 for IDing purposes
 			bow.level(0);
 			String info = super.info();
@@ -237,7 +237,7 @@ public class Dart extends MissileWeapon {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return super.value()/2; //half normal value
 	}
 	
@@ -263,8 +263,8 @@ public class Dart extends MissileWeapon {
 			
 			if (item == null) return;
 			
-			final int maxToTip = Math.min(curItem.quantity(), item.quantity()*2);
-			final int maxSeedsToUse = (maxToTip+1)/2;
+			final long maxToTip = Math.min(curItem.quantity(), item.quantity()*2);
+			final long maxSeedsToUse = (maxToTip+1)/2;
 			
 			final int singleSeedDarts;
 			

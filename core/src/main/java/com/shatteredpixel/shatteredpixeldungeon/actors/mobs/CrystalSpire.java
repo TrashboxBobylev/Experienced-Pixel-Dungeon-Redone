@@ -328,7 +328,7 @@ public class CrystalSpire extends Mob {
 				public void call() {
 					//does its own special damage calculation that's only influenced by pickaxe level and augment
 					//we pretend the spire is the owner here so that properties like hero str or or other equipment do not factor in
-					int dmg = p.damageRoll(CrystalSpire.this);
+					int dmg = (int) p.damageRoll(CrystalSpire.this);
 
 					dmg = Math.min(dmg, HT / 10);
 

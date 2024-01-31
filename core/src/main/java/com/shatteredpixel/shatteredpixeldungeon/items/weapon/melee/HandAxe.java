@@ -43,7 +43,7 @@ public class HandAxe extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //15 base, down from 18
 				lvl*(tier+2);   //+4
 	}

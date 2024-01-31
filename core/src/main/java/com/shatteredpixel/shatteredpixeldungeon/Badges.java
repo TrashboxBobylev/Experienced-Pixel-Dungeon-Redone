@@ -988,7 +988,7 @@ public class Badges {
 		displayBadge( badge );
 	}
 
-	public static void validateHighScore( int score ){
+	public static void validateHighScore(long score ){
 		Badge badge = null;
 		if (score >= 100_000) {
 			badge = Badge.HIGH_SCORE_1;

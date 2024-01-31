@@ -229,7 +229,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 		n.level(0);
 		n.quantity(1);
-		int level = w.trueLevel();
+		long level = w.trueLevel();
 		if (level > 0) {
 			n.upgrade( level );
 		} else if (level < 0) {
@@ -259,7 +259,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 		n.level(0);
 		
-		int level = r.level();
+		long level = r.level();
 		if (level > 0) {
 			n.upgrade( level );
 		} else if (level < 0) {
@@ -315,7 +315,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		} while ( Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 		
 		n.level( 0 );
-		int level = w.trueLevel();
+		long level = w.trueLevel();
 		n.upgrade( level );
 
 		n.levelKnown = w.levelKnown;
@@ -368,12 +368,12 @@ public class ScrollOfTransmutation extends InventoryScroll {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 50 * quantity : super.value();
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 }

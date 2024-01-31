@@ -262,7 +262,7 @@ abstract public class ClassArmor extends Armor {
 									inscribe(armor.glyph);
 									seal = armor.checkSeal();
 									if (seal.level() > 0) {
-										int newLevel = trueLevel() + 1;
+										long newLevel = trueLevel() + 1;
 										level(newLevel);
 										Badges.validateItemLevelAquired(ClassArmor.this);
 									}
@@ -270,7 +270,7 @@ abstract public class ClassArmor extends Armor {
 									//automates the process of detaching the glyph manually
 									// and re-affixing it to the new armor
 									if (seal.level() > 0 && trueLevel() <= armor.trueLevel()){
-										int newLevel = trueLevel() + 1;
+										long newLevel = trueLevel() + 1;
 										level(newLevel);
 										Badges.validateItemLevelAquired(ClassArmor.this);
 									}
@@ -331,7 +331,7 @@ abstract public class ClassArmor extends Armor {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 0;
 	}
 

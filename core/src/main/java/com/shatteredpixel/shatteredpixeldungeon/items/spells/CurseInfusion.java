@@ -97,7 +97,7 @@ public class CurseInfusion extends InventorySpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((30 + 50) * (quantity/3f));
 	}

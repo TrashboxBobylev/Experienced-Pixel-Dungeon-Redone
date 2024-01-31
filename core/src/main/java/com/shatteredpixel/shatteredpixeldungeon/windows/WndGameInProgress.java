@@ -176,7 +176,7 @@ public class WndGameInProgress extends Window {
 		pos += GAP + txt.height();
 	}
 	
-	private void statSlot( String label, int value ) {
-		statSlot( label, Integer.toString( value ) );
+	private void statSlot(String label, long value ) {
+		statSlot( label, Long.toString( value ) );
 	}
 }

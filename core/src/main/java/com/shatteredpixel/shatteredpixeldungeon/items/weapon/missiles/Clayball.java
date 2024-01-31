@@ -61,7 +61,7 @@ public class Clayball extends MissileWeapon {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 826 * quantity;
 	}
 

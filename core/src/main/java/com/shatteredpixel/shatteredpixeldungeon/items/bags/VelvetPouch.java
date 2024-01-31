@@ -52,7 +52,7 @@ public class VelvetPouch extends Bag {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 30;
 	}
 

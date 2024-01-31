@@ -86,7 +86,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  Math.round(3f*(tier+1)) +   //6 base damage, down from 10
 				lvl*(tier+1);               //scaling unaffected
 	}
@@ -168,7 +168,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
-	public int buffedVisiblyUpgraded() {
+	public long buffedVisiblyUpgraded() {
 		if (wand != null){
 			return Math.max(super.buffedVisiblyUpgraded(), wand.buffedVisiblyUpgraded());
 		} else {
@@ -177,7 +177,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.MYSTICAL_CHARGE)){
 			Hero hero = (Hero) attacker;
 			ArtifactRecharge.chargeArtifacts(hero, 2f);
@@ -234,7 +234,7 @@ public class MagesStaff extends MeleeWeapon {
 
 	public Item imbueWand(Wand wand, Char owner){
 
-		int oldStaffcharges = this.wand != null ? this.wand.curCharges : 0;
+		long oldStaffcharges = this.wand != null ? this.wand.curCharges : 0;
 
 		if (owner == Dungeon.hero && Dungeon.hero.hasTalent(Talent.WAND_PRESERVATION)){
 			Talent.WandPreservationCounter counter = Buff.affect(Dungeon.hero, Talent.WandPreservationCounter.class);
@@ -262,7 +262,7 @@ public class MagesStaff extends MeleeWeapon {
 		wand.updateLevel();
 
 		//syncs the level of the two items.
-		int targetLevel = Math.max(this.trueLevel(), wand.trueLevel());
+		long targetLevel = Math.max(this.trueLevel(), wand.trueLevel());
 
 		//if the staff's level is being overridden by the wand, preserve 1 upgrade
 		if (wand.trueLevel() >= this.trueLevel() && this.trueLevel() > 0) targetLevel++;
@@ -347,7 +347,7 @@ public class MagesStaff extends MeleeWeapon {
 	
 	public void updateWand(boolean levelled){
 		if (wand != null) {
-			int curCharges = wand.curCharges;
+			long curCharges = wand.curCharges;
 			wand.level(level());
 			//gives the wand one additional max charge
 			wand.maxCharges = Math.round(wand.maxCharges * 1.33f);
@@ -407,7 +407,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 0;
 	}
 	
@@ -452,8 +452,8 @@ public class MagesStaff extends MeleeWeapon {
 				if (wand == null){
 					applyWand((Wand)item);
 				} else {
-					int newLevel;
-					int itemLevel = item.trueLevel();
+					long newLevel;
+					long itemLevel = item.trueLevel();
 					if (itemLevel >= trueLevel()){
 						if (trueLevel() > 0)    newLevel = itemLevel + 1;
 						else                    newLevel = itemLevel;

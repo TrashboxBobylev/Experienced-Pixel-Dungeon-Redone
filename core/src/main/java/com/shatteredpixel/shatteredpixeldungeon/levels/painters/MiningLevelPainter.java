@@ -43,7 +43,7 @@ public class MiningLevelPainter extends CavesPainter {
 		return 3;
 	}
 
-	private int goldToAdd = 0;
+	private long goldToAdd = 0;
 
 	public RegularPainter setGold(int amount){
 		goldToAdd = amount;

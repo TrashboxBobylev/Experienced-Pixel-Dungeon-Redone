@@ -63,12 +63,12 @@ public abstract class Runestone extends Item {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 15 * quantity;
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return 3 * quantity;
 	}
 

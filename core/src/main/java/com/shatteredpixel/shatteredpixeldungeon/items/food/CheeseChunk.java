@@ -66,7 +66,7 @@ public class CheeseChunk extends Food {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 20 * quantity;
 	}
 

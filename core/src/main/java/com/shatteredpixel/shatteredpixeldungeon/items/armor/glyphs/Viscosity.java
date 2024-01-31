@@ -45,10 +45,10 @@ public class Viscosity extends Glyph {
 	private static ItemSprite.Glowing PURPLE = new ItemSprite.Glowing( 0x8844CC );
 	
 	@Override
-	public int proc( Armor armor, Char attacker, Char defender, int damage ) {
+	public long proc( Armor armor, Char attacker, Char defender, long damage ) {
 
 		//we use a tracker so that this glyph can apply after armor
-		Buff.affect(defender, ViscosityTracker.class).level = armor.buffedLvl();
+		Buff.affect(defender, ViscosityTracker.class).level = (int) armor.buffedLvl();
 
 		return damage;
 		

@@ -58,7 +58,7 @@ public abstract class TreasureBag extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return quantity * 3000;
     }
 

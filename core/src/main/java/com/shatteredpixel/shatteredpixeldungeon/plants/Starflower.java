@@ -66,12 +66,12 @@ public class Starflower extends Plant {
 		}
 		
 		@Override
-		public int value() {
+		public long value() {
 			return 30 * quantity;
 		}
 
 		@Override
-		public int energyVal() {
+		public long energyVal() {
 			return 3 * quantity;
 		}
 	}

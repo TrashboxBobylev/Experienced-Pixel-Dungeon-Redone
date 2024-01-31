@@ -57,20 +57,20 @@ public class Dagger extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  4*(tier+1) +    //8 base, down from 10
 				lvl*(tier+1);   //scaling unchanged
 	}
 	
 	@Override
-	public int damageRoll(Char owner) {
+	public long damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
 			Char enemy = hero.enemy();
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 75% toward max to max on surprise, instead of min to max.
-				int diff = max() - min();
-				int damage = augment.damageFactor(Random.NormalIntRange(
+				long diff = max() - min();
+				long damage = augment.damageFactor(Random.NormalLongRange(
 						min() + Math.round(diff*0.75f),
 						max()));
 				int exStr = hero.STR() - STRReq();

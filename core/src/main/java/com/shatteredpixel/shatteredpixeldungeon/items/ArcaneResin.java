@@ -85,7 +85,7 @@ public class ArcaneResin extends Item {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 30*quantity();
 	}
 
@@ -116,7 +116,7 @@ public class ArcaneResin extends Item {
 					return;
 				}
 
-				int resinToUse = w.level()+1;
+				long resinToUse = w.level()+1;
 
 				if (quantity() < resinToUse){
 					GLog.w(Messages.get(ArcaneResin.class, "not_enough"));
@@ -156,7 +156,7 @@ public class ArcaneResin extends Item {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 5;
 		}
 
@@ -172,7 +172,7 @@ public class ArcaneResin extends Item {
 		@Override
 		public Item sampleOutput(ArrayList<Item> ingredients) {
 			Wand w = (Wand)ingredients.get(0);
-			int level = w.level() - w.resinBonus;
+			long level = w.level() - w.resinBonus;
 
 			Item output = new ArcaneResin().quantity(2*(level+1));
 

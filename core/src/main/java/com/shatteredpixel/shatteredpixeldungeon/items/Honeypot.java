@@ -151,7 +151,7 @@ public class Honeypot extends Item {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 30 * quantity;
 	}
 
@@ -255,7 +255,7 @@ public class Honeypot extends Item {
 		}
 		
 		@Override
-		public int value() {
+		public long value() {
 			return 5 * quantity;
 		}
 	}

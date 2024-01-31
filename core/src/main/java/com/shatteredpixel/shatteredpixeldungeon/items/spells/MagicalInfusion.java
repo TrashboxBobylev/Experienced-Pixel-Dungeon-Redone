@@ -75,7 +75,7 @@ public class MagicalInfusion extends InventorySpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return (50 + 40) * quantity;
 	}

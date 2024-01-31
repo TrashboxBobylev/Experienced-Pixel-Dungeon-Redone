@@ -62,12 +62,12 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	//1/2/3 base damage with 1/2/3 scaling based on charges used
-	public int min(int lvl){
+	public long min(long lvl){
 		return (1+lvl) * chargesPerCast();
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
-	public int max(int lvl){
+	public long max(long lvl){
 		switch (chargesPerCast()){
 			case 1: default:
 				return 2 + 2*lvl;
@@ -153,7 +153,7 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like blazing enchantment
 		new FireBlastOnHit().proc( staff, attacker, defender, damage);
 	}

@@ -58,7 +58,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
     static final Class<Plant>[] helpfulPlants = new Class[]{Earthroot.class, Mageroyal.class, Starflower.class, Sungrass.class};
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         int heal = Math.max(1, attacker.HT / 150);
         ArrayList<Char> affected = new ArrayList<>();
         for (Char ch: Actor.chars()){
@@ -101,7 +101,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
     }
 
     @Override
-    public int defenseFactor( Char owner ) {
+    public long defenseFactor( Char owner ) {
         return 4;	//4 extra defence
     }
 

@@ -53,7 +53,7 @@ public class ElixirOfDragonsBlood extends Elixir {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return quantity * (50 + 40);
 	}

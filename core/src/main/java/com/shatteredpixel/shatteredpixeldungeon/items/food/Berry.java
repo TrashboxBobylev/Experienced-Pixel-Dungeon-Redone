@@ -63,7 +63,7 @@ public class Berry extends Food {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 5 * quantity;
 	}
 

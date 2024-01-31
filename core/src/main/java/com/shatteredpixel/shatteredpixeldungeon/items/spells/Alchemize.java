@@ -54,7 +54,7 @@ public class Alchemize extends Spell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)(40 * (quantity/8f));
 	}
@@ -131,7 +131,7 @@ public class Alchemize extends Spell {
 
 				} else {
 
-					int priceAll = item.value();
+					long priceAll = item.value();
 					RedButton btnSell1 = new RedButton(Messages.get(this, "sell_1", priceAll / item.quantity())) {
 						@Override
 						protected void onClick() {
@@ -179,7 +179,7 @@ public class Alchemize extends Spell {
 
 				} else {
 
-					int energyAll = item.energyVal();
+					long energyAll = item.energyVal();
 					RedButton btnEnergize1 = new RedButton(Messages.get(this, "energize_1", energyAll / item.quantity())) {
 						@Override
 						protected void onClick() {

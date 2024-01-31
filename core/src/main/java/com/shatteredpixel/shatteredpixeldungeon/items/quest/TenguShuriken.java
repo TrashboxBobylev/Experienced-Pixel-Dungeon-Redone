@@ -43,7 +43,7 @@ public class TenguShuriken extends MissileWeapon {
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return  10 * tier +                      //8 base, down from 10
                 (tier == 1 ? 2*lvl : tier*lvl); //scaling unchanged
     }
@@ -54,8 +54,8 @@ public class TenguShuriken extends MissileWeapon {
     }
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
-        Buff.affect(defender, Sai.DefenseDebuff.class, 5f).stack = max() / 3;
+    public long proc(Char attacker, Char defender, long damage) {
+        Buff.affect(defender, Sai.DefenseDebuff.class, 5f).stack = (int) (max() / 3);
         return super.proc(attacker, defender, damage);
     }
 }

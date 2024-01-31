@@ -59,7 +59,7 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return  6*(tier+1) +    //36
                 lvl*(tier+2);   //+7
     }
@@ -136,7 +136,7 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         for (int i : PathFinder.NEIGHBOURS9){
 
             if (!Dungeon.level.solid[attacker.pos + i]

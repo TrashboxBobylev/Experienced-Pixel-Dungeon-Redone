@@ -53,11 +53,11 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 2+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 8+4*lvl;
 	}
 	
@@ -71,7 +71,7 @@ public class WandOfDisintegration extends DamageWand {
 		
 		boolean terrainAffected = false;
 		
-		int level = buffedLvl();
+		long level = buffedLvl();
 		
 		int maxDistance = Math.min(distance(), beam.dist);
 		
@@ -117,22 +117,22 @@ public class WandOfDisintegration extends DamageWand {
 			Dungeon.observe();
 		}
 		
-		int lvl = level + (chars.size()-1) + terrainBonus;
+		long lvl = level + (chars.size()-1) + terrainBonus;
 		for (Char ch : chars) {
 			wandProc(ch, chargesPerCast());
-			ch.damage( damageRoll(lvl), this );
+			ch.damage((int) damageRoll(lvl), this );
 			ch.sprite.centerEmitter().burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
 			ch.sprite.flash();
 		}
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//no direct effect, see magesStaff.reachfactor
 	}
 
 	private int distance() {
-		return buffedLvl()*2 + 6;
+		return (int) (buffedLvl()*2 + 6);
 	}
 	
 	@Override

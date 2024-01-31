@@ -123,7 +123,7 @@ public class RingOfWealth extends Ring {
 		latestDropTier = 0;
 	}
 	
-	public static Item genConsumableDrop(int level) {
+	public static Item genConsumableDrop(long level) {
 		float roll = Dungeon.Float();
 		//60% chance - 4% per level. Starting from +15: 0%
 		if (roll < (0.6f - 0.04f * level)) {

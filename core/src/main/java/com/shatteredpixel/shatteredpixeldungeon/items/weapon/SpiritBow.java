@@ -96,7 +96,7 @@ public class SpiritBow extends Weapon {
 	};
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 
 		if (attacker.buff(NaturesPower.naturesPowerTracker.class) != null && !sniperSpecial){
 
@@ -178,12 +178,12 @@ public class SpiritBow extends Weapon {
 	}
 	
 	@Override
-	public int STRReq(int lvl) {
+	public int STRReq(long lvl) {
 		return STRReq(1, lvl); //tier 1
 	}
 	
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		int dmg = 2 + Dungeon.hero.lvl/4
 				+ 2*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/25 : 0);
@@ -191,7 +191,7 @@ public class SpiritBow extends Weapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		int dmg = 8 + (int)(Dungeon.hero.lvl/2f)
 				+ 3*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/10 : 0);
@@ -206,8 +206,8 @@ public class SpiritBow extends Weapon {
 	private int targetPos;
 	
 	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll(owner));
+	public long damageRoll(Char owner) {
+		long damage = augment.damageFactor(super.damageRoll(owner));
 		
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
@@ -266,14 +266,14 @@ public class SpiritBow extends Weapon {
 	}
 
 	@Override
-	public int level() {
+	public long level() {
 		int level = Dungeon.hero == null ? 0 : Dungeon.hero.lvl/5;
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
 	}
 
 	@Override
-	public int buffedLvl() {
+	public long buffedLvl() {
 		//level isn't affected by buffs/debuffs
 		return level();
 	}
@@ -309,7 +309,7 @@ public class SpiritBow extends Weapon {
 		}
 
 		@Override
-		public int damageRoll(Char owner) {
+		public long damageRoll(Char owner) {
 			return SpiritBow.this.damageRoll(owner);
 		}
 		
@@ -319,7 +319,7 @@ public class SpiritBow extends Weapon {
 		}
 		
 		@Override
-		public int proc(Char attacker, Char defender, int damage) {
+		public long proc(Char attacker, Char defender, long damage) {
 			return SpiritBow.this.proc(attacker, defender, damage);
 		}
 		
@@ -338,7 +338,7 @@ public class SpiritBow extends Weapon {
 		}
 		
 		@Override
-		public int STRReq(int lvl) {
+		public int STRReq(long lvl) {
 			return SpiritBow.this.STRReq();
 		}
 

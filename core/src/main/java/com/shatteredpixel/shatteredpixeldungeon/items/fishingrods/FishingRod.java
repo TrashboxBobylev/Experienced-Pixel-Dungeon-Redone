@@ -175,12 +175,12 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
-    public int visiblyUpgraded() {
+    public long visiblyUpgraded() {
         return level();
     }
 
     @Override
-    public int buffedVisiblyUpgraded() {
+    public long buffedVisiblyUpgraded() {
         return level();
     }
 
@@ -192,7 +192,7 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 60 * Dungeon.escalatingDepth() / 5;
     }
 }

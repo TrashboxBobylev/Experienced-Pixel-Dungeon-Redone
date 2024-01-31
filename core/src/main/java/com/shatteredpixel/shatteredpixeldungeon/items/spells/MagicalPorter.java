@@ -62,7 +62,7 @@ public class MagicalPorter extends InventorySpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity
 		return Math.round(quantity * ((5 + 40) / 8f));
 	}

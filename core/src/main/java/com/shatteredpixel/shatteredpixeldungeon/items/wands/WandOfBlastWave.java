@@ -60,11 +60,11 @@ public class WandOfBlastWave extends DamageWand {
 		collisionProperties = Ballistica.PROJECTILE;
 	}
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 1+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 3+3*lvl;
 	}
 
@@ -86,7 +86,7 @@ public class WandOfBlastWave extends DamageWand {
 
 			if (ch != null){
 				wandProc(ch, chargesPerCast());
-				if (ch.alignment != Char.Alignment.ALLY) ch.damage(damageRoll(), this);
+				if (ch.alignment != Char.Alignment.ALLY) ch.damage((int) damageRoll(), this);
 
 				if (ch.pos == bolt.collisionPos + i) {
 					Ballistica trajectory = new Ballistica(ch.pos, ch.pos + i, Ballistica.MAGIC_BOLT);
@@ -101,24 +101,24 @@ public class WandOfBlastWave extends DamageWand {
 		Char ch = Actor.findChar(bolt.collisionPos);
 		if (ch != null){
 			wandProc(ch, chargesPerCast());
-			ch.damage(damageRoll(), this);
+			ch.damage((int) damageRoll(), this);
 
 			if (bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) {
 				Ballistica trajectory = new Ballistica(ch.pos, bolt.path.get(bolt.dist + 1), Ballistica.MAGIC_BOLT);
-				int strength = buffedLvl() + 3;
+				long strength = buffedLvl() + 3;
 				throwChar(ch, trajectory, strength, false, true, this);
 			}
 		}
 
 	}
 
-	public static void throwChar(final Char ch, final Ballistica trajectory, int power,
+	public static void throwChar(final Char ch, final Ballistica trajectory, long power,
 	                             boolean closeDoors, boolean collideDmg, Object cause){
 		if (ch.properties().contains(Char.Property.BOSS)) {
 			power = (power+1)/2;
 		}
 
-		int dist = Math.min(trajectory.dist, power);
+		int dist = (int) Math.min(trajectory.dist, power);
 
 		boolean collided = dist == trajectory.dist;
 
@@ -187,7 +187,7 @@ public class WandOfBlastWave extends DamageWand {
 	public static class Knockback{}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like elastic enchantment
 		//we delay this with an actor to prevent conflicts with regular elastic
 		//so elastic always fully resolves first, then this effect activates

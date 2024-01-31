@@ -37,13 +37,13 @@ public class Grim extends Weapon.Enchantment {
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
 	
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
 
 		if (defender.isImmune(Grim.class)) {
 			return damage;
 		}
 
-		int level = Math.max( 0, weapon.buffedLvl() );
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		//scales from 0 - 50% based on how low hp the enemy is, plus 0-5% per level
 		float maxChance = 0.5f + .05f*level;

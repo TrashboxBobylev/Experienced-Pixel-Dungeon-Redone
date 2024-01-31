@@ -78,7 +78,7 @@ public class ArmoredStatue extends Statue {
 
 	@Override
 	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange( armor.DRMin(), armor.DRMax());
+		return (int) (super.drRoll() + Random.NormalLongRange( armor.DRMin(), armor.DRMax()));
 	}
 
 	//used in some glyph calculations
@@ -98,7 +98,7 @@ public class ArmoredStatue extends Statue {
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		damage = armor.proc(enemy, this, damage);
+		damage = (int) armor.proc(enemy, this, damage);
 		return super.defenseProc(enemy, damage);
 	}
 

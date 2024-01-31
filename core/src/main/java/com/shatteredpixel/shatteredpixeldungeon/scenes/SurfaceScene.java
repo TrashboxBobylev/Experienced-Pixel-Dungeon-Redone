@@ -167,7 +167,7 @@ public class SurfaceScene extends PixelScene {
 		CharSprite allySprite = null;
 		
 		//picks the highest between ghost's weapon, armor, and rose level/2
-		int roseLevel = 0;
+		long roseLevel = 0;
 		DriedRose rose = Dungeon.hero.belongings.getItem(DriedRose.class);
 		if (rose != null){
 			roseLevel = rose.level()/2;
@@ -179,8 +179,8 @@ public class SurfaceScene extends PixelScene {
 			}
 		}
 		
-		int earthLevel = Dungeon.hero.belongings.getItem(WandOfLivingEarth.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfLivingEarth.class).level();
-		int wardLevel = Dungeon.hero.belongings.getItem(WandOfWarding.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfWarding.class).level();
+		long earthLevel = Dungeon.hero.belongings.getItem(WandOfLivingEarth.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfLivingEarth.class).level();
+		long wardLevel = Dungeon.hero.belongings.getItem(WandOfWarding.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfWarding.class).level();
 		
 		MagesStaff staff = Dungeon.hero.belongings.getItem(MagesStaff.class);
 		if (staff != null){
@@ -198,7 +198,7 @@ public class SurfaceScene extends PixelScene {
 			allySprite = new EarthGuardianSprite();
 		} else if (wardLevel >= 3){
 			allySprite = new WardSprite();
-			((WardSprite) allySprite).updateTier(Math.min(wardLevel+2, 6));
+			((WardSprite) allySprite).updateTier((int) Math.min(wardLevel+2, 6));
 		}
 		
 		if (allySprite != null){

@@ -48,13 +48,13 @@ public class WarHammer extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  20*(tier+1) +    //120 base, up from 36
 				5*lvl*(tier+1);   //scaling is 5x
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return  tier*12 +  //base
 				lvl*10;    //level scaling
 	}
@@ -79,7 +79,7 @@ public class WarHammer extends MeleeWeapon {
 	}
 
 	@Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
         Buff.affect(attacker, Paralysis.class, Random.Int(2, 5));
         Buff.affect(defender, Paralysis.class, Random.Int(1, 3));

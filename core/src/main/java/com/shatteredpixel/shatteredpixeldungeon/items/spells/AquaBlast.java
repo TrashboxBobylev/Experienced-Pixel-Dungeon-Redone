@@ -51,7 +51,7 @@ public class AquaBlast extends TargetedSpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((60 + 40) * (quantity/8f));
 	}

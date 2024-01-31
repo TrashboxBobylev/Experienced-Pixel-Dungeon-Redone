@@ -79,10 +79,10 @@ public class Item implements Bundlable {
 	public int icon = -1; //used as an identifier for items with randomized images
 	
 	public boolean stackable = false;
-	protected int quantity = 1;
+	protected long quantity = 1;
 	public boolean dropsDownHeap = false;
 	
-	private int level = 0;
+	private long level = 0;
 
 	public boolean levelKnown = false;
 	
@@ -284,7 +284,7 @@ public class Item implements Bundlable {
 	}
 	
 	//returns a new item if the split was sucessful and there are now 2 items, otherwise null
-	public Item split( int amount ){
+	public Item split( long amount ){
 		if (amount <= 0 || amount >= quantity()) {
 			return null;
 		} else {
@@ -360,18 +360,18 @@ public class Item implements Bundlable {
 	public void onDetach(){}
 
 	//returns the true level of the item, ignoring all modifiers aside from upgrades
-	public final int trueLevel(){
+	public final long trueLevel(){
 		return level;
 	}
 
 	//returns the persistant level of the item, only affected by modifiers which are persistent (e.g. curse infusion)
-	public int level(){
+	public long level(){
 		return level;
 	}
 	
 	//returns the level of the item, after it may have been modified by temporary boosts/reductions
 	//note that not all item properties should care about buffs/debuffs! (e.g. str requirement)
-	public int buffedLvl(){
+	public long buffedLvl(){
 		//only the hero can be affected by Degradation
 		if (Dungeon.hero.buff( Degrade.class ) != null
 			&& (isEquipped( Dungeon.hero ) || Dungeon.hero.belongings.contains( this ))) {
@@ -381,7 +381,7 @@ public class Item implements Bundlable {
 		}
 	}
 
-	public void level( int value ){
+	public void level(long value ){
 		level = value;
 
 		updateQuickslot();
@@ -396,9 +396,17 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	final public Item upgrade( int n ) {
-		for (int i=0; i < n; i++) {
-			upgrade();
+	final public Item upgrade(long n ) {
+		if (n > 20){
+			for (long i=0; i < 20; i++) {
+				upgrade();
+			}
+			this.level += n - 20;
+			updateQuickslot();
+		} else {
+			for (long i = 0; i < n; i++) {
+				upgrade();
+			}
 		}
 		
 		return this;
@@ -411,19 +419,27 @@ public class Item implements Bundlable {
 		return this;
 	}
 	
-	final public Item degrade( int n ) {
-		for (int i=0; i < n; i++) {
-			degrade();
+	final public Item degrade(long n ) {
+		if (n > 20){
+			for (long i=0; i < 20; i++) {
+				degrade();
+			}
+			this.level -= n - 20;
+			updateQuickslot();
+		} else {
+			for (long i = 0; i < n; i++) {
+				degrade();
+			}
 		}
 		
 		return this;
 	}
 	
-	public int visiblyUpgraded() {
+	public long visiblyUpgraded() {
 		return levelKnown ? level() : 0;
 	}
 
-	public int buffedVisiblyUpgraded() {
+	public long buffedVisiblyUpgraded() {
 		return levelKnown ? buffedLvl() : 0;
 	}
 	
@@ -509,26 +525,26 @@ public class Item implements Bundlable {
 		return Messages.get(this, "desc");
 	}
 	
-	public int quantity() {
+	public long quantity() {
 		return quantity;
 	}
 	
-	public Item quantity( int value ) {
+	public Item quantity(long value ) {
 		quantity = value;
 		return this;
 	}
 
 	//item's value in gold coins
-	public int value() {
+	public long value() {
 		return 0;
 	}
 
 	//item's value in energy crystals
-	public int energyVal() {
+	public long energyVal() {
 		return 0;
 	}
 
-	public final int sellPrice(){
+	public final long sellPrice(){
 		return value() * 5 * (Dungeon.depth / 5 + 1);
 	}
 	
@@ -546,7 +562,7 @@ public class Item implements Bundlable {
 	}
 	
 	public String status() {
-		return quantity != 1 ? Integer.toString( quantity ) : null;
+		return quantity != 1 ? Long.toString( quantity ) : null;
 	}
 
 	public static void updateQuickslot() {
@@ -578,12 +594,12 @@ public class Item implements Bundlable {
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
-		quantity	= bundle.getInt( QUANTITY );
+		quantity	= bundle.getLong( QUANTITY );
 		levelKnown	= bundle.getBoolean( LEVEL_KNOWN );
 		cursedKnown	= bundle.getBoolean( CURSED_KNOWN );
 		wereOofed = bundle.getBoolean(WERE_OOFED);
 		
-		int level = bundle.getInt( LEVEL );
+		long level = bundle.getLong( LEVEL );
 		if (level > 0) {
 			upgrade( level );
 		} else if (level < 0) {

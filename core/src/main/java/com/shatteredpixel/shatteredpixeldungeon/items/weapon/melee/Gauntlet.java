@@ -53,7 +53,7 @@ public class Gauntlet extends MeleeWeapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  Math.round(3f*(tier+1)) +     //18 base, down from 36
 				lvl*Math.round(0.5f*(tier+2));  //+3.5 per level, down from +7
 	}
@@ -63,7 +63,7 @@ public class Gauntlet extends MeleeWeapon {
 	private ArrayList<Lightning.Arc> arcs = new ArrayList<>();
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		affected.clear();
 		arcs.clear();
 

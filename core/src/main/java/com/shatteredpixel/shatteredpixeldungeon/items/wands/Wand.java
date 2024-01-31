@@ -64,8 +64,8 @@ public abstract class Wand extends Item {
 
 	private static final float TIME_TO_ZAP	= 1f;
 	
-	public int maxCharges = initialCharges();
-	public int curCharges = maxCharges;
+	public long maxCharges = initialCharges();
+	public long curCharges = maxCharges;
 	public float partialCharge = 0f;
 	
 	protected Charger charger;
@@ -118,7 +118,7 @@ public abstract class Wand extends Item {
 
 	public abstract void onZap(Ballistica attack);
 
-	public abstract void onHit( MagesStaff staff, Char attacker, Char defender, int damage);
+	public abstract void onHit( MagesStaff staff, Char attacker, Char defender, long damage);
 
 	//not affected by enchantment proc chance changers
 	public static float procChanceMultiplier( Char attacker ){
@@ -188,7 +188,7 @@ public abstract class Wand extends Item {
 	}
 
 	//TODO Consider externalizing char awareness buff
-	protected static void wandProc(Char target, int wandLevel, int chargesUsed){
+	protected static void wandProc(Char target, long wandLevel, int chargesUsed){
 		if (Dungeon.hero.heroClass == HeroClass.MAGE) {
 			int dur = 10;
 			Buff.append(Dungeon.hero, TalismanOfForesight.CharAwareness.class, dur).charID = target.id();
@@ -214,7 +214,7 @@ public abstract class Wand extends Item {
 		}
 	}
 	
-	public void level( int value) {
+	public void level(long value) {
 		super.level( value );
 		updateLevel();
 	}
@@ -282,12 +282,12 @@ public abstract class Wand extends Item {
 	}
 	
 	@Override
-	public int level() {
+	public long level() {
 		if (!cursed && curseInfusionBonus){
 			curseInfusionBonus = false;
 			updateLevel();
 		}
-		int level = super.level();
+		long level = super.level();
 		if (curseInfusionBonus) level += 1 + level/6;
 		level += resinBonus;
 		return level;
@@ -324,8 +324,8 @@ public abstract class Wand extends Item {
 	}
 
 	@Override
-	public int buffedLvl() {
-		int lvl = super.buffedLvl();
+	public long buffedLvl() {
+		long lvl = super.buffedLvl();
 
 		if (charger != null && charger.target != null) {
 
@@ -368,7 +368,7 @@ public abstract class Wand extends Item {
 	}
 
 	public void updateLevel() {
-		maxCharges = initialCharges() + level();
+		maxCharges = (initialCharges() + level());
 		curCharges = Math.min( curCharges, maxCharges );
 	}
 	
@@ -491,8 +491,8 @@ public abstract class Wand extends Item {
 	}
 
 	@Override
-	public int value() {
-		int price = 75;
+	public long value() {
+		long price = 75;
 		if (cursed && cursedKnown) {
 			price /= 2;
 		}
@@ -539,7 +539,7 @@ public abstract class Wand extends Item {
 
 		updateLevel();
 
-		curCharges = bundle.getInt( CUR_CHARGES );
+		curCharges = bundle.getLong( CUR_CHARGES );
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
 	}
@@ -569,7 +569,7 @@ public abstract class Wand extends Item {
 
 		@Override
 		public void onZap(Ballistica attack) {}
-		public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {}
+		public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {}
 
 		@Override
 		public String info() {
@@ -746,7 +746,7 @@ public abstract class Wand extends Item {
 		}
 
 		private void recharge(){
-			int missingCharges = maxCharges - curCharges;
+			long missingCharges = maxCharges - curCharges;
 			missingCharges = Math.max(0, missingCharges);
 
 			float turnsToCharge = (float) (BASE_CHARGE_DELAY

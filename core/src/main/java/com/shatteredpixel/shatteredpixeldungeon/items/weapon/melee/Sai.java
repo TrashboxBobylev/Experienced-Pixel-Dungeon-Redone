@@ -53,13 +53,13 @@ public class Sai extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  Math.round(3f*(tier+1)) +     //12 base, down from 24
 				lvl*Math.round(0.5f*(tier+2));  //+2.5 per level, down from +5
 	}
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         DefenseDebuff debuff = Buff.affect(defender, DefenseDebuff.class, 3.33f);
         debuff.stack += max() / 2;
         return super.proc(attacker, defender, damage);

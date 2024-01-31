@@ -51,13 +51,13 @@ public class Rapier extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  4*(tier+1) +    //8 base, down from 10
 				lvl*(tier+1);   //scaling unchanged
 	}
 
 	@Override
-	public int defenseFactor( Char owner ) {
+	public long defenseFactor( Char owner ) {
 		return 1;	//1 extra defence
 	}
 
@@ -69,11 +69,11 @@ public class Rapier extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(3+lvl) damage, equivalent to +67% damage, but more consistent
-		int dmgBoost = augment.damageFactor(3 + level());
+		long dmgBoost = augment.damageFactor(3 + level());
 		lungeAbility(hero, target, 1, dmgBoost, this);
 	}
 
-	public static void lungeAbility(Hero hero, Integer target, float dmgMulti, int dmgBoost, MeleeWeapon wep){
+	public static void lungeAbility(Hero hero, Integer target, float dmgMulti, long dmgBoost, MeleeWeapon wep){
 		if (target == null){
 			return;
 		}

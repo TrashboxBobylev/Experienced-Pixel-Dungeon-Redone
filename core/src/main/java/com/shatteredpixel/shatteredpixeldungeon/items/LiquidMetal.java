@@ -106,7 +106,7 @@ public class LiquidMetal extends Item {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return quantity;
 	}
 
@@ -178,8 +178,8 @@ public class LiquidMetal extends Item {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			int cost = 1;
+		public long cost(ArrayList<Item> ingredients) {
+			long cost = 1;
 			for (Item i : ingredients){
 				cost += i.quantity();
 			}

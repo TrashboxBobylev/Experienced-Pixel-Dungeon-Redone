@@ -72,7 +72,7 @@ public class Cheese extends Food {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 40 * quantity;
 	}
 

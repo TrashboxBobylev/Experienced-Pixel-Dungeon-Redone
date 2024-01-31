@@ -78,7 +78,7 @@ public class ScrollOfTerror extends Scroll {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 40 * quantity : super.value();
 	}
 }

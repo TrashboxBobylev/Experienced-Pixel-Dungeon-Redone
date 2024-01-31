@@ -64,7 +64,7 @@ public class SuperPickaxe extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return quantity * 100;
     }
 

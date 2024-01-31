@@ -77,7 +77,7 @@ public class Pickaxe extends MeleeWeapon {
 	public boolean bloodStained = false;
 
 	@Override
-	public int STRReq(int lvl) {
+	public int STRReq(long lvl) {
 		return super.STRReq(lvl) + 2; //tier 3 strength requirement with tier 2 damage stats
 	}
 
@@ -146,7 +146,7 @@ public class Pickaxe extends MeleeWeapon {
 	}
 	
 	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		if (Blacksmith.Quest.oldBloodQuest() && !bloodStained && defender instanceof Bat) {
 			Actor.add(new Actor() {
 

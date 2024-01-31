@@ -99,13 +99,13 @@ public abstract class ExoticScroll extends Scroll {
 
 	@Override
 	//20 gold more than its none-exotic equivalent
-	public int value() {
+	public long value() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 30) * quantity;
 	}
 
 	@Override
 	//6 more energy than its none-exotic equivalent
-	public int energyVal() {
+	public long energyVal() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 6) * quantity;
 	}
 	
@@ -121,7 +121,7 @@ public abstract class ExoticScroll extends Scroll {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 6;
 		}
 		

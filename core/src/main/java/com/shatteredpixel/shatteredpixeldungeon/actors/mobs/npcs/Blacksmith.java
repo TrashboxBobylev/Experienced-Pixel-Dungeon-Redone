@@ -366,7 +366,7 @@ public class Blacksmith extends NPC {
 		if (first instanceof MissileWeapon && first.quantity() > 1){
 			first = first.split(1);
 		}
-		int level = first.level();
+		long level = first.level();
 		//adjust for curse infusion
 		if (first instanceof Weapon && ((Weapon) first).curseInfusionBonus) level--;
 		if (first instanceof Armor && ((Armor) first).curseInfusionBonus) level--;
@@ -385,8 +385,8 @@ public class Blacksmith extends NPC {
 		Notes.remove( Notes.Landmark.TROLL );
 	}
 
-	public static int getGold() {
-		return (45 + 15 * Dungeon.escalatingDepth()) * 25;
+	public static long getGold() {
+		return (45 + 15L * Dungeon.escalatingDepth()) * 25;
 	}
 
 	@Override

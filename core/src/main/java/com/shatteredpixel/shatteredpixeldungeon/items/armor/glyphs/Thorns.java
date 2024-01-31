@@ -36,9 +36,9 @@ public class Thorns extends Armor.Glyph {
 	private static ItemSprite.Glowing RED = new ItemSprite.Glowing( 0x660022 );
 
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 
-		int level = Math.max(0, armor.buffedLvl());
+		long level = Math.max(0, armor.buffedLvl());
 
 		// lvl 0 - 16.7%
 		// lvl 1 - 23.1%

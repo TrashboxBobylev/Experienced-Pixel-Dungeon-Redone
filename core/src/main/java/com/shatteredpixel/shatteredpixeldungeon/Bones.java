@@ -141,7 +141,7 @@ public class Bones {
 			if (Dungeon.Int(3) < items.size()) {
 				item = Random.element(items);
 				if (item.stackable){
-					item.quantity(Dungeon.NormalIntRange(1, (item.quantity() + 1) / 2));
+					item.quantity(Dungeon.NormalLongRange(1, (item.quantity() + 1) / 2));
 					if (item.quantity() > 3){
 						item.quantity(3);
 					}

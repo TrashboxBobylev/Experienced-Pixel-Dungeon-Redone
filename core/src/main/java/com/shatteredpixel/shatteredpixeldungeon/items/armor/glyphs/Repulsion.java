@@ -37,9 +37,9 @@ public class Repulsion extends Armor.Glyph {
 	private static ItemSprite.Glowing WHITE = new ItemSprite.Glowing( 0xFFFFFF );
 	
 	@Override
-	public int proc( Armor armor, Char attacker, Char defender, int damage) {
+	public long proc( Armor armor, Char attacker, Char defender, long damage) {
 
-		int level = Math.max( 0, armor.buffedLvl() );
+		long level = Math.max( 0, armor.buffedLvl() );
 
 		// lvl 0 - 20%
 		// lvl 1 - 33%

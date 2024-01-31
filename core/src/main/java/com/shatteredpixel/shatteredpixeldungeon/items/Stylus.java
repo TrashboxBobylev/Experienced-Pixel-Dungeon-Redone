@@ -112,7 +112,7 @@ public class Stylus extends Item {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 30 * quantity;
 	}
 

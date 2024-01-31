@@ -202,8 +202,8 @@ public class WandOfCorruption extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, buffedLvl() );
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, buffedLvl() );
 
 		// lvl 0 - 16%
 		// lvl 1 - 28.5%

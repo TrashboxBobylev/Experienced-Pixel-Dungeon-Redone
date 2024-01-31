@@ -216,12 +216,12 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return isKnown() ? 50 * quantity : super.value();
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 
@@ -260,7 +260,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 					boolean wasCursed = w.cursed;
 					boolean hadCursedEnchant = w.hasCurseEnchant();
 
-					for (int i = 0; i < curItem.quantity(); i++)
+					for (long i = 0; i < curItem.quantity(); i++)
 						w.upgrade();
 
 					if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
@@ -274,7 +274,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 					boolean wasCursed = a.cursed;
 					boolean hadCursedGlyph = a.hasCurseGlyph();
 
-					for (int i = 0; i < curItem.quantity(); i++)
+					for (long i = 0; i < curItem.quantity(); i++)
 						a.upgrade();
 
 					if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
@@ -286,14 +286,14 @@ public class ScrollOfUpgrade extends InventoryScroll {
 				} else if (item instanceof Wand || item instanceof Ring) {
 					boolean wasCursed = item.cursed;
 
-					for (int i = 0; i < curItem.quantity(); i++)
+					for (long i = 0; i < curItem.quantity(); i++)
 						item.upgrade();
 
 					if (item.cursedKnown && wasCursed && !item.cursed){
 						removeCurse( Dungeon.hero );
 					}
 				} else {
-					for (int i = 0; i < curItem.quantity(); i++)
+					for (long i = 0; i < curItem.quantity(); i++)
 						item.upgrade();
 				}
 				((InventoryScroll)curItem).readAnimation();

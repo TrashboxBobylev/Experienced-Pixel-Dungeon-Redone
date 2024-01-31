@@ -44,7 +44,7 @@ public class PhantomMeat extends Food {
 		effect(hero);
 	}
 
-	public int value() {
+	public long value() {
 		return 30 * quantity;
 	}
 

@@ -36,7 +36,7 @@ public class HolyDart extends TippedDart {
 	}
 	
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		
 		Buff.affect(defender, Doom.class);
 		

@@ -60,11 +60,11 @@ public class WandOfLightning extends DamageWand {
 
 	private ArrayList<Lightning.Arc> arcs = new ArrayList<>();
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 5+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 10+5*lvl;
 	}
 	
@@ -99,7 +99,7 @@ public class WandOfLightning extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like shocking enchantment
 		new LightningOnHit().proc(staff, attacker, defender, damage);
 	}

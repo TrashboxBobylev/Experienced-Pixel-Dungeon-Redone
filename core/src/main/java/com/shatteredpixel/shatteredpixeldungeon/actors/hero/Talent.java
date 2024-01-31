@@ -659,7 +659,7 @@ public enum Talent {
 		if (hero.buff(Talent.SpiritBladesTracker.class) != null
 				&& Random.Int(10) < 3*hero.pointsInTalent(Talent.SPIRIT_BLADES)){
 			SpiritBow bow = hero.belongings.getItem(SpiritBow.class);
-			if (bow != null) dmg = bow.proc( hero, enemy, dmg );
+			if (bow != null) dmg = (int) bow.proc( hero, enemy, dmg );
 			hero.buff(Talent.SpiritBladesTracker.class).detach();
 		}
 

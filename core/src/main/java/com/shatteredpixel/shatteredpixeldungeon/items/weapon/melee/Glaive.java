@@ -42,7 +42,7 @@ public class Glaive extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  Math.round(9f*(tier+1)) +    //54 base, up from 36
 				lvl*Math.round(2f*(tier+1)); //+12 per level, up from +7
 	}

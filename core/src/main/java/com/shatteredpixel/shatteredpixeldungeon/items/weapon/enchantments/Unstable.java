@@ -50,7 +50,7 @@ public class Unstable extends Weapon.Enchantment {
 	};
 
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
 		
 		int conservedDamage = 0;
 		if (attacker.buff(Kinetic.ConservedDamage.class) != null) {

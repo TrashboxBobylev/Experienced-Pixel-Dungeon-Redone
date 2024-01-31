@@ -102,13 +102,13 @@ public class ExoticPotion extends Potion {
 	
 	@Override
 	//20 gold more than its none-exotic equivalent
-	public int value() {
+	public long value() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 20) * quantity;
 	}
 
 	@Override
 	//4 more energy than its none-exotic equivalent
-	public int energyVal() {
+	public long energyVal() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 4) * quantity;
 	}
 
@@ -124,7 +124,7 @@ public class ExoticPotion extends Potion {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 4;
 		}
 

@@ -35,7 +35,7 @@ public class LootIndicator extends Tag {
 	private ItemSlot slot;
 	
 	private Item lastItem = null;
-	private int lastQuantity = 0;
+	private long lastQuantity = 0;
 	
 	public LootIndicator() {
 		super( 0x185898 );

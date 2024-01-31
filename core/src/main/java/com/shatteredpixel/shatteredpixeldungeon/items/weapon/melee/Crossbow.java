@@ -60,7 +60,7 @@ public class Crossbow extends MeleeWeapon {
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //25 base, down from 30
 				lvl*(tier+1);     //+5 per level, down from +6
 	}

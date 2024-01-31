@@ -65,7 +65,7 @@ public class WndEnergizeItem extends WndInfoItem {
 
 		} else {
 
-			int energyAll = item.energyVal();
+			long energyAll = item.energyVal();
 			RedButton btnEnergize1 = new RedButton( Messages.get(this, "energize_1", energyAll / item.quantity()) ) {
 				@Override
 				protected void onClick() {

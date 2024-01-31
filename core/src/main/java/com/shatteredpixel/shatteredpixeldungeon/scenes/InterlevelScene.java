@@ -316,8 +316,8 @@ public class InterlevelScene extends PixelScene {
 				} );
 				thread = null;
 				error = null;
-			} else if (thread != null && (int)waitingTime == 10){
-				waitingTime = 11f;
+			} else if (thread != null && (int)waitingTime == 60){
+				waitingTime = 61f;
 				String s = "";
 				for (StackTraceElement t : thread.getStackTrace()){
 					s += "\n";
@@ -326,7 +326,7 @@ public class InterlevelScene extends PixelScene {
 				//we care about reporting game logic exceptions, not slow IO
 				if (!s.contains("FileUtils.bundleToFile")){
 					ShatteredPixelDungeon.reportException(
-							new RuntimeException("waited more than 10 seconds on levelgen. " +
+							new RuntimeException("waited more than 60 seconds on levelgen. " +
 									"Seed:" + Dungeon.seed + " depth:" + Dungeon.depth + " trace:" +
 									s));
 				}

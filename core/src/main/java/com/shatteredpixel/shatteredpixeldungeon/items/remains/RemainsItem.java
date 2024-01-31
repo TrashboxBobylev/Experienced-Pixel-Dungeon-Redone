@@ -72,7 +72,7 @@ public abstract class RemainsItem extends Item {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 50;
 	}
 

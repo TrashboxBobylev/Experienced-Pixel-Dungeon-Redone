@@ -117,7 +117,7 @@ public class ReclaimTrap extends TargetedSpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity, rounds down
 		return (int)((40 + 50) * (quantity/4f));
 	}

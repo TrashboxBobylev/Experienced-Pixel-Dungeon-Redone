@@ -329,11 +329,11 @@ public class InventoryPane extends Component {
 		if (selector == null) {
 			promptTxt.visible = false;
 
-			goldTxt.text(Integer.toString(Dungeon.gold));
+			goldTxt.text(Long.toString(Dungeon.gold));
 			goldTxt.measure();
 			goldTxt.visible = gold.visible = true;
 
-			energyTxt.text(Integer.toString(Dungeon.energy));
+			energyTxt.text(Long.toString(Dungeon.energy));
 			energyTxt.measure();
 			energyTxt.visible = energy.visible = Dungeon.energy > 0;
 		} else {

@@ -91,7 +91,7 @@ public class OverloadBeacon extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 125 * quantity;
     }
 

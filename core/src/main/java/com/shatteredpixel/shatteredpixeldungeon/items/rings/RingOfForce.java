@@ -92,7 +92,7 @@ public class RingOfForce extends Ring {
 	}
 
 	//same as equivalent tier weapon
-	private static int min(int lvl, float tier){
+	private static int min(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
@@ -102,7 +102,7 @@ public class RingOfForce extends Ring {
 	}
 
 	//same as equivalent tier weapon
-	private static int max(int lvl, float tier){
+	private static int max(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
@@ -115,7 +115,7 @@ public class RingOfForce extends Ring {
 	public String statsInfo() {
 		float tier = tier(Dungeon.hero.STR());
 		if (isIdentified()) {
-			int level = soloBuffedBonus();
+			long level = soloBuffedBonus();
 			String info = Messages.get(this, "stats", min(level, tier), max(level, tier), level);
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				level = combinedBuffedBonus(Dungeon.hero);

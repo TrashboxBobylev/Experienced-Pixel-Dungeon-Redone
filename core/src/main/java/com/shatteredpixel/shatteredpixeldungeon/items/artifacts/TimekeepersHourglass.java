@@ -274,7 +274,7 @@ public class TimekeepersHourglass extends Artifact {
 
 				Invisibility.dispel();
 
-				int usedCharge = Math.min(charge, 2);
+				long usedCharge = Math.min(charge, 2);
 				//buffs always act last, so the stasis buff should end a turn early.
 				spend(5*usedCharge);
 
@@ -490,7 +490,7 @@ public class TimekeepersHourglass extends Artifact {
 		}
 
 		@Override
-		public int value() {
+		public long value() {
 			return 30;
 		}
 

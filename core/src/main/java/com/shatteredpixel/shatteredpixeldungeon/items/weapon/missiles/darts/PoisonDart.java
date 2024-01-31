@@ -37,7 +37,7 @@ public class PoisonDart extends TippedDart {
 	}
 	
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 
 		//when processing charged shot, only poison enemies
 		if (!processingChargedShot || attacker.alignment != defender.alignment) {

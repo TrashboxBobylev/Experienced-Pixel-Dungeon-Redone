@@ -123,13 +123,13 @@ public abstract class TippedDart extends Dart {
 	}
 
 	//the number of regular darts lost due to merge being called
-	public static int lostDarts = 0;
+	public static long lostDarts = 0;
 
 	@Override
 	public Item merge(Item other) {
-		int total = quantity() + other.quantity();
+		long total = quantity() + other.quantity();
 		super.merge(other);
-		int extra = total - quantity();
+		long extra = total - quantity();
 
 		//need to spawn waste tipped darts as regular darts
 		if (extra > 0){
@@ -184,7 +184,7 @@ public abstract class TippedDart extends Dart {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//value of regular dart plus half of the seed
 		return 8 * quantity;
 	}
@@ -205,7 +205,7 @@ public abstract class TippedDart extends Dart {
 		types.put(Swiftthistle.Seed.class,  AdrenalineDart.class);
 	}
 	
-	public static TippedDart getTipped( Plant.Seed s, int quantity ){
+	public static TippedDart getTipped( Plant.Seed s, long quantity ){
 		return (TippedDart) Reflection.newInstance(types.get(s.getClass())).quantity(quantity);
 	}
 	

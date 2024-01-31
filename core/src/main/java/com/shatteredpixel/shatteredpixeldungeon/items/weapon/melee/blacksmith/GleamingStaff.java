@@ -53,18 +53,18 @@ public class GleamingStaff extends BlacksmithWeapon {
     public int counter = 0;
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return Math.round(super.min(lvl)*0.6f);
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return Math.round(super.max(lvl)*0.75f);
     }
 
     @Override
-    public int defenseFactor( Char owner ) {
-        int defense = tier + Dungeon.cycle * 5 + (buffedLvl() * (1 + Dungeon.cycle));
+    public long defenseFactor( Char owner ) {
+        long defense = tier + Dungeon.cycle * 5 + (buffedLvl() * (1 + Dungeon.cycle));
         if (owner.buff(GuardTracker.class) != null)
             return defense * 2;
         return defense;	//2 extra defence
@@ -77,7 +77,7 @@ public class GleamingStaff extends BlacksmithWeapon {
     private static final int COMBO_COUNT = 21;
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         counter++;
         Sample.INSTANCE.play( Assets.Sounds.GOLD, 2f, 1f + 3.5f * ((COMBO_COUNT * 1f - counter) / (COMBO_COUNT * 1f))  );
         if (counter >= COMBO_COUNT){
