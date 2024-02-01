@@ -199,7 +199,7 @@ public class Statistics {
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
-		goldCollected	= bundle.getInt( GOLD );
+		goldCollected	= bundle.getLong( GOLD );
 		deepestFloor	= bundle.getInt( DEEPEST );
 		highestAscent   = bundle.getInt( HIGHEST );
 		enemiesSlain	= bundle.getInt( SLAIN );
@@ -246,7 +246,7 @@ public class Statistics {
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){
-		info.goldCollected  = bundle.getInt( GOLD );
+		info.goldCollected  = bundle.getLong( GOLD );
 		info.maxDepth       = bundle.getInt( DEEPEST );
 	}
 
