@@ -449,6 +449,7 @@ public class Blacksmith extends NPC {
 
 			favor       = 0;
 			pickaxe     = new Pickaxe().identify();
+			((Pickaxe)pickaxe).tier += 5*(Dungeon.cycle+1);
 			reforges    = 0;
 			hardens     = 0;
 			upgrades    = 0;
