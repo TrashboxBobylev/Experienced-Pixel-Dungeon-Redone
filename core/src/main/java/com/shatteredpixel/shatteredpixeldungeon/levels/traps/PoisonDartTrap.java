@@ -119,7 +119,7 @@ public class PoisonDartTrap extends Trap {
 								});
 						return false;
 					} else {
-						finalTarget.damage(Random.NormalIntRange(4, 8) - finalTarget.drRoll(), PoisonDartTrap.this);
+						finalTarget.damage((long) (Math.pow(Random.NormalLongRange(4, 8), Dungeon.cycle+1)) - finalTarget.drRoll(), PoisonDartTrap.this);
 						Buff.affect( finalTarget, Poison.class ).set( poisonAmount() );
 						return true;
 					}
