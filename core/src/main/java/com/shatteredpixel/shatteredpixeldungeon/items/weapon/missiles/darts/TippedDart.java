@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,13 +123,13 @@ public abstract class TippedDart extends Dart {
 	}
 
 	//the number of regular darts lost due to merge being called
-	public static int lostDarts = 0;
+	public static long lostDarts = 0;
 
 	@Override
 	public Item merge(Item other) {
-		int total = quantity() + other.quantity();
+		long total = quantity() + other.quantity();
 		super.merge(other);
-		int extra = total - quantity();
+		long extra = total - quantity();
 
 		//need to spawn waste tipped darts as regular darts
 		if (extra > 0){
@@ -142,7 +142,7 @@ public abstract class TippedDart extends Dart {
 
 	@Override
 	public float durabilityPerUse() {
-		float use = super.durabilityPerUse();
+		float use = super.durabilityPerUse(false);
 
 		if (Dungeon.hero.subClass == HeroSubClass.WARDEN) {
 			use /= 5;
@@ -172,16 +172,19 @@ public abstract class TippedDart extends Dart {
 		}
 		use *= (1f - lotusPreserve);
 
+		float usages = Math.round(MAX_DURABILITY/use);
+
 		//grants 4 extra uses with charged shot
 		if (Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
-			use = 100f/((100f/use) + 4f) + 0.001f;
+			usages += 4;
 		}
-		
-		return use;
+
+		//add a tiny amount to account for rounding error for calculations like 1/3
+		return (MAX_DURABILITY/usages) + 0.001f;
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//value of regular dart plus half of the seed
 		return 8 * quantity;
 	}
@@ -202,7 +205,7 @@ public abstract class TippedDart extends Dart {
 		types.put(Swiftthistle.Seed.class,  AdrenalineDart.class);
 	}
 	
-	public static TippedDart getTipped( Plant.Seed s, int quantity ){
+	public static TippedDart getTipped( Plant.Seed s, long quantity ){
 		return (TippedDart) Reflection.newInstance(types.get(s.getClass())).quantity(quantity);
 	}
 	

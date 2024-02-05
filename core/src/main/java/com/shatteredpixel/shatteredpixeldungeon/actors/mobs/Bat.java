@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,10 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Random;
 
 public class Bat extends Mob {
@@ -73,7 +74,7 @@ public class Bat extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(50, 65);
             case 2: return Random.NormalIntRange(240, 312);
@@ -106,13 +107,13 @@ public class Bat extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
-		int reg = Math.min( damage - 4 - Dungeon.cycle * 60, HT - HP );
+		long reg = Math.min( damage - 4 - Dungeon.cycle * 60L, HT - HP );
 		
 		if (reg > 0) {
 			HP += reg;
-			sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+			sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(reg), FloatingText.HEALING);
 		}
 		
 		return damage;

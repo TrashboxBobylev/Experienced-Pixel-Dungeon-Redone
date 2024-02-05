@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange( armor.DRMin(), armor.DRMax());
+	public long drRoll() {
+		return (int) (super.drRoll() + Random.NormalLongRange( armor.DRMin(), armor.DRMax()));
 	}
 
 	//used in some glyph calculations
@@ -97,17 +97,18 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
-		damage = armor.proc(enemy, this, damage);
+	public long defenseProc(Char enemy, long damage) {
+		damage = (int) armor.proc(enemy, this, damage);
 		return super.defenseProc(enemy, damage);
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		//TODO improve this when I have proper damage source logic
 		if (armor != null && armor.hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
 			dmg -= AntiMagic.drRoll(this, armor.buffedLvl());
+			dmg = Math.max(dmg, 0);
 		}
 
 		super.damage( dmg, src );

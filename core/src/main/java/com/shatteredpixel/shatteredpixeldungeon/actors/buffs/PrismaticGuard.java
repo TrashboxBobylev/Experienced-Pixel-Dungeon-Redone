@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ public class PrismaticGuard extends Buff {
 		type = buffType.POSITIVE;
 	}
 	
-	private float HP;
+	private double HP;
 	
 	@Override
 	public boolean act() {
@@ -54,7 +54,8 @@ public class PrismaticGuard extends Buff {
 		int v = hero.visibleEnemies();
 		for (int i=0; i < v; i++) {
 			Mob mob = hero.visibleEnemy( i );
-			if ( mob.isAlive() && mob.state != mob.PASSIVE && mob.state != mob.WANDERING && mob.state != mob.SLEEPING && !hero.mindVisionEnemies.contains(mob)
+			if ( mob.isAlive() && !mob.isInvulnerable(PrismaticImage.class)
+					&& mob.state != mob.PASSIVE && mob.state != mob.WANDERING && mob.state != mob.SLEEPING && !hero.mindVisionEnemies.contains(mob)
 					&& (closest == null || Dungeon.level.distance(hero.pos, mob.pos) < Dungeon.level.distance(hero.pos, closest.pos))) {
 				closest = mob;
 			}
@@ -96,15 +97,15 @@ public class PrismaticGuard extends Buff {
 		return true;
 	}
 	
-	public void set( int HP ){
+	public void set( long HP ){
 		this.HP = HP;
 	}
 	
-	public int maxHP(){
+	public long maxHP(){
 		return maxHP((Hero)target);
 	}
 	
-	public static int maxHP( Hero hero ){
+	public static long maxHP( Hero hero ){
 		return 10 + (int)Math.floor(hero.lvl * 2.5f); //half of hero's HP
 	}
 	
@@ -120,17 +121,17 @@ public class PrismaticGuard extends Buff {
 
 	@Override
 	public float iconFadePercent() {
-		return 1f - HP/(float)maxHP();
+		return (float) (1f - HP/(double) maxHP());
 	}
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString((int)HP);
+		return Long.toString((long) HP);
 	}
 	
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", (int)HP, maxHP());
+		return Messages.get(this, "desc", (long)HP, maxHP());
 	}
 	
 	private static final String HEALTH = "hp";
@@ -144,6 +145,6 @@ public class PrismaticGuard extends Buff {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		HP = bundle.getFloat(HEALTH);
+		HP = bundle.getLong(HEALTH);
 	}
 }

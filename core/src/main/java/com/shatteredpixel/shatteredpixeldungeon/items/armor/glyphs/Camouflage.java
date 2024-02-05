@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,12 +38,12 @@ public class Camouflage extends Armor.Glyph {
 	private static ItemSprite.Glowing GREEN = new ItemSprite.Glowing( 0x448822 );
 
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 		//no proc effect, see HighGrass.trample
 		return damage;
 	}
 
-	public static void activate(Char ch, int level){
+	public static void activate(Char ch, long level){
 		Buff.prolong(ch, Invisibility.class, Math.round((3 + level/2f)* genericProcChanceMultiplier(ch)));
 		if ( Dungeon.level.heroFOV[ch.pos] ) {
 			Sample.INSTANCE.play( Assets.Sounds.MELD );

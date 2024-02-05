@@ -36,6 +36,7 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
 import java.io.IOException;
+import java.lang.Float;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -47,7 +48,7 @@ import java.util.regex.Pattern;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
 import static java.util.Arrays.copyOfRange;
 
-import java.lang.Float;
+import java.lang.Long;
 
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
@@ -459,11 +460,11 @@ public class ScrollOfDebug extends Scroll {
                                 else if(input[i].matches("[\\-x+]\\d+")) {
                                     switch (input[i].charAt(0)) {
                                         case 'x':
-                                            item.quantity(Integer.parseInt(input[i].substring(1)));
+                                            item.quantity(Long.parseLong(input[i].substring(1)));
                                             break;
                                         case '-':
                                         case '+':
-                                            item.level(Integer.parseInt(input[i]));
+                                            item.level(Long.parseLong(input[i]));
                                             break;
                                     }
                                 }

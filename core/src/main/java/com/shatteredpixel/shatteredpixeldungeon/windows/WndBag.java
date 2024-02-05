@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ public class WndBag extends WndTabbed {
 			PixelScene.align(gold);
 			add(gold);
 
-			BitmapText amt = new BitmapText(Integer.toString(Dungeon.gold), PixelScene.pixelFont);
+			BitmapText amt = new BitmapText(Long.toString(Dungeon.gold), PixelScene.pixelFont);
 			amt.hardlight(TITLE_COLOR);
 			amt.measure();
 			amt.x = width - gold.width() - amt.width() - 1;
@@ -187,7 +187,7 @@ public class WndBag extends WndTabbed {
 			PixelScene.align(gold);
 			add(gold);
 
-			BitmapText amt = new BitmapText(Integer.toString(Dungeon.gold), PixelScene.pixelFont);
+			BitmapText amt = new BitmapText(Long.toString(Dungeon.gold), PixelScene.pixelFont);
 			amt.hardlight(TITLE_COLOR);
 			amt.measure();
 			amt.x = width - gold.width() - amt.width() - 2f;
@@ -203,7 +203,7 @@ public class WndBag extends WndTabbed {
 			PixelScene.align(energy);
 			add(energy);
 
-			amt = new BitmapText(Integer.toString(Dungeon.energy), PixelScene.pixelFont);
+			amt = new BitmapText(Long.toString(Dungeon.energy), PixelScene.pixelFont);
 			amt.hardlight(0x44CCFF);
 			amt.measure();
 			amt.x = width - energy.width() - amt.width() - 1;

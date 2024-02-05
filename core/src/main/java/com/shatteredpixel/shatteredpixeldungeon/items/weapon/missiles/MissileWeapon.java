@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,31 +72,40 @@ abstract public class MissileWeapon extends Weapon {
 	protected MissileWeapon parent;
 
 	@Override
-	public int min() {
+	public long min() {
 		return Math.max(0, min( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
 	}
 	
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return  3 * tier +                      //base
 				(tier == 1 ? lvl*2 : 3*lvl);      //level scaling
 	}
 	
 	@Override
-	public int max() {
+	public long max() {
 		return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  7 * tier +                      //base
 				(tier == 1 ? 3*lvl : tier*2*lvl); //level scaling
 	}
 	
-	public int STRReq(int lvl){
+	public int STRReq(long lvl){
 		return STRReq(tier, lvl) - 1; //1 less str than normal for their tier
 	}
-	
+
+	//use the parent item if this has been thrown from a parent
+	public long buffedLvl(){
+		if (parent != null) {
+			return parent.buffedLvl();
+		} else {
+			return super.buffedLvl();
+		}
+	}
+
 	@Override
 	//FIXME some logic here assumes the items are in the player's inventory. Might need to adjust
 	public Item upgrade() {
@@ -162,7 +171,7 @@ abstract public class MissileWeapon extends Weapon {
 		}
 
 		if (projecting
-				&& (Dungeon.level.passable[dst] || Dungeon.level.avoid[dst])
+				&& (Dungeon.level.passable[dst] || Dungeon.level.avoid[dst] || Actor.findChar(dst) != null)
 				&& Dungeon.level.distance(user.pos, dst) <= Math.round(4 * Enchantment.genericProcChanceMultiplier(user))){
 			return dst;
 		} else {
@@ -232,7 +241,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		if (attacker == Dungeon.hero && Dungeon.hero.subClass == HeroSubClass.SNIPER){
 			if (this instanceof Dart && ((Dart) this).crossbowHasEnchant(Dungeon.hero)){
 				//do nothing
@@ -268,7 +277,7 @@ abstract public class MissileWeapon extends Weapon {
 
 	public String status() {
 		//show quantity even when it is 1
-		return Integer.toString( quantity );
+		return Long.toString( quantity );
 	}
 	
 	@Override
@@ -306,6 +315,11 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	public float durabilityPerUse(){
+		//classes that override durabilityPerUse can turn rounding off, to do their own rounding after more logic
+		return durabilityPerUse(true);
+	}
+
+	protected final float durabilityPerUse( boolean rounded){
 		float usages = baseUses * (float)(Math.pow(3, level()));
 
 		//+50%/75% durability
@@ -315,16 +329,19 @@ abstract public class MissileWeapon extends Weapon {
 		if (holster) {
 			usages *= MagicalHolster.HOLSTER_DURABILITY_FACTOR;
 		}
-		
+
 		usages *= RingOfSharpshooting.durabilityMultiplier( Dungeon.hero );
-		
+
 		//at 100 uses, items just last forever.
 		if (usages >= 100f) return 0;
 
-		usages = Math.round(usages);
+		if (rounded){usages = Math.round(usages);
 
 		//add a tiny amount to account for rounding error for calculations like 1/3
-		return (MAX_DURABILITY/usages) + 0.001f;
+		return (MAX_DURABILITY/usages) + 0.001f;} else {
+			//rounding can be disabled for classes that override durability per use
+			return MAX_DURABILITY/usages;
+		}
 	}
 	
 	protected void decrementDurability(){
@@ -352,8 +369,8 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll( owner ));
+	public long damageRoll(Char owner) {
+		long damage = augment.damageFactor(super.damageRoll( owner ));
 		
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
@@ -362,7 +379,7 @@ abstract public class MissileWeapon extends Weapon {
 			}
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
 				if (((Hero) owner).subClass == HeroSubClass.FREERUNNER)
-					damage = Math.round(damage * 1.5f);
+					damage = Math.round(damage * 1.5d);
 			}
 		}
 		
@@ -398,7 +415,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	@Override
-	public Item split(int amount) {
+	public Item split(long amount) {
 		bundleRestoring = true;
 		Item split = super.split(amount);
 		bundleRestoring = false;
@@ -472,7 +489,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 6 * tier * quantity * (level() + 1);
 	}
 	

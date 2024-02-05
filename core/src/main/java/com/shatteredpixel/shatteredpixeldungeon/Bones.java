@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,13 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
+import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
@@ -46,11 +49,14 @@ public class Bones {
 	private static final String LEVEL	= "level";
 	private static final String BRANCH	= "branch";
 	private static final String ITEM	= "item";
+	private static final String HERO_CLASS	= "hero_class";
 
 	private static int depth = -1;
 	private static int branch = -1;
+
 	private static Item item;
-	
+	private static HeroClass heroClass;
+
 	public static void leave() {
 
 		//remains will usually drop on the floor the hero died on
@@ -66,10 +72,13 @@ public class Bones {
 		}
 
 		item = pickItem(Dungeon.hero);
+		heroClass = Dungeon.hero.heroClass;
 
 		Bundle bundle = new Bundle();
 		bundle.put( LEVEL, depth );
+		bundle.put( BRANCH, branch );
 		bundle.put( ITEM, item );
+		bundle.put( HERO_CLASS, heroClass );
 
 		try {
 			FileUtils.bundleToFile( BONES_FILE, bundle );
@@ -81,14 +90,10 @@ public class Bones {
 	private static Item pickItem(Hero hero){
 		Item item = null;
 
-		//seeded runs always leave gold
+		//seeded runs don't leave items
 		//This is to prevent using specific seeds to transport items to regular runs
 		if (!Dungeon.customSeedText.isEmpty()){
-			if (Dungeon.gold > 100) {
-				return new Gold( Random.NormalIntRange( 50, Dungeon.gold/2 ) );
-			} else {
-				return new Gold( 50 );
-			}
+			return null;
 		}
 
 		if (Dungeon.Int(3) != 0) {
@@ -128,28 +133,29 @@ public class Bones {
 			ArrayList<Item> items = new ArrayList<>();
 			while (iterator.hasNext()){
 				curItem = iterator.next();
-				if (curItem.bones)
+				if (curItem.bones) {
 					items.add(curItem);
+				}
 			}
 
+			//if there are few items, there is an increasingly high chance of leaving nothing
 			if (Dungeon.Int(3) < items.size()) {
 				item = Random.element(items);
 				if (item.stackable){
-					item.quantity(Dungeon.NormalIntRange(1, (item.quantity() + 1) / 2));
+					item.quantity(Dungeon.NormalLongRange(1, (item.quantity() + 1) / 2));
+					if (item.quantity() > 3){
+						item.quantity(3);
+					}
 				}
 			} else {
-				if (Dungeon.gold > 100) {
-					item = new Gold( Dungeon.NormalIntRange( 50, Dungeon.gold/2 ) );
-				} else {
-					item = new Gold( 50 );
-				}
+				item = null;
 			}
 		}
 		
 		return item;
 	}
 
-	public static Item get() {
+	public static ArrayList<Item> get() {
 		//daily runs do not interact with remains
 		if (Dungeon.daily){
 			return null;
@@ -163,7 +169,16 @@ public class Bones {
 				depth = bundle.getInt( LEVEL );
 				branch = bundle.getInt( BRANCH );
 				if (depth > 0) {
-					item = (Item) bundle.get(ITEM);
+					if (bundle.contains(ITEM)) {
+						item = (Item) bundle.get(ITEM);
+					} else {
+						item = null;
+					}
+					if (bundle.contains(HERO_CLASS)){
+						heroClass = bundle.getEnum(HERO_CLASS, HeroClass.class);
+					} else {
+						heroClass = null;
+					}
 				}
 
 				return get();
@@ -184,13 +199,9 @@ public class Bones {
 				}
 				depth = 0;
 
-				//challenged or seeded runs will always find 10 gold
+				//challenged or seeded runs don't get items from prior runs
 				if (Dungeon.challenges != 0 || !Dungeon.customSeedText.isEmpty()){
-					item = new Gold(10);
-				}
-
-				if (item == null) {
-					item = new Gold(50);
+					item = null;
 				}
 
 				//Enforces artifact uniqueness
@@ -200,39 +211,53 @@ public class Bones {
 						//generates a new artifact of the same type, always +0
 						Artifact artifact = Reflection.newInstance(((Artifact)item).getClass());
 						
-						if (artifact == null){
-							return new Gold(item.value());
+						if (artifact != null){
+							artifact.cursed = true;
+							artifact.cursedKnown = true;
 						}
 
-						artifact.cursed = true;
-						artifact.cursedKnown = true;
-
-						return artifact;
+						item = artifact;
 						
 					} else {
-						return new Gold(item.value());
+						item = new Gold(item.value());
 					}
 				}
 
-				if (item == null) return null;
-
-				if (item.isUpgradable() && !(item instanceof MissileWeapon)) {
-					item.cursed = true;
-					item.cursedKnown = true;
-				}
-				
-				if (item.isUpgradable()) {
-					//caps at +3
-					if (item.level() > 3) {
-						item.degrade( item.level() - 3 );
+				if (item != null) {
+					if (item.isUpgradable() && !(item instanceof MissileWeapon)) {
+						item.cursed = true;
+						item.cursedKnown = true;
 					}
-					//thrown weapons are always IDed, otherwise set unknown
-					item.levelKnown = item instanceof MissileWeapon;
+
+					if (item.isUpgradable()) {
+						//caps at +3
+						if (item.level() > 3) {
+							item.degrade(item.level() - 3);
+						}
+						//thrown weapons are always IDed, otherwise set unknown
+						item.levelKnown = item instanceof MissileWeapon;
+					}
+
+					item.reset();
 				}
-				
-				item.reset();
-				
-				return item;
+
+				ArrayList<Item> result = new ArrayList<>();
+
+				if (heroClass != null) {
+					if (heroClass == HeroClass.RAT_KING)
+						result.add(new CheeseChunk());
+					else
+						result.add(RemainsItem.get(heroClass));
+					if (Dungeon.bossLevel()){
+						Statistics.qualifiedForBossRemainsBadge = true;
+					}
+				}
+
+				if (item != null) {
+					result.add(item);
+				}
+
+				return result.isEmpty() ? null : result;
 			} else {
 				return null;
 			}

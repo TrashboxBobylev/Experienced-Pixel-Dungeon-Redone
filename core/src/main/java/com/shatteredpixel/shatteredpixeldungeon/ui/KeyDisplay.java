@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class KeyDisplay extends Visual {
 	private SmartTexture tx = TextureCache.get(Assets.Interfaces.MENU_BTN);
 	
 	private boolean dirty = true;
-	private int[] keys;
+	private long[] keys;
 	
 	//mapping of key types to slots in the array, 0 is reserved for black (missed) keys
 	//this also determines the order these keys will appear (lower first)
@@ -69,7 +69,7 @@ public class KeyDisplay extends Visual {
 	}
 	
 	public void updateKeys(){
-		keys = new int[keyMap.size()+1];
+		keys = new long[keyMap.size()+1];
 		
 		for (Notes.KeyRecord rec : Notes.getRecords(Notes.KeyRecord.class)){
 			if (rec.depth() < Dungeon.depth){
@@ -81,13 +81,13 @@ public class KeyDisplay extends Visual {
 		}
 		
 		totalKeys = 0;
-		for (int k : keys){
+		for (long k : keys){
 			totalKeys += k;
 		}
 		dirty = true;
 	}
 	
-	public int keyCount(){
+	public long keyCount(){
 		return totalKeys;
 	}
 	
@@ -131,7 +131,7 @@ public class KeyDisplay extends Visual {
 		
 		while (totalKeys > maxKeys){
 			Class<? extends Key> mostType = null;
-			int mostNum = 0;
+			long mostNum = 0;
 			for (Class<?extends Key> k : keyMap.keySet()){
 				if (keys[keyMap.get(k)] >= mostNum){
 					mostType = k;

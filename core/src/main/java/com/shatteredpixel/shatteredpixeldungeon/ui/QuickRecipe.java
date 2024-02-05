@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ public class QuickRecipe extends Component {
 	public QuickRecipe(Recipe r, ArrayList<Item> inputs, final Item output) {
 		
 		ingredients = inputs;
-		int cost = r.cost(inputs);
+		long cost = r.cost(inputs);
 		boolean hasInputs = true;
 		this.inputs = new ArrayList<>();
 		for (final Item in : inputs) {
@@ -97,7 +97,7 @@ public class QuickRecipe extends Component {
 			};
 			
 			ArrayList<Item> similar = Dungeon.hero.belongings.getAllSimilar(in);
-			int quantity = 0;
+			long quantity = 0;
 			for (Item sim : similar) {
 				//if we are looking for a specific item, it must be IDed
 				if (sim.getClass() != in.getClass() || sim.isIdentified()) quantity += sim.quantity();
@@ -188,11 +188,11 @@ public class QuickRecipe extends Component {
 			super( icon );
 		}
 		
-		public arrow( Image icon, int count ){
+		public arrow(Image icon, long count ){
 			super( icon );
 			hotArea.blockLevel = PointerArea.NEVER_BLOCK;
 
-			text = new BitmapText( Integer.toString(count), PixelScene.pixelFont);
+			text = new BitmapText( Long.toString(count), PixelScene.pixelFont);
 			text.measure();
 			add(text);
 		}

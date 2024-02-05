@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -74,7 +74,7 @@ public class AscensionChallenge extends Buff {
 		modifiers.put(Scorpio.class,        4f);
 	}
 
-	public static float statModifier(Char ch){
+	public static double statModifier(Char ch){
 		if (Dungeon.hero == null || Dungeon.hero.buff(AscensionChallenge.class) == null){
 			return 1;
 		}

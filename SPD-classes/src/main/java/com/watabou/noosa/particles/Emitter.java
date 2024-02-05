@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -137,9 +137,11 @@ public class Emitter extends Group {
 
 	@Override
 	public void revive() {
+		//ensure certain emitter variables default to true
 		started = false;
-		//some emitters may be killed while not visible, this ensures true is always the default
 		visible = true;
+		fillTarget = true;
+		autoKill = true;
 		super.revive();
 	}
 

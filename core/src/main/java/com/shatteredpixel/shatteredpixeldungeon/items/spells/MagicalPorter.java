@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ public class MagicalPorter extends InventorySpell {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients, divided by output quantity
 		return Math.round(quantity * ((5 + 40) / 8f));
 	}

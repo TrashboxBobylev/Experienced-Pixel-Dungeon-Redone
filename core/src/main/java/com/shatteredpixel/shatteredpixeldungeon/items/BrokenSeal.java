@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,7 +90,7 @@ public class BrokenSeal extends Item {
 		this.glyph = glyph;
 	}
 
-	public int maxShield( int armTier, int armLvl ){
+	public long maxShield( int armTier, long armLvl ){
 		return armTier + armLvl + Dungeon.hero.pointsInTalent(Talent.IRON_WILL);
 	}
 
@@ -201,7 +201,7 @@ public class BrokenSeal extends Item {
 	public static class WarriorShield extends ShieldBuff {
 
 		private Armor armor;
-		private float partialShield;
+		private double partialShield;
 
 		@Override
 		public synchronized boolean act() {
@@ -225,7 +225,7 @@ public class BrokenSeal extends Item {
 			return true;
 		}
 		
-		public synchronized void supercharge(int maxShield){
+		public synchronized void supercharge(long maxShield){
 			if (maxShield > shielding()){
 				setShield(maxShield);
 			}
@@ -235,7 +235,7 @@ public class BrokenSeal extends Item {
 			armor = arm;
 		}
 
-		public synchronized int maxShield() {
+		public synchronized long maxShield() {
 			//metamorphed iron will logic
 			if (((Hero)target).heroClass != HeroClass.WARRIOR && ((Hero) target).hasTalent(Talent.IRON_WILL)){
 				return ((Hero) target).pointsInTalent(Talent.IRON_WILL);
@@ -250,7 +250,7 @@ public class BrokenSeal extends Item {
 		
 		@Override
 		//logic edited slightly as buff should not detach
-		public int absorbDamage(int dmg) {
+		public long absorbDamage(long dmg) {
 			if (shielding() <= 0) return dmg;
 
 			if (shielding() >= dmg){

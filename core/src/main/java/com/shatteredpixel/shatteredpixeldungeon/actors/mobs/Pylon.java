@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,10 +89,25 @@ public class Pylon extends Mob {
 
 	@Override
 	protected boolean act() {
-		alerted = false;
-		super.act();
+		//char logic
+		if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
+			fieldOfView = new boolean[Dungeon.level.length()];
+		}
+		Dungeon.level.updateFieldOfView( this, fieldOfView );
+
+		throwItems();
+
+		sprite.hideAlert();
+		sprite.hideLost();
+
+		//mob logic
+		enemy = chooseEnemy();
+
+		enemySeen = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
+		//end of char/mob logic
 
 		if (alignment == Alignment.NEUTRAL){
+			spend(TICK);
 			return true;
 		}
 
@@ -136,6 +151,8 @@ public class Pylon extends Mob {
 
 		targetNeighbor = (targetNeighbor+1)%8;
 
+		spend(TICK);
+
 		return true;
 	}
 
@@ -157,6 +174,7 @@ public class Pylon extends Mob {
 
 	public void activate(){
 		alignment = Alignment.ENEMY;
+		state = HUNTING; //so allies know to attack it
 		((PylonSprite) sprite).activate();
 	}
 
@@ -202,7 +220,7 @@ public class Pylon extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (dmg >= 15 + Dungeon.cycle * 60 && Dungeon.cycle < 2){
 			//takes 15/16/17/18/19/20 dmg at 15/17/20/24/29/36 incoming dmg
 			dmg = 14 + Dungeon.cycle * 60 + (int)(Math.sqrt(8*(dmg - 14) + 1) - 1)/2;

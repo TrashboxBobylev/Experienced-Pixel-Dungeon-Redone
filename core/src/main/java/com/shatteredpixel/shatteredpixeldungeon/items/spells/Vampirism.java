@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ public class Vampirism extends TargetedSpell{
 
         if (target != null && target != hero && !target.properties().contains(Char.Property.INORGANIC)){
             //33-66% of  health is transfered to user
-            int heal = Random.Int(target.HT / 3, target.HT * 2 / 3);
+            long heal = Random.Long(target.HT / 3, target.HT * 2 / 3);
             target.damage(heal, this);
             if (target.isAlive()){
                 target.sprite.emitter().burst(ShadowParticle.CURSE, 10);
@@ -67,7 +67,7 @@ public class Vampirism extends TargetedSpell{
     }
 
     @Override
-    public int value() {
+    public long value() {
         //prices of ingredients, divided by output quantity
         return Math.round(quantity * ((30 + 43.333333f+ 40) / 3f));
     }

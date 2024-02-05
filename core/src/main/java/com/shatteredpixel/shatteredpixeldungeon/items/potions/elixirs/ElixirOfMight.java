@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -51,10 +52,10 @@ public class ElixirOfMight extends Elixir {
 		identify();
 		
 		Dungeon.luck++;
+		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.LUCK);
 		
 		hero.updateHT( true );
-		hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(this, "msg_1" ));
-		GLog.p( Messages.get(this, "msg_2") );
+		GLog.p( Messages.get(this, "msg") );
 
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
@@ -65,7 +66,7 @@ public class ElixirOfMight extends Elixir {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		//prices of ingredients
 		return quantity * (50 + 40);
 	}

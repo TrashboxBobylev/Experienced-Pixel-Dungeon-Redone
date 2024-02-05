@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,8 +23,6 @@
  */
 
 package com.zrp200.scrollofdebug;
-
-import sun.net.www.protocol.file.FileURLConnection;
 
 import java.io.File;
 import java.io.IOException;
@@ -169,7 +167,7 @@ public class PackageTrie {
 
                     if (connection instanceof JarURLConnection) {
                         checkJarFile((JarURLConnection) connection, pckgname, root);
-                    } else if (connection instanceof FileURLConnection) {
+                    } else if ("file".equals(url.getProtocol())) {
                         try {
                             checkDirectory(
                                     new File(URLDecoder.decode(url.getPath(),

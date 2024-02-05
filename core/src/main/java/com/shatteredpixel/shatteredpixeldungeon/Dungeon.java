@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -184,7 +184,7 @@ public class Dungeon {
 	//keeps track of what levels the game should try to load instead of creating fresh
 	public static ArrayList<Integer> generatedLevels = new ArrayList<>();
 
-	public static int gold;
+	public static long gold;
 	public static int cycle;
 
 	public static ArrayList<Item> oofedItems = new ArrayList<>();
@@ -194,7 +194,7 @@ public class Dungeon {
 
 	public static float fireDamage;
 	public static int luck;
-	public static int energy;
+	public static long energy;
 
 	public static HashSet<Integer> chapters;
 
@@ -258,14 +258,14 @@ public class Dungeon {
 		generatedLevels.clear();
 		oofedItems.clear();
 
-		gold = 0;
+		gold = 0L;
 		cycle = 0;
 		Bbat.level = 1;
 		respawn_timer = 50;
 		additionalMobs = 0;
 		fireDamage = 1;
 		luck = 1;
-		energy = 0;
+		energy = 0L;
 
 		droppedItems = new SparseArray<>();
 
@@ -438,6 +438,8 @@ public class Dungeon {
 				}
 			}
 		}
+
+		Statistics.qualifiedForBossRemainsBadge = false;
 		
 		level.create();
 		
@@ -497,7 +499,9 @@ public class Dungeon {
 	}
 
 	public static boolean interfloorTeleportAllowed(){
-		if (Dungeon.level.locked || (Dungeon.hero != null && Dungeon.hero.belongings.getItem(Amulet.class) != null)){
+		if (Dungeon.level.locked
+				|| Dungeon.level instanceof MiningLevel
+				|| (Dungeon.hero != null && Dungeon.hero.belongings.getItem(Amulet.class) != null)){
 			return false;
 		}
 		return true;
@@ -861,8 +865,8 @@ public class Dungeon {
 		depth = bundle.getInt( DEPTH );
 		branch = bundle.getInt( BRANCH );
 
-		gold = bundle.getInt( GOLD );
-		energy = bundle.getInt( ENERGY );
+		gold = bundle.getLong( GOLD );
+		energy = bundle.getLong( ENERGY );
 
 		cycle = bundle.getInt( CYCLE);
 		respawn_timer = bundle.getFloat(RESPAWN_TIMER);
@@ -1202,6 +1206,33 @@ public class Dungeon {
 		return highest;
 	}
 
+	public static long Long(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.Long(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static long LongRange(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.LongRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static long NormalLongRange(long min, long max){
+		long highest = Long.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			long roll = Random.NormalLongRange(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
 	public static float Float(){
 		float highest = Float.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
@@ -1244,6 +1275,53 @@ public class Dungeon {
 		float highest = Float.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
 			float roll = Random.NormalFloat(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static double Double(){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.Float();
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static double Double(double max){
+		return Double(max, LuckDirection.DOWN);
+	}
+
+	public static double Double(double max, LuckDirection direction){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.Double(max);
+			if (i == 0)
+				highest = roll;
+			else {
+				switch (direction) {
+					case UP: if (roll > highest) highest = roll; break;
+					case DOWN: if (roll < highest) highest = roll; break;
+				}
+			}
+		}
+		return highest;
+	}
+
+	public static double Double(double min, double max){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.Double(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static double NormalDouble(double min, double max){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.NormalDouble(min, max);
 			if (roll > highest) highest = roll;
 		}
 		return highest;

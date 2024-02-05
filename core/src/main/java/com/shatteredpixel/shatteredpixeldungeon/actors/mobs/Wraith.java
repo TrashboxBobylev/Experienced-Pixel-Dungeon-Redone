@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 public class Wraith extends Mob {
 
@@ -53,6 +54,7 @@ public class Wraith extends Mob {
 		flying = true;
 
 		properties.add(Property.UNDEAD);
+		properties.add(Property.INORGANIC);
 	}
 	
 	private static final String LEVEL = "level";
@@ -71,7 +73,7 @@ public class Wraith extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange( 1 + level/2, 2 + level );
 	}
 	
@@ -96,21 +98,34 @@ public class Wraith extends Mob {
 		state = WANDERING;
 		return true;
 	}
-	
-	public static void spawnAround( int pos, boolean allowExotic ) {
-		for (int n : PathFinder.NEIGHBOURS4) {
-			spawnAt( pos + n, allowExotic );
-		}
+
+	public static void spawnAround( int pos ) {
+		spawnAround( pos, null );
 	}
 	
-	public static Wraith spawnAt( int pos, boolean allowExotic ) {
+	public static void spawnAround( int pos, Class<? extends Wraith> wraithClass ) {
+		for (int n : PathFinder.NEIGHBOURS4) {
+			spawnAt( pos + n, wraithClass );
+		}
+	}
+
+	public static Wraith spawnAt( int pos ) {
+		return spawnAt( pos, null );
+	}
+
+	public static Wraith spawnAt( int pos, Class<? extends Wraith> wraithClass ) {
 		if ((!Dungeon.level.solid[pos] || Dungeon.level.passable[pos]) && Actor.findChar( pos ) == null) {
 
 			Wraith w;
-			if (allowExotic && Random.Int(100) == 0){
-				w = new TormentedSpirit();
+			//if no wraith type is specified, 1/100 chance for exotic, otherwise normal
+			if (wraithClass == null){
+				if (Random.Int(100) == 0){
+					w = new TormentedSpirit();
+				} else {
+					w = new Wraith();
+				}
 			} else {
-				w = new Wraith();
+				w = Reflection.newInstance(wraithClass);
 			}
 			w.adjustStats( Dungeon.scalingDepth() );
 			w.pos = pos;
@@ -126,7 +141,7 @@ public class Wraith extends Mob {
 			} else {
 				w.sprite.emitter().burst(ShadowParticle.CURSE, 5);
 			}
-			
+
 			return w;
 		} else {
 			return null;

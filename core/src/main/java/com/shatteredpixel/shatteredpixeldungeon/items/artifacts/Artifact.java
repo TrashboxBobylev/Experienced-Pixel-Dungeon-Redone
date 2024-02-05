@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,12 +49,12 @@ public class Artifact extends KindofMisc {
 	protected int levelCap = 0;
 
 	//the current artifact charge
-	protected int charge = 0;
+	protected long charge = 0;
 	//the build towards next charge, usually rolls over at 1.
 	//better to keep charge as an int and use a separate float than casting.
 	protected float partialCharge = 0;
 	//the maximum charge, varies per artifact, not all artifacts use this.
-	protected int chargeCap = 0;
+	protected long chargeCap = 0;
 
 	//used by some artifacts to keep track of duration of effects or cooldowns to use.
 	protected int cooldown = 0;
@@ -118,17 +118,17 @@ public class Artifact extends KindofMisc {
     }
 
 	@Override
-	public int visiblyUpgraded() {
+	public long visiblyUpgraded() {
 		return levelKnown ? Math.round((level()*10)/(float)levelCap): 0;
 	}
 
 	@Override
-	public int buffedVisiblyUpgraded() {
+	public long buffedVisiblyUpgraded() {
 		return visiblyUpgraded();
 	}
 
 	@Override
-	public int buffedLvl() {
+	public long buffedLvl() {
 		//level isn't affected by buffs/debuffs
 		return level();
 	}
@@ -193,7 +193,7 @@ public class Artifact extends KindofMisc {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		int price = 100;
 		if (level() > 0)
 			price += 20*visiblyUpgraded();
@@ -231,7 +231,7 @@ public class Artifact extends KindofMisc {
 			return false;
 		}
 
-		public int itemLevel() {
+		public long itemLevel() {
 			return level();
 		}
 
@@ -261,8 +261,8 @@ public class Artifact extends KindofMisc {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
 		exp = bundle.getInt( EXP );
-		if (chargeCap > 0)  charge = Math.min( chargeCap, bundle.getInt( CHARGE ));
-		else                charge = bundle.getInt( CHARGE );
+		if (chargeCap > 0)  charge = Math.min( chargeCap, bundle.getLong( CHARGE ));
+		else                charge = bundle.getLong( CHARGE );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
 	}
 }

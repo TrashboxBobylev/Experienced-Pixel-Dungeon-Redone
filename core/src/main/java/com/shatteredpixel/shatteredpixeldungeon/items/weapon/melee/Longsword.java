@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,13 +60,13 @@ public class Longsword extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //25
 				lvl*(tier+1);   //+5
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
+	public long proc(Char attacker, Char defender, long damage) {
 		int[] targets = new int[2];
 		int direction = -1;
 		int direction1 = -1, direction2 = -1;
@@ -112,7 +112,7 @@ public class Longsword extends MeleeWeapon {
 				if (Actor.findChar(pos) != null){
 					Char ch = Actor.findChar(pos);
 					if (ch.alignment != attacker.alignment){
-						int dmg = Math.round(damage*0.6f);
+						long dmg = Math.round(damage*0.6f);
 						Sample.INSTANCE.play(Assets.Sounds.HIT_STAB, 1f, 0.75f);
 						if (enchantment != null && attacker.buff(MagicImmune.class) == null) {
 							dmg = enchantment.proc( this, attacker, defender, damage );

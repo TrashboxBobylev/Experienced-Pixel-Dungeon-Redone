@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -37,27 +37,26 @@ public class Vampiric extends Weapon.Enchantment {
 	private static ItemSprite.Glowing RED = new ItemSprite.Glowing( 0x660022 );
 	
 	@Override
-	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
+	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
 		
 		//chance to heal scales from 5%-30% based on missing HP
-		float missingPercent = (attacker.HT - attacker.HP) / (float)attacker.HT;
-		float healChance = 0.05f + .25f*missingPercent;
+		double missingPercent = (attacker.HT - attacker.HP) / (double)attacker.HT;
+		double healChance = 0.05f + .25f*missingPercent;
 
 		healChance *= procChanceMultiplier(attacker);
 		
-		if (Random.Float() < healChance){
+		if (Random.Double() < healChance){
 
-			float powerMulti = Math.max(1f, healChance);
+			double powerMulti = Math.max(1f, healChance);
 			
 			//heals for 50% of damage dealt
-			int healAmt = Math.round(damage * 0.5f * powerMulti);
+			long healAmt = Math.round(damage * 0.5f * powerMulti);
 			healAmt = Math.min( healAmt, attacker.HT - attacker.HP );
 			
 			if (healAmt > 0 && attacker.isAlive()) {
 				
 				attacker.HP += healAmt;
-				attacker.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.4f, 1 );
-				attacker.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( healAmt ) );
+				attacker.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString( healAmt ), FloatingText.HEALING );
 				
 			}
 		}

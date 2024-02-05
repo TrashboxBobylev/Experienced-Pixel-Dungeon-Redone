@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ public class Swarm extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(25, 31);
             case 2: return Random.NormalIntRange(129, 176);
@@ -109,7 +109,7 @@ public class Swarm extends Mob {
 	}
 	
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 
 		if (HP >= damage + 2) {
 			ArrayList<Integer> candidates = new ArrayList<>();

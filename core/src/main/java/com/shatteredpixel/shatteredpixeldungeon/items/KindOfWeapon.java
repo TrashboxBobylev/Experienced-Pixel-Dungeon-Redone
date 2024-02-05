@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,10 +38,10 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
-import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
 abstract public class KindOfWeapon extends EquipableItem {
@@ -216,19 +216,19 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int min(){
+	public long min(){
 		return min(buffedLvl());
 	}
 
-	public int max(){
+	public long max(){
 		return max(buffedLvl());
 	}
 
-	abstract public int min(int lvl);
-	abstract public int max(int lvl);
+	abstract public long min(long lvl);
+	abstract public long max(long lvl);
 
-	public int damageRoll( Char owner ) {
-		return Dungeon.NormalIntRange( min(), max() );
+	public long damageRoll( Char owner ) {
+		return Dungeon.NormalLongRange( min(), max() );
 	}
 	
 	public float accuracyFactor( Char owner, Char target ) {
@@ -259,11 +259,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 		}
 	}
 
-	public int defenseFactor( Char owner ) {
+	public long defenseFactor( Char owner ) {
 		return 0;
 	}
 	
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		return damage;
 	}
 

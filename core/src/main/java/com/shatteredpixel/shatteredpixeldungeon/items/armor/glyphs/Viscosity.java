@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class Viscosity extends Glyph {
 	private static ItemSprite.Glowing PURPLE = new ItemSprite.Glowing( 0x8844CC );
 	
 	@Override
-	public int proc( Armor armor, Char attacker, Char defender, int damage ) {
+	public long proc( Armor armor, Char attacker, Char defender, long damage ) {
 
 		//we use a tracker so that this glyph can apply after armor
 		Buff.affect(defender, ViscosityTracker.class).level = armor.buffedLvl();
@@ -65,25 +65,25 @@ public class Viscosity extends Glyph {
 			actPriority = Actor.VFX_PRIO;
 		}
 
-		private int level = 0;
+		private long level = 0;
 
-		public int deferDamage(int dmg){
+		public long deferDamage(long dmg){
 			//account for icon stomach (just skip the glyph)
 			if (target.buff(Talent.WarriorFoodImmunity.class) != null){
 				return dmg;
 			}
 
-			int level = Math.max( 0, this.level );
+			long level = Math.max( 0, this.level );
 
 			float percent = (level+1)/(float)(level+6);
 			percent *= genericProcChanceMultiplier(target);
 
-			int amount;
+			long amount;
 			if (percent > 1f){
 				dmg = Math.round(dmg / percent);
 				amount = dmg;
 			} else {
-				amount = (int)Math.ceil(dmg * percent);
+				amount = (long)Math.ceil(dmg * percent);
 			}
 
 			if (amount > 0){
@@ -109,7 +109,7 @@ public class Viscosity extends Glyph {
 			type = buffType.NEGATIVE;
 		}
 
-        public int damage = 0;
+        public long damage = 0;
 		
 		private static final String DAMAGE	= "damage";
 		
@@ -123,7 +123,7 @@ public class Viscosity extends Glyph {
 		@Override
 		public void restoreFromBundle( Bundle bundle ) {
 			super.restoreFromBundle( bundle );
-			damage = bundle.getInt( DAMAGE );
+			damage = bundle.getLong( DAMAGE );
 		}
 		
 		@Override
@@ -136,7 +136,7 @@ public class Viscosity extends Glyph {
 			}
 		}
 		
-		public void prolong( int damage ) {
+		public void prolong( long damage ) {
 			this.damage += damage;
 		}
 		
@@ -147,7 +147,7 @@ public class Viscosity extends Glyph {
 
 		@Override
 		public String iconTextDisplay() {
-			return Integer.toString(damage);
+			return Long.toString(damage);
 		}
 
 

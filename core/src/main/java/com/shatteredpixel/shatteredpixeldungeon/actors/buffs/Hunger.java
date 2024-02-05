@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ public class Hunger extends Buff implements Hero.Doom {
 	public static final float STARVING	= 450f;
 
 	private float level;
-	private float partialDamage;
+	private double partialDamage;
 
 	private static final String LEVEL			= "level";
 	private static final String PARTIALDAMAGE 	= "partialDamage";
@@ -61,7 +61,7 @@ public class Hunger extends Buff implements Hero.Doom {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		level = bundle.getFloat( LEVEL );
-		partialDamage = bundle.getFloat(PARTIALDAMAGE);
+		partialDamage = bundle.getDouble(PARTIALDAMAGE);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class Hunger extends Buff implements Hero.Doom {
 				partialDamage += STEP * target.HT/1000f;
 
 				if (partialDamage > 1){
-					target.damage( (int)partialDamage, this);
-					partialDamage -= (int)partialDamage;
+					target.damage( (long) partialDamage, this);
+					partialDamage -= (long)partialDamage;
 				}
 				
 			} else if (!Dungeon.level.locked){
@@ -93,7 +93,6 @@ public class Hunger extends Buff implements Hero.Doom {
 				if (newLevel >= STARVING) {
 
 					GLog.n( Messages.get(this, "onstarving") );
-					hero.resting = false;
 					hero.damage( 1, this );
 
 					hero.interrupt();
@@ -149,8 +148,8 @@ public class Hunger extends Buff implements Hero.Doom {
 			level = STARVING;
 			partialDamage += excess * (target.HT/1000f);
 			if (partialDamage > 1f){
-				target.damage( (int)partialDamage, this );
-				partialDamage -= (int)partialDamage;
+				target.damage( (long)partialDamage, this );
+				partialDamage -= (long)partialDamage;
 			}
 		}
 

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class RipperDemon extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(79, 91);
             case 2: return Random.NormalIntRange(270, 440);
@@ -150,6 +150,10 @@ public class RipperDemon extends Mob {
 
 	@Override
 	protected boolean act() {
+		if (state == WANDERING){
+			leapPos = -1;
+		}
+
 		AiState lastState = state;
 		boolean result = super.act();
 		if (paralysed <= 0) leapCooldown --;
@@ -279,7 +283,7 @@ public class RipperDemon extends Mob {
 						//get ready to leap
 						leapPos = targetPos;
 						//don't want to overly punish players with slow move or attack speed
-						spend(GameMath.gate(TICK, enemy.cooldown(), 3*TICK));
+						spend(GameMath.gate(attackDelay(), (int)Math.ceil(enemy.cooldown()), 3*attackDelay()));
 						if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[leapPos]){
 							GLog.w(Messages.get(RipperDemon.this, "leap"));
 							sprite.parent.addToBack(new TargetedCell(leapPos, 0xFF0000));

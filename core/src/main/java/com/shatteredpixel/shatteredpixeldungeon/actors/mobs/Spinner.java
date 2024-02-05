@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ public class Spinner extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(58, 73);
             case 2: return Random.NormalIntRange(260, 371);
@@ -156,10 +156,10 @@ public class Spinner extends Mob {
 	}
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		damage = super.attackProc( enemy, damage );
 		if (Random.Int(2) == 0) {
-			int duration = Random.IntRange(7, 8);
+			long duration = Random.IntRange(7, 8);
 			//we only use half the ascension modifier here as total poison dmg doesn't scale linearly
 			duration = Math.round(duration * (AscensionChallenge.statModifier(this)/2f + 0.5f));
 			Buff.affect(enemy, Poison.class).set(duration);
@@ -230,9 +230,9 @@ public class Spinner extends Mob {
 			int leftPos = enemy.pos + PathFinder.CIRCLE8[left(i)];
 			int rightPos = enemy.pos + PathFinder.CIRCLE8[right(i)];
 			
-			if (Dungeon.level.passable[leftPos]) GameScene.add(Blob.seed(leftPos, 20, Web.class));
-			if (Dungeon.level.passable[webPos])  GameScene.add(Blob.seed(webPos, 20, Web.class));
-			if (Dungeon.level.passable[rightPos])GameScene.add(Blob.seed(rightPos, 20, Web.class));
+			if (Dungeon.level.passable[leftPos]) applyWebToCell(leftPos);
+			if (Dungeon.level.passable[webPos])  applyWebToCell(webPos);
+			if (Dungeon.level.passable[rightPos])applyWebToCell(rightPos);
 			
 			webCoolDown = 10;
 
@@ -241,6 +241,10 @@ public class Spinner extends Mob {
 			}
 		}
 		next();
+	}
+
+	protected void applyWebToCell(int cell){
+		GameScene.add(Blob.seed(cell, 20, Web.class));
 	}
 	
 	private int left(int direction){

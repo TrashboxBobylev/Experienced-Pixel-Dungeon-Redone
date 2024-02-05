@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,7 +242,7 @@ public class Ring extends KindofMisc {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		int price = 75;
 		if (cursed && cursedKnown) {
 			price /= 2;
@@ -291,8 +291,8 @@ public class Ring extends KindofMisc {
 	}
 
 	@Override
-	public int buffedLvl() {
-		int lvl = super.buffedLvl();
+	public long buffedLvl() {
+		long lvl = super.buffedLvl();
 		if (Dungeon.hero.buff(EnhancedRings.class) != null){
 			lvl++;
 		}
@@ -318,7 +318,7 @@ public class Ring extends KindofMisc {
 	}
 
 	//just used for ring descriptions
-	public int soloBonus(){
+	public long soloBonus(){
 		if (cursed){
 			return Math.min( 0, Ring.this.level()-2 );
 		} else {
@@ -327,7 +327,7 @@ public class Ring extends KindofMisc {
 	}
 
 	//just used for ring descriptions
-	public int soloBuffedBonus(){
+	public long soloBuffedBonus(){
 		if (cursed){
 			return Math.min( 0, Ring.this.buffedLvl()-2 );
 		} else {
@@ -335,7 +335,7 @@ public class Ring extends KindofMisc {
 		}
 	}
 
-    public int soloVisualBonus(){
+    public long soloVisualBonus(){
         if (cursed){
             return Math.min( 0, Ring.this.buffedLvl()-2 );
         } else {
@@ -344,10 +344,25 @@ public class Ring extends KindofMisc {
     }
 
 	//just used for ring descriptions
-	public static int combinedBuffedBonus(Char target, Class<?extends RingBuff> type){
+	public long combinedBonus(Hero hero){
 		int bonus = 0;
-		for (RingBuff buff : target.buffs(type)) {
-			bonus += buff.buffedLvl();
+		if (hero.belongings.ring() != null && hero.belongings.ring().getClass() == getClass()){
+			bonus += hero.belongings.ring().soloBonus();
+		}
+		if (hero.belongings.misc() != null && hero.belongings.misc().getClass() == getClass()){
+			bonus += ((Ring)hero.belongings.misc()).soloBonus();
+		}
+		return bonus;
+	}
+
+	//just used for ring descriptions
+	public long combinedBuffedBonus(Hero hero){
+		int bonus = 0;
+		if (hero.belongings.ring() != null && hero.belongings.ring().getClass() == getClass()){
+			bonus += hero.belongings.ring().soloBuffedBonus();
+		}
+		if (hero.belongings.misc() != null && hero.belongings.misc().getClass() == getClass()){
+			bonus += ((Ring)hero.belongings.misc()).soloBuffedBonus();
 		}
 		return bonus;
 	}
@@ -371,11 +386,11 @@ if (target instanceof Hero && Dungeon.hero == null && cooldown() == 0 && target.
 			return true;
 		}
 
-		public int level(){
+		public long level(){
 			return Ring.this.soloBonus();
 		}
 
-		public int buffedLvl(){
+		public long buffedLvl(){
 			return Ring.this.soloBuffedBonus();
 		}
 

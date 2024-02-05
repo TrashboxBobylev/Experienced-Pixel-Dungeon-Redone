@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -358,14 +358,14 @@ public class AlchemyScene extends PixelScene {
 
 			Recipe recipe = recipes.get(i);
 
-			int cost = recipe.cost(ingredients);
+			long cost = recipe.cost(ingredients);
 
 			outputs[i].visible = true;
 			outputs[i].setRect(outputs[0].left(), top, BTN_SIZE, BTN_SIZE);
 			outputs[i].item(recipe.sampleOutput(ingredients));
 			top += BTN_SIZE+gap;
 
-			int availableEnergy = Dungeon.energy;
+			long availableEnergy = Dungeon.energy;
 			if (toolkit != null){
 				availableEnergy += toolkit.availableEnergy();
 			}
@@ -391,7 +391,7 @@ public class AlchemyScene extends PixelScene {
 		Item result = null;
 		
 		if (recipe != null){
-			int cost = recipe.cost(ingredients);
+			long cost = recipe.cost(ingredients);
 			if (toolkit != null){
 				cost = toolkit.consumeEnergy(cost);
 			}
@@ -421,7 +421,7 @@ public class AlchemyScene extends PixelScene {
 			smokeEmitter.burst(Speck.factory( Speck.WOOL ), 10 );
 			Sample.INSTANCE.play( Assets.Sounds.PUFF );
 
-			int resultQuantity = result.quantity();
+			long resultQuantity = result.quantity();
 			if (!result.collect()){
 				Dungeon.level.drop(result, Dungeon.hero.pos);
 			}
@@ -461,7 +461,7 @@ public class AlchemyScene extends PixelScene {
 		
 		int curslot = 0;
 		for (Item finding : toFind){
-			int needed = finding.quantity();
+			long needed = finding.quantity();
 			ArrayList<Item> found = inventory.getAllSimilar(finding);
 			while (!found.isEmpty() && needed > 0){
 				Item detached;
@@ -662,7 +662,7 @@ public class AlchemyScene extends PixelScene {
 			enable(enabled, 0);
 		}
 
-		public void enable( boolean enabled, int cost ){
+		public void enable(boolean enabled, long cost ){
 			button.enable(enabled);
 			if (enabled) {
 				button.icon().tint(1, 1, 0, 1);

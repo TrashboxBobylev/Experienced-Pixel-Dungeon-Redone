@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
@@ -35,11 +36,12 @@ public class Corruption extends AllyBuff {
 		announced = true;
 	}
 
-	private float buildToDamage = 0f;
+	private double buildToDamage = 0f;
 
 	//corrupted enemies are usually fully healed and cleansed of most debuffs
 	public static void corruptionHeal(Char target){
 		target.HP = target.HT;
+		target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(target.HT), FloatingText.HEALING);
 		for (Buff buff : target.buffs()) {
 			if (buff.type == Buff.buffType.NEGATIVE
 					&& !(buff instanceof SoulMark)) {
@@ -52,7 +54,7 @@ public class Corruption extends AllyBuff {
 	public boolean act() {
 		buildToDamage += target.HT/100f;
 
-		int damage = (int)buildToDamage;
+		long damage = (long) buildToDamage;
 		buildToDamage -= damage;
 
 		if (damage > 0)

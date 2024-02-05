@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ public class Degrade extends FlavourBuff {
 	}
 
 	//called in Item.buffedLevel()
-	public static int reduceLevel( int level ){
+	public static long reduceLevel( long level ){
 		if (level <= 0){
 			//zero or negative levels are unaffected
 			return level;
@@ -66,7 +66,7 @@ public class Degrade extends FlavourBuff {
 			// This means that levels 1/2/3/4/5/6/7/8/9/10/11/12/...
 			// Are now instead:       1/2/3/3/4/4/4/5/5/ 5/ 5/ 6/...
 			// Basically every level starting with 3 sticks around for 1 level longer than the last
-			return (int)Math.round(Math.sqrt(2*(level-1)) + 1);
+			return Math.round(Math.sqrt(2*(level-1)) + 1);
 		}
 	}
 

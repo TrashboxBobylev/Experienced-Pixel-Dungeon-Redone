@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,14 +105,14 @@ public class MirrorImage extends NPC {
 	}
 	
 	@Override
-	public int damageRoll() {
-		int damage;
+	public long damageRoll() {
+		long damage;
 		if (hero.belongings.weapon() != null){
 			damage = hero.belongings.weapon().damageRoll(this);
 		} else {
 			damage = hero.damageRoll(); //handles ring of force
 		}
-		return (damage+1)/2; //half hero damage, rounded up
+		return (int) ((damage+1)/2); //half hero damage, rounded up
 	}
 	
 	@Override
@@ -151,17 +151,17 @@ public class MirrorImage extends NPC {
 	}
 	
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
+	public long drRoll() {
+		long dr = super.drRoll();
 		if (hero != null && hero.belongings.weapon() != null){
-			return dr + Random.NormalIntRange(0, hero.belongings.weapon().defenseFactor(this)/2);
+			return (dr + Random.NormalLongRange(0, hero.belongings.weapon().defenseFactor(this)/2));
 		} else {
 			return dr;
 		}
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		
 		MirrorInvis buff = buff(MirrorInvis.class);
@@ -173,7 +173,7 @@ public class MirrorImage extends NPC {
 			((Mob)enemy).aggro( this );
 		}
 		if (hero.belongings.weapon() != null){
-			damage = hero.belongings.weapon().proc( this, enemy, damage );
+			damage = (int) hero.belongings.weapon().proc( this, enemy, damage );
 			if (!enemy.isAlive() && enemy == Dungeon.hero){
 				Dungeon.fail(this);
 				GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );

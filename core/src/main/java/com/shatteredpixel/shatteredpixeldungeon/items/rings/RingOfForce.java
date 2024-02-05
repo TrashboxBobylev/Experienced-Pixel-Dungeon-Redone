@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ public class RingOfForce extends Ring {
 	}
 
 	//same as equivalent tier weapon
-	private static int min(int lvl, float tier){
+	private static int min(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
@@ -102,7 +102,7 @@ public class RingOfForce extends Ring {
 	}
 
 	//same as equivalent tier weapon
-	private static int max(int lvl, float tier){
+	private static int max(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
@@ -115,10 +115,10 @@ public class RingOfForce extends Ring {
 	public String statsInfo() {
 		float tier = tier(Dungeon.hero.STR());
 		if (isIdentified()) {
-			int level = soloBuffedBonus();
+			long level = soloBuffedBonus();
 			String info = Messages.get(this, "stats", min(level, tier), max(level, tier), level);
-			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Force.class)){
-				level = combinedBuffedBonus(Dungeon.hero, Force.class);
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
+				level = combinedBuffedBonus(Dungeon.hero);
 				info += "\n\n" + Messages.get(this, "combined_stats", min(level, tier), max(level, tier), level);
 			}
 			return info;

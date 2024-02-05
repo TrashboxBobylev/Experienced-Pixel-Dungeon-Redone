@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,9 +39,9 @@ public class Kinetic extends Weapon.Enchantment {
 	private static ItemSprite.Glowing YELLOW = new ItemSprite.Glowing( 0xFFFF00 );
 	
 	@Override
-	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
+	public long proc(Weapon weapon, Char attacker, Char defender, long damage) {
 		
-		int conservedDamage = 0;
+		long conservedDamage = 0;
 		if (attacker.buff(ConservedDamage.class) != null) {
 			conservedDamage = attacker.buff(ConservedDamage.class).damageBonus();
 			attacker.buff(ConservedDamage.class).detach();
@@ -64,7 +64,7 @@ public class Kinetic extends Weapon.Enchantment {
 			actPriority = Actor.VFX_PRIO;
 		}
 
-		public int conservedDamage;
+		public long conservedDamage;
 
 		@Override
 		public boolean act() {
@@ -89,30 +89,30 @@ public class Kinetic extends Weapon.Enchantment {
 			if (preservedDamage >= 10){
 				icon.hardlight(1f, 0f, 0f);
 			} else if (preservedDamage >= 5) {
-				icon.hardlight(1f, 1f - (preservedDamage - 5f)*.2f, 0f);
+				icon.hardlight(1f, (float) (1f - (preservedDamage - 5f)*.2f), 0f);
 			} else {
-				icon.hardlight(1f, 1f, 1f - preservedDamage*.2f);
+				icon.hardlight(1f, 1f, (float) (1f - preservedDamage*.2f));
 			}
 		}
 
 		@Override
 		public String iconTextDisplay() {
-			return Integer.toString(damageBonus());
+			return Long.toString(damageBonus());
 		}
 		
-		private float preservedDamage;
+		private double preservedDamage;
 		
-		public void setBonus(int bonus){
+		public void setBonus(long bonus){
 			preservedDamage = bonus;
 		}
 		
-		public int damageBonus(){
-			return (int)Math.ceil(preservedDamage);
+		public long damageBonus(){
+			return (long) Math.ceil(preservedDamage);
 		}
 		
 		@Override
 		public boolean act() {
-			preservedDamage -= Math.max(preservedDamage*.025f, 0.1f);
+			preservedDamage -= Math.max(preservedDamage*.025d, 0.1f);
 			if (preservedDamage <= 0) detach();
 			
 			spend(TICK);
@@ -136,7 +136,7 @@ public class Kinetic extends Weapon.Enchantment {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			if (bundle.contains(PRESERVED_DAMAGE)){
-				preservedDamage = bundle.getFloat(PRESERVED_DAMAGE);
+				preservedDamage = bundle.getDouble(PRESERVED_DAMAGE);
 			} else {
 				preservedDamage = cooldown()/10;
 				spend(cooldown());

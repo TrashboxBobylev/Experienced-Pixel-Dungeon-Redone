@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -259,7 +259,7 @@ public class CloakOfShadows extends Artifact {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 0;
 	}
 
@@ -362,7 +362,7 @@ public class CloakOfShadows extends Artifact {
 					((Hero) target).interrupt();
 				} else {
 					//target hero level is 1 + 2*cloak level
-					int lvlDiffFromTarget = ((Hero) target).lvl - (1+level()*2);
+					int lvlDiffFromTarget = (int) (((Hero) target).lvl - (1+level()*2));
 					//plus an extra one for each level after 6
 					if (level() >= 7){
 						lvlDiffFromTarget -= level()-6;
@@ -390,6 +390,9 @@ public class CloakOfShadows extends Artifact {
 		}
 
 		public void dispel(){
+			if (turnsToCost <= 0 && charge > 0){
+				charge--;
+			}
 			updateQuickslot();
 			detach();
 		}

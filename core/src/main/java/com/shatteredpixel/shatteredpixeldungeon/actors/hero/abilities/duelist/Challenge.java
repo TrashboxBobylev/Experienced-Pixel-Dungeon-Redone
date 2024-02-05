@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbili
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -41,9 +41,9 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
-import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 
@@ -198,7 +198,7 @@ public class Challenge extends ArmorAbility {
 		public static float DURATION = 10f;
 
 		private int left = (int)DURATION;
-		private int takenDmg = 0;
+		private long takenDmg = 0;
 
 		@Override
 		public int icon() {
@@ -215,7 +215,7 @@ public class Challenge extends ArmorAbility {
 			return Integer.toString(left);
 		}
 
-		public void addDamage(int dmg){
+		public void addDamage(long dmg){
 			takenDmg += dmg;
 		}
 
@@ -254,19 +254,19 @@ public class Challenge extends ArmorAbility {
 					if (Dungeon.hero.hasTalent(Talent.INVIGORATING_VICTORY)){
 						DuelParticipant heroBuff = Dungeon.hero.buff(DuelParticipant.class);
 
-						int hpToHeal = 0;
+						long hpToHeal = 0;
 						if (heroBuff != null){
 							hpToHeal = heroBuff.takenDmg;
 						}
 
 						//heals for 30%/50%/65%/75% of taken damage plus 5/10/15/20 bonus, based on talent points
-						hpToHeal = (int)Math.round(hpToHeal * (1f - Math.pow(0.707f, Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY))));
-						hpToHeal += 5*Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY);
+						hpToHeal = Math.round(hpToHeal * (1f - Math.pow(0.707f, Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY))));
+						hpToHeal += 5L*Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY);
 						hpToHeal = Math.min(hpToHeal, Dungeon.hero.HT - Dungeon.hero.HP);
 						if (hpToHeal > 0){
 							Dungeon.hero.HP += hpToHeal;
 							Dungeon.hero.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.33f, 6 );
-							Dungeon.hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(Dewdrop.class, "heal", hpToHeal) );
+							Dungeon.hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(hpToHeal), FloatingText.HEALING );
 						}
 					}
 				}
@@ -309,7 +309,7 @@ public class Challenge extends ArmorAbility {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			left = bundle.getInt(LEFT);
-			takenDmg = bundle.getInt(TAKEN_DMG);
+			takenDmg = bundle.getLong(TAKEN_DMG);
 		}
 	}
 

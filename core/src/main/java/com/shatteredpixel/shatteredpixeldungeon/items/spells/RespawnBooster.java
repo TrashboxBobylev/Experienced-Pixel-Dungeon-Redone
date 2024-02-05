@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,8 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
@@ -43,11 +45,16 @@ public class RespawnBooster extends Spell{
     protected void onCast(Hero hero) {
         if (Dungeon.respawn_timer > 1) {
             Dungeon.respawn_timer = (int) GameMath.gate(1, Dungeon.respawn_timer - 2, 50);
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "-2", FloatingText.RESPAWN_BOOST);
         }
         else {
             Dungeon.respawn_timer = Dungeon.respawn_timer * 0.7f;
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "-30%", FloatingText.RESPAWN_BOOST);
         }
-        if (Dungeon.respawn_timer % 3 == 0 || Dungeon.respawn_timer <= 0.7f) Dungeon.additionalMobs = Dungeon.additionalMobs + 1;
+        if (Dungeon.respawn_timer % 3 == 0 || Dungeon.respawn_timer <= 0.7f){
+            Dungeon.additionalMobs = Dungeon.additionalMobs + 1;
+            hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "+1", FloatingText.MOB_BOOST);
+        }
 
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(SacrificialParticle.FACTORY, 10);
@@ -56,7 +63,7 @@ public class RespawnBooster extends Spell{
     }
 
     @Override
-    public int value() {
+    public long value() {
         //prices of ingredients, divided by output quantity
         return Math.round(quantity * ((50 + 43.333333f + 40)));
     }

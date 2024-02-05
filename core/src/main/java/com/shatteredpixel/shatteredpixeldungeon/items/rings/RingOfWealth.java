@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2019 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -123,7 +123,7 @@ public class RingOfWealth extends Ring {
 		latestDropTier = 0;
 	}
 	
-	public static Item genConsumableDrop(int level) {
+	public static Item genConsumableDrop(long level) {
 		float roll = Dungeon.Float();
 		//60% chance - 4% per level. Starting from +15: 0%
 		if (roll < (0.6f - 0.04f * level)) {

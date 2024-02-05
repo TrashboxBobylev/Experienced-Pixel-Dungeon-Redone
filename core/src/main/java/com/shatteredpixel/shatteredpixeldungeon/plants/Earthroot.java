@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ public class Earthroot extends Plant {
 		private static final float STEP = 1f;
 		
 		private int pos;
-		private int level;
+		private long level;
 
 		{
 			type = buffType.POSITIVE;
@@ -97,12 +97,12 @@ public class Earthroot extends Plant {
 			return (Dungeon.scalingDepth() + 5)/2;
 		}
 		
-		public int absorb( int damage ) {
+		public long absorb( long damage ) {
 			if (pos != target.pos){
 				detach();
 				return damage;
 			}
-			int block = Math.min( damage, blocking());
+			long block = Math.min( damage, blocking());
 			if (level <= block) {
 				detach();
 				return damage - block;
@@ -112,7 +112,7 @@ public class Earthroot extends Plant {
 			}
 		}
 		
-		public void level( int value ) {
+		public void level( long value ) {
 			if (target != null) {
 				if (level < value) {
 					level = value;
@@ -133,7 +133,7 @@ public class Earthroot extends Plant {
 
 		@Override
 		public String iconTextDisplay() {
-			return Integer.toString(level);
+			return Long.toString(level);
 		}
 
 		@Override
@@ -155,7 +155,7 @@ public class Earthroot extends Plant {
 		public void restoreFromBundle( Bundle bundle ) {
 			super.restoreFromBundle( bundle );
 			pos = bundle.getInt( POS );
-			level = bundle.getInt( LEVEL );
+			level = bundle.getLong( LEVEL );
 		}
 	}
 }

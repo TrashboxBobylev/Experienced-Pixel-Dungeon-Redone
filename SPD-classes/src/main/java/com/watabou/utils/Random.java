@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,7 @@ package com.watabou.utils;
 
 import com.watabou.noosa.Game;
 
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Random {
 
@@ -96,6 +92,27 @@ public class Random {
 		return min + ((Float(max - min) + Float(max - min))/2f);
 	}
 
+	//returns a uniformly distributed double in the range [0, 1)
+	public static synchronized double Double() {
+		return generators.peek().nextDouble();
+	}
+
+	//returns a uniformly distributed double in the range [0, max)
+	public static double Double( double max ) {
+		return Double() * max;
+	}
+
+	//returns a uniformly distributed double in the range [min, max)
+	public static double Double( double min, double max ) {
+		return min + Double(max - min);
+	}
+
+	//returns a triangularly distributed double in the range [min, max)
+	public static double NormalDouble( double min, double max ) {
+		return min + ((Double(max - min) + Double(max - min))/2f);
+	}
+
+
 	//returns a uniformly distributed int in the range [0, max)
 	public static synchronized int Int( int max ) {
 		return max > 0 ? generators.peek().nextInt(max) : 0;
@@ -126,6 +143,20 @@ public class Random {
 		long result = Long();
 		if (result < 0) result += Long.MAX_VALUE;
 		return result % max;
+	}
+
+	public static long Long( long min, long max ) {
+		return min + Long(max - min);
+	}
+
+	//returns a uniformly distributed int in the range [min, max]
+	public static long LongRange( long min, long max ) {
+		return min + Long(max - min + 1);
+	}
+
+	//returns a triangularly distributed int in the range [min, max]
+	public static long NormalLongRange( long min, long max ) {
+		return min + (int)((Float() + Float()) * (max - min + 1) / 2f);
 	}
 
 	//returns an index from chances, the probability of each index is the weight values in changes

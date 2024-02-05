@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -51,6 +52,7 @@ import com.watabou.utils.Random;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SurfaceScene extends PixelScene {
 
@@ -101,8 +103,9 @@ public class SurfaceScene extends PixelScene {
 		Group window = new Group();
 		window.camera = viewport;
 		add( window );
-		
-		boolean dayTime = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 7;
+
+		Calendar cal = GregorianCalendar.getInstance();
+		boolean dayTime = cal.get(Calendar.HOUR_OF_DAY) >= 7 && cal.get(Calendar.HOUR_OF_DAY) <= 20;
 		
 		Sky sky = new Sky( dayTime );
 		sky.scale.set( SKY_WIDTH, SKY_HEIGHT );
@@ -164,7 +167,7 @@ public class SurfaceScene extends PixelScene {
 		CharSprite allySprite = null;
 		
 		//picks the highest between ghost's weapon, armor, and rose level/2
-		int roseLevel = 0;
+		long roseLevel = 0;
 		DriedRose rose = Dungeon.hero.belongings.getItem(DriedRose.class);
 		if (rose != null){
 			roseLevel = rose.level()/2;
@@ -176,8 +179,8 @@ public class SurfaceScene extends PixelScene {
 			}
 		}
 		
-		int earthLevel = Dungeon.hero.belongings.getItem(WandOfLivingEarth.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfLivingEarth.class).level();
-		int wardLevel = Dungeon.hero.belongings.getItem(WandOfWarding.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfWarding.class).level();
+		long earthLevel = Dungeon.hero.belongings.getItem(WandOfLivingEarth.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfLivingEarth.class).level();
+		long wardLevel = Dungeon.hero.belongings.getItem(WandOfWarding.class) == null ? 0 : Dungeon.hero.belongings.getItem(WandOfWarding.class).level();
 		
 		MagesStaff staff = Dungeon.hero.belongings.getItem(MagesStaff.class);
 		if (staff != null){
@@ -195,7 +198,7 @@ public class SurfaceScene extends PixelScene {
 			allySprite = new EarthGuardianSprite();
 		} else if (wardLevel >= 3){
 			allySprite = new WardSprite();
-			((WardSprite) allySprite).updateTier(Math.min(wardLevel+2, 6));
+			((WardSprite) allySprite).updateTier((int) Math.min(wardLevel+2, 6));
 		}
 		
 		if (allySprite != null){
@@ -205,6 +208,14 @@ public class SurfaceScene extends PixelScene {
 			allySprite.y = SKY_HEIGHT - allySprite.height();
 			align(allySprite);
 			window.add(allySprite);
+		}
+
+		if (Dungeon.hero.belongings.getItem(RemainsItem.class) != null){
+			Image grave = new Image(Assets.Interfaces.SURFACE, 88, 74, 16, 22);
+
+			grave.x = a.x + a.width() + 10;
+			grave.y = a.y + a.height() - grave.height();
+			window.add(grave);
 		}
 		
 		window.add( a );

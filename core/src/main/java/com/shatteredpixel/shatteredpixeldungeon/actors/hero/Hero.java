@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -156,8 +156,8 @@ public class Hero extends Char {
 	public float awareness;
 	
 	public int lvl = 1;
-	public int exp = 0;
-	public int totalExp = 0;
+	public long exp = 0;
+	public long totalExp = 0;
 
 	public boolean grinding = false;
 
@@ -181,9 +181,9 @@ public class Hero extends Char {
 	}
 	
 	public void updateHT( boolean boostHP ){
-		int curHT = HT;
+		long curHT = HT;
 		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		HT = 20 + 5L*(lvl-1) + HTBoost;
 		int multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier + HT);
 		
@@ -259,7 +259,7 @@ public class Hero extends Char {
 	public void restoreFromBundle( Bundle bundle ) {
 
 		lvl = bundle.getInt( LEVEL );
-		exp = bundle.getInt( EXPERIENCE );
+		exp = bundle.getLong( EXPERIENCE );
 
 		HTBoost = bundle.getInt(HTBOOST);
 
@@ -276,7 +276,7 @@ public class Hero extends Char {
 		
 		STR = bundle.getInt( STRENGTH );
 
-		totalExp = bundle.getInt(TOTAL_EXPERIENCE);
+		totalExp = bundle.getLong(TOTAL_EXPERIENCE);
 		grinding = bundle.getBoolean(GRINDING);
 
 
@@ -286,10 +286,10 @@ public class Hero extends Char {
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		info.level = bundle.getInt( LEVEL );
 		info.str = bundle.getInt( STRENGTH );
-		info.exp = bundle.getInt( EXPERIENCE );
-		info.hp = bundle.getInt( Char.TAG_HP );
-		info.ht = bundle.getInt( Char.TAG_HT );
-		info.shld = bundle.getInt( Char.TAG_SHLD );
+		info.exp = bundle.getLong( EXPERIENCE );
+		info.hp = bundle.getLong( Char.TAG_HP );
+		info.ht = bundle.getLong( Char.TAG_HT );
+		info.shld = bundle.getLong( Char.TAG_SHLD );
 		info.heroClass = bundle.getEnum( CLASS, HeroClass.class );
 		info.subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
 		Belongings.preview( info, bundle );
@@ -514,11 +514,11 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
+	public long drRoll() {
+		long dr = super.drRoll();
 
 		if (belongings.armor() != null) {
-			int armDr = Dungeon.NormalIntRange( belongings.armor().DRMin(), belongings.armor().DRMax());
+			long armDr = Dungeon.NormalLongRange( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
@@ -526,14 +526,14 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			int wepDr = Dungeon.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
+			long wepDr = Dungeon.NormalLongRange( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}
 			if (wepDr > 0) dr += wepDr;
 		}
 		Barkskin bark = buff(Barkskin.class);
-		if (bark != null)               dr += Dungeon.NormalIntRange( 0 , bark.level() );
+		if (bark != null)               dr += Dungeon.NormalLongRange( 0 , bark.level() );
 
 		if (buff(HoldFast.class) != null){
 			dr += Random.NormalIntRange(HoldFast.minArmor(), HoldFast.armor());
@@ -543,9 +543,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		KindOfWeapon wep = belongings.attackingWeapon();
-		int dmg;
+		long dmg;
 
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
@@ -747,7 +747,16 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			} else {
 				ready();
 			}
-			
+
+			//if we just loaded into a level and have a search buff, make sure to process them
+			if(Actor.now() == 0){
+				if (buff(Foresight.class) != null){
+					search(false);
+				} else if (buff(TalismanOfForesight.Foresight.class) != null){
+					buff(TalismanOfForesight.Foresight.class).checkAwareness();
+				}
+			}
+
 			actResult = false;
 			
 		} else {
@@ -823,6 +832,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		curAction = null;
 		GameScene.resetKeyHold();
+		resting = false;
 	}
 	
 	public void resume() {
@@ -960,6 +970,15 @@ if (buff(RoundShield.GuardTracker.class) != null){
 							|| item instanceof Key
 							|| item instanceof Guidebook) {
 						//Do Nothing
+					} else if (item instanceof DarkGold) {
+						DarkGold existing = belongings.getItem(DarkGold.class);
+						if (existing != null){
+							if (existing.quantity() >= 40) {
+								GLog.p(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+							} else {
+								GLog.i(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+							}
+						}
 					} else {
 
 						//TODO make all unique items important? or just POS / SOU?
@@ -1169,9 +1188,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 						//1 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER){
-							Splash.at(action.dst, ColorMath.random( 0x444444, 0x777766 ), 5);
+							Splash.at(action.dst, 0x555555, 5);
 							Sample.INSTANCE.play( Assets.Sounds.MINE, 0.6f );
-							Level.set( action.dst, Terrain.EMPTY );
+							Level.set( action.dst, Terrain.EMPTY_DECO );
 						}
 
 						for (int i : PathFinder.NEIGHBOURS9) {
@@ -1266,7 +1285,9 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					&& buff(Talent.AggressiveBarrierCooldown.class) == null
 					&& (HP / (float)HT) < 0.20f*(1+pointsInTalent(Talent.AGGRESSIVE_BARRIER))){
 				Buff.affect(this, Barrier.class).setShield(3);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, "3", FloatingText.SHIELDING);
 				Buff.affect(this, Talent.AggressiveBarrierCooldown.class, 50f);
+
 			}
 			sprite.attack( enemy.pos );
 
@@ -1305,7 +1326,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int attackProc( final Char enemy, int damage ) {
+	public long attackProc( final Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 
 		KindOfWeapon wep;
@@ -1335,7 +1356,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					@Override
 					protected boolean act() {
 						if (enemy.isAlive()) {
-							int bonusTurns = hasTalent(Talent.SHARED_UPGRADES) ? wep.buffedLvl() : 0;
+							int bonusTurns = hasTalent(Talent.SHARED_UPGRADES) ? (int) wep.buffedLvl() : 0;
 							Buff.prolong(Hero.this, SnipersMark.class, SnipersMark.DURATION + bonusTurns).set(enemy.id(), bonusTurns);
 						}
 						Actor.remove(this);
@@ -1349,7 +1370,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 		
 		if (damage > 0 && isSubclass(HeroSubClass.BERSERKER)){
 			Berserk berserk = Buff.affect(this, Berserk.class);
@@ -1374,12 +1395,12 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				GLog.i(Messages.get(Hero.class, "you_now_have", lootbag.name()));
 			}
 		}
-		
+
 		return super.defenseProc( enemy, damage );
 	}
 	
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null)
 			return;
 
@@ -1387,7 +1408,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		// unless the player recently hit 'continue moving', in which case this is ignored
 		if (!(src instanceof Hunger || src instanceof Viscosity.DeferedDamage) && damageInterrupt) {
 			interrupt();
-			resting = false;
 		}
 
 		if (this.buff(Drowsy.class) != null){
@@ -1426,6 +1446,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		if (belongings.armor() != null && belongings.armor().hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){
 			dmg -= AntiMagic.drRoll(this, belongings.armor().buffedLvl());
+			dmg = Math.max(dmg, 0);
 		}
 
 		if ((belongings.weapon() instanceof Greatshield || belongings.weapon() instanceof RoundShield) &&
@@ -1442,12 +1463,12 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			dmg /= 2;
 		}
 
-		int preHP = HP + shielding();
+		long preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
 		super.damage( dmg, src );
-		int postHP = HP + shielding();
+		long postHP = HP + shielding();
 		if (src instanceof Hunger) postHP -= shielding();
-		int effectiveDamage = preHP - postHP;
+		long effectiveDamage = preHP - postHP;
 
 		if (effectiveDamage <= 0) return;
 
@@ -1472,16 +1493,15 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				}
 				//hero gets interrupted on taking serious damage, regardless of any other factor
 				interrupt();
-				resting = false;
 				damageInterrupt = true;
 			}
 		}
 	}
 
-	private void shieldDamage(int dmg) {
+	private void shieldDamage(long dmg) {
 		ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.BEACON);
 		PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
-		int finalDmg = dmg;
+		long finalDmg = dmg;
 		((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
 				MagicMissile.INVISI,
 				sprite,
@@ -1551,11 +1571,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		
 		if (newMob) {
-			interrupt();
 			if (resting){
 				Dungeon.observe();
-				resting = false;
 			}
+			interrupt();
 		}
 
 		visibleEnemies = visible;
@@ -1711,7 +1730,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			
 		} else if (fieldOfView[cell] && ch instanceof Mob) {
 
-			if (ch.alignment != Alignment.ENEMY && ch.buff(Amok.class) == null) {
+			if (((Mob) ch).heroShouldInteract()) {
 				curAction = new HeroAction.Interact( ch );
 			} else {
 				curAction = new HeroAction.Attack( ch );
@@ -1778,7 +1797,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		return true;
 	}
 	
-	public void earnExp( int exp, Class source ) {
+	public void earnExp( long exp, Class source ) {
 
 		this.exp += exp;
 		this.totalExp += exp;
@@ -1880,13 +1899,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		Dungeon.hero.earnExp(value, null);
 	}
 
-	public int maxExp() {
+	public long maxExp() {
 		return maxExp( lvl );
 	}
 	
-	public static int maxExp( int lvl ){
+	public static long maxExp( int lvl ){
 		HeroClass heroClass = Dungeon.hero == null ? GamesInProgress.selectedClass: Dungeon.hero.heroClass;
-		return 5 + lvl * 5;
+		return 5 + lvl * 5L;
 	}
 	
 	public boolean isStarving() {
@@ -1955,7 +1974,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (ankh != null) {
 			interrupt();
-			resting = false;
 
 			if (ankh.isBlessed()) {
 				this.HP = HT ;
@@ -2443,6 +2461,11 @@ if (buff(RoundShield.GuardTracker.class) != null){
 				spawnPoints.remove( index );
 				ratsToSpawn--;
 			}
+		}
+
+
+		if (talisman != null){
+			talisman.checkAwareness();
 		}
 
 		return smthFound;

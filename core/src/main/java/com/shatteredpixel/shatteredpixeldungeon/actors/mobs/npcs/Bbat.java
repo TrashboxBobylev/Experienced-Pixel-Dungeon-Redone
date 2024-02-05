@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -37,7 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BbatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class Bbat extends Mob {
@@ -64,7 +67,7 @@ public class Bbat extends Mob {
     }
 
     @Override
-    public int damageRoll() {
+    public long damageRoll() {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)){
             int i = Random.NormalIntRange(0, level * 2);
             if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
@@ -84,9 +87,26 @@ public class Bbat extends Mob {
     }
 
     @Override
-    public int attackProc(Char enemy, int damage) {
+    public long attackProc(Char enemy, long damage) {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)) Buff.affect(enemy, Marked.class).stack++;
         return super.attackProc(enemy, damage);
+    }
+
+    @Override
+    protected boolean canAttack(Char enemy) {
+        if (Dungeon.level.distance( pos, enemy.pos ) > 2){
+            return super.canAttack(enemy);
+        } else {
+            boolean[] passable = BArray.not(Dungeon.level.solid, null);
+            for (Char ch : Actor.chars()) {
+                //our own tile is always passable
+                passable[ch.pos] = ch == this;
+            }
+
+            PathFinder.buildDistanceMap(enemy.pos, passable, 2);
+
+            return PathFinder.distance[pos] <= 2;
+        }
     }
 
     @Override
@@ -123,7 +143,7 @@ public class Bbat extends Mob {
     public static final int RECHARGE_AMOUNT = 50;
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(long dmg, Object src) {
         super.damage(dmg, src);
         Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(((float)dmg / (float)HT)*RECHARGE_AMOUNT);
     }
@@ -131,7 +151,7 @@ public class Bbat extends Mob {
     @Override
     public void die(Object cause) {
         super.die(cause);
-        Buff.affect(Dungeon.hero, BbatRecharge.class, 800f);
+        Buff.affect(Dungeon.hero, BbatRecharge.class, BbatRecharge.DURATION);
     }
 
     private class Wandering extends Mob.Wandering {
@@ -173,7 +193,7 @@ public class Bbat extends Mob {
 
     public static class BbatRecharge extends FlavourBuff {
 
-        public static final float DURATION = 800f;
+        public static final float DURATION = 700f;
 
         {
             type = buffType.NEGATIVE;

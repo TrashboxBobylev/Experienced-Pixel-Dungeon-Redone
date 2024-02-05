@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -92,10 +93,10 @@ public class CrystalMimic extends Mimic {
 
 	//does not deal bonus damage, steals instead. See attackProc
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		if (alignment == Alignment.NEUTRAL) {
 			alignment = Alignment.ENEMY;
-			int dmg = super.damageRoll();
+			long dmg = super.damageRoll();
 			alignment = Alignment.NEUTRAL;
 			return dmg;
 		} else {
@@ -122,7 +123,7 @@ public class CrystalMimic extends Mimic {
 	}
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		if (alignment == Alignment.NEUTRAL && enemy == Dungeon.hero){
 			steal( Dungeon.hero );
 

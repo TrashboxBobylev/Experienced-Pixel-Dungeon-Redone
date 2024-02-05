@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,18 +47,18 @@ public class FantasmalStabber extends BlacksmithWeapon {
     }
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return super.min(lvl)/4;
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return super.max(lvl)/4;
     }
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
-        int dmg = super.proc(attacker, defender, damage);
+    public long proc(Char attacker, Char defender, long damage) {
+        long dmg = super.proc(attacker, defender, damage);
         dmg += defender.drRoll();
         if (attacker instanceof Hero){
             for (Buff b : attacker.buffs()) {
@@ -76,14 +76,14 @@ public class FantasmalStabber extends BlacksmithWeapon {
     }
 
     @Override
-    public int damageRoll(Char owner) {
+    public long damageRoll(Char owner) {
         if (owner instanceof Hero) {
             Hero hero = (Hero)owner;
             Char enemy = hero.enemy();
             if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
                 //deals 50% toward max to max on surprise, instead of min to max.
-                int diff = max() - min();
-                int damage = augment.damageFactor(Random.NormalIntRange(
+                long diff = max() - min();
+                long damage = augment.damageFactor(Random.NormalLongRange(
                         min() + Math.round(diff*0.50f),
                         max()));
                 int exStr = hero.STR() - STRReq();

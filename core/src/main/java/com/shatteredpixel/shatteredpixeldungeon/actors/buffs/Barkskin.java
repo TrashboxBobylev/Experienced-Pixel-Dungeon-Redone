@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class Barkskin extends Buff {
 		type = buffType.POSITIVE;
 	}
 
-	private int level = 0;
+	private long level = 0;
 	private int interval = 1;
 	
 	@Override
@@ -58,11 +58,11 @@ public class Barkskin extends Buff {
 		return true;
 	}
 	
-	public int level() {
+	public long level() {
 		return level;
 	}
 	
-	public void set( int value, int time ) {
+	public void set( long value, int time ) {
 		if (level <= value) {
 			level = value;
 			interval = time;
@@ -87,7 +87,7 @@ public class Barkskin extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(level);
+		return Long.toString(level);
 	}
 
 	@Override
@@ -109,14 +109,14 @@ public class Barkskin extends Buff {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		interval = bundle.getInt( INTERVAL );
-		level = bundle.getInt( LEVEL );
+		level = bundle.getLong( LEVEL );
 	}
 
 	//These two methods allow for multiple instances of barkskin to stack in terms of duration
 	// but only the stronger bonus is applied
 
-	public static int currentLevel(Char ch ){
-		int level = 0;
+	public static long currentLevel(Char ch ){
+		long level = 0;
 		for (Barkskin b : ch.buffs(Barkskin.class)){
 			level = Math.max(level, b.level);
 		}
@@ -124,7 +124,7 @@ public class Barkskin extends Buff {
 	}
 
 	//reset if a matching buff exists, otherwise append
-	public static void conditionallyAppend(Char ch, int level, int interval){
+	public static void conditionallyAppend(Char ch, long level, int interval){
 		for (Barkskin b : ch.buffs(Barkskin.class)){
 			if (b.interval == interval){
 				b.set(level, interval);

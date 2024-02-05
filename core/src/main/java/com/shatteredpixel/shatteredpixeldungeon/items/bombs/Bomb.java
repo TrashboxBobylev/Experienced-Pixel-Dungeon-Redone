@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = damageRoll();
+				long dmg = damageRoll();
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -201,7 +201,7 @@ public class Bomb extends Item {
 				}
 				
 				if (ch == Dungeon.hero && !ch.isAlive()) {
-					if (this instanceof MagicalBomb){
+					if (this instanceof ConjuredBomb){
 						Badges.validateDeathFromFriendlyMagic();
 					}
 					GLog.n(Messages.get(this, "ondeath"));
@@ -215,19 +215,19 @@ public class Bomb extends Item {
 		}
 	}
 
-	public static int damageRoll() {
-		int dmg = (Dungeon.NormalIntRange(minDamage(), maxDamage()));
+	public static long damageRoll() {
+		long dmg = (Dungeon.NormalLongRange(minDamage(), maxDamage()));
 		if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 			dmg *= 2.5f;
 		}
 		return dmg;
 	}
 
-	public static int maxDamage() {
+	public static long maxDamage() {
 		return Math.round((10 + Dungeon.scalingDepth() * 2)*Dungeon.fireDamage);
 	}
 
-	public static int minDamage() {
+	public static long minDamage() {
 		return Math.round((5 + Dungeon.scalingDepth())*Dungeon.fireDamage);
 	}
 
@@ -257,7 +257,7 @@ public class Bomb extends Item {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 20 * quantity;
 	}
 	
@@ -284,8 +284,8 @@ public class Bomb extends Item {
 			Actor.add( fuse = ((Fuse)bundle.get(FUSE)).ignite(this) );
 	}
 
-	//used to track the death from friendly magic badge
-	public static class MagicalBomb extends Bomb{};
+	//used to track the death from friendly magic badge, if an explosion was conjured by magic
+	public static class ConjuredBomb extends Bomb{};
 
 	public static class Fuse extends Actor{
 
@@ -415,7 +415,7 @@ public class Bomb extends Item {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (validIngredients.containsKey(i.getClass())){
 					return (bombCosts.get(validIngredients.get(i.getClass())));

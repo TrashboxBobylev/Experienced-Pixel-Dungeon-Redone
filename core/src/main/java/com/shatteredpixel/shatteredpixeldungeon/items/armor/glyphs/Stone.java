@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ public class Stone extends Armor.Glyph {
 	private static ItemSprite.Glowing GREY = new ItemSprite.Glowing( 0x222222 );
 
 	@Override
-	public int proc(Armor armor, Char attacker, Char defender, int damage) {
+	public long proc(Armor armor, Char attacker, Char defender, long damage) {
 		
 		testing = true;
 		float evasion = defender.defenseSkill(attacker);
@@ -54,7 +54,7 @@ public class Stone extends Armor.Glyph {
 		// we clamp in case accuracy or evasion were negative
 		hitChance = GameMath.gate(0.25f, (1f + 3f*hitChance)/4f, 1f);
 		
-		damage = (int)Math.ceil(damage * hitChance);
+		damage = (long) Math.ceil(damage * hitChance);
 		
 		return damage;
 	}

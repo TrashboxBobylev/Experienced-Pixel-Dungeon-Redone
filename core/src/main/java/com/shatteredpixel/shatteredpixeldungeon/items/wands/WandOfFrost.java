@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,11 +50,11 @@ public class WandOfFrost extends DamageWand {
 		image = ItemSpriteSheet.WAND_FROST;
 	}
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 2+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 8+5*lvl;
 	}
 
@@ -84,7 +84,7 @@ public class WandOfFrost extends DamageWand {
 		Char ch = Actor.findChar(bolt.collisionPos);
 		if (ch != null){
 
-			int damage = damageRoll();
+			long damage = damageRoll();
 
 			if (ch.buff(Frost.class) != null){
 				return; //do nothing, can't affect a frozen target
@@ -92,7 +92,7 @@ public class WandOfFrost extends DamageWand {
 			if (ch.buff(Chill.class) != null){
 				//6.67% less damage per turn of chill remaining, to a max of 10 turns (50% dmg)
 				float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
-				damage = (int)Math.round(damage * Math.pow(0.9333f, chillturns));
+				damage = Math.round(damage * Math.pow(0.9333f, chillturns));
 			} else {
 				ch.sprite.burst( 0xFF99CCFF, (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
 			}
@@ -123,7 +123,7 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		Chill chill = defender.buff(Chill.class);
 
 		if (chill != null) {

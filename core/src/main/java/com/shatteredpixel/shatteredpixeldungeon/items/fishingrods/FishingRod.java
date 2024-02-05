@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -175,12 +175,12 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
-    public int visiblyUpgraded() {
+    public long visiblyUpgraded() {
         return level();
     }
 
     @Override
-    public int buffedVisiblyUpgraded() {
+    public long buffedVisiblyUpgraded() {
         return level();
     }
 
@@ -192,7 +192,7 @@ public abstract class FishingRod extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 60 * Dungeon.escalatingDepth() / 5;
     }
 }

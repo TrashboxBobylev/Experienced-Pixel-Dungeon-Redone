@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
@@ -212,6 +214,7 @@ public class MeleeWeapon extends Weapon {
 				&& hero.hasTalent(Talent.AGGRESSIVE_BARRIER)
 				&& (hero.HP / (float)hero.HT) < 0.20f*(1+hero.pointsInTalent(Talent.AGGRESSIVE_BARRIER))){
 			Buff.affect(hero, Barrier.class).setShield(3);
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "3", FloatingText.SHIELDING);
 		}
 
 		if (hero.buff(Talent.CombinedLethalityAbilityTracker.class) != null
@@ -275,23 +278,23 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return  tier*2 +  //base
 				lvl*2;    //level scaling
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  5*(tier+1) +    //base
 				lvl*(tier+1);   //level scaling
 	}
 
-	public int STRReq(int lvl){
+	public int STRReq(long lvl){
 		return STRReq(tier, lvl);
 	}
 private static boolean evaluatingTwinUpgrades = false;
 	@Override
-	public int buffedLvl() {
+	public long buffedLvl() {
 		if (!evaluatingTwinUpgrades && isEquipped(Dungeon.hero) && Dungeon.hero.subClass == HeroSubClass.CHAMPION){
 			KindOfWeapon other = null;
 			if (Dungeon.hero.belongings.weapon() != this) other = Dungeon.hero.belongings.weapon();
@@ -299,7 +302,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 			if (other instanceof MeleeWeapon) {
 				evaluatingTwinUpgrades = true;
-				int otherLevel = other.buffedLvl();
+				long otherLevel = other.buffedLvl();
 				evaluatingTwinUpgrades = false;
 
 				//weaker weapon needs to be 2/1/0 tiers lower, based on talent level
@@ -340,8 +343,8 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
 	@Override
-	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll( owner ));
+	public long damageRoll(Char owner) {
+		long damage = augment.damageFactor(super.damageRoll( owner ));
 
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
@@ -349,19 +352,19 @@ private static boolean evaluatingTwinUpgrades = false;
 				damage += Dungeon.IntRange( 0, exStr );
 			}
 		}
-		if (masteryPotionBonus) damage*=1.2f;
+		if (masteryPotionBonus) damage*=1.2d;
 
 		return damage;
 	}
 
 	@Override
-	public int min() {
-		return Math.round(super.min()*(1f + hardenBoost(buffedLvl())));
+	public long min() {
+		return Math.round(super.min()*(1d + hardenBoost(buffedLvl())));
 	}
 
 	@Override
-	public int max() {
-		return Math.round(super.max()*(1f + hardenBoost(buffedLvl())));
+	public long max() {
+		return Math.round(super.max()*(1d + hardenBoost(buffedLvl())));
 	}
 
 	@Override
@@ -453,7 +456,7 @@ private static boolean evaluatingTwinUpgrades = false;
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		int price = 20 * tier;
 		if (hasGoodEnchant()) {
 			price *= 1.5;

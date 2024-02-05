@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,12 +46,12 @@ public class RustyShield extends Item {
     }
 
     @Override
-    public int value() {
+    public long value() {
         return quantity * 100;
     }
 
     @Override
     public void onHeroGainExp(float levelPercent, Hero hero) {
-        Buff.affect(hero, ArcaneArmor.class).set((int) (hero.buff(ArcaneArmor.class).level() + hero.HT / 200 * levelPercent), 1);
+        Buff.affect(hero, ArcaneArmor.class).set((long) (hero.buff(ArcaneArmor.class).level() + hero.HT / 200 * levelPercent), 1);
     }
 }

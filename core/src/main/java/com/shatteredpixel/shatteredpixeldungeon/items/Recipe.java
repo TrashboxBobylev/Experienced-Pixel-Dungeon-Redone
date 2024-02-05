@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ public abstract class Recipe {
 	
 	public abstract boolean testIngredients(ArrayList<Item> ingredients);
 	
-	public abstract int cost(ArrayList<Item> ingredients);
+	public abstract long cost(ArrayList<Item> ingredients);
 	
 	public abstract Item brew(ArrayList<Item> ingredients);
 	
@@ -96,7 +96,7 @@ public abstract class Recipe {
 				}
 			}
 			
-			for (int i : needed){
+			for (long i : needed){
 				if (i > 0){
 					return false;
 				}
@@ -105,7 +105,7 @@ public abstract class Recipe {
 			return true;
 		}
 		
-		public final int cost(ArrayList<Item> ingredients){
+		public final long cost(ArrayList<Item> ingredients){
 			return cost;
 		}
 		

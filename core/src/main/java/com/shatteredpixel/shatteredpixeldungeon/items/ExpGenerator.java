@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ public class ExpGenerator extends Item {
         } else {
             com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator generator = new com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ExpGenerator();
             generator.pos = cell;
-            generator.set(level());
+//            generator.set(level());
 
             GameScene.add( generator );
             ScrollOfTeleportation.appear(generator, cell);
@@ -66,17 +66,17 @@ public class ExpGenerator extends Item {
     }
 
     @Override
-    public int level() {
+    public long level() {
         return super.level() + 1;
     }
 
     @Override
-    public int visiblyUpgraded() {
+    public long visiblyUpgraded() {
         return super.level();
     }
 
     @Override
-    public int value() {
+    public long value() {
         return 120 * quantity * level();
     }
 

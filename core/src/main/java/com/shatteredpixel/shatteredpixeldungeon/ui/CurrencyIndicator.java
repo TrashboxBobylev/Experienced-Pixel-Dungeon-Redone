@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ public class CurrencyIndicator extends Component {
 
 	private static final float TIME	= 2f;
 	
-	private int lastGold = 0;
-	private int lastEnergy = 0;
+	private long lastGold = 0;
+	private long lastEnergy = 0;
 	
 	private BitmapText gold;
 	private BitmapText energy;
@@ -94,7 +94,7 @@ public class CurrencyIndicator extends Component {
 			
 			lastGold = Dungeon.gold;
 			
-			gold.text( Integer.toString(lastGold) );
+			gold.text( Long.toString(lastGold) );
 			gold.measure();
 			gold.hardlight( 0xFFFF00 );
 			
@@ -107,7 +107,7 @@ public class CurrencyIndicator extends Component {
 		if (Dungeon.energy != lastEnergy) {
 			lastEnergy = Dungeon.energy;
 
-			energy.text( Integer.toString(lastEnergy) );
+			energy.text( Long.toString(lastEnergy) );
 			energy.measure();
 			energy.hardlight( 0x44CCFF );
 

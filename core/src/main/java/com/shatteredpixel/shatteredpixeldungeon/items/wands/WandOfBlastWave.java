@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,11 +60,11 @@ public class WandOfBlastWave extends DamageWand {
 		collisionProperties = Ballistica.PROJECTILE;
 	}
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 1+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 3+3*lvl;
 	}
 
@@ -105,20 +105,20 @@ public class WandOfBlastWave extends DamageWand {
 
 			if (bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) {
 				Ballistica trajectory = new Ballistica(ch.pos, bolt.path.get(bolt.dist + 1), Ballistica.MAGIC_BOLT);
-				int strength = buffedLvl() + 3;
+				long strength = buffedLvl() + 3;
 				throwChar(ch, trajectory, strength, false, true, this);
 			}
 		}
 
 	}
 
-	public static void throwChar(final Char ch, final Ballistica trajectory, int power,
+	public static void throwChar(final Char ch, final Ballistica trajectory, long power,
 	                             boolean closeDoors, boolean collideDmg, Object cause){
 		if (ch.properties().contains(Char.Property.BOSS)) {
 			power = (power+1)/2;
 		}
 
-		int dist = Math.min(trajectory.dist, power);
+		int dist = (int) Math.min(trajectory.dist, power);
 
 		boolean collided = dist == trajectory.dist;
 
@@ -162,7 +162,7 @@ public class WandOfBlastWave extends DamageWand {
 				int oldPos = ch.pos;
 				ch.pos = newPos;
 				if (finalCollided && ch.isActive()) {
-					ch.damage(Random.NormalIntRange(finalDist, 2*finalDist), this);
+					ch.damage(Random.NormalIntRange(finalDist, 2*finalDist), new Knockback());
 					if (ch.isActive()) {
 						Paralysis.prolong(ch, Paralysis.class, 1 + finalDist/2f);
 					} else if (ch == Dungeon.hero){
@@ -184,8 +184,10 @@ public class WandOfBlastWave extends DamageWand {
 		}));
 	}
 
+	public static class Knockback{}
+
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like elastic enchantment
 		//we delay this with an actor to prevent conflicts with regular elastic
 		//so elastic always fully resolves first, then this effect activates

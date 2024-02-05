@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ public class WildMagic extends ArmorAbility {
 			ArrayList<Wand> thirds = new ArrayList<>(wands);
 
 			for (Wand w : wands){
-				float totalCharge = w.curCharges + w.partialCharge;
+				double totalCharge = w.curCharges + w.partialCharge;
 				if (totalCharge < 2*chargeUsePerShot){
 					seconds.remove(w);
 				}

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import com.watabou.utils.Bundle;
 
 public class Poison extends Buff implements Hero.Doom {
 	
-	protected float left;
+	protected double left;
 	
 	private static final String LEFT	= "left";
 
@@ -57,14 +57,14 @@ public class Poison extends Buff implements Hero.Doom {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
-		left = bundle.getFloat( LEFT );
+		left = bundle.getDouble( LEFT );
 	}
 	
-	public void set( float duration ) {
+	public void set( double duration ) {
 		this.left = Math.max(duration, left);
 	}
 
-	public void extend( float duration ) {
+	public void extend( double duration ) {
 		this.left += duration;
 	}
 	
@@ -79,7 +79,7 @@ public class Poison extends Buff implements Hero.Doom {
 	}
 
 	public String iconTextDisplay(){
-		return Integer.toString((int) left);
+		return Long.toString((long) left);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class Poison extends Buff implements Hero.Doom {
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			target.damage( (int)(left / 3) + 1, this );
+			target.damage( (long) (left / 3) + 1, this );
 			spend( TICK );
 			
 			if ((left -= TICK) <= 0) {

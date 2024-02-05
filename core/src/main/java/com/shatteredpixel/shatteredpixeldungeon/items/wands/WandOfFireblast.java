@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,13 +62,13 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	//1/2/3 base damage with 1/2/3 scaling based on charges used
-	public int min(int lvl){
+	public long min(long lvl){
 		return (1+lvl) * chargesPerCast();
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
-	public int max(int lvl){
-		switch (chargesPerCast()){
+	public long max(long lvl){
+		switch ((int) chargesPerCast()){
 			case 1: default:
 				return 2 + 2*lvl;
 			case 2:
@@ -107,7 +107,7 @@ public class WandOfFireblast extends DamageWand {
 					Dungeon.level.heaps.get(cell).burn();
 				}
 			} else {
-				GameScene.add( Blob.seed( cell, 1+chargesPerCast(), Fire.class ) );
+				GameScene.add( Blob.seed( cell, (int) Math.min(Integer.MAX_VALUE-1, 1+chargesPerCast()), Fire.class ) );
 			}
 
 			Char ch = Actor.findChar( cell );
@@ -128,7 +128,7 @@ public class WandOfFireblast extends DamageWand {
 				if (Dungeon.level.trueDistance(cell+i, bolt.collisionPos) < Dungeon.level.trueDistance(cell, bolt.collisionPos)
 						&& Dungeon.level.flamable[cell+i]
 						&& Fire.volumeAt(cell+i, Fire.class) == 0){
-					GameScene.add( Blob.seed( cell+i, 1+chargesPerCast(), Fire.class ) );
+					GameScene.add( Blob.seed( cell+i, (int) Math.min(Integer.MAX_VALUE-1, 1+chargesPerCast()), Fire.class ) );
 				}
 			}
 		}
@@ -138,7 +138,7 @@ public class WandOfFireblast extends DamageWand {
 			ch.damage(Math.round(damageRoll()*Dungeon.fireDamage), this);
 			if (ch.isAlive()) {
 				Buff.affect(ch, Burning.class).reignite(ch);
-				switch (chargesPerCast()) {
+				switch ((int) chargesPerCast()) {
 					case 1:
 						break; //no effects
 					case 2:
@@ -153,7 +153,7 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like blazing enchantment
 		new FireBlastOnHit().proc( staff, attacker, defender, damage);
 	}
@@ -170,7 +170,7 @@ public class WandOfFireblast extends DamageWand {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// 5/7/9 distance
-		int maxDist = 3 + 2*chargesPerCast();
+		int maxDist = (int) (3 + 2*chargesPerCast());
 
 		cone = new ConeAOE( bolt,
 				maxDist,
@@ -202,12 +202,12 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		if (cursed || charger != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null){
 			return 1;
 		}
 		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
-		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
+		return (long) GameMath.gate(1, (long)Math.ceil(curCharges*0.3d), 3);
 	}
 
 	@Override

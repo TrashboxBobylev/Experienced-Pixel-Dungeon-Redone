@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -110,6 +110,10 @@ public class Bundle {
 
 	public float getFloat( String key ) {
 		return (float)data.optDouble( key, 0.0 );
+	}
+
+	public double getDouble( String key ) {
+		return data.optDouble( key, 0.0 );
 	}
 
 	public String getString( String key ) {
@@ -333,6 +337,14 @@ public class Bundle {
 		}
 	}
 
+	public void put( String key, double value ) {
+		try {
+			data.put( key, value );
+		} catch (JSONException e) {
+			Game.reportException(e);
+		}
+	}
+
 	public void put( String key, String value ) {
 		try {
 			data.put( key, value );
@@ -405,6 +417,18 @@ public class Bundle {
 	}
 
 	public void put( String key, float[] array ) {
+		try {
+			JSONArray jsonArray = new JSONArray();
+			for (int i=0; i < array.length; i++) {
+				jsonArray.put( i, array[i] );
+			}
+			data.put( key, jsonArray );
+		} catch (JSONException e) {
+			Game.reportException(e);
+		}
+	}
+
+	public void put( String key, double[] array ) {
 		try {
 			JSONArray jsonArray = new JSONArray();
 			for (int i=0; i < array.length; i++) {
@@ -512,6 +536,7 @@ public class Bundle {
 			try {
 				json = new JSONTokener(jsonString).nextValue();
 			} catch (Exception e){
+				//TODO support for v1.1.X saves has been dropped, can probably remove this soon
 				//if the string can't be tokenized, it may be written by v1.1.X, which used libGDX JSON.
 				// Some of these are written in a 'minified' format, some have duplicate keys.
 				// We read them in with the libGDX JSON code, fix duplicates, write as full JSON

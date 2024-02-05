@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public class HornOfPlenty extends Artifact {
 				}
 
 				Hunger hunger = Buff.affect(Dungeon.hero, Hunger.class);
-				int chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
+				long chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
 				if (chargesToUse > charge) chargesToUse = charge;
 
 				//always use 1 charge if snacking
@@ -195,7 +195,7 @@ public class HornOfPlenty extends Artifact {
 	}
 
 	@Override
-	public void level(int value) {
+	public void level(long value) {
 		super.level(value);
 		chargeCap = 5 + level()/2;
 	}
@@ -219,7 +219,7 @@ public class HornOfPlenty extends Artifact {
 		}
 		if (storedFoodEnergy >= Hunger.HUNGRY){
 			int upgrades = storedFoodEnergy / (int)Hunger.HUNGRY;
-			upgrades = Math.min(upgrades, 10 - level());
+			upgrades = (int) Math.min(upgrades, 10 - level());
 			upgrade(upgrades);
 			storedFoodEnergy -= upgrades * Hunger.HUNGRY;
 			if (level() == 10){

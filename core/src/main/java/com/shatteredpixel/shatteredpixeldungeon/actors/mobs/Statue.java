@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,8 +98,8 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
-		return weapon.damageRoll(this);
+	public long damageRoll() {
+		return (int) weapon.damageRoll(this);
 	}
 	
 	@Override
@@ -119,8 +119,8 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this));
+	public long drRoll() {
+		return (int) (super.drRoll() + Random.NormalLongRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this)));
 	}
 	
 	@Override
@@ -135,7 +135,7 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 
 		if (state == PASSIVE) {
 			state = HUNTING;
@@ -145,9 +145,9 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
-		damage = weapon.proc( this, enemy, damage );
+		damage = (int) weapon.proc( this, enemy, damage );
 		if (!enemy.isAlive() && enemy == Dungeon.hero){
 			Dungeon.fail(this);
 			GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,20 +49,20 @@ public class CrystalSpire extends Mob {
 
 	{
 		//this translates to roughly 33/27/23/20/18/16 pickaxe hits at +0/1/2/3/4/5
-		HP = HT = 300;
+		HP = HT = 500;
 		spriteClass = CrystalSpireSprite.class;
 		switch (Dungeon.cycle){
 			case 1:
-				HP = HT = 1600;
+				HP = HT = 1650;
 				break;
 			case 2:
-				HP = HT = 19564;
+				HP = HT = 3400;
 				break;
 			case 3:
-				HP = HT = 900000;
+				HP = HT = 6600;
 				break;
 			case 4:
-				HP = HT = 12000000;
+				HP = HT = 11625;
 				break;
 		}
 
@@ -76,7 +76,7 @@ public class CrystalSpire extends Mob {
 		alignment = Alignment.NEUTRAL;
 
 		properties.add(Property.IMMOVABLE);
-		properties.add(Property.MINIBOSS);
+		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
 	}
 
@@ -139,7 +139,7 @@ public class CrystalSpire extends Mob {
 						dmg *= 1.5f; //18-27 damage
 						Buff.prolong(ch, Cripple.class, 30f);
 					}
-					ch.damage(dmg, CrystalSpire.this);
+					ch.damage(dmg, new SpireSpike());
 
 					int movePos = i;
 					//crystal guardians get knocked away from the hero, others get knocked away from the spire
@@ -213,6 +213,8 @@ public class CrystalSpire extends Mob {
 
 		return true;
 	}
+
+	public static class SpireSpike{}
 
 	private void diamondAOEAttack(){
 		targetedCells.clear();
@@ -293,7 +295,7 @@ public class CrystalSpire extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (!(src instanceof Pickaxe) ){
 			dmg = 0;
 		}
@@ -302,7 +304,7 @@ public class CrystalSpire extends Mob {
 
 	@Override
 	public boolean isInvulnerable(Class effect) {
-		return effect != Pickaxe.class;
+		return super.isInvulnerable(effect) || effect != Pickaxe.class;
 	}
 
 	@Override
@@ -318,7 +320,6 @@ public class CrystalSpire extends Mob {
 			final Pickaxe p = Dungeon.hero.belongings.getItem(Pickaxe.class);
 
 			if (p == null){
-				//maybe a game log entry here?
 				return true;
 			}
 
@@ -327,7 +328,7 @@ public class CrystalSpire extends Mob {
 				public void call() {
 					//does its own special damage calculation that's only influenced by pickaxe level and augment
 					//we pretend the spire is the owner here so that properties like hero str or or other equipment do not factor in
-					int dmg = p.damageRoll(CrystalSpire.this);
+					long dmg = p.damageRoll(CrystalSpire.this);
 
 					dmg = Math.min(dmg, HT / 10);
 
@@ -335,6 +336,8 @@ public class CrystalSpire extends Mob {
 					abilityCooldown -= dmg/10f;
 					sprite.bloodBurstA(Dungeon.hero.sprite.center(), dmg);
 					sprite.flash();
+
+					BossHealthBar.bleed(HP <= HT/3);
 
 					if (isAlive()) {
 						Sample.INSTANCE.play(Assets.Sounds.SHATTER, 1f, Random.Float(1.15f, 1.25f));
@@ -361,7 +364,7 @@ public class CrystalSpire extends Mob {
 						for (Char ch : Actor.chars()){
 							if (fieldOfView[ch.pos]) {
 								if (ch instanceof CrystalGuardian) {
-									ch.damage(ch.HT, this);
+									ch.damage(ch.HT, new SpireSpike());
 								}
 								if (ch instanceof CrystalWisp) {
 									Buff.affect(ch, Blindness.class, 5f);

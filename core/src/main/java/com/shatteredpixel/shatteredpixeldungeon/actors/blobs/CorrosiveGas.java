@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import com.watabou.utils.Bundle;
 public class CorrosiveGas extends Blob {
 
 	//FIXME should have strength per-cell
-    protected int strength = 0;
+    protected long strength = 0;
 
 	//used in specific cases where the source of the corrosion is important for death logic
 	private Class source;
@@ -65,11 +65,11 @@ public class CorrosiveGas extends Blob {
 		}
 	}
 
-	public CorrosiveGas setStrength(int str){
+	public CorrosiveGas setStrength(long str){
 		return setStrength(str, null);
 	}
 
-	public CorrosiveGas setStrength(int str, Class source){
+	public CorrosiveGas setStrength(long str, Class source){
 		if (str > strength) {
 			strength = str;
 			this.source = source;
@@ -83,7 +83,7 @@ public class CorrosiveGas extends Blob {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		strength = bundle.getInt( STRENGTH );
+		strength = bundle.getLong( STRENGTH );
 		source = bundle.getClass( SOURCE );
 	}
 

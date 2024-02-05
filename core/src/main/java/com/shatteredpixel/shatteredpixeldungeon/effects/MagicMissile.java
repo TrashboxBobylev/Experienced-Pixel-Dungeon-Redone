@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,14 +61,14 @@ public class MagicMissile extends Emitter {
 	public static final int RAINBOW         = 8;
 	public static final int EARTH           = 9;
 	public static final int WARD            = 10;
-	
 	public static final int SHAMAN_RED      = 11;
 	public static final int SHAMAN_BLUE     = 12;
 	public static final int SHAMAN_PURPLE   = 13;
 	public static final int TOXIC_VENT      = 14;
 	public static final int ELMO            = 15;
-	public static final int INVISI          = 16;
-	public static final int HOLYEXP         = 17;
+	public static final int POISON          = 16;
+	public static final int INVISI          = 17;
+	public static final int HOLYEXP         = 18;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -84,7 +84,7 @@ public class MagicMissile extends Emitter {
 	public static final int SPARK_CONE      = 112;
 	public static final int BLOOD_CONE      = 113;
 	public static final int HOLY_EXP_CONE   = 114;
-	
+
 	public void reset( int type, int from, int to, Callback callback ) {
 		reset( type,
 				DungeonTilemap.raisedTileCenterToWorld( from ),
@@ -164,7 +164,6 @@ public class MagicMissile extends Emitter {
 				size( 4 );
 				pour( WardParticle.FACTORY, 0.01f );
 				break;
-				
 			case SHAMAN_RED:
 				size( 2 );
 				pour( ShamanParticle.RED, 0.01f );
@@ -193,6 +192,11 @@ public class MagicMissile extends Emitter {
 				size( 6 );
 				pour( HolyExpParticle.FACTORY, 0.01f );
 				break;
+			case POISON:
+				size( 3 );
+				pour( PoisonParticle.MISSILE, 0.01f );
+				break;
+
 			case MAGIC_MISS_CONE:
 				size( 10 );
 				pour( WhiteParticle.FACTORY, 0.03f );

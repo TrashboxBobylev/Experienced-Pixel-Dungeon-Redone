@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -82,10 +83,10 @@ public class WandOfTransfusion extends Wand {
 			if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null){
 				
 				// 5% of max hp
-				int selfDmg = Math.round(curUser.HT*0.05f);
+				long selfDmg = Math.round(curUser.HT*0.05f);
 				
-				int healing = selfDmg + 3*buffedLvl();
-				int shielding = (ch.HP + healing) - ch.HT;
+				long healing = (selfDmg + 3*buffedLvl());
+				long shielding = (ch.HP + healing) - ch.HT;
 				if (shielding > 0){
 					healing -= shielding;
 					Buff.affect(ch, Barrier.class).setShield(shielding);
@@ -96,7 +97,12 @@ public class WandOfTransfusion extends Wand {
 				ch.HP += healing;
 				
 				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING),  (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
-				ch.sprite.showStatus(CharSprite.POSITIVE, "+%dHP", healing + shielding);
+				if (healing > 0) {
+					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healing), FloatingText.HEALING);
+				}
+				if (shielding > 0){
+					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shielding), FloatingText.SHIELDING);
+				}
 				
 				if (!freeCharge) {
 					damageHero(selfDmg);
@@ -110,6 +116,7 @@ public class WandOfTransfusion extends Wand {
 
 				//grant a self-shield, and...
 				Buff.affect(curUser, Barrier.class).setShield((5 + buffedLvl()));
+curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl()), FloatingText.SHIELDING);
 
 				//charms living enemies
 				if (!ch.properties().contains(Char.Property.UNDEAD)) {
@@ -120,7 +127,7 @@ public class WandOfTransfusion extends Wand {
 				
 				//harms the undead
 				} else {
-					ch.damage((int) (Random.NormalIntRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
+					ch.damage((long) (Random.NormalLongRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
 					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.min(Math.sqrt(10 + buffedLvl()), 1000));
 					Sample.INSTANCE.play(Assets.Sounds.BURNING);
 				}
@@ -132,7 +139,7 @@ public class WandOfTransfusion extends Wand {
 	}
 
 	//this wand costs health too
-	private void damageHero(int damage){
+	private void damageHero(long damage){
 		
 		curUser.damage(damage, this);
 
@@ -144,11 +151,13 @@ public class WandOfTransfusion extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()){
 			//grants a free use of the staff and shields self
 			freeCharge = true;
-			Buff.affect(attacker, Barrier.class).setShield(Math.round((2*(5 + buffedLvl()))*procChanceMultiplier(attacker)));
+			int shieldToGive = Math.round((2*(5 + buffedLvl()))*procChanceMultiplier(attacker));
+			Buff.affect(attacker, Barrier.class).setShield(shieldToGive);
+			attacker.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
 			GLog.p( Messages.get(this, "charged") );
 			attacker.sprite.emitter().burst(BloodParticle.BURST, 20);
 		}

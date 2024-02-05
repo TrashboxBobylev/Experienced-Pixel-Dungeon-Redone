@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,11 +47,11 @@ public class WandOfMagicMissile extends DamageWand {
 		image = ItemSpriteSheet.WAND_MAGIC_MISSILE;
 	}
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 2 +lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 8+2*lvl;
 	}
 	
@@ -81,7 +81,7 @@ public class WandOfMagicMissile extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		SpellSprite.show(attacker, SpellSprite.CHARGE);
 		for (Wand.Charger c : attacker.buffs(Wand.Charger.class)){
 			if (c.wand() != this){
@@ -104,7 +104,7 @@ public class WandOfMagicMissile extends DamageWand {
 
 		public static float DURATION = 4f;
 
-		private int level = 0;
+		private long level = 0;
 		private Wand wandJustApplied; //we don't bundle this as it's only used right as the buff is applied
 
 		public void setup(Wand wand){
@@ -120,7 +120,7 @@ public class WandOfMagicMissile extends DamageWand {
 			updateQuickslot();
 		}
 
-		public int level(){
+		public long level(){
 			return this.level;
 		}
 
@@ -162,7 +162,7 @@ public class WandOfMagicMissile extends DamageWand {
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			level = bundle.getInt(LEVEL);
+			level = bundle.getLong(LEVEL);
 		}
 	}
 

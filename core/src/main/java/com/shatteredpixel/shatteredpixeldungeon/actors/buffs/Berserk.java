@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal.WarriorShield;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -64,7 +65,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 	private int turnRecovery;
 
 	public int powerLossBuffer = 0;
-	private float power = 0;
+	private double power = 0;
 
 	private static final String STATE = "state";
 	private static final String LEVEL_RECOVERY = "levelrecovery";
@@ -87,7 +88,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 		super.restoreFromBundle(bundle);
 
 		state = bundle.getEnum(STATE, State.class);
-		power = bundle.getFloat(POWER);
+		power = bundle.getDouble(POWER);
 		powerLossBuffer = bundle.getInt(POWER_BUFFER);
 		levelRecovery = bundle.getFloat(LEVEL_RECOVERY);
 		turnRecovery = bundle.getInt(TURN_RECOVERY);
@@ -103,7 +104,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 			ShieldBuff buff = target.buff(WarriorShield.class);
 			if (target.shielding() > 0) {
 				//lose 2.5% of shielding per turn, but no less than 1
-				int dmg = (int)Math.ceil(target.shielding() * 0.025f);
+				long dmg = (long) Math.ceil(target.shielding() * 0.025f);
 				if (buff != null && buff.shielding() > 0) {
 					dmg = buff.absorbDamage(dmg);
 				}
@@ -171,11 +172,11 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 	}
 
 	public float enchantFactor(float chance){
-		return chance + ((Math.min(1f, power) * 0.15f) * ((Hero) target).pointsInTalent(Talent.ENRAGED_CATALYST));
+		return (float) (chance + ((Math.min(1f, power) * 0.15f) * ((Hero) target).pointsInTalent(Talent.ENRAGED_CATALYST)));
 	}
 
-	public float damageFactor(float dmg){
-		return dmg * Math.min(1.5f, 1f + (power / 2f));
+	public double damageFactor(double dmg){
+		return (dmg * Math.min(1.5f, 1f + (power / 2f)));
 	}
 
 	public boolean berserking(){
@@ -218,11 +219,12 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 		WarriorShield shield = target.buff(WarriorShield.class);
 		int shieldAmount = Math.round(shield.maxShield() * shieldMultiplier);
 		shield.supercharge(shieldAmount);
+		target.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(shieldAmount), FloatingText.SHIELDING );
 
 		BuffIndicator.refreshHero();
 	}
 	
-	public void damage(int damage){
+	public void damage(long damage){
 		if (state != State.NORMAL) return;
 		float maxPower = 1f + 0.1667f*((Hero)target).pointsInTalent(Talent.ENDLESS_RAGE);
 		power = Math.min(maxPower, power + (damage/(float)target.HT)/3f );
@@ -277,7 +279,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 	@Override
 	public void doAction() {
 		WarriorShield shield = target.buff(WarriorShield.class);
-		if (shield != null) {
+		if (shield != null && shield.maxShield() > 0) {
 			startBerserking();
 			ActionIndicator.clearAction(this);
 		} else {
@@ -311,7 +313,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 		switch (state){
 			case NORMAL: default:
 				float maxPower = 1f + 0.1667f*((Hero)target).pointsInTalent(Talent.ENDLESS_RAGE);
-				return (maxPower - power)/maxPower;
+				return (float) ((maxPower - power)/maxPower);
 			case BERSERK:
 				return 0f;
 			case RECOVERING:

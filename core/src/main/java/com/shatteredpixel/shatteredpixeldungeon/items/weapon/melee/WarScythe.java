@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ public class WarScythe extends MeleeWeapon {
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return  Math.round(6.67f*(tier+1)) +    //40 base, up from 30
                 lvl*(tier+1);                   //scaling unchanged
     }

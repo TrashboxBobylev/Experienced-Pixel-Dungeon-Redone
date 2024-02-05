@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,7 +121,7 @@ public class RunicBlade extends MeleeWeapon {
     //equal to tier 4 in damage at +5
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         int i = 5 * (tier) +                    //20 base, down from 30
                 Math.round(lvl * (tier+1)); //+5 per level, up from +6
         if (!charged) i = 6 * (tier) +
@@ -214,7 +214,7 @@ public class RunicBlade extends MeleeWeapon {
                                                 Char enemy = Actor.findChar( cell );
                                                 if (enemy != null && enemy != curUser) {
                                                     if (Char.hit(curUser, enemy, true)) {
-                                                        int dmg = curBlade.damageRoll(curUser)*2;
+                                                        long dmg = (curBlade.damageRoll(curUser)*2);
                                                         enemy.damage(dmg, curBlade);
                                                         if (curUser.isSubclass(HeroSubClass.GLADIATOR)) Buff.affect( curUser, Combo.class ).hit( enemy );
                                                         curBlade.proc(curUser, enemy, dmg);

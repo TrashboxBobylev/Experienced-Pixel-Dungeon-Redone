@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2023 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public class OOFThief extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(53, 70);
             case 2: return Random.NormalIntRange(255, 320);
@@ -190,7 +190,7 @@ public class OOFThief extends Mob {
 	private static final int STEAL_COUNT = 3;
 
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		counter++;
 

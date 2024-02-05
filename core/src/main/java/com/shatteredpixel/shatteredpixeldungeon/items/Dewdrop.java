@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -77,25 +77,23 @@ public class Dewdrop extends Item {
 		//20 drops for a full heal
 		int heal = Math.round( hero.HT * 0.05f * quantity );
 
-		int effect = Math.min( hero.HT - hero.HP, heal );
-		int shield = 0;
+		long effect = Math.min( hero.HT - hero.HP, heal );
+		long shield = 0;
 		if (hero.subClass == HeroSubClass.WARDEN){
 			shield = heal - effect;
-			int maxShield = Math.round(hero.HT);
-			int curShield = 0;
+			long maxShield = hero.HT;
+			long curShield = 0;
 			if (hero.buff(Barrier.class) != null) curShield = hero.buff(Barrier.class).shielding();
 			shield = Math.min(shield, maxShield-curShield);
 		}
 		if (effect > 0 || shield > 0) {
 			hero.HP += effect;
 			if (shield > 0) Buff.affect(hero, Barrier.class).incShield(shield);
-			hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-			if (effect > 0 && shield > 0){
-				hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(Dewdrop.class, "both", effect, shield) );
-			} else if (effect > 0){
-				hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(Dewdrop.class, "heal", effect) );
-			} else {
-				hero.sprite.showStatus( CharSprite.POSITIVE, Messages.get(Dewdrop.class, "shield", shield) );
+			if (effect > 0){
+				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(effect), FloatingText.HEALING);
+			}
+			if (shield > 0) {
+				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(shield), FloatingText.SHIELDING );
 			}
 
 		} else if (!force) {
@@ -128,7 +126,7 @@ public class Dewdrop extends Item {
 	}
 
 	@Override
-	public Item quantity(int value) {
+	public Item quantity(long value) {
 		quantity = Math.min( value, 1);
 		return this;
 	}

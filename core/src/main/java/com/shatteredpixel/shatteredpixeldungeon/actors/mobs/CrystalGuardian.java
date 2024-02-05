@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -93,7 +93,7 @@ public class CrystalGuardian extends Mob{
 			throwItems();
 			HP = Math.min(HT, HP+(Math.max(1, HP/20)));
 			if (Dungeon.level.heroFOV[pos]) {
-				sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, "5", FloatingText.HEALING);
 			}
 			if (HP == HT){
 				recovering = false;
@@ -106,7 +106,7 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		switch (Dungeon.cycle) {
 			case 1: return Random.NormalIntRange(60, 70);
 			case 2: return Random.NormalIntRange(280, 350);
@@ -156,9 +156,9 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		if (recovering){
-			sprite.showStatus(CharSprite.NEGATIVE, Integer.toString(damage));
+			sprite.showStatus(CharSprite.NEGATIVE, Long.toString(damage));
 			HP = Math.max(1, HP-damage);
 			damage = -1;
 		}

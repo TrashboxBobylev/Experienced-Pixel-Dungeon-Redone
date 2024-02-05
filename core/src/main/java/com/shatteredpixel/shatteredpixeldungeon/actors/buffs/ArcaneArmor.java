@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class ArcaneArmor extends Buff {
 		type = buffType.POSITIVE;
 	}
 	
-	private int level = 0;
+	private long level = 0;
 	private int interval = 1;
 	
 	@Override
@@ -58,11 +58,11 @@ public class ArcaneArmor extends Buff {
 		return true;
 	}
 	
-	public int level() {
+	public long level() {
 		return level;
 	}
 	
-	public void set( int value, int time ) {
+	public void set( long value, int time ) {
 		//decide whether to override, preferring high value + low interval
 		if (Math.sqrt(interval)*level < Math.sqrt(time)*value) {
 			level = value;
@@ -92,7 +92,7 @@ public class ArcaneArmor extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(level);
+		return Long.toString(level);
 	}
 	
 	@Override
@@ -114,6 +114,6 @@ public class ArcaneArmor extends Buff {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		interval = bundle.getInt( INTERVAL );
-		level = bundle.getInt( LEVEL );
+		level = bundle.getLong( LEVEL );
 	}
 }

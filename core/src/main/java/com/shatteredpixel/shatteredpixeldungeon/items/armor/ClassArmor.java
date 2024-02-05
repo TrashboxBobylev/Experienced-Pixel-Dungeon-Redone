@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -247,6 +248,9 @@ abstract public class ClassArmor extends Armor {
 								armor.detach(hero.belongings.backpack);
 								if (hero.belongings.armor == armor){
 									hero.belongings.armor = null;
+									if (hero.sprite instanceof HeroSprite) {
+										((HeroSprite) hero.sprite).updateArmor();
+									}
 								}
 								level(armor.trueLevel());
 								tier = armor.tier;
@@ -258,7 +262,7 @@ abstract public class ClassArmor extends Armor {
 									inscribe(armor.glyph);
 									seal = armor.checkSeal();
 									if (seal.level() > 0) {
-										int newLevel = trueLevel() + 1;
+										long newLevel = trueLevel() + 1;
 										level(newLevel);
 										Badges.validateItemLevelAquired(ClassArmor.this);
 									}
@@ -266,7 +270,7 @@ abstract public class ClassArmor extends Armor {
 									//automates the process of detaching the glyph manually
 									// and re-affixing it to the new armor
 									if (seal.level() > 0 && trueLevel() <= armor.trueLevel()){
-										int newLevel = trueLevel() + 1;
+										long newLevel = trueLevel() + 1;
 										level(newLevel);
 										Badges.validateItemLevelAquired(ClassArmor.this);
 									}
@@ -327,7 +331,7 @@ abstract public class ClassArmor extends Armor {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		return 0;
 	}
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,12 +43,12 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
-import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.tweeners.Tweener;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -150,6 +150,8 @@ public class ShadowClone extends ArmorAbility {
 			HP = HT = 80;
 
 			immunities.add(AllyBuff.class);
+
+			properties.add(Property.INORGANIC);
 		}
 
 		public ShadowAlly(){
@@ -202,9 +204,9 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int damageRoll() {
-			int damage = Random.NormalIntRange(10, 20);
-			int heroDamage = Dungeon.hero.damageRoll();
+		public long damageRoll() {
+			long damage = Random.NormalIntRange(10, 20);
+			long heroDamage = Dungeon.hero.damageRoll();
 			heroDamage /= Dungeon.hero.attackDelay(); //normalize hero damage based on atk speed
 			heroDamage = Math.round(0.08f * Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE) * heroDamage);
 			if (heroDamage > 0){
@@ -214,20 +216,20 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int attackProc( Char enemy, int damage ) {
+		public long attackProc( Char enemy, long damage ) {
 			damage = super.attackProc( enemy, damage );
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE)
 					&& Dungeon.hero.belongings.weapon() != null){
-				return Dungeon.hero.belongings.weapon().proc( this, enemy, damage );
+				return (int) Dungeon.hero.belongings.weapon().proc( this, enemy, damage );
 			} else {
 				return damage;
 			}
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
-			int heroRoll = Dungeon.hero.drRoll();
+		public long drRoll() {
+			long dr = super.drRoll();
+			long heroRoll = Dungeon.hero.drRoll();
 			heroRoll = Math.round(0.12f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
 			if (heroRoll > 0){
 				dr += heroRoll;
@@ -247,18 +249,18 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int defenseProc(Char enemy, int damage) {
+		public long defenseProc(Char enemy, long damage) {
 			damage = super.defenseProc(enemy, damage);
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR)
 					&& Dungeon.hero.belongings.armor() != null){
-				return Dungeon.hero.belongings.armor().proc( enemy, this, damage );
+				return (int) Dungeon.hero.belongings.armor().proc( enemy, this, damage );
 			} else {
 				return damage;
 			}
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 
 			//TODO improve this when I have proper damage source logic
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR)
@@ -266,6 +268,7 @@ public class ShadowClone extends ArmorAbility {
 					&& Dungeon.hero.belongings.armor().hasGlyph(AntiMagic.class, this)
 					&& AntiMagic.RESISTS.contains(src.getClass())){
 				dmg -= AntiMagic.drRoll(Dungeon.hero, Dungeon.hero.belongings.armor().buffedLvl());
+				dmg = Math.max(dmg, 0);
 			}
 
 			super.damage(dmg, src);

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ public class Elastic extends Weapon.Enchantment {
 	private static ItemSprite.Glowing PINK = new ItemSprite.Glowing( 0xFF00FF );
 	
 	@Override
-	public int proc(Weapon weapon, Char attacker, Char defender, int damage ) {
-		int level = Math.max( 0, weapon.buffedLvl() );
+	public long proc(Weapon weapon, Char attacker, Char defender, long damage ) {
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 20%
 		// lvl 1 - 33%

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -52,18 +53,18 @@ public class GleamingStaff extends BlacksmithWeapon {
     public int counter = 0;
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return Math.round(super.min(lvl)*0.6f);
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return Math.round(super.max(lvl)*0.75f);
     }
 
     @Override
-    public int defenseFactor( Char owner ) {
-        int defense = tier + Dungeon.cycle * 5 + (buffedLvl() * (1 + Dungeon.cycle));
+    public long defenseFactor( Char owner ) {
+        long defense = tier + Dungeon.cycle * 5 + (buffedLvl() * (1 + Dungeon.cycle));
         if (owner.buff(GuardTracker.class) != null)
             return defense * 2;
         return defense;	//2 extra defence
@@ -76,7 +77,7 @@ public class GleamingStaff extends BlacksmithWeapon {
     private static final int COMBO_COUNT = 21;
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         counter++;
         Sample.INSTANCE.play( Assets.Sounds.GOLD, 2f, 1f + 3.5f * ((COMBO_COUNT * 1f - counter) / (COMBO_COUNT * 1f))  );
         if (counter >= COMBO_COUNT){
@@ -87,7 +88,7 @@ public class GleamingStaff extends BlacksmithWeapon {
             defender.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.025f, 20);
             Dungeon.level.drop(lootbag, defender.pos).sprite.drop();
         } else {
-            defender.sprite.showStatus(0xF3F600, Integer.toString(COMBO_COUNT - counter));
+            defender.sprite.showStatusWithIcon(0xF3F600, Integer.toString(COMBO_COUNT - counter), FloatingText.GOLD);
         }
 
         return super.proc(attacker, defender, damage);

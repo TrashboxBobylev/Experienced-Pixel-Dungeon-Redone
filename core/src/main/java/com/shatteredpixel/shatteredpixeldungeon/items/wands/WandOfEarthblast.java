@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2019 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,12 +59,12 @@ public class WandOfEarthblast extends DamageWand {
 		collisionProperties = Ballistica.STOP_TARGET;
 	}
 
-	public int min(int lvl){
-		return (int) ((4+lvl*2) * ((chargesPerCast())));
+	public long min(long lvl){
+		return ((4+lvl*2) * ((chargesPerCast())));
 	}
 
-	public int max(int lvl){
-		return (int) ((25+5*lvl) * ((chargesPerCast())));
+	public long max(long lvl){
+		return ((25+5*lvl) * ((chargesPerCast())));
 	}
 
 	ConeAOE cone;
@@ -100,7 +100,7 @@ public class WandOfEarthblast extends DamageWand {
 			}
 		}
 		for (Char ch : affectedChars){
-			int dmg = damageRoll();
+			long dmg = damageRoll();
 			switch (Dungeon.level.distance(ch.pos, Dungeon.hero.pos)){
 				case 3: dmg *= 0.66f; break;
 				case 5: dmg *= 0.33f; break;
@@ -119,7 +119,7 @@ public class WandOfEarthblast extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//acts like blazing enchantment
 		new Blazing().proc( staff, attacker, defender, damage);
 	}
@@ -129,8 +129,8 @@ public class WandOfEarthblast extends DamageWand {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// unlimited distance
-		int d = 3 + (chargesPerCast()-1);
-		int dist = Math.min(bolt.dist, d);
+		long d = 3 + (chargesPerCast()-1);
+		long dist = Math.min(bolt.dist, d);
 
 		cone = new ConeAOE(bolt, d, 90, collisionProperties );
 
@@ -148,16 +148,16 @@ public class WandOfEarthblast extends DamageWand {
 		MagicMissile.boltFromChar( curUser.sprite.parent,
 				MagicMissile.EARTH,
 				curUser.sprite,
-				bolt.path.get(dist/2),
+				bolt.path.get((int) (dist/2)),
 				callback );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 		Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		//consumes 30% of current charges, rounded up, with a minimum of one.
-		return Math.max(1, (int)Math.ceil(curCharges*0.3f));
+		return Math.max(1, (long)Math.ceil(curCharges*0.3d));
 	}
 
 	@Override
@@ -205,7 +205,7 @@ public class WandOfEarthblast extends DamageWand {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 1;
 		}
 

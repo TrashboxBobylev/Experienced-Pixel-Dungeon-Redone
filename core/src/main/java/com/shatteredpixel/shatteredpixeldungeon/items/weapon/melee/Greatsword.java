@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return  6*(tier+1) +    //36
                 lvl*(tier+2);   //+7
     }
@@ -136,7 +136,7 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         for (int i : PathFinder.NEIGHBOURS9){
 
             if (!Dungeon.level.solid[attacker.pos + i]
@@ -179,7 +179,7 @@ public class Greatsword extends MeleeWeapon {
 
         public static class TickDebuff extends Buff {
 
-            private float partialHP = 0;
+            private double partialHP = 0;
 
             private final String PART_HP = "partialHP";
 
@@ -193,7 +193,7 @@ public class Greatsword extends MeleeWeapon {
             public void restoreFromBundle(Bundle bundle) {
                 super.restoreFromBundle(bundle);
                 if (bundle.contains(PART_HP))
-                    partialHP = bundle.getFloat(PART_HP);
+                    partialHP = bundle.getDouble(PART_HP);
             }
 
             @Override
@@ -203,8 +203,8 @@ public class Greatsword extends MeleeWeapon {
                     if (target.HP > 0) {
                         partialHP += regen;
                         if (partialHP >= 1){
-                            target.damage((int)partialHP, new Doom());
-                            partialHP -= (int)partialHP;
+                            target.damage((long) partialHP, new Doom());
+                            partialHP -= (long)partialHP;
                         }
                     }
                     spend( TICK );
@@ -222,8 +222,8 @@ public class Greatsword extends MeleeWeapon {
         }
 
         @Override
-        public int drRoll() {
-            return Random.Int(Dungeon.escalatingDepth(), Dungeon.escalatingDepth());
+        public long drRoll() {
+            return Random.Long(Dungeon.escalatingDepth(), Dungeon.escalatingDepth());
         }
     }
 

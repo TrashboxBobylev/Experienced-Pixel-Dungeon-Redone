@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
+import com.shatteredpixel.shatteredpixeldungeon.utils.Holiday;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
@@ -79,7 +80,7 @@ public class RatKing extends NPC {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 		//do nothing
 	}
 
@@ -220,9 +221,11 @@ public class RatKing extends NPC {
 	
 	@Override
 	public String description() {
-		return ((RatKingSprite)sprite).festive ?
-				Messages.get(this, "desc_festive")
-				: super.description();
+		if (Holiday.getCurrentHoliday() == Holiday.WINTER_HOLIDAYS){
+			return Messages.get(this, "desc_festive");
+		} else {
+			return super.description();
+		}
 	}
 
     public static class Barter extends Buff {

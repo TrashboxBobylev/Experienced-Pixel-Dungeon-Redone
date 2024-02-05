@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,6 +94,7 @@ public class ItemSpriteSheet {
 	
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
+	public static final int GEO_BOULDER     = UNCOLLECTIBLE+11;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
@@ -106,6 +107,7 @@ public class ItemSpriteSheet {
 
 		assignItemRect(TENGU_BOMB,      10, 10);
 		assignItemRect(TENGU_SHOCKER,   10, 10);
+		assignItemRect(GEO_BOULDER,     16, 14);
 	}
 
 	private static final int CONTAINERS     =                               xy(1, 3);   //16 slots
@@ -130,7 +132,7 @@ public class ItemSpriteSheet {
         assignItemRect(PSYCHE_CHEST,     16, 14);
 	}
 
-	private static final int MISC_CONSUMABLE =                              xy(1, 4);   //16 slots
+	private static final int MISC_CONSUMABLE =                              xy(1, 4);   //32 slots
 	public static final int ANKH            = MISC_CONSUMABLE +0;
 	public static final int STYLUS          = MISC_CONSUMABLE +1;
 	public static final int SEAL            = MISC_CONSUMABLE +2;
@@ -147,6 +149,12 @@ public class ItemSpriteSheet {
 	public static final int AMULET          = MISC_CONSUMABLE +13;
 	public static final int MASTERY         = MISC_CONSUMABLE +14;
 	public static final int KIT             = MISC_CONSUMABLE +15;
+	public static final int SEAL_SHARD      = MISC_CONSUMABLE +16;
+	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +17;
+	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +18;
+	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +19;
+	public static final int BROKEN_HILT     = MISC_CONSUMABLE +20;
+
 	static{
 		assignItemRect(ANKH,            10, 16);
 		assignItemRect(STYLUS,          12, 13);
@@ -166,9 +174,15 @@ public class ItemSpriteSheet {
 		assignItemRect(AMULET,          16, 16);
 		assignItemRect(MASTERY,         13, 16);
 		assignItemRect(KIT,             16, 15);
+
+		assignItemRect(SEAL_SHARD,      11, 11);
+		assignItemRect(BROKEN_STAFF,    14, 10);
+		assignItemRect(CLOAK_SCRAP,      9,  9);
+		assignItemRect(BOW_FRAGMENT,    12,  9);
+		assignItemRect(BROKEN_HILT,      9,  9);
 	}
 	
-	private static final int BOMBS          =                               xy(1, 5);   //16 slots
+	private static final int BOMBS          =                               xy(1, 6);   //16 slots
 	public static final int BOMB            = BOMBS+0;
 	public static final int DBL_BOMB        = BOMBS+1;
 	public static final int FIRE_BOMB       = BOMBS+2;
@@ -199,14 +213,14 @@ public class ItemSpriteSheet {
 		assignItemRect(NEW_TENGU_BOMB,  9,  15);
 	}
 
-	private static final int FISHING_HOOKS = xy(1, 6);
-	public static final int BASIC_HOOK = FISHING_HOOKS+0;
-	public static final int GOLDEN_HOOK = FISHING_HOOKS+1;
-	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS+2;
-	public static final int AVARITIA_HOOK = FISHING_HOOKS+3;
-    public static final int CHAOS_HOOK = FISHING_HOOKS+4;
+	private static final int FISHING_HOOKS = xy(16, 6);
+	public static final int BASIC_HOOK = FISHING_HOOKS-4;
+	public static final int GOLDEN_HOOK = FISHING_HOOKS-3;
+	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-2;
+	public static final int AVARITIA_HOOK = FISHING_HOOKS-1;
+    public static final int CHAOS_HOOK = FISHING_HOOKS-0;
 	static {
-        for (int i = FISHING_HOOKS; i < FISHING_HOOKS+5; i++)
+        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-5; i--)
             assignItemRect(i, 14, 13);
     }
 
@@ -683,14 +697,12 @@ public class ItemSpriteSheet {
 	public static final int CARPACCIO   = FOOD+4;
 	public static final int RATION      = FOOD+5;
 	public static final int PASTY       = FOOD+6;
-	public static final int PUMPKIN_PIE = FOOD+7;
-	public static final int CANDY_CANE  = FOOD+8;
-	public static final int MEAT_PIE    = FOOD+9;
-	public static final int BLANDFRUIT  = FOOD+10;
-	public static final int BLAND_CHUNKS= FOOD+11;
-	public static final int CHEESE      = FOOD+12;
-	public static final int PHANTOM_MEAT= FOOD+13;
-	public static final int CHEESE_CHUNK= FOOD+14;
+	public static final int MEAT_PIE    = FOOD+7;
+	public static final int BLANDFRUIT  = FOOD+8;
+	public static final int BLAND_CHUNKS= FOOD+9;
+	public static final int CHEESE      = FOOD+10;
+	public static final int PHANTOM_MEAT= FOOD+11;
+	public static final int CHEESE_CHUNK= FOOD+12;
 	static{
 		assignItemRect(MEAT,        15, 11);
 		assignItemRect(STEAK,       15, 11);
@@ -699,8 +711,6 @@ public class ItemSpriteSheet {
 		assignItemRect(CARPACCIO,   15, 11);
 		assignItemRect(RATION,      16, 12);
 		assignItemRect(PASTY,       16, 11);
-		assignItemRect(PUMPKIN_PIE, 16, 12);
-		assignItemRect(CANDY_CANE,  13, 16);
 		assignItemRect(MEAT_PIE,    16, 12);
 		assignItemRect(BLANDFRUIT,  9,  12);
 		assignItemRect(BLAND_CHUNKS,14, 6);
@@ -709,7 +719,31 @@ public class ItemSpriteSheet {
 		assignItemRect(CHEESE_CHUNK,10, 8);
 	}
 
-	private static final int QUEST  =                                       xy(1, 29);  //32 slots
+	private static final int HOLIDAY_FOOD   =                               xy(1, 29);  //16 slots
+	public static final int STEAMED_FISH    = HOLIDAY_FOOD+0;
+	public static final int FISH_LEFTOVER   = HOLIDAY_FOOD+1;
+	public static final int CHOC_AMULET     = HOLIDAY_FOOD+2;
+	public static final int EASTER_EGG      = HOLIDAY_FOOD+3;
+	public static final int RAINBOW_POTION  = HOLIDAY_FOOD+4;
+	public static final int SHATTERED_CAKE  = HOLIDAY_FOOD+5;
+	public static final int PUMPKIN_PIE     = HOLIDAY_FOOD+6;
+	public static final int VANILLA_CAKE    = HOLIDAY_FOOD+7;
+	public static final int CANDY_CANE      = HOLIDAY_FOOD+8;
+	public static final int SPARKLING_POTION= HOLIDAY_FOOD+9;
+	static{
+		assignItemRect(STEAMED_FISH,    16, 12);
+		assignItemRect(FISH_LEFTOVER,   16, 12);
+		assignItemRect(CHOC_AMULET,     16, 16);
+		assignItemRect(EASTER_EGG,      12, 14);
+		assignItemRect(RAINBOW_POTION,  12, 14);
+		assignItemRect(SHATTERED_CAKE,  15, 11);
+		assignItemRect(PUMPKIN_PIE,     16, 12);
+		assignItemRect(VANILLA_CAKE,    15, 11);
+		assignItemRect(CANDY_CANE,      13, 16);
+		assignItemRect(SPARKLING_POTION,12, 14);
+	}
+
+	private static final int QUEST  =                                       xy(1, 30);  //16 slots
 	public static final int SKULL   = QUEST+0;
 	public static final int DUST    = QUEST+1;
 	public static final int CANDLE  = QUEST+2;
@@ -751,7 +785,7 @@ public class ItemSpriteSheet {
 		assignItemRect(CHEEST,      16, 14);
 	}
 
-	private static final int TREASURE_BAGS =                       xy(1, 30);
+	private static final int TREASURE_BAGS =                       xy(1, 26);
 	public static final int GOO_BAG = TREASURE_BAGS+0;
     public static final int TENGU_BAG = TREASURE_BAGS+1;
     public static final int DM300_BAG = TREASURE_BAGS+2;

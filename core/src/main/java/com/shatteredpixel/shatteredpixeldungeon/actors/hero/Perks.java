@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ public class Perks {
         public void tintIcon(Image icon) { icon.hardlight(0.15f, 0.7f, 0.5f); }
     }
 
-    public static int onAttackProc(Hero hero, Char enemy, int damage){
+    public static long onAttackProc(Hero hero, Char enemy, long damage){
         if (hero.perks.contains(Perk.SUCKER_PUNCH)
                 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)
                 && enemy.buff(SuckerPunchTracker.class) == null){

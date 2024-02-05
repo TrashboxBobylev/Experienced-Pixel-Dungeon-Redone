@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ import com.watabou.input.KeyEvent;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
-import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.RectF;
 import com.watabou.utils.Signal;
@@ -171,10 +170,6 @@ public class WndTabbed extends Window {
 		protected boolean selected;
 		
 		protected NinePatch bg;
-
-		{
-			hotArea.blockLevel = PointerArea.ALWAYS_BLOCK;
-		}
 		
 		@Override
 		protected void layout() {
@@ -189,9 +184,7 @@ public class WndTabbed extends Window {
 		
 		protected void select( boolean value ) {
 			
-			active = !(selected = value);
-
-			if (!active) killTooltip();
+			selected = value;
 			
 			if (bg != null) {
 				remove( bg );
@@ -207,8 +200,10 @@ public class WndTabbed extends Window {
 		
 		@Override
 		protected void onClick() {
-			Sample.INSTANCE.play( Assets.Sounds.CLICK, 0.7f, 0.7f, 1.2f );
-			WndTabbed.this.onClick( this );
+			if (!selected) {
+				Sample.INSTANCE.play(Assets.Sounds.CLICK, 0.7f, 0.7f, 1.2f);
+				WndTabbed.this.onClick(this);
+			}
 		}
 	}
 	

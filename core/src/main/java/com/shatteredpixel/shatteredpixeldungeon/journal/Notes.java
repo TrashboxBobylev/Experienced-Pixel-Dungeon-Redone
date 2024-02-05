@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -150,11 +150,11 @@ public class Notes {
 			return key.getClass();
 		}
 		
-		public int quantity(){
+		public long quantity(){
 			return key.quantity();
 		}
 		
-		public void quantity(int num){
+		public void quantity(long num){
 			key.quantity(num);
 		}
 		
@@ -238,7 +238,7 @@ public class Notes {
 		return false;
 	}
 	
-	public static int keyCount( Key key ){
+	public static long keyCount(Key key ){
 		KeyRecord k = new KeyRecord( key );
 		if (records.contains(k)){
 			k = (KeyRecord) records.get(records.indexOf(k));

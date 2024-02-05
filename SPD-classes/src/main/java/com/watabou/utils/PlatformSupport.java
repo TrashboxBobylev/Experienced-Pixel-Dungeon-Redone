@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.watabou.input.ControllerHandler;
 import com.watabou.noosa.Game;
 import com.zrp200.scrollofdebug.PackageTrie;
 
@@ -46,9 +47,14 @@ public abstract class PlatformSupport {
 
 	public abstract boolean connectedToUnmeteredNetwork();
 
+	public abstract boolean supportsVibration();
+
 	public void vibrate( int millis ){
-		//regular GDX vibration by default
-		Gdx.input.vibrate( millis );
+		if (ControllerHandler.isControllerConnected()) {
+			ControllerHandler.vibrate(millis);
+		} else {
+			Gdx.input.vibrate( millis );
+		}
 	}
 
 	public void setHonorSilentSwitch( boolean value ){

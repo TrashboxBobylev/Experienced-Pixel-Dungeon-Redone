@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,13 +43,13 @@ public class Acidic extends Scorpio {
 		lootChance = 1f;
 	}
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 		return super.attackProc(enemy, damage);
 	}
 
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 		if (Dungeon.level.adjacent(pos, enemy.pos)){
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 		}

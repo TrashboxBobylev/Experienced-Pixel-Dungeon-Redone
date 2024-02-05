@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,13 +102,13 @@ public class ExoticPotion extends Potion {
 	
 	@Override
 	//20 gold more than its none-exotic equivalent
-	public int value() {
+	public long value() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 20) * quantity;
 	}
 
 	@Override
 	//4 more energy than its none-exotic equivalent
-	public int energyVal() {
+	public long energyVal() {
 		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 4) * quantity;
 	}
 
@@ -124,7 +124,7 @@ public class ExoticPotion extends Potion {
 		}
 		
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return 4;
 		}
 

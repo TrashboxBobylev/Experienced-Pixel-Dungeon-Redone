@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ public class Wandmaker extends NPC {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 		//do nothing
 	}
 
@@ -462,7 +462,7 @@ public class Wandmaker extends NPC {
 
 				//or hero is in the ritual room and all 4 candles are with them
 				if (((RegularLevel) Dungeon.level).room(Dungeon.hero.pos) instanceof RitualSiteRoom) {
-					int candles = 0;
+					long candles = 0;
 					if (Dungeon.hero.belongings.getItem(CeremonialCandle.class) != null){
 						candles += Dungeon.hero.belongings.getItem(CeremonialCandle.class).quantity();
 					}

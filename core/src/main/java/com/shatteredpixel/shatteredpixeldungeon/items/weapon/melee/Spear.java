@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class Spear extends MeleeWeapon {
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return  Math.round(8f*(tier+1)) +    //24 base, up from 18
 				lvl*Math.round(1.66f*(tier+2)); //+6.64 per level, up from +4
 	}

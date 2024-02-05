@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.plants.*;
@@ -57,8 +58,8 @@ public class RegrowingSlasher extends BlacksmithWeapon {
     static final Class<Plant>[] helpfulPlants = new Class[]{Earthroot.class, Mageroyal.class, Starflower.class, Sungrass.class};
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
-        int heal = Math.max(1, attacker.HT / 150);
+    public long proc(Char attacker, Char defender, long damage) {
+        long heal = Math.max(1, attacker.HT / 150);
         ArrayList<Char> affected = new ArrayList<>();
         for (Char ch: Actor.chars()){
             if (ch.alignment == attacker.alignment){
@@ -66,16 +67,15 @@ public class RegrowingSlasher extends BlacksmithWeapon {
             }
         }
         for (Char ch: affected){
-            int previousLife = ch.HP;
+            long previousLife = ch.HP;
             ch.HP = Math.min(ch.HP + heal, ch.HT);
             if (attacker.fieldOfView[ch.pos]) {
-                ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 2);
                 ch.sprite.emitter().burst(LeafParticle.GENERAL, 4);
                 if (previousLife != ch.HP)
-                    ch.sprite.showStatus(CharSprite.POSITIVE, Integer.toString(heal));
+                    ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(heal), FloatingText.HEALING);
                 else {
                     if (Barkskin.currentLevel(attacker) != heal)
-                        attacker.sprite.showStatus(0x8e6629, Integer.toString(heal*5));
+                        attacker.sprite.showStatus(0x8e6629, Long.toString(heal*5));
                     Buff.affect(attacker, Barkskin.class).set(heal*5, affected.size());
                 }
             }
@@ -101,7 +101,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
     }
 
     @Override
-    public int defenseFactor( Char owner ) {
+    public long defenseFactor( Char owner ) {
         return 4;	//4 extra defence
     }
 
@@ -125,7 +125,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
                         hero.HP = Math.min(hero.HP + hero.HT / 10, hero.HT);
                         hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 10);
                         hero.sprite.emitter().burst(LeafParticle.GENERAL, 8);
-                        hero.sprite.showStatus(CharSprite.POSITIVE, Integer.toString(hero.HT / 10));
+                        hero.sprite.showStatus(CharSprite.POSITIVE, Long.toString(hero.HT / 10));
 
                         RegrowthSpirit w = new RegrowthSpirit();
                         w.adjustStats( Dungeon.scalingDepth() );
@@ -156,7 +156,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
         }
 
         @Override
-        public void damage(int dmg, Object src) {
+        public void damage(long dmg, Object src) {
             if (src instanceof Char)
                 super.damage(1, src);
         }

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(86, 106);
             case 2: return Random.NormalIntRange(360, 487);
@@ -204,7 +204,7 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (beamCharged) dmg /= 4;
 		super.damage(dmg, src);
 	}
@@ -238,7 +238,7 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-                int dmg = Random.NormalIntRange(30, 50);
+                long dmg = Random.NormalIntRange(30, 50);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(168, 231); break;
                     case 2: dmg = Random.NormalIntRange(510, 824); break;

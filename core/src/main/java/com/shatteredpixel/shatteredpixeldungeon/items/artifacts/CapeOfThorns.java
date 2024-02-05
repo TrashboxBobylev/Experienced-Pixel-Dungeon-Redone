@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -92,18 +92,18 @@ public class CapeOfThorns extends Artifact {
 			return true;
 		}
 
-		public int proc(int damage, Char attacker, Char defender){
+		public long proc(long damage, Char attacker, Char defender){
 			if (cooldown == 0){
 				charge += damage*(0.5+level()*0.05);
 				if (charge >= chargeCap){
 					charge = 0;
-					cooldown = 10+level();
+					cooldown = (int) (10+level());
 					GLog.p( Messages.get(this, "radiating") );
 				}
 			}
 
 			if (cooldown != 0){
-				int deflected = Random.NormalIntRange(0, damage);
+				long deflected = Random.NormalLongRange(0, damage);
 				damage -= deflected;
 
 				if (attacker != null && Dungeon.level.adjacent(attacker.pos, defender.pos)) {

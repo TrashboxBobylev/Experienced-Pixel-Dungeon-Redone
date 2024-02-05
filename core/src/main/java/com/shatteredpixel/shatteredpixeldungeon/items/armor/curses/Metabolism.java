@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor.Glyph;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -41,13 +41,13 @@ public class Metabolism extends Glyph {
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
 	
 	@Override
-	public int proc( Armor armor, Char attacker, Char defender, int damage) {
+	public long proc( Armor armor, Char attacker, Char defender, long damage) {
 
 		float procChance = 1/6f * procChanceMultiplier(defender);
 		if ( Random.Float() < procChance && defender instanceof Hero) {
 
 			//assumes using up 10% of starving, and healing of 1 hp per 10 turns;
-			int healing = Math.min((int)Hunger.STARVING/100, defender.HT - defender.HP);
+			long healing = Math.min((int)Hunger.STARVING/100, defender.HT - defender.HP);
 
 			if (healing > 0) {
 				
@@ -58,8 +58,7 @@ public class Metabolism extends Glyph {
 					hunger.affectHunger( healing * -10 );
 					
 					defender.HP += healing;
-					defender.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-					defender.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( healing ) );
+					defender.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString( healing ), FloatingText.HEALING);
 				}
 			}
 

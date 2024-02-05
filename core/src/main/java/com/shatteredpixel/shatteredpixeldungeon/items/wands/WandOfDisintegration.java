@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,11 +53,11 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
 
-	public int min(int lvl){
+	public long min(long lvl){
 		return 2+lvl;
 	}
 
-	public int max(int lvl){
+	public long max(long lvl){
 		return 8+4*lvl;
 	}
 	
@@ -71,7 +71,7 @@ public class WandOfDisintegration extends DamageWand {
 		
 		boolean terrainAffected = false;
 		
-		int level = buffedLvl();
+		long level = buffedLvl();
 		
 		int maxDistance = Math.min(distance(), beam.dist);
 		
@@ -117,22 +117,22 @@ public class WandOfDisintegration extends DamageWand {
 			Dungeon.observe();
 		}
 		
-		int lvl = level + (chars.size()-1) + terrainBonus;
+		long lvl = level + (chars.size()-1) + terrainBonus;
 		for (Char ch : chars) {
 			wandProc(ch, chargesPerCast());
-			ch.damage( damageRoll(lvl), this );
+			ch.damage(damageRoll(lvl), this );
 			ch.sprite.centerEmitter().burst( PurpleParticle.BURST, Random.IntRange( 1, 2 ) );
 			ch.sprite.flash();
 		}
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//no direct effect, see magesStaff.reachfactor
 	}
 
 	private int distance() {
-		return buffedLvl()*2 + 6;
+		return (int) (buffedLvl()*2 + 6);
 	}
 	
 	@Override

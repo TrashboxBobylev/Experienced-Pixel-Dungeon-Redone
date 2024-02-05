@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,7 @@ public class WandOfRegrowth extends Wand {
 			furrowedChance = (chargesOverLimit+1)/5f;
 		}
 
-		int chrgUsed = chargesPerCast();
+		long chrgUsed = chargesPerCast();
 		int grassToPlace = Math.round((3.67f+buffedLvl()/3f)*chrgUsed);
 
 		//ignore cells which can't have anything grow in them.
@@ -209,7 +209,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
 		//like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
 		boolean grass = false;
 		int terr = Dungeon.level.map[attacker.pos];
@@ -222,7 +222,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		if (grass) {
-			int level = Math.max(0, staff.buffedLvl());
+			long level = Math.max(0, staff.buffedLvl());
 
 			// lvl 0 - 16%
 			// lvl 1 - 21%
@@ -237,7 +237,7 @@ public class WandOfRegrowth extends Wand {
 	public void fx(Ballistica bolt, Callback callback) {
 
 		// 4/6/8 distance
-		int maxDist = 2 + 2*chargesPerCast();
+		int maxDist = (int) (2 + 2*chargesPerCast());
 
 		cone = new ConeAOE( bolt,
 				maxDist,
@@ -268,12 +268,12 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		if (cursed || charger != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null){
 			return 1;
 		}
 		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
-		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
+		return (long) GameMath.gate(1, (long)Math.ceil(curCharges*0.3d), 3);
 	}
 
 	@Override
@@ -403,11 +403,11 @@ public class WandOfRegrowth extends Wand {
 			viewDistance = 1;
 		}
 
-		private int wandLvl = 0;
+		private long wandLvl = 0;
 
-		private void setLevel( int lvl ){
+		private void setLevel( long lvl ){
 			wandLvl = lvl;
-			HP = HT = 25 + 3*lvl;
+			HP = HT = (25 + 3*lvl);
 		}
 
 		public boolean inRange(int pos){
@@ -436,7 +436,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		@Override
-		public void damage( int dmg, Object src ) {
+		public void damage( long dmg, Object src ) {
 			//do nothing
 		}
 

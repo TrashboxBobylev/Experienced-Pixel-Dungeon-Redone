@@ -6,7 +6,7 @@
  * Copyright (C) 2014-2019 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,12 +53,12 @@ public class CreativeGloves extends MeleeWeapon {
 	}
 
 	@Override
-	public int min(int lvl) {
+	public long min(long lvl) {
 		return 1;
 	}
 
 	@Override
-	public int max(int lvl) {
+	public long max(long lvl) {
 		return 5;
 	}
 

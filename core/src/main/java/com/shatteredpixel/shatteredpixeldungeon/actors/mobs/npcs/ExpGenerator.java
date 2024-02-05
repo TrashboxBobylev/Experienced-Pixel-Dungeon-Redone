@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,10 +64,10 @@ public class ExpGenerator extends Mob {
         super.die(cause);
         if (cause instanceof Char && !(cause instanceof Hero)) {
             Buff.affect((Char) cause, Adrenaline.class, 50f);
-            Buff.affect((Char) cause, Barkskin.class).set(enemy.HT*5, 0);
+            Buff.affect((Char) cause, Barkskin.class).set((int) (enemy.HT*5), 0);
             Buff.affect((Char) cause, Bless.class, 60f);
             Buff.affect((Char) cause, Levitation.class, 60f);
-            Buff.affect((Char) cause, ArcaneArmor.class).set(enemy.HT*5, 0);
+            Buff.affect((Char) cause, ArcaneArmor.class).set((int) (enemy.HT*5), 0);
         }
         Dungeon.level.drop(new com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator().upgrade(level - 1), pos).sprite.drop();
     }

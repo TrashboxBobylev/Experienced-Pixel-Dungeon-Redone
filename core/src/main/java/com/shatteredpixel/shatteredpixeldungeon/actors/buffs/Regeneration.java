@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
-import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.watabou.utils.Bundle;
 
 public class Regeneration extends Buff {
@@ -41,7 +40,7 @@ public class Regeneration extends Buff {
 	}
 	
 	private static final float REGENERATION_DELAY = 10;
-	private float partialHP = 0;
+	private double partialHP = 0;
 
 	private final String PART_HP = "partialHP";
 
@@ -55,35 +54,35 @@ public class Regeneration extends Buff {
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		if (bundle.contains(PART_HP))
-			partialHP = bundle.getFloat(PART_HP);
+			partialHP = bundle.getDouble(PART_HP);
 	}
 
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
 			ChaliceOfBlood.chaliceRegen regenBuff = Dungeon.hero.buff( ChaliceOfBlood.chaliceRegen.class);
-			float regen = REGENERATION_DELAY;
+			double regen = REGENERATION_DELAY;
 			if (regenBuff != null) {
 				if (regenBuff.isCursed()) {
 					regen *= 1.5f;
 				} else {
 					if (regenBuff.itemLevel() < 11)
 						regen -= regenBuff.itemLevel()*0.9f;
-					else regen = 1 / (float)((3 * Math.pow(regenBuff.itemLevel() - 1, 2) / 243));
+					else regen = 1 / (3 * Math.pow(regenBuff.itemLevel() - 1, 2) / 243);
 					regen /= RingOfEnergy.artifactChargeMultiplier(target);
 				}
 			}
 			if (Dungeon.hero.heroClass == HeroClass.WARRIOR){
 				regen /= 2;
 			}
-			regen = 1f / regen;
+			regen = 1d / regen;
 
 			if (target.HP < regencap() && !((Hero)target).isStarving()) {
 				if (regenOn()) {
 					partialHP += regen;
 					if (partialHP >= 1){
-						target.HP = Math.min(target.HP + (int)partialHP, target.HT);
-						partialHP -= (int)partialHP;
+						target.HP = Math.min(target.HP + (long)partialHP, target.HT);
+						partialHP -= (long)partialHP;
 						if (target.HP == regencap()) {
 							((Hero) target).resting = false;
 						}
@@ -102,7 +101,7 @@ public class Regeneration extends Buff {
 		return true;
 	}
 	
-	public int regencap(){
+	public long regencap(){
 		return target.HT;
 	}
 

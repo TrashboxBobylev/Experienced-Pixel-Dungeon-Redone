@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -54,8 +55,9 @@ public class WandOfWarding extends Wand {
 
 	@Override
 	public int collisionProperties(int target) {
-		if (cursed || !Dungeon.level.heroFOV[target])   return Ballistica.PROJECTILE;
-		else                                            return Ballistica.STOP_TARGET;
+		if (cursed)                                 return super.collisionProperties(target);
+		else if (!Dungeon.level.heroFOV[target])    return Ballistica.PROJECTILE;
+		else                                        return Ballistica.STOP_TARGET;
 	}
 
 	private boolean wardAvailable = true;
@@ -157,8 +159,8 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, staff.buffedLvl() );
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, staff.buffedLvl() );
 
 		// lvl 0 - 20%
 		// lvl 1 - 33%
@@ -198,7 +200,7 @@ public class WandOfWarding extends Wand {
 	public static class Ward extends NPC {
 
 		public int tier = 1;
-		private int wandLevel = 1;
+		private long wandLevel = 1;
 
 		public int totalZaps = 0;
 
@@ -219,7 +221,7 @@ public class WandOfWarding extends Wand {
 			return Messages.get(this, "name_" + tier );
 		}
 
-		public void upgrade(int wandLevel ){
+		public void upgrade(long wandLevel ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -256,11 +258,11 @@ public class WandOfWarding extends Wand {
 
 		}
 
-		public void wandHeal( int wandLevel ){
+		public void wandHeal( long wandLevel ){
 			wandHeal( wandLevel, 1f );
 		}
 
-		public void wandHeal( int wandLevel, float healFactor ){
+		public void wandHeal( long wandLevel, float healFactor ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -281,7 +283,7 @@ public class WandOfWarding extends Wand {
 			}
 
 			HP = Math.min(HT, HP+heal);
-			if (sprite != null) sprite.showStatus(CharSprite.POSITIVE, Integer.toString(heal));
+			if (sprite != null) sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
 
 		}
 
@@ -294,8 +296,8 @@ public class WandOfWarding extends Wand {
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
+		public long drRoll() {
+			long dr = super.drRoll();
 			if (tier > 3){
 				return dr + Math.round(Random.NormalIntRange(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
 			} else {
@@ -324,7 +326,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = (int) (Random.NormalIntRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
+			long dmg = (long) (Random.NormalLongRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){
@@ -333,7 +335,8 @@ public class WandOfWarding extends Wand {
 
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromFriendlyMagic();
-				Dungeon.fail( this );
+				GLog.n(Messages.capitalize(Messages.get( this, "kill", name() )));
+				Dungeon.fail( WandOfWarding.class );
 			}
 
 			totalZaps++;

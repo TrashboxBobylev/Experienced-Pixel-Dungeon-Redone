@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -33,10 +34,10 @@ import com.watabou.utils.GameMath;
 
 public class Healing extends Buff {
 
-	private int healingLeft;
+	private long healingLeft;
 	
 	private float percentHealPerTick;
-	private int flatHealPerTick;
+	private long flatHealPerTick;
 	
 	{
 		//unlike other buffs, this one acts after the hero and takes priority against other effects
@@ -55,11 +56,16 @@ public class Healing extends Buff {
 			if (target.HP == target.HT && target instanceof Hero) {
 				((Hero) target).resting = false;
 			}
+
+			target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healingThisTick()), FloatingText.HEALING);
 		}
-		
+
 		healingLeft -= healingThisTick();
 		
 		if (healingLeft <= 0){
+			if (target instanceof Hero) {
+				((Hero) target).resting = false;
+			}
 			detach();
 		}
 		
@@ -74,14 +80,14 @@ public class Healing extends Buff {
 				healingLeft);
 	}
 
-	public void setHeal(int amount, float percentPerTick, int flatPerTick){
+	public void setHeal(long amount, float percentPerTick, long flatPerTick){
 		//multiple sources of healing do not overlap, but do combine the best of their properties
 		healingLeft = Math.max(healingLeft, amount);
 		percentHealPerTick = Math.max(percentHealPerTick, percentPerTick);
 		flatHealPerTick = Math.max(flatHealPerTick, flatPerTick);
 	}
 	
-	public void increaseHeal( int amount ){
+	public void increaseHeal( long amount ){
 		healingLeft += amount;
 	}
 	
@@ -106,9 +112,9 @@ public class Healing extends Buff {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		healingLeft = bundle.getInt(LEFT);
+		healingLeft = bundle.getLong(LEFT);
 		percentHealPerTick = bundle.getFloat(PERCENT);
-		flatHealPerTick = bundle.getInt(FLAT);
+		flatHealPerTick = bundle.getLong(FLAT);
 	}
 	
 	@Override
@@ -118,7 +124,7 @@ public class Healing extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(healingLeft);
+		return Long.toString(healingLeft);
 	}
 	
 	@Override

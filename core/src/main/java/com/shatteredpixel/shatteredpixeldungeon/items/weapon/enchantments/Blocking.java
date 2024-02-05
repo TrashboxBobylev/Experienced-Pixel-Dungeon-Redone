@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -42,9 +43,9 @@ public class Blocking extends Weapon.Enchantment {
 	private static ItemSprite.Glowing BLUE = new ItemSprite.Glowing( 0x0000FF );
 	
 	@Override
-	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
+	public long proc(Weapon weapon, Char attacker, Char defender, long damage) {
 		
-		int level = Math.max( 0, weapon.buffedLvl() );
+		long level = Math.max( 0, weapon.buffedLvl() );
 
 		// lvl 0 - 10%
 		// lvl 1 ~ 12%
@@ -54,7 +55,9 @@ public class Blocking extends Weapon.Enchantment {
 			float powerMulti = Math.max(1f, procChance);
 
 			BlockBuff b = Buff.affect(attacker, BlockBuff.class);
-			b.setShield(Math.round(powerMulti * (2 + weapon.buffedLvl())));
+			int shield = Math.round(powerMulti * (2 + weapon.buffedLvl()));
+			b.setShield(shield);
+			attacker.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
 			attacker.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 5);
 		}
 		
@@ -79,7 +82,7 @@ public class Blocking extends Weapon.Enchantment {
 		}
 
 		@Override
-		public void setShield(int shield) {
+		public void setShield(long shield) {
 			super.setShield(shield);
 			postpone(5f);
 		}

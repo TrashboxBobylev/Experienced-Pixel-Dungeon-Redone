@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -40,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SuccubusSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -92,7 +94,7 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(80, 101);
             case 2: return Random.NormalIntRange(420, 533);
@@ -103,19 +105,24 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		
 		if (enemy.buff(Charm.class) != null ){
-			int shield = (HP - HT) + (5 + damage);
+			long shield = (HP - HT) + (5 + damage);
 			if (shield > 0){
 				HP = HT;
+				if (shield < 5){
+					sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5-shield), FloatingText.HEALING);
+				}
+
 				Buff.affect(this, Barrier.class).setShield(shield);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shield), FloatingText.SHIELDING);
 			} else {
 				HP += 5 + damage;
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, "5", FloatingText.HEALING);
 			}
 			if (Dungeon.level.heroFOV[pos]) {
-				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 2 );
 				Sample.INSTANCE.play( Assets.Sounds.CHARMS );
 			}
 		} else if (Random.Int( 3 ) == 0) {

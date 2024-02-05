@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,9 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
+import com.shatteredpixel.shatteredpixeldungeon.utils.Holiday;
 import com.watabou.noosa.TextureFilm;
-
-import java.util.Calendar;
 
 public class RatKingSprite extends MobSprite {
 
@@ -44,12 +43,7 @@ public class RatKingSprite extends MobSprite {
 
 	public void resetAnims(){
 
-		final Calendar calendar = Calendar.getInstance();
-		//once a year the rat king feels a bit festive!
-		festive = (calendar.get(Calendar.MONTH) == Calendar.DECEMBER
-				&& calendar.get(Calendar.WEEK_OF_MONTH) > 2);
-
-		int c = festive ? 8 : 0;
+		int c = Holiday.getCurrentHoliday() == Holiday.WINTER_HOLIDAYS ? 8 : 0;
 
 		if (Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ratmogrify){
 			c += 16;

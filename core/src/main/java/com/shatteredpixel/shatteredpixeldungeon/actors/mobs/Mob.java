@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Fe
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -267,7 +267,7 @@ public abstract class Mob extends Char {
 		}
 		
 		//if we are an alert enemy, auto-hunt a target that is affected by aggression, even another enemy
-		if (alignment == Alignment.ENEMY && state != PASSIVE && state != SLEEPING) {
+		if ((alignment == Alignment.ENEMY || buff(Amok.class) != null ) && state != PASSIVE && state != SLEEPING) {
 			if (enemy != null && enemy.buff(StoneOfAggression.Aggression.class) != null){
 				state = HUNTING;
 				return enemy;
@@ -340,9 +340,10 @@ public abstract class Mob extends Char {
 				for (Mob mob : Dungeon.level.mobs)
 					if (mob.alignment == Alignment.ENEMY && (fieldOfView[mob.pos])
 							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
-						//intelligent allies do not target mobs which are passive, wandering, or asleep
-						if ((!intelligentAlly ||
-								(mob.state != mob.SLEEPING && mob.state != mob.PASSIVE && mob.state != mob.WANDERING))) {
+						//do not target passive mobs
+						//intelligent allies also don't target mobs which are wandering or asleep
+						if (mob.state != mob.PASSIVE &&
+								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING))) {
 							enemies.add(mob);
 						}
 				
@@ -429,7 +430,7 @@ public abstract class Mob extends Char {
 			if ((buff instanceof Terror && buff(Dread.class) == null)
 					|| (buff instanceof Dread && buff(Terror.class) == null)) {
 				if (enemySeen) {
-					sprite.showStatus(CharSprite.NEGATIVE, Messages.get(this, "rage"));
+					sprite.showStatus(CharSprite.WARNING, Messages.get(this, "rage"));
 					state = HUNTING;
 				} else {
 					state = WANDERING;
@@ -656,7 +657,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 		
 		if (enemy instanceof Hero
 				&& ((Hero) enemy).belongings.attackingWeapon() instanceof MissileWeapon){
@@ -690,7 +691,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (buff(SoulMark.class) != null) {
-			int restoration = Math.min(damage, HP+shielding());
+			long restoration = Math.min(damage, HP+shielding());
 			
 			//physical damage that doesn't come from the hero is less effective
 			if (enemy != Dungeon.hero){
@@ -699,8 +700,12 @@ public abstract class Mob extends Char {
 			if (restoration > 0) {
 				if (Dungeon.hero.subClass == HeroSubClass.WARLOCK)
 					Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*1.5f);
-				Dungeon.hero.HP = (int) Math.ceil(Math.min(Dungeon.hero.HT, Dungeon.hero.HP + (restoration * 0.4f)));
-				Dungeon.hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+
+				if (Dungeon.hero.HP < Dungeon.hero.HT) {
+					int heal = (int)Math.ceil(restoration * 0.4f);
+					Dungeon.hero.HP = Math.min(Dungeon.hero.HT, Dungeon.hero.HP + heal);
+					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
+				}
 			}
 		}
 
@@ -723,7 +728,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + cycledDrRoll();
 	}
 
@@ -735,6 +740,11 @@ public abstract class Mob extends Char {
 		return enemy == Dungeon.hero
 				&& (enemy.invisible > 0 || !enemySeen || (fieldOfView != null && fieldOfView.length == Dungeon.level.length() && !fieldOfView[enemy.pos]))
 				&& (!attacking || enemy.canSurpriseAttack());
+	}
+
+	//whether the hero should interact with the mob (true) or attack it (false)
+	public boolean heroShouldInteract(){
+		return alignment != Alignment.ENEMY && buff(Amok.class) == null;
 	}
 
 	public void aggro( Char ch ) {
@@ -755,13 +765,15 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 
-		if (state == SLEEPING) {
-			state = WANDERING;
-		}
-		if (state != HUNTING && !(src instanceof Corruption)) {
-			alerted = true;
+		if (!isInvulnerable(src.getClass())) {
+			if (state == SLEEPING) {
+				state = WANDERING;
+			}
+			if (state != HUNTING && !(src instanceof Corruption)) {
+				alerted = true;
+			}
 		}
 		
 		super.damage( dmg, src );
@@ -794,7 +806,7 @@ public abstract class Mob extends Char {
 					exp *= 2;
 				}
 				if (exp > 0) {
-					Dungeon.hero.sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "exp", exp));
+					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(exp), FloatingText.EXPERIENCE);
 				}
 				Dungeon.hero.earnExp(exp, getClass());
 				if (Dungeon.hero.perks.contains(Perks.Perk.ADDITIONAL_MONEY)){
@@ -858,7 +870,7 @@ public abstract class Mob extends Char {
 		if (!(this instanceof Wraith)
 				&& soulMarked
 				&& Random.Float() < (Dungeon.hero.subClass == HeroSubClass.WARLOCK ? 0.5f : 0)){
-			Wraith w = Wraith.spawnAt(pos, false);
+			Wraith w = Wraith.spawnAt(pos, Wraith.class);
 			if (w != null) {
 				Buff.affect(w, Corruption.class);
 				if (Dungeon.level.heroFOV[pos]) {
@@ -1156,7 +1168,7 @@ public abstract class Mob extends Char {
 				} else if (enemy == null) {
 					sprite.showLost();
 					state = WANDERING;
-					target = Dungeon.level.randomDestination( Mob.this );
+					target = ((Mob.Wandering)WANDERING).randomDestination();
 					spend( TICK );
 					return true;
 				}
@@ -1187,7 +1199,7 @@ public abstract class Mob extends Char {
 					if (!enemyInFOV) {
 						sprite.showLost();
 						state = WANDERING;
-						target = Dungeon.level.randomDestination( Mob.this );
+						target = ((Mob.Wandering)WANDERING).randomDestination();
 					}
 					return true;
 				}
@@ -1240,7 +1252,7 @@ public abstract class Mob extends Char {
 					&& buffs( AllyBuff.class ).isEmpty()
 					&& buff( Dread.class ) == null) {
 				if (enemySeen) {
-					sprite.showStatus(CharSprite.NEGATIVE, Messages.get(Mob.class, "rage"));
+					sprite.showStatus(CharSprite.WARNING, Messages.get(Mob.class, "rage"));
 					state = HUNTING;
 				} else {
 					state = WANDERING;
@@ -1306,7 +1318,7 @@ public abstract class Mob extends Char {
 			
 			ArrayList<Integer> candidatePositions = new ArrayList<>();
 			for (int i : PathFinder.NEIGHBOURS8) {
-				if (!Dungeon.level.solid[i+pos] && level.findMob(i+pos) == null){
+				if (!Dungeon.level.solid[i+pos] && !Dungeon.level.avoid[i+pos] && level.findMob(i+pos) == null){
 					candidatePositions.add(i+pos);
 				}
 			}

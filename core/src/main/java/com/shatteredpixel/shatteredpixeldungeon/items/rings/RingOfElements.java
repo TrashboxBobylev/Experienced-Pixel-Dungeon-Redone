@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,9 +46,9 @@ public class RingOfElements extends Ring {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
 					new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
-			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero, Resistance.class)){
+			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - (0.80f - combinedBuffedBonus(Dungeon.hero, Resistance.class)*0.0075f))));
+						Messages.decimalFormat("#.##", 100f * (1f - (0.80f - combinedBuffedBonus(Dungeon.hero)*0.0075f))));
 			}
 			return info;
 		} else {

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ import com.watabou.utils.SparseArray;
 
 public class Statistics {
 
-	public static int goldCollected;
+	public static long goldCollected;
 	public static int deepestFloor;
 	public static int highestAscent;
 	public static int enemiesSlain;
@@ -41,8 +41,8 @@ public class Statistics {
 	//These are used for score calculation
 	// some are built incrementally, most are assigned when full score is calculated
 	public static int progressScore;
-	public static int heldItemValue;
-	public static int treasureScore;
+	public static long heldItemValue;
+	public static long treasureScore;
 	public static SparseArray<Boolean> floorsExplored = new SparseArray<>();
 	public static int exploreScore;
 	public static int[] bossScores = new int[5];
@@ -52,10 +52,10 @@ public class Statistics {
 	public static float winMultiplier;
 	public static float chalMultiplier;
 	public static float cycleMultiplier;
-	public static int totalScore;
+	public static long totalScore;
 
 	//used for hero unlock badges
-	public static int upgradesUsed;
+	public static long upgradesUsed;
 	public static int sneakAttacks;
 	public static int thrownAttacks;
 
@@ -65,6 +65,7 @@ public class Statistics {
 	
 	public static boolean qualifiedForNoKilling = false;
 	public static boolean completedWithNoKilling = false;
+	public static boolean qualifiedForBossRemainsBadge = false;
 	public static boolean qualifiedForBossChallengeBadge = false;
 	
 	public static boolean amuletObtained = false;
@@ -104,6 +105,7 @@ public class Statistics {
 		duration	    = 0;
 		
 		qualifiedForNoKilling = false;
+		qualifiedForBossRemainsBadge = false;
 		qualifiedForBossChallengeBadge = false;
 		
 		amuletObtained = false;
@@ -144,6 +146,7 @@ public class Statistics {
 	private static final String DURATION	= "duration";
 
 	private static final String NO_KILLING_QUALIFIED	= "qualifiedForNoKilling";
+	private static final String BOSS_REMAINS_QUALIFIED	= "qualifiedForBossRemainsBadge";
 	private static final String BOSS_CHALLENGE_QUALIFIED= "qualifiedForBossChallengeBadge";
 	
 	private static final String AMULET          = "amuletObtained";
@@ -187,6 +190,7 @@ public class Statistics {
 		bundle.put( DURATION,	duration );
 
 		bundle.put(NO_KILLING_QUALIFIED, qualifiedForNoKilling);
+		bundle.put(BOSS_REMAINS_QUALIFIED, qualifiedForBossRemainsBadge);
 		bundle.put(BOSS_CHALLENGE_QUALIFIED, qualifiedForBossChallengeBadge);
 		
 		bundle.put( AMULET,		amuletObtained );
@@ -195,7 +199,7 @@ public class Statistics {
 	}
 	
 	public static void restoreFromBundle( Bundle bundle ) {
-		goldCollected	= bundle.getInt( GOLD );
+		goldCollected	= bundle.getLong( GOLD );
 		deepestFloor	= bundle.getInt( DEEPEST );
 		highestAscent   = bundle.getInt( HIGHEST );
 		enemiesSlain	= bundle.getInt( SLAIN );
@@ -233,7 +237,7 @@ public class Statistics {
 		duration		= bundle.getFloat( DURATION );
 
 		qualifiedForNoKilling = bundle.getBoolean( NO_KILLING_QUALIFIED );
-
+		qualifiedForBossRemainsBadge = bundle.getBoolean( BOSS_REMAINS_QUALIFIED );
 		qualifiedForBossChallengeBadge = bundle.getBoolean( BOSS_CHALLENGE_QUALIFIED );
 		
 		amuletObtained	= bundle.getBoolean( AMULET );
@@ -242,7 +246,7 @@ public class Statistics {
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ){
-		info.goldCollected  = bundle.getInt( GOLD );
+		info.goldCollected  = bundle.getLong( GOLD );
 		info.maxDepth       = bundle.getInt( DEEPEST );
 	}
 

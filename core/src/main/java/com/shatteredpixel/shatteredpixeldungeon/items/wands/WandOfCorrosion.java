@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,9 +58,9 @@ public class WandOfCorrosion extends Wand {
 
 	@Override
 	public void onZap(Ballistica bolt) {
-		CorrosiveGas gas = Blob.seed(bolt.collisionPos, 50 + 10 * buffedLvl(), CorrosiveGas.class);
+		CorrosiveGas gas = Blob.seed(bolt.collisionPos, (int) (50 + 10 * buffedLvl()), CorrosiveGas.class);
 		CellEmitter.get(bolt.collisionPos).burst(Speck.factory(Speck.CORROSION), 10 );
-		gas.setStrength((int) ((2 + buffedLvl())*(1+ Dungeon.hero.lvl/150f)), getClass());
+		gas.setStrength((long) ((2 + buffedLvl())*(1+ Dungeon.hero.lvl/150f)), getClass());
 		GameScene.add(gas);
 		Sample.INSTANCE.play(Assets.Sounds.GAS);
 
@@ -92,8 +92,8 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, buffedLvl() );
+	public void onHit(MagesStaff staff, Char attacker, Char defender, long damage) {
+		long level = Math.max( 0, buffedLvl() );
 
 		// lvl 0 - 33%
 		// lvl 1 - 50%

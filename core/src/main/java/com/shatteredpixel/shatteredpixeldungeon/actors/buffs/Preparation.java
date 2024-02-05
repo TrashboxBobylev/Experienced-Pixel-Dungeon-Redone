@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -114,10 +114,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 			}
 		}
 		
-		public int damageRoll( Char attacker ){
-			int dmg = attacker.damageRoll();
+		public long damageRoll( Char attacker ){
+			long dmg = attacker.damageRoll();
 			for( int i = 1; i < damageRolls; i++){
-				int newDmg = attacker.damageRoll();
+				long newDmg = attacker.damageRoll();
 				if (newDmg > dmg) dmg = newDmg;
 			}
 			return Math.round(dmg * (1f + baseDmgBonus));
@@ -167,7 +167,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 		return AttackLevel.getLvl(turnsInvis).ordinal()+1;
 	}
 
-	public int damageRoll( Char attacker ){
+	public long damageRoll( Char attacker ){
 		return AttackLevel.getLvl(turnsInvis).damageRoll(attacker);
 	}
 

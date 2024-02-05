@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2020 Evan Debenham
+ * Copyright (C) 2019-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,17 +65,17 @@ public class StarlightSmasher extends BlacksmithWeapon {
     public boolean starlight_power = false;
 
     @Override
-    public int min(int lvl) {
+    public long min(long lvl) {
         return super.min(lvl)*10;
     }
 
     @Override
-    public int max(int lvl) {
+    public long max(long lvl) {
         return super.max(lvl)*8;
     }
 
     @Override
-    public int proc(Char attacker, Char defender, int damage) {
+    public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
         Buff.affect(attacker, Paralysis.class, Random.Int(2, 6));
         Buff.affect(defender, Paralysis.class, Random.Int(2, 4));

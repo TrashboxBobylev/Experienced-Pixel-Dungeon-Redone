@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,6 +89,14 @@ public class Generator {
 		//Artifacts in particular don't reset, no duplicates!
 		public float[] probs;
 		public float[] defaultProbs = null;
+
+		//some items types have two decks and swap between them
+		// this enforces more consistency while still allowing for better precision
+		public float[] defaultProbs2 = null;
+		public boolean using2ndProbs = false;
+		//but in such cases we still need a reference to the full deck in case of non-deck generation
+		public float[] defaultProbsTotal = null;
+
 		//These variables are used as a part of the deck system, to ensure that drops are consistent
 		// regardless of when they occur (either as part of seeded levelgen, or random item drops)
 		public Long seed = null;
@@ -136,7 +144,8 @@ public class Generator {
 					PotionOfParalyticGas.class,
 					PotionOfPurity.class,
 					PotionOfExperience.class};
-			POTION.defaultProbs = new float[]{ 0, 8, 6, 4, 4, 4, 3, 3, 3, 3, 3, 3 };
+			POTION.defaultProbs  = new float[]{ 0, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
+			POTION.defaultProbs2 = new float[]{ 0, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
 			POTION.probs = POTION.defaultProbs.clone();
 			
 			SEED.classes = new Class<?>[]{
@@ -152,7 +161,7 @@ public class Generator {
 					Earthroot.Seed.class,
 					Mageroyal.Seed.class,
 					Starflower.Seed.class};
-			SEED.defaultProbs = new float[]{ 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2 };
+			SEED.defaultProbs = new float[]{ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 };
 			SEED.probs = SEED.defaultProbs.clone();
 			
 			SCROLL.classes = new Class<?>[]{
@@ -169,7 +178,8 @@ public class Generator {
 					ScrollOfTerror.class,
 					ScrollOfTransmutation.class
 			};
-			SCROLL.defaultProbs = new float[]{ 0, 6, 4, 3, 3, 3, 2, 2, 2, 2, 2, 1 };
+			SCROLL.defaultProbs  = new float[]{ 0, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
+			SCROLL.defaultProbs2 = new float[]{ 0, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
 			SCROLL.probs = SCROLL.defaultProbs.clone();
 			
 			STONE.classes = new Class<?>[]{
@@ -186,7 +196,7 @@ public class Generator {
 					StoneOfFear.class,
 					StoneOfAugmentation.class  //1 is sold in each shop
 			};
-			STONE.defaultProbs = new float[]{ 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 0 };
+			STONE.defaultProbs = new float[]{ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0 };
 			STONE.probs = STONE.defaultProbs.clone();
 
 			WAND.classes = new Class<?>[]{
@@ -361,6 +371,15 @@ public class Generator {
 			};
 			ARTIFACT.defaultProbs = new float[]{ 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
 			ARTIFACT.probs = ARTIFACT.defaultProbs.clone();
+
+			for (Category cat : Category.values()){
+				if (cat.defaultProbs2 != null){
+					cat.defaultProbsTotal = new float[cat.defaultProbs.length];
+					for (int i = 0; i < cat.defaultProbs.length; i++){
+						cat.defaultProbsTotal[i] = cat.defaultProbs[i] + cat.defaultProbs2[i];
+					}
+				}
+			}
 		}
 	}
 
@@ -381,6 +400,7 @@ public class Generator {
 		usingFirstDeck = Random.Int(2) == 0;
 		generalReset();
 		for (Category cat : Category.values()) {
+			cat.using2ndProbs =  cat.defaultProbs2 != null && Random.Int(2) == 0;
 			reset(cat);
 			if (cat.defaultProbs != null) {
 				cat.seed = Random.Long();
@@ -397,7 +417,14 @@ public class Generator {
 	}
 
 	public static void reset(Category cat){
-		if (cat.defaultProbs != null) cat.probs = cat.defaultProbs.clone();
+		if (cat.defaultProbs != null) {
+			if (cat.defaultProbs2 != null){
+				cat.using2ndProbs = !cat.using2ndProbs;
+				cat.probs = cat.using2ndProbs ? cat.defaultProbs2.clone() : cat.defaultProbs.clone();
+			} else {
+				cat.probs = cat.defaultProbs.clone();
+			}
+		}
 	}
 
 	//reverts changes to drop chances generates by this item
@@ -489,6 +516,8 @@ public class Generator {
 			return randomMissile(true);
 		} else if (cat.defaultProbs == null || cat == Category.ARTIFACT) {
 			return random(cat);
+		} else if (cat.defaultProbsTotal != null){
+			return ((Item) Reflection.newInstance(cat.classes[Random.chances(cat.defaultProbsTotal)])).random();
 		} else {
 			return ((Item) Reflection.newInstance(cat.classes[Random.chances(cat.defaultProbs)])).random();
 		}
@@ -617,6 +646,7 @@ public class Generator {
 	private static final String FIRST_DECK = "first_deck";
 	private static final String GENERAL_PROBS = "general_probs";
 	private static final String CATEGORY_PROBS = "_probs";
+	private static final String CATEGORY_USING_PROBS2 = "_using_probs2";
 	private static final String CATEGORY_SEED = "_seed";
 	private static final String CATEGORY_DROPPED = "_dropped";
 
@@ -633,7 +663,12 @@ public class Generator {
 		for (Category cat : Category.values()){
 			if (cat.defaultProbs == null) continue;
 
-			bundle.put(cat.name().toLowerCase() + CATEGORY_PROBS,   cat.probs);
+			bundle.put(cat.name().toLowerCase() + CATEGORY_PROBS, cat.probs);
+
+			if (cat.defaultProbs2 != null){
+				bundle.put(cat.name().toLowerCase() + CATEGORY_USING_PROBS2, cat.using2ndProbs);
+			}
+
 			if (cat.seed != null) {
 				bundle.put(cat.name().toLowerCase() + CATEGORY_SEED, cat.seed);
 				bundle.put(cat.name().toLowerCase() + CATEGORY_DROPPED, cat.dropped);
@@ -658,6 +693,11 @@ public class Generator {
 				float[] probs = bundle.getFloatArray(cat.name().toLowerCase() + CATEGORY_PROBS);
 				if (cat.defaultProbs != null && probs.length == cat.defaultProbs.length){
 					cat.probs = probs;
+				}
+				if (bundle.contains(cat.name().toLowerCase() + CATEGORY_USING_PROBS2)){
+					cat.using2ndProbs = bundle.getBoolean(cat.name().toLowerCase() + CATEGORY_USING_PROBS2);
+				} else {
+					cat.using2ndProbs = false;
 				}
 				if (bundle.contains(cat.name().toLowerCase() + CATEGORY_SEED)){
 					cat.seed = bundle.getLong(cat.name().toLowerCase() + CATEGORY_SEED);

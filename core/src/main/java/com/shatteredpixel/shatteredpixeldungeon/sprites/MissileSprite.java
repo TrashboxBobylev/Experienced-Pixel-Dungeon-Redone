@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.SuperPickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -95,18 +96,19 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		ANGULAR_SPEEDS.put(Javelin.class,       0);
 		ANGULAR_SPEEDS.put(Trident.class,       0);
 		ANGULAR_SPEEDS.put(RunicBlade.RunicMissile.class, 0);
-		
+
 		ANGULAR_SPEEDS.put(SpiritBow.SpiritArrow.class,       0);
 		ANGULAR_SPEEDS.put(ScorpioSprite.ScorpioShot.class,   0);
 		
 		//720 is default
-		
+
+		ANGULAR_SPEEDS.put(GnollGeomancer.Boulder.class,   90);
+
 		ANGULAR_SPEEDS.put(HeavyBoomerang.class,1440);
 		ANGULAR_SPEEDS.put(Bolas.class,         1440);
 		
-		ANGULAR_SPEEDS.put(Shuriken.class,      2160);
-		
-		ANGULAR_SPEEDS.put(TenguSprite.TenguShuriken.class,      2160);
+		ANGULAR_SPEEDS.put(Shuriken.class,                  2160);
+		ANGULAR_SPEEDS.put(TenguSprite.TenguShuriken.class, 2160);
 
 		ANGULAR_SPEEDS.put(SuperPickaxe.class, 2880);
 		ANGULAR_SPEEDS.put(StarlightSmasher.class, 2880);
@@ -150,7 +152,13 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 			flipHorizontal = true;
 			updateFrame();
 		}
-		
+
+		if (item instanceof GnollGeomancer.Boulder){
+			angle = 0;
+			flipHorizontal = false;
+			updateFrame();
+		}
+
 		float speed = SPEED;
 		if (item instanceof Dart
 				&& (Dungeon.hero.belongings.weapon() instanceof Crossbow

@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,21 +63,20 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
     public int internalTier;
 
     public enum Augment {
-		SPEED   (0.7f, 2/3f),
-		DAMAGE  (1.5f, 5/3f),
-		NONE	(1.0f, 1f);
+		SPEED   (0.7d, 2/3f),
+		DAMAGE  (1.5d, 5/3f),
+		NONE	(1.0d, 1f);
 
-		private float damageFactor;
+		private double damageFactor;
 		private float delayFactor;
 
-		Augment(float dmg, float dly){
+		Augment(double dmg, float dly){
 			damageFactor = dmg;
 			delayFactor = dly;
 		}
 
-		public int damageFactor(int dmg){
-			int damage = Math.round(dmg * damageFactor);
-			return damage;
+		public long damageFactor(long dmg){
+            return Math.round(dmg * damageFactor);
 		}
 
 		public float delayFactor(float dly){
@@ -96,12 +95,12 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	public boolean curseInfusionBonus = false;
 	public boolean masteryPotionBonus = false;
 
-	public static float hardenBoost(int upgrades){
+	public static float hardenBoost(long upgrades){
 		return 0.0015f * upgrades;
 	}
 
 	@Override
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		
 		if (enchantment != null && attacker.buff(MagicImmune.class) == null) {
 			damage = enchantment.proc( this, attacker, defender, damage );
@@ -246,9 +245,9 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 		return req;
 	}
 
-	public abstract int STRReq(int lvl);
+	public abstract int STRReq(long lvl);
 
-	protected static int STRReq(int tier, int lvl){
+	protected static int STRReq(int tier, long lvl){
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
@@ -256,8 +255,8 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	}
 
 	@Override
-	public int level() {
-		int level = super.level();
+	public long level() {
+		long level = super.level();
 		if (curseInfusionBonus) level += 1 + level/6;
 		return level;
 	}
@@ -388,7 +387,7 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 		};
 		
 			
-		public abstract int proc( Weapon weapon, Char attacker, Char defender, int damage );
+		public abstract long proc( Weapon weapon, Char attacker, Char defender, long damage );
 
 		protected float procChanceMultiplier( Char attacker ){
 			return genericProcChanceMultiplier( attacker );

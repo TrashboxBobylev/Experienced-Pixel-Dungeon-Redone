@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,11 +71,11 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 			defenceFactor = df;
 		}
 		
-		public int evasionFactor(int level){
+		public long evasionFactor(long level){
 			return Math.round((2 + level) * evasionFactor);
 		}
 		
-		public int defenseFactor(int level){
+		public long defenseFactor(long level){
 			return Math.round((2 + level) * defenceFactor);
 		}
 	}
@@ -223,7 +223,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 		this.seal = seal;
 		if (seal.level() > 0){
 			//doesn't trigger upgrading logic such as affecting curses/glyphs
-			int newLevel = trueLevel()+1;
+			long newLevel = trueLevel()+1;
 			level(newLevel);
 			Badges.validateItemLevelAquired(this);
 		}
@@ -268,16 +268,16 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 		return hero.belongings.armor() == this;
 	}
 
-	public final int DRMax(){
+	public final long DRMax(){
 		return Math.round(DRMax(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
 	}
 
-	public int DRMax(int lvl){
+	public long DRMax(long lvl){
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
 			return 1 + tier + lvl + augment.defenseFactor(lvl);
 		}
 
-		int max = tier * (2 + lvl) + augment.defenseFactor(lvl);
+		long max = tier * (2 + lvl) + augment.defenseFactor(lvl);
 		if (lvl > max){
 			return ((lvl - max)+1)/2;
 		} else {
@@ -285,16 +285,16 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 		}
 	}
 
-	public final int DRMin(){
+	public final long DRMin(){
 		return Math.round(DRMin(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
 	}
 
-	public int DRMin(int lvl){
+	public long DRMin(long lvl){
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
 			return 0;
 		}
 
-		int max = DRMax(lvl);
+		long max = DRMax(lvl);
 		if (lvl >= max){
 			return (lvl - max);
 		} else {
@@ -367,8 +367,8 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 	
 	@Override
-	public int level() {
-		int level = super.level();
+	public long level() {
+		long level = super.level();
 		//TODO warrior's seal upgrade should probably be considered here too
 		// instead of being part of true level
 		if (curseInfusionBonus) level += 1 + level/6;
@@ -394,7 +394,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 		return super.upgrade();
 	}
 	
-	public int proc( Char attacker, Char defender, int damage ) {
+	public long proc( Char attacker, Char defender, long damage ) {
 		
 		if (glyph != null && defender.buff(MagicImmune.class) == null) {
 			damage = glyph.proc( this, attacker, defender, damage );
@@ -527,11 +527,11 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 		return req;
 	}
 
-	public int STRReq(int lvl){
+	public int STRReq(long lvl){
 		return STRReq(tier, lvl);
 	}
 
-	protected static int STRReq(int tier, int lvl){
+	protected static int STRReq(int tier, long lvl){
 		lvl = Math.max(0, lvl);
 
 		//strength req decreases at +1,+3,+6,+10,etc.
@@ -539,7 +539,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 	
 	@Override
-	public int value() {
+	public long value() {
 		if (seal != null) return 0;
 
 		int price = 20 * tier;
@@ -619,7 +619,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 				Multiplicity.class, Stench.class, Overgrowth.class, Bulk.class
 		};
 		
-		public abstract int proc( Armor armor, Char attacker, Char defender, int damage );
+		public abstract long proc( Armor armor, Char attacker, Char defender, long damage );
 
 		protected float procChanceMultiplier( Char defender ){
 			return genericProcChanceMultiplier( defender );

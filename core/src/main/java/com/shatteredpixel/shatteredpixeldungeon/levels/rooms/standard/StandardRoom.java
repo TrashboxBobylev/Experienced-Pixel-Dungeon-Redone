@@ -3,10 +3,10 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * Experienced Pixel Dungeon
- * Copyright (C) 2019-2020 Trashbox Bobylev
+ * Copyright (C) 2019-2024 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.watabou.utils.Point;
-import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -49,10 +48,6 @@ public abstract class StandardRoom extends Room {
 			minDim = min;
 			maxDim = max;
 			roomValue = val;
-		}
-		
-		public int connectionWeight(){
-			return roomValue*roomValue;
 		}
 		
 	}
@@ -103,6 +98,20 @@ public abstract class StandardRoom extends Room {
 	@Override
 	public int minHeight() { return sizeCat.minDim; }
 	public int maxHeight() { return sizeCat.maxDim; }
+
+	//larger standard rooms generally count as multiple rooms for various counting/weighting purposes
+	//but there can be exceptions
+	public int sizeFactor(){
+		return sizeCat.roomValue;
+	}
+
+	public int mobSpawnWeight(){
+		return sizeFactor();
+	}
+
+	public int connectionWeight(){
+		return sizeFactor() * sizeFactor();
+	}
 
 	@Override
 	public boolean canMerge(Level l, Point p, int mergeTerrain) {
