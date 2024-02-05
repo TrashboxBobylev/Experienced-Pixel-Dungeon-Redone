@@ -49,17 +49,17 @@ public class CrystalSpire extends Mob {
 
 	{
 		//this translates to roughly 33/27/23/20/18/16 pickaxe hits at +0/1/2/3/4/5
-		HP = HT = 300;
+		HP = HT = 500;
 		spriteClass = CrystalSpireSprite.class;
 		switch (Dungeon.cycle){
 			case 1:
-				HP = HT = 1600;
+				HP = HT = 1650;
 				break;
 			case 2:
-				HP = HT = 19564;
+				HP = HT = 3400;
 				break;
 			case 3:
-				HP = HT = 900000;
+				HP = HT = 6600;
 				break;
 			case 4:
 				HP = HT = 12000000;
