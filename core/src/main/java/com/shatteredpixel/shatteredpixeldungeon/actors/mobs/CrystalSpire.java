@@ -62,7 +62,7 @@ public class CrystalSpire extends Mob {
 				HP = HT = 6600;
 				break;
 			case 4:
-				HP = HT = 12000000;
+				HP = HT = 11625;
 				break;
 		}
 
