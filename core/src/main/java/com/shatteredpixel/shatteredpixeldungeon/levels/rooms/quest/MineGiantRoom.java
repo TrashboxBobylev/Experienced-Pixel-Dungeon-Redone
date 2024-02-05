@@ -124,7 +124,7 @@ public class MineGiantRoom extends CaveRoom {
 
 			GnollGeomancer g = new GnollGeomancer();
 			g.pos = level.pointToCell(center);
-			Buff.affect(g, GnollGeomancer.RockArmor.class).setShield(50);
+			Buff.affect(g, GnollGeomancer.RockArmor.class).setShield(g.HT/3);
 			level.mobs.add(g);
 
 		} else if (Blacksmith.Quest.Type() == Blacksmith.Quest.FUNGI){

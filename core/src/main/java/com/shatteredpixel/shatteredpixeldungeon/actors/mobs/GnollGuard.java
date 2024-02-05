@@ -45,6 +45,28 @@ public class GnollGuard extends Mob {
 
 		loot = Spear.class;
 		lootChance = 0.1f;
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 360;
+				defenseSkill = 52;
+				EXP = 32;
+				break;
+			case 2:
+				HP = HT = 5250;
+				defenseSkill = 185;
+				EXP = 325;
+				break;
+			case 3:
+				HP = HT = 96750;
+				defenseSkill = 500;
+				EXP = 3215;
+				break;
+			case 4:
+				HP = HT = 8650000;
+				defenseSkill = 3210;
+				EXP = 82000;
+				break;
+		}
 
 		WANDERING = new Wandering();
 	}
@@ -82,8 +104,20 @@ public class GnollGuard extends Mob {
 	@Override
 	public long damageRoll() {
 		if (enemy != null && !Dungeon.level.adjacent(pos, enemy.pos)){
+			switch (Dungeon.cycle) {
+				case 1: return Random.NormalIntRange(68, 80);
+				case 2: return Random.NormalIntRange(285, 390);
+				case 3: return Random.NormalIntRange(1400, 1610);
+				case 4: return Random.NormalIntRange(26000, 60000);
+			}
 			return Random.NormalIntRange( 16, 22 );
 		} else {
+			switch (Dungeon.cycle) {
+				case 1: return Random.NormalIntRange(45, 55);
+				case 2: return Random.NormalIntRange(225, 275);
+				case 3: return Random.NormalIntRange(850, 1000);
+				case 4: return Random.NormalIntRange(16500, 22500);
+			}
 			return Random.NormalIntRange( 6, 12 );
 		}
 	}
@@ -99,12 +133,24 @@ public class GnollGuard extends Mob {
 
 	@Override
 	public int attackSkill( Char target ) {
+		switch (Dungeon.cycle){
+			case 1: return 85;
+			case 2: return 312;
+			case 3: return 745;
+			case 4: return 4075;
+		}
 		return 20;
 	}
 
 	@Override
-	public long drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 6);
+	public int cycledDrRoll() {
+		switch (Dungeon.cycle){
+			case 1: return Random.NormalIntRange(22, 41);
+			case 2: return Random.NormalIntRange(85, 230);
+			case 3: return Random.NormalIntRange(495, 880);
+			case 4: return Random.NormalIntRange(15000, 32000);
+		}
+		return Random.NormalIntRange(0, 6);
 	}
 
 	@Override

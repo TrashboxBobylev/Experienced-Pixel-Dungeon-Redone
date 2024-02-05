@@ -58,6 +58,20 @@ public class GnollGeomancer extends Mob {
 	{
 		HP = HT = 150;
 		spriteClass = GnollGeomancerSprite.class;
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 450;
+				break;
+			case 2:
+				HP = HT = 935;
+				break;
+			case 3:
+				HP = HT = 1750;
+				break;
+			case 4:
+				HP = HT = 3200;
+				break;
+		}
 
 		EXP = 20;
 
@@ -129,17 +143,35 @@ public class GnollGeomancer extends Mob {
 
 	@Override
 	public long damageRoll() {
+		switch (Dungeon.cycle) {
+			case 1: return Random.NormalIntRange(35, 45);
+			case 2: return Random.NormalIntRange(155, 175);
+			case 3: return Random.NormalIntRange(564, 670);
+			case 4: return Random.NormalIntRange(4650, 6900);
+		}
 		return Random.NormalIntRange( 3, 6 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+		switch (Dungeon.cycle){
+			case 1: return 95;
+			case 2: return 335;
+			case 3: return 785;
+			case 4: return 4500;
+		}
 		return 20;
 	}
 
 	@Override
-	public long drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 6);
+	public int cycledDrRoll() {
+		switch (Dungeon.cycle){
+			case 1: return Random.NormalIntRange(30, 45);
+			case 2: return Random.NormalIntRange(100, 265);
+			case 3: return Random.NormalIntRange(570, 950);
+			case 4: return Random.NormalIntRange(17000, 38000);
+		}
+		return Random.NormalIntRange(0, 6);
 	}
 
 	@Override
@@ -185,12 +217,12 @@ public class GnollGeomancer extends Mob {
 				public void call() {
 					//does its own special damage calculation that's only influenced by pickaxe level and augment
 					//we pretend the geomancer is the owner here so that properties like hero str or or other equipment do not factor in
-					long dmg = (int) p.damageRoll(GnollGeomancer.this);
+					long dmg = p.damageRoll(GnollGeomancer.this);
 
 					boolean wasSleeping = state == SLEEPING;
 
 					//ensure we don't do enough damage to break the armor at the start
-					if (wasSleeping) dmg = Math.min(dmg, 15);
+					if (wasSleeping) dmg = Math.min(dmg, HT/10);
 
 					dmg = Math.min(dmg, buff(RockArmor.class).shielding());
 
@@ -270,7 +302,7 @@ public class GnollGeomancer extends Mob {
 			BossHealthBar.bleed(newBracket <= 0);
 
 			carveRockAndDash();
-			Buff.affect(this, RockArmor.class).setShield(25);
+			Buff.affect(this, RockArmor.class).setShield(HT/6);
 		}
 	}
 
@@ -684,7 +716,14 @@ public class GnollGeomancer extends Mob {
 						}
 
 						if (ch != null && !(ch instanceof GnollGeomancer)){
-							ch.damage(Random.NormalIntRange(6, 12), new GnollGeomancer.Boulder());
+							long dmg = Random.NormalIntRange(6, 12);
+							switch (Dungeon.cycle) {
+								case 1: dmg = Random.NormalIntRange(48, 72); break;
+								case 2: dmg = Random.NormalIntRange(240, 295); break;
+								case 3: dmg = Random.NormalIntRange(960, 1250); break;
+								case 4: dmg = Random.NormalIntRange(7400, 13000); break;
+							}
+							ch.damage(dmg, new GnollGeomancer.Boulder());
 
 							if (ch.isAlive()){
 								Buff.prolong( ch, Paralysis.class, ch instanceof GnollGuard ? 10 : 3 );
@@ -787,7 +826,14 @@ public class GnollGeomancer extends Mob {
 
 		@Override
 		public void affectChar(Char ch) {
-			ch.damage(Random.NormalIntRange(6, 12), this);
+			long dmg = Random.NormalIntRange(6, 12);
+			switch (Dungeon.cycle) {
+				case 1: dmg = Random.NormalIntRange(48, 72); break;
+				case 2: dmg = Random.NormalIntRange(240, 295); break;
+				case 3: dmg = Random.NormalIntRange(960, 1250); break;
+				case 4: dmg = Random.NormalIntRange(7400, 13000); break;
+			}
+			ch.damage(dmg, this);
 			if (ch.isAlive()) {
 				Buff.prolong(ch, Paralysis.class, ch instanceof GnollGuard ? 10 : 3);
 			} else if (ch == Dungeon.hero){

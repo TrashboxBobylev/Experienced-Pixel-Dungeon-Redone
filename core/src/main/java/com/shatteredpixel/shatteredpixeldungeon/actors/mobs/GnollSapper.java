@@ -52,6 +52,28 @@ public class GnollSapper extends Mob {
 		HUNTING = new Hunting();
 		WANDERING = new Wandering();
 		state = SLEEPING;
+		switch (Dungeon.cycle){
+			case 1:
+				HP = HT = 480;
+				defenseSkill = 50;
+				EXP = 55;
+				break;
+			case 2:
+				HP = HT = 6010;
+				defenseSkill = 190;
+				EXP = 425;
+				break;
+			case 3:
+				HP = HT = 125500;
+				defenseSkill = 500;
+				EXP = 4000;
+				break;
+			case 4:
+				HP = HT = 11000000;
+				defenseSkill = 3000;
+				EXP = 115000;
+				break;
+		}
 	}
 
 	public int spawnPos;
@@ -96,11 +118,23 @@ public class GnollSapper extends Mob {
 
 	@Override
 	public long damageRoll() {
+		switch (Dungeon.cycle) {
+			case 1: return Random.NormalIntRange(24, 36);
+			case 2: return Random.NormalIntRange(120, 145);
+			case 3: return Random.NormalIntRange(480, 615);
+			case 4: return Random.NormalIntRange(3700, 6000);
+		}
 		return Random.NormalIntRange( 1, 6 );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
+		switch (Dungeon.cycle){
+			case 1: return 75;
+			case 2: return 292;
+			case 3: return 720;
+			case 4: return 3865;
+		}
 		return 18;
 	}
 
@@ -111,8 +145,14 @@ public class GnollSapper extends Mob {
 	}
 
 	@Override
-	public long drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 6);
+	public int cycledDrRoll() {
+		switch (Dungeon.cycle){
+			case 1: return Random.NormalIntRange(20, 35);
+			case 2: return Random.NormalIntRange(70, 200);
+			case 3: return Random.NormalIntRange(445, 715);
+			case 4: return Random.NormalIntRange(13500, 28000);
+		}
+		return Random.NormalIntRange(0, 6);
 	}
 
 	@Override
