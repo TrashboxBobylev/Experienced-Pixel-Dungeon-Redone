@@ -61,7 +61,44 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.16.3", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.0", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
+                    "_-_ Released February blablablath, 2024\n" +
+                            "_-_ 8 days after Experienced Pixel Dungeon 2.16.3"));
+            changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "ShPD content",
+                "Implemented Shattered's 2.3.1, with following additions:\n\n" +
+                        "_-_ Added new floating text icons for Experienced's permanent boosts.\n" +
+                        "_-_ Rat King drops cheese chunk as his remains item.\n" +
+                        "_-_ Gnoll quest enemies now have stats for dungeon cycles.\n" +
+                        "_-_ Upgraded Android Gradle Plugin from 3.6.4 to latest version (finally!)."));
+        changes.addButton( new ChangeButton(Icons.get(Icons.PLUS), "Prolonging numbers",
+                "The most significant change in this update is tweaking certain numbers from _stored in 32-bit variables to 64-bit variables_, increasing their max value from ~2 billion to ~9 quintillion:\n" +
+                        "_-_ gold and alchemical energy\n" +
+                        "_-_ current and max health of living entities\n" +
+                        "_-_ dealt damage from most of sources\n" +
+                        "_-_ amount of stored and gained experience\n" +
+                        "_-_ upgrades and amount of items\n" +
+                        "_-_ wand and artifact charges\n" +
+                        "_-_ limits on buffs like barksking and healing\n" +
+                        "_-_ natural and equipable armor values\n" +
+                        "_-_ statistics and ranking stats\n\n" +
+                        "This is still very unstable and untested overhaul to the codebase, so this is why I am releasing this first as a pre-release build and unlocking Scroll of Debug (with patch to support 64-bit numbers) for everyone. Test any oversights and holes in coding to your heart's content!"));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Unsorted and other changes",
+                    "_-_ Buffed Bbat:\n" +
+                            "   _-_ now has extra range\n" +
+                            "   _-_ decreased cooldown to 700 turns\n\n" +
+                            "_-_ Significantly reduced Crystal Spire's health on cycles to account for pickaxe's damage, but still encouraging to upgrade it.\n\n" +
+                            "_-_ Tweaked Pickaxe:\n" +
+                            "   _-_ now gets tiers with cycles like any other weapon\n" +
+                            "   _-_ now has 50% more damage at base, but gets 50% less damage from upgrading\n\n" +
+                            "_-_ Skeletons deal 150% of their damage roll on exploding instead of static 6-12 damage.\n\n" +
+                            "_-_ Dart traps and necromancers now scale their damage with dungeon cycles."
+            ));
+
+            changes = new ChangeInfo("ExpPD-2.16.3", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
