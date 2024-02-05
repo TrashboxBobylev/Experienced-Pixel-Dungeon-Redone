@@ -95,8 +95,8 @@ public class BlackMimic extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
-		return Random.NormalIntRange( Dungeon.hero.HT / 4, Dungeon.hero.HT / 3 );
+	public long damageRoll() {
+		return Random.NormalLongRange( Dungeon.hero.HT / 4, Dungeon.hero.HT / 3 );
 	}
 
 	@Override
@@ -508,7 +508,7 @@ public class BlackMimic extends Mob {
 	private boolean invulnWarned = false;
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 	    if (Dungeon.cycle == 4) dmg /= 3.5f;
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
@@ -518,7 +518,7 @@ public class BlackMimic extends Mob {
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass())) lock.addTime(dmg);
 
-		int threshold = HT/3 * (2- pylonsActivated);
+		long threshold = HT/3 * (2- pylonsActivated);
 
 		if (HP < threshold){
 			HP = threshold;

@@ -77,12 +77,12 @@ public class Dewdrop extends Item {
 		//20 drops for a full heal
 		int heal = Math.round( hero.HT * 0.05f * quantity );
 
-		int effect = Math.min( hero.HT - hero.HP, heal );
-		int shield = 0;
+		long effect = Math.min( hero.HT - hero.HP, heal );
+		long shield = 0;
 		if (hero.subClass == HeroSubClass.WARDEN){
 			shield = heal - effect;
-			int maxShield = Math.round(hero.HT);
-			int curShield = 0;
+			long maxShield = hero.HT;
+			long curShield = 0;
 			if (hero.buff(Barrier.class) != null) curShield = hero.buff(Barrier.class).shielding();
 			shield = Math.min(shield, maxShield-curShield);
 		}
@@ -90,10 +90,10 @@ public class Dewdrop extends Item {
 			hero.HP += effect;
 			if (shield > 0) Buff.affect(hero, Barrier.class).incShield(shield);
 			if (effect > 0){
-				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(effect), FloatingText.HEALING);
+				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(effect), FloatingText.HEALING);
 			}
 			if (shield > 0) {
-				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING );
+				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(shield), FloatingText.SHIELDING );
 			}
 
 		} else if (!force) {

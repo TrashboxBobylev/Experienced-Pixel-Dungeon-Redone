@@ -66,7 +66,7 @@ public abstract class Wand extends Item {
 	
 	public long maxCharges = initialCharges();
 	public long curCharges = maxCharges;
-	public float partialCharge = 0f;
+	public double partialCharge = 0f;
 	
 	protected Charger charger;
 	
@@ -159,14 +159,14 @@ public abstract class Wand extends Item {
 		}
 	}
 
-	public void gainCharge( float amt ){
+	public void gainCharge( double amt ){
 		gainCharge( amt, false );
 	}
 
-	public void gainCharge( float amt, boolean overcharge ){
+	public void gainCharge( double amt, boolean overcharge ){
 		partialCharge += amt;
 		while (partialCharge >= 1) {
-			if (overcharge) curCharges = Math.min(maxCharges+(int)amt, curCharges+1);
+			if (overcharge) curCharges = Math.min(maxCharges+(long)amt, curCharges+1);
 			else curCharges = Math.min(maxCharges, curCharges+1);
 			partialCharge--;
 			updateQuickslot();
@@ -183,12 +183,12 @@ public abstract class Wand extends Item {
 		charger.setScaleFactor( chargeScaleFactor );
 	}
 
-	protected void wandProc(Char target, int chargesUsed){
+	protected void wandProc(Char target, long chargesUsed){
 		wandProc(target, buffedLvl(), chargesUsed);
 	}
 
 	//TODO Consider externalizing char awareness buff
-	protected static void wandProc(Char target, long wandLevel, int chargesUsed){
+	protected static void wandProc(Char target, long wandLevel, long chargesUsed){
 		if (Dungeon.hero.heroClass == HeroClass.MAGE) {
 			int dur = 10;
 			Buff.append(Dungeon.hero, TalismanOfForesight.CharAwareness.class, dur).charID = target.id();
@@ -376,7 +376,7 @@ public abstract class Wand extends Item {
 		return 2;
 	}
 
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		return 1;
 	}
 	
@@ -541,7 +541,7 @@ public abstract class Wand extends Item {
 
 		curCharges = bundle.getLong( CUR_CHARGES );
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
-		partialCharge = bundle.getFloat( PARTIALCHARGE );
+		partialCharge = bundle.getDouble( PARTIALCHARGE );
 	}
 	
 	@Override

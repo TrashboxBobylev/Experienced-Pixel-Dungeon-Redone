@@ -94,7 +94,7 @@ public abstract class Elemental extends Mob {
 
 	protected boolean summonedALly;
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		if (!summonedALly) {
 			switch (Dungeon.cycle) {
 				case 1: return Random.NormalIntRange(64, 83);
@@ -185,7 +185,7 @@ public abstract class Elemental extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		meleeProc( enemy, damage );
 		
@@ -216,14 +216,14 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() )) {
-			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), buff );
+			damage( Random.NormalLongRange( HT/2, HT * 3/5 ), buff );
 			return false;
 		} else {
 			return super.add( buff );
 		}
 	}
 	
-	protected abstract void meleeProc( Char enemy, int damage );
+	protected abstract void meleeProc( Char enemy, long damage );
 	protected abstract void rangedProc( Char enemy );
 	
 	protected ArrayList<Class<? extends Buff>> harmfulBuffs = new ArrayList<>();
@@ -265,12 +265,12 @@ public abstract class Elemental extends Mob {
 		}
 
         @Override
-        public int damageRoll() {
+        public long damageRoll() {
             return Math.round(super.damageRoll()*Dungeon.fireDamage);
         }
 
         @Override
-		protected void meleeProc( Char enemy, int damage ) {
+		protected void meleeProc( Char enemy, long damage ) {
 			if (Random.Int( 2 ) == 0 && !Dungeon.level.water[enemy.pos]) {
 				Buff.affect( enemy, Burning.class ).reignite( enemy );
 				if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
@@ -405,7 +405,7 @@ public abstract class Elemental extends Mob {
 		}
 
 		@Override
-		public int damageRoll() {
+		public long damageRoll() {
 			if (!summonedALly) {
 				return Random.NormalIntRange(10, 12);
 			} else {
@@ -414,7 +414,7 @@ public abstract class Elemental extends Mob {
 		}
 
 		@Override
-		protected void meleeProc(Char enemy, int damage) {
+		protected void meleeProc(Char enemy, long damage) {
 			//no fiery on-hit unless it is an ally summon
 			if (summonedALly) {
 				super.meleeProc(enemy, damage);
@@ -501,7 +501,7 @@ public abstract class Elemental extends Mob {
 		}
 		
 		@Override
-		protected void meleeProc( Char enemy, int damage ) {
+		protected void meleeProc( Char enemy, long damage ) {
 			if (Random.Int( 3 ) == 0 || Dungeon.level.water[enemy.pos]) {
 				Freezing.freeze( enemy.pos );
 				if (enemy.sprite.visible) Splash.at( enemy.sprite.center(), sprite.blood(), 5);
@@ -527,7 +527,7 @@ public abstract class Elemental extends Mob {
 		}
 		
 		@Override
-		protected void meleeProc( Char enemy, int damage ) {
+		protected void meleeProc( Char enemy, long damage ) {
 			ArrayList<Char> affected = new ArrayList<>();
 			ArrayList<Lightning.Arc> arcs = new ArrayList<>();
 			Shocking.arc( this, enemy, 2, affected, arcs );
@@ -574,7 +574,7 @@ public abstract class Elemental extends Mob {
 		}
 		
 		@Override
-		protected void meleeProc( Char enemy, int damage ) {
+		protected void meleeProc( Char enemy, long damage ) {
 			CursedWand.cursedEffect(null, this, enemy);
 		}
 		

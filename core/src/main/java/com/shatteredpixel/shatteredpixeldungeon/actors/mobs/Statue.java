@@ -98,7 +98,7 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return (int) weapon.damageRoll(this);
 	}
 	
@@ -119,7 +119,7 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return (int) (super.drRoll() + Random.NormalLongRange(0, Dungeon.escalatingDepth() + weapon.defenseFactor(this)));
 	}
 	
@@ -135,7 +135,7 @@ public class Statue extends Mob {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 
 		if (state == PASSIVE) {
 			state = HUNTING;
@@ -145,7 +145,7 @@ public class Statue extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		damage = (int) weapon.proc( this, enemy, damage );
 		if (!enemy.isAlive() && enemy == Dungeon.hero){

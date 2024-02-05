@@ -54,7 +54,7 @@ public class Stone extends Armor.Glyph {
 		// we clamp in case accuracy or evasion were negative
 		hitChance = GameMath.gate(0.25f, (1f + 3f*hitChance)/4f, 1f);
 		
-		damage = (int)Math.ceil(damage * hitChance);
+		damage = (long) Math.ceil(damage * hitChance);
 		
 		return damage;
 	}

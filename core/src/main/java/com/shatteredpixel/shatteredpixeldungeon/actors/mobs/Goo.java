@@ -92,7 +92,7 @@ public class Goo extends Mob {
 	private int healInc = 1;
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		int min = 1;
 
 		int max = (HP*2 <= HT) ? 12 : 8;
@@ -222,7 +222,7 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		if (Random.Int( 3 ) == 0) {
 			Buff.affect( enemy, Ooze.class ).set( Ooze.DURATION );
@@ -329,7 +329,7 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (!BossHealthBar.isAssigned()){
 			BossHealthBar.assignBoss( this );
 			Dungeon.level.seal();

@@ -37,7 +37,7 @@ public class ArcaneArmor extends Buff {
 		type = buffType.POSITIVE;
 	}
 	
-	private int level = 0;
+	private long level = 0;
 	private int interval = 1;
 	
 	@Override
@@ -58,11 +58,11 @@ public class ArcaneArmor extends Buff {
 		return true;
 	}
 	
-	public int level() {
+	public long level() {
 		return level;
 	}
 	
-	public void set( int value, int time ) {
+	public void set( long value, int time ) {
 		//decide whether to override, preferring high value + low interval
 		if (Math.sqrt(interval)*level < Math.sqrt(time)*value) {
 			level = value;
@@ -92,7 +92,7 @@ public class ArcaneArmor extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(level);
+		return Long.toString(level);
 	}
 	
 	@Override
@@ -114,6 +114,6 @@ public class ArcaneArmor extends Buff {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		interval = bundle.getInt( INTERVAL );
-		level = bundle.getInt( LEVEL );
+		level = bundle.getLong( LEVEL );
 	}
 }

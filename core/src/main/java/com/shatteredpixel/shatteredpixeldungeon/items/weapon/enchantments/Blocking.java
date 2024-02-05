@@ -82,7 +82,7 @@ public class Blocking extends Weapon.Enchantment {
 		}
 
 		@Override
-		public void setShield(int shield) {
+		public void setShield(long shield) {
 			super.setShield(shield);
 			postpone(5f);
 		}

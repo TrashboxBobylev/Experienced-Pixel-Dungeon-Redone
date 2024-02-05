@@ -1280,6 +1280,53 @@ public class Dungeon {
 		return highest;
 	}
 
+	public static double Double(){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			float roll = Random.Float();
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static double Double(double max){
+		return Double(max, LuckDirection.DOWN);
+	}
+
+	public static double Double(double max, LuckDirection direction){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.Double(max);
+			if (i == 0)
+				highest = roll;
+			else {
+				switch (direction) {
+					case UP: if (roll > highest) highest = roll; break;
+					case DOWN: if (roll < highest) highest = roll; break;
+				}
+			}
+		}
+		return highest;
+	}
+
+	public static double Double(double min, double max){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.Double(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
+	public static double NormalDouble(double min, double max){
+		double highest = Double.MIN_VALUE;
+		for (int i = 0; i < luck; i++){
+			double roll = Random.NormalDouble(min, max);
+			if (roll > highest) highest = roll;
+		}
+		return highest;
+	}
+
 	//returns an index from chances, the probability of each index is the weight values in changes
 	public static int chances( float[] chances ) {
 

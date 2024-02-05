@@ -96,7 +96,7 @@ public class DM300 extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(67, 86);
             case 2: return Random.NormalIntRange(340, 445);
@@ -356,7 +356,7 @@ public class DM300 extends Mob {
 				}
 				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
 				sprite.emitter().start(SparkParticle.STATIC, 0.05f, 20);
-				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(30 + (HT - HP)/10), FloatingText.SHIELDING);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(30 + (HT - HP)/10), FloatingText.SHIELDING);
 			}
 
 			Buff.affect(this, Barrier.class).setShield( 30 + (HT - HP)/10);
@@ -486,18 +486,18 @@ public class DM300 extends Mob {
 	private boolean invulnWarned = false;
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (!BossHealthBar.isAssigned()){
 			notice();
 		}
 
-		int preHP = HP;
+		long preHP = HP;
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
 			return;
 		}
 
-		int dmgTaken = preHP - HP;
+		long dmgTaken = preHP - HP;
 		if (dmgTaken > 0) {
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 			if (lock != null && !isImmune(src.getClass())){
@@ -506,7 +506,7 @@ public class DM300 extends Mob {
 			}
 		}
 
-		int threshold;
+		long threshold;
 		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
 			threshold = HT / 4 * (3 - pylonsActivated);
 		} else {

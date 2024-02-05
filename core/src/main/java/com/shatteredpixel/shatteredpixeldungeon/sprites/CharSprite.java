@@ -352,6 +352,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			Splash.at( center(), color, n );
 		}
 	}
+
+	public void bloodBurstA( PointF from, long damage ) {
+		bloodBurstA(from, (int)Math.min(Integer.MAX_VALUE, damage));
+	}
 	
 	public void bloodBurstA( PointF from, int damage ) {
 		if (visible) {

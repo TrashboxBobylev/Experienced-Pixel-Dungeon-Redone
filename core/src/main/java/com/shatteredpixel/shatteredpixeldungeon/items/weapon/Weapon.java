@@ -63,14 +63,14 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
     public int internalTier;
 
     public enum Augment {
-		SPEED   (0.7f, 2/3f),
-		DAMAGE  (1.5f, 5/3f),
-		NONE	(1.0f, 1f);
+		SPEED   (0.7d, 2/3f),
+		DAMAGE  (1.5d, 5/3f),
+		NONE	(1.0d, 1f);
 
-		private float damageFactor;
+		private double damageFactor;
 		private float delayFactor;
 
-		Augment(float dmg, float dly){
+		Augment(double dmg, float dly){
 			damageFactor = dmg;
 			delayFactor = dly;
 		}

@@ -171,12 +171,12 @@ public class SpiritHawk extends ArmorAbility {
 		}
 
 		@Override
-		public int damageRoll() {
+		public long damageRoll() {
 			return Random.NormalIntRange(5, 10);
 		}
 
 		@Override
-		public int attackProc(Char enemy, int damage) {
+		public long attackProc(Char enemy, long damage) {
 			damage = super.attackProc( enemy, damage );
 			switch (Dungeon.hero.pointsInTalent(Talent.GO_FOR_THE_EYES)){
 				case 1:

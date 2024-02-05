@@ -125,7 +125,7 @@ public class Longsword extends MeleeWeapon {
 								}
 							}
 						}
-						ch.damage((int) dmg, this);
+						ch.damage(dmg, this);
 					}
 				}
 			}

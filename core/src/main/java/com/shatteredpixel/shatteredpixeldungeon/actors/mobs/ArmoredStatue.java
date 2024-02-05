@@ -77,7 +77,7 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return (int) (super.drRoll() + Random.NormalLongRange( armor.DRMin(), armor.DRMax()));
 	}
 
@@ -97,13 +97,13 @@ public class ArmoredStatue extends Statue {
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		damage = (int) armor.proc(enemy, this, damage);
 		return super.defenseProc(enemy, damage);
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		//TODO improve this when I have proper damage source logic
 		if (armor != null && armor.hasGlyph(AntiMagic.class, this)
 				&& AntiMagic.RESISTS.contains(src.getClass())){

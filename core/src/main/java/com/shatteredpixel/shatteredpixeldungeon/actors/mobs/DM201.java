@@ -66,7 +66,7 @@ public class DM201 extends DM200 {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(69, 91);
             case 2: return Random.NormalIntRange(321, 412);
@@ -79,7 +79,7 @@ public class DM201 extends DM200 {
 	private boolean threatened = false;
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if ((src instanceof Char && !Dungeon.level.adjacent(pos, ((Char)src).pos))
 				|| enemy == null || !Dungeon.level.adjacent(pos, enemy.pos)){
 			threatened = true;

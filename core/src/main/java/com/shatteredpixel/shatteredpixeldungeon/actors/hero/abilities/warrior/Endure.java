@@ -99,7 +99,7 @@ public class Endure extends ArmorAbility {
 			return Messages.get(this, "desc", damageBonus, hitsLeft);
 		}
 
-		public float adjustDamageTaken(float damage){
+		public double adjustDamageTaken(double damage){
 			if (enduring) {
 				damageBonus += damage/2;
 
@@ -142,7 +142,7 @@ public class Endure extends ArmorAbility {
 			}
 		}
 
-		public float damageFactor(float damage){
+		public double damageFactor(double damage){
 			if (enduring){
 				return damage;
 			} else {

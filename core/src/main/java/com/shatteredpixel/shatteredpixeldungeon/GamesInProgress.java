@@ -176,9 +176,9 @@ public class GamesInProgress {
 		public int str;
 		public int strBonus;
 		public long exp;
-		public int hp;
-		public int ht;
-		public int shld;
+		public long hp;
+		public long ht;
+		public long shld;
 		public HeroClass heroClass;
 		public HeroSubClass subClass;
 		public int armorTier;

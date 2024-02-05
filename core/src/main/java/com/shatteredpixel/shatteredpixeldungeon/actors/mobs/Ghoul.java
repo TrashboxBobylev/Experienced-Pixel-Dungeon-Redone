@@ -89,7 +89,7 @@ public class Ghoul extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(64, 79);
             case 2: return Random.NormalIntRange(276, 400);

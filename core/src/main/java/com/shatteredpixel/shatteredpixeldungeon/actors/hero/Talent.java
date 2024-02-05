@@ -443,9 +443,9 @@ public enum Talent {
 			if (hero.cooldown() > 0) {
 				Buff.affect(hero, WarriorFoodImmunity.class, hero.cooldown());
 			}
-			int healing = Dungeon.hero.HT / 8;
+			long healing = Dungeon.hero.HT / 8;
 			hero.HP = Math.min(hero.HP + healing, hero.HT);
-			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healing), FloatingText.HEALING);
 		}
 		if (hero.heroClass == HeroClass.MAGE){
 			//5/8 turns of recharging
@@ -638,7 +638,7 @@ public enum Talent {
 		}
 	}
 
-	public static int onAttackProc( Hero hero, Char enemy, int dmg ){
+	public static long onAttackProc( Hero hero, Char enemy, long dmg ){
 		if (hero.hasTalent(Talent.SUCKER_PUNCH)
 				&& enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)
 				&& enemy.buff(SuckerPunchTracker.class) == null){

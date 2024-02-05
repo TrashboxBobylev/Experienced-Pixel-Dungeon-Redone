@@ -67,7 +67,7 @@ public class FungalSentry extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange(5, 10);
 	}
 
@@ -81,7 +81,7 @@ public class FungalSentry extends Mob {
 	//TODO if we want to allow them to be literally killed, probably should give them a heal if hero is out of FOV, or similar
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		Buff.affect(enemy, Poison.class).extend(6);
 		return super.attackProc(enemy, damage);
 	}

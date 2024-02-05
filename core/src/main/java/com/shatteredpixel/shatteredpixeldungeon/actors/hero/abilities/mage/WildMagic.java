@@ -86,7 +86,7 @@ public class WildMagic extends ArmorAbility {
 			ArrayList<Wand> thirds = new ArrayList<>(wands);
 
 			for (Wand w : wands){
-				float totalCharge = w.curCharges + w.partialCharge;
+				double totalCharge = w.curCharges + w.partialCharge;
 				if (totalCharge < 2*chargeUsePerShot){
 					seconds.remove(w);
 				}

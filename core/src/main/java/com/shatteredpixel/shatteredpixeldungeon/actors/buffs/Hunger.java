@@ -45,7 +45,7 @@ public class Hunger extends Buff implements Hero.Doom {
 	public static final float STARVING	= 450f;
 
 	private float level;
-	private float partialDamage;
+	private double partialDamage;
 
 	private static final String LEVEL			= "level";
 	private static final String PARTIALDAMAGE 	= "partialDamage";
@@ -61,7 +61,7 @@ public class Hunger extends Buff implements Hero.Doom {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		level = bundle.getFloat( LEVEL );
-		partialDamage = bundle.getFloat(PARTIALDAMAGE);
+		partialDamage = bundle.getDouble(PARTIALDAMAGE);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class Hunger extends Buff implements Hero.Doom {
 				partialDamage += STEP * target.HT/1000f;
 
 				if (partialDamage > 1){
-					target.damage( (int)partialDamage, this);
-					partialDamage -= (int)partialDamage;
+					target.damage( (long) partialDamage, this);
+					partialDamage -= (long)partialDamage;
 				}
 				
 			} else if (!Dungeon.level.locked){
@@ -148,8 +148,8 @@ public class Hunger extends Buff implements Hero.Doom {
 			level = STARVING;
 			partialDamage += excess * (target.HT/1000f);
 			if (partialDamage > 1f){
-				target.damage( (int)partialDamage, this );
-				partialDamage -= (int)partialDamage;
+				target.damage( (long)partialDamage, this );
+				partialDamage -= (long)partialDamage;
 			}
 		}
 

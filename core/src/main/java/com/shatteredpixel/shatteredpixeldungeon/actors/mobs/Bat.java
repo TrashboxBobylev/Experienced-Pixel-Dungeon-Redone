@@ -74,7 +74,7 @@ public class Bat extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(50, 65);
             case 2: return Random.NormalIntRange(240, 312);
@@ -107,13 +107,13 @@ public class Bat extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
-		int reg = Math.min( damage - 4 - Dungeon.cycle * 60, HT - HP );
+		long reg = Math.min( damage - 4 - Dungeon.cycle * 60L, HT - HP );
 		
 		if (reg > 0) {
 			HP += reg;
-			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(reg), FloatingText.HEALING);
+			sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(reg), FloatingText.HEALING);
 		}
 		
 		return damage;

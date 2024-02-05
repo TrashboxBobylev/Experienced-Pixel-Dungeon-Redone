@@ -94,7 +94,7 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(80, 101);
             case 2: return Random.NormalIntRange(420, 533);
@@ -105,19 +105,19 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		
 		if (enemy.buff(Charm.class) != null ){
-			int shield = (HP - HT) + (5 + damage);
+			long shield = (HP - HT) + (5 + damage);
 			if (shield > 0){
 				HP = HT;
 				if (shield < 5){
-					sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(5-shield), FloatingText.HEALING);
+					sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5-shield), FloatingText.HEALING);
 				}
 
 				Buff.affect(this, Barrier.class).setShield(shield);
-				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shield), FloatingText.SHIELDING);
 			} else {
 				HP += 5 + damage;
 				sprite.showStatusWithIcon(CharSprite.POSITIVE, "5", FloatingText.HEALING);

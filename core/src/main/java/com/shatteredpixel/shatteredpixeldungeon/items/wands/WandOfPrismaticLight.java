@@ -103,7 +103,7 @@ public class WandOfPrismaticLight extends DamageWand {
 		} else {
 			ch.sprite.centerEmitter().burst( RainbowParticle.BURST,  (int) Math.min(Math.sqrt(10 + buffedLvl()), 1000));
 
-			ch.damage((int) dmg, this);
+			ch.damage(dmg, this);
 		}
 
 	}

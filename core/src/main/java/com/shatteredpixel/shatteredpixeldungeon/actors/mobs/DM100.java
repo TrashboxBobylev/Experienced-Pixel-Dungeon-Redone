@@ -84,7 +84,7 @@ public class DM100 extends Mob implements Callback {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(31, 45);
             case 2: return Random.NormalIntRange(160, 205);
@@ -139,7 +139,7 @@ public class DM100 extends Mob implements Callback {
 
 			Invisibility.dispel(this);
 			if (hit( this, enemy, true )) {
-				int dmg = Random.NormalIntRange(3, 10);
+				long dmg = Random.NormalIntRange(3, 10);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(32, 48); break;

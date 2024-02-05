@@ -36,7 +36,7 @@ import com.watabou.utils.Bundle;
 
 public class Corrosion extends Buff implements Hero.Doom {
 
-	private float damage = 1;
+	private double damage = 1;
 	protected float left;
 
 	//used in specific cases where the source of the corrosion is important for death logic
@@ -62,16 +62,16 @@ public class Corrosion extends Buff implements Hero.Doom {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
-		damage = bundle.getFloat( DAMAGE );
+		damage = bundle.getDouble( DAMAGE );
 		left = bundle.getFloat( LEFT );
 		source = bundle.getClass( SOURCE );
 	}
 
-	public void set(float duration, int damage){
+	public void set(float duration, long damage){
 		set(duration, damage, null);
 	}
 
-	public void set(float duration, int damage, Class source) {
+	public void set(float duration, long damage, Class source) {
 		this.left = Math.max(duration, left);
 		if (this.damage < damage) this.damage = damage;
 		this.source = source;
@@ -100,7 +100,7 @@ public class Corrosion extends Buff implements Hero.Doom {
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
-			target.damage((int)damage, this);
+			target.damage((long)damage, this);
 			if (damage < (Dungeon.scalingDepth()/2)+2) {
 				damage++;
 			} else {

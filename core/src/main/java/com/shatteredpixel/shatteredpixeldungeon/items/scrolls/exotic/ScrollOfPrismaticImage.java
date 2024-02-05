@@ -50,7 +50,7 @@ public class ScrollOfPrismaticImage extends ExoticScroll {
 			if (m instanceof PrismaticImage){
 				found = true;
 				m.HP = m.HT;
-				m.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(m.HT), FloatingText.HEALING );
+				m.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(m.HT), FloatingText.HEALING );
 			}
 		}
 		

@@ -88,7 +88,7 @@ public class Guard extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(40, 57);
             case 2: return Random.NormalIntRange(200, 278);

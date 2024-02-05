@@ -97,7 +97,7 @@ public class CrystalWisp extends Mob{
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		switch (Dungeon.cycle) {
 			case 1: return Random.NormalIntRange(50, 55);
 			case 2: return Random.NormalIntRange(240, 275);

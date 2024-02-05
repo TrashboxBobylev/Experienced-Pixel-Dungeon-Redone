@@ -136,6 +136,10 @@ public class Buff extends Actor {
 		return Messages.decimalFormat("#.##", input);
 	}
 
+	protected String dispTurns(double input){
+		return Messages.decimalFormat("#.##", input);
+	}
+
 	//buffs act after the hero, so it is often useful to use cooldown+1 when display buff time remaining
 	public float visualcooldown(){
 		return cooldown()+1f;

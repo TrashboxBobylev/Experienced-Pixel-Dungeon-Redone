@@ -41,13 +41,13 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
-import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -119,13 +119,13 @@ public class WarpBeacon extends ArmorAbility {
 
 							if (existing != null && existing != hero){
 								if (hero.hasTalent(Talent.TELEFRAG)){
-									int heroHP = hero.HP + hero.shielding();
-									int heroDmg = 5 * hero.pointsInTalent(Talent.TELEFRAG);
+									long heroHP = hero.HP + hero.shielding();
+									long heroDmg = 5 * hero.pointsInTalent(Talent.TELEFRAG);
 									hero.damage(Math.min(heroDmg, heroHP-1), WarpBeacon.this);
 
-									int damage = Random.NormalIntRange(10*hero.pointsInTalent(Talent.TELEFRAG), 15*hero.pointsInTalent(Talent.TELEFRAG));
+									long damage = Random.NormalLongRange(10*hero.pointsInTalent(Talent.TELEFRAG), 15*hero.pointsInTalent(Talent.TELEFRAG));
 									existing.sprite.flash();
-									existing.sprite.bloodBurstA(existing.sprite.center(), damage);
+									existing.sprite.bloodBurstA(existing.sprite.center(), (int) Math.min(Integer.MAX_VALUE, damage));
 									existing.damage(damage, WarpBeacon.this);
 
 									Sample.INSTANCE.play(Assets.Sounds.HIT_CRUSH);

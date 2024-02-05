@@ -43,7 +43,7 @@ public class TormentedSpirit extends Wraith {
 
 	//50% more damage scaling than regular wraiths
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange( 1 + Math.round(1.5f*level)/2, 2 + Math.round(1.5f*level) );
 	}
 

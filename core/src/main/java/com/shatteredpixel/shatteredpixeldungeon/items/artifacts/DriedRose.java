@@ -613,7 +613,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public int damageRoll() {
+		public long damageRoll() {
 			int dmg = 0;
 			if (rose != null && rose.weapon != null){
 				dmg += rose.weapon.damageRoll(this);
@@ -625,7 +625,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public int attackProc(Char enemy, int damage) {
+		public long attackProc(Char enemy, long damage) {
 			damage = super.attackProc(enemy, damage);
 			if (rose != null && rose.weapon != null) {
 				damage = (int) rose.weapon.proc( this, enemy, damage );
@@ -638,7 +638,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public int defenseProc(Char enemy, int damage) {
+		public long defenseProc(Char enemy, long damage) {
 			if (rose != null && rose.armor != null) {
 				damage = (int) rose.armor.proc( enemy, this, damage );
 			}
@@ -646,7 +646,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 			//TODO improve this when I have proper damage source logic
 			if (rose != null && rose.armor != null && rose.armor.hasGlyph(AntiMagic.class, this)
 					&& AntiMagic.RESISTS.contains(src.getClass())){
@@ -701,8 +701,8 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
+		public long drRoll() {
+			long dr = super.drRoll();
 			if (rose != null && rose.armor != null){
 				dr += Random.NormalLongRange( rose.armor.DRMin(), rose.armor.DRMax());
 			}

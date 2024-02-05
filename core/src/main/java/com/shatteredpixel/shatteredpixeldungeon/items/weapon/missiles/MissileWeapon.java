@@ -379,7 +379,7 @@ abstract public class MissileWeapon extends Weapon {
 			}
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
 				if (((Hero) owner).subClass == HeroSubClass.FREERUNNER)
-					damage = Math.round(damage * 1.5f);
+					damage = Math.round(damage * 1.5d);
 			}
 		}
 		

@@ -106,7 +106,7 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		switch (Dungeon.cycle) {
 			case 1: return Random.NormalIntRange(60, 70);
 			case 2: return Random.NormalIntRange(280, 350);
@@ -156,9 +156,9 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		if (recovering){
-			sprite.showStatus(CharSprite.NEGATIVE, Integer.toString(damage));
+			sprite.showStatus(CharSprite.NEGATIVE, Long.toString(damage));
 			HP = Math.max(1, HP-damage);
 			damage = -1;
 		}

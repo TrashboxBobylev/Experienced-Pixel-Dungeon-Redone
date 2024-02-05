@@ -110,7 +110,7 @@ public class FiringSnapper extends BlacksmithWeapon {
                         continue;
                     }
 
-                    int dmg = (int) super.proc(attacker, ch, Math.round(damage*1.0f));
+                    long dmg = super.proc(attacker, ch, Math.round(damage*1.0f));
 
                     //those not at the center of the blast take less damage
                     if (ch.pos != cell){

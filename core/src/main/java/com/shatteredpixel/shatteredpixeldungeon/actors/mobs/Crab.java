@@ -70,7 +70,7 @@ public class Crab extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(30, 45);
             case 2: return Random.NormalIntRange(150, 184);

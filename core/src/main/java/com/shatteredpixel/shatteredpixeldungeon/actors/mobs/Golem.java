@@ -84,7 +84,7 @@ public class Golem extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(69, 96);
             case 2: return Random.NormalIntRange(300, 519);

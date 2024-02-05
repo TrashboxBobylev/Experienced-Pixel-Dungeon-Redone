@@ -309,8 +309,8 @@ public class ElementalBlast extends ArmorAbility {
 								//*** Wand of Transfusion ***
 								} else if (finalWandCls == WandOfTransfusion.class){
 									if(mob.alignment == Char.Alignment.ALLY || mob.buff(Charm.class) != null){
-										int healing = Math.round(10*effectMulti);
-										int shielding = (mob.HP + healing) - mob.HT;
+										long healing = Math.round(10*effectMulti);
+										long shielding = (mob.HP + healing) - mob.HT;
 										if (shielding > 0){
 											healing -= shielding;
 											Buff.affect(mob, Barrier.class).setShield(shielding);
@@ -322,10 +322,10 @@ public class ElementalBlast extends ArmorAbility {
 										mob.sprite.emitter().burst(Speck.factory(Speck.HEALING), 4);
 
 										if (healing > 0) {
-											mob.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
+											mob.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healing), FloatingText.HEALING);
 										}
 										if (shielding > 0){
-											mob.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
+											mob.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shielding), FloatingText.SHIELDING);
 										}
 									} else {
 										if (!mob.properties().contains(Char.Property.UNDEAD)) {

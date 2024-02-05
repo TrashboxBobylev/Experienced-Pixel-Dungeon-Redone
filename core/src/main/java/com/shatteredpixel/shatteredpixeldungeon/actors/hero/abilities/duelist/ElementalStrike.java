@@ -219,19 +219,19 @@ public class ElementalStrike extends ArmorAbility {
 		//*** Blocking ***
 		} else if (ench instanceof Blocking){
 			if (targetsHit > 0){
-				int shield = Math.round(Math.round(6f*targetsHit*powerMulti));
+				long shield = Math.round(Math.round(6f*targetsHit*powerMulti));
 				Buff.affect(hero, Barrier.class).setShield(Math.round(6f*targetsHit*powerMulti));
-				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
+				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shield), FloatingText.SHIELDING);
 			}
 
 		//*** Vampiric ***
 		} else if (ench instanceof Vampiric){
 			if (targetsHit > 0){
-				int heal = Math.round(2.5f*targetsHit*powerMulti);
+				long heal = Math.round(2.5f*targetsHit*powerMulti);
 				heal = Math.min( heal, hero.HT - hero.HP );
 				if (heal > 0){
 					hero.HP += heal;
-					hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString( heal ), FloatingText.HEALING );
+					hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString( heal ), FloatingText.HEALING );
 				}
 			}
 
@@ -248,7 +248,7 @@ public class ElementalStrike extends ArmorAbility {
 
 	public static class ElementalStrikeLuckyTracker extends Buff{};
 
-	private int storedKineticDamage = 0;
+	private long storedKineticDamage = 0;
 
 	public static class ElementalStrikeFurrowCounter extends CounterBuff{{revivePersists = true;}};
 

@@ -105,7 +105,7 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(32, 47);
             case 2: return Random.NormalIntRange(160, 208);
@@ -167,7 +167,7 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		
 		if (alignment == Alignment.ENEMY && item == null
@@ -179,7 +179,7 @@ public class Thief extends Mob {
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		if (state == FLEEING) {
 			Dungeon.level.drop( new Gold(), pos ).sprite.drop();
 		}

@@ -29,7 +29,7 @@ import com.watabou.utils.Bundle;
 
 public abstract class ShieldBuff extends Buff {
 	
-	private int shielding;
+	private long shielding;
 	
 	@Override
 	public boolean attachTo(Char target) {
@@ -47,11 +47,11 @@ public abstract class ShieldBuff extends Buff {
 		super.detach();
 	}
 	
-	public int shielding(){
+	public long shielding(){
 		return shielding;
 	}
 	
-	public void setShield( int shield ) {
+	public void setShield( long shield ) {
 		if (this.shielding <= shield) this.shielding = shield;
 		if (target != null) target.needsShieldUpdate = true;
 	}
@@ -60,7 +60,7 @@ public abstract class ShieldBuff extends Buff {
 		incShield(1);
 	}
 
-	public void incShield( int amt ){
+	public void incShield( long amt ){
 		shielding += amt;
 		if (target != null) target.needsShieldUpdate = true;
 	}
@@ -69,13 +69,13 @@ public abstract class ShieldBuff extends Buff {
 		decShield(1);
 	}
 
-	public void decShield( int amt ){
+	public void decShield( long amt ){
 		shielding -= amt;
 		if (target != null) target.needsShieldUpdate = true;
 	}
 	
 	//returns the amount of damage leftover
-	public int absorbDamage( int dmg ){
+	public long absorbDamage( long dmg ){
 		if (shielding >= dmg){
 			shielding -= dmg;
 			dmg = 0;
@@ -101,7 +101,7 @@ public abstract class ShieldBuff extends Buff {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
-		shielding = bundle.getInt( SHIELDING );
+		shielding = bundle.getLong( SHIELDING );
 	}
 	
 }

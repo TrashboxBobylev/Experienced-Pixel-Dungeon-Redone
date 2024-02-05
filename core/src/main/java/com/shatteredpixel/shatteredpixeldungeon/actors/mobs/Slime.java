@@ -72,7 +72,7 @@ public class Slime extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(32, 38);
             case 2: return Random.NormalIntRange(164, 189);
@@ -94,14 +94,14 @@ public class Slime extends Mob {
 	}
 	
 	@Override
-	public void damage(int dmg, Object src) {
-		float scaleFactor = AscensionChallenge.statModifier(this);
-		int scaledDmg = Math.round(dmg/scaleFactor);
+	public void damage(long dmg, Object src) {
+		double scaleFactor = AscensionChallenge.statModifier(this);
+		long scaledDmg = Math.round(dmg/scaleFactor);
 		if (scaledDmg >= 5 + Dungeon.cycle * 75 && Dungeon.cycle < 2){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
 			scaledDmg = 4 + Dungeon.cycle * 75 + (int)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
 		}
-		dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
+		dmg = (long) (scaledDmg*AscensionChallenge.statModifier(this));
 		super.damage(dmg, src);
 	}
 

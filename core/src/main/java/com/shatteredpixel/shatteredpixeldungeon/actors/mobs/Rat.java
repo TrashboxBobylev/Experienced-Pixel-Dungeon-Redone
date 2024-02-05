@@ -75,7 +75,7 @@ public class Rat extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 	    switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(25, 31);
             case 2: return Random.NormalIntRange(110, 145);

@@ -204,9 +204,9 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int damageRoll() {
-			int damage = Random.NormalIntRange(10, 20);
-			int heroDamage = Dungeon.hero.damageRoll();
+		public long damageRoll() {
+			long damage = Random.NormalIntRange(10, 20);
+			long heroDamage = Dungeon.hero.damageRoll();
 			heroDamage /= Dungeon.hero.attackDelay(); //normalize hero damage based on atk speed
 			heroDamage = Math.round(0.08f * Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE) * heroDamage);
 			if (heroDamage > 0){
@@ -216,7 +216,7 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int attackProc( Char enemy, int damage ) {
+		public long attackProc( Char enemy, long damage ) {
 			damage = super.attackProc( enemy, damage );
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE)
 					&& Dungeon.hero.belongings.weapon() != null){
@@ -227,9 +227,9 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
-			int heroRoll = Dungeon.hero.drRoll();
+		public long drRoll() {
+			long dr = super.drRoll();
+			long heroRoll = Dungeon.hero.drRoll();
 			heroRoll = Math.round(0.12f * Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR) * heroRoll);
 			if (heroRoll > 0){
 				dr += heroRoll;
@@ -249,7 +249,7 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public int defenseProc(Char enemy, int damage) {
+		public long defenseProc(Char enemy, long damage) {
 			damage = super.defenseProc(enemy, damage);
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR)
 					&& Dungeon.hero.belongings.armor() != null){
@@ -260,7 +260,7 @@ public class ShadowClone extends ArmorAbility {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 
 			//TODO improve this when I have proper damage source logic
 			if (Random.Int(4) < Dungeon.hero.pointsInTalent(Talent.CLONED_ARMOR)

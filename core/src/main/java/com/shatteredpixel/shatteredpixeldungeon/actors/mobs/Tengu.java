@@ -105,7 +105,7 @@ public class Tengu extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(42, 60);
             case 2: return Random.NormalIntRange(225, 312);
@@ -160,18 +160,18 @@ public class Tengu extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (!Dungeon.level.mobs.contains(this)){
 			return;
 		}
 
 		PrisonBossLevel.State state = ((PrisonBossLevel)Dungeon.level).state();
 		
-		int hpBracket = HT / 8;
+		long hpBracket = HT / 8;
 
-		int curbracket = HP / hpBracket;
+		int curbracket = (int)(HP / hpBracket);
 
-		int beforeHitHP = HP;
+		long beforeHitHP = HP;
 		super.damage(dmg, src);
 
 		//cannot be hit through multiple brackets at a time
@@ -179,7 +179,7 @@ public class Tengu extends Mob {
 			HP = (curbracket-1)*hpBracket + 1;
 		}
 
-		int newBracket =  HP / hpBracket;
+		int newBracket = (int)(HP / hpBracket);
 		dmg = beforeHitHP - HP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);

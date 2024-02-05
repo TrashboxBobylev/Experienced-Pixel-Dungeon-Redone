@@ -60,11 +60,11 @@ public class WandOfEarthblast extends DamageWand {
 	}
 
 	public long min(long lvl){
-		return (int) ((4+lvl*2) * ((chargesPerCast())));
+		return ((4+lvl*2) * ((chargesPerCast())));
 	}
 
 	public long max(long lvl){
-		return (int) ((25+5*lvl) * ((chargesPerCast())));
+		return ((25+5*lvl) * ((chargesPerCast())));
 	}
 
 	ConeAOE cone;
@@ -129,8 +129,8 @@ public class WandOfEarthblast extends DamageWand {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// unlimited distance
-		int d = 3 + (chargesPerCast()-1);
-		int dist = Math.min(bolt.dist, d);
+		long d = 3 + (chargesPerCast()-1);
+		long dist = Math.min(bolt.dist, d);
 
 		cone = new ConeAOE(bolt, d, 90, collisionProperties );
 
@@ -148,16 +148,16 @@ public class WandOfEarthblast extends DamageWand {
 		MagicMissile.boltFromChar( curUser.sprite.parent,
 				MagicMissile.EARTH,
 				curUser.sprite,
-				bolt.path.get(dist/2),
+				bolt.path.get((int) (dist/2)),
 				callback );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 		Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		//consumes 30% of current charges, rounded up, with a minimum of one.
-		return Math.max(1, (int)Math.ceil(curCharges*0.3f));
+		return Math.max(1, (long)Math.ceil(curCharges*0.3d));
 	}
 
 	@Override

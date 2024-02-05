@@ -89,7 +89,7 @@ public class WandOfRegrowth extends Wand {
 			furrowedChance = (chargesOverLimit+1)/5f;
 		}
 
-		int chrgUsed = chargesPerCast();
+		long chrgUsed = chargesPerCast();
 		int grassToPlace = Math.round((3.67f+buffedLvl()/3f)*chrgUsed);
 
 		//ignore cells which can't have anything grow in them.
@@ -237,7 +237,7 @@ public class WandOfRegrowth extends Wand {
 	public void fx(Ballistica bolt, Callback callback) {
 
 		// 4/6/8 distance
-		int maxDist = 2 + 2*chargesPerCast();
+		int maxDist = (int) (2 + 2*chargesPerCast());
 
 		cone = new ConeAOE( bolt,
 				maxDist,
@@ -268,12 +268,12 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	protected long chargesPerCast() {
 		if (cursed || charger != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null){
 			return 1;
 		}
 		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
-		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
+		return (long) GameMath.gate(1, (long)Math.ceil(curCharges*0.3d), 3);
 	}
 
 	@Override
@@ -407,7 +407,7 @@ public class WandOfRegrowth extends Wand {
 
 		private void setLevel( long lvl ){
 			wandLvl = lvl;
-			HP = HT = (int) (25 + 3*lvl);
+			HP = HT = (25 + 3*lvl);
 		}
 
 		public boolean inRange(int pos){
@@ -436,7 +436,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		@Override
-		public void damage( int dmg, Object src ) {
+		public void damage( long dmg, Object src ) {
 			//do nothing
 		}
 

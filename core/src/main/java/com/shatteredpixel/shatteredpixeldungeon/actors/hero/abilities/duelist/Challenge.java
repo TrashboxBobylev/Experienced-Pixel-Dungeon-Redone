@@ -198,7 +198,7 @@ public class Challenge extends ArmorAbility {
 		public static float DURATION = 10f;
 
 		private int left = (int)DURATION;
-		private int takenDmg = 0;
+		private long takenDmg = 0;
 
 		@Override
 		public int icon() {
@@ -215,7 +215,7 @@ public class Challenge extends ArmorAbility {
 			return Integer.toString(left);
 		}
 
-		public void addDamage(int dmg){
+		public void addDamage(long dmg){
 			takenDmg += dmg;
 		}
 
@@ -254,19 +254,19 @@ public class Challenge extends ArmorAbility {
 					if (Dungeon.hero.hasTalent(Talent.INVIGORATING_VICTORY)){
 						DuelParticipant heroBuff = Dungeon.hero.buff(DuelParticipant.class);
 
-						int hpToHeal = 0;
+						long hpToHeal = 0;
 						if (heroBuff != null){
 							hpToHeal = heroBuff.takenDmg;
 						}
 
 						//heals for 30%/50%/65%/75% of taken damage plus 5/10/15/20 bonus, based on talent points
-						hpToHeal = (int)Math.round(hpToHeal * (1f - Math.pow(0.707f, Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY))));
-						hpToHeal += 5*Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY);
+						hpToHeal = Math.round(hpToHeal * (1f - Math.pow(0.707f, Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY))));
+						hpToHeal += 5L*Dungeon.hero.pointsInTalent(Talent.INVIGORATING_VICTORY);
 						hpToHeal = Math.min(hpToHeal, Dungeon.hero.HT - Dungeon.hero.HP);
 						if (hpToHeal > 0){
 							Dungeon.hero.HP += hpToHeal;
 							Dungeon.hero.sprite.emitter().start( Speck.factory( Speck.HEALING ), 0.33f, 6 );
-							Dungeon.hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(hpToHeal), FloatingText.HEALING );
+							Dungeon.hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(hpToHeal), FloatingText.HEALING );
 						}
 					}
 				}
@@ -309,7 +309,7 @@ public class Challenge extends ArmorAbility {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			left = bundle.getInt(LEFT);
-			takenDmg = bundle.getInt(TAKEN_DMG);
+			takenDmg = bundle.getLong(TAKEN_DMG);
 		}
 	}
 

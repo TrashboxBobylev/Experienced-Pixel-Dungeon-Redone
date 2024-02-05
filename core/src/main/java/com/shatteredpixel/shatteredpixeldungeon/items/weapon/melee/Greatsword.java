@@ -179,7 +179,7 @@ public class Greatsword extends MeleeWeapon {
 
         public static class TickDebuff extends Buff {
 
-            private float partialHP = 0;
+            private double partialHP = 0;
 
             private final String PART_HP = "partialHP";
 
@@ -193,7 +193,7 @@ public class Greatsword extends MeleeWeapon {
             public void restoreFromBundle(Bundle bundle) {
                 super.restoreFromBundle(bundle);
                 if (bundle.contains(PART_HP))
-                    partialHP = bundle.getFloat(PART_HP);
+                    partialHP = bundle.getDouble(PART_HP);
             }
 
             @Override
@@ -203,8 +203,8 @@ public class Greatsword extends MeleeWeapon {
                     if (target.HP > 0) {
                         partialHP += regen;
                         if (partialHP >= 1){
-                            target.damage((int)partialHP, new Doom());
-                            partialHP -= (int)partialHP;
+                            target.damage((long) partialHP, new Doom());
+                            partialHP -= (long)partialHP;
                         }
                     }
                     spend( TICK );
@@ -222,8 +222,8 @@ public class Greatsword extends MeleeWeapon {
         }
 
         @Override
-        public int drRoll() {
-            return Random.Int(Dungeon.escalatingDepth(), Dungeon.escalatingDepth());
+        public long drRoll() {
+            return Random.Long(Dungeon.escalatingDepth(), Dungeon.escalatingDepth());
         }
     }
 

@@ -100,7 +100,7 @@ public class ChaliceOfBlood extends Artifact {
 	}
 
 	private void prick(Hero hero){
-		int damage = (int) (5 + 3*(level()*level()));
+		long damage = (int) (5 + 3*(level()*level()));
 
 		Earthroot.Armor armor = hero.buff(Earthroot.Armor.class);
 		if (armor != null) {
@@ -122,7 +122,7 @@ public class ChaliceOfBlood extends Artifact {
 			damage = 1;
 		} else {
 			Sample.INSTANCE.play(Assets.Sounds.CURSED);
-			hero.sprite.emitter().burst( ShadowParticle.CURSE, 4+(damage/10) );
+			hero.sprite.emitter().burst( ShadowParticle.CURSE, (int)(4+(damage/10)) );
 		}
 
 		hero.damage(damage, this);

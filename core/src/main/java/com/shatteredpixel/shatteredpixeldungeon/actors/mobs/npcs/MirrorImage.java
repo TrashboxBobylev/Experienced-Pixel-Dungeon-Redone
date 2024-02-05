@@ -105,7 +105,7 @@ public class MirrorImage extends NPC {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		long damage;
 		if (hero.belongings.weapon() != null){
 			damage = hero.belongings.weapon().damageRoll(this);
@@ -151,17 +151,17 @@ public class MirrorImage extends NPC {
 	}
 	
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
+	public long drRoll() {
+		long dr = super.drRoll();
 		if (hero != null && hero.belongings.weapon() != null){
-			return (int) (dr + Random.NormalLongRange(0, hero.belongings.weapon().defenseFactor(this)/2));
+			return (dr + Random.NormalLongRange(0, hero.belongings.weapon().defenseFactor(this)/2));
 		} else {
 			return dr;
 		}
 	}
 	
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		
 		MirrorInvis buff = buff(MirrorInvis.class);

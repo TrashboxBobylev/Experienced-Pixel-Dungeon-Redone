@@ -181,9 +181,9 @@ public class Hero extends Char {
 	}
 	
 	public void updateHT( boolean boostHP ){
-		int curHT = HT;
+		long curHT = HT;
 		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		HT = 20 + 5L*(lvl-1) + HTBoost;
 		int multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier + HT);
 		
@@ -259,7 +259,7 @@ public class Hero extends Char {
 	public void restoreFromBundle( Bundle bundle ) {
 
 		lvl = bundle.getInt( LEVEL );
-		exp = bundle.getInt( EXPERIENCE );
+		exp = bundle.getLong( EXPERIENCE );
 
 		HTBoost = bundle.getInt(HTBOOST);
 
@@ -276,7 +276,7 @@ public class Hero extends Char {
 		
 		STR = bundle.getInt( STRENGTH );
 
-		totalExp = bundle.getInt(TOTAL_EXPERIENCE);
+		totalExp = bundle.getLong(TOTAL_EXPERIENCE);
 		grinding = bundle.getBoolean(GRINDING);
 
 
@@ -287,9 +287,9 @@ public class Hero extends Char {
 		info.level = bundle.getInt( LEVEL );
 		info.str = bundle.getInt( STRENGTH );
 		info.exp = bundle.getLong( EXPERIENCE );
-		info.hp = bundle.getInt( Char.TAG_HP );
-		info.ht = bundle.getInt( Char.TAG_HT );
-		info.shld = bundle.getInt( Char.TAG_SHLD );
+		info.hp = bundle.getLong( Char.TAG_HP );
+		info.ht = bundle.getLong( Char.TAG_HT );
+		info.shld = bundle.getLong( Char.TAG_SHLD );
 		info.heroClass = bundle.getEnum( CLASS, HeroClass.class );
 		info.subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
 		Belongings.preview( info, bundle );
@@ -514,8 +514,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 
 	@Override
-	public int drRoll() {
-		int dr = super.drRoll();
+	public long drRoll() {
+		long dr = super.drRoll();
 
 		if (belongings.armor() != null) {
 			long armDr = Dungeon.NormalLongRange( belongings.armor().DRMin(), belongings.armor().DRMax());
@@ -533,7 +533,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (wepDr > 0) dr += wepDr;
 		}
 		Barkskin bark = buff(Barkskin.class);
-		if (bark != null)               dr += Dungeon.NormalIntRange( 0 , bark.level() );
+		if (bark != null)               dr += Dungeon.NormalLongRange( 0 , bark.level() );
 
 		if (buff(HoldFast.class) != null){
 			dr += Random.NormalIntRange(HoldFast.minArmor(), HoldFast.armor());
@@ -543,7 +543,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		KindOfWeapon wep = belongings.attackingWeapon();
 		long dmg;
 
@@ -574,7 +574,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (dmg < 0) dmg = 0;
-		return (int) dmg;
+		return dmg;
 	}
 	
 	@Override
@@ -1326,7 +1326,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int attackProc( final Char enemy, int damage ) {
+	public long attackProc( final Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 
 		KindOfWeapon wep;
@@ -1340,7 +1340,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			Buff.affect(this, ElementalStrike.DirectedPowerTracker.class, 1f).enchBoost = 0.5f;
 		}
 
-		if (wep != null) damage = (int) wep.proc( this, enemy, damage );
+		if (wep != null) damage = wep.proc( this, enemy, damage );
 		damage = Talent.onAttackProc( this, enemy, damage );
 
 		damage = Perks.onAttackProc( this, enemy, damage );
@@ -1370,7 +1370,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 		
 		if (damage > 0 && isSubclass(HeroSubClass.BERSERKER)){
 			Berserk berserk = Buff.affect(this, Berserk.class);
@@ -1378,7 +1378,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 		
 		if (belongings.armor() != null) {
-			damage = (int) belongings.armor().proc( enemy, this, damage );
+			damage = belongings.armor().proc( enemy, this, damage );
 		}
 
 		WandOfLivingEarth.RockArmor rockArmor = buff(WandOfLivingEarth.RockArmor.class);
@@ -1400,7 +1400,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 	
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null)
 			return;
 
@@ -1463,12 +1463,12 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			dmg /= 2;
 		}
 
-		int preHP = HP + shielding();
+		long preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
 		super.damage( dmg, src );
-		int postHP = HP + shielding();
+		long postHP = HP + shielding();
 		if (src instanceof Hunger) postHP -= shielding();
-		int effectiveDamage = preHP - postHP;
+		long effectiveDamage = preHP - postHP;
 
 		if (effectiveDamage <= 0) return;
 
@@ -1498,10 +1498,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 	}
 
-	private void shieldDamage(int dmg) {
+	private void shieldDamage(long dmg) {
 		ConeAOE aoe = arrangeBlast(pos, sprite, MagicMissile.BEACON);
 		PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
-		int finalDmg = dmg;
+		long finalDmg = dmg;
 		((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
 				MagicMissile.INVISI,
 				sprite,

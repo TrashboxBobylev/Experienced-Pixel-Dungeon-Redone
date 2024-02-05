@@ -43,7 +43,7 @@ public class PrismaticGuard extends Buff {
 		type = buffType.POSITIVE;
 	}
 	
-	private float HP;
+	private double HP;
 	
 	@Override
 	public boolean act() {
@@ -97,15 +97,15 @@ public class PrismaticGuard extends Buff {
 		return true;
 	}
 	
-	public void set( int HP ){
+	public void set( long HP ){
 		this.HP = HP;
 	}
 	
-	public int maxHP(){
+	public long maxHP(){
 		return maxHP((Hero)target);
 	}
 	
-	public static int maxHP( Hero hero ){
+	public static long maxHP( Hero hero ){
 		return 10 + (int)Math.floor(hero.lvl * 2.5f); //half of hero's HP
 	}
 	
@@ -121,17 +121,17 @@ public class PrismaticGuard extends Buff {
 
 	@Override
 	public float iconFadePercent() {
-		return 1f - HP/(float)maxHP();
+		return (float) (1f - HP/(double) maxHP());
 	}
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString((int)HP);
+		return Long.toString((long) HP);
 	}
 	
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", (int)HP, maxHP());
+		return Messages.get(this, "desc", (long)HP, maxHP());
 	}
 	
 	private static final String HEALTH = "hp";
@@ -145,6 +145,6 @@ public class PrismaticGuard extends Buff {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		HP = bundle.getFloat(HEALTH);
+		HP = bundle.getLong(HEALTH);
 	}
 }

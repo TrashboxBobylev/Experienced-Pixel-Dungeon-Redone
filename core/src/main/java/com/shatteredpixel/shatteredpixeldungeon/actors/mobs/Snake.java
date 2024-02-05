@@ -75,7 +75,7 @@ public class Snake extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(21, 36);
             case 2: return Random.NormalIntRange(120, 160);

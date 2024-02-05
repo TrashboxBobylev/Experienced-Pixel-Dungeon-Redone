@@ -92,6 +92,27 @@ public class Random {
 		return min + ((Float(max - min) + Float(max - min))/2f);
 	}
 
+	//returns a uniformly distributed double in the range [0, 1)
+	public static synchronized double Double() {
+		return generators.peek().nextDouble();
+	}
+
+	//returns a uniformly distributed double in the range [0, max)
+	public static double Double( double max ) {
+		return Double() * max;
+	}
+
+	//returns a uniformly distributed double in the range [min, max)
+	public static double Double( double min, double max ) {
+		return min + Double(max - min);
+	}
+
+	//returns a triangularly distributed double in the range [min, max)
+	public static double NormalDouble( double min, double max ) {
+		return min + ((Double(max - min) + Double(max - min))/2f);
+	}
+
+
 	//returns a uniformly distributed int in the range [0, max)
 	public static synchronized int Int( int max ) {
 		return max > 0 ? generators.peek().nextInt(max) : 0;

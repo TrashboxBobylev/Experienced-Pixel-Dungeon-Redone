@@ -657,7 +657,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 		
 		if (enemy instanceof Hero
 				&& ((Hero) enemy).belongings.attackingWeapon() instanceof MissileWeapon){
@@ -691,7 +691,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (buff(SoulMark.class) != null) {
-			int restoration = Math.min(damage, HP+shielding());
+			long restoration = Math.min(damage, HP+shielding());
 			
 			//physical damage that doesn't come from the hero is less effective
 			if (enemy != Dungeon.hero){
@@ -728,7 +728,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + cycledDrRoll();
 	}
 
@@ -765,7 +765,7 @@ public abstract class Mob extends Char {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage( long dmg, Object src ) {
 
 		if (!isInvulnerable(src.getClass())) {
 			if (state == SLEEPING) {

@@ -89,7 +89,7 @@ public class RipperDemon extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(79, 91);
             case 2: return Random.NormalIntRange(270, 440);

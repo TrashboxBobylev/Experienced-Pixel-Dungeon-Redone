@@ -83,10 +83,10 @@ public class WandOfTransfusion extends Wand {
 			if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null){
 				
 				// 5% of max hp
-				int selfDmg = Math.round(curUser.HT*0.05f);
+				long selfDmg = Math.round(curUser.HT*0.05f);
 				
-				int healing = (int) (selfDmg + 3*buffedLvl());
-				int shielding = (ch.HP + healing) - ch.HT;
+				long healing = (selfDmg + 3*buffedLvl());
+				long shielding = (ch.HP + healing) - ch.HT;
 				if (shielding > 0){
 					healing -= shielding;
 					Buff.affect(ch, Barrier.class).setShield(shielding);
@@ -98,10 +98,10 @@ public class WandOfTransfusion extends Wand {
 				
 				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING),  (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
 				if (healing > 0) {
-					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
+					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healing), FloatingText.HEALING);
 				}
 				if (shielding > 0){
-					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
+					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(shielding), FloatingText.SHIELDING);
 				}
 				
 				if (!freeCharge) {
@@ -115,7 +115,7 @@ public class WandOfTransfusion extends Wand {
 			} else if (ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) {
 
 				//grant a self-shield, and...
-				Buff.affect(curUser, Barrier.class).setShield((int) (5 + buffedLvl()));
+				Buff.affect(curUser, Barrier.class).setShield((5 + buffedLvl()));
 curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl()), FloatingText.SHIELDING);
 
 				//charms living enemies
@@ -127,7 +127,7 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl
 				
 				//harms the undead
 				} else {
-					ch.damage((int) (Random.NormalLongRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
+					ch.damage((long) (Random.NormalLongRange(3 + buffedLvl(), 6+2*buffedLvl())*(1+ Dungeon.hero.lvl/150f)), this);
 					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f,  (int) Math.min(Math.sqrt(10 + buffedLvl()), 1000));
 					Sample.INSTANCE.play(Assets.Sounds.BURNING);
 				}
@@ -139,7 +139,7 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl
 	}
 
 	//this wand costs health too
-	private void damageHero(int damage){
+	private void damageHero(long damage){
 		
 		curUser.damage(damage, this);
 

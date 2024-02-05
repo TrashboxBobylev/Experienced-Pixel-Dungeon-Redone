@@ -80,7 +80,7 @@ public class Brute extends Mob {
 	protected boolean hasRaged = false;
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return buff(BruteRage.class) != null ?
                     Random.NormalIntRange( 70, 123 ) :
@@ -145,7 +145,7 @@ public class Brute extends Mob {
 	
 	protected void triggerEnrage(){
 		Buff.affect(this, BruteRage.class).setShield(HT/2 + 4);
-		sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(HT/2 + 4), FloatingText.SHIELDING );
+		sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString(HT/2 + 4), FloatingText.SHIELDING );
 		if (Dungeon.level.heroFOV[pos]) {
 			SpellSprite.show( this, SpellSprite.BERSERK);
 		}

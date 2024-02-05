@@ -44,12 +44,12 @@ public class Bleeding extends Buff {
 		announced = true;
 	}
 	
-	protected float level;
+	protected double level;
 
 	//used in specific cases where the source of the bleed is important for death logic
 	private Class source;
 
-	public float level(){
+	public double level(){
 		return level;
 	}
 	
@@ -66,15 +66,15 @@ public class Bleeding extends Buff {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
-		level = bundle.getFloat( LEVEL );
+		level = bundle.getDouble( LEVEL );
 		source = bundle.getClass( SOURCE );
 	}
 	
-	public void set( float level ) {
+	public void set( double level ) {
 		set( level, null );
 	}
 
-	public void set( float level, Class source ){
+	public void set( double level, Class source ){
 		if (this.level < level) {
 			this.level = Math.max(this.level, level);
 			this.source = source;
@@ -88,22 +88,22 @@ public class Bleeding extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(Math.round(level));
+		return Long.toString(Math.round(level));
 	}
 	
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
 			
-			level = Dungeon.NormalFloat(level / 2f, level);
-			int dmg = Math.round(level);
+			level = Dungeon.NormalDouble(level / 2f, level);
+			long dmg = Math.round(level);
 			
 			if (dmg > 0) {
 				
 				target.damage( dmg, this );
 				if (target.sprite.visible) {
 					Splash.at( target.sprite.center(), -PointF.PI / 2, PointF.PI / 6,
-							target.sprite.blood(), Math.min( 10 * dmg / target.HT, 10 ) );
+							target.sprite.blood(), (int) Math.min(Integer.MAX_VALUE, Math.min( 10 * dmg / target.HT, 10 )));
 				}
 				
 				if (target == Dungeon.hero && !target.isAlive()) {

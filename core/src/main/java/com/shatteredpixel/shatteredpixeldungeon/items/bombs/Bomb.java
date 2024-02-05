@@ -187,7 +187,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = damageRoll();
+				long dmg = damageRoll();
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -215,19 +215,19 @@ public class Bomb extends Item {
 		}
 	}
 
-	public static int damageRoll() {
-		int dmg = (Dungeon.NormalIntRange(minDamage(), maxDamage()));
+	public static long damageRoll() {
+		long dmg = (Dungeon.NormalLongRange(minDamage(), maxDamage()));
 		if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 			dmg *= 2.5f;
 		}
 		return dmg;
 	}
 
-	public static int maxDamage() {
+	public static long maxDamage() {
 		return Math.round((10 + Dungeon.scalingDepth() * 2)*Dungeon.fireDamage);
 	}
 
-	public static int minDamage() {
+	public static long minDamage() {
 		return Math.round((5 + Dungeon.scalingDepth())*Dungeon.fireDamage);
 	}
 

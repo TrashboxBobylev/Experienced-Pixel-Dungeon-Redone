@@ -92,7 +92,7 @@ public class CapeOfThorns extends Artifact {
 			return true;
 		}
 
-		public int proc(int damage, Char attacker, Char defender){
+		public long proc(long damage, Char attacker, Char defender){
 			if (cooldown == 0){
 				charge += damage*(0.5+level()*0.05);
 				if (charge >= chargeCap){
@@ -103,7 +103,7 @@ public class CapeOfThorns extends Artifact {
 			}
 
 			if (cooldown != 0){
-				int deflected = Random.NormalIntRange(0, damage);
+				long deflected = Random.NormalLongRange(0, damage);
 				damage -= deflected;
 
 				if (attacker != null && Dungeon.level.adjacent(attacker.pos, defender.pos)) {

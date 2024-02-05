@@ -91,7 +91,7 @@ public class Waterskin extends Item {
 				
 				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
 
-				int curShield = 0;
+				long curShield = 0;
 				if (hero.buff(Barrier.class) != null) curShield = hero.buff(Barrier.class).shielding();
 				int maxShield = Math.round(hero.HT);
 				if (hero.subClass == HeroSubClass.WARDEN){

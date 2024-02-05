@@ -92,13 +92,13 @@ public class WandOfFrost extends DamageWand {
 			if (ch.buff(Chill.class) != null){
 				//6.67% less damage per turn of chill remaining, to a max of 10 turns (50% dmg)
 				float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
-				damage = (int)Math.round(damage * Math.pow(0.9333f, chillturns));
+				damage = Math.round(damage * Math.pow(0.9333f, chillturns));
 			} else {
 				ch.sprite.burst( 0xFF99CCFF, (int) Math.min(Math.sqrt(2 + buffedLvl() / 2f), 1000));
 			}
 
 			wandProc(ch, chargesPerCast());
-			ch.damage((int) damage, this);
+			ch.damage(damage, this);
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 1.1f * Random.Float(0.87f, 1.15f) );
 
 			if (ch.isAlive()){

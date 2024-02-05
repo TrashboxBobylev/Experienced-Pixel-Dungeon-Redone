@@ -74,7 +74,7 @@ public class AscensionChallenge extends Buff {
 		modifiers.put(Scorpio.class,        4f);
 	}
 
-	public static float statModifier(Char ch){
+	public static double statModifier(Char ch){
 		if (Dungeon.hero == null || Dungeon.hero.buff(AscensionChallenge.class) == null){
 			return 1;
 		}

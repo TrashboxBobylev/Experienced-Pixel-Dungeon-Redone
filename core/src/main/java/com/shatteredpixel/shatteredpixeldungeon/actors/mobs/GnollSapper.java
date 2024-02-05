@@ -95,7 +95,7 @@ public class GnollSapper extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange( 1, 6 );
 	}
 
@@ -105,13 +105,13 @@ public class GnollSapper extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		super.damage(dmg, src);
 		abilityCooldown -= dmg/10f;
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 6);
 	}
 

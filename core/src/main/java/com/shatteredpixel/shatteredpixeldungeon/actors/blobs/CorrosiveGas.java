@@ -37,7 +37,7 @@ import com.watabou.utils.Bundle;
 public class CorrosiveGas extends Blob {
 
 	//FIXME should have strength per-cell
-    protected int strength = 0;
+    protected long strength = 0;
 
 	//used in specific cases where the source of the corrosion is important for death logic
 	private Class source;
@@ -65,11 +65,11 @@ public class CorrosiveGas extends Blob {
 		}
 	}
 
-	public CorrosiveGas setStrength(int str){
+	public CorrosiveGas setStrength(long str){
 		return setStrength(str, null);
 	}
 
-	public CorrosiveGas setStrength(int str, Class source){
+	public CorrosiveGas setStrength(long str, Class source){
 		if (str > strength) {
 			strength = str;
 			this.source = source;
@@ -83,7 +83,7 @@ public class CorrosiveGas extends Blob {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		strength = bundle.getInt( STRENGTH );
+		strength = bundle.getLong( STRENGTH );
 		source = bundle.getClass( SOURCE );
 	}
 

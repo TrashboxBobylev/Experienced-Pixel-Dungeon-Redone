@@ -67,7 +67,7 @@ public class Bbat extends Mob {
     }
 
     @Override
-    public int damageRoll() {
+    public long damageRoll() {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)){
             int i = Random.NormalIntRange(0, level * 2);
             if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
@@ -87,7 +87,7 @@ public class Bbat extends Mob {
     }
 
     @Override
-    public int attackProc(Char enemy, int damage) {
+    public long attackProc(Char enemy, long damage) {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)) Buff.affect(enemy, Marked.class).stack++;
         return super.attackProc(enemy, damage);
     }
@@ -143,7 +143,7 @@ public class Bbat extends Mob {
     public static final int RECHARGE_AMOUNT = 50;
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(long dmg, Object src) {
         super.damage(dmg, src);
         Buff.affect(Dungeon.hero, ArtifactRecharge.class).prolong(((float)dmg / (float)HT)*RECHARGE_AMOUNT);
     }

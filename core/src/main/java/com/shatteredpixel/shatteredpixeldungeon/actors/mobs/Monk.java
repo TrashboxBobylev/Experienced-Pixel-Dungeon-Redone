@@ -78,7 +78,7 @@ public class Monk extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(62, 78);
             case 2: return Random.NormalIntRange(270, 400);

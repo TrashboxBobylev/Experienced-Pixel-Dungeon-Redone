@@ -258,13 +258,13 @@ public class Ratmogrify extends ArmorAbility {
 			return original.attackSkill(target);
 		}
 
-		public int drRoll() {
+		public long drRoll() {
 			return original.drRoll();
 		}
 
 		@Override
-		public int damageRoll() {
-			int damage = original.damageRoll();
+		public long damageRoll() {
+			long damage = original.damageRoll();
 			if (!allied && Dungeon.hero.hasTalent(Talent.RATSISTANCE)){
 				damage *= Math.pow(0.9f, Dungeon.hero.pointsInTalent(Talent.RATSISTANCE));
 			}

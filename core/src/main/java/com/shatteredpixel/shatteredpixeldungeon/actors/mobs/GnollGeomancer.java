@@ -128,7 +128,7 @@ public class GnollGeomancer extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange( 3, 6 );
 	}
 
@@ -138,7 +138,7 @@ public class GnollGeomancer extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 6);
 	}
 
@@ -185,7 +185,7 @@ public class GnollGeomancer extends Mob {
 				public void call() {
 					//does its own special damage calculation that's only influenced by pickaxe level and augment
 					//we pretend the geomancer is the owner here so that properties like hero str or or other equipment do not factor in
-					int dmg = (int) p.damageRoll(GnollGeomancer.this);
+					long dmg = (int) p.damageRoll(GnollGeomancer.this);
 
 					boolean wasSleeping = state == SLEEPING;
 
@@ -246,10 +246,10 @@ public class GnollGeomancer extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
-		int hpBracket = HT / 3;
+	public void damage(long dmg, Object src) {
+		long hpBracket = HT / 3;
 
-		int curbracket = HP / hpBracket;
+		long curbracket = HP / hpBracket;
 		if (curbracket == 3) curbracket--; //full HP isn't its own bracket
 
 		inFinalBracket = curbracket == 0;
@@ -258,7 +258,7 @@ public class GnollGeomancer extends Mob {
 
 		abilityCooldown -= dmg/10f;
 
-		int newBracket =  HP / hpBracket;
+		long newBracket =  HP / hpBracket;
 		if (newBracket == 3) newBracket--; //full HP isn't its own bracket
 
 		if (newBracket != curbracket) {
@@ -562,9 +562,9 @@ public class GnollGeomancer extends Mob {
 					// 50/50 to either throw a rock or do rockfall, but never do rockfall twice
 					// unless target is next to a barricade, then always try to throw
 					// unless nothing to throw, then always rockfall
-					int hpBracket = HT / 3;
+					long hpBracket = HT / 3;
 
-					int curbracket = HP / hpBracket;
+					int curbracket = (int)(HP / hpBracket);
 					if (curbracket == 3) curbracket--; //full HP isn't its own bracket
 
 					Ballistica aim = GnollGeomancer.prepRockThrowAttack(enemy, GnollGeomancer.this);

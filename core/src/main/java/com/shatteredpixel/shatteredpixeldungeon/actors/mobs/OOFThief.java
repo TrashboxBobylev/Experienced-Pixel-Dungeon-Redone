@@ -100,7 +100,7 @@ public class OOFThief extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(53, 70);
             case 2: return Random.NormalIntRange(255, 320);
@@ -190,7 +190,7 @@ public class OOFThief extends Mob {
 	private static final int STEAL_COUNT = 3;
 
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		counter++;
 

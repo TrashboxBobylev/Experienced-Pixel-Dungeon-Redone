@@ -59,7 +59,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
 
     @Override
     public long proc(Char attacker, Char defender, long damage) {
-        int heal = Math.max(1, attacker.HT / 150);
+        long heal = Math.max(1, attacker.HT / 150);
         ArrayList<Char> affected = new ArrayList<>();
         for (Char ch: Actor.chars()){
             if (ch.alignment == attacker.alignment){
@@ -67,15 +67,15 @@ public class RegrowingSlasher extends BlacksmithWeapon {
             }
         }
         for (Char ch: affected){
-            int previousLife = ch.HP;
+            long previousLife = ch.HP;
             ch.HP = Math.min(ch.HP + heal, ch.HT);
             if (attacker.fieldOfView[ch.pos]) {
                 ch.sprite.emitter().burst(LeafParticle.GENERAL, 4);
                 if (previousLife != ch.HP)
-                    ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
+                    ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(heal), FloatingText.HEALING);
                 else {
                     if (Barkskin.currentLevel(attacker) != heal)
-                        attacker.sprite.showStatus(0x8e6629, Integer.toString(heal*5));
+                        attacker.sprite.showStatus(0x8e6629, Long.toString(heal*5));
                     Buff.affect(attacker, Barkskin.class).set(heal*5, affected.size());
                 }
             }
@@ -125,7 +125,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
                         hero.HP = Math.min(hero.HP + hero.HT / 10, hero.HT);
                         hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), 10);
                         hero.sprite.emitter().burst(LeafParticle.GENERAL, 8);
-                        hero.sprite.showStatus(CharSprite.POSITIVE, Integer.toString(hero.HT / 10));
+                        hero.sprite.showStatus(CharSprite.POSITIVE, Long.toString(hero.HT / 10));
 
                         RegrowthSpirit w = new RegrowthSpirit();
                         w.adjustStats( Dungeon.scalingDepth() );
@@ -156,7 +156,7 @@ public class RegrowingSlasher extends BlacksmithWeapon {
         }
 
         @Override
-        public void damage(int dmg, Object src) {
+        public void damage(long dmg, Object src) {
             if (src instanceof Char)
                 super.damage(1, src);
         }

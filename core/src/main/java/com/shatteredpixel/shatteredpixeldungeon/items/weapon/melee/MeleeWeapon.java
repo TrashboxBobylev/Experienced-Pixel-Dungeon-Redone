@@ -352,19 +352,19 @@ private static boolean evaluatingTwinUpgrades = false;
 				damage += Dungeon.IntRange( 0, exStr );
 			}
 		}
-		if (masteryPotionBonus) damage*=1.2f;
+		if (masteryPotionBonus) damage*=1.2d;
 
 		return damage;
 	}
 
 	@Override
 	public long min() {
-		return Math.round(super.min()*(1f + hardenBoost(buffedLvl())));
+		return Math.round(super.min()*(1d + hardenBoost(buffedLvl())));
 	}
 
 	@Override
 	public long max() {
-		return Math.round(super.max()*(1f + hardenBoost(buffedLvl())));
+		return Math.round(super.max()*(1d + hardenBoost(buffedLvl())));
 	}
 
 	@Override

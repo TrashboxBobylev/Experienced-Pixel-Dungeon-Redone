@@ -74,13 +74,13 @@ public class GnollGuard extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (hasSapper()) dmg /= 4;
 		super.damage(dmg, src);
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		if (enemy != null && !Dungeon.level.adjacent(pos, enemy.pos)){
 			return Random.NormalIntRange( 16, 22 );
 		} else {
@@ -89,8 +89,8 @@ public class GnollGuard extends Mob {
 	}
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
-		int dmg = super.attackProc(enemy, damage);
+	public long attackProc(Char enemy, long damage) {
+		long dmg = super.attackProc(enemy, damage);
 		if (enemy == Dungeon.hero && !Dungeon.level.adjacent(pos, enemy.pos) && dmg > 12){
 			GLog.n(Messages.get(this, "spear_warn"));
 		}
@@ -103,7 +103,7 @@ public class GnollGuard extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 6);
 	}
 

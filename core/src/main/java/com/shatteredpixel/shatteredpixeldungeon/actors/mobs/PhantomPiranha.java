@@ -46,7 +46,7 @@ public class PhantomPiranha extends Piranha {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		Char dmgSource = null;
 		if (src instanceof Char) dmgSource = (Char)src;
 		if (src instanceof Wand) dmgSource = Dungeon.hero;
@@ -79,7 +79,7 @@ public class PhantomPiranha extends Piranha {
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		return super.defenseProc(enemy, damage);
 	}
 

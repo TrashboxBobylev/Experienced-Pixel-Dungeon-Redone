@@ -34,10 +34,10 @@ import com.watabou.utils.GameMath;
 
 public class Healing extends Buff {
 
-	private int healingLeft;
+	private long healingLeft;
 	
 	private float percentHealPerTick;
-	private int flatHealPerTick;
+	private long flatHealPerTick;
 	
 	{
 		//unlike other buffs, this one acts after the hero and takes priority against other effects
@@ -80,14 +80,14 @@ public class Healing extends Buff {
 				healingLeft);
 	}
 
-	public void setHeal(int amount, float percentPerTick, int flatPerTick){
+	public void setHeal(long amount, float percentPerTick, long flatPerTick){
 		//multiple sources of healing do not overlap, but do combine the best of their properties
 		healingLeft = Math.max(healingLeft, amount);
 		percentHealPerTick = Math.max(percentHealPerTick, percentPerTick);
 		flatHealPerTick = Math.max(flatHealPerTick, flatPerTick);
 	}
 	
-	public void increaseHeal( int amount ){
+	public void increaseHeal( long amount ){
 		healingLeft += amount;
 	}
 	
@@ -112,9 +112,9 @@ public class Healing extends Buff {
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		healingLeft = bundle.getInt(LEFT);
+		healingLeft = bundle.getLong(LEFT);
 		percentHealPerTick = bundle.getFloat(PERCENT);
-		flatHealPerTick = bundle.getInt(FLAT);
+		flatHealPerTick = bundle.getLong(FLAT);
 	}
 	
 	@Override
@@ -124,7 +124,7 @@ public class Healing extends Buff {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString(healingLeft);
+		return Long.toString(healingLeft);
 	}
 	
 	@Override

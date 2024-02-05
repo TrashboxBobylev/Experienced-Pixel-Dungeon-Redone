@@ -55,7 +55,7 @@ public class Vampirism extends TargetedSpell{
 
         if (target != null && target != hero && !target.properties().contains(Char.Property.INORGANIC)){
             //33-66% of  health is transfered to user
-            int heal = Random.Int(target.HT / 3, target.HT * 2 / 3);
+            long heal = Random.Long(target.HT / 3, target.HT * 2 / 3);
             target.damage(heal, this);
             if (target.isAlive()){
                 target.sprite.emitter().burst(ShadowParticle.CURSE, 10);

@@ -98,7 +98,7 @@ public class Swarm extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(25, 31);
             case 2: return Random.NormalIntRange(129, 176);
@@ -109,7 +109,7 @@ public class Swarm extends Mob {
 	}
 	
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 
 		if (HP >= damage + 2) {
 			ArrayList<Integer> candidates = new ArrayList<>();

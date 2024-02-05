@@ -77,7 +77,7 @@ public class Piranha extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		return Random.NormalIntRange( Dungeon.escalatingDepth(), 4 + Dungeon.escalatingDepth() * 2 );
 	}
 	
@@ -87,7 +87,7 @@ public class Piranha extends Mob {
 	}
 	
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, Dungeon.escalatingDepth());
 	}
 

@@ -198,7 +198,7 @@ public class Necromancer extends Mob {
 			
 			mySkeleton.HP = Math.min(mySkeleton.HP + mySkeleton.HT/5 + Dungeon.cycle * 20, mySkeleton.HT);
 			if (mySkeleton.sprite.visible) {
-				mySkeleton.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString( mySkeleton.HT/5 ), FloatingText.HEALING );
+				mySkeleton.sprite.showStatusWithIcon( CharSprite.POSITIVE, Long.toString( mySkeleton.HT/5 ), FloatingText.HEALING );
 			}
 			
 		//otherwise give it adrenaline

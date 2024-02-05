@@ -48,7 +48,7 @@ public class FungalSpinner extends Spinner {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		int grassCells = 0;
 		for (int i : PathFinder.NEIGHBOURS9) {
 			if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS
@@ -63,7 +63,7 @@ public class FungalSpinner extends Spinner {
 	}
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		return damage; //does not apply poison
 	}
 

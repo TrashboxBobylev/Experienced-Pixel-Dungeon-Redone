@@ -80,7 +80,7 @@ public class Skeleton extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(34, 50);
             case 2: return Random.NormalIntRange(180, 231);
@@ -101,7 +101,7 @@ public class Skeleton extends Mob {
 		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
 			Char ch = findChar( pos + PathFinder.NEIGHBOURS8[i] );
 			if (ch != null && ch.isAlive()) {
-				int damage = Math.round(Random.NormalIntRange(6, 12));
+				long damage = Math.round(Random.NormalLongRange(6, 12));
 				damage = Math.round( damage * AscensionChallenge.statModifier(this));
 				//armor is 2x effective against bone explosion
 				damage = Math.max( 0,  damage - (ch.drRoll() + ch.drRoll()) );

@@ -71,14 +71,14 @@ public class RotLasher extends Mob {
 	@Override
 	protected boolean act() {
 		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos))) {
-			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(Math.min(5, HT - HP)), FloatingText.HEALING);
-			HP = Math.min(HT, HP + 3 + Dungeon.cycle * 25);
+			sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(Math.min(5, HT - HP)), FloatingText.HEALING);
+			HP = Math.min(HT, HP + 3 + Dungeon.cycle * 25L);
 		}
 		return super.act();
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (src instanceof Burning) {
 			destroy();
 			sprite.die();
@@ -88,7 +88,7 @@ public class RotLasher extends Mob {
 	}
 
 	@Override
-	public int attackProc(Char enemy, int damage) {
+	public long attackProc(Char enemy, long damage) {
 		damage = super.attackProc( enemy, damage );
 		Buff.affect( enemy, Cripple.class, 2f );
 		return super.attackProc(enemy, damage);
@@ -110,7 +110,7 @@ public class RotLasher extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(45, 63);
             case 2: return Random.NormalIntRange(250, 324);

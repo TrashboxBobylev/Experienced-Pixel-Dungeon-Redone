@@ -175,7 +175,7 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public int defenseProc(Char enemy, int damage) {
+	public long defenseProc(Char enemy, long damage) {
 		if (state == PASSIVE){
 			alignment = Alignment.ENEMY;
 			stopHiding();
@@ -184,7 +184,7 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (state == PASSIVE){
 			alignment = Alignment.ENEMY;
 			stopHiding();
@@ -214,7 +214,7 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		if (alignment == Alignment.NEUTRAL){
 			return Random.NormalIntRange( 2 + 2*level, 2 + 2*level);
 		} else {
@@ -223,7 +223,7 @@ public class Mimic extends Mob {
 	}
 
 	@Override
-	public int drRoll() {
+	public long drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 1 + level/2);
 	}
 

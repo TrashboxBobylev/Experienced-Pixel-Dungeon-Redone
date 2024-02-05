@@ -81,7 +81,7 @@ public class DM200 extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(60, 79);
             case 2: return Random.NormalIntRange(280, 395);

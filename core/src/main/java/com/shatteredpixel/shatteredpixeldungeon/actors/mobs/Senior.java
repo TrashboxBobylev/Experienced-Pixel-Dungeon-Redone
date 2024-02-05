@@ -47,7 +47,7 @@ public class Senior extends Monk {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(71, 83);
             case 2: return Random.NormalIntRange(313, 431);

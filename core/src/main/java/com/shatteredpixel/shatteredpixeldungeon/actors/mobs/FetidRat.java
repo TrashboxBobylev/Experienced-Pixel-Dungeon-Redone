@@ -85,7 +85,7 @@ public class FetidRat extends Rat {
 	}
 
 	@Override
-	public int attackProc( Char enemy, int damage ) {
+	public long attackProc( Char enemy, long damage ) {
 		damage = super.attackProc( enemy, damage );
 		if (Random.Int(3) == 0) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
@@ -95,7 +95,7 @@ public class FetidRat extends Rat {
 	}
 
 	@Override
-	public int defenseProc( Char enemy, int damage ) {
+	public long defenseProc( Char enemy, long damage ) {
 
 		GameScene.add(Blob.seed(pos, 20, StenchGas.class));
 

@@ -164,7 +164,7 @@ public class DemonSpawner extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (dmg >= 20 + Dungeon.cycle * 300 && Dungeon.cycle < 2){
 			//takes 20/21/22/23/24/25/26/27/28/29/30 dmg
 			// at   20/22/25/29/34/40/47/55/64/74/85 incoming dmg

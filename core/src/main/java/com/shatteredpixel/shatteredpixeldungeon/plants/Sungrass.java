@@ -77,8 +77,8 @@ public class Sungrass extends Plant {
 		private static final float STEP = 1f;
 		
 		private int pos;
-		private float partialHeal;
-		private int level;
+		private double partialHeal;
+		private long level;
 
 		{
 			type = buffType.POSITIVE;
@@ -95,14 +95,14 @@ public class Sungrass extends Plant {
 			partialHeal += (40 + target.HT)/150f;
 			
 			if (partialHeal > 1){
-				int healThisTurn = (int)partialHeal;
+				long healThisTurn = (long) partialHeal;
 				partialHeal -= healThisTurn;
 				level -= healThisTurn;
 
 				if (target.HP < target.HT) {
 
 					target.HP += healThisTurn;
-					target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healThisTurn), FloatingText.HEALING);
+					target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healThisTurn), FloatingText.HEALING);
 
 					if (target.HP >= target.HT) {
 						target.HP = target.HT;
@@ -123,7 +123,7 @@ public class Sungrass extends Plant {
 			return true;
 		}
 
-		public void boost( int amount ){
+		public void boost( long amount ){
 			if (target != null) {
 				level += amount;
 				pos = target.pos;
@@ -142,7 +142,7 @@ public class Sungrass extends Plant {
 
 		@Override
 		public String iconTextDisplay() {
-			return Integer.toString(level);
+			return Long.toString(level);
 		}
 
 		@Override
@@ -166,8 +166,8 @@ public class Sungrass extends Plant {
 		public void restoreFromBundle( Bundle bundle ) {
 			super.restoreFromBundle( bundle );
 			pos = bundle.getInt( POS );
-			partialHeal = bundle.getFloat( PARTIAL );
-			level = bundle.getInt( LEVEL );
+			partialHeal = bundle.getDouble( PARTIAL );
+			level = bundle.getLong( LEVEL );
 
 		}
 	}

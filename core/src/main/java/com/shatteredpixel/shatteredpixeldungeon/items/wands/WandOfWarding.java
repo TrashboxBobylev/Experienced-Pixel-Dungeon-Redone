@@ -296,8 +296,8 @@ public class WandOfWarding extends Wand {
 		}
 
 		@Override
-		public int drRoll() {
-			int dr = super.drRoll();
+		public long drRoll() {
+			long dr = super.drRoll();
 			if (tier > 3){
 				return dr + Math.round(Random.NormalIntRange(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
 			} else {
@@ -326,7 +326,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = (int) (Random.NormalLongRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
+			long dmg = (long) (Random.NormalLongRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){

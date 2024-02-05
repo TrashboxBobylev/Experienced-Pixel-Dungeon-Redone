@@ -69,7 +69,7 @@ public class Gnoll extends Mob {
 	}
 	
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(28, 40);
             case 2: return Random.NormalIntRange(130, 167);

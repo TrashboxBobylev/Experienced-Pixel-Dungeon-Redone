@@ -103,7 +103,7 @@ public class Perks {
         public void tintIcon(Image icon) { icon.hardlight(0.15f, 0.7f, 0.5f); }
     }
 
-    public static int onAttackProc(Hero hero, Char enemy, int damage){
+    public static long onAttackProc(Hero hero, Char enemy, long damage){
         if (hero.perks.contains(Perk.SUCKER_PUNCH)
                 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)
                 && enemy.buff(SuckerPunchTracker.class) == null){

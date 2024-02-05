@@ -104,7 +104,7 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(86, 106);
             case 2: return Random.NormalIntRange(360, 487);
@@ -204,7 +204,7 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(long dmg, Object src) {
 		if (beamCharged) dmg /= 4;
 		super.damage(dmg, src);
 	}
@@ -238,7 +238,7 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-                int dmg = Random.NormalIntRange(30, 50);
+                long dmg = Random.NormalIntRange(30, 50);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(168, 231); break;
                     case 2: dmg = Random.NormalIntRange(510, 824); break;

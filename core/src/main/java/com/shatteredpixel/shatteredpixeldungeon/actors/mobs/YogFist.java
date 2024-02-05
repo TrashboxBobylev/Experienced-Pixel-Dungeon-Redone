@@ -157,10 +157,10 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
-		int preHP = HP;
+	public void damage(long dmg, Object src) {
+		long preHP = HP;
 		super.damage(dmg, src);
-		int dmgTaken = preHP - HP;
+		long dmgTaken = preHP - HP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (dmgTaken > 0 && lock != null){
@@ -188,7 +188,7 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Random.NormalIntRange(86, 121);
             case 2: return Random.NormalIntRange(375, 580);
@@ -342,7 +342,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 			int grassCells = 0;
 			for (int i : PathFinder.NEIGHBOURS9) {
 				if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS
@@ -414,7 +414,7 @@ public abstract class YogFist extends Mob {
 			GameScene.add(Blob.seed(pos, 0, ToxicGas.class));
 
 			if (Dungeon.level.water[pos] && HP < HT) {
-				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(HT/50), FloatingText.HEALING);
+				sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(HT/50), FloatingText.HEALING);
 				HP = Math.min(HT, HP + HT/50);
 			}
 
@@ -422,7 +422,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 			if (!isInvulnerable(src.getClass())
 					&& !(src instanceof Bleeding)
 					&& buff(Sickle.HarvestBleedTracker.class) == null){
@@ -450,7 +450,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public int attackProc( Char enemy, int damage ) {
+		public long attackProc( Char enemy, long damage ) {
 			damage = super.attackProc( enemy, damage );
 
 			if (Random.Int( 2 ) == 0) {
@@ -477,7 +477,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public int damageRoll() {
+		public long damageRoll() {
             switch (Dungeon.cycle) {
                 case 1: return Random.NormalIntRange(121, 145);
                 case 2: return Random.NormalIntRange(489, 675);
@@ -488,7 +488,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(long dmg, Object src) {
 			if (!isInvulnerable(src.getClass()) && !(src instanceof Viscosity.DeferedDamage)){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg >= 0) {
@@ -558,8 +558,8 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
-			int beforeHP = HP;
+		public void damage(long dmg, Object src) {
+			long beforeHP = HP;
 			super.damage(dmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
 				HP = HT/2;
@@ -635,8 +635,8 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
-			int beforeHP = HP;
+		public void damage(long dmg, Object src) {
+			long beforeHP = HP;
 			super.damage(dmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
 				HP = HT/2;
