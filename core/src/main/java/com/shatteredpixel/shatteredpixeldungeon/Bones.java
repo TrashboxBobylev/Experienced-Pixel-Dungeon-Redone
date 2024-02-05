@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.utils.Bundle;
@@ -243,7 +244,10 @@ public class Bones {
 				ArrayList<Item> result = new ArrayList<>();
 
 				if (heroClass != null) {
-					result.add(RemainsItem.get(heroClass));
+					if (heroClass == HeroClass.RAT_KING)
+						result.add(new CheeseChunk());
+					else
+						result.add(RemainsItem.get(heroClass));
 					if (Dungeon.bossLevel()){
 						Statistics.qualifiedForBossRemainsBadge = true;
 					}
