@@ -213,7 +213,7 @@ public class ItemSpriteSheet {
 		assignItemRect(NEW_TENGU_BOMB,  9,  15);
 	}
 
-	private static final int FISHING_HOOKS = xy(16, 6);
+	private static final int FISHING_HOOKS = xy(16, 5);
 	public static final int BASIC_HOOK = FISHING_HOOKS-4;
 	public static final int GOLDEN_HOOK = FISHING_HOOKS-3;
 	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-2;
