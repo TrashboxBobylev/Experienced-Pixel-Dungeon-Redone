@@ -184,8 +184,7 @@ public class Hero extends Char {
 		long curHT = HT;
 		
 		HT = 20 + 5L*(lvl-1) + HTBoost;
-		int multiplier = RingOfMight.HTMultiplier(this);
-		HT = Math.round(multiplier + HT);
+		HT += RingOfMight.HTMultiplier(this);
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
 			HT += buff(ElixirOfMight.HTBoost.class).boost();
