@@ -89,12 +89,12 @@ public class Corrosion extends Buff implements Hero.Doom {
 
 	@Override
 	public String iconTextDisplay() {
-		return Integer.toString((int)damage);
+		return Long.toString((long) damage);
 	}
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", dispTurns(left), (int)damage);
+		return Messages.get(this, "desc", dispTurns(left), (long)damage);
 	}
 
 	@Override
