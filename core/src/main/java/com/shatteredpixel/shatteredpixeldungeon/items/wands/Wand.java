@@ -368,7 +368,7 @@ public abstract class Wand extends Item {
 	}
 
 	public void updateLevel() {
-		maxCharges = (initialCharges() + level());
+		maxCharges = (level() + initialCharges());
 		curCharges = Math.min( curCharges, maxCharges );
 	}
 	
