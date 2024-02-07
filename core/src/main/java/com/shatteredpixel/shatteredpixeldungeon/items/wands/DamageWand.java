@@ -36,13 +36,13 @@ import com.watabou.utils.Random;
 public abstract class DamageWand extends Wand{
 
 	public long min(){
-		return Math.round(min(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
+		return Math.round(min(buffedLvl())*(1+ Dungeon.hero.lvl/150d));
 	}
 
 	public abstract long min(long lvl);
 
 	public long max(){
-		return Math.round(max(buffedLvl())*(1+ Dungeon.hero.lvl/150f));
+		return Math.round(max(buffedLvl())*(1+ Dungeon.hero.lvl/150d));
 	}
 
 	public abstract long max(long lvl);
