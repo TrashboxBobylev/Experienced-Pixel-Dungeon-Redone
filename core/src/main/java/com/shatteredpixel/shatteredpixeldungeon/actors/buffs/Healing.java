@@ -57,7 +57,7 @@ public class Healing extends Buff {
 				((Hero) target).resting = false;
 			}
 
-			target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healingThisTick()), FloatingText.HEALING);
+			target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(healingThisTick()), FloatingText.HEALING);
 		}
 
 		healingLeft -= healingThisTick();
@@ -74,9 +74,9 @@ public class Healing extends Buff {
 		return true;
 	}
 	
-	private int healingThisTick(){
-		return (int)GameMath.gate(1,
-				Math.round(healingLeft * percentHealPerTick) + flatHealPerTick,
+	private long healingThisTick(){
+		return (long)GameMath.gate(1d,
+				Math.round(healingLeft * percentHealPerTick * 1d) + flatHealPerTick,
 				healingLeft);
 	}
 

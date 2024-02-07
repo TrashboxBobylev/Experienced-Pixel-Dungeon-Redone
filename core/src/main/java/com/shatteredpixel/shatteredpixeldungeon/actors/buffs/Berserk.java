@@ -352,7 +352,7 @@ public class Berserk extends Buff implements ActionIndicator.Action {
 
 	@Override
 	public String desc() {
-		float dispDamage = ((int)damageFactor(10000) / 100f) - 100f;
+		double dispDamage = ((long)damageFactor(10000) / 100d) - 100d;
 		switch (state){
 			case NORMAL: default:
 				return Messages.get(this, "angered_desc", Math.floor(power * 100f), dispDamage);
