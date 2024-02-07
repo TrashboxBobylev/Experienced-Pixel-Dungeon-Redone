@@ -398,10 +398,10 @@ public class Item implements Bundlable {
 	
 	final public Item upgrade(long n ) {
 		if (n > 20){
+			this.level += n - 20;
 			for (long i=0; i < 20; i++) {
 				upgrade();
 			}
-			this.level += n - 20;
 			updateQuickslot();
 		} else {
 			for (long i = 0; i < n; i++) {
@@ -421,10 +421,10 @@ public class Item implements Bundlable {
 	
 	final public Item degrade(long n ) {
 		if (n > 20){
+			this.level -= n - 20;
 			for (long i=0; i < 20; i++) {
 				degrade();
 			}
-			this.level -= n - 20;
 			updateQuickslot();
 		} else {
 			for (long i = 0; i < n; i++) {

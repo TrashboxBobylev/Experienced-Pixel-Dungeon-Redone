@@ -154,7 +154,7 @@ public abstract class FishingRod extends Item {
     @Override
     public Item upgrade() {
         super.upgrade();
-        if (level() % 5 == 0) fishingStr++;
+        fishingStr = (int) Math.min(Integer.MAX_VALUE, level() / 5);
         return this;
     }
 
