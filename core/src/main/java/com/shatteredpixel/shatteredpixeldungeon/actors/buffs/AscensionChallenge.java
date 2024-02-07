@@ -167,7 +167,7 @@ public class AscensionChallenge extends Buff {
 		BuffIndicator.refreshHero();
 	}
 
-	public static int AscensionCorruptResist(Mob m){
+	public static long AscensionCorruptResist(Mob m){
 		//default to just using their EXP value if no ascent challenge is happening
 		if (Dungeon.hero.buff(AscensionChallenge.class) == null){
 			return m.EXP;
@@ -176,7 +176,7 @@ public class AscensionChallenge extends Buff {
 		if (m instanceof Ratmogrify.TransmogRat){
 			m = ((Ratmogrify.TransmogRat) m).getOriginal();
 		}
-		int xp = m.EXP;
+		long xp = m.EXP;
 		for (Class<?extends Mob> cls : modifiers.keySet()){
 			if (cls.isAssignableFrom(m.getClass())){
 				xp = Math.max(Eye.experience(), m.EXP); //same exp as an eye

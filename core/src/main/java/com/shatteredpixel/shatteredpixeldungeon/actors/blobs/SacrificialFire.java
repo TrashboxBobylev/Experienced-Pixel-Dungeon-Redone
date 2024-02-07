@@ -29,13 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialParticle;
@@ -154,7 +148,7 @@ public class SacrificialFire extends Blob {
 
 		if (firePos != -1) {
 
-			int exp = 0;
+			long exp = 0;
 			if (ch instanceof Mob) {
 				//same rates as used in wand of corruption, except for swarms
 				if (ch instanceof Statue || ch instanceof Mimic){
@@ -177,7 +171,7 @@ public class SacrificialFire extends Blob {
 
 			if (exp > 0) {
 
-				int volumeLeft = cur[firePos] - exp;
+				int volumeLeft = cur[firePos] - (int)Math.min(Integer.MAX_VALUE, exp);
 				if (volumeLeft > 0) {
 					cur[firePos] -= exp;
 					volume -= exp;

@@ -105,10 +105,10 @@ public class WandOfCorruption extends Wand {
 				Statistics.qualifiedForBossChallengeBadge = false;
 			}
 
-			float corruptingPower = (3 + buffedLvl()/3f)*(1+ Dungeon.hero.lvl/150f);
+			double corruptingPower = (3 + buffedLvl()/3d)*(1+ Dungeon.hero.lvl/150f);
 			
 			//base enemy resistance is usually based on their exp, but in special cases it is based on other criteria
-			float enemyResist;
+			double enemyResist;
 			if (ch instanceof Mimic || ch instanceof Statue){
 				enemyResist = 1 + Dungeon.escalatingDepth();
 			} else if (ch instanceof Piranha || ch instanceof Bee) {
@@ -142,7 +142,7 @@ public class WandOfCorruption extends Wand {
 			if (corruptingPower > enemyResist){
 				corruptEnemy( enemy );
 			} else {
-				float debuffChance = corruptingPower / enemyResist;
+				float debuffChance = (float) (corruptingPower / enemyResist);
 				if (Dungeon.Float() < debuffChance){
 					debuffEnemy( enemy, MAJOR_DEBUFFS);
 				} else {

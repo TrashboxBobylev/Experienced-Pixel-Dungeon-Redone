@@ -104,7 +104,7 @@ public abstract class Mob extends Char {
 	
 	public int defenseSkill = 0;
 	
-	public int EXP = 1;
+	public long EXP = 1;
 	public int maxLvl = Integer.MAX_VALUE;
 	
 	protected Char enemy;
@@ -801,12 +801,12 @@ public abstract class Mob extends Char {
 
 				AscensionChallenge.processEnemyKill(this);
 
-				int exp = EXP;
+				long exp = EXP;
 				if (Dungeon.hero.buff(Bless.class) != null) {
 					exp *= 2;
 				}
 				if (exp > 0) {
-					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(exp), FloatingText.EXPERIENCE);
+					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(exp), FloatingText.EXPERIENCE);
 				}
 				Dungeon.hero.earnExp(exp, getClass());
 				if (Dungeon.hero.perks.contains(Perks.Perk.ADDITIONAL_MONEY)){
