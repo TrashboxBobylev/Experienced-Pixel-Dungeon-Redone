@@ -42,7 +42,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             dependencies {
-                releaseImplementation project(':services:updates:githubUpdates')
+                releaseImplementation project(':services:updates:debugUpdates')
                 releaseImplementation project(':services:news:ingameNews')
             }
         }
@@ -74,7 +74,7 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:1.11.0:natives-x86"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:1.11.0:natives-x86_64"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
-    implementation "com.github.RohitSurwase.UCE-Handler:uce_handler:1.4"
+//    implementation "com.github.RohitSurwase.UCE-Handler:uce_handler:1.4"
 }
 
 // called every time gradle gets executed, takes the native dependencies of
