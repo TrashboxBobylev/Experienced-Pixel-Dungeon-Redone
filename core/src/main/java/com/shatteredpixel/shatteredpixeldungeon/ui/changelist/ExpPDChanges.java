@@ -98,6 +98,39 @@ public class ExpPDChanges {
                             "_-_ Dart traps and necromancers now scale their damage with dungeon cycles."
             ));
 
+            changes = new ChangeInfo("BETA-2", false, null);
+            changes.hardlight(CharSprite.WARNING);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.get(Icons.PLUS), "Prolonging numbers",
+                    "Changed some more numbers from 32-bit to 64-bit format:\n\n" +
+                            "_-_ mob experience value\n" +
+                            "_-_ Fire Empower's percentage boost\n" +
+                            "_-_ partial upgrade number prompt\n" +
+                            "_-_ wand charges (doesn't softcap at 32-bit anymore)\n" +
+                            "_-_ hero's health (doesn't softcap at 32-bit anymore)\n" +
+                            "_-_ wand stats in the item window\n" +
+                            "_-_ missile weapon's damage\n" +
+                            "_-_ potion of healing's healing at current turn\n" +
+                            "_-_ corrosion's damage (doesn't softcap at 32-bit anymore)\n" +
+                            "_-_ berserk's buff info"
+            ));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
+                    "_-_ Changed Preparation:\n" +
+                            "   _-_ now detaches when Dirk/Fantasmal Stabber is unequipped\n" +
+                            "   _-_ slightly increased Dirk's max damage\n" +
+                            "   _-_ reduced damage of missile weapon by 35% when used with Preparation.\n" +
+                            "_-_ Upgrade text in inventory now scale down in size to fit into item slots.\n" +
+                            "_-_ Scroll of Upgrade is much more optimized with large quantities used at once.\n" +
+                            "_-_ Scroll of Debug can now handle 64-bit numbers when used to call game's methods."
+            ));
+
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed fishing rods having incorrect sprites.\n" +
+                            "_-_ Fixed OOF thief's desperation invulnerability not actually working.\n" +
+                            "_-_ Fixed Longsword's Duelist ability being usable at no charges."
+            ));
+
             changes = new ChangeInfo("ExpPD-2.16.3", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
