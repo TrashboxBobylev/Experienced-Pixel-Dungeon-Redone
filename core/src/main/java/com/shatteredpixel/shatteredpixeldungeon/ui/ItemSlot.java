@@ -279,6 +279,11 @@ public class ItemSlot extends Button {
 		if (trueLvl != 0 || buffedLvl != 0) {
 			level.text( Messages.format( TXT_LEVEL, buffedLvl ) );
 			level.measure();
+			if (level.width > width - (margin.left + margin.right) * 1.25f){
+				level.scale.set(PixelScene.align(1f - 0.015f*(63 - Long.numberOfLeadingZeros(buffedLvl))));
+			} else {
+				level.scale.set(1f);
+			}
 			if (trueLvl == buffedLvl || buffedLvl <= 0) {
 				if (buffedLvl > 0){
 					if ((item instanceof Weapon && ((Weapon) item).curseInfusionBonus)
