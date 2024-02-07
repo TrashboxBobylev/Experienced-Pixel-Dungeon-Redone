@@ -192,7 +192,7 @@ public class Dungeon {
 	public static float respawn_timer;
 	public static int additionalMobs;
 
-	public static float fireDamage;
+	public static double fireDamage;
 	public static int luck;
 	public static long energy;
 
@@ -263,7 +263,7 @@ public class Dungeon {
 		Bbat.level = 1;
 		respawn_timer = 50;
 		additionalMobs = 0;
-		fireDamage = 1;
+		fireDamage = 1d;
 		luck = 1;
 		energy = 0L;
 
@@ -871,7 +871,7 @@ public class Dungeon {
 		cycle = bundle.getInt( CYCLE);
 		respawn_timer = bundle.getFloat(RESPAWN_TIMER);
 		additionalMobs = bundle.getInt(ADDMOBS);
-		fireDamage = bundle.getFloat(FIREDANAGE);
+		fireDamage = bundle.getDouble(FIREDANAGE);
 		luck = bundle.getInt(LUCK);
 
 		Statistics.restoreFromBundle( bundle );

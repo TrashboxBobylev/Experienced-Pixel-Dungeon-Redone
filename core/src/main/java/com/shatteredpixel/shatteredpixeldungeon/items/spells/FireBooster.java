@@ -42,7 +42,7 @@ public class FireBooster extends Spell {
 
     @Override
     protected void onCast(Hero hero) {
-        Dungeon.fireDamage *= 1.1f;
+        Dungeon.fireDamage *= 1.1d;
         hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "+1.1x", FloatingText.FIRE_BOOST);
         for (int i : PathFinder.NEIGHBOURS9){
             CellEmitter.center(hero.pos + i).burst(FlameParticle.FACTORY, 10);
