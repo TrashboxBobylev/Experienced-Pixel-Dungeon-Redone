@@ -95,9 +95,9 @@ public class ScrollOfUpgrade extends InventoryScroll {
 							"Accept", "Cancel") {
 						@Override public void onSelect(boolean positive, String text) {
 							if(!positive) return;
-							int number = 0;
+							long number = 0;
 							try {
-								number = Integer.parseInt(text);
+								number = Long.parseLong(text);
 							} catch (NumberFormatException e){
 								GLog.w("No valid number was entered.");
 								return;
