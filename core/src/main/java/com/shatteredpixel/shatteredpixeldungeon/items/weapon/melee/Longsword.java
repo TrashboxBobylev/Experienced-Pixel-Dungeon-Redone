@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -213,6 +214,12 @@ public class Longsword extends MeleeWeapon {
 		Char enemy = Actor.findChar(target);
 
 		float chargeUse = abilityChargeUse(hero, enemy);
+
+		if (chargeUse <= 0) {
+			GLog.w(Messages.get(this, "ability_no_charge"));
+			return;
+		}
+
 		int maxDist = 2 + Math.round(chargeUse);
 		int dist = Math.min(aim.dist, maxDist);
 
