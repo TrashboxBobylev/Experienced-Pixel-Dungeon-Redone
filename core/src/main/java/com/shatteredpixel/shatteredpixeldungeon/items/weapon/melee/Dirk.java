@@ -29,11 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
-public class Dirk extends MeleeWeapon {
+public class Dirk extends MeleeWeapon implements PreparationAllowed {
 
 	{
 		image = ItemSpriteSheet.DIRK;
@@ -45,8 +46,8 @@ public class Dirk extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return (long) (6*(tier) +    //12 base, down from 18
-						lvl*(tier*0.66f));   //scaling down to 1.32
+		return (long) (7*(tier) +    //14 base, down from 18
+						lvl*(tier*0.75f));   //scaling down to 1.5
 	}
 	
 	@Override

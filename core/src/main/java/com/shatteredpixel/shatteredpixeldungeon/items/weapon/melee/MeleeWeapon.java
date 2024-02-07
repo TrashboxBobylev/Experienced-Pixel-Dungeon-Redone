@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -168,6 +169,8 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public boolean doUnequip(Hero hero, boolean collect, boolean single) {
 		if (super.doUnequip(hero, collect, single)){
+			if (this instanceof PreparationAllowed)
+				Buff.detach(hero, Preparation.class);
 			ActionIndicator.refresh();
 			return true;
 		}

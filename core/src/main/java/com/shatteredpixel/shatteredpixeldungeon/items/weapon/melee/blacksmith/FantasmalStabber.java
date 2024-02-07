@@ -33,11 +33,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
-public class FantasmalStabber extends BlacksmithWeapon {
+public class FantasmalStabber extends BlacksmithWeapon implements PreparationAllowed {
     {
         image = ItemSpriteSheet.PHANTDAGGER;
         hitSound = Assets.Sounds.HIT_STAB;

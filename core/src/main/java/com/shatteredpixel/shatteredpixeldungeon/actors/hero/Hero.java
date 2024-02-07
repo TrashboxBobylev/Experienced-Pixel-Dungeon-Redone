@@ -69,9 +69,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.FantasmalStabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GleamingStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -551,6 +551,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			dmg = wep.damageRoll( this );
 
 			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
+			else if (buff(Preparation.class) != null){
+				dmg = Math.round(dmg*0.65d);
+			}
+
 		} else {
 			dmg = RingOfForce.damageRoll(this);
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){
@@ -857,7 +861,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (getCloser( action.dst )) {
 			canSelfTrample = false;
-			if (belongings.weapon instanceof Dirk || belongings.weapon instanceof FantasmalStabber) Buff.affect(this, Preparation.class);
+			if (belongings.weapon instanceof PreparationAllowed)
+				Buff.affect(this, Preparation.class);
 			return true;
 
 		//Hero moves in place if there is grass to trample
