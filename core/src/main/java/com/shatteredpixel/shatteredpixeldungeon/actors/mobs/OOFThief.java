@@ -187,6 +187,11 @@ public class OOFThief extends Mob {
 		hasRaged = true;
 	}
 
+	@Override
+	public boolean isInvulnerable(Class effect) {
+		return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
+	}
+
 	private static final int STEAL_COUNT = 3;
 
 	@Override
