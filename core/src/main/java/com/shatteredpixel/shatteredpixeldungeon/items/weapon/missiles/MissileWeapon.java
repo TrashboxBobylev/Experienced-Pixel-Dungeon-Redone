@@ -449,8 +449,8 @@ abstract public class MissileWeapon extends Weapon {
 		
 		info += "\n\n" + Messages.get( MissileWeapon.class, "stats",
 				tier,
-				Math.round(augment.damageFactor(min())),
-				Math.round(augment.damageFactor(max())),
+				augment.damageFactor(min()),
+				augment.damageFactor(max()),
 				STRReq());
 
 		if (STRReq() > Dungeon.hero.STR()) {
