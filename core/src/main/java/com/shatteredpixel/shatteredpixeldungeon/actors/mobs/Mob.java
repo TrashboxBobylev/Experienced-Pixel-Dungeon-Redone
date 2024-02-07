@@ -834,7 +834,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (buff(Longsword.HolyExpEffect.class) != null){
-			EXP = (int) Math.round(EXP * Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks));
+			EXP = Math.round(EXP * Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks));
 		}
 
 		if (this.buff(Overload.class) != null) {
