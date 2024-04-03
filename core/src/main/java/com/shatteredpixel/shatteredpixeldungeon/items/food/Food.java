@@ -131,10 +131,9 @@ public class Food extends Item {
 						hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
 						GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
 					} else {
-						GLog.w(Messages.get(this, "cant_grab"));
+						GLog.w( Messages.capitalize(Messages.get(hero, "you_cant_have", item.name())) );
 						h.sprite.drop();
-						return;
-					}
+                    }
 				}
 			}
 		}
