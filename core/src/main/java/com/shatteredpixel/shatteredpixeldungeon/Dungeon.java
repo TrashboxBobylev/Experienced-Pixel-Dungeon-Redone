@@ -302,6 +302,8 @@ public class Dungeon {
         Notes.reset();
         if (cycle < 4) cycle += 1;
         GameLog.wipe();
+		SpecialRoom.initForRun();
+		SecretRoom.initForRun();
         Generator.generalReset();
 		generatedLevels.clear();
 		BeaconOfReturning beacon = Dungeon.hero.belongings.getItem(BeaconOfReturning.class);
