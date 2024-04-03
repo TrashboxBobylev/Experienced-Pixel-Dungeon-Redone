@@ -45,8 +45,8 @@ public class Scimitar extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  5*(tier+1) +    //20 base, down from 24
-				lvl*(tier+1);   //+5
+		return  5L*(tier()+1) +    //20 base, down from 24
+				lvl*(tier()+1);   //+5
 	}
 
 	@Override

@@ -81,22 +81,22 @@ public class Dart extends MissileWeapon {
 	@Override
 	public long min(long lvl) {
 		if (bow != null){
-			return  (tier+3) +                    //4 base
+			return  (tier()+3) +                    //4 base
 					bow.buffedLvl() + lvl; //+1 per level or bow level
 		} else {
-			return  tier +     //1 base, down from 2
-					lvl*tier;    //scaling unchanged
+			return  tier() +     //1 base, down from 2
+					lvl*tier();    //scaling unchanged
 		}
 	}
 
 	@Override
 	public long max(long lvl) {
 		if (bow != null){
-			return  4*(tier+3) +                       //12 base
-                    (tier+2)*bow.buffedLvl() + (tier+1)*lvl; //+3 per bow level, +2 per level (default scaling +2)
+			return  4L*(tier()+3) +                       //12 base
+                    (tier()+2)*bow.buffedLvl() + (tier()+1)*lvl; //+3 per bow level, +2 per level (default scaling +2)
 		} else {
-			return  tier*2 +     //2 base, down from 5
-					2*lvl*tier;  //scaling unchanged
+			return  tier()*2L +     //2 base, down from 5
+					2*lvl*tier();  //scaling unchanged
 		}
 	}
 	

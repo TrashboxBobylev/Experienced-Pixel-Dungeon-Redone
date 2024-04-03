@@ -54,8 +54,8 @@ public class Sai extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  Math.round(3f*(tier+1)) +     //12 base, down from 24
-				lvl*Math.round(0.5f*(tier+2));  //+2.5 per level, down from +5
+		return  Math.round(3d*(tier()+1)) +     //12 base, down from 24
+				lvl*Math.round(0.5d*(tier()+2));  //+2.5 per level, down from +5
 	}
 
     @Override

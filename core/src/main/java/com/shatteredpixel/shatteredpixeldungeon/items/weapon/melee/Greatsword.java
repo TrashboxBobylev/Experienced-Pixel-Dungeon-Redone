@@ -60,8 +60,8 @@ public class Greatsword extends MeleeWeapon {
 
     @Override
     public long max(long lvl) {
-        return  6*(tier+1) +    //36
-                lvl*(tier+2);   //+7
+        return  6L*(tier()+1) +    //36
+                lvl*(tier()+2);   //+7
     }
 
     @Override

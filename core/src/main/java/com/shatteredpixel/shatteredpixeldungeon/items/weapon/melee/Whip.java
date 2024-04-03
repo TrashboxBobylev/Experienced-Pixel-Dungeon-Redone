@@ -59,13 +59,13 @@ public class Whip extends MeleeWeapon {
 
 	@Override
 	public long min(long lvl) {
-		return tier+lvl/2;
+		return tier()+lvl/2;
 	}
 
 	@Override
 	public long max(long lvl) {
-		return  3*(tier) +    //16 base, down from 24
-				lvl*(tier-1)/2;     //+4 per level, down from +5
+		return  3L*(tier()) +    //16 base, down from 24
+				lvl*(tier()-1)/2;     //+4 per level, down from +5
 	}
 
 	public static class WhipReachBooster extends Buff {};
