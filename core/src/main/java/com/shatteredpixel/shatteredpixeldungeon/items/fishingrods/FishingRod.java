@@ -65,12 +65,17 @@ public abstract class FishingRod extends Item {
     }
 
     public float amplifier = 1f;
-    public int fishingStr = 1;
+    public int baseFishingStr = 1;
+    public int bonusFishingStr = 0;
     public int tier;
     public boolean hook;
 
     public float fishingPower(){
         return level()*amplifier;
+    }
+
+    public int fishingStrength(){
+        return baseFishingStr + bonusFishingStr;
     }
 
     @Override
@@ -129,7 +134,7 @@ public abstract class FishingRod extends Item {
                     public void call() {
                         Hook hook = new Hook();
                         hook.tier = tier;
-                        hook.tries = fishingStr;
+                        hook.tries = fishingStrength();
                         hook.power = (int) fishingPower();
                         GameScene.add(hook);
                         ScrollOfTeleportation.appear(hook, target);
@@ -154,7 +159,7 @@ public abstract class FishingRod extends Item {
     @Override
     public Item upgrade() {
         super.upgrade();
-        fishingStr = (int) Math.min(Integer.MAX_VALUE, level() / 5);
+        bonusFishingStr = (int) Math.min(Integer.MAX_VALUE, level() / 5);
         return this;
     }
 
@@ -162,7 +167,7 @@ public abstract class FishingRod extends Item {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
         bundle.put("hook", hook);
-        bundle.put("amp", fishingStr);
+        bundle.put("amp", bonusFishingStr);
     }
 
     @Override
@@ -171,7 +176,7 @@ public abstract class FishingRod extends Item {
         hook = bundle.getBoolean("hook");
         if (hook) defaultAction = AC_UNCAST;
         else defaultAction = AC_CAST;
-        fishingStr = bundle.getInt("amp");
+        bonusFishingStr = bundle.getInt("amp");
     }
 
     @Override
@@ -187,7 +192,7 @@ public abstract class FishingRod extends Item {
     @Override
     public String desc() {
         String desc = super.desc();
-        desc += "\n\n" + Messages.get(FishingRod.class, "basics", Math.round(fishingPower()*100), fishingStr);
+        desc += "\n\n" + Messages.get(FishingRod.class, "basics", Math.round(fishingPower()*100), fishingStrength());
         return desc;
     }
 

@@ -31,6 +31,6 @@ public class NeutroniumFishingRod extends FishingRod{
         image = ItemSpriteSheet.NEUTRONIUM_HOOK;
         amplifier = 29;
         tier = 3;
-        fishingStr = 18;
+        baseFishingStr = 18;
     }
 }

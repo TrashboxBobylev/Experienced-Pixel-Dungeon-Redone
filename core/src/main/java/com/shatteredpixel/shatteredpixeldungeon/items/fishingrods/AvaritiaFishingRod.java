@@ -32,7 +32,7 @@ public class AvaritiaFishingRod extends FishingRod{
         image = ItemSpriteSheet.AVARITIA_HOOK;
         amplifier = 150;
         tier = 4;
-        fishingStr = 60;
+        baseFishingStr = 60;
     }
 
     @Override

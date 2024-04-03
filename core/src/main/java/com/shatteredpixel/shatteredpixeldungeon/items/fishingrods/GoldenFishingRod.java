@@ -31,6 +31,6 @@ public class GoldenFishingRod extends FishingRod{
         image = ItemSpriteSheet.GOLDEN_HOOK;
         amplifier = 6;
         tier = 2;
-        fishingStr = 10;
+        baseFishingStr = 10;
     }
 }
