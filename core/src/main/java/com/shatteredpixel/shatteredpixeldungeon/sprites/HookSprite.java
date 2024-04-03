@@ -42,16 +42,10 @@ public class HookSprite extends CharSprite{
 
         TextureFilm frames = new TextureFilm(texture, 7, 15);
 
-        tierIdles[1] = new Animation( 1, true );
-        tierIdles[1].frames(frames, 0);
-        tierIdles[2] = new Animation( 1, true );
-        tierIdles[2].frames(frames, 1);
-        tierIdles[3] = new Animation( 1, true );
-        tierIdles[3].frames(frames, 2);
-        tierIdles[4] = new Animation( 1, true );
-        tierIdles[4].frames(frames, 3);
-        tierIdles[5] = new Animation( 1, true );
-        tierIdles[5].frames(frames, 4);
+        for (int i = 1; i <= 5; i++){
+            tierIdles[i] = new Animation( 1, true );
+            tierIdles[i].frames(frames, i - 1);
+        }
     }
 
     @Override
@@ -64,7 +58,7 @@ public class HookSprite extends CharSprite{
         super.die();
         //cancels die animation and fades out immediately
         play(idle, true);
-        parent.add( new AlphaTweener( this, 0, 2f ) {
+        parent.add( new AlphaTweener( this, 0, 1.25f ) {
             @Override
             protected void onComplete() {
                 HookSprite.this.killAndErase();

@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
@@ -901,7 +900,7 @@ public abstract class Char extends Actor {
 	
 	public void die( Object src ) {
 		destroy();
-		if (src != Chasm.class && !(this instanceof Hook)) sprite.die();
+		if (src != Chasm.class) sprite.die();
 	}
 
 	//we cache this info to prevent having to call buff(...) in isAlive.
