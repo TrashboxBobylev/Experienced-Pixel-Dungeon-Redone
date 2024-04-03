@@ -32,7 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
-public class ScrollOfConfusion extends ExoticScroll {
+public class ScrollOfDetermination extends ExoticScroll {
 	
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_CHALLENGE;
@@ -40,13 +40,14 @@ public class ScrollOfConfusion extends ExoticScroll {
 	
 	@Override
 	public void doRead() {
-		
-		setKnown();
+
+		detach(curUser.belongings.backpack);
 		
 		curUser.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
 		Sample.INSTANCE.play( Assets.Sounds.READ, 2f );
 		Invisibility.dispel();
-		
+
+		identify();
 		readAnimation();
 
 		Buff.affect(curUser, RageShield.class).set(curUser.HT * 3f);
