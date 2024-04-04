@@ -84,7 +84,7 @@ public class YogDzewa extends Mob {
                 EXP = 2000000;
                 break;
             case 4:
-                HP = HT = 2000000000;
+                HP = HT = 4000000000L;
                 defenseSkill = 0;
                 EXP = 1500000000;
                 break;
@@ -440,7 +440,6 @@ public class YogDzewa extends Mob {
 
 	@Override
 	public void damage( long dmg, Object src ) {
-        if (Dungeon.cycle == 4) dmg /= 2;
 		long preHP = HP;
 		super.damage( dmg, src );
 
