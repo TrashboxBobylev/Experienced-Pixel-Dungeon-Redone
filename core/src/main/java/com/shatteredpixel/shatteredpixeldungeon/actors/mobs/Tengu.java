@@ -102,6 +102,11 @@ public class Tengu extends Mob {
                 defenseSkill = 3600;
                 EXP = 7500000;
                 break;
+			case 5:
+				HP = HT = 8000000000L;
+				defenseSkill = 60000;
+				EXP = 750000000;
+				break;
         }
 	}
 
@@ -112,6 +117,7 @@ public class Tengu extends Mob {
             case 2: return Random.NormalIntRange(225, 312);
             case 3: return Random.NormalIntRange(750, 1000);
             case 4: return Random.NormalIntRange(14000, 23000);
+			case 5: return Random.NormalIntRange(1000000, 2250000);
         }
 		return Random.NormalIntRange( 6, 12 );
 	}
@@ -125,6 +131,7 @@ public class Tengu extends Mob {
                 case 2: return 275;
                 case 3: return 660;
                 case 4: return 3000;
+				case 5: return 42500;
             }
 			return 10;
 		} else {
@@ -133,6 +140,7 @@ public class Tengu extends Mob {
                 case 2: return 294;
                 case 3: return 730;
                 case 4: return 4100;
+				case 5: return 46500;
             }
 			return 20;
 		}
@@ -145,6 +153,7 @@ public class Tengu extends Mob {
             case 2: return Random.NormalIntRange(80, 195);
             case 3: return Random.NormalIntRange(400, 800);
             case 4: return Random.NormalIntRange(8000, 14000);
+			case 5: return Random.NormalIntRange(460000, 950000);
         }
 		return Random.NormalIntRange(0, 5);
 	}

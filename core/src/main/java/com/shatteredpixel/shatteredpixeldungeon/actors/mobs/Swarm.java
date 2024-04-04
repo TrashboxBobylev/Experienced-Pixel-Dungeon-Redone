@@ -75,6 +75,11 @@ public class Swarm extends Mob {
                 defenseSkill = 1680;
                 EXP = 36000;
                 break;
+			case 5:
+				HP = HT = 2000000000;
+				defenseSkill = 36000;
+				EXP = 17000000;
+				break;
         }
 	}
 	
@@ -104,6 +109,7 @@ public class Swarm extends Mob {
             case 2: return Random.NormalIntRange(129, 176);
             case 3: return Random.NormalIntRange(525, 667);
             case 4: return Random.NormalIntRange(5000, 9000);
+			case 5: return Random.NormalIntRange(475000, 975000);
         }
 		return Random.NormalIntRange( 1, 4 );
 	}
@@ -150,6 +156,7 @@ public class Swarm extends Mob {
             case 2: return 180;
             case 3: return 560;
             case 4: return 1800;
+			case 5: return 29000;
         }
 		return 10;
 	}

@@ -76,6 +76,11 @@ public class Skeleton extends Mob {
                 defenseSkill = 2100;
                 EXP = 51000;
                 break;
+			case 5:
+				HP = HT = 1000000000;
+				defenseSkill = 40000;
+				EXP = 22500000;
+				break;
         }
 	}
 	
@@ -86,6 +91,7 @@ public class Skeleton extends Mob {
             case 2: return Random.NormalIntRange(180, 231);
             case 3: return Random.NormalIntRange(600, 850);
             case 4: return Random.NormalIntRange(8000, 14000);
+			case 5: return Random.NormalIntRange(525000, 1100000);
         }
 		return Random.NormalIntRange( 2, 10 );
 	}
@@ -142,6 +148,7 @@ public class Skeleton extends Mob {
             case 2: return 224;
             case 3: return 600;
             case 4: return 2500;
+			case 5: return 36000;
         }
 		return 12;
 	}
@@ -153,6 +160,7 @@ public class Skeleton extends Mob {
             case 2: return Random.NormalIntRange(95, 170);
             case 3: return Random.NormalIntRange(360, 625);
             case 4: return Random.NormalIntRange(5000, 10000);
+			case 5: return Random.NormalIntRange(55000, 700000);
         }
 		return Random.NormalIntRange(0, 5);
 	}
