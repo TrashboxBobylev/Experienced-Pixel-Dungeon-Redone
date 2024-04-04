@@ -70,6 +70,11 @@ public class CrystalWisp extends Mob{
 				defenseSkill = 3000;
 				EXP = 74000;
 				break;
+			case 5:
+				HP = HT = 1400000000;
+				defenseSkill = 59500;
+				EXP = 36500000;
+				break;
 		}
 	}
 
@@ -103,6 +108,7 @@ public class CrystalWisp extends Mob{
 			case 2: return Random.NormalIntRange(240, 275);
 			case 3: return Random.NormalIntRange(800, 900);
 			case 4: return Random.NormalIntRange(14000, 18500);
+			case 5: return Random.NormalIntRange(1100000, 1800000);
 		}
 		return Random.NormalIntRange( 5, 10 );
 	}
@@ -114,6 +120,7 @@ public class CrystalWisp extends Mob{
 			case 2: return 275;
 			case 3: return 760;
 			case 4: return 3600;
+			case 5: return 53000;
 		}
 		return 18;
 	}
@@ -125,6 +132,7 @@ public class CrystalWisp extends Mob{
 			case 2: return Random.NormalIntRange(70, 170);
 			case 3: return Random.NormalIntRange(500, 700);
 			case 4: return Random.NormalIntRange(8000, 16000);
+			case 5: return Random.NormalIntRange(650000, 1250000);
 		}
 		return Random.NormalIntRange(0, 4);
 	}
@@ -170,6 +178,7 @@ public class CrystalWisp extends Mob{
 				case 2: dmg = Random.NormalIntRange(240, 275); break;
 				case 3: dmg = Random.NormalIntRange(800, 900); break;
 				case 4: dmg = Random.NormalIntRange(14000, 18500); break;
+				case 5: dmg = Random.NormalIntRange(1100000, 1800000); break;
 			}
 			enemy.damage( dmg, new LightBeam() );
 

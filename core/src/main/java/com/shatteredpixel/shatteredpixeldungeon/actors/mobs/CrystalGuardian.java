@@ -78,6 +78,11 @@ public class CrystalGuardian extends Mob{
 				defenseSkill = 4750;
 				EXP = 195000;
 				break;
+			case 5:
+				HP = HT = 2900000000L;
+				defenseSkill = 59500;
+				EXP = 48000000;
+				break;
 		}
 	}
 
@@ -112,6 +117,7 @@ public class CrystalGuardian extends Mob{
 			case 2: return Random.NormalIntRange(280, 350);
 			case 3: return Random.NormalIntRange(1300, 1475);
 			case 4: return Random.NormalIntRange(20000, 45000);
+			case 5: return Random.NormalIntRange(2200000, 3800000);
 		}
 		return Random.NormalIntRange( 10, 16 );
 	}
@@ -123,6 +129,7 @@ public class CrystalGuardian extends Mob{
 			case 2: return 335;
 			case 3: return 800;
 			case 4: return 4600;
+			case 5: return 65000;
 		}
 		return 20;
 	}
@@ -146,6 +153,7 @@ public class CrystalGuardian extends Mob{
 			case 2: return Random.NormalIntRange(100, 270);
 			case 3: return Random.NormalIntRange(570, 1300);
 			case 4: return Random.NormalIntRange(16000, 42000);
+			case 5: return Random.NormalIntRange(2500000, 4000000);
 		}
 		return Random.NormalIntRange(0, 10);
 	}

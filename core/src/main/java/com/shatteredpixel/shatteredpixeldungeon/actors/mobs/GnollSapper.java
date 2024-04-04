@@ -73,6 +73,11 @@ public class GnollSapper extends Mob {
 				defenseSkill = 3000;
 				EXP = 115000;
 				break;
+			case 5:
+				HP = HT = 1575000000;
+				defenseSkill = 62500;
+				EXP = 41500000;
+				break;
 		}
 	}
 
@@ -123,6 +128,7 @@ public class GnollSapper extends Mob {
 			case 2: return Random.NormalIntRange(120, 145);
 			case 3: return Random.NormalIntRange(480, 615);
 			case 4: return Random.NormalIntRange(3700, 6000);
+			case 5: return Random.NormalIntRange(400000, 1000000);
 		}
 		return Random.NormalIntRange( 1, 6 );
 	}
@@ -134,6 +140,7 @@ public class GnollSapper extends Mob {
 			case 2: return 292;
 			case 3: return 720;
 			case 4: return 3865;
+			case 5: return 52750;
 		}
 		return 18;
 	}
@@ -151,6 +158,7 @@ public class GnollSapper extends Mob {
 			case 2: return Random.NormalIntRange(70, 200);
 			case 3: return Random.NormalIntRange(445, 715);
 			case 4: return Random.NormalIntRange(13500, 28000);
+			case 5: return Random.NormalIntRange(1400000, 1750000);
 		}
 		return Random.NormalIntRange(0, 6);
 	}
