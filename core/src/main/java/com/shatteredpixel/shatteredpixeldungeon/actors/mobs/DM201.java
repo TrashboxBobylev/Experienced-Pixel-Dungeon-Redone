@@ -62,6 +62,11 @@ public class DM201 extends DM200 {
                 defenseSkill = 4800;
                 EXP = 210000;
                 break;
+			case 5:
+				HP = HT = 3200000000L;
+				defenseSkill = 56500;
+				EXP = 51000000;
+				break;
         }
 	}
 
@@ -72,6 +77,7 @@ public class DM201 extends DM200 {
             case 2: return Random.NormalIntRange(321, 412);
             case 3: return Random.NormalIntRange(1400, 1794);
             case 4: return Random.NormalIntRange(40000, 75000);
+			case 5: return Random.NormalIntRange(4000000, 7600000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}

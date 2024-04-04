@@ -74,6 +74,11 @@ public class Brute extends Mob {
                 defenseSkill = 3400;
                 EXP = 90000;
                 break;
+			case 5:
+				HP = HT = 1600000000;
+				defenseSkill = 57500;
+				EXP = 36500000;
+				break;
         }
 	}
 	
@@ -94,6 +99,9 @@ public class Brute extends Mob {
             case 4: return buff(BruteRage.class) != null ?
                     Random.NormalIntRange( 30000, 64000 ) :
                     Random.NormalIntRange(16500, 40000);
+			case 5: return buff(BruteRage.class) != null ?
+					Random.NormalIntRange(2250000, 3500000) :
+					Random.NormalIntRange(1650000, 2500000);
         }
 		return buff(BruteRage.class) != null ?
 			Random.NormalIntRange( 15, 40 ) :
@@ -107,6 +115,7 @@ public class Brute extends Mob {
             case 2: return 300;
             case 3: return 740;
             case 4: return 3600;
+			case 5: return 57500;
         }
 		return 20;
 	}
@@ -118,6 +127,7 @@ public class Brute extends Mob {
             case 2: return Random.NormalIntRange(120, 231);
             case 3: return Random.NormalIntRange(500, 890);
             case 4: return Random.NormalIntRange(10000, 22000);
+			case 5: return Random.NormalIntRange(750000, 1450000);
         }
 		return Random.NormalIntRange(0, 8);
 	}

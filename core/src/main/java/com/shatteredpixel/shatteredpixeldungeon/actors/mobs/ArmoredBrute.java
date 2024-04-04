@@ -53,6 +53,7 @@ public class ArmoredBrute extends Brute {
             case 2: return Random.NormalIntRange(160, 280);
             case 3: return Random.NormalIntRange(570, 1000);
             case 4: return Random.NormalIntRange(19000, 30000);
+			case 5: return Random.NormalIntRange(1250000, 1750000);
         }
 		return Random.NormalIntRange(6, 10);
 	}

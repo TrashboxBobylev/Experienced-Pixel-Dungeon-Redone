@@ -77,6 +77,11 @@ public class DM200 extends Mob {
                 defenseSkill = 4400;
                 EXP = 180000;
                 break;
+			case 5:
+				HP = HT = 2475000000L;
+				defenseSkill = 55500;
+				EXP = 42000000;
+				break;
         }
 	}
 
@@ -87,6 +92,7 @@ public class DM200 extends Mob {
             case 2: return Random.NormalIntRange(280, 395);
             case 3: return Random.NormalIntRange(1300, 1631);
             case 4: return Random.NormalIntRange(20000, 60000);
+			case 5: return Random.NormalIntRange(2500000, 5000000);
         }
 		return Random.NormalIntRange( 10, 25 );
 	}
@@ -98,6 +104,7 @@ public class DM200 extends Mob {
             case 2: return 335;
             case 3: return 800;
             case 4: return 4600;
+			case 5: return 68750;
         }
 		return 20;
 	}
@@ -109,6 +116,7 @@ public class DM200 extends Mob {
             case 2: return Random.NormalIntRange(100, 241);
             case 3: return Random.NormalIntRange(570, 1000);
             case 4: return Random.NormalIntRange(16000, 36000);
+			case 5: return Random.NormalIntRange(1900000, 2500000);
         }
 		return Random.NormalIntRange(0, 8);
 	}
