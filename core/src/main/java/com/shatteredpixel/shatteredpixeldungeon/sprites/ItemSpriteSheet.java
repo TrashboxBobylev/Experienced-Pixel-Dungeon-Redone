@@ -214,13 +214,14 @@ public class ItemSpriteSheet {
 	}
 
 	private static final int FISHING_HOOKS = xy(16, 5);
-	public static final int BASIC_HOOK = FISHING_HOOKS-4;
-	public static final int GOLDEN_HOOK = FISHING_HOOKS-3;
-	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-2;
-	public static final int AVARITIA_HOOK = FISHING_HOOKS-1;
-    public static final int CHAOS_HOOK = FISHING_HOOKS-0;
+	public static final int BASIC_HOOK = FISHING_HOOKS-5;
+	public static final int GOLDEN_HOOK = FISHING_HOOKS-4;
+	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-3;
+	public static final int AVARITIA_HOOK = FISHING_HOOKS-2;
+    public static final int CHAOS_HOOK = FISHING_HOOKS-1;
+	public static final int SPIRITUAL_HOOK = FISHING_HOOKS-0;
 	static {
-        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-5; i--)
+        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-6; i--)
             assignItemRect(i, 14, 13);
     }
 

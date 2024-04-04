@@ -42,7 +42,7 @@ public class HookSprite extends CharSprite{
 
         TextureFilm frames = new TextureFilm(texture, 7, 15);
 
-        for (int i = 1; i <= 5; i++){
+        for (int i = 1; i <= 6; i++){
             tierIdles[i] = new Animation( 1, true );
             tierIdles[i].frames(frames, i - 1);
         }
