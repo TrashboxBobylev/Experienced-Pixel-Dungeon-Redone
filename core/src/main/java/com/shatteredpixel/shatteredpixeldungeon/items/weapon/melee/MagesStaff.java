@@ -385,7 +385,10 @@ public class MagesStaff extends MeleeWeapon {
 		Emitter emitter = new Emitter();
 		emitter.pos(12.5f, 3);
 		emitter.fillTarget = false;
-		emitter.pour(StaffParticleFactory, 0.1f);
+		if (wand instanceof WandOfEarthblast)
+			emitter.pour(StaffParticleFactory, 0.05f);
+		else
+			emitter.pour(StaffParticleFactory, 0.1f);
 		return emitter;
 	}
 

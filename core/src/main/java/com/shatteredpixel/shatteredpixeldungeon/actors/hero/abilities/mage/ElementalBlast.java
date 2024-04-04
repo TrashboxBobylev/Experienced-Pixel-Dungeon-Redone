@@ -25,19 +25,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -48,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
@@ -78,6 +73,7 @@ public class ElementalBlast extends ArmorAbility {
 		effectTypes.put(WandOfTransfusion.class,    MagicMissile.BLOOD_CONE);
 		effectTypes.put(WandOfCorruption.class,     MagicMissile.SHADOW_CONE);
 		effectTypes.put(WandOfRegrowth.class,       MagicMissile.FOLIAGE_CONE);
+		effectTypes.put(WandOfEarthblast.class,     MagicMissile.EARTHBLAST_CONE);
 	}
 
 	private static final HashMap<Class<?extends Wand>, Float> damageFactors = new HashMap<>();
@@ -95,6 +91,7 @@ public class ElementalBlast extends ArmorAbility {
 		damageFactors.put(WandOfTransfusion.class,      0f);
 		damageFactors.put(WandOfCorruption.class,       0f);
 		damageFactors.put(WandOfRegrowth.class,         0f);
+		damageFactors.put(WandOfEarthblast.class,       1.3f);
 	}
 
 	{
@@ -143,7 +140,7 @@ public class ElementalBlast extends ArmorAbility {
 			projectileProps = Ballistica.STOP_TARGET;
 
 		//*** Wand of Fireblast ***
-		} else if (wandCls == WandOfFireblast.class){
+		} else if (wandCls == WandOfFireblast.class || wandCls == WandOfEarthblast.class){
 			projectileProps = projectileProps | Ballistica.IGNORE_SOFT_SOLID;
 
 		//*** Wand of Warding ***
@@ -238,6 +235,32 @@ public class ElementalBlast extends ArmorAbility {
 										GameScene.updateMap(cell);
 									}
 								}
+							//*** Wand of Avalanche ***
+							} else if (finalWandCls == WandOfEarthblast.class){
+								int terr = Dungeon.level.map[cell];
+								if (freeze != null){
+									freeze.clear(cell);
+								}
+								if (fire != null){
+									fire.clear(cell);
+								}
+								Plant plant = Dungeon.level.plants.get(cell);
+								if (plant != null){
+									plant.wither();
+								}
+								Blob web = Dungeon.level.blobs.get(Web.class);
+								if (web != null){
+									web.clear(cell);
+								}
+								if (terr == Terrain.DOOR || terr == Terrain.OPEN_DOOR ||
+										terr == Terrain.GRASS || terr == Terrain.FURROWED_GRASS ||
+										terr == Terrain.HIGH_GRASS || terr == Terrain.BARRICADE ||
+										terr == Terrain.BOOKSHELF || terr == Terrain.PEDESTAL) {
+									Level.set(cell, Terrain.EMPTY);
+									GameScene.updateMap(cell);
+									Sample.INSTANCE.play( Assets.Sounds.ROCKS );
+								}
+								CellEmitter.bottom(cell).burst(Speck.factory(Speck.ROCK), 10);
 							}
 
 							//### Deal damage ###
@@ -353,6 +376,12 @@ public class ElementalBlast extends ArmorAbility {
 									if (mob.alignment != Char.Alignment.ALLY) {
 										Buff.prolong( mob, Roots.class, effectMulti*Roots.DURATION );
 										charsHit++;
+									}
+								//*** Wand of Avalanche ***
+								} else if (finalWandCls == WandOfEarthblast.class){
+									if (mob.isAlive() && mob.alignment != Char.Alignment.ALLY) {
+										Buff.affect(mob, Paralysis.class, Paralysis.DURATION);
+										Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 									}
 								}
 							}

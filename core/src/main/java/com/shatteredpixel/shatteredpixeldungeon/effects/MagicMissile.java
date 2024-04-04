@@ -69,6 +69,7 @@ public class MagicMissile extends Emitter {
 	public static final int POISON          = 16;
 	public static final int INVISI          = 17;
 	public static final int HOLYEXP         = 18;
+	public static final int EARTHBLAST      = 19;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -84,6 +85,7 @@ public class MagicMissile extends Emitter {
 	public static final int SPARK_CONE      = 112;
 	public static final int BLOOD_CONE      = 113;
 	public static final int HOLY_EXP_CONE   = 114;
+	public static final int EARTHBLAST_CONE = 115;
 
 	public void reset( int type, int from, int to, Callback callback ) {
 		reset( type,
@@ -160,6 +162,10 @@ public class MagicMissile extends Emitter {
 				size( 4 );
 				pour( EarthParticle.FACTORY, 0.01f );
 				break;
+			case EARTHBLAST:
+				size( 6 );
+				pour( EarthblastParticle.FACTORY, 0.01f );
+				break;
 			case WARD:
 				size( 4 );
 				pour( WardParticle.FACTORY, 0.01f );
@@ -232,6 +238,10 @@ public class MagicMissile extends Emitter {
 			case EARTH_CONE:
 				size( 10 );
 				pour( EarthParticle.FACTORY, 0.03f );
+				break;
+			case EARTHBLAST_CONE:
+				size( 12 );
+				pour( EarthblastParticle.FACTORY, 0.03f );
 				break;
 			case WARD_CONE:
 				size( 10 );
@@ -362,6 +372,8 @@ public class MagicMissile extends Emitter {
 			size( 4 - (am = left / lifespan) * 3 );
 		}
 	}
+
+
 	
 	public static class EarthParticle extends PixelParticle.Shrinking {
 		
@@ -426,6 +438,73 @@ public class MagicMissile extends Emitter {
 			this.x = x - speed.x * lifespan;
 			this.y = y - speed.y * lifespan;
 			
+			acc.set( 0, 0 );
+		}
+	}
+
+	public static class EarthblastParticle extends PixelParticle.Shrinking {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((EarthblastParticle)emitter.recycle( EarthblastParticle.class )).reset( x, y );
+			}
+		};
+
+		public static final Emitter.Factory BURST = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((EarthblastParticle)emitter.recycle( EarthblastParticle.class )).resetBurst( x, y );
+			}
+		};
+
+		public static final Emitter.Factory ATTRACT = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((EarthblastParticle)emitter.recycle( EarthblastParticle.class )).resetAttract( x, y );
+			}
+		};
+
+		public EarthblastParticle() {
+			super();
+
+			lifespan = 0.75f;
+
+			acc.set( 0, +40 );
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+
+			left = lifespan;
+			size = 6;
+
+			if (Random.Int(6) == 0){
+				color(ColorMath.random(0xA4E8C8, 0x4C8B68));
+			} else {
+				color(ColorMath.random(0xB88865, 0x4A3524));
+			}
+
+			speed.set( Random.Float( -10, +10 ), Random.Float( -12, +12 ) );
+		}
+
+		public void resetBurst( float x, float y ){
+			reset(x, y);
+
+			speed.polar( Random.Float( PointF.PI2 ), Random.Float( 45, 70 ) );
+		}
+
+		public void resetAttract( float x, float y ){
+			reset(x, y);
+
+			speed.polar( Random.Float( PointF.PI2 ), Random.Float( 28, 38 ) );
+
+			this.x = x - speed.x * lifespan;
+			this.y = y - speed.y * lifespan;
+
 			acc.set( 0, 0 );
 		}
 	}
