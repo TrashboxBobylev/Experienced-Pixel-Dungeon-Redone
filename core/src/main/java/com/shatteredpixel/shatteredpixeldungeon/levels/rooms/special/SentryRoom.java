@@ -27,7 +27,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Eye;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
@@ -220,6 +219,8 @@ public class SentryRoom extends SpecialRoom {
 			spriteClass = SentrySprite.class;
 
 			properties.add(Property.IMMOVABLE);
+
+			HT = HP = 9_000_000_000_000_000_000L;
 		}
 
 		private float initialChargeDelay;
@@ -297,16 +298,6 @@ public class SentryRoom extends SpecialRoom {
 		@Override
 		public int defenseSkill( Char enemy ) {
 			return INFINITE_EVASION;
-		}
-
-		@Override
-		public void damage( long dmg, Object src ) {
-			//do nothing
-		}
-
-		@Override
-		public boolean add( Buff buff ) {
-			return false;
 		}
 
 		@Override
