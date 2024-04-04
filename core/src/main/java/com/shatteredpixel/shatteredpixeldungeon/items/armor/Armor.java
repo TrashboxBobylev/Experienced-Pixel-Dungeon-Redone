@@ -363,7 +363,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 
 	@Override
 	public int tier() {
-		switch (Math.max(0, tier / 5 - 1)){
+		switch (Math.max(0, (tier-1) / 5)){
 			case 0:
 				return tier;
 			case 1:
