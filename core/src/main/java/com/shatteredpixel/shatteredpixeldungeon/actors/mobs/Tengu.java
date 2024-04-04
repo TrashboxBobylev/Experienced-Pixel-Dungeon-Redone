@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -896,13 +897,27 @@ public class Tengu extends Mob {
 						}
 						
 						if (cur[cell] > 0 && off[cell] == 0){
-							
-							if (Actor.findChar( cell ) == Dungeon.hero){
+
+							//similar to fire.burn(), but Tengu is immune, and hero loses score
+							Char ch = Actor.findChar( cell );
+							if (ch != null && !ch.isImmune(Fire.class) && !(ch instanceof Tengu)) {
+								Buff.affect( ch, Burning.class ).reignite( ch );
+							}
+							if (ch == Dungeon.hero){
 								Statistics.qualifiedForBossChallengeBadge = false;
 								Statistics.bossScores[1] -= 100;
 							}
-Fire.burn(cell);
 
+							Heap heap = Dungeon.level.heaps.get( cell );
+							if (heap != null) {
+								heap.burn();
+							}
+
+							Plant plant = Dungeon.level.plants.get( cell );
+							if (plant != null){
+								plant.wither();
+							}
+							
 							if (Dungeon.level.flamable[cell]){
 								Dungeon.level.destroy( cell );
 								
