@@ -29,6 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DemonSpawner;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -95,7 +98,12 @@ public class Clayball extends MissileWeapon {
 		}
 
 		for (Char target : targets){
-			if (target != Dungeon.hero) Buff.affect(target, Viscosity.DeferedDamage.class).prolong(target.HT*10);
+			if (target != Dungeon.hero) {
+				Viscosity.DeferedDamage dmg = Buff.affect(target, Viscosity.DeferedDamage.class);
+				dmg.prolong(target.HT*10);
+				if (target instanceof Slime || target instanceof DemonSpawner || target instanceof YogFist.RustedFist || target instanceof YogFist.RottingFist) dmg.prolong(target.HT*100);
+				dmg.act();
+			}
 			if (target == Dungeon.hero && !target.isAlive()){
 				Dungeon.fail(getClass());
 				GLog.n(Messages.get(this, "ondeath"));
