@@ -53,6 +53,7 @@ public class Senior extends Monk {
             case 2: return Random.NormalIntRange(313, 431);
             case 3: return Random.NormalIntRange(1800, 2340);
             case 4: return Random.NormalIntRange(60000, 100000);
+			case 5: return Random.NormalIntRange(4000000, 7900000);
         }
 		return Random.NormalIntRange( 16, 25 );
 	}

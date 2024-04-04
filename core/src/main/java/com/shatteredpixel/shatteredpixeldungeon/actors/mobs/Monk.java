@@ -74,6 +74,11 @@ public class Monk extends Mob {
                 defenseSkill = 6400;
                 EXP = 800000;
                 break;
+			case 5:
+				HP = HT = 3900000000L;
+				defenseSkill = 100500;
+				EXP = 145000000;
+				break;
         }
 	}
 	
@@ -84,6 +89,7 @@ public class Monk extends Mob {
             case 2: return Random.NormalIntRange(270, 400);
             case 3: return Random.NormalIntRange(1700, 2240);
             case 4: return Random.NormalIntRange(40000, 100000);
+			case 5: return Random.NormalIntRange(3100000, 7750000);
         }
 		return Random.NormalIntRange( 12, 25 );
 	}
@@ -95,6 +101,7 @@ public class Monk extends Mob {
             case 2: return 440;
             case 3: return 1000;
             case 4: return 7000;
+			case 5: return 102500;
         }
 		return 30;
 	}
@@ -111,6 +118,7 @@ public class Monk extends Mob {
             case 2: return Random.NormalIntRange(60, 193);
             case 3: return Random.NormalIntRange(700, 1000);
             case 4: return Random.NormalIntRange(26000, 73000);
+			case 5: return Random.NormalIntRange(2700000, 5150000);
         }
 		return Random.NormalIntRange(0, 2);
 	}

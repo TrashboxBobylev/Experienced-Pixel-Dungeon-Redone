@@ -85,6 +85,11 @@ public class Ghoul extends Mob {
                 defenseSkill = 4800;
                 EXP = 200000;
                 break;
+			case 5:
+				HP = HT = 1630000000;
+				defenseSkill = 85500;
+				EXP = 25000000;
+				break;
         }
 	}
 
@@ -95,6 +100,7 @@ public class Ghoul extends Mob {
             case 2: return Random.NormalIntRange(276, 400);
             case 3: return Random.NormalIntRange(1500, 1821);
             case 4: return Random.NormalIntRange(23000, 71000);
+			case 5: return Random.NormalIntRange(2750000, 6500000);
         }
 		return Random.NormalIntRange( 16, 22 );
 	}
@@ -106,6 +112,7 @@ public class Ghoul extends Mob {
             case 2: return 338;
             case 3: return 880;
             case 4: return 5500;
+			case 5: return 90000;
         }
 		return 24;
 	}
@@ -117,6 +124,7 @@ public class Ghoul extends Mob {
             case 2: return Random.NormalIntRange(100, 211);
             case 3: return Random.NormalIntRange(621, 1111);
             case 4: return Random.NormalIntRange(18000, 46000);
+			case 5: return Random.NormalIntRange(1600000, 3200000);
         }
 		return Random.NormalIntRange(0, 4);
 	}
