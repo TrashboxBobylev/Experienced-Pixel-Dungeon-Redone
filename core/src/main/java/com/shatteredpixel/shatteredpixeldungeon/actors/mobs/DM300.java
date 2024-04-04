@@ -88,7 +88,7 @@ public class DM300 extends Mob {
                 EXP = 110000;
                 break;
             case 4:
-                HP = HT = 12000000;
+                HP = HT = 120000000;
                 defenseSkill = 5000;
                 EXP = 2000000;
                 break;
