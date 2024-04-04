@@ -300,7 +300,7 @@ public class Dungeon {
         for (LimitedDrops a : LimitedDrops.values())
             if (a != LimitedDrops.BBAT && a != LimitedDrops.CHEESY_CHEEST)  a.count = 0;
         Notes.reset();
-        if (cycle < 4) cycle += 1;
+        if (cycle < 5) cycle += 1;
         GameLog.wipe();
 		SpecialRoom.initForRun();
 		SecretRoom.initForRun();
