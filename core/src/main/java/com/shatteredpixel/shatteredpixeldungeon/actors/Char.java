@@ -767,7 +767,42 @@ public abstract class Char extends Actor {
 			}
 		}
 
-		if (this instanceof Hero && ((Hero) this).perks.contains(IRON_WILL) && HP <= HT/2){
+		int icon = 0;
+
+		if (sprite != null) {
+			//defaults to normal damage icon if no other ones apply
+			                                                            icon = FloatingText.PHYS_DMG;
+			if (NO_ARMOR_PHYSICAL_SOURCES.contains(src.getClass()))     icon = FloatingText.PHYS_DMG_NO_BLOCK;
+			if (AntiMagic.RESISTS.contains(src.getClass()))             icon = FloatingText.MAGIC_DMG;
+			if (src instanceof Pickaxe)                                 icon = FloatingText.PICK_DMG;
+
+			//special case for sniper when using ranged attacks
+			if (src == Dungeon.hero
+					&& Dungeon.hero.subClass == HeroSubClass.SNIPER
+					&& !Dungeon.level.adjacent(Dungeon.hero.pos, pos)
+					&& Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon){
+				icon = FloatingText.PHYS_DMG_NO_BLOCK;
+			}
+
+			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
+			if (src instanceof Burning || src instanceof FiringSnapper) icon = FloatingText.BURNING;
+			if (src instanceof Chill || src instanceof Frost)        icon = FloatingText.FROST;
+			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
+			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
+			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
+			if (src instanceof ToxicGas)                                icon = FloatingText.TOXIC;
+			if (src instanceof Corrosion)                               icon = FloatingText.CORROSION;
+			if (src instanceof Poison)                                  icon = FloatingText.POISON;
+			if (src instanceof Ooze)                                    icon = FloatingText.OOZE;
+			if (src instanceof Viscosity.DeferedDamage)                 icon = FloatingText.DEFERRED;
+			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
+			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
+
+			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Long.toString(dmg + shielded), icon);
+		}
+
+		if (this instanceof Hero && ((Hero) this).perks.contains(IRON_WILL) && HP <= HT/2 &&
+				(icon == FloatingText.PHYS_DMG || icon == FloatingText.PHYS_DMG_NO_BLOCK || icon == FloatingText.MAGIC_DMG)){
 			Camera.main.shake(4, 0.25f);
 			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY);
 
@@ -811,38 +846,6 @@ public abstract class Char extends Actor {
 					}
 			);
 
-		}
-
-		if (sprite != null) {
-			//defaults to normal damage icon if no other ones apply
-			int                                                         icon = FloatingText.PHYS_DMG;
-			if (NO_ARMOR_PHYSICAL_SOURCES.contains(src.getClass()))     icon = FloatingText.PHYS_DMG_NO_BLOCK;
-			if (AntiMagic.RESISTS.contains(src.getClass()))             icon = FloatingText.MAGIC_DMG;
-			if (src instanceof Pickaxe)                                 icon = FloatingText.PICK_DMG;
-
-			//special case for sniper when using ranged attacks
-			if (src == Dungeon.hero
-					&& Dungeon.hero.subClass == HeroSubClass.SNIPER
-					&& !Dungeon.level.adjacent(Dungeon.hero.pos, pos)
-					&& Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon){
-				icon = FloatingText.PHYS_DMG_NO_BLOCK;
-			}
-
-			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
-			if (src instanceof Burning || src instanceof FiringSnapper) icon = FloatingText.BURNING;
-			if (src instanceof Chill || src instanceof Frost)        icon = FloatingText.FROST;
-			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
-			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
-			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
-			if (src instanceof ToxicGas)                                icon = FloatingText.TOXIC;
-			if (src instanceof Corrosion)                               icon = FloatingText.CORROSION;
-			if (src instanceof Poison)                                  icon = FloatingText.POISON;
-			if (src instanceof Ooze)                                    icon = FloatingText.OOZE;
-			if (src instanceof Viscosity.DeferedDamage)                 icon = FloatingText.DEFERRED;
-			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
-			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
-
-			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Long.toString(dmg + shielded), icon);
 		}
 
 		if (HP < 0) HP = 0;
