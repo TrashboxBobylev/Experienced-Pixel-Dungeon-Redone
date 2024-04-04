@@ -88,6 +88,11 @@ public abstract class YogFist extends Mob {
                 defenseSkill = 16500;
                 EXP = 9000000;
                 break;
+			case 5:
+				HP = HT = 30000000000L;
+				defenseSkill = 0;
+				EXP = 9000000000L;
+				break;
         }
 	}
 
@@ -183,6 +188,7 @@ public abstract class YogFist extends Mob {
             case 2: return 525;
             case 3: return 1300;
             case 4: return 20000;
+			case 5: return 275000;
         }
 		return 36;
 	}
@@ -194,6 +200,7 @@ public abstract class YogFist extends Mob {
             case 2: return Random.NormalIntRange(375, 580);
             case 3: return Random.NormalIntRange(2800, 4500);
             case 4: return Random.NormalIntRange(350000, 460000);
+			case 5: return Random.NormalIntRange(6000000, 12500000);
         }
 		return Random.NormalIntRange( 18, 36 );
 	}
@@ -205,6 +212,7 @@ public abstract class YogFist extends Mob {
             case 2: return Random.NormalIntRange(250, 430);
             case 3: return Random.NormalIntRange(1750, 3200);
             case 4: return Random.NormalIntRange(370000, 480000);
+			case 5: return Random.NormalIntRange(8000000, 16500000);
         }
 		return Random.NormalIntRange(0, 15);
 	}
@@ -483,6 +491,7 @@ public abstract class YogFist extends Mob {
                 case 2: return Random.NormalIntRange(489, 675);
                 case 3: return Random.NormalIntRange(3100, 5412);
                 case 4: return Random.NormalIntRange(435000, 540000);
+				case 5: return Random.NormalIntRange(8500000, 17500000);
             }
 			return Random.NormalIntRange( 22, 44 );
 		}
@@ -540,6 +549,7 @@ public abstract class YogFist extends Mob {
                     case 2: dmg = Random.NormalIntRange(200, 389); break;
                     case 3: dmg = Random.NormalIntRange(2300, 3000); break;
                     case 4: dmg = Random.NormalIntRange(170000, 250000); break;
+					case 5: dmg = Random.NormalIntRange(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
@@ -613,6 +623,7 @@ public abstract class YogFist extends Mob {
                     case 2: dmg = Random.NormalIntRange(200, 389); break;
                     case 3: dmg = Random.NormalIntRange(2300, 3000); break;
                     case 4: dmg = Random.NormalIntRange(175000, 250000); break;
+					case 5: dmg = Random.NormalIntRange(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new DarkBolt() );
 

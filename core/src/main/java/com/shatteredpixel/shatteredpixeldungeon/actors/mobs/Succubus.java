@@ -90,6 +90,11 @@ public class Succubus extends Mob {
                 defenseSkill = 11000;
                 EXP = 3000000;
                 break;
+			case 5:
+				HP = HT = 5000000000L;
+				defenseSkill = 150000;
+				EXP = 245000000;
+				break;
         }
 	}
 	
@@ -100,6 +105,7 @@ public class Succubus extends Mob {
             case 2: return Random.NormalIntRange(420, 533);
             case 3: return Random.NormalIntRange(2300, 3170);
             case 4: return Random.NormalIntRange(170000, 250000);
+			case 5: return Random.NormalIntRange(7000000, 10000000);
         }
 		return Random.NormalIntRange( 25, 30 );
 	}
@@ -197,6 +203,7 @@ public class Succubus extends Mob {
             case 2: return 480;
             case 3: return 1175;
             case 4: return 13000;
+			case 5: return 185750;
         }
 		return 40;
 	}
@@ -208,6 +215,7 @@ public class Succubus extends Mob {
             case 2: return Random.NormalIntRange(150, 300);
             case 3: return Random.NormalIntRange(1500, 2400);
             case 4: return Random.NormalIntRange(135000, 190000);
+			case 5: return Random.NormalIntRange(4750000, 8500000);
         }
 		return Random.NormalIntRange(0, 10);
 	}
