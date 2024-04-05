@@ -1287,7 +1287,7 @@ public class Dungeon {
 	public static double Double(){
 		double highest = Double.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
-			float roll = Random.Float();
+			double roll = Random.Double();
 			if (roll > highest) highest = roll;
 		}
 		return highest;
