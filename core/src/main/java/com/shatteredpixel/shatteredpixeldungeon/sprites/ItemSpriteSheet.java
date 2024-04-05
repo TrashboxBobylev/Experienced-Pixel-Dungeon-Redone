@@ -799,6 +799,8 @@ public class ItemSpriteSheet {
     public static final int BIGGER_GAMBLE_BAG = TREASURE_BAGS+9;
     public static final int QUALITY_BAG = TREASURE_BAGS+10;
 	public static final int SUPER_PICKAXE = TREASURE_BAGS+11;
+	public static final int BURNT_BAG = TREASURE_BAGS+12;
+	public static final int IDEAL_BAG = TREASURE_BAGS+13;
     static{
         assignItemRect(GOO_BAG, 14, 15);
         assignItemRect(TENGU_BAG, 14, 15);
@@ -812,6 +814,8 @@ public class ItemSpriteSheet {
         assignItemRect(BIGGER_GAMBLE_BAG, 14, 15);
         assignItemRect(QUALITY_BAG, 14, 15);
 		assignItemRect(SUPER_PICKAXE, 14, 14);
+		assignItemRect(BURNT_BAG, 14, 15);
+		assignItemRect(IDEAL_BAG, 14, 15);
     }
 	private static final int DOCUMENTS  =                                   xy(1, 32);  //16 slots
 	public static final int GUIDE_PAGE  = DOCUMENTS+0;
