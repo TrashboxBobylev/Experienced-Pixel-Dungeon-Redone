@@ -41,6 +41,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BurntBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -127,6 +130,14 @@ public class Burning extends Buff implements Hero.Doom {
 								Dungeon.level.drop( steak, hero.pos ).sprite.drop();
 							}
 						}
+						if (toBurn instanceof GambleBag || toBurn instanceof BiggerGambleBag){
+							for (int i = 0; i < toBurn.quantity(); i++) {
+								Item bag = BurntBag.burningRoll();
+								if (!bag.collect(hero.belongings.backpack)) {
+									Dungeon.level.drop(bag, hero.pos).sprite.drop();
+								}
+							}
+						}
 						Heap.burnFX( hero.pos );
 					}
 				}
@@ -145,6 +156,11 @@ public class Burning extends Buff implements Hero.Doom {
 				} else if (item instanceof MysteryMeat) {
 					target.sprite.emitter().burst( ElmoParticle.FACTORY, 6 );
 					((Thief)target).item = new ChargrilledMeat();
+				} else if (item instanceof GambleBag || item instanceof BiggerGambleBag){
+					for (int i = 0; i < item.quantity(); i++) {
+						Item bag = BurntBag.burningRoll();
+						Dungeon.level.drop(bag, target.pos).sprite.drop();
+					}
 				}
 
 			}

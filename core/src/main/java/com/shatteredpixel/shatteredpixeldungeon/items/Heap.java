@@ -45,6 +45,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BurntBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -251,6 +254,12 @@ public class Heap implements Bundlable {
 				} else {
 					burnt = true;
 				}
+			} else if (item instanceof GambleBag || item instanceof BiggerGambleBag){
+				for (int i = 0; i < item.quantity(); i++){
+					drop(BurntBag.burningRoll());
+				}
+				items.remove(item);
+				burnt = true;
 			}
 		}
 		
