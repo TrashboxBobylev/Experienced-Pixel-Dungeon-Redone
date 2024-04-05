@@ -69,7 +69,7 @@ public class BlackMimic extends Mob {
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 900 + Math.round(Dungeon.hero.lvl*15*Math.pow(10, Dungeon.cycle));
+		HP = HT = 900 + Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle));
 		EXP = 2000;
 		defenseSkill = 20 + Dungeon.hero.lvl / 3 * 2;
 
@@ -100,8 +100,8 @@ public class BlackMimic extends Mob {
 	@Override
 	public long damageRoll() {
 		return Random.NormalLongRange(
-				Math.round(Dungeon.hero.lvl/2f*Math.pow(10, Dungeon.cycle)),
-				Math.round(Dungeon.hero.lvl*15*Math.pow(10, Dungeon.cycle)) );
+				Math.round(Dungeon.hero.lvl/2f*Math.pow(12, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle)) );
 	}
 
 	@Override
@@ -112,8 +112,8 @@ public class BlackMimic extends Mob {
 	@Override
 	public int cycledDrRoll() {
 		return (int) Random.NormalLongRange(
-				Math.round(Dungeon.hero.lvl/3f*Math.pow(10, Dungeon.cycle)),
-				Math.round(Dungeon.hero.lvl*Math.pow(10, Dungeon.cycle)));
+				Math.round(Dungeon.hero.lvl/3f*Math.pow(12, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*Math.pow(12, Dungeon.cycle)));
 	}
 
 	public int pylonsActivated = 0;
