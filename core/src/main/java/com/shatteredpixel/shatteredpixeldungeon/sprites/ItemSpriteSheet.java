@@ -754,6 +754,10 @@ public class ItemSpriteSheet {
 	public static final int TOKEN   = QUEST+6;
 	public static final int BLOB    = QUEST+7;
 	public static final int SHARD   = QUEST+8;
+	public static final int PLUTONIUM = QUEST+9;
+	public static final int OSMIRIDIUM = QUEST+10;
+	public static final int ENDERIUM = QUEST+11;
+	public static final int ENERGITE = QUEST+12;
 	static{
 		assignItemRect(SKULL,   16, 11);
 		assignItemRect(DUST,    12, 11);
@@ -764,6 +768,10 @@ public class ItemSpriteSheet {
 		assignItemRect(TOKEN,   12, 12);
 		assignItemRect(BLOB,    10,  9);
 		assignItemRect(SHARD,    8, 10);
+		assignItemRect(PLUTONIUM,    12, 10);
+		assignItemRect(OSMIRIDIUM,   10, 11);
+		assignItemRect(ENDERIUM,    9, 10);
+		assignItemRect(ENERGITE,    12, 14);
 	}
 
 	private static final int BAGS       =                                   xy(1, 31);  //16 slots
