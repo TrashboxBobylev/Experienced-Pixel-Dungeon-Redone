@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetributio
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
@@ -727,6 +728,13 @@ public abstract class Char extends Actor {
 			buff( Paralysis.class ).processDamage(dmg);
 		}
 
+		long overflow = 0;
+
+		if (buff(IdealBag.OsmirdiumShield.class) != null){
+			overflow = dmg / 2;
+			dmg = 0;
+		}
+
 		long shielded = dmg;
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
 		if (!(src instanceof Hunger)){
@@ -846,6 +854,12 @@ public abstract class Char extends Actor {
 					}
 			);
 
+		}
+
+		if (overflow > 0) {
+			HP += overflow;
+			if (sprite != null)
+				sprite.showStatusWithIcon(CharSprite.NEGATIVE, Long.toString(overflow), FloatingText.HEALING);
 		}
 
 		if (HP < 0) HP = 0;
