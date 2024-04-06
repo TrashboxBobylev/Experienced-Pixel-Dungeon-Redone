@@ -74,7 +74,7 @@ public class InventoryPane extends Component {
 	private ArrayList<BagButton> bags;
 
 	public static final int WIDTH = 210;
-	public static final int HEIGHT = 90;
+	public static final int HEIGHT = 108;
 
 	private static final int SLOT_WIDTH = 16;
 	private static final int SLOT_HEIGHT = 16;
@@ -308,7 +308,7 @@ public class InventoryPane extends Component {
 		}
 
 		int j = 0;
-		for (int i = 0; i < 48; i++){
+		for (int i = 0; i < 55; i++){
 			if (i == 0 && lastBag != stuff.backpack){
 				bagItems.get(i).item(lastBag);
 				continue;
