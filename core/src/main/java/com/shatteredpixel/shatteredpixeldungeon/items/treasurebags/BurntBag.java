@@ -60,7 +60,7 @@ public class BurntBag extends TreasureBag {
         }
 
         if (worstRoll <= 0.1f)
-            return new ChargrilledMeat();
+            return new IdealBag();
         else
             return new BurntBag();
     }
