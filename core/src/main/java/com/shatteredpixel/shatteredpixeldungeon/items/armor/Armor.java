@@ -269,7 +269,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 
 	public final long DRMax(){
-		return Math.round(DRMax(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
+		return Math.round(DRMax(buffedLvl())*(1d + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public long DRMax(long lvl){
@@ -286,7 +286,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 
 	public final long DRMin(){
-		return Math.round(DRMin(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
+		return Math.round(DRMin(buffedLvl())*(1d + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public long DRMin(long lvl){
