@@ -325,6 +325,7 @@ public class Dungeon {
             case 2: return depth*5+200;
             case 3: return depth*50+2500;
             case 4: return depth*100 + 4300;
+			case 5: return depth*375 + 12500;
         }
         return depth;
     }
