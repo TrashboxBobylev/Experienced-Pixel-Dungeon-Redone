@@ -127,6 +127,7 @@ public class ExpPDChanges {
                             "_-_ Upgrade amount text now auto-resizes for large upgrade values\n" +
                             "_-_ Changed inventory UI to more comfortably fit all slots on landscape and desktop resolutions\n" +
                             "_-_ Tremendously optimized Scroll of Upgrade's usage for large numbers\n" +
+                            "_-_ Projecting Runic Blade's projectile can pierce walls in same way as Projecting missile weapons do\n" +
                             "_-_ Yog-Dzewa's lasers now kill most of the players in one hit with Badder Bosses challenge"
             ));
 
