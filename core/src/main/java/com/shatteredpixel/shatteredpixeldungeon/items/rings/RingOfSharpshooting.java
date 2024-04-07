@@ -54,7 +54,7 @@ public class RingOfSharpshooting extends Ring {
 		return new Aim();
 	}
 	
-	public static int levelDamageBonus( Char target ){
+	public static long levelDamageBonus( Char target ){
 		return getBuffedBonus(target, RingOfSharpshooting.Aim.class) + 1;
 	}
 	

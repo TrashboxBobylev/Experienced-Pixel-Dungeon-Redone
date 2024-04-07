@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.TenguTreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
@@ -64,78 +65,84 @@ public class ExpPDChanges {
             ChangeInfo changes = new ChangeInfo("ExpPD-2.17.0", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
-            changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
-                    "_-_ Released February blablablath, 2024\n" +
-                            "_-_ 8 days after Experienced Pixel Dungeon 2.16.3"));
-            changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "ShPD content",
-                "Implemented Shattered's 2.3.1, with following additions:\n\n" +
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released April 7th, 2024\n" +
+                            "_-_ 88 days after Experienced Pixel Dungeon 2.16.3\n" +
+                            "_-_ 142 days after Experienced Pixel Dungeon 2.16"));
+            changes.addButton( new ChangeButton(Icons.SHPX.get(), "ShPD content",
+                "Implemented Shattered's 2.3.2, with following additions:\n\n" +
                         "_-_ Added new floating text icons for Experienced's permanent boosts.\n" +
                         "_-_ Rat King drops cheese chunk as his remains item.\n" +
                         "_-_ Gnoll quest enemies now have stats for dungeon cycles.\n" +
                         "_-_ Upgraded Android Gradle Plugin from 3.6.4 to latest version (finally!)."));
-        changes.addButton( new ChangeButton(Icons.get(Icons.PLUS), "Prolonging numbers",
+        changes.addButton( new ChangeButton(Icons.PLUS.get(), "Prolonging numbers",
                 "The most significant change in this update is tweaking certain numbers from _stored in 32-bit variables to 64-bit variables_, increasing their max value from ~2 billion to ~9 quintillion:\n" +
                         "_-_ gold and alchemical energy\n" +
+                        "_-_ mob experience value\n" +
                         "_-_ current and max health of living entities\n" +
                         "_-_ dealt damage from most of sources\n" +
                         "_-_ amount of stored and gained experience\n" +
                         "_-_ upgrades and amount of items\n" +
                         "_-_ wand and artifact charges\n" +
+                        "_-_ equipment stats like damage, blocking and other effects\n" +
                         "_-_ limits on buffs like barksking and healing\n" +
-                        "_-_ natural and equipable armor values\n" +
                         "_-_ statistics and ranking stats\n\n" +
-                        "This is still very unstable and untested overhaul to the codebase, so this is why I am releasing this first as a pre-release build and unlocking Scroll of Debug (with patch to support 64-bit numbers) for everyone. Test any oversights and holes in coding to your heart's content!"));
+                        "This is still potentially unstable overhaul to the codebase."));
+        changes.addButton( new ChangeButton(new ItemSprite(new IdealBag()), "New Treasure Bags",
+                "Added two new treasure bags, which are obtained by burning lucky bags:\n\n" +
+                        "_-_ _Burnt Bag_ contains less items than normal bags, and they can contain burnt meat instead of loot.\n" +
+                        "_-_ _Refined Lucky Bag_ can appear instead of Burnt Bag with 10% chance (or is it?) and contains as many items as 10 Lucky Bags combined! " +
+                        "There are some new silly, yet useful loot that can drop from Refined Lucky Bag, including fabled elemental ring..."));
+        changes.addButton( new ChangeButton(new ItemSprite(new BlackPsycheChest()), "Cycling",
+                "_-_ Dart traps and necromancers now scale their damage with dungeon cycles\n" +
+                        "_-_ Implemented cycle 5, with new fishing rod and even more stat increases\n" +
+                        "_-_ Buffed Black Mimic's stats to exponentially scale with cycling"));
+        changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                "_-_ Buffed Bbat:\n" +
+                        "   _-_ now has extra range\n" +
+                        "   _-_ decreased cooldown to 700 turns\n" +
+                        "_-_ Tweaked Pickaxe:\n" +
+                        "   _-_ now gets tiers with cycles like any other weapon\n" +
+                        "   _-_ now has 50% more damage at base, but gets 50% less damage from upgrading\n" +
+                        "_-_ \"Nerfed\" Iron Will:\n" +
+                        "   _-_ no longer triggers from debuffs or hunger\n" +
+                        "   _-_ this thing was very annoying to some users, which is understandable\n" +
+                        "_-_ Buffed Blacksmith's harden favor from 0.15% boost per upgrade to 0.2% boost per upgrade\n" +
+                        "_-_ Weapons and armors in later cycles scale better both in base damage and scaling",
 
-            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Unsorted and other changes",
-                    "_-_ Buffed Bbat:\n" +
-                            "   _-_ now has extra range\n" +
-                            "   _-_ decreased cooldown to 700 turns\n\n" +
-                            "_-_ Significantly reduced Crystal Spire's health on cycles to account for pickaxe's damage, but still encouraging to upgrade it.\n\n" +
-                            "_-_ Tweaked Pickaxe:\n" +
-                            "   _-_ now gets tiers with cycles like any other weapon\n" +
-                            "   _-_ now has 50% more damage at base, but gets 50% less damage from upgrading\n\n" +
-                            "_-_ Skeletons deal 150% of their damage roll on exploding instead of static 6-12 damage.\n\n" +
-                            "_-_ Dart traps and necromancers now scale their damage with dungeon cycles."
-            ));
+                        "_-_ Changed Preparation:\n" +
+                        "   _-_ now detaches when Dirk/Fantasmal Stabber is unequipped\n" +
+                        "   _-_ slightly increased Dirk's max damage\n" +
+                        "   _-_ reduced damage of missile weapon by 35% when used with Preparation\n" +
+                        "_-_ Scroll of Determination is now consumed and identified correctly\n" +
+                        "_-_ \"Excalibur's swing\" ability can longer be used with no weapon energy\n" +
+                        "_-_ Ring effect levels are now capped at 200 billion\n" +
+                        "_-_ Significantly nerfed \"Scrolls of Upgrade from experience\" mechanic:\n" +
+                        "   _-_ changed experience requirements from 100/175/250/325/500/575 to 100/200/1250/11750/75000/500000\n" +
+                        "_-_ Ring of Elements can no longer be obtained by normal means and be upgraded, but increased its base power to 50% reduction from 20%"));
 
-            changes = new ChangeInfo("BETA-2", false, null);
-            changes.hardlight(CharSprite.WARNING);
-            changeInfos.add(changes);
-            changes.addButton( new ChangeButton(Icons.get(Icons.PLUS), "Prolonging numbers",
-                    "Changed some more numbers from 32-bit to 64-bit format:\n\n" +
-                            "_-_ mob experience value\n" +
-                            "_-_ Fire Empower's percentage boost\n" +
-                            "_-_ partial upgrade number prompt\n" +
-                            "_-_ wand charges (doesn't softcap at 32-bit anymore)\n" +
-                            "_-_ hero's health (doesn't softcap at 32-bit anymore)\n" +
-                            "_-_ wand stats in the item window\n" +
-                            "_-_ missile weapon's damage\n" +
-                            "_-_ potion of healing's healing at current turn\n" +
-                            "_-_ corrosion's damage (doesn't softcap at 32-bit anymore)\n" +
-                            "_-_ berserk's buff info"
-            ));
-
-            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Changes",
-                    "_-_ Changed Preparation:\n" +
-                            "   _-_ now detaches when Dirk/Fantasmal Stabber is unequipped\n" +
-                            "   _-_ slightly increased Dirk's max damage\n" +
-                            "   _-_ reduced damage of missile weapon by 35% when used with Preparation.\n" +
-                            "_-_ Upgrade text in inventory now scale down in size to fit into item slots.\n" +
-                            "_-_ Scroll of Upgrade is much more optimized with large quantities used at once.\n" +
-                            "_-_ Scroll of Debug can now handle 64-bit numbers when used to call game's methods."
+            changes.addButton( new ChangeButton(Icons.PREFS.get(), "Unsorted and other changes",
+                            "_-_ Significantly reduced Crystal Spire's health on cycles to account for pickaxe's damage, but still encouraging to upgrade it\n" +
+                            "_-_ Skeletons deal 150% of their damage roll on exploding instead of static 6-12 damage\n" +
+                            "_-_ Upgrade amount text now auto-resizes for large upgrade values\n" +
+                            "_-_ Changed inventory UI to more comfortably fit all slots on landscape and desktop resolutions\n" +
+                            "_-_ Tremendously optimized Scroll of Upgrade's usage for large numbers\n" +
+                            "_-_ Projecting Runic Blade's projectile can pierce walls in same way as Projecting missile weapons do\n" +
+                            "_-_ Yog-Dzewa's lasers now kill most of the players in one hit with Badder Bosses challenge"
             ));
 
             changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
-                    "_-_ Fixed fishing rods having incorrect sprites.\n" +
-                            "_-_ Fixed OOF thief's desperation invulnerability not actually working.\n" +
-                            "_-_ Fixed Longsword's Duelist ability being usable at no charges."
+                    "_-_ Fixed fishing rod bobbers staying on the screen even after being used\n" +
+                            "_-_ Fixed OOF thief's desperation invulnerability not actually working\n" +
+                            "_-_ Fixed Longsword's Duelist ability being usable at no charges\n" +
+                            "_-_ Fixed cycle 4 DM-300 having too little health"
             ));
 
             changes = new ChangeInfo("ExpPD-2.16.3", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.get(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN), "Developer Commentary",
-                    "_-_ Released January 10th, 2023\n" +
+                    "_-_ Released January 10th, 2024\n" +
                             "_-_ 8 days after Experienced Pixel Dungeon 2.16.2"));
             changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
                     "_-_ Fixed the crash with slimes by removing the luck part.\n" +

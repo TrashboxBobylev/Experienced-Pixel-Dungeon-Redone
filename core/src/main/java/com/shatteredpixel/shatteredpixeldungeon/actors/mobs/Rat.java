@@ -62,6 +62,11 @@ public class Rat extends Mob {
                 defenseSkill = 1200;
                 EXP = 26000;
                 break;
+			case 5:
+				HP = HT = 425000000;
+				defenseSkill = 18000;
+				EXP = 10000000;
+				break;
         }
 	}
 
@@ -81,6 +86,7 @@ public class Rat extends Mob {
             case 2: return Random.NormalIntRange(110, 145);
             case 3: return Random.NormalIntRange(475, 589);
             case 4: return Random.NormalIntRange(3200, 5000);
+			case 5: return Random.NormalIntRange(345000, 485000);
         }
         return Random.NormalIntRange(1, 4);
 	}
@@ -92,6 +98,7 @@ public class Rat extends Mob {
             case 2: return 175;
             case 3: return 520;
             case 4: return 1350;
+			case 5: return 19500;
         }
 		return 8;
 	}
@@ -103,6 +110,7 @@ public class Rat extends Mob {
             case 2: return Random.NormalIntRange(60, 100);
             case 3: return Random.NormalIntRange(250, 434);
             case 4: return Random.NormalIntRange(2000, 4500);
+			case 5: return Random.NormalIntRange(325000, 450000);
         }
 		return Random.NormalIntRange(0, 1);
 	}

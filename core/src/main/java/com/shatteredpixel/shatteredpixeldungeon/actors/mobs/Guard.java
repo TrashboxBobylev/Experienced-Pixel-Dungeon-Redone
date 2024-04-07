@@ -84,6 +84,11 @@ public class Guard extends Mob {
                 defenseSkill = 2400;
                 EXP = 57500;
                 break;
+			case 5:
+				HP = HT = 1600000000;
+				defenseSkill = 48500;
+				EXP = 30000000;
+				break;
         }
 	}
 
@@ -94,6 +99,7 @@ public class Guard extends Mob {
             case 2: return Random.NormalIntRange(200, 278);
             case 3: return Random.NormalIntRange(725, 987);
             case 4: return Random.NormalIntRange(11000, 18000);
+			case 5: return Random.NormalIntRange(700000, 1600000);
         }
 		return Random.NormalIntRange(4, 12);
 	}
@@ -168,6 +174,7 @@ public class Guard extends Mob {
             case 2: return 245;
             case 3: return 640;
             case 4: return 2800;
+			case 5: return 40500;
         }
 		return 12;
 	}
@@ -179,6 +186,7 @@ public class Guard extends Mob {
             case 2: return Random.NormalIntRange(120, 198);
             case 3: return Random.NormalIntRange(500, 780);
             case 4: return Random.NormalIntRange(9000, 13000);
+			case 5: return Random.NormalIntRange(450000, 925000);
         }
 		return Random.NormalIntRange(0, 7);
 	}

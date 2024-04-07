@@ -39,20 +39,20 @@ public class Greatshield extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  Math.round(3f*(tier+1)) +     //18 base, down from 36
-				lvl*(tier-1);                   //+4 per level, down from +7
+		return  Math.round(3d*(tier()+1)) +     //18 base, down from 36
+				lvl*(tier()-1);                   //+4 per level, down from +7
 	}
 
 	@Override
 	public long defenseFactor( Char owner ) {
-		return (tier+1)+(tier-2)*buffedLvl();    //6 extra defence, plus 3 per level;
+		return (tier()+1)+(tier()-2)*buffedLvl();    //6 extra defence, plus 3 per level;
 	}
 	
 	public String statsInfo(){
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", (tier+1)+(tier-2)*buffedLvl());
+			return Messages.get(this, "stats_desc", (tier()+1)+(tier()-2)*buffedLvl());
 		} else {
-			return Messages.get(this, "typical_stats_desc", (tier+1));
+			return Messages.get(this, "typical_stats_desc", (tier()+1));
 		}
 	}
 

@@ -51,7 +51,7 @@ public class RingOfForce extends Ring {
 		return new Force();
 	}
 	
-	public static int armedDamageBonus( Char ch ){
+	public static long armedDamageBonus( Char ch ){
 		return getBuffedBonus( ch, Force.class);
 	}
 
@@ -79,34 +79,34 @@ public class RingOfForce extends Ring {
 		return tier;
 	}
 
-	public static int damageRoll( Hero hero ){
+	public static long damageRoll( Hero hero ){
 		if (hero.buff(Force.class) != null
 				&& hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) == null) {
-			int level = getBuffedBonus(hero, Force.class);
+			long level = getBuffedBonus(hero, Force.class);
 			float tier = tier(hero.STR());
-			return Dungeon.NormalIntRange(min(level, tier), max(level, tier));
+			return Dungeon.NormalLongRange(min(level, tier), max(level, tier));
 		} else {
 			//attack without any ring of force influence
-			return Dungeon.NormalIntRange(1, Math.max(hero.STR()-8, 1));
+			return Dungeon.NormalLongRange(1, Math.max(hero.STR()-8, 1));
 		}
 	}
 
 	//same as equivalent tier weapon
-	private static int min(long lvl, float tier){
+	private static long min(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
 				tier +  //base
-				lvl     //level scaling
+				lvl*1d     //level scaling
 		));
 	}
 
 	//same as equivalent tier weapon
-	private static int max(long lvl, float tier){
+	private static long max(long lvl, float tier){
 		if (lvl <= 0) tier = 1; //tier is forced to 1 if cursed
 
 		return Math.max( 0, Math.round(
-				5*(tier+1) +    //base
+				5d*(tier+1) +    //base
 				lvl*(tier+1)    //level scaling
 		));
 	}

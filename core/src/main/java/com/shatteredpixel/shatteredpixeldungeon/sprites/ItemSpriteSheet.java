@@ -214,13 +214,14 @@ public class ItemSpriteSheet {
 	}
 
 	private static final int FISHING_HOOKS = xy(16, 5);
-	public static final int BASIC_HOOK = FISHING_HOOKS-4;
-	public static final int GOLDEN_HOOK = FISHING_HOOKS-3;
-	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-2;
-	public static final int AVARITIA_HOOK = FISHING_HOOKS-1;
-    public static final int CHAOS_HOOK = FISHING_HOOKS-0;
+	public static final int BASIC_HOOK = FISHING_HOOKS-5;
+	public static final int GOLDEN_HOOK = FISHING_HOOKS-4;
+	public static final int NEUTRONIUM_HOOK = FISHING_HOOKS-3;
+	public static final int AVARITIA_HOOK = FISHING_HOOKS-2;
+    public static final int CHAOS_HOOK = FISHING_HOOKS-1;
+	public static final int SPIRITUAL_HOOK = FISHING_HOOKS-0;
 	static {
-        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-5; i--)
+        for (int i = FISHING_HOOKS; i > FISHING_HOOKS-6; i--)
             assignItemRect(i, 14, 13);
     }
 
@@ -753,6 +754,10 @@ public class ItemSpriteSheet {
 	public static final int TOKEN   = QUEST+6;
 	public static final int BLOB    = QUEST+7;
 	public static final int SHARD   = QUEST+8;
+	public static final int PLUTONIUM = QUEST+9;
+	public static final int OSMIRIDIUM = QUEST+10;
+	public static final int ENDERIUM = QUEST+11;
+	public static final int ENERGITE = QUEST+12;
 	static{
 		assignItemRect(SKULL,   16, 11);
 		assignItemRect(DUST,    12, 11);
@@ -763,6 +768,10 @@ public class ItemSpriteSheet {
 		assignItemRect(TOKEN,   12, 12);
 		assignItemRect(BLOB,    10,  9);
 		assignItemRect(SHARD,    8, 10);
+		assignItemRect(PLUTONIUM,    12, 10);
+		assignItemRect(OSMIRIDIUM,   10, 11);
+		assignItemRect(ENDERIUM,    9, 10);
+		assignItemRect(ENERGITE,    12, 14);
 	}
 
 	private static final int BAGS       =                                   xy(1, 31);  //16 slots
@@ -798,6 +807,8 @@ public class ItemSpriteSheet {
     public static final int BIGGER_GAMBLE_BAG = TREASURE_BAGS+9;
     public static final int QUALITY_BAG = TREASURE_BAGS+10;
 	public static final int SUPER_PICKAXE = TREASURE_BAGS+11;
+	public static final int BURNT_BAG = TREASURE_BAGS+12;
+	public static final int IDEAL_BAG = TREASURE_BAGS+13;
     static{
         assignItemRect(GOO_BAG, 14, 15);
         assignItemRect(TENGU_BAG, 14, 15);
@@ -811,6 +822,8 @@ public class ItemSpriteSheet {
         assignItemRect(BIGGER_GAMBLE_BAG, 14, 15);
         assignItemRect(QUALITY_BAG, 14, 15);
 		assignItemRect(SUPER_PICKAXE, 14, 14);
+		assignItemRect(BURNT_BAG, 14, 15);
+		assignItemRect(IDEAL_BAG, 14, 15);
     }
 	private static final int DOCUMENTS  =                                   xy(1, 32);  //16 slots
 	public static final int GUIDE_PAGE  = DOCUMENTS+0;

@@ -53,15 +53,15 @@ public class Flail extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  Math.round(8*(tier+1)) +        //40 base, up from 30
-				lvl*Math.round(2f*(tier+1));  //+10 per level, up from +6
+		return  Math.round(8d*(tier()+1)) +        //40 base, up from 30
+				lvl*Math.round(2d*(tier()+1));  //+10 per level, up from +6
 	}
 
-	private static float spinBonus = 1f;
+	private static double spinBonus = 1f;
 
 	@Override
 	public long damageRoll(Char owner) {
-		int dmg = Math.round(super.damageRoll(owner) * spinBonus);
+		long dmg = Math.round(super.damageRoll(owner) * spinBonus);
 		if (spinBonus > 1f) Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
 		spinBonus = 1f;
 		return dmg;

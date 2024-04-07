@@ -80,6 +80,11 @@ public class Golem extends Mob {
                 defenseSkill = 7000;
                 EXP = 1750000;
                 break;
+			case 5:
+				HP = HT = 3200000000L;
+				defenseSkill = 90500;
+				EXP = 185000000;
+				break;
         }
 	}
 
@@ -90,6 +95,7 @@ public class Golem extends Mob {
             case 2: return Random.NormalIntRange(300, 519);
             case 3: return Random.NormalIntRange(1900, 2650);
             case 4: return Random.NormalIntRange(65000, 180000);
+			case 5: return Random.NormalIntRange(6000000, 9000000);
         }
 		return Random.NormalIntRange( 25, 30 );
 	}
@@ -101,6 +107,7 @@ public class Golem extends Mob {
             case 2: return 400;
             case 3: return 1100;
             case 4: return 8300;
+			case 5: return 120000;
         }
 		return 28;
 	}
@@ -112,6 +119,7 @@ public class Golem extends Mob {
             case 2: return Random.NormalIntRange(160, 333);
             case 3: return Random.NormalIntRange(1100, 1800);
             case 4: return Random.NormalIntRange(70000, 125000);
+			case 5: return Random.NormalIntRange(3900000, 7000000);
         }
 		return Random.NormalIntRange(0, 12);
 	}

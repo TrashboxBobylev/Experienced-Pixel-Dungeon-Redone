@@ -84,10 +84,15 @@ public class YogDzewa extends Mob {
                 EXP = 2000000;
                 break;
             case 4:
-                HP = HT = 2000000000;
+                HP = HT = 4000000000L;
                 defenseSkill = 0;
                 EXP = 1500000000;
                 break;
+			case 5:
+				HP = HT = 95000000000L;
+				defenseSkill = 0;
+				EXP = 20000000000L;
+				break;
         }
 	}
 
@@ -271,9 +276,10 @@ public class YogDzewa extends Mob {
 							case 2: dmg = Random.NormalIntRange(370, 502); break;
 							case 3: dmg = Random.NormalIntRange(2650, 4000); break;
 							case 4: dmg = Random.NormalIntRange(179000, 320000); break;
+							case 5: dmg = Random.NormalIntRange(6400000, 10000000); break;
 						}
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
-							ch.damage(Math.round(dmg*1.5f), new Eye.DeathGaze());
+							ch.damage(dmg*25000L, new Eye.DeathGaze());
 						} else {
 							ch.damage(dmg, new Eye.DeathGaze());
 						}
@@ -440,7 +446,6 @@ public class YogDzewa extends Mob {
 
 	@Override
 	public void damage( long dmg, Object src ) {
-        if (Dungeon.cycle == 4) dmg /= 2;
 		long preHP = HP;
 		super.damage( dmg, src );
 
@@ -730,6 +735,11 @@ public class YogDzewa extends Mob {
                     defenseSkill = 17000;
                     EXP = 1000000;
                     break;
+				case 5:
+					HP = HT = 1400000000;
+					defenseSkill = 57500;
+					EXP = 30000000;
+					break;
             }
 			properties.add(Property.BOSS_MINION);
 		}
@@ -741,6 +751,7 @@ public class YogDzewa extends Mob {
                 case 2: return 500;
                 case 3: return 1250;
                 case 4: return 20000;
+				case 5: return 265000;
             }
 			return 30;
 		}
@@ -752,6 +763,7 @@ public class YogDzewa extends Mob {
                 case 2: return Random.NormalIntRange(325, 440);
                 case 3: return Random.NormalIntRange(2500, 4000);
                 case 4: return Random.NormalIntRange(360000, 460000);
+				case 5: return Random.NormalIntRange(6000000, 9000000);
             }
 			return Random.NormalIntRange( 15, 25 );
 		}

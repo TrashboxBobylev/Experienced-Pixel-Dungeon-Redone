@@ -68,6 +68,11 @@ public class Slime extends Mob {
                 defenseSkill = 1900;
                 EXP = 43000;
                 break;
+			case 5:
+				HP = HT = 675000000;
+				defenseSkill = 33000;
+				EXP = 19500000;
+				break;
         }
 	}
 	
@@ -78,6 +83,7 @@ public class Slime extends Mob {
             case 2: return Random.NormalIntRange(164, 189);
             case 3: return Random.NormalIntRange(560, 740);
             case 4: return Random.NormalIntRange(7000, 9000);
+			case 5: return Random.NormalIntRange(475000, 635000);
         }
 	    return Random.NormalIntRange( 2, 5 );
 	}
@@ -89,6 +95,7 @@ public class Slime extends Mob {
             case 2: return 225;
             case 3: return 580;
             case 4: return 2200;
+			case 5: return 32000;
         }
 		return 12;
 	}

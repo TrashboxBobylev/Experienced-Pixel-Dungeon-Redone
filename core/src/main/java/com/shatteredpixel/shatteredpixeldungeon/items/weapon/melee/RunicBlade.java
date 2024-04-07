@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -122,10 +122,10 @@ public class RunicBlade extends MeleeWeapon {
 
     @Override
     public long max(long lvl) {
-        int i = 5 * (tier) +                    //20 base, down from 30
-                Math.round(lvl * (tier+1)); //+5 per level, up from +6
-        if (!charged) i = 6 * (tier) +
-                Math.round(lvl * (tier + 2));
+        long i = 5L * (tier()) +                    //20 base, down from 30
+                lvl * (tier()+1); //+5 per level, up from +6
+        if (!charged) i = 6L * (tier()) +
+                lvl * (tier() + 2L);
         return i;
     }
 
@@ -177,8 +177,7 @@ public class RunicBlade extends MeleeWeapon {
                     return;
                 }
 
-                final Ballistica shot = new Ballistica( curUser.pos, target, Ballistica.PROJECTILE);
-                final int cell = shot.collisionPos;
+                final int cell = new RunicMissile().throwPos(curUser, target);
 
                 if (target == curUser.pos || cell == curUser.pos) {
                     GLog.i( Messages.get(Wand.class, "self_target") );
@@ -416,6 +415,20 @@ public class RunicBlade extends MeleeWeapon {
     public static class RunicMissile extends Item {
         {
             image = ItemSpriteSheet.RUNIC_SHOT;
+        }
+
+        @Override
+        public int throwPos(Hero user, int dst) {
+
+            boolean projecting = curItem instanceof RunicBlade && ((RunicBlade) curItem).hasEnchant(Projecting.class, user);
+
+            if (projecting
+                    && (Dungeon.level.passable[dst] || Dungeon.level.avoid[dst] || Actor.findChar(dst) != null)
+                    && Dungeon.level.distance(user.pos, dst) <= Math.round(4 * Enchantment.genericProcChanceMultiplier(user))){
+                return dst;
+            } else {
+                return super.throwPos(user, dst);
+            }
         }
     }
 }

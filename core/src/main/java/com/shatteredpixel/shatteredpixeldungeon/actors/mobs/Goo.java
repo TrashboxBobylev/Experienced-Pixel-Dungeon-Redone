@@ -85,6 +85,11 @@ public class Goo extends Mob {
                 defenseSkill = 2200;
                 EXP = 2000000;
                 break;
+			case 5:
+				HP = HT = 2325000000L;
+				defenseSkill = 40000;
+				EXP = 200000000;
+				break;
         }
 	}
 

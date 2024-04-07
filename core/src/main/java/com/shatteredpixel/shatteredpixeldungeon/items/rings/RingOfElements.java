@@ -45,14 +45,14 @@ public class RingOfElements extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					new DecimalFormat("#.###").format(100f * (1f - (0.80f - soloVisualBonus()*0.0075f))));
+					new DecimalFormat("#.###").format(100f * (1f - (0.50f))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - (0.80f - combinedBuffedBonus(Dungeon.hero)*0.0075f))));
+						Messages.decimalFormat("#.##", 100f * (1f - (0.50f))));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(20f));
+			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(50f));
 		}
 	}
 	
@@ -82,15 +82,24 @@ public class RingOfElements extends Ring {
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
                 float multiplier = 1f;
-                if (getBuffedBonus(target, Resistance.class) > 0) multiplier = 0.8f;
-                if (getBuffedBonus(target, Resistance.class) > 1) multiplier -= getBuffedBonus(target, Resistance.class)*0.0075;
+                if (getBonus(target, Resistance.class) > 0) multiplier = 0.5f;
                 return multiplier;
 			}
 		}
 		
 		return 1f;
 	}
-	
+
+	@Override
+	public boolean isUpgradable() {
+		return false;
+	}
+
+	@Override
+	public boolean isIdentified() {
+		return true;
+	}
+
 	public class Resistance extends RingBuff {
 	
 	}

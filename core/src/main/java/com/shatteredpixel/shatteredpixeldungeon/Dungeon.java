@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -299,8 +300,10 @@ public class Dungeon {
         for (LimitedDrops a : LimitedDrops.values())
             if (a != LimitedDrops.BBAT && a != LimitedDrops.CHEESY_CHEEST)  a.count = 0;
         Notes.reset();
-        if (cycle < 4) cycle += 1;
+        if (cycle < 5) cycle += 1;
         GameLog.wipe();
+		SpecialRoom.initForRun();
+		SecretRoom.initForRun();
         Generator.generalReset();
 		generatedLevels.clear();
 		BeaconOfReturning beacon = Dungeon.hero.belongings.getItem(BeaconOfReturning.class);
@@ -322,6 +325,7 @@ public class Dungeon {
             case 2: return depth*5+200;
             case 3: return depth*50+2500;
             case 4: return depth*100 + 4300;
+			case 5: return depth*375 + 12500;
         }
         return depth;
     }
@@ -983,6 +987,7 @@ public class Dungeon {
 	public static void observe(){
 		int dist = Math.max(Dungeon.hero.viewDistance, 8);
 		dist *= 1f + 0.25f*Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
+		if (Dungeon.hero.isSubclass(HeroSubClass.SNIPER)) dist = Math.round(dist * 1.5f);
 
 		if (Dungeon.hero.buff(MagicalSight.class) != null){
 			dist = Math.max( dist, MagicalSight.DISTANCE );
@@ -1283,7 +1288,7 @@ public class Dungeon {
 	public static double Double(){
 		double highest = Double.MIN_VALUE;
 		for (int i = 0; i < luck; i++){
-			float roll = Random.Float();
+			double roll = Random.Double();
 			if (roll > highest) highest = roll;
 		}
 		return highest;

@@ -74,6 +74,11 @@ public class Spinner extends Mob {
                 defenseSkill = 3900;
                 EXP = 135000;
                 break;
+			case 5:
+				HP = HT = 1875000000;
+				defenseSkill = 65500;
+				EXP = 40000000;
+				break;
         }
 	}
 
@@ -84,6 +89,7 @@ public class Spinner extends Mob {
             case 2: return Random.NormalIntRange(260, 371);
             case 3: return Random.NormalIntRange(1200, 1468);
             case 4: return Random.NormalIntRange(18000, 50000);
+			case 5: return Random.NormalIntRange(2000000, 4200000);
         }
 		return Random.NormalIntRange(10, 20);
 	}
@@ -95,6 +101,7 @@ public class Spinner extends Mob {
             case 2: return 321;
             case 3: return 760;
             case 4: return 4200;
+			case 5: return 62750;
         }
 		return 22;
 	}
@@ -106,6 +113,7 @@ public class Spinner extends Mob {
             case 2: return Random.NormalIntRange(80, 219);
             case 3: return Random.NormalIntRange(480, 840);
             case 4: return Random.NormalIntRange(13000, 30000);
+			case 5: return Random.NormalIntRange(1220000, 2000000);
         }
 		return Random.NormalIntRange(0, 6);
 	}

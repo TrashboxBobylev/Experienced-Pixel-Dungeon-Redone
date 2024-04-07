@@ -32,7 +32,7 @@ public class ChaosFishingRod extends FishingRod{
         image = ItemSpriteSheet.CHAOS_HOOK;
         amplifier = 900;
         tier = 5;
-        fishingStr = 180;
+        baseFishingStr = 180;
     }
 
     @Override

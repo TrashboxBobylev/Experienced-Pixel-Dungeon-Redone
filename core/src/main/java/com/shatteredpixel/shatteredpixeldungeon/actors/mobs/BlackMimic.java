@@ -69,9 +69,9 @@ public class BlackMimic extends Mob {
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 900 + Dungeon.hero.lvl*15;
+		HP = HT = 900 + Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle));
 		EXP = 2000;
-		defenseSkill = 20 + Dungeon.hero.lvl / 2;
+		defenseSkill = 20 + Dungeon.hero.lvl / 3 * 2;
 
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
@@ -91,22 +91,29 @@ public class BlackMimic extends Mob {
             case 4:
                 EXP = 2100000000;
                 break;
+			case 5:
+				EXP = 45000000000L;
+				break;
         }
 	}
 
 	@Override
 	public long damageRoll() {
-		return Random.NormalLongRange( Dungeon.hero.HT / 4, Dungeon.hero.HT / 3 );
+		return Random.NormalLongRange(
+				Math.round(Dungeon.hero.lvl/2f*Math.pow(12, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle)) );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 20 + Math.round(Dungeon.hero.lvl / 1.33f);
+		return 20 + Math.round(Dungeon.hero.lvl * 1.25f);
 	}
 
 	@Override
 	public int cycledDrRoll() {
-		return Random.NormalIntRange(Dungeon.hero.lvl / 10, Dungeon.hero.lvl);
+		return (int) Random.NormalLongRange(
+				Math.round(Dungeon.hero.lvl/3f*Math.pow(12, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*Math.pow(12, Dungeon.cycle)));
 	}
 
 	public int pylonsActivated = 0;
@@ -509,7 +516,6 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public void damage(long dmg, Object src) {
-	    if (Dungeon.cycle == 4) dmg /= 3.5f;
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
 			return;

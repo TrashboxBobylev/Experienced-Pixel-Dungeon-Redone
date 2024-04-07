@@ -269,15 +269,15 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 
 	public final long DRMax(){
-		return Math.round(DRMax(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
+		return Math.round(DRMax(buffedLvl())*(1d + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public long DRMax(long lvl){
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 1 + tier + lvl + augment.defenseFactor(lvl);
+			return 1 + tier() + lvl + augment.defenseFactor(lvl);
 		}
 
-		long max = tier * (2 + lvl) + augment.defenseFactor(lvl);
+		long max = tier() * (2 + lvl) + augment.defenseFactor(lvl);
 		if (lvl > max){
 			return ((lvl - max)+1)/2;
 		} else {
@@ -286,7 +286,7 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 	}
 
 	public final long DRMin(){
-		return Math.round(DRMin(buffedLvl())*(1f + Weapon.hardenBoost(buffedLvl())));
+		return Math.round(DRMin(buffedLvl())*(1d + Weapon.hardenBoost(buffedLvl())));
 	}
 
 	public long DRMin(long lvl){
@@ -363,7 +363,19 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 
 	@Override
 	public int tier() {
-		return tier;
+		switch (Math.max(0, (tier-1) / 5)){
+			case 0:
+				return tier;
+			case 1:
+				return tier+1;
+			case 2:
+				return Math.round(tier*1.5f);
+			case 3:
+				return Math.round((tier+2)*2f);
+			case 4:
+			default:
+				return Math.round((tier+4)*3f);
+		}
 	}
 	
 	@Override

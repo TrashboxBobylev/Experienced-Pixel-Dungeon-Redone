@@ -43,14 +43,14 @@ public class Tomahawk extends MissileWeapon {
 
 	@Override
 	public long min(long lvl) {
-		return  Math.round(3f * tier) +   //6 base, down from 8
+		return  Math.round(3d * tier()) +   //6 base, down from 8
 				4 * lvl;                    //scaling unchanged
 	}
 	
 	@Override
 	public long max(long lvl) {
-		return  Math.round(7f * tier) +  //15 base, down from 20
-				(tier*2)*lvl;                 //scaling unchanged
+		return  Math.round(7d * tier()) +  //15 base, down from 20
+				(tier()*2L)*lvl;                 //scaling unchanged
 	}
 	
 	@Override

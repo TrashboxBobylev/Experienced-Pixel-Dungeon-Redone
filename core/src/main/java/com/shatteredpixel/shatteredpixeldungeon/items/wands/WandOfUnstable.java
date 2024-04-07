@@ -38,7 +38,7 @@ public class WandOfUnstable extends Wand {
         image = ItemSpriteSheet.WAND_UNSTABLE;
     }
 
-    public Class<?extends Wand>[] wands = new Class[]{
+    public static Class<?extends Wand>[] wands = new Class[]{
             WandOfBlastWave.class,
             WandOfFireblast.class,
             WandOfCorrosion.class,

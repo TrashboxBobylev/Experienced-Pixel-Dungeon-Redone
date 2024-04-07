@@ -88,10 +88,15 @@ public class DM300 extends Mob {
                 EXP = 110000;
                 break;
             case 4:
-                HP = HT = 12000000;
+                HP = HT = 120000000;
                 defenseSkill = 5000;
                 EXP = 2000000;
                 break;
+			case 5:
+				HP = HT = 11000000000L;
+				defenseSkill = 81000;
+				EXP = 1500000000;
+				break;
         }
 	}
 
@@ -102,6 +107,7 @@ public class DM300 extends Mob {
             case 2: return Random.NormalIntRange(340, 445);
             case 3: return Random.NormalIntRange(1500, 1943);
             case 4: return Random.NormalIntRange(47000, 84000);
+			case 5: return Random.NormalIntRange(4500000, 6500000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -113,6 +119,7 @@ public class DM300 extends Mob {
             case 2: return 375;
             case 3: return 835;
             case 4: return 5400;
+			case 5: return 80000;
         }
 		return 20;
 	}
@@ -124,6 +131,7 @@ public class DM300 extends Mob {
             case 2: return Random.NormalIntRange(120, 275);
             case 3: return Random.NormalIntRange(562, 1310);
             case 4: return Random.NormalIntRange(19000, 45000);
+			case 5: return Random.NormalIntRange(2250000, 3500000);
         }
 		return Random.NormalIntRange(0, 10);
 	}

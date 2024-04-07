@@ -97,7 +97,8 @@ public class RingOfMight extends Ring {
 	}
 	
 	public static int strengthBonus( Char target ){
-		return (getBuffedBonus(target, Might.class) >= 1) ? getBuffedBonus(target, Might.class) : 0;
+		int boost = (int)Math.min(2000000000L, getBuffedBonus(target, Might.class));
+		return (boost >= 1) ? boost : 0;
     }
 	
 	public static int HTMultiplier( Char target ){

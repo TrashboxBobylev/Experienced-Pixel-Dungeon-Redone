@@ -82,6 +82,11 @@ public class Warlock extends Mob implements Callback {
                 defenseSkill = 6700;
                 EXP = 1200000;
                 break;
+			case 5:
+				HP = HT = 3800000000L;
+				defenseSkill = 80500;
+				EXP = 135000000;
+				break;
         }
 	}
 	
@@ -92,6 +97,7 @@ public class Warlock extends Mob implements Callback {
             case 2: return Random.NormalIntRange(240, 389);
             case 3: return Random.NormalIntRange(1800, 2300);
             case 4: return Random.NormalIntRange(40000, 110000);
+			case 5: return Random.NormalIntRange(2400000, 5000000);
         }
 		return Random.NormalIntRange( 12, 18 );
 	}
@@ -103,6 +109,7 @@ public class Warlock extends Mob implements Callback {
             case 2: return 392;
             case 3: return 960;
             case 4: return 7600;
+			case 5: return 110000;
         }
 		return 25;
 	}
@@ -114,6 +121,7 @@ public class Warlock extends Mob implements Callback {
             case 2: return Random.NormalIntRange(112, 276);
             case 3: return Random.NormalIntRange(900, 1600);
             case 4: return Random.NormalIntRange(40000, 96000);
+			case 5: return Random.NormalIntRange(3400000, 5750000);
         }
 		return Random.NormalIntRange(0, 8);
 	}
@@ -164,6 +172,7 @@ public class Warlock extends Mob implements Callback {
                 case 2: dmg = Random.NormalIntRange(276, 400); break;
                 case 3: dmg = Random.NormalIntRange(1400, 1621); break;
                 case 4: dmg = Random.NormalIntRange(45000, 130000); break;
+				case 5: dmg = Random.NormalIntRange(2500000, 5100000); break;
             }
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 			enemy.damage( dmg, new DarkBolt() );

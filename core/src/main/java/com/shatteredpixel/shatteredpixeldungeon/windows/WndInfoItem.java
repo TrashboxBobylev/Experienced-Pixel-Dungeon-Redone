@@ -36,7 +36,7 @@ public class WndInfoItem extends Window {
 	private static final float GAP	= 2;
 
 	private static final int WIDTH_MIN = 120;
-	private static final int WIDTH_MAX = 220;
+	private static final int WIDTH_MAX = 350;
 
 	//only one WndInfoItem can appear at a time
 	private static WndInfoItem INSTANCE;

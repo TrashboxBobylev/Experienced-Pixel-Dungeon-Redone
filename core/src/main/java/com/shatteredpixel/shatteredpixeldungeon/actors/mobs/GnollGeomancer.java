@@ -71,6 +71,9 @@ public class GnollGeomancer extends Mob {
 			case 4:
 				HP = HT = 3200;
 				break;
+			case 5:
+				HP = HT = 8000;
+				break;
 		}
 
 		EXP = 20;
@@ -148,6 +151,7 @@ public class GnollGeomancer extends Mob {
 			case 2: return Random.NormalIntRange(155, 175);
 			case 3: return Random.NormalIntRange(564, 670);
 			case 4: return Random.NormalIntRange(4650, 6900);
+			case 5: return Random.NormalIntRange(700000, 1150000);
 		}
 		return Random.NormalIntRange( 3, 6 );
 	}
@@ -159,6 +163,7 @@ public class GnollGeomancer extends Mob {
 			case 2: return 335;
 			case 3: return 785;
 			case 4: return 4500;
+			case 5: return 72750;
 		}
 		return 20;
 	}
@@ -170,6 +175,7 @@ public class GnollGeomancer extends Mob {
 			case 2: return Random.NormalIntRange(100, 265);
 			case 3: return Random.NormalIntRange(570, 950);
 			case 4: return Random.NormalIntRange(17000, 38000);
+			case 5: return Random.NormalIntRange(1625000, 3000000);
 		}
 		return Random.NormalIntRange(0, 6);
 	}
@@ -722,6 +728,7 @@ public class GnollGeomancer extends Mob {
 								case 2: dmg = Random.NormalIntRange(240, 295); break;
 								case 3: dmg = Random.NormalIntRange(960, 1250); break;
 								case 4: dmg = Random.NormalIntRange(7400, 13000); break;
+								case 5: dmg =  Random.NormalIntRange(175000, 800000); break;
 							}
 							ch.damage(dmg, new GnollGeomancer.Boulder());
 
@@ -832,6 +839,7 @@ public class GnollGeomancer extends Mob {
 				case 2: dmg = Random.NormalIntRange(240, 295); break;
 				case 3: dmg = Random.NormalIntRange(960, 1250); break;
 				case 4: dmg = Random.NormalIntRange(7400, 13000); break;
+				case 5: dmg =  Random.NormalIntRange(175000, 800000); break;
 			}
 			ch.damage(dmg, this);
 			if (ch.isAlive()) {

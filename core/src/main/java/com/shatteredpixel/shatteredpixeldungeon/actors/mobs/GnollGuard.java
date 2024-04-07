@@ -66,6 +66,11 @@ public class GnollGuard extends Mob {
 				defenseSkill = 3210;
 				EXP = 82000;
 				break;
+			case 5:
+				HP = HT = 1555000000;
+				defenseSkill = 59500;
+				EXP = 37500000;
+				break;
 		}
 
 		WANDERING = new Wandering();
@@ -109,6 +114,7 @@ public class GnollGuard extends Mob {
 				case 2: return Random.NormalIntRange(285, 390);
 				case 3: return Random.NormalIntRange(1400, 1610);
 				case 4: return Random.NormalIntRange(26000, 60000);
+				case 5: return Random.NormalIntRange(3000000, 4400000);
 			}
 			return Random.NormalIntRange( 16, 22 );
 		} else {
@@ -117,6 +123,7 @@ public class GnollGuard extends Mob {
 				case 2: return Random.NormalIntRange(225, 275);
 				case 3: return Random.NormalIntRange(850, 1000);
 				case 4: return Random.NormalIntRange(16500, 22500);
+				case 5: return Random.NormalIntRange(1750000, 2650000);
 			}
 			return Random.NormalIntRange( 6, 12 );
 		}
@@ -138,6 +145,7 @@ public class GnollGuard extends Mob {
 			case 2: return 312;
 			case 3: return 745;
 			case 4: return 4075;
+			case 5: return 57950;
 		}
 		return 20;
 	}
@@ -149,6 +157,7 @@ public class GnollGuard extends Mob {
 			case 2: return Random.NormalIntRange(85, 230);
 			case 3: return Random.NormalIntRange(495, 880);
 			case 4: return Random.NormalIntRange(15000, 32000);
+			case 5: return Random.NormalIntRange(1650000, 1800000);
 		}
 		return Random.NormalIntRange(0, 6);
 	}

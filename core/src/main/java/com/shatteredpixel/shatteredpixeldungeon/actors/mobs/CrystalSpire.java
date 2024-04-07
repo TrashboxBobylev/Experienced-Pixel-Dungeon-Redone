@@ -64,6 +64,9 @@ public class CrystalSpire extends Mob {
 			case 4:
 				HP = HT = 11625;
 				break;
+			case 5:
+				HP = HT = 46725;
+				break;
 		}
 
 		EXP = 20;
@@ -132,6 +135,7 @@ public class CrystalSpire extends Mob {
 						case 2: dmg = Random.NormalIntRange(500, 648); break;
 						case 3: dmg = Random.NormalIntRange(1790, 2400); break;
 						case 4: dmg = Random.NormalIntRange(34000, 52000); break;
+						case 5: dmg = Random.NormalIntRange(4000000, 4900000); break;
 					}
 
 					//guardians are hit harder by the attack

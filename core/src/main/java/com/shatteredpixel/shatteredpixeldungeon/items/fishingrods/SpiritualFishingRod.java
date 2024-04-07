@@ -22,37 +22,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith;
+package com.shatteredpixel.shatteredpixeldungeon.items.fishingrods;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public abstract class BlacksmithWeapon extends MeleeWeapon {
+public class SpiritualFishingRod extends FishingRod{
     {
-        internalTier = tier = 3;
-    }
-
-    @Override
-    public long min(long lvl) {
-        return  (tier()+Dungeon.cycle*5L)*2 +  //base
-                lvl*2;    //level scaling
-    }
-
-    @Override
-    public long max(long lvl) {
-        return  5*(tier()+1+Dungeon.cycle*5L) +    //base
-                lvl*(tier()+1+Dungeon.cycle*5L);   //level scaling
-    }
-
-    @Override
-    protected int baseChargeUse(Hero hero, Char target){
-        return 3;
+        image = ItemSpriteSheet.SPIRITUAL_HOOK;
+        amplifier = 7777;
+        tier = 6;
+        baseFishingStr = 360;
     }
 
     @Override
     public long value() {
-        return Math.round(super.value()*2.2f);
+        return 60 * Dungeon.escalatingDepth() / 8;
     }
 }

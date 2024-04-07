@@ -282,14 +282,14 @@ public class MeleeWeapon extends Weapon {
 
 	@Override
 	public long min(long lvl) {
-		return  tier*2 +  //base
+		return  tier()*2L +  //base
 				lvl*2;    //level scaling
 	}
 
 	@Override
 	public long max(long lvl) {
-		return  5*(tier+1) +    //base
-				lvl*(tier+1);   //level scaling
+		return  5L*(tier()+1) +    //base
+				lvl*(tier()+1);   //level scaling
 	}
 
 	public int STRReq(long lvl){

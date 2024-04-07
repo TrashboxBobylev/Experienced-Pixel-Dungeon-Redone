@@ -122,6 +122,7 @@ public class BuffIndicator extends Component {
 	public static final int MONK_ENERGY = 68;
 	public static final int DUEL_COMBO  = 69;
 	public static final int DAZE        = 70;
+	public static final int OSMISHIELD  = 71;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;

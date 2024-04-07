@@ -87,8 +87,8 @@ public class MagesStaff extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  Math.round(3f*(tier+1)) +   //6 base damage, down from 10
-				lvl*(tier+1);               //scaling unaffected
+		return  Math.round(3d*(tier()+1)) +   //6 base damage, down from 10
+				lvl*(tier()+1);               //scaling unaffected
 	}
 
 	public MagesStaff(Wand wand){
@@ -385,7 +385,10 @@ public class MagesStaff extends MeleeWeapon {
 		Emitter emitter = new Emitter();
 		emitter.pos(12.5f, 3);
 		emitter.fillTarget = false;
-		emitter.pour(StaffParticleFactory, 0.1f);
+		if (wand instanceof WandOfEarthblast)
+			emitter.pour(StaffParticleFactory, 0.05f);
+		else
+			emitter.pour(StaffParticleFactory, 0.1f);
 		return emitter;
 	}
 
