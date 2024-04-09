@@ -53,13 +53,13 @@ public class BurntBag extends TreasureBag {
     }
 
     public static Item burningRoll(){
-        float worstRoll = 1f;
+        float worstRoll = 0f;
         for (int i = 0; i < 3; i++){
             float lol = Dungeon.Float();
-            if (lol < worstRoll) worstRoll = lol;
+            if (lol > worstRoll) worstRoll = lol;
         }
 
-        if (worstRoll <= 0.1f)
+        if (worstRoll <= 0.2f)
             return new IdealBag();
         else
             return new BurntBag();

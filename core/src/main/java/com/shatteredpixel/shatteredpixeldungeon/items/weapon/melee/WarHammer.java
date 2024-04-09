@@ -44,7 +44,7 @@ public class WarHammer extends MeleeWeapon {
 
 		internalTier = tier = 5;
 		ACC = 1.20f; //20% boost to accuracy
-        DLY = 3;
+        DLY = 2.5f;
 	}
 
 	@Override
@@ -81,7 +81,8 @@ public class WarHammer extends MeleeWeapon {
 	@Override
     public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
-        Buff.affect(attacker, Paralysis.class, Random.Int(2, 5));
+        Buff.affect(attacker, Paralysis.class, Random.Int(1, 4)
+				* (Math.round((1f/((speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
         Buff.affect(defender, Paralysis.class, Random.Int(1, 3));
         return super.proc(attacker, defender, damage);
     }

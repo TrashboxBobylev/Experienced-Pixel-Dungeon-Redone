@@ -26,12 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -113,16 +109,7 @@ public class Perks {
         if (hero.perks.contains(Perk.DIRECTIVE)
                 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)
                 && enemy.buff(DirectiveTracker.class) == null){
-            Actor.addDelayed(new Actor() {
-                @Override
-                protected boolean act() {
-                    Buff.count(hero, DirectiveMovingTracker.class, -1);
-                    diactivate();
-                    return true;
-                }
-            }, 0);
-
-            Buff.affect(enemy, DirectiveTracker.class);
+            Buff.affect(hero, Haste.class, 1.5f);
         }
         if (hero.perks.contains(Perk.FOLLOW_UP_STRIKE)) {
             if (hero.belongings.weapon instanceof MissileWeapon) {
