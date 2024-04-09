@@ -58,7 +58,7 @@ public class IdealBag extends TreasureBag {
         int amount = Random.Int(0, 15)*10;
         if (Dungeon.hero.perks.contains(Perks.Perk.MORE_BAG)) amount *= 1.5f;
         for(int i = 0; i < amount; i++) {
-            if (Dungeon.Float() <= 0.04f){
+            if (Dungeon.Float(1) <= 0.03f){
                 Item gift = null;
                 switch (Random.Int(5)){
                     case 0:
