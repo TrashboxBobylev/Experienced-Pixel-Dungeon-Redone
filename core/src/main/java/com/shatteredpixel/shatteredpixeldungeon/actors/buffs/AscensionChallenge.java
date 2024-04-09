@@ -75,6 +75,10 @@ public class AscensionChallenge extends Buff {
 	}
 
 	public static double statModifier(Char ch){
+		return baseStatModifier(ch)*Dungeon.resetDamage();
+	}
+
+	private static double baseStatModifier(Char ch){
 		if (Dungeon.hero == null || Dungeon.hero.buff(AscensionChallenge.class) == null){
 			return 1;
 		}

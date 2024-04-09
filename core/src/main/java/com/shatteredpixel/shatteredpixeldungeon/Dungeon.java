@@ -196,6 +196,7 @@ public class Dungeon {
 	public static double fireDamage;
 	public static int luck;
 	public static long energy;
+	public static double resetDamage;
 
 	public static HashSet<Integer> chapters;
 
@@ -267,6 +268,7 @@ public class Dungeon {
 		fireDamage = 1d;
 		luck = 1;
 		energy = 0L;
+		resetDamage = 1d;
 
 		droppedItems = new SparseArray<>();
 
@@ -301,6 +303,7 @@ public class Dungeon {
             if (a != LimitedDrops.BBAT && a != LimitedDrops.CHEESY_CHEEST)  a.count = 0;
         Notes.reset();
         if (cycle < 5) cycle += 1;
+		Dungeon.resetDamage = 1d + (Dungeon.resetDamage - 1d) * 0.5d;
         GameLog.wipe();
 		SpecialRoom.initForRun();
 		SecretRoom.initForRun();
@@ -649,6 +652,10 @@ public class Dungeon {
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
 
+	public static double resetDamage(){
+		return resetDamage + Statistics.duration / 0.000075d;
+	}
+
 	private static final String INIT_VER	= "init_ver";
 	private static final String VERSION		= "version";
 	private static final String SEED		= "seed";
@@ -663,6 +670,7 @@ public class Dungeon {
     private static final String RESPAWN_TIMER		= "respawntimer";
     private static final String ADDMOBS		= "additionalMobs";
     private static final String FIREDANAGE = "firedamage";
+	private static final String RESETDAMAGE = "resetdamage";
     private static final String LUCK        = "luck";
 	private static final String BRANCH		= "branch";
 	private static final String GENERATED_LEVELS    = "generated_levels";
@@ -699,6 +707,7 @@ public class Dungeon {
 			bundle.put( RESPAWN_TIMER, respawn_timer);
 			bundle.put( ADDMOBS, additionalMobs);
 			bundle.put(FIREDANAGE, fireDamage);
+			bundle.put(RESETDAMAGE, resetDamage);
 			bundle.put(LUCK, luck);
 			Bbat.saveLevel(bundle);
 
@@ -877,6 +886,11 @@ public class Dungeon {
 		additionalMobs = bundle.getInt(ADDMOBS);
 		fireDamage = bundle.getDouble(FIREDANAGE);
 		luck = bundle.getInt(LUCK);
+		if (bundle.contains(RESETDAMAGE)){
+			resetDamage = bundle.getDouble(RESETDAMAGE);
+		} else {
+			resetDamage = 1d;
+		}
 
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
