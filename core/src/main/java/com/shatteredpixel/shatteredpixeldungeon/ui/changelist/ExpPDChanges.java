@@ -62,7 +62,45 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.0", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.1", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                "_-_ Released April 9th, 2024\n" +
+                        "_-_ 2 days after Experienced Pixel Dungeon 2.17"));
+            changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                "_-_ Changed Ring of Haste:\n" +
+                        "   _-_ now 3x less likely to appear as other rings\n" +
+                        "   _-_ now slows you down\n" +
+                        "_-_ Glyph of Swiftness is now a curse and slows player down\n" +
+                        "_-_ Glyph of Flow is 5000x less potent; base speed boost reduced from _2x_ to _1.25x_\n" +
+                        "_-_ Buffed Ring of Elements:\n" +
+                        "   _-_ now reduces _80%_ of elemental damage instead of 50%\n" +
+                        "_-_ Buffed Warhammer and Starlight Smasher:\n" +
+                        "   _-_ increased attack delay from _3 turns_ to _2.5 turns_\n" +
+                        "   _-_ decreased attacker's stun by 1 turn and allowed it to be affected by furor\n" +
+                        "   _-_ decreased Starlight Smasher's special attack's delay from _5 turns_ to _3.5 turns_\n" +
+                        "   _-_ decreased Starlight Smasher's max damage from _10x_ of base to _8.5x_ of base\n" +
+                        "_-_ Reworked/nerfed Directive perk:\n" +
+                        "   _-_ now grants 1.5 turns of haste instead of 3 free steps"));
+            changes.addButton( new ChangeButton(new ItemSprite(new IdealBag()), "New Treasure Bags",
+                "_-_ Chance to get Refined Lucky Bag is _increased to 20%_, but the mechanic with worst rolls to get it works correctly now\n" +
+                        "_-_ _Refined Lucky Bag_ is now less likely to give unstackable items like equipment\n" +
+                        "_-_ _Refined Lucky Bag's_ chance to drop exclusive item is now affected by luck and increased from 4% to 4.5%"));
+            changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.PSYCHE_CHEST), "Fate Lock",
+                "Changed Fate Lock's reset mechanic:\n\n" +
+                        "_-_ Now uses 45% of player's health, down from 50%\n" +
+                        "_-_ Enemies get _8%_ faster and _16%_ stronger with each reset\n" +
+                        "_-_ The only way to reduce this boost is to go to new cycle\n" +
+                        "_-_ Run's current duration also affects enemy stats"));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Arena's guaranteed gold from each mob now directly goes into player's purse"
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed a crash caused by fishing attempts\n" +
+                        "_-_ Fixed Rat King not being rendered on ascension's surface scene"
+            ));
+            changes = new ChangeInfo("ExpPD-2.17.0", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
