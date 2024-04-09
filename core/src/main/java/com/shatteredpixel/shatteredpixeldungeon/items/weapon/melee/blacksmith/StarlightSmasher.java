@@ -59,14 +59,14 @@ public class StarlightSmasher extends BlacksmithWeapon {
         usesTargeting = true;
 
         ACC = 1.30f; //30% boost to accuracy
-        DLY = 3;
+        DLY = 2.5f;
     }
 
     public boolean starlight_power = false;
 
     @Override
     public long min(long lvl) {
-        return super.min(lvl)*10;
+        return Math.round(super.min(lvl)*8.5f);
     }
 
     @Override
@@ -77,7 +77,8 @@ public class StarlightSmasher extends BlacksmithWeapon {
     @Override
     public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
-        Buff.affect(attacker, Paralysis.class, Random.Int(2, 6));
+        Buff.affect(attacker, Paralysis.class, Random.Int(1, 5)
+                * (Math.round((1f/((speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
         Buff.affect(defender, Paralysis.class, Random.Int(2, 4));
         if (!starlight_power){
             starlight_power = true;
@@ -97,7 +98,7 @@ public class StarlightSmasher extends BlacksmithWeapon {
 
     public float castDelay(Char user, int dst ){
         if (starlight_power)
-            return TIME_TO_THROW*5f;
+            return TIME_TO_THROW*3.5f;
         return super.castDelay(user, dst);
     }
 
