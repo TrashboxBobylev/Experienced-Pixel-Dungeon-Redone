@@ -74,7 +74,13 @@ public class IdealBag extends TreasureBag {
                 }
                 items.add(gift);
             } else {
-                items.add(Generator.random());
+                while (true){
+                    Item loot = Generator.random();
+                    if (loot.stackable || Random.Int(2) != 0) {
+                        items.add(loot);
+                        break;
+                    }
+                }
             }
         }
         return items;
