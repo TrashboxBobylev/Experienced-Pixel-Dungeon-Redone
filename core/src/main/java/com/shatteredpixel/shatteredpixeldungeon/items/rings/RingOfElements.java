@@ -45,14 +45,14 @@ public class RingOfElements extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					new DecimalFormat("#.###").format(100f * (1f - (0.50f))));
+					new DecimalFormat("#.###").format(100f * (1f - (0.2f))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - (0.50f))));
+						Messages.decimalFormat("#.##", 100f * (1f - (0.2f))));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(50f));
+			return Messages.get(this, "typical_stats", new DecimalFormat("#.###").format(80f));
 		}
 	}
 	
@@ -82,7 +82,7 @@ public class RingOfElements extends Ring {
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
                 float multiplier = 1f;
-                if (getBonus(target, Resistance.class) > 0) multiplier = 0.5f;
+                if (getBonus(target, Resistance.class) > 0) multiplier = 0.2f;
                 return multiplier;
 			}
 		}
