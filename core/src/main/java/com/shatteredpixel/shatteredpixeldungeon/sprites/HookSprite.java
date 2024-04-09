@@ -33,7 +33,7 @@ import com.watabou.noosa.tweeners.AlphaTweener;
 
 public class HookSprite extends CharSprite{
 
-    private Animation[] tierIdles = new Animation[6];
+    private Animation[] tierIdles = new Animation[7];
 
     public HookSprite() {
         super();
