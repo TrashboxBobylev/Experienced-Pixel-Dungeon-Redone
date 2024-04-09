@@ -410,7 +410,7 @@ public class SurfaceScene extends PixelScene {
 		public Avatar( HeroClass cl ) {
 			if (cl == HeroClass.RAT_KING) {
 				// FIXME do I want this animated?
-				copy(HeroSprite.avatar(cl, 6));
+				copy(HeroSprite.avatar(cl, 0));
 				scale.set(WIDTH/width(),HEIGHT/height());
 			}
 			else {
