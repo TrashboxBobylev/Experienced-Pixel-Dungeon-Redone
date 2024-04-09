@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 
 public class Swiftness extends Armor.Glyph {
 
-	private static ItemSprite.Glowing YELLOW = new ItemSprite.Glowing( 0xFFFF00 );
+	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
 
 	@Override
 	public long proc(Armor armor, Char attacker, Char defender, long damage) {
@@ -40,7 +40,12 @@ public class Swiftness extends Armor.Glyph {
 
 	@Override
 	public ItemSprite.Glowing glowing() {
-		return YELLOW;
+		return BLACK;
+	}
+
+	@Override
+	public boolean curse() {
+		return true;
 	}
 
 }
