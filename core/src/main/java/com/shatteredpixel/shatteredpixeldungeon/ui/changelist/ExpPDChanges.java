@@ -62,7 +62,36 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.1", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.2", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released April 11th, 2024\n" +
+                            "_-_ 2 days after Experienced Pixel Dungeon 2.17.1"));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed Dwarf King becoming unbeatable when affected by Fate Lock's stat boost\n" +
+                            "_-_ Fixed harden boost being applied to every weapon and armor regardless of them being hardened or not\n" +
+                            "_-_ Fixed hero's accuracy and evasion being decreased with luck"
+            ));
+            changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                    "_-_ Changed Ring of Elements:\n" +
+                            "   _-_ now appears 2x less frequently in Refined Lucky Bag\n" +
+                            "   _-_ increased elemental protection from 80% to 98%\n" +
+                            "_-_ Nerfed harden mechanic:\n" +
+                            "   _-_ now 10x less potent\n" +
+                            "_-_ Massively increased stat escalation of weapons from later cycles and added one for cycle 5\n" +
+                            "_-_ Buffed the probability of getting Refined Lucky Bag from \"20%\" to \"35%\""
+            ));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Changed Dwarf King:\n" +
+                            "   _-_ increased max HP by 3x\n" +
+                            "   _-_ no longer has second phase (screw Evan for making it so hard to maintain\n" +
+                            "_-_ Capped some of AoE traps to not last forever on later cycles\n" +
+                            "_-_ Massively increased virtual depth escalation with cycles to make debuffs and gases more potent\n" +
+                            "_-_ Capped Blazing enchantment's particle amount at 100"
+            ));
+
+            changes = new ChangeInfo("ExpPD-2.17.1", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
