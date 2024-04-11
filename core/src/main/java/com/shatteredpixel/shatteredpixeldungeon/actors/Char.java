@@ -531,7 +531,7 @@ public abstract class Char extends Actor {
 		}
 
 		float acuRoll = Random.Float( acuStat );
-		if (attacker instanceof Hero) acuRoll = Dungeon.Float( acuStat );
+		if (attacker instanceof Hero) acuRoll = Dungeon.Float( acuStat, Dungeon.LuckDirection.UP );
 		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
@@ -541,7 +541,7 @@ public abstract class Char extends Actor {
 		acuRoll *= AscensionChallenge.statModifier(attacker);
 
 		float defRoll = Random.Float( defStat );
-		if (defender instanceof Hero) defRoll = Dungeon.Float( defRoll );
+		if (defender instanceof Hero) defRoll = Dungeon.Float( defRoll, Dungeon.LuckDirection.UP );
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		if (defender.buff( Daze.class) != null) defRoll *= 0.5f;
