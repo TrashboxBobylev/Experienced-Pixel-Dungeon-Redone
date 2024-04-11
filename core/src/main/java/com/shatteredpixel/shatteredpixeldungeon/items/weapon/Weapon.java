@@ -96,7 +96,7 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	public boolean masteryPotionBonus = false;
 
 	public static float hardenBoost(long upgrades){
-		return 0.002f * upgrades;
+		return 0.0002f * upgrades;
 	}
 
 	@Override
