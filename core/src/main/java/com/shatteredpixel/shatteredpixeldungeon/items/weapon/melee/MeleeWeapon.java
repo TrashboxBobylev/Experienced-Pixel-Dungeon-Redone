@@ -362,12 +362,12 @@ private static boolean evaluatingTwinUpgrades = false;
 
 	@Override
 	public long min() {
-		return Math.round(super.min()*(1d + hardenBoost(buffedLvl())));
+		return Math.round(super.min()*(1d + (enchantHardened ? Weapon.hardenBoost(buffedLvl()) : 0d)));
 	}
 
 	@Override
 	public long max() {
-		return Math.round(super.max()*(1d + hardenBoost(buffedLvl())));
+		return Math.round(super.max()*(1d + (enchantHardened ? Weapon.hardenBoost(buffedLvl()) : 0d)));
 	}
 
 	@Override

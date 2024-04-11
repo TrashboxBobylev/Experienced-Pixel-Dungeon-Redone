@@ -59,7 +59,7 @@ public class GuardianTrap extends Trap {
 
 		Sample.INSTANCE.play( Assets.Sounds.ALERT );
 
-		for (int i = 0; i < (scalingDepth() - 5)/5; i++){
+		for (int i = 0; i < Math.min(20, (scalingDepth() - 5)/5); i++){
 			Guardian guardian = new Guardian();
 			guardian.createWeapon(false);
 			guardian.state = guardian.WANDERING;

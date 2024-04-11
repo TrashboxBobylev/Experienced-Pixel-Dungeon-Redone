@@ -96,7 +96,7 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 	public boolean masteryPotionBonus = false;
 
 	public static float hardenBoost(long upgrades){
-		return 0.002f * upgrades;
+		return 0.0002f * upgrades;
 	}
 
 	@Override
@@ -267,14 +267,16 @@ abstract public class Weapon extends KindOfWeapon implements EquipableItem.Tiera
 			case 0:
 				return tier;
 			case 1:
-				return tier+1;
+				return tier+5;
 			case 2:
-				return Math.round(tier*1.5f);
+				return Math.round(tier*3f);
 			case 3:
-				return Math.round((tier+2)*2f);
+				return Math.round((tier+12)*5f);
 			case 4:
+				return Math.round((tier+30)*8f);
+			case 5:
 			default:
-				return Math.round((tier+4)*3f);
+				return Math.round((tier+150)*15f);
 		}
 	}
 
