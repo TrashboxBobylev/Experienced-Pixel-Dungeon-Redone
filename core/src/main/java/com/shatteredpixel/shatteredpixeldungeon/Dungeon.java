@@ -653,7 +653,7 @@ public class Dungeon {
 	}
 
 	public static double resetDamage(){
-		return resetDamage + Statistics.duration * 0.000075d;
+		return resetDamage;
 	}
 
 	private static final String INIT_VER	= "init_ver";
