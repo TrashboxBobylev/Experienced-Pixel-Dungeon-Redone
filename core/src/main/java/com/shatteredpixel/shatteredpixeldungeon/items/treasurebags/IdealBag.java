@@ -60,16 +60,16 @@ public class IdealBag extends TreasureBag {
         for(int i = 0; i < amount; i++) {
             if (Dungeon.Float(1) <= 0.045f){
                 Item gift = null;
-                switch (Random.Int(5)){
-                    case 0:
+                switch (Random.Int(9)){
+                    case 0: case 1:
                         gift = new Plutonium(); break;
-                    case 1:
+                    case 2: case 3:
                         gift = new OsmiridiumPlate(); break;
-                    case 2:
+                    case 4: case 5:
                         gift = new BrokenEnderiumBlade(); break;
-                    case 3:
+                    case 6: case 7:
                         gift = new EnergyBottle(); break;
-                    case 4:
+                    case 9:
                         gift = new RingOfElements(); break;
                 }
                 items.add(gift);
