@@ -324,11 +324,11 @@ public class Dungeon {
     public static int escalatingDepth(int depth){
 	    switch (cycle){
             case 0: return depth;
-            case 1: return (int) (depth*2f +45);
-            case 2: return depth*15+500;
-            case 3: return depth*200+10000;
-            case 4: return depth*2500 + 75000;
-			case 5: return depth*32500 + 300500;
+            case 1: return (int) (depth*2f + 55);
+            case 2: return depth*25+750;
+            case 3: return depth*300+12500;
+            case 4: return depth*3000 + 100000;
+			case 5: return depth*40000 + 410000;
         }
         return depth;
     }
