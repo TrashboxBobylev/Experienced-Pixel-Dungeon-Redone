@@ -90,7 +90,7 @@ public class ItemSpriteSheet {
 	public static final int PETAL           = UNCOLLECTIBLE+2;
 	public static final int SANDBAG         = UNCOLLECTIBLE+3;
 	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+4;
-	public static final int RUNIC_SHOT = UNCOLLECTIBLE+5;
+	public static final int RUNIC_SHOT 		= UNCOLLECTIBLE+8;
 	
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
@@ -119,7 +119,7 @@ public class ItemSpriteSheet {
 	public static final int LOCKED_CHEST    = CONTAINERS+5;
 	public static final int CRYSTAL_CHEST   = CONTAINERS+6;
 	public static final int EBONY_CHEST     = CONTAINERS+7;
-	public static final int PSYCHE_CHEST = CONTAINERS+8;
+	public static final int PSYCHE_CHEST 	= CONTAINERS+8;
 	static{
 		assignItemRect(BONES,           14, 11);
 		assignItemRect(REMAINS,         14, 11);
@@ -682,35 +682,28 @@ public class ItemSpriteSheet {
 	private static final int SPELLS         =                               xy(1, 27);  //16 slots
 	public static final int WILD_ENERGY     = SPELLS+0;
 	public static final int PHASE_SHIFT     = SPELLS+1;
-	public static final int TELE_GRAB       = SPELLS+15;
-	public static final int WILD_ENERGY     = SPELLS+2;
-	public static final int RETURN_BEACON   = SPELLS+3;
-	public static final int SUMMON_ELE      = SPELLS+14;
-	public static final int VAMPIRISM = SPELLS+4;
+	public static final int TELE_GRAB       = SPELLS+2;
+	public static final int UNSTABLE_SPELL  = SPELLS+3;
+	public static final int RESPAWN    		= SPELLS+4;
 
-	public static final int AQUA_BLAST      = SPELLS+5;
-	public static final int FEATHER_FALL    = SPELLS+6;
-	public static final int RECLAIM_TRAP    = SPELLS+7;
-    public static final int RESPAWN    = SPELLS+8;
+	public static final int CURSE_INFUSE    = SPELLS+5;
+	public static final int MAGIC_INFUSE    = SPELLS+6;
+	public static final int ALCHEMIZE       = SPELLS+7;
+	public static final int RECYCLE         = SPELLS+8;
+	public static final int FIREBOOSTER     = SPELLS+9;
 
-	public static final int CURSE_INFUSE    = SPELLS+9;
-	public static final int MAGIC_INFUSE    = SPELLS+10;
-	public static final int ALCHEMIZE       = SPELLS+11;
-	public static final int RECYCLE         = SPELLS+12;
-    public static final int FIREBOOSTER         = SPELLS+13;
+	public static final int RECLAIM_TRAP    = SPELLS+10;
+	public static final int RETURN_BEACON   = SPELLS+11;
+	public static final int SUMMON_ELE      = SPELLS+12;
+	public static final int VAMPIRISM 		= SPELLS+13;
+
 	static{
-		assignItemRect(WILD_ENERGY,     12, 11);
 		assignItemRect(PHASE_SHIFT,     12, 11);
 		assignItemRect(TELE_GRAB,       12, 11);
 		assignItemRect(WILD_ENERGY,      8, 16);
-		assignItemRect(RETURN_BEACON,    8, 16);
-        assignItemRect(VAMPIRISM,    8, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
 
-		assignItemRect(AQUA_BLAST,      11, 11);
-		assignItemRect(FEATHER_FALL,    11, 11);
-		assignItemRect(RECLAIM_TRAP,    11, 11);
-        assignItemRect(RESPAWN,    11, 11);
+        assignItemRect(RESPAWN,         11, 11);
 
 		assignItemRect(UNSTABLE_SPELL,  12, 13);
 
@@ -718,11 +711,12 @@ public class ItemSpriteSheet {
 		assignItemRect(MAGIC_INFUSE,    12, 12);
 		assignItemRect(ALCHEMIZE,       10, 15);
 		assignItemRect(RECYCLE,         10, 15);
+		assignItemRect(FIREBOOSTER,     10, 15);
 
 		assignItemRect(RECLAIM_TRAP,     8, 16);
 		assignItemRect(RETURN_BEACON,    8, 16);
-		assignItemRect(SUMMON_ELE,       8, 16);
-		assignItemRect(FIREBOOSTER, 10, 15);
+		assignItemRect(VAMPIRISM,    	 8, 16);
+
 	}
 	
 	private static final int FOOD       =                                   xy(1, 28);  //16 slots
@@ -739,20 +733,9 @@ public class ItemSpriteSheet {
 	public static final int BERRY           = FOOD+10;
 	public static final int PHANTOM_MEAT    = FOOD+11;
 	public static final int SUPPLY_RATION   = FOOD+12;
+	public static final int CHEESE			= FOOD+13;
+	public static final int CHEESE_CHUNK 	= FOOD+14;
 	static{
-		assignItemRect(MEAT,        15, 11);
-		assignItemRect(STEAK,       15, 11);
-		assignItemRect(STEWED,      15, 11);
-		assignItemRect(OVERPRICED,  14, 11);
-		assignItemRect(CARPACCIO,   15, 11);
-		assignItemRect(RATION,      16, 12);
-		assignItemRect(PASTY,       16, 11);
-		assignItemRect(MEAT_PIE,    16, 12);
-		assignItemRect(BLANDFRUIT,  9,  12);
-		assignItemRect(BLAND_CHUNKS,14, 6);
-		assignItemRect(CHEESE,      16, 12);
-		assignItemRect(PHANTOM_MEAT,15, 11);
-		assignItemRect(CHEESE_CHUNK,10, 8);
 		assignItemRect(MEAT,            15, 11);
 		assignItemRect(STEAK,           15, 11);
 		assignItemRect(STEWED,          15, 11);
@@ -766,6 +749,8 @@ public class ItemSpriteSheet {
 		assignItemRect(BERRY,           9,  11);
 		assignItemRect(PHANTOM_MEAT,    15, 11);
 		assignItemRect(SUPPLY_RATION,   16, 12);
+		assignItemRect(CHEESE,      	16, 12);
+		assignItemRect(CHEESE_CHUNK,	10, 8);
 	}
 
 	private static final int HOLIDAY_FOOD   =                               xy(1, 29);  //16 slots
