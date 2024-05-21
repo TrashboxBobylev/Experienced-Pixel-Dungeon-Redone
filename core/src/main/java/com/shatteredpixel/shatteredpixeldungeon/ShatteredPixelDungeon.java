@@ -44,7 +44,8 @@ public class ShatteredPixelDungeon extends Game {
 	public static final int v2_0_2 = 700;
 	public static final int v2_1_4 = 737; //iOS was 737, other platforms were 736
 	public static final int v2_2_1 = 755; //iOS was 755 (also called v2.2.2), other platforms were 754
-	public static final int v2_3_0 = 765;
+	public static final int v2_3_2 = 768;
+	public static final int v2_4_0 = 780;
 	
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
@@ -61,6 +62,30 @@ public class ShatteredPixelDungeon extends Game {
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel.ArenaBuff.class,
 				"com.shatteredpixel.shatteredpixeldungeon.levels.OldCavesBossLevel$ArenaBuff" );
+
+		//pre-v2.4.0
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.spells.FeatherFall" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall.FeatherBuff.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.spells.FeatherFall$FeatherBuff" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.spells.AquaBlast" );
+
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance.EntranceRoom.class,
+				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EntranceRoom" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit.ExitRoom.class,
+				"com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.ExitRoom" );
 
 		//pre-v2.3.0
 		com.watabou.utils.Bundle.addAlias(

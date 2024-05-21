@@ -110,7 +110,7 @@ public class CrystalWisp extends Mob{
 			case 4: return Random.NormalIntRange(14000, 18500);
 			case 5: return Random.NormalIntRange(1100000, 1800000);
 		}
-		return Random.NormalIntRange( 5, 10 );
+		return Char.combatRoll( 5, 10 );
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class CrystalWisp extends Mob{
 		Char enemy = this.enemy;
 		if (hit( this, enemy, true )) {
 
-			int dmg = Random.NormalIntRange( 5, 10 );
+			int dmg = Char.combatRoll( 5, 10 );
 			switch (Dungeon.cycle) {
 				case 1: dmg = Random.NormalIntRange(50, 55); break;
 				case 2: dmg = Random.NormalIntRange(240, 275); break;

@@ -30,8 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
@@ -161,38 +161,39 @@ public abstract class Recipe {
 		new ExoticPotion.PotionToExotic(),
 		new ExoticScroll.ScrollToExotic(),
 		new ArcaneResin.Recipe(),
-		new Alchemize.Recipe(),
-		new StewedMeat.oneMeat()
+		new BlizzardBrew.Recipe(),
+		new InfernalBrew.Recipe(),
+		new AquaBrew.Recipe(),
+		new ShockingBrew.Recipe(),
+		new ElixirOfDragonsBlood.Recipe(),
+		new ElixirOfIcyTouch.Recipe(),
+		new ElixirOfToxicEssence.Recipe(),
+		new ElixirOfMight.Recipe(),
+		new ElixirOfFeatherFall.Recipe(),
+		new MagicalInfusion.Recipe(),
+		new BeaconOfReturning.Recipe(),
+		new PhaseShift.Recipe(),
+		new Recycle.Recipe(),
+		new TelekineticGrab.Recipe(),
+		new SummonElemental.Recipe(),
+		new StewedMeat.oneMeat(),
+		new TrinketCatalyst.Recipe(),
+		new Trinket.UpgradeTrinket()
 	};
 	
 	private static Recipe[] twoIngredientRecipes = new Recipe[]{
 		new Blandfruit.CookFruit(),
 		new Bomb.EnhanceBomb(),
-		new AlchemicalCatalyst.Recipe(),
-		new ArcaneCatalyst.Recipe(),
+		new UnstableBrew.Recipe(),
+		new CausticBrew.Recipe(),
 		new ElixirOfArcaneArmor.Recipe(),
 		new ElixirOfAquaticRejuvenation.Recipe(),
-		new ElixirOfDragonsBlood.Recipe(),
-		new ElixirOfIcyTouch.Recipe(),
-		new ElixirOfMight.Recipe(),
 		new ElixirOfHoneyedHealing.Recipe(),
-		new ElixirOfToxicEssence.Recipe(),
-		new BlizzardBrew.Recipe(),
-		new InfernalBrew.Recipe(),
-		new ShockingBrew.Recipe(),
-		new CausticBrew.Recipe(),
-		new AquaBlast.Recipe(),
-		new BeaconOfReturning.Recipe(),
+		new UnstableSpell.Recipe(),
+		new Alchemize.Recipe(),
 		new CurseInfusion.Recipe(),
-		new FeatherFall.Recipe(),
-		new MagicalPorter.Recipe(),
-		new PhaseShift.Recipe(),
 		new ReclaimTrap.Recipe(),
-		new Recycle.Recipe(),
 		new WildEnergy.Recipe(),
-		new TelekineticGrab.Recipe(),
-		new SummonElemental.Recipe(),
-		new CheeseChunk.oneMeat(),
 		new StewedMeat.twoMeat()
 	};
 	

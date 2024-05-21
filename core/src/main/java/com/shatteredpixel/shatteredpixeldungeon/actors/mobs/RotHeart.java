@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RotHeartSprite;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class RotHeart extends Mob {
 
@@ -64,6 +63,7 @@ public class RotHeart extends Mob {
                 break;
 
         }
+		properties.add(Property.STATIC);
 	}
 
 	@Override
@@ -150,13 +150,7 @@ public class RotHeart extends Mob {
 	}
 	
 	{
-		immunities.add( Paralysis.class );
-		immunities.add( Amok.class );
-		immunities.add( Sleep.class );
 		immunities.add( ToxicGas.class );
-		immunities.add( Terror.class );
-		immunities.add( Dread.class );
-		immunities.add( Vertigo.class );
 	}
 
 }

@@ -429,7 +429,7 @@ public class Hero extends Char {
 		}
 
 		if (buff(Scimitar.SwordDance.class) != null){
-			accuracy *= 1.25f;
+			accuracy *= 1.50f;
 		}
 
 		if (!RingOfForce.fightingUnarmed(this)) {
@@ -495,7 +495,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (buff(RoundShield.GuardTracker.class) != null){
-			buff(RoundShield.GuardTracker.class).detach();
+			buff(RoundShield.GuardTracker.class).hasBlocked = true;
+			BuffIndicator.refreshHero();
 			shieldDamage(lvl);
 			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			return Messages.get(RoundShield.GuardTracker.class, "guarded");
@@ -517,7 +518,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		long dr = super.drRoll();
 
 		if (belongings.armor() != null) {
-			long armDr = Dungeon.NormalLongRange( belongings.armor().DRMin(), belongings.armor().DRMax());
+			int armDr = Char.combatRoll( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
@@ -525,7 +526,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			long wepDr = Dungeon.NormalLongRange( 0 , belongings.weapon().defenseFactor( this ) );
+			int wepDr = Char.combatRoll( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}
@@ -1132,7 +1133,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 	}
 
-	public boolean actMine(HeroAction.Mine action){
+	private boolean actMine(HeroAction.Mine action){
 		if (Dungeon.level.adjacent(pos, action.dst)){
 			path = null;
 			if ((Dungeon.level.map[action.dst] == Terrain.WALL
@@ -1282,7 +1283,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		enemy = action.target;
 
-		if (enemy.isAlive() && canAttack( enemy ) && !isCharmedBy( enemy ) && enemy.invisible == 0) {
+		if (isCharmedBy( enemy )){
+			GLog.w( Messages.get(Charm.class, "cant_attack"));
+			ready();
+			return false;
+		}
+
+		if (enemy.isAlive() && canAttack( enemy ) && enemy.invisible == 0) {
 
 			if (heroClass != HeroClass.DUELIST
 					&& hasTalent(Talent.AGGRESSIVE_BARRIER)
@@ -2179,18 +2186,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
-		}
-
-		RingOfForce.BrawlersStance brawlStance = buff(RingOfForce.BrawlersStance.class);
-		if (brawlStance != null && brawlStance.hitsLeft() > 0){
-			MeleeWeapon.Charger charger = Buff.affect(this, MeleeWeapon.Charger.class);
-			charger.partialCharge -= RingOfForce.BrawlersStance.HIT_CHARGE_USE;
-			while (charger.partialCharge < 0) {
-				charger.charges--;
-				charger.partialCharge++;
-			}
-			BuffIndicator.refreshHero();
-			Item.updateQuickslot();
 		}
 
 		curAction = null;

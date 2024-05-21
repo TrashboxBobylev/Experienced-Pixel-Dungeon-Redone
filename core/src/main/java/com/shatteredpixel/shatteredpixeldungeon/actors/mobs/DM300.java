@@ -109,7 +109,7 @@ public class DM300 extends Mob {
             case 4: return Random.NormalIntRange(47000, 84000);
 			case 5: return Random.NormalIntRange(4500000, 6500000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	@Override
@@ -521,7 +521,7 @@ public class DM300 extends Mob {
 			threshold = HT / 3 * (2 - pylonsActivated);
 		}
 
-		if (HP < threshold){
+		if (HP <= threshold && HP > 0){
 			HP = threshold;
 			supercharge();
 		}

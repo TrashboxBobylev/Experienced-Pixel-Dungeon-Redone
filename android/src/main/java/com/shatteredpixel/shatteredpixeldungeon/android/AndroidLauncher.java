@@ -65,7 +65,7 @@ public class AndroidLauncher extends AndroidApplication {
 			GdxNativesLoader.load();
 			FreeType.initFreeType();
 		} catch (Exception e){
-			AndroidMissingNativesHandler.errorMsg = e.getMessage();
+			AndroidMissingNativesHandler.error = e;
 			Intent intent = new Intent(this, AndroidMissingNativesHandler.class);
 			startActivity(intent);
 			finish();

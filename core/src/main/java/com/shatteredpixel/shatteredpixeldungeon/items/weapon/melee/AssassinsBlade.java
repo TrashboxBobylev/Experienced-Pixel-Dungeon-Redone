@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.utils.Random;
 
 public class AssassinsBlade extends MeleeWeapon {
 
@@ -62,7 +61,7 @@ public class AssassinsBlade extends MeleeWeapon {
 						max()));
 				int exStr = hero.STR() - STRReq();
 				if (exStr > 0) {
-					damage += Dungeon.IntRange(0, exStr);
+					damage += Char.combatRoll(0, exStr);
 				}
 				return damage;
 			}
@@ -80,13 +79,17 @@ public class AssassinsBlade extends MeleeWeapon {
 	}
 
 	@Override
-	protected int baseChargeUse(Hero hero, Char target){
-		return 2;
+	protected void duelistAbility(Hero hero, Integer target) {
+		Dagger.sneakAbility(hero, target, 3, 2+buffedLvl(), this);
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Dagger.sneakAbility(hero, target, 4, this);
+	public String abilityInfo() {
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", 2+buffedLvl());
+		} else {
+			return Messages.get(this, "typical_ability_desc", 2);
+		}
 	}
 
 }

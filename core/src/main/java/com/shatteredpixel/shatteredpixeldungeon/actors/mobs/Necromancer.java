@@ -47,7 +47,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Necromancer extends Mob {
 	
@@ -111,7 +110,17 @@ public class Necromancer extends Mob {
 		}
 		return super.act();
 	}
-	
+
+	@Override
+	public void aggro(Char ch) {
+		super.aggro(ch);
+		if (mySkeleton != null && mySkeleton.isAlive()
+				&& Dungeon.level.mobs.contains(mySkeleton)
+				&& mySkeleton.alignment == alignment){
+			mySkeleton.aggro(ch);
+		}
+	}
+
 	@Override
 	public int cycledDrRoll() {
         switch (Dungeon.cycle){

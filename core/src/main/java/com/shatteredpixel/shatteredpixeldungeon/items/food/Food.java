@@ -82,7 +82,7 @@ public class Food extends Item {
 			hero.sprite.operate( hero.pos );
 			hero.busy();
 			SpellSprite.show( hero, SpellSprite.FOOD );
-			Sample.INSTANCE.play( Assets.Sounds.EAT );
+			eatSFX();
 			
 			hero.spend( eatingTime() );
 
@@ -92,6 +92,10 @@ public class Food extends Item {
 			Badges.validateFoodEaten();
 			
 		}
+	}
+
+	protected void eatSFX(){
+		Sample.INSTANCE.play( Assets.Sounds.EAT );
 	}
 
 	protected float eatingTime(){

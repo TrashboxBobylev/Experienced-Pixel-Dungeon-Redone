@@ -186,15 +186,16 @@ public class EtherealChains extends Artifact {
 				Actor.add(new Pushing(enemy, enemy.pos, pulledPos, new Callback() {
 					public void call() {
 						enemy.pos = pulledPos;
-						Dungeon.level.occupyCell(enemy);
-						Dungeon.observe();
-						GameScene.updateFog();
-						hero.spendAndNext(1f);
 
 						charge -= chargeUse;
 						Invisibility.dispel(hero);
 						Talent.onArtifactUsed(hero);
 						updateQuickslot();
+
+						Dungeon.level.occupyCell(enemy);
+						Dungeon.observe();
+						GameScene.updateFog();
+						hero.spendAndNext(1f);
 					}
 				}));
 				hero.next();
@@ -251,15 +252,16 @@ public class EtherealChains extends Artifact {
 				Actor.add(new Pushing(hero, hero.pos, newHeroPos, new Callback() {
 					public void call() {
 						hero.pos = newHeroPos;
-						Dungeon.level.occupyCell(hero);
-						hero.spendAndNext(1f);
-						Dungeon.observe();
-						GameScene.updateFog();
 
 						charge -= chargeUse;
 						Invisibility.dispel(hero);
 						Talent.onArtifactUsed(hero);
 						updateQuickslot();
+
+						Dungeon.level.occupyCell(hero);
+						hero.spendAndNext(1f);
+						Dungeon.observe();
+						GameScene.updateFog();
 					}
 				}));
 				hero.next();
@@ -278,7 +280,7 @@ public class EtherealChains extends Artifact {
 		long chargeTarget = 5+(level()*2);
 		if (charge < chargeTarget*2){
 			partialCharge += 0.5f*amount;
-			if (partialCharge >= 1){
+			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
 				updateQuickslot();
@@ -317,7 +319,7 @@ public class EtherealChains extends Artifact {
 				Buff.prolong( target, Cripple.class, 10f);
 			}
 
-			if (partialCharge >= 1) {
+			while (partialCharge >= 1) {
 				partialCharge --;
 				charge ++;
 			}

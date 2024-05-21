@@ -87,6 +87,7 @@ public class DemonSpawner extends Mob {
 				EXP = 425000000;
 				break;
         }
+		properties.add(Property.STATIC);
 	}
 
 	@Override
@@ -207,12 +208,4 @@ public class DemonSpawner extends Mob {
 		spawnRecorded = bundle.getBoolean(SPAWN_RECORDED);
 	}
 
-	{
-		immunities.add( Paralysis.class );
-		immunities.add( Amok.class );
-		immunities.add( Sleep.class );
-		immunities.add( Dread.class );
-		immunities.add( Terror.class );
-		immunities.add( Vertigo.class );
-	}
 }

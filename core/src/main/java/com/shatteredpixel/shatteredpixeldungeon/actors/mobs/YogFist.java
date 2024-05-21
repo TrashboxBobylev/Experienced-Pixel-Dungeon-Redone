@@ -202,7 +202,7 @@ public abstract class YogFist extends Mob {
             case 4: return Random.NormalIntRange(350000, 460000);
 			case 5: return Random.NormalIntRange(6000000, 12500000);
         }
-		return Random.NormalIntRange( 18, 36 );
+		return Char.combatRoll( 18, 36 );
 	}
 
 	@Override
@@ -493,7 +493,7 @@ public abstract class YogFist extends Mob {
                 case 4: return Random.NormalIntRange(435000, 540000);
 				case 5: return Random.NormalIntRange(8500000, 17500000);
             }
-			return Random.NormalIntRange( 22, 44 );
+			return Char.combatRoll( 22, 44 );
 		}
 
 		@Override

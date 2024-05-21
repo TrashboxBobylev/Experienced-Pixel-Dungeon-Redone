@@ -93,6 +93,10 @@ public class WelcomeScene extends PixelScene {
 			}
 			Dungeon.daily = Dungeon.dailyReplay = false;
 
+			if (previousVersion <= ShatteredPixelDungeon.v2_3_2){
+				Document.ADVENTURERS_GUIDE.findPage(Document.GUIDE_ALCHEMY);
+			}
+
 			Badges.saveGlobal(true);
 			Journal.saveGlobal(true);
 

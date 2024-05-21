@@ -94,7 +94,7 @@ public class DM200 extends Mob {
             case 4: return Random.NormalIntRange(20000, 60000);
 			case 5: return Random.NormalIntRange(2500000, 5000000);
         }
-		return Random.NormalIntRange( 10, 25 );
+		return Char.combatRoll( 10, 25 );
 	}
 
 	@Override

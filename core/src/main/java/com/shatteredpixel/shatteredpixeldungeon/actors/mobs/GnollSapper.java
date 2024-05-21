@@ -130,7 +130,7 @@ public class GnollSapper extends Mob {
 			case 4: return Random.NormalIntRange(3700, 6000);
 			case 5: return Random.NormalIntRange(400000, 1000000);
 		}
-		return Random.NormalIntRange( 1, 6 );
+		return Char.combatRoll( 1, 6 );
 	}
 
 	@Override
@@ -205,6 +205,12 @@ public class GnollSapper extends Mob {
 				return super.act(enemyInFOV, justAlerted);
 			} else {
 				enemySeen = true;
+
+				if (getPartner() != null
+						&& getPartner() instanceof Mob
+						&& ((Mob) getPartner()).alignment != alignment){
+					losePartner();
+				}
 
 				if (Actor.findById(partnerID) != null
 						&& Dungeon.level.distance(pos, enemy.pos) <= 3){

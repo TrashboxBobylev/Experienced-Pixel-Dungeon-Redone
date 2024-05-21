@@ -54,13 +54,7 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 			Buff.affect(hero, AquaHealing.class).set(Math.round(hero.HT * 1.5f));
 		}
 	}
-	
-	@Override
-	public long value() {
-		//prices of ingredients
-		return quantity * (30 + 30);
-	}
-	
+
 	public static class AquaHealing extends Buff {
 		
 		{

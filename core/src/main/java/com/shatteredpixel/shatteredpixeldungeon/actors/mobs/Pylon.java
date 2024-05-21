@@ -66,6 +66,7 @@ public class Pylon extends Mob {
 		properties.add(Property.INORGANIC);
 		properties.add(Property.ELECTRIC);
 		properties.add(Property.IMMOVABLE);
+		properties.add(Property.STATIC);
 
 		state = PASSIVE;
 		alignment = Alignment.NEUTRAL;
@@ -162,7 +163,7 @@ public class Pylon extends Mob {
 	private void shockChar( Char ch ){
 		if (ch != null && !(ch instanceof DM300)){
 			ch.sprite.flash();
-			ch.damage(Random.NormalIntRange(10, 20) + Dungeon.cycle * 60, new Electricity());
+			ch.damage(Char.combatRoll(10, 20) + Dungeon.cycle * 60, new Electricity());
 
 			if (ch == Dungeon.hero) {
 				Statistics.qualifiedForBossChallengeBadge = false;

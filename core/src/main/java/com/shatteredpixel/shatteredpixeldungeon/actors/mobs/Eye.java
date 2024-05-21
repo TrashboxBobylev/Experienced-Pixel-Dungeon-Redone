@@ -118,7 +118,7 @@ public class Eye extends Mob {
             case 4: return Random.NormalIntRange(179000, 290000);
 			case 5: return Random.NormalIntRange(5750000, 9000000);
         }
-		return Random.NormalIntRange(20, 30);
+		return Char.combatRoll(20, 30);
 	}
 
 	@Override
@@ -247,7 +247,7 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-                long dmg = Random.NormalIntRange(30, 50);
+                long dmg = Char.combatRoll(30, 50);
                 switch (Dungeon.cycle){
                     case 1: dmg = Random.NormalIntRange(168, 231); break;
                     case 2: dmg = Random.NormalIntRange(510, 824); break;

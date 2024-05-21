@@ -36,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
@@ -116,11 +118,7 @@ public class MeleeWeapon extends Weapon {
 				//do nothing
 			} else if (STRReq() > hero.STR()){
 				GLog.w(Messages.get(this, "ability_low_str"));
-			} else if (hero.belongings.weapon == this &&
-					(Buff.affect(hero, Charger.class).charges + Buff.affect(hero, Charger.class).partialCharge) < abilityChargeUse(hero, null)) {
-				GLog.w(Messages.get(this, "ability_no_charge"));
-			} else if (hero.belongings.secondWep == this &&
-					(Buff.affect(hero, Charger.class).secondCharges + Buff.affect(hero, Charger.class).secondPartialCharge) < abilityChargeUse(hero, null)) {
+			} else if ((Buff.affect(hero, Charger.class).charges + Buff.affect(hero, Charger.class).partialCharge) < abilityChargeUse(hero, null)) {
 				GLog.w(Messages.get(this, "ability_no_charge"));
 			} else {
 
@@ -199,25 +197,18 @@ public class MeleeWeapon extends Weapon {
 		hero.belongings.abilityWeapon = this;
 		Charger charger = Buff.affect(hero, Charger.class);
 
-		if (Dungeon.hero.belongings.weapon == this) {
-			charger.partialCharge -= abilityChargeUse(hero, target);
-			while (charger.partialCharge < 0 && charger.charges > 0) {
-				charger.charges--;
-				charger.partialCharge++;
-			}
-		} else {
-			charger.secondPartialCharge -= abilityChargeUse(hero, target);
-			while (charger.secondPartialCharge < 0 && charger.secondCharges > 0) {
-				charger.secondCharges--;
-				charger.secondPartialCharge++;
-			}
+		charger.partialCharge -= abilityChargeUse(hero, target);
+		while (charger.partialCharge < 0 && charger.charges > 0) {
+			charger.charges--;
+			charger.partialCharge++;
 		}
 
 		if (hero.heroClass == HeroClass.DUELIST
 				&& hero.hasTalent(Talent.AGGRESSIVE_BARRIER)
-				&& (hero.HP / (float)hero.HT) < 0.20f*(1+hero.pointsInTalent(Talent.AGGRESSIVE_BARRIER))){
-			Buff.affect(hero, Barrier.class).setShield(3);
-			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "3", FloatingText.SHIELDING);
+				&& (hero.HP / (float)hero.HT) <= 0.5f){
+			int shieldAmt = 1 + 2*hero.pointsInTalent(Talent.AGGRESSIVE_BARRIER);
+			Buff.affect(hero, Barrier.class).setShield(shieldAmt);
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldAmt), FloatingText.SHIELDING);
 		}
 
 		if (hero.buff(Talent.CombinedLethalityAbilityTracker.class) != null
@@ -233,6 +224,17 @@ public class MeleeWeapon extends Weapon {
 		hero.belongings.abilityWeapon = null;
 		if (hero.hasTalent(Talent.PRECISE_ASSAULT)){
 			Buff.prolong(hero, Talent.PreciseAssaultTracker.class, hero.cooldown()+4f);
+		}
+		if (hero.hasTalent(Talent.VARIED_CHARGE)){
+			Talent.VariedChargeTracker tracker = hero.buff(Talent.VariedChargeTracker.class);
+			if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null){
+				Buff.affect(hero, Talent.VariedChargeTracker.class).weapon = getClass();
+			} else {
+				tracker.detach();
+				Charger charger = Buff.affect(hero, Charger.class);
+				charger.gainCharge(hero.pointsInTalent(Talent.VARIED_CHARGE) / 6f);
+				ScrollOfRecharging.charge(hero);
+			}
 		}
 		if (hero.subClass == HeroSubClass.CHAMPION) {
 			Talent.CombinedLethalityAbilityTracker tracker = hero.buff(Talent.CombinedLethalityAbilityTracker.class);
@@ -253,6 +255,8 @@ public class MeleeWeapon extends Weapon {
 			}
 		}
 		if (hero.buff(Talent.CounterAbilityTacker.class) != null){
+			Charger charger = Buff.affect(hero, Charger.class);
+			charger.gainCharge(hero.pointsInTalent(Talent.COUNTER_ABILITY)*0.375f);
 			hero.buff(Talent.CounterAbilityTacker.class).detach();
 		}
 	}
@@ -273,11 +277,7 @@ public class MeleeWeapon extends Weapon {
 	}
 
 	public float abilityChargeUse(Hero hero, Char target){
-		float chargeUse = baseChargeUse(hero, target);
-		if (hero.buff(Talent.CounterAbilityTacker.class) != null){
-			chargeUse = Math.max(0, chargeUse-0.5f*hero.pointsInTalent(Talent.COUNTER_ABILITY));
-		}
-		return chargeUse;
+		return baseChargeUse(hero, target);
 	}
 
 	@Override
@@ -352,7 +352,7 @@ private static boolean evaluatingTwinUpgrades = false;
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
 			if (exStr > 0) {
-				damage += Dungeon.IntRange( 0, exStr );
+				damage += Char.combatRoll( 0, exStr );
 			}
 		}
 		if (masteryPotionBonus) damage*=1.2d;
@@ -423,7 +423,7 @@ private static boolean evaluatingTwinUpgrades = false;
 
 		//the mage's staff has no ability as it can only be gained by the mage
 		if (Dungeon.hero.isClass(HeroClass.DUELIST) && !(this instanceof MagesStaff)){
-			info += "\n\n" + Messages.get(this, "ability_desc");
+			info += "\n\n" + abilityInfo();
 		}
 
 		return info;
@@ -443,16 +443,16 @@ private static boolean evaluatingTwinUpgrades = false;
 		tier += Dungeon.cycle * 5;
 	}
 
+	public String abilityInfo() {
+		return Messages.get(this, "ability_desc");
+	}
+
 	@Override
 	public String status() {
 		if (isEquipped(Dungeon.hero)
 				&& Dungeon.hero.buff(Charger.class) != null) {
 			Charger buff = Dungeon.hero.buff(Charger.class);
-			if (Dungeon.hero.belongings.weapon == this) {
-				return buff.charges + "/" + buff.chargeCap();
-			} else {
-				return buff.secondCharges + "/" + buff.secondChargeCap();
-			}
+			return buff.charges + "/" + buff.chargeCap();
 		} else {
 			return super.status();
 		}
@@ -489,25 +489,33 @@ private static boolean evaluatingTwinUpgrades = false;
     }
 	public static class Charger extends Buff implements ActionIndicator.Action {
 
-		public int charges = 3;
+		public int charges = 2;
 		public float partialCharge;
-		//offhand charge as well?
-
-		//champion subclass
-		public int secondCharges = 3;
-		public float secondPartialCharge;
 
 		@Override
 		public boolean act() {
 			if (charges < chargeCap()){
 				if (Regeneration.regenOn()){
-					partialCharge += 1/(40f-(chargeCap()-charges)); // 40 to 30 turns per charge
+					//60 to 45 turns per charge
+					float chargeToGain = 1/(60f-1.5f*(chargeCap()-charges));
+
+					//40 to 30 turns per charge for champion
+					if (Dungeon.hero.subClass == HeroSubClass.CHAMPION){
+						chargeToGain *= 1.5f;
+					}
+
+					//50% slower charge gain with brawler's stance enabled, even if buff is inactive
+					if (Dungeon.hero.buff(RingOfForce.BrawlersStance.class) != null){
+						chargeToGain *= 0.50f;
+					}
+
+					partialCharge += chargeToGain;
 				}
 
-				if (((Hero) target).heroClass == HeroClass.DUELIST &&
-						target.buff(Recharging.class) != null || target.buff(ArtifactRecharge.class) != null){
-					//1 every 5 turns
-					partialCharge += 1/(5f);
+				int points = ((Hero)target).pointsInTalent(Talent.WEAPON_RECHARGING);
+				if (points > 0 && target.buff(Recharging.class) != null || target.buff(ArtifactRecharge.class) != null){
+					//1 every 15 turns at +1, 10 turns at +2
+					partialCharge += 1/(20f - 5f*points);
 				}
 
 				if (partialCharge >= 1){
@@ -517,24 +525,6 @@ private static boolean evaluatingTwinUpgrades = false;
 				}
 			} else {
 				partialCharge = 0;
-			}
-
-			if (Dungeon.hero.isSubclass(HeroSubClass.CHAMPION)
-					&& secondCharges < secondChargeCap()) {
-				if (Regeneration.regenOn()) {
-					// 80 to 60 turns per charge without talent
-					// up to 53.333 to 40 turns per charge at max talent level
-					secondPartialCharge += secondChargeMultiplier() / (40f-(secondChargeCap()-secondCharges));
-				}
-
-				if (secondPartialCharge >= 1) {
-					secondCharges++;
-					secondPartialCharge--;
-					updateQuickslot();
-				}
-
-			} else {
-				secondPartialCharge = 0;
 			}
 
 			if (ActionIndicator.action != this && Dungeon.hero.subClass == HeroSubClass.CHAMPION) {
@@ -559,16 +549,11 @@ private static boolean evaluatingTwinUpgrades = false;
 		}
 
 		public int chargeCap(){
-			return Math.min(10, 3 + (Dungeon.hero.lvl-1)/3);
-		}
-
-		public int secondChargeCap(){
-			return Math.round(chargeCap() * secondChargeMultiplier());
-		}
-
-		public float secondChargeMultiplier(){
-			//50% - 75%, depending on talent
-			return 0.75f;
+			if (Dungeon.hero.subClass == HeroSubClass.CHAMPION){
+				return Math.min(10, 4 + (Dungeon.hero.lvl - 1) / 4);
+			} else {
+				return Math.min(8, 2 + (Dungeon.hero.lvl - 1) / 4);
+			}
 		}
 
 		public void gainCharge( float charge ){
@@ -578,7 +563,10 @@ private static boolean evaluatingTwinUpgrades = false;
 					charges++;
 					partialCharge--;
 				}
-				charges = Math.min(charges, chargeCap());
+				if (charges >= chargeCap()){
+					partialCharge = 0;
+					charges = chargeCap();
+				}
 				updateQuickslot();
 			}
 		}
@@ -586,16 +574,11 @@ private static boolean evaluatingTwinUpgrades = false;
 		public static final String CHARGES          = "charges";
 		private static final String PARTIALCHARGE   = "partialCharge";
 
-		public static final String SECOND_CHARGES          = "second_charges";
-		private static final String SECOND_PARTIALCHARGE   = "second_partialCharge";
-
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
 			bundle.put(CHARGES, charges);
 			bundle.put(PARTIALCHARGE, partialCharge);
-			bundle.put(SECOND_CHARGES, secondCharges);
-			bundle.put(SECOND_PARTIALCHARGE, secondPartialCharge);
 		}
 
 		@Override
@@ -603,8 +586,6 @@ private static boolean evaluatingTwinUpgrades = false;
 			super.restoreFromBundle(bundle);
 			charges = bundle.getInt(CHARGES);
 			partialCharge = bundle.getFloat(PARTIALCHARGE);
-			secondCharges = bundle.getInt(SECOND_CHARGES);
-			secondPartialCharge = bundle.getFloat(SECOND_PARTIALCHARGE);
 		}
 
 		@Override

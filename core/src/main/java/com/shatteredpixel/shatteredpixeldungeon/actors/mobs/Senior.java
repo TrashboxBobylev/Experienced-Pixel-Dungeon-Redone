@@ -25,9 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SeniorSprite;
-import com.watabou.utils.Random;
 
 public class Senior extends Monk {
 
@@ -55,7 +55,7 @@ public class Senior extends Monk {
             case 4: return Random.NormalIntRange(60000, 100000);
 			case 5: return Random.NormalIntRange(4000000, 7900000);
         }
-		return Random.NormalIntRange( 16, 25 );
+		return Char.combatRoll( 16, 25 );
 	}
 	
 }

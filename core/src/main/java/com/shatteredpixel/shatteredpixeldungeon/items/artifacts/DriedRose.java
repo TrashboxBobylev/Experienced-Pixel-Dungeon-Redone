@@ -240,12 +240,15 @@ public class DriedRose extends Artifact {
 			desc += "\n";
 
 			if (weapon != null) {
-				desc += "\n" + Messages.get(this, "desc_weapon", weapon.title());
+				desc += "\n" + Messages.get(this, "desc_weapon", Messages.titleCase(weapon.title()));
 			}
 
 			if (armor != null) {
-				desc += "\n" + Messages.get(this, "desc_armor", armor.title());
+				desc += "\n" + Messages.get(this, "desc_armor", Messages.titleCase(armor.title()));
 			}
+
+			desc += "\n" + Messages.get(this, "desc_strength", ghostStrength());
+
 		}
 		
 		return desc;
@@ -295,7 +298,11 @@ public class DriedRose extends Artifact {
 
 		if (ghost == null){
 			if (charge < chargeCap) {
-				charge += Math.round(4*amount);
+				partialCharge += 4*amount;
+				while (partialCharge >= 1f){
+					charge++;
+					partialCharge--;
+				}
 				if (charge >= chargeCap) {
 					charge = chargeCap;
 					partialCharge = 0;
@@ -398,7 +405,7 @@ public class DriedRose extends Artifact {
 					partialCharge += (ghost.HT / 500f) * RingOfEnergy.artifactChargeMultiplier(target);
 					updateQuickslot();
 					
-					if (partialCharge > 1) {
+					while (partialCharge > 1) {
 						ghost.HP++;
 						partialCharge--;
 					}
@@ -415,7 +422,7 @@ public class DriedRose extends Artifact {
 					&& Regeneration.regenOn()) {
 				//500 turns to a full charge
 				partialCharge += (1/5f * RingOfEnergy.artifactChargeMultiplier(target));
-				if (partialCharge > 1){
+				while (partialCharge > 1){
 					charge++;
 					partialCharge--;
 					if (charge == chargeCap){
@@ -618,7 +625,7 @@ public class DriedRose extends Artifact {
 			if (rose != null && rose.weapon != null){
 				dmg += rose.weapon.damageRoll(this);
 			} else {
-				dmg += Random.NormalIntRange(0, 5);
+				dmg += Char.combatRoll(0, 5);
 			}
 			
 			return dmg;
@@ -704,10 +711,10 @@ public class DriedRose extends Artifact {
 		public long drRoll() {
 			long dr = super.drRoll();
 			if (rose != null && rose.armor != null){
-				dr += Random.NormalLongRange( rose.armor.DRMin(), rose.armor.DRMax());
+				dr += Char.combatRoll( rose.armor.DRMin(), rose.armor.DRMax());
 			}
 			if (rose != null && rose.weapon != null){
-				dr += Random.NormalLongRange( 0, rose.weapon.defenseFactor( this ));
+				dr += Char.combatRoll( 0, rose.weapon.defenseFactor( this ));
 			}
 			return dr;
 		}

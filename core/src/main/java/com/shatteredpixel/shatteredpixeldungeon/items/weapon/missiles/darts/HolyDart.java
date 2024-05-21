@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
 
 public class HolyDart extends TippedDart {
 
@@ -37,7 +38,7 @@ public class HolyDart extends TippedDart {
 	
 	@Override
 	public long proc(Char attacker, Char defender, long damage) {
-		
+
 		Buff.affect(defender, Doom.class);
 		
 		return super.proc(attacker, defender, damage);

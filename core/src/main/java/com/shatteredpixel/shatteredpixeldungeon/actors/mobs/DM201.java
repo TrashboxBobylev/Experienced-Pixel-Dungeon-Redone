@@ -79,7 +79,7 @@ public class DM201 extends DM200 {
             case 4: return Random.NormalIntRange(40000, 75000);
 			case 5: return Random.NormalIntRange(4000000, 7600000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	private boolean threatened = false;

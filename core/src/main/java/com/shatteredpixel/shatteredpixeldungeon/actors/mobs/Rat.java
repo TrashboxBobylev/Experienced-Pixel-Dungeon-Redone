@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class Rat extends Mob {
 
@@ -88,7 +87,7 @@ public class Rat extends Mob {
             case 4: return Random.NormalIntRange(3200, 5000);
 			case 5: return Random.NormalIntRange(345000, 485000);
         }
-        return Random.NormalIntRange(1, 4);
+        return Char.combatRoll(1, 4);
 	}
 	
 	@Override

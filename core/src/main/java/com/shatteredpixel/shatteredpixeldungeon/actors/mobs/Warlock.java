@@ -99,7 +99,7 @@ public class Warlock extends Mob implements Callback {
             case 4: return Random.NormalIntRange(40000, 110000);
 			case 5: return Random.NormalIntRange(2400000, 5000000);
         }
-		return Random.NormalIntRange( 12, 18 );
+		return Char.combatRoll( 12, 18 );
 	}
 	
 	@Override
@@ -166,7 +166,7 @@ public class Warlock extends Mob implements Callback {
 				Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
 			
-			long dmg = Random.NormalIntRange( 12, 18 );
+			long dmg = Char.combatRoll( 12, 18 );
             switch (Dungeon.cycle) {
                 case 1: dmg = Random.NormalIntRange(64, 83); break;
                 case 2: dmg = Random.NormalIntRange(276, 400); break;

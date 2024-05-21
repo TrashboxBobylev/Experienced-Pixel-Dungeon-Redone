@@ -5,9 +5,6 @@
  * Shattered Pixel Dungeon
  * Copyright (C) 2014-2024 Evan Debenham
  *
- * Experienced Pixel Dungeon
- * Copyright (C) 2019-2024 Trashbox Bobylev
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,50 +19,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
+package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit;
 
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.HallwayRoom;
 import com.watabou.utils.Point;
 
-public class ExitRoom extends StandardRoom {
-	
-	@Override
-	public int minWidth() {
-		return Math.max(super.minWidth(), 5);
-	}
-	
-	@Override
-	public int minHeight() {
-		return Math.max(super.minHeight(), 5);
-	}
-	
-	public void paint(Level level) {
+public class HallwayExitRoom extends HallwayRoom {
 
-		Painter.fill( level, this, Terrain.WALL );
-		Painter.fill( level, this, 1, Terrain.EMPTY );
-		
-		for (Room.Door door : connected.values()) {
-			door.set( Room.Door.Type.REGULAR );
+	@Override
+	public boolean isExit() {
+		return true;
+	}
+
+	@Override
+	public void paint(Level level) {
+		super.paint(level);
+
+		int exit = -1;
+		for ( Point p : getPoints()){
+			if (level.map[level.pointToCell(p)] == Terrain.STATUE_SP){
+				exit = level.pointToCell(p);
+				break;
+			}
 		}
-		
-		int exit = level.pointToCell(random( 2 ));
 		Painter.set( level, exit, Terrain.EXIT );
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
-	}
-	
-	@Override
-	public boolean canPlaceCharacter(Point p, Level l) {
-		return super.canPlaceCharacter(p, l) && l.pointToCell(p) != l.exit();
+
 	}
 
-	@Override
-	public boolean connect(Room room) {
-		//cannot connect to entrance, otherwise works normally
-		if (room instanceof EntranceRoom)   return false;
-		else                            return super.connect(room);
-	}
 }

@@ -119,7 +119,7 @@ public class CrystalGuardian extends Mob{
 			case 4: return Random.NormalIntRange(20000, 45000);
 			case 5: return Random.NormalIntRange(2200000, 3800000);
 		}
-		return Random.NormalIntRange( 10, 16 );
+		return Char.combatRoll( 10, 16 );
 	}
 
 	@Override

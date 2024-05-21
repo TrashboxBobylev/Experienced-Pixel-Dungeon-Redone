@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PiranhaSprite;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -78,7 +79,7 @@ public class Piranha extends Mob {
 	
 	@Override
 	public long damageRoll() {
-		return Random.NormalIntRange( Dungeon.escalatingDepth(), 4 + Dungeon.escalatingDepth() * 2 );
+		return Char.combatRoll( Dungeon.escalatingDepth(), 4 + Dungeon.escalatingDepth() * 2 );
 	}
 	
 	@Override
@@ -88,7 +89,7 @@ public class Piranha extends Mob {
 	
 	@Override
 	public long drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, Dungeon.escalatingDepth());
+		return super.drRoll() + Char.combatRoll(0, Dungeon.escalatingDepth());
 	}
 
 	@Override
@@ -200,7 +201,8 @@ public class Piranha extends Mob {
 	}
 
 	public static Piranha random(){
-		if (Random.Int(50) == 0){
+		float altChance = 1/50f * RatSkull.exoticChanceMultiplier();
+		if (Random.Float() < altChance){
 			return new PhantomPiranha();
 		} else {
 			return new Piranha();

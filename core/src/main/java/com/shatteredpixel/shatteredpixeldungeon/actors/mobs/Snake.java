@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SnakeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.Random;
 
 public class Snake extends Mob {
 	
@@ -88,7 +87,7 @@ public class Snake extends Mob {
             case 4: return Random.NormalIntRange(3900, 5780);
             case 5: return Random.NormalIntRange(370000, 525000);
         }
-		return Random.NormalIntRange( 1, 4 );
+		return Char.combatRoll( 1, 4 );
 	}
 	
 	@Override

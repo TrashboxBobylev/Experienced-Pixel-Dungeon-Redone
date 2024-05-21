@@ -45,8 +45,6 @@ import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
 abstract public class KindOfWeapon extends EquipableItem {
-	
-	protected static final float TIME_TO_EQUIP = 1f;
 
 	protected String hitSound = Assets.Sounds.HIT;
 	protected float hitSoundPitch = 1f;
@@ -100,10 +98,24 @@ abstract public class KindOfWeapon extends EquipableItem {
 	public boolean isEquipped( Hero hero ) {
 		return hero.belongings.weapon() == this || hero.belongings.secondWep() == this;
 	}
-	
+
+	private static boolean isSwiftEquipping = false;
+
+	protected float timeToEquip( Hero hero ) {
+		return isSwiftEquipping ? 0f : super.timeToEquip(hero);
+	}
+
 	@Override
 	public boolean doEquip( Hero hero ) {
-		boolean wasInInv = hero.belongings.contains(this);
+
+		isSwiftEquipping = false;
+		if (hero.belongings.contains(this) && hero.hasTalent(Talent.SWIFT_EQUIP)){
+			if (hero.buff(Talent.SwiftEquipCooldown.class) == null
+					|| hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()){
+				isSwiftEquipping = true;
+			}
+		}
+
 		detachAll( hero.belongings.backpack );
 		
 		if (hero.belongings.weapon == null || hero.belongings.weapon.doUnequip( hero, true )) {
@@ -121,32 +133,36 @@ abstract public class KindOfWeapon extends EquipableItem {
 				GLog.n( Messages.get(KindOfWeapon.class, "equip_cursed") );
 			}
 
-			if (wasInInv && hero.heroClass == HeroClass.DUELIST) {
+			hero.spendAndNext( timeToEquip(hero) );
+			if (isSwiftEquipping) {
+				GLog.i(Messages.get(this, "swift_equip"));
 				if (hero.buff(Talent.SwiftEquipCooldown.class) == null){
-					hero.spendAndNext(-hero.cooldown());
 					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 24f)
 							.secondUse = true;
-					GLog.i(Messages.get(this, "swift_equip"));
 				} else if (hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()) {
-					hero.spendAndNext(-hero.cooldown());
 					hero.buff(Talent.SwiftEquipCooldown.class).secondUse = false;
-					GLog.i(Messages.get(this, "swift_equip"));
-				} else {
-					hero.spendAndNext(TIME_TO_EQUIP);
 				}
-			} else {
-				hero.spendAndNext(TIME_TO_EQUIP);
+				isSwiftEquipping = false;
 			}
 			return true;
 			
 		} else {
-			
+			isSwiftEquipping = false;
 			collect( hero.belongings.backpack );
 			return false;
 		}
 	}
 
 	public boolean equipSecondary( Hero hero ){
+
+		isSwiftEquipping = false;
+		if (hero.belongings.contains(this) && hero.hasTalent(Talent.SWIFT_EQUIP)){
+			if (hero.buff(Talent.SwiftEquipCooldown.class) == null
+					|| hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()){
+				isSwiftEquipping = true;
+			}
+		}
+
 		boolean wasInInv = hero.belongings.contains(this);
 		detachAll( hero.belongings.backpack );
 
@@ -165,26 +181,21 @@ abstract public class KindOfWeapon extends EquipableItem {
 				GLog.n( Messages.get(KindOfWeapon.class, "equip_cursed") );
 			}
 
-			if (wasInInv && hero.heroClass == HeroClass.DUELIST) {
+			hero.spendAndNext( timeToEquip(hero) );
+			if (isSwiftEquipping) {
+				GLog.i(Messages.get(this, "swift_equip"));
 				if (hero.buff(Talent.SwiftEquipCooldown.class) == null){
-					hero.spendAndNext(-hero.cooldown());
 					Buff.affect(hero, Talent.SwiftEquipCooldown.class, 24f)
 							.secondUse = true;
-					GLog.i(Messages.get(this, "swift_equip"));
 				} else if (hero.buff(Talent.SwiftEquipCooldown.class).hasSecondUse()) {
-					hero.spendAndNext(-hero.cooldown());
 					hero.buff(Talent.SwiftEquipCooldown.class).secondUse = false;
-					GLog.i(Messages.get(this, "swift_equip"));
-				} else {
-					hero.spendAndNext(TIME_TO_EQUIP);
 				}
-			} else {
-				hero.spendAndNext(TIME_TO_EQUIP);
+				isSwiftEquipping = false;
 			}
 			return true;
 
 		} else {
-
+			isSwiftEquipping = false;
 			collect( hero.belongings.backpack );
 			return false;
 		}
@@ -228,7 +239,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 	abstract public long max(long lvl);
 
 	public long damageRoll( Char owner ) {
-		return Dungeon.NormalLongRange( min(), max() );
+		return Char.combatRoll( min(), max() );
 	}
 	
 	public float accuracyFactor( Char owner, Char target ) {

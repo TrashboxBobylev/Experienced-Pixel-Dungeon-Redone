@@ -94,6 +94,7 @@ public class YogDzewa extends Mob {
 				EXP = 20000000000L;
 				break;
         }
+		properties.add(Property.STATIC);
 	}
 
 	private int phase = 0;
@@ -507,7 +508,10 @@ public class YogDzewa extends Mob {
 		if (phase > 1 && isAlive()){
 			viewDistance = 4 - (phase-1);
 		}
-		level.viewDistance = (int)GameMath.gate(1, viewDistance, level.viewDistance);
+		if (Dungeon.isChallenged(Challenges.DARKNESS)) {
+			viewDistance = Math.min(viewDistance, 2);
+		}
+		level.viewDistance = viewDistance;
 		if (Dungeon.hero != null) {
 			if (Dungeon.hero.buff(Light.class) == null) {
 				Dungeon.hero.viewDistance = level.viewDistance;
@@ -537,7 +541,7 @@ public class YogDzewa extends Mob {
 	@Override
 	public void aggro(Char ch) {
 		for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
-			if (Dungeon.level.distance(pos, mob.pos) <= 4 &&
+			if (mob != ch && Dungeon.level.distance(pos, mob.pos) <= 4 &&
 					(mob instanceof Larva || mob instanceof YogRipper || mob instanceof YogEye || mob instanceof YogScorpio)) {
 				mob.aggro(ch);
 			}
@@ -629,17 +633,6 @@ public class YogDzewa extends Mob {
 		}
 
 		return desc;
-	}
-
-	{
-		immunities.add( Dread.class );
-		immunities.add( Terror.class );
-		immunities.add( Amok.class );
-		immunities.add( Charm.class );
-		immunities.add( Sleep.class );
-		immunities.add( Vertigo.class );
-		immunities.add( Frost.class );
-		immunities.add( Paralysis.class );
 	}
 
 	private static final String PHASE = "phase";
@@ -765,7 +758,7 @@ public class YogDzewa extends Mob {
                 case 4: return Random.NormalIntRange(360000, 460000);
 				case 5: return Random.NormalIntRange(6000000, 9000000);
             }
-			return Random.NormalIntRange( 15, 25 );
+			return Char.combatRoll( 15, 25 );
 		}
 
 		@Override

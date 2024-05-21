@@ -91,7 +91,7 @@ public class Monk extends Mob {
             case 4: return Random.NormalIntRange(40000, 100000);
 			case 5: return Random.NormalIntRange(3100000, 7750000);
         }
-		return Random.NormalIntRange( 12, 25 );
+		return Char.combatRoll( 12, 25 );
 	}
 	
 	@Override

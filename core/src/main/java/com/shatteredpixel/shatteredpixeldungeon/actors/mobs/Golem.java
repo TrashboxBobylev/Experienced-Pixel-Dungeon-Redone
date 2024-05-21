@@ -97,7 +97,7 @@ public class Golem extends Mob {
             case 4: return Random.NormalIntRange(65000, 180000);
 			case 5: return Random.NormalIntRange(6000000, 9000000);
         }
-		return Random.NormalIntRange( 25, 30 );
+		return Char.combatRoll( 25, 30 );
 	}
 	
 	@Override

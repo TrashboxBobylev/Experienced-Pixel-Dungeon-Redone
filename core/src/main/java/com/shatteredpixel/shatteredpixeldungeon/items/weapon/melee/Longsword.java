@@ -265,4 +265,13 @@ public class Longsword extends MeleeWeapon {
 
 	}
 
+	@Override
+	public String abilityInfo() {
+		int dmgBoost = levelKnown ? 4 + buffedLvl() : 4;
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+		} else {
+			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+		}
+	}
 }

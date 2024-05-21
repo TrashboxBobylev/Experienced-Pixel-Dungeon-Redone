@@ -22,39 +22,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.quest;
+package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.watabou.utils.Point;
 
-public class RatSkull extends Item {
-	
-	{
-		image = ItemSpriteSheet.SKULL;
-		
-		unique = true;
+public class WaterBridgeRoom extends StandardBridgeRoom {
+
+	protected int maxBridgeWidth( int roomDimension ) {
+		return roomDimension >= 8 ? 3 : 2;
 	}
-	
+
+	protected int spaceTile(){
+		return Terrain.WATER;
+	}
+
 	@Override
-	public boolean isUpgradable() {
+	public boolean canPlaceWater(Point p) {
 		return false;
 	}
-	
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
 
-    @Override
-    protected void onThrow(int cell) {
-        super.onThrow(cell);
-        Char character;
-        if ((character = Actor.findChar(cell)) != null){
-            Buff.affect(character, Ooze.class).set(Float.MAX_VALUE);
-        }
-    }
 }

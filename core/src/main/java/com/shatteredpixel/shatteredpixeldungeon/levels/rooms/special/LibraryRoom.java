@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -69,9 +70,13 @@ public class LibraryRoom extends SpecialRoom {
 	
 	private static Item prize( Level level ) {
 		
-		Item prize = level.findPrizeItem( Scroll.class );
-		if (prize == null)
-			prize = Generator.random( Generator.Category.SCROLL );
+		Item prize = level.findPrizeItem( TrinketCatalyst.class );
+		if (prize == null){
+			prize = level.findPrizeItem( Scroll.class );
+			if (prize == null) {
+				prize = Generator.random( Generator.Category.SCROLL );
+			}
+		}
 		
 		return prize;
 	}

@@ -102,7 +102,7 @@ public class RipperDemon extends Mob {
             case 4: return Random.NormalIntRange(65000, 180000);
 			case 5: return Random.NormalIntRange(3400000, 8000000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	@Override

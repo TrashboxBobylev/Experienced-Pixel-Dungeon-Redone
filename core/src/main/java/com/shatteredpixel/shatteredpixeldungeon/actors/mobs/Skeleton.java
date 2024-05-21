@@ -36,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Skeleton extends Mob {
 	
@@ -93,7 +92,7 @@ public class Skeleton extends Mob {
             case 4: return Random.NormalIntRange(8000, 14000);
 			case 5: return Random.NormalIntRange(525000, 1100000);
         }
-		return Random.NormalIntRange( 2, 10 );
+		return Char.combatRoll( 2, 10 );
 	}
 	
 	@Override

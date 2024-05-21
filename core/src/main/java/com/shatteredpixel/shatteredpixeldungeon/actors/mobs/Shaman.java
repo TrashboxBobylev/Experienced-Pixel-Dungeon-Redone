@@ -88,7 +88,7 @@ public abstract class Shaman extends Mob {
             case 4: return Random.NormalIntRange(18000, 27500);
 			case 5: return Random.NormalIntRange(1500000, 2250000);
         }
-		return Random.NormalIntRange( 5, 10 );
+		return Char.combatRoll( 5, 10 );
 	}
 	
 	@Override
@@ -168,7 +168,7 @@ public abstract class Shaman extends Mob {
 				if (enemy == Dungeon.hero) Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
 			
-			long dmg = Random.NormalIntRange( 6, 15 );
+			long dmg = Char.combatRoll( 6, 15 );
             switch (Dungeon.cycle) {
                 case 1: dmg = Random.NormalIntRange(48, 62); break;
                 case 2: dmg = Random.NormalIntRange(250, 324); break;

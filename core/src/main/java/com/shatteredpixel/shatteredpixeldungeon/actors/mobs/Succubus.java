@@ -107,7 +107,7 @@ public class Succubus extends Mob {
             case 4: return Random.NormalIntRange(170000, 250000);
 			case 5: return Random.NormalIntRange(7000000, 10000000);
         }
-		return Random.NormalIntRange( 25, 30 );
+		return Char.combatRoll( 25, 30 );
 	}
 	
 	@Override

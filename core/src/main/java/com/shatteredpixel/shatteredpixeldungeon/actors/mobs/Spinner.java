@@ -91,7 +91,7 @@ public class Spinner extends Mob {
             case 4: return Random.NormalIntRange(18000, 50000);
 			case 5: return Random.NormalIntRange(2000000, 4200000);
         }
-		return Random.NormalIntRange(10, 20);
+		return Char.combatRoll(10, 20);
 	}
 
 	@Override

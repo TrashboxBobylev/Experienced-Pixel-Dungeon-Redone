@@ -86,7 +86,9 @@ public class AntiMagic extends Armor.Glyph {
 
 		RESISTS.add( ElementalStrike.class );
 		RESISTS.add( Blazing.class );
+		RESISTS.add( WandOfFireblast.FireBlastOnHit.class );
 		RESISTS.add( Shocking.class );
+		RESISTS.add( WandOfLightning.LightningOnHit.class );
 		RESISTS.add( Grim.class );
 
 		RESISTS.add( WarpBeacon.class );
@@ -112,7 +114,7 @@ public class AntiMagic extends Armor.Glyph {
 	}
 	
 	public static int drRoll( Char ch, long level ){
-		return Dungeon.NormalIntRange(
+		return Char.combatRoll(
 				Math.round(level * genericProcChanceMultiplier(ch)),
 				Math.round((3 + (level*1.5f)) * genericProcChanceMultiplier(ch)));
 	}

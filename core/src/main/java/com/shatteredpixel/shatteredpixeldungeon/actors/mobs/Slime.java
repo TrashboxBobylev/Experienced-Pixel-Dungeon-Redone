@@ -85,7 +85,7 @@ public class Slime extends Mob {
             case 4: return Random.NormalIntRange(7000, 9000);
 			case 5: return Random.NormalIntRange(475000, 635000);
         }
-	    return Random.NormalIntRange( 2, 5 );
+	    return Char.combatRoll( 2, 5 );
 	}
 	
 	@Override
