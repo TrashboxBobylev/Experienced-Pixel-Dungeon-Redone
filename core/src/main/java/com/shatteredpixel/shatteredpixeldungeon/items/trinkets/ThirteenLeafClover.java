@@ -46,7 +46,7 @@ public class ThirteenLeafClover extends Trinket {
 		return combatDistributionInverseChance(trinketLevel(ThirteenLeafClover.class));
 	}
 
-	public static float combatDistributionInverseChance( int level ){
+	public static float combatDistributionInverseChance( long level ){
 		if (level <= -1){
 			return 0;
 		} else {
@@ -54,8 +54,8 @@ public class ThirteenLeafClover extends Trinket {
 		}
 	}
 
-	public static int invCombatRoll( int min, int max){
-		return Random.InvNormalIntRange( min, max );
+	public static long invCombatRoll( long min, long max){
+		return Random.InvNormalLongRange( min, max );
 	}
 
 }

@@ -177,6 +177,17 @@ public class Random {
 		return min + (int)((Float() + Float()) * (max - min + 1) / 2f);
 	}
 
+	//returns an inverse triangularly distributed int in the range [min, max]
+	//this makes results more likely as they get further from the middle of the range
+	public static long InvNormalLongRange( long min, long max ){
+		float roll1 = Float(), roll2 = Float();
+		if (Math.abs(roll1-0.5f) >= Math.abs(roll2-0.5f)){
+			return min + (int)(roll1*(max - min + 1));
+		} else {
+			return min + (int)(roll2*(max - min + 1));
+		}
+	}
+
 	//returns an index from chances, the probability of each index is the weight values in changes
 	public static int chances( float[] chances ) {
 		
