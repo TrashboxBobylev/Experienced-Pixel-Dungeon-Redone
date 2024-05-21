@@ -69,7 +69,7 @@ public class Dagger extends MeleeWeapon {
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 75% toward max to max on surprise, instead of min to max.
 				long diff = max() - min();
-				long damage = augment.damageFactor(Random.NormalLongRange(
+				long damage = augment.damageFactor(Char.combatRoll(
 						min() + Math.round(diff*0.75f),
 						max()));
 				int exStr = hero.STR() - STRReq();
@@ -105,7 +105,7 @@ public class Dagger extends MeleeWeapon {
 		}
 	}
 
-	public static void sneakAbility(Hero hero, Integer target, int maxDist, int invisTurns, MeleeWeapon wep){
+	public static void sneakAbility(Hero hero, Integer target, int maxDist, long invisTurns, MeleeWeapon wep){
 		if (target == null) {
 			return;
 		}

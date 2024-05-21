@@ -82,7 +82,7 @@ public class Clayball extends MissileWeapon {
 
 		boolean[] FOV = new boolean[Dungeon.level.length()];
 		Point c = Dungeon.level.cellToPoint(cell);
-		ShadowCaster.castShadow(c.x, c.y, FOV, Dungeon.level.losBlocking, 8);
+		ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, 8);
 
 		for (int i = 0; i < FOV.length; i++) {
 			if (FOV[i]) {

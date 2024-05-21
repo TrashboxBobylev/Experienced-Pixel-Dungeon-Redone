@@ -107,7 +107,7 @@ public class TrinketCatalyst extends Item {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			if (ingredients.get(0) instanceof TrinketCatalyst && !((TrinketCatalyst) ingredients.get(0)).rolledTrinkets.isEmpty()){
 				return 0; //costs 0 if rolledTrinkets has items as the player already paid 6 energy
 			}

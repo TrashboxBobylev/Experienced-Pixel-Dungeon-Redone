@@ -57,7 +57,7 @@ public class Dirk extends MeleeWeapon implements PreparationAllowed {
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 67% toward max to max on surprise, instead of min to max.
 				long diff = max() - min();
-				long damage = augment.damageFactor(Random.NormalLongRange(
+				long damage = augment.damageFactor(Char.combatRoll(
 						min() + Math.round(diff*0.67f),
 						max()));
 				int exStr = hero.STR() - STRReq();

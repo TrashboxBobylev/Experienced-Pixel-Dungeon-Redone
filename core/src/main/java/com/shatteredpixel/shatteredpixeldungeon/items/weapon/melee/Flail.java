@@ -57,7 +57,7 @@ public class Flail extends MeleeWeapon {
 				lvl*Math.round(2d*(tier()+1));  //+10 per level, up from +6
 	}
 
-	private static int spinBoost = 0;
+	private static long spinBoost = 0;
 
 	@Override
 	public long damageRoll(Char owner) {
@@ -129,7 +129,7 @@ public class Flail extends MeleeWeapon {
 
 	@Override
 	public String abilityInfo() {
-		int dmgBoost = levelKnown ? 6 + 2*buffedLvl() : 6;
+		long dmgBoost = levelKnown ? 6 + 2*buffedLvl() : 6;
 		if (levelKnown){
 			return Messages.get(this, "ability_desc", augment.damageFactor(dmgBoost));
 		} else {

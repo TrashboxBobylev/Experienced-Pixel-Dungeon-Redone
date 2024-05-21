@@ -24,7 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
@@ -271,13 +273,13 @@ public class YogDzewa extends Mob {
 					}
 
 					if (hit( this, ch, true )) {
-						int dmg = Random.NormalIntRange(20, 30);
+						long dmg = Char.combatRoll(20, 30);
 						switch (Dungeon.cycle){
-							case 1: dmg = Random.NormalIntRange(120, 175); break;
-							case 2: dmg = Random.NormalIntRange(370, 502); break;
-							case 3: dmg = Random.NormalIntRange(2650, 4000); break;
-							case 4: dmg = Random.NormalIntRange(179000, 320000); break;
-							case 5: dmg = Random.NormalIntRange(6400000, 10000000); break;
+							case 1: dmg = Char.combatRoll(120, 175); break;
+							case 2: dmg = Char.combatRoll(370, 502); break;
+							case 3: dmg = Char.combatRoll(2650, 4000); break;
+							case 4: dmg = Char.combatRoll(179000, 320000); break;
+							case 5: dmg = Char.combatRoll(6400000, 10000000); break;
 						}
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
 							ch.damage(dmg*25000L, new Eye.DeathGaze());
@@ -752,23 +754,23 @@ public class YogDzewa extends Mob {
 		@Override
 		public long damageRoll() {
             switch (Dungeon.cycle) {
-                case 1: return Random.NormalIntRange(70, 91);
-                case 2: return Random.NormalIntRange(325, 440);
-                case 3: return Random.NormalIntRange(2500, 4000);
-                case 4: return Random.NormalIntRange(360000, 460000);
-				case 5: return Random.NormalIntRange(6000000, 9000000);
+                case 1: return Char.combatRoll(70, 91);
+                case 2: return Char.combatRoll(325, 440);
+                case 3: return Char.combatRoll(2500, 4000);
+                case 4: return Char.combatRoll(360000, 460000);
+				case 5: return Char.combatRoll(6000000, 9000000);
             }
 			return Char.combatRoll( 15, 25 );
 		}
 
 		@Override
-		public int cycledDrRoll() {
+		public long cycledDrRoll() {
             switch (Dungeon.cycle){
-                case 1: return Random.NormalIntRange(40, 63);
-                case 2: return Random.NormalIntRange(125, 248);
-                case 3: return Random.NormalIntRange(1600, 2800);
+                case 1: return Char.combatRoll(40, 63);
+                case 2: return Char.combatRoll(125, 248);
+                case 3: return Char.combatRoll(1600, 2800);
             }
-			return Random.NormalIntRange(0, 4);
+			return Char.combatRoll(0, 4);
 		}
 
 		@Override

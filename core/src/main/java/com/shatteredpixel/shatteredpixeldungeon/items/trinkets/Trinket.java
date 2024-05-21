@@ -56,7 +56,7 @@ public abstract class Trinket extends Item {
 		Trinket trinket = Dungeon.hero.belongings.getItem(trinketType);
 
 		if (trinket != null){
-			return trinket.buffedLvl();
+			return (int)trinket.buffedLvl();
 		} else {
 			return -1;
 		}
@@ -93,7 +93,7 @@ public abstract class Trinket extends Item {
 		}
 
 		@Override
-		public int cost(ArrayList<Item> ingredients) {
+		public long cost(ArrayList<Item> ingredients) {
 			return ((Trinket)ingredients.get(0)).upgradeEnergyCost();
 		}
 

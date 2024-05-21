@@ -62,12 +62,12 @@ public class WandOfTransfusion extends DamageWand {
 	}
 
 	@Override
-	public int min(int level) {
+	public long min(long level) {
 		return 3 + level;
 	}
 
 	@Override
-	public int max(int level) {
+	public long max(long level) {
 		return 6 + 2*level;
 	}
 

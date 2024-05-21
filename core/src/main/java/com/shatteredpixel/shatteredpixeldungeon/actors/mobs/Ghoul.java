@@ -97,11 +97,11 @@ public class Ghoul extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(64, 79);
-            case 2: return Random.NormalIntRange(276, 400);
-            case 3: return Random.NormalIntRange(1500, 1821);
-            case 4: return Random.NormalIntRange(23000, 71000);
-			case 5: return Random.NormalIntRange(2750000, 6500000);
+            case 1: return Char.combatRoll(64, 79);
+            case 2: return Char.combatRoll(276, 400);
+            case 3: return Char.combatRoll(1500, 1821);
+            case 4: return Char.combatRoll(23000, 71000);
+			case 5: return Char.combatRoll(2750000, 6500000);
         }
 		return Char.combatRoll( 16, 22 );
 	}
@@ -119,15 +119,15 @@ public class Ghoul extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(22, 43);
-            case 2: return Random.NormalIntRange(100, 211);
-            case 3: return Random.NormalIntRange(621, 1111);
-            case 4: return Random.NormalIntRange(18000, 46000);
-			case 5: return Random.NormalIntRange(1600000, 3200000);
+            case 1: return Char.combatRoll(22, 43);
+            case 2: return Char.combatRoll(100, 211);
+            case 3: return Char.combatRoll(621, 1111);
+            case 4: return Char.combatRoll(18000, 46000);
+			case 5: return Char.combatRoll(1600000, 3200000);
         }
-		return Random.NormalIntRange(0, 4);
+		return Char.combatRoll(0, 4);
 	}
 
 	@Override

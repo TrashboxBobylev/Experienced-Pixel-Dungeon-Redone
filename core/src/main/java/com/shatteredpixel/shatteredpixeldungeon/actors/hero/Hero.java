@@ -518,7 +518,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		long dr = super.drRoll();
 
 		if (belongings.armor() != null) {
-			int armDr = Char.combatRoll( belongings.armor().DRMin(), belongings.armor().DRMax());
+			long armDr = Char.combatRoll( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
@@ -526,7 +526,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			int wepDr = Char.combatRoll( 0 , belongings.weapon().defenseFactor( this ) );
+			long wepDr = Char.combatRoll( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}

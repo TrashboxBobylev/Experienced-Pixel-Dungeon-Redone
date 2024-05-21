@@ -55,13 +55,13 @@ public class Glaive extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(12+2*lvl) damage, roughly +55% base damage, +45% scaling
-		int dmgBoost = augment.damageFactor(12 + 2*buffedLvl());
+		long dmgBoost = augment.damageFactor(12 + 2*buffedLvl());
 		Spear.spikeAbility(hero, target, 1, dmgBoost, this);
 	}
 
 	@Override
 	public String abilityInfo() {
-		int dmgBoost = levelKnown ? 12 + 2*buffedLvl() : 12;
+		long dmgBoost = levelKnown ? 12 + 2*buffedLvl() : 12;
 		if (levelKnown){
 			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
 		} else {

@@ -49,11 +49,11 @@ public class Senior extends Monk {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(71, 83);
-            case 2: return Random.NormalIntRange(313, 431);
-            case 3: return Random.NormalIntRange(1800, 2340);
-            case 4: return Random.NormalIntRange(60000, 100000);
-			case 5: return Random.NormalIntRange(4000000, 7900000);
+            case 1: return Char.combatRoll(71, 83);
+            case 2: return Char.combatRoll(313, 431);
+            case 3: return Char.combatRoll(1800, 2340);
+            case 4: return Char.combatRoll(60000, 100000);
+			case 5: return Char.combatRoll(4000000, 7900000);
         }
 		return Char.combatRoll( 16, 25 );
 	}

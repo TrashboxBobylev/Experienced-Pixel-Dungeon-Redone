@@ -73,13 +73,13 @@ public class Sword extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(4+lvl) damage, roughly +35% base dmg, +40% scaling
-		int dmgBoost = augment.damageFactor(4 + buffedLvl());
+		long dmgBoost = augment.damageFactor(4 + buffedLvl());
 		Sword.cleaveAbility(hero, target, 1, dmgBoost, this);
 	}
 
 	@Override
 	public String abilityInfo() {
-		int dmgBoost = levelKnown ? 4 + buffedLvl() : 4;
+		long dmgBoost = levelKnown ? 4 + buffedLvl() : 4;
 		if (levelKnown){
 			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
 		} else {
@@ -87,7 +87,7 @@ public class Sword extends MeleeWeapon {
 		}
 	}
 
-	public static void cleaveAbility(Hero hero, Integer target, float dmgMulti, int dmgBoost, MeleeWeapon wep){
+	public static void cleaveAbility(Hero hero, Integer target, float dmgMulti, long dmgBoost, MeleeWeapon wep){
 		if (target == null) {
 			return;
 		}

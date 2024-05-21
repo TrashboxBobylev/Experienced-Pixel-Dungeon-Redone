@@ -58,7 +58,7 @@ public abstract class Brew extends Potion {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return quantity * 60;
 	}
 

@@ -26,11 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.items.treasurebags;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.*;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.AquaBlast;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.ArcaneCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
@@ -60,9 +60,9 @@ public class DKTreasureBag extends TreasureBag {
             }
             for (int i = 0; i < 15; i++) items.add(Generator.random());
             items.add(new Recycle().quantity(50));
-            items.add(new AquaBlast().quantity(50));
-            items.add(new ArcaneCatalyst().quantity(50));
-            items.add(new AlchemicalCatalyst().quantity(50));
+            items.add(new AquaBrew().quantity(50));
+            items.add(new UnstableSpell().quantity(50));
+            items.add(new UnstableBrew().quantity(50));
         }
         if (Dungeon.cycle > 1){
             items.add(new OverloadBeacon().quantity(2));

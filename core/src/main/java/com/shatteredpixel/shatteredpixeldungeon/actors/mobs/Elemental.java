@@ -103,13 +103,13 @@ public abstract class Elemental extends Mob {
 	public long damageRoll() {
 		if (!summonedALly) {
 			switch (Dungeon.cycle) {
-				case 1: return Random.NormalIntRange(64, 83);
-				case 2: return Random.NormalIntRange(291, 434);
+				case 1: return Char.combatRoll(64, 83);
+				case 2: return Char.combatRoll(291, 434);
 				case 3: return Char.combatRoll(1650, 2100);
-				case 4: return Random.NormalIntRange(30000, 85000);
-				case 5: return Random.NormalIntRange(3000000, 7000000);
+				case 4: return Char.combatRoll(30000, 85000);
+				case 5: return Char.combatRoll(3000000, 7000000);
 			}
-			return Random.NormalIntRange( 16, 26 );
+			return Char.combatRoll( 16, 26 );
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
 			return Char.combatRoll(6*regionScale, 15 + 10*regionScale);
@@ -142,18 +142,18 @@ public abstract class Elemental extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(24, 50);
-            case 2: return Random.NormalIntRange(121, 243);
-            case 3: return Random.NormalIntRange(700, 1321);
-            case 4: return Random.NormalIntRange(22000, 64000);
-			case 5: return Random.NormalIntRange(2200000, 4250000);
+            case 1: return Char.combatRoll(24, 50);
+            case 2: return Char.combatRoll(121, 243);
+            case 3: return Char.combatRoll(700, 1321);
+            case 4: return Char.combatRoll(22000, 64000);
+			case 5: return Char.combatRoll(2200000, 4250000);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 	
-	protected int rangedCooldown = Char.combatRoll( 3, 5 );
+	protected int rangedCooldown = Random.NormalIntRange( 3, 5 );
 	
 	@Override
 	protected boolean act() {

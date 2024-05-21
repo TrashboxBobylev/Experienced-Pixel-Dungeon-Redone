@@ -52,7 +52,7 @@ public abstract class DamageWand extends Wand{
 	}
 
 	public long damageRoll(long lvl){
-		long dmg = Random.NormalLongRange(min(lvl), max(lvl));
+		long dmg = Char.combatRoll(min(lvl), max(lvl));
 		WandEmpower emp = Dungeon.hero.buff(WandEmpower.class);
 		if (emp != null){
 			dmg += emp.dmgBoost;

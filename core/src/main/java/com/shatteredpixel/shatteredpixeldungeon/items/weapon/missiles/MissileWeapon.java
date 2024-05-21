@@ -155,10 +155,6 @@ abstract public class MissileWeapon extends Weapon {
 		return super.collect(container);
 	}
 
-	public boolean isSimilar( Item item ) {
-		return level() == item.level() && getClass() == item.getClass();
-	}
-
 	@Override
 	public int throwPos(Hero user, int dst) {
 

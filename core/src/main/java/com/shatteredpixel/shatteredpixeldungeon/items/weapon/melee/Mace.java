@@ -85,7 +85,7 @@ public class Mace extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(4+1.5*lvl) damage, roughly +55% base dmg, +60% scaling
-		int dmgBoost = augment.damageFactor(5 + Math.round(1.5f*buffedLvl()));
+		long dmgBoost = augment.damageFactor(5 + Math.round(1.5d*buffedLvl()));
 		Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);
 	}
 
@@ -99,7 +99,7 @@ public class Mace extends MeleeWeapon {
 		}
 	}
 
-	public static void heavyBlowAbility(Hero hero, Integer target, float dmgMulti, int dmgBoost, MeleeWeapon wep){
+	public static void heavyBlowAbility(Hero hero, Integer target, float dmgMulti, long dmgBoost, MeleeWeapon wep){
 		if (target == null) {
 			return;
 		}
@@ -125,7 +125,7 @@ public class Mace extends MeleeWeapon {
 		}
 
 		float finalDmgMulti = dmgMulti;
-		int finalDmgBoost = dmgBoost;
+		long finalDmgBoost = dmgBoost;
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {

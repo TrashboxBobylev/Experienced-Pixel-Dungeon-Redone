@@ -43,7 +43,7 @@ public class DimensionalSundial extends Trinket {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", (int)(100*(enemySpawnMultiplier(buffedLvl())-1f)));
+		return Messages.get(this, "desc", (int)(100*(enemySpawnMultiplier((int)buffedLvl())-1f)));
 	}
 
 	public static boolean sundialWarned = false;

@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -159,6 +160,8 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 		if (target instanceof Hero) {
 			Hero hero = (Hero) target;
 			if (hero.subClass == HeroSubClass.MONK) {
+				int points = hero.pointsInTalent(Talent.UNENCUMBERED_SPIRIT);
+
 				if (hero.belongings.armor() != null){
 					if (hero.belongings.armor().tier <= 1 && points >= 3){
 						enGainMulti += 1.20f;

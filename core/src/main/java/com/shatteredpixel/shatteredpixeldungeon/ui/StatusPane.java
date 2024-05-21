@@ -234,9 +234,9 @@ public class StatusPane extends Component {
 	
 	private static final int[] warningColors = new int[]{0x660000, 0xCC0000, 0x660000};
 
-	private int oldHP = 0;
-	private int oldShield = 0;
-	private int oldMax = 0;
+	private long oldHP = 0;
+	private long oldShield = 0;
+	private long oldMax = 0;
 
 	@Override
 	public void update() {

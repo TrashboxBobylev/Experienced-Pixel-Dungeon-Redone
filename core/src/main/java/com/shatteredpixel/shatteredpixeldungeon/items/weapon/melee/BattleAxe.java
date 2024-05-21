@@ -54,7 +54,7 @@ public class BattleAxe extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(5+1.5*lvl) damage, roughly +40% base dmg, +50% scaling
-		int dmgBoost = augment.damageFactor(5 + Math.round(1.5f*buffedLvl()));
+		long dmgBoost = augment.damageFactor(5 + Math.round(1.5d*buffedLvl()));
 		Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);
 	}
 

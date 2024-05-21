@@ -122,15 +122,15 @@ public class Necromancer extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(8, 28);
-            case 2: return Random.NormalIntRange(75, 180);
-            case 3: return Random.NormalIntRange(400, 700);
-            case 4: return Random.NormalIntRange(7000, 12000);
-			case 5: return Random.NormalIntRange(480000, 775000);
+            case 1: return Char.combatRoll(8, 28);
+            case 2: return Char.combatRoll(75, 180);
+            case 3: return Char.combatRoll(400, 700);
+            case 4: return Char.combatRoll(7000, 12000);
+			case 5: return Char.combatRoll(480000, 775000);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 	
 	@Override
@@ -262,7 +262,7 @@ public class Necromancer extends Mob {
 
 				Char blocker = Actor.findChar(summoningPos);
 				if (blocker.alignment != alignment){
-					blocker.damage( (long) (Math.pow(Random.NormalLongRange(2, 10), Dungeon.cycle+1)), new SummoningBlockDamage() );
+					blocker.damage( (long) (Math.pow(Char.combatRoll(2, 10), Dungeon.cycle+1)), new SummoningBlockDamage() );
 					if (blocker == Dungeon.hero && !blocker.isAlive()){
 						Badges.validateDeathFromEnemyMagic();
 						Dungeon.fail(this);

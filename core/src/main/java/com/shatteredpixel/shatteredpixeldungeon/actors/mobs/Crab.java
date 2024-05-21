@@ -76,11 +76,11 @@ public class Crab extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(30, 45);
-            case 2: return Random.NormalIntRange(150, 184);
-            case 3: return Random.NormalIntRange(540, 721);
-            case 4: return Random.NormalIntRange(6000, 10000);
-            case 5: return Random.NormalIntRange(450000, 675000);
+            case 1: return Char.combatRoll(30, 45);
+            case 2: return Char.combatRoll(150, 184);
+            case 3: return Char.combatRoll(540, 721);
+            case 4: return Char.combatRoll(6000, 10000);
+            case 5: return Char.combatRoll(450000, 675000);
         }
 		return Char.combatRoll( 1, 7 );
 	}
@@ -98,14 +98,14 @@ public class Crab extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(8, 20);
-            case 2: return Random.NormalIntRange(76, 150);
-            case 3: return Random.NormalIntRange(300, 550);
-            case 4: return Random.NormalIntRange(4000, 8500);
-            case 5: return Random.NormalIntRange(440000, 600000);
+            case 1: return Char.combatRoll(8, 20);
+            case 2: return Char.combatRoll(76, 150);
+            case 3: return Char.combatRoll(300, 550);
+            case 4: return Char.combatRoll(4000, 8500);
+            case 5: return Char.combatRoll(440000, 600000);
         }
-		return Random.NormalIntRange(0, 4);
+		return Char.combatRoll(0, 4);
 	}
 }

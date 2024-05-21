@@ -81,9 +81,9 @@ public class EbonyMimic extends Mimic {
 	}
 
 	@Override
-	public int damageRoll() {
+	public long damageRoll() {
 		if (alignment == Alignment.NEUTRAL){
-			return Math.round(super.damageRoll()*1.5f); //BIG damage on surprise
+			return Math.round(super.damageRoll()*1.5d); //BIG damage on surprise
 		} else {
 			return super.damageRoll();
 		}

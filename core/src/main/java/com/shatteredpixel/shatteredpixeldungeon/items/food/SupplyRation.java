@@ -68,7 +68,7 @@ public class SupplyRation extends Food {
 	}
 
 	@Override
-	public int value() {
+	public long value() {
 		return 10 * quantity;
 	}
 

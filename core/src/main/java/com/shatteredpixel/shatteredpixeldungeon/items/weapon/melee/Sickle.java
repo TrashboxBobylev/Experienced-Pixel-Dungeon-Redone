@@ -61,13 +61,13 @@ public class Sickle extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//replaces damage with 12+2*lvl bleed, roughly 110% avg dmg at base, 100% avg scaling
-		int bleedAmt = augment.damageFactor(12 + 2*buffedLvl());
+		long bleedAmt = augment.damageFactor(12 + 2*buffedLvl());
 		Sickle.harvestAbility(hero, target, 0f, bleedAmt, this);
 	}
 
 	@Override
 	public String abilityInfo() {
-		int bleedAmt = levelKnown ? 12 + 2*buffedLvl() : 12;
+		long bleedAmt = levelKnown ? 12 + 2*buffedLvl() : 12;
 		if (levelKnown){
 			return Messages.get(this, "ability_desc", augment.damageFactor(bleedAmt));
 		} else {
@@ -75,7 +75,7 @@ public class Sickle extends MeleeWeapon {
 		}
 	}
 
-	public static void harvestAbility(Hero hero, Integer target, float bleedMulti, int bleedBoost, MeleeWeapon wep){
+	public static void harvestAbility(Hero hero, Integer target, float bleedMulti, long bleedBoost, MeleeWeapon wep){
 
 		if (target == null) {
 			return;

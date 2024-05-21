@@ -33,12 +33,12 @@ public class ParchmentScrap extends Trinket {
 	@Override
 	protected int upgradeEnergyCost() {
 		//5 -> 10(15) -> 15(30) -> 20(50)
-		return 10+5*level();
+		return 10+5*(int)level();
 	}
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", (int)enchantChanceMultiplier(buffedLvl()), Messages.decimalFormat("#.##", curseChanceMultiplier(buffedLvl())));
+		return Messages.get(this, "desc", (int)enchantChanceMultiplier((int)buffedLvl()), Messages.decimalFormat("#.##", curseChanceMultiplier((int)buffedLvl())));
 	}
 
 	public static float enchantChanceMultiplier(){

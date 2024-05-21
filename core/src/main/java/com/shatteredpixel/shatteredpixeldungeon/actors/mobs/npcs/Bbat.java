@@ -41,7 +41,6 @@ import com.watabou.noosa.Image;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Bbat extends Mob {
 
@@ -69,11 +68,11 @@ public class Bbat extends Mob {
     @Override
     public long damageRoll() {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)){
-            int i = Random.NormalIntRange(0, level * 2);
+            long i = Char.combatRoll(0, level * 2L);
             if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
             return i;
         }
-        return Random.NormalIntRange( level, 1 + level * 2 );
+        return Char.combatRoll( level, 1 + level * 2L );
     }
 
     @Override

@@ -29,8 +29,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -118,7 +118,7 @@ public class Sai extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(3+0.67*lvl) damage, roughly +45% base damage, +45% scaling
-		int dmgBoost = augment.damageFactor(3 + Math.round(0.67f*buffedLvl()));
+		long dmgBoost = augment.damageFactor(3 + Math.round(0.67d*buffedLvl()));
 		Sai.comboStrikeAbility(hero, target, 0, dmgBoost, this);
 	}
 
@@ -132,7 +132,7 @@ public class Sai extends MeleeWeapon {
 		}
 	}
 
-	public static void comboStrikeAbility(Hero hero, Integer target, float multiPerHit, int boostPerHit, MeleeWeapon wep){
+	public static void comboStrikeAbility(Hero hero, Integer target, float multiPerHit, long boostPerHit, MeleeWeapon wep){
 		if (target == null) {
 			return;
 		}

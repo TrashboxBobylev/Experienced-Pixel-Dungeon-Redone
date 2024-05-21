@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -56,7 +55,7 @@ public class AssassinsBlade extends MeleeWeapon {
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 50% toward max to max on surprise, instead of min to max.
 				long diff = max() - min();
-				long damage = augment.damageFactor(Random.NormalLongRange(
+				long damage = augment.damageFactor(Char.combatRoll(
 						min() + Math.round(diff*0.50f),
 						max()));
 				int exStr = hero.STR() - STRReq();

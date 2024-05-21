@@ -51,14 +51,16 @@ public class HoldFast extends Buff {
         return true;
     }
 
-    public int armorBonus(){
+    public long armorBonus(){
 		if (pos == target.pos && target instanceof Hero){
 			return Char.combatRoll(0, 2* ((Hero) target).pointsInTalent(Talent.HOLD_FAST));
 		} else {
 			detach();
 			return 0;
 		}
-	}@Override
+	}
+
+    @Override
     public int icon() {
         return BuffIndicator.ARMOR;
     }

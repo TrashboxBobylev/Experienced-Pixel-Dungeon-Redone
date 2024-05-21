@@ -112,7 +112,7 @@ public class Whip extends MeleeWeapon {
 			public void call() {
 				beforeAbilityUsed(hero, finalClosest);
 				//+(2+0.5*lvl) damage, roughly +20% base damage, +25% scaling
-				int dmgBoost = augment.damageFactor(2 + Math.round(0.5f*buffedLvl()));
+				long dmgBoost = augment.damageFactor(2 + Math.round(0.5d*buffedLvl()));
 				for (Char ch : targets) {
 					hero.attack(ch, 0.8f, 0, 1f);
 					if (!ch.isAlive()){

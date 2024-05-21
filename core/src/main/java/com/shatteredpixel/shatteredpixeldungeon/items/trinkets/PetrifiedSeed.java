@@ -33,12 +33,12 @@ public class PetrifiedSeed extends Trinket {
 	@Override
 	protected int upgradeEnergyCost() {
 		//5 -> 8(13) -> 10(23) -> 12(35)
-		return 6+2*level();
+		return 6+2*(int)level();
 	}
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", (int)(100*stoneInsteadOfSeedChance(buffedLvl())), (int)Math.round(100*(grassLootMultiplier(buffedLvl())-1f)));
+		return Messages.get(this, "desc", (int)(100*stoneInsteadOfSeedChance((int)buffedLvl())), (int)Math.round(100*(grassLootMultiplier((int)buffedLvl())-1f)));
 	}
 
 	public static float grassLootMultiplier(){

@@ -220,7 +220,7 @@ public class Pickaxe extends MeleeWeapon {
 		hero.sprite.attack(enemy.pos, new Callback() {
 			@Override
 			public void call() {
-				int damageBoost = 0;
+				long damageBoost = 0;
 				if (Char.hasProp(enemy, Char.Property.INORGANIC)
 						|| enemy instanceof Swarm
 						|| enemy instanceof Bee
@@ -249,7 +249,7 @@ public class Pickaxe extends MeleeWeapon {
 
 	@Override
 	public String abilityInfo() {
-		int dmgBoost = 8 + 2*buffedLvl();
+		long dmgBoost = 8 + 2*buffedLvl();
 		return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
 	}
 

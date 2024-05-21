@@ -95,7 +95,7 @@ public class Gloves extends MeleeWeapon {
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
 		//+(2+0.5*lvl) damage, roughly +67% base damage, +50% scaling
-		int dmgBoost = augment.damageFactor(2 + Math.round(0.5f*buffedLvl()));
+		long dmgBoost = augment.damageFactor(2 + Math.round(0.5d*buffedLvl()));
 		Sai.comboStrikeAbility(hero, target, 0, dmgBoost, this);
 	}
 

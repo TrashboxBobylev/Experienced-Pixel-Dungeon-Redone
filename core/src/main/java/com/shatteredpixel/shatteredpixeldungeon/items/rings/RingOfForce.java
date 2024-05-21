@@ -36,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class RingOfForce extends Ring {
 				&& hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) == null) {
 			long level = getBuffedBonus(hero, Force.class);
 			float tier = tier(hero.STR());
-			int dmg = Char.combatRoll(min(level, tier), max(level, tier));
+			long dmg = Char.combatRoll(min(level, tier), max(level, tier));
 			if (hero.buff(BrawlersStance.class) != null
 				&& hero.buff(BrawlersStance.class).active){
 				// 1+tier base dmg, roughly +35% dmg
@@ -207,7 +206,7 @@ public class RingOfForce extends Ring {
 		if (Dungeon.hero.isClass(HeroClass.DUELIST)
 			&& (anonymous || isIdentified() || isEquipped(Dungeon.hero))){
 			//0 if unidentified, solo level if unequipped, combined level if equipped
-			int level = isIdentified() ? (isEquipped(Dungeon.hero) ? getBuffedBonus(Dungeon.hero, Force.class) : soloBuffedBonus()) : 0;
+			long level = isIdentified() ? (isEquipped(Dungeon.hero) ? getBuffedBonus(Dungeon.hero, Force.class) : soloBuffedBonus()) : 0;
 			float tier = tier(Dungeon.hero.STR());
 			int dmgBoost = Math.round(1+tier+(level*((3+tier)/8f)));
 			if (isIdentified()) {

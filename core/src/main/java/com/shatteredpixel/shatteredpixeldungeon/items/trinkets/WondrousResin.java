@@ -33,14 +33,14 @@ public class WondrousResin extends Trinket {
 	@Override
 	protected int upgradeEnergyCost() {
 		//5 -> 10(15) -> 15(30) -> 20(50)
-		return 10+5*level();
+		return 10+5*(int)level();
 	}
 
 	@Override
 	public String desc() {
 		return Messages.get(this, "desc",
-				Messages.decimalFormat("#.##", 100*positiveCurseEffectChance(buffedLvl())),
-				Messages.decimalFormat("#.##", 100*extraCurseEffectChance(buffedLvl())));
+				Messages.decimalFormat("#.##", 100*positiveCurseEffectChance((int)buffedLvl())),
+				Messages.decimalFormat("#.##", 100*extraCurseEffectChance((int)buffedLvl())));
 	}
 
 	//TODO currently this trims most rare/v.rare wand effects entirely. Need to improve variety there

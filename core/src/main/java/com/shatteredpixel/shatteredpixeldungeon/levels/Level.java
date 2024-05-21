@@ -50,12 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.EyeOfNewt;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MossyClump;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.DimensionalSundial;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrapMechanism;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
@@ -687,17 +682,17 @@ if (bundle.contains( "respawner" )){
 	}
 
 	public float respawnCooldown(){
-		float cooldown = Dungeon.getRespawnTimer();
+		float cooldown;
 		if (Statistics.amuletObtained){
 			if (Dungeon.depth == 1){
 				//very fast spawns on floor 1! 0/2/4/6/8/10/12, etc.
-				cooldown = (Dungeon.level.mobCount()) * (respawn_timer / 25f);
+				cooldown = (Dungeon.level.mobCount()) * (Dungeon.getRespawnTimer() / 25f);
 			} else {
 				//respawn time is 5/5/10/15/20/25/25, etc.
-				cooldown = Math.round(GameMath.gate( respawn_timer/10f, Dungeon.level.mobCount() * (TIME_TO_RESPAWN / 10f), TIME_TO_RESPAWN / 2f));
+				cooldown = Math.round(GameMath.gate( Dungeon.getRespawnTimer()/10f, Dungeon.level.mobCount() * (Dungeon.getRespawnTimer() / 10f), Dungeon.getRespawnTimer() / 2f));
 			}
 		} else if (Dungeon.level.feeling == Feeling.DARK){
-			cooldown = 2* respawn_timer /3f;
+			cooldown = 2* Dungeon.getRespawnTimer() /3f;
 		} else {
 			cooldown = TIME_TO_RESPAWN;
 		}
