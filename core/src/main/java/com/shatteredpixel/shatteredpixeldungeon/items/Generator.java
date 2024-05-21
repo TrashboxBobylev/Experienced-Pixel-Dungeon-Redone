@@ -32,10 +32,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Spell;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.*;
@@ -45,8 +51,8 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
