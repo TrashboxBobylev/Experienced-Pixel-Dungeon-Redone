@@ -120,12 +120,12 @@ public class ReclaimTrap extends TargetedSpell {
 	
 	@Override
 	public long value() {
-		return (int)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
+		return (long)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 
 	@Override
-	public int energyVal() {
-		return (int)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
+	public long energyVal() {
+		return (long)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 	
 	private static final String STORED_TRAP = "stored_trap";

@@ -63,7 +63,7 @@ public abstract class Brew extends Potion {
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return quantity * 12;
 	}
 

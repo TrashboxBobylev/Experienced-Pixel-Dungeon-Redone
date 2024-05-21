@@ -68,7 +68,7 @@ public class Alchemize extends Spell {
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return (int)(4 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 

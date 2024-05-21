@@ -70,12 +70,12 @@ public class PhaseShift extends TargetedSpell {
 	
 	@Override
 	public long value() {
-		return (int)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
+		return (long)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 
 	@Override
-	public int energyVal() {
-		return (int)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
+	public long energyVal() {
+		return (long)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {

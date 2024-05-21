@@ -82,7 +82,7 @@ public class MagicalInfusion extends InventorySpell {
 	}
 
 	@Override
-	public int energyVal() {
+	public long energyVal() {
 		return 12 * quantity;
 	}
 	
