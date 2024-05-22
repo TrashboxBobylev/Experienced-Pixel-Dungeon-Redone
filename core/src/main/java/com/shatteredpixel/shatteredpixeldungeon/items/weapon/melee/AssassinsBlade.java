@@ -79,13 +79,13 @@ public class AssassinsBlade extends MeleeWeapon {
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		Dagger.sneakAbility(hero, target, 3, 2+buffedLvl(), this);
+		Dagger.sneakAbility(hero, target, 3, 2+buffedLvl()/150, this);
 	}
 
 	@Override
 	public String abilityInfo() {
 		if (levelKnown){
-			return Messages.get(this, "ability_desc", 2+buffedLvl());
+			return Messages.get(this, "ability_desc", 2+buffedLvl()/150);
 		} else {
 			return Messages.get(this, "typical_ability_desc", 2);
 		}

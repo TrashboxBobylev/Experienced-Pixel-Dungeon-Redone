@@ -93,13 +93,13 @@ public class Dagger extends MeleeWeapon {
 
 	@Override
 	protected void duelistAbility(Hero hero, Integer target) {
-		sneakAbility(hero, target, 5, 2+buffedLvl(), this);
+		sneakAbility(hero, target, 5, 2+buffedLvl()/150, this);
 	}
 
 	@Override
 	public String abilityInfo() {
 		if (levelKnown){
-			return Messages.get(this, "ability_desc", 2+buffedLvl());
+			return Messages.get(this, "ability_desc", 2+buffedLvl()/150);
 		} else {
 			return Messages.get(this, "typical_ability_desc", 2);
 		}
