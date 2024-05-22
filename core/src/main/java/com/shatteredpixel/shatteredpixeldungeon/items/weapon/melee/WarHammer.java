@@ -84,7 +84,7 @@ public class WarHammer extends MeleeWeapon {
     public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
         Buff.affect(attacker, Paralysis.class, Random.Int(1, 4)
-				* (Math.round((1f/((speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
+				* (Math.round((1f/(1d + (speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
         Buff.affect(defender, Paralysis.class, Random.Int(1, 3));
         return super.proc(attacker, defender, damage);
     }
