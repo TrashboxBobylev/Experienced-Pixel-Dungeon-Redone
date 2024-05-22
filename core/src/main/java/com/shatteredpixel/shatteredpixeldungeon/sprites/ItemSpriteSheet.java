@@ -84,17 +84,17 @@ public class ItemSpriteSheet {
 
 	private static final int UNCOLLECTIBLE  =                               xy(1, 2);   //16 slots
 	public static final int GOLD            = UNCOLLECTIBLE+0;
-	public static final int ENERGY          = UNCOLLECTIBLE+8;
+	public static final int ENERGY          = UNCOLLECTIBLE+1;
 
-	public static final int DEWDROP         = UNCOLLECTIBLE+1;
-	public static final int PETAL           = UNCOLLECTIBLE+2;
-	public static final int SANDBAG         = UNCOLLECTIBLE+3;
-	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+4;
-	public static final int RUNIC_SHOT 		= UNCOLLECTIBLE+8;
+	public static final int DEWDROP         = UNCOLLECTIBLE+3;
+	public static final int PETAL           = UNCOLLECTIBLE+4;
+	public static final int SANDBAG         = UNCOLLECTIBLE+5;
+	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+6;
+	public static final int RUNIC_SHOT 		= UNCOLLECTIBLE+7;
 	
-	public static final int TENGU_BOMB      = UNCOLLECTIBLE+9;
-	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+10;
-	public static final int GEO_BOULDER     = UNCOLLECTIBLE+11;
+	public static final int TENGU_BOMB      = UNCOLLECTIBLE+8;
+	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+9;
+	public static final int GEO_BOULDER     = UNCOLLECTIBLE+10;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
