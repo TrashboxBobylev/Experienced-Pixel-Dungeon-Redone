@@ -183,8 +183,8 @@ public class Longsword extends MeleeWeapon {
 		@Override
 		public String desc() {
 			return Messages.get(this, "desc",
-					Math.round((Math.pow(1.08, stacks) - 1f)*100),
-					Math.round((Math.pow(1.15, stacks) - 1f)*100));
+					Math.round((Math.pow(1.14, stacks) - 1f)*100),
+					Math.round((Math.pow(1.25, stacks) - 1f)*100));
 		}
 
 		public static String STACKS = "stacks";
@@ -261,15 +261,5 @@ public class Longsword extends MeleeWeapon {
 				});
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 
-	}
-
-	@Override
-	public String abilityInfo() {
-		long dmgBoost = levelKnown ? 4 + buffedLvl() : 4;
-		if (levelKnown){
-			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
-		} else {
-			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
-		}
 	}
 }

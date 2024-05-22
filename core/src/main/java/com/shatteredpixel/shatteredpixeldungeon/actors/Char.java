@@ -700,7 +700,7 @@ public abstract class Char extends Actor {
 			dmg *= 1.25d;
 		}
 		if (this.buff(Longsword.HolyExpEffect.class) != null){
-			dmg *= Math.pow(1.08d, buff(Longsword.HolyExpEffect.class).stacks);
+			dmg *= Math.pow(1.14d, buff(Longsword.HolyExpEffect.class).stacks);
 		}
 
 		Class<?> srcClass = src.getClass();
