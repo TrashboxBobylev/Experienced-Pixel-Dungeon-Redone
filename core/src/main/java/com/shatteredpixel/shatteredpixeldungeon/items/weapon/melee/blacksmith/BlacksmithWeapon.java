@@ -48,7 +48,7 @@ public abstract class BlacksmithWeapon extends MeleeWeapon {
 
     @Override
     protected int baseChargeUse(Hero hero, Char target){
-        return 3;
+        return 2;
     }
 
     @Override
