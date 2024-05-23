@@ -74,7 +74,7 @@ public class PrismaticGuard extends Buff {
 			}
 			if (bestPos != -1) {
 				PrismaticImage pris = new PrismaticImage();
-				pris.duplicate(hero, (int)Math.floor(HP) );
+				pris.duplicate(hero, (long)Math.floor(HP) );
 				pris.state = pris.HUNTING;
 				GameScene.add(pris, 1);
 				ScrollOfTeleportation.appear(pris, bestPos);
@@ -106,7 +106,7 @@ public class PrismaticGuard extends Buff {
 	}
 	
 	public static long maxHP( Hero hero ){
-		return 10 + (int)Math.floor(hero.lvl * 2.5f); //half of hero's HP
+		return 10 + (long)Math.floor(hero.lvl * 2.5d); //half of hero's HP
 	}
 	
 	@Override

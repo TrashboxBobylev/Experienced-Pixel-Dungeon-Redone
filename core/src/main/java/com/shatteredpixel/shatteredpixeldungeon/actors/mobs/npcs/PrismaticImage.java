@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
@@ -145,7 +144,7 @@ public class PrismaticImage extends NPC {
 		deathTimer = bundle.getInt( TIMER );
 	}
 	
-	public void duplicate( Hero hero, int HP ) {
+	public void duplicate( Hero hero, long HP ) {
 		this.hero = hero;
 		heroID = this.hero.id();
 		this.HP = HP;
