@@ -441,13 +441,6 @@ public abstract class Wand extends Item {
 				&& charger != null && charger.target == Dungeon.hero
 				&& !Dungeon.hero.belongings.contains(this)) {
 
-			//if the wand is owned by the hero, but not in their inventory, it must be in the staff
-			if (!Dungeon.hero.belongings.contains(this)) {
-				if (curCharges == 0 && Dungeon.hero.hasTalent(Talent.BACKUP_BARRIER)) {
-					//grants 3/5 shielding
-					Buff.affect(Dungeon.hero, Barrier.class).setShield(1 + 2 * Dungeon.hero.pointsInTalent(Talent.BACKUP_BARRIER));
-				}
-				if (Dungeon.hero.isSubclass(HeroSubClass.BATTLEMAGE)) {
 					Buff.prolong(Dungeon.hero, Talent.EmpoweredStrikeTracker.class, 10f);
 				}
 
@@ -456,7 +449,6 @@ public abstract class Wand extends Item {
 
 			Buff.affect(Dungeon.hero, Talent.LingeringMagicTracker.class, 5f);
 			}
-		}
 
 		Invisibility.dispel();
 
@@ -464,7 +456,7 @@ public abstract class Wand extends Item {
 		updateQuickslot();
 
 		curUser.spendAndNext( TIME_TO_ZAP );
-	}}
+	}
 	
 	@Override
 	public Item random() {
