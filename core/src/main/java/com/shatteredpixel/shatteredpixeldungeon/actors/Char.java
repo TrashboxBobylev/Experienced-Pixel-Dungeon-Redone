@@ -651,10 +651,6 @@ public abstract class Char extends Actor {
 			return;
 		}
 
-		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			dmg = (long) Math.ceil(dmg * buff.damageTakenFactor());
-		}
-
 		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);
 			for (LifeLink link : links.toArray(new LifeLink[0])){
@@ -703,19 +699,6 @@ public abstract class Char extends Actor {
 			dmg *= Math.pow(1.14d, buff(Longsword.HolyExpEffect.class).stacks);
 		}
 
-		Class<?> srcClass = src.getClass();
-		if (isImmune( srcClass )) {
-			dmg = 0;
-		} else {
-			dmg = Math.round( dmg * (double)resist( srcClass ));
-		}
-		
-		//TODO improve this when I have proper damage source logic
-		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
-			dmg -= combatRoll(0, buff(ArcaneArmor.class).level());
-			if (dmg < 0) dmg = 0;
-		}
-
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
 			if (isImmune(Bleeding.class)){
 				sprite.showStatus(CharSprite.POSITIVE, Messages.titleCase(Messages.get(this, "immune")));
@@ -733,6 +716,22 @@ public abstract class Char extends Actor {
 			sprite.showStatus(CharSprite.WARNING, Messages.titleCase(b.name()) + " " + (int)b.level());
 			buff(Sickle.HarvestBleedTracker.class).detach();
 			return;
+		}
+for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
+		}
+
+		Class<?> srcClass = src.getClass();
+		if (isImmune( srcClass )) {
+			dmg = 0;
+		} else {
+			dmg = Math.round( dmg * resist( srcClass ));
+		}
+
+		//TODO improve this when I have proper damage source logic
+		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
+			dmg -= combatRoll(0, buff(ArcaneArmor.class).level());
+			if (dmg < 0) dmg = 0;
 		}
 
 		if (buff( Paralysis.class ) != null) {

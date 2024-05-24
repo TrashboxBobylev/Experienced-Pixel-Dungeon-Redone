@@ -466,7 +466,7 @@ public class YogDzewa extends Mob {
 		phaseTransition();
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null){
+		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/3f);
 			else                                                    lock.addTime(dmgTaken/2f);
 		}
@@ -508,7 +508,7 @@ public class YogDzewa extends Mob {
 	public void updateVisibility( Level level ){
 		int viewDistance = 4;
 		if (phase > 1 && isAlive()){
-			viewDistance = 4 - (phase-1);
+			viewDistance = Math.max(4 - (phase-1), 1);
 		}
 		if (Dungeon.isChallenged(Challenges.DARKNESS)) {
 			viewDistance = Math.min(viewDistance, 2);
