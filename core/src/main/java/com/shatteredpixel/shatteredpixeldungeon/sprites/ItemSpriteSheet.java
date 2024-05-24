@@ -687,7 +687,7 @@ public class ItemSpriteSheet {
 	public static final int RESPAWN    		= SPELLS+4;
 
 	public static final int CURSE_INFUSE    = SPELLS+5;
-	public static final int MAGIC_INFUSE    = SPELLS+6;
+	public static final int MAGIC_INFUSE    = SPELLS+14;
 	public static final int ALCHEMIZE       = SPELLS+7;
 	public static final int RECYCLE         = SPELLS+8;
 	public static final int FIREBOOSTER     = SPELLS+9;
