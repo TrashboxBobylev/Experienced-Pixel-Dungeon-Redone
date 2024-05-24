@@ -303,6 +303,7 @@ public class Hero extends Char {
 		if (talent == Talent.ENHANCED_COMBO && subClass == HeroSubClass.GLADIATOR) return 3;
 		if (talent == Talent.ENRAGED_CATALYST && subClass == HeroSubClass.BERSERKER) return 4;
 		if (talent == Talent.EMPOWERED_STRIKE && subClass == HeroSubClass.BATTLEMAGE) return 6;
+		if (talent == Talent.SPEEDY_STEALTH && subClass == HeroSubClass.FREERUNNER) return 3;
 		for (LinkedHashMap<Talent, Integer> tier : talents){
 			for (Talent f : tier.keySet()){
 				if (f == talent) return tier.get(f);
