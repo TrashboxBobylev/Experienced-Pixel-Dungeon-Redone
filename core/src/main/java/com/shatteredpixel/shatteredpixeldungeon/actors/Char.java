@@ -717,15 +717,16 @@ public abstract class Char extends Actor {
 			buff(Sickle.HarvestBleedTracker.class).detach();
 			return;
 		}
-for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
+
+		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			dmg = (long) Math.ceil(dmg * buff.damageTakenFactor());
 		}
 
 		Class<?> srcClass = src.getClass();
 		if (isImmune( srcClass )) {
 			dmg = 0;
 		} else {
-			dmg = Math.round( dmg * resist( srcClass ));
+			dmg = Math.round( dmg * (double)resist( srcClass ));
 		}
 
 		//TODO improve this when I have proper damage source logic
