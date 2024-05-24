@@ -191,16 +191,16 @@ public abstract class Recipe {
 		new CurseInfusion.Recipe(),
 		new ReclaimTrap.Recipe(),
 		new WildEnergy.Recipe(),
-		new StewedMeat.twoMeat()
+		new StewedMeat.twoMeat(),
+		new FireBooster.Recipe(),
+		new RespawnBooster.Recipe(),
+		new Vampirism.Recipe()
 	};
 	
 	private static Recipe[] threeIngredientRecipes = new Recipe[]{
 		new Potion.SeedToPotion(),
 		new StewedMeat.threeMeat(),
 		new MeatPie.Recipe(),
-        new Vampirism.Recipe(),
-        new RespawnBooster.Recipe(),
-        new FireBooster.Recipe(),
 		new WandOfEarthblast.Recipe()
 	};
 	
