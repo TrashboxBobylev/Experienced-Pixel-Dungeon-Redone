@@ -299,6 +299,7 @@ public class Hero extends Char {
 	}
 
 	public int pointsInTalent( Talent talent ){
+		if (talent == Talent.ENHANCED_COMBO && subClass == HeroSubClass.GLADIATOR) return 3;
 		for (LinkedHashMap<Talent, Integer> tier : talents){
 			for (Talent f : tier.keySet()){
 				if (f == talent) return tier.get(f);
