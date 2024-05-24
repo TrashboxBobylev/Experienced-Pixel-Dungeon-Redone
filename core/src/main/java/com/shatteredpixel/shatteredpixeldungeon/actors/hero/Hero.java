@@ -296,6 +296,7 @@ public class Hero extends Char {
 
 	public boolean hasTalent( Talent talent ){
 		if (talent == Talent.MYSTICAL_CHARGE && subClass == HeroSubClass.BATTLEMAGE) return true;
+		if (talent == Talent.SHARED_UPGRADES && subClass == HeroSubClass.SNIPER) return true;
 		return pointsInTalent(talent) > 0;
 	}
 
