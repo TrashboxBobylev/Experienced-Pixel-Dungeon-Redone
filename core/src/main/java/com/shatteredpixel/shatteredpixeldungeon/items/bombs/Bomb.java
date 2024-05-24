@@ -216,7 +216,7 @@ public class Bomb extends Item {
 	}
 
 	public static long damageRoll() {
-		long dmg = (Dungeon.NormalLongRange(minDamage(), maxDamage()));
+		long dmg = (Char.combatRoll(minDamage(), maxDamage()));
 		if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 			dmg *= 2.5f;
 		}
