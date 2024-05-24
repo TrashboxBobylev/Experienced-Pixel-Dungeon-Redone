@@ -622,9 +622,6 @@ public enum Talent {
 		if (hero.pointsInTalent(VETERANS_INTUITION) == 2 && item instanceof Armor){
 			item.identify();
 		}
-		if (hero.heroClass == HeroClass.MAGE && item instanceof Wand){
-			item.identify();
-		}
 		if (hero.hasTalent(THIEFS_INTUITION) && item instanceof Ring){
 			if (hero.pointsInTalent(THIEFS_INTUITION) == 2){
 				item.identify();
@@ -640,6 +637,9 @@ public enum Talent {
 	public static void onItemCollected( Hero hero, Item item ){
 		if (hero.pointsInTalent(THIEFS_INTUITION) == 2){
 			if (item instanceof Ring) ((Ring) item).setKnown();
+		}
+		if (hero.heroClass == HeroClass.MAGE && item instanceof Wand){
+			item.identify();
 		}
 	}
 

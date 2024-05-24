@@ -337,9 +337,9 @@ public abstract class Wand extends Item {
 				lvl = Degrade.reduceLevel(lvl);
 			}
 
-			if (charger.target.buff(ScrollEmpower.class) != null){
-				lvl += 2;
-			}
+//			if (charger.target.buff(ScrollEmpower.class) != null){
+//				lvl += 2;
+//			}
 
 			if (curCharges == 1 && charger.target instanceof Hero && ((Hero)charger.target).hasTalent(Talent.DESPERATE_POWER)){
 				lvl += ((Hero)charger.target).pointsInTalent(Talent.DESPERATE_POWER);
