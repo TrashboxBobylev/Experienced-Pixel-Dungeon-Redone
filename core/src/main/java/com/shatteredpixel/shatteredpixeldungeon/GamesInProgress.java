@@ -129,6 +129,7 @@ public class GamesInProgress {
 		
 		info.depth = Dungeon.depth;
 		info.challenges = Dungeon.challenges;
+		info.cycle = Dungeon.cycle;
 
 		info.seed = Dungeon.seed;
 		info.customSeed = Dungeon.customSeedText;
@@ -166,6 +167,7 @@ public class GamesInProgress {
 		public int depth;
 		public int version;
 		public int challenges;
+		public int cycle;
 
 		public long seed;
 		public String customSeed;

@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGameInProgress;
 import com.watabou.noosa.BitmapText;
@@ -43,7 +45,7 @@ import java.util.ArrayList;
 
 public class StartScene extends PixelScene {
 	
-	private static final int SLOT_WIDTH = 120;
+	private static final int SLOT_WIDTH = 138;
 	private static final int SLOT_HEIGHT = 30;
 	
 	@Override
@@ -129,6 +131,8 @@ public class StartScene extends PixelScene {
 		private BitmapText depth;
 		private Image classIcon;
 		private BitmapText level;
+		private Image cycleIcon;
+		private BitmapText cycle;
 		
 		private int slot;
 		private boolean newGame;
@@ -179,6 +183,12 @@ public class StartScene extends PixelScene {
 					add(steps);
 					depth = new BitmapText(PixelScene.pixelFont);
 					add(depth);
+					if (info.cycle != 0){
+						cycleIcon = new Image(new ItemSprite(ItemSpriteSheet.DARK_CHEST));
+						add(cycleIcon);
+						cycle = new BitmapText(PixelScene.pixelFont);
+						add(cycle);
+					}
 					
 					classIcon = new Image(Icons.get(info.heroClass));
 					add(classIcon);
@@ -195,15 +205,26 @@ public class StartScene extends PixelScene {
 				
 				level.text(Integer.toString(info.level));
 				level.measure();
+
+				if (info.cycle != 0){
+					cycle.text(Integer.toString(info.cycle));
+					cycle.measure();
+				}
 				
 				if (info.challenges > 0){
 					name.hardlight(Window.TITLE_COLOR);
 					depth.hardlight(Window.TITLE_COLOR);
 					level.hardlight(Window.TITLE_COLOR);
+					if (info.cycle != 0){
+						cycle.hardlight(Window.TITLE_COLOR);
+					}
 				} else {
 					name.resetColor();
 					depth.resetColor();
 					level.resetColor();
+					if (info.cycle != 0){
+						cycle.resetColor();
+					}
 				}
 
 				if (info.daily){
@@ -255,6 +276,16 @@ public class StartScene extends PixelScene {
 				depth.x = steps.x + (steps.width() - depth.width()) / 2f;
 				depth.y = steps.y + (steps.height() - depth.height()) / 2f + 1;
 				align(depth);
+
+				if (cycle != null){
+					cycleIcon.x = x + width - 56 + (16 - cycleIcon.width())/2f;
+					cycleIcon.y = y + (height - cycleIcon.height())/2f;
+					align(cycleIcon);
+
+					cycle.x = cycleIcon.x + (cycleIcon.width() - cycle.width()) / 2f;
+					cycle.y = cycleIcon.y + (cycleIcon.height() - cycle.height()) / 2f + 1;
+					align(cycle);
+				}
 				
 			} else {
 				name.setPos(
