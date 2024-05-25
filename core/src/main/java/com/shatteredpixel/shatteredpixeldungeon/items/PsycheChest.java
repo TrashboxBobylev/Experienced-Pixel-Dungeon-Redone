@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -74,6 +75,26 @@ public class PsycheChest extends Item {
     @Override
     public boolean isUpgradable() {
         return false;
+    }
+
+    @Override
+    public String desc() {
+        return Messages.get(this, "desc", neededExp());
+    }
+
+    public static long neededExp(){
+        long neededExp = 100;
+        switch (Dungeon.cycle){
+            case 1: neededExp = 200; break;
+            case 2: neededExp = 1250; break;
+            case 3: neededExp = 11750; break;
+            case 4: neededExp = 75000; break;
+            case 5: neededExp = 500000; break;
+        }
+        if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
+            neededExp *= 2.5f;
+        }
+        return neededExp;
     }
 
     @Override
