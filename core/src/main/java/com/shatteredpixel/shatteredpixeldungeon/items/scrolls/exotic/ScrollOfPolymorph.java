@@ -59,7 +59,7 @@ public class ScrollOfPolymorph extends ExoticScroll {
 					mob.EXP = 0;
 					mob.alignment = ALLY;
 					Gold gold = (Gold) new Gold().random();
-					gold.quantity(gold.quantity()*Random.Int(2, 6));
+					gold.quantity(gold.quantity()*Random.Int(7, 20));
 					Dungeon.level.drop(gold, mob.pos).sprite.drop();
 					
 					mob.destroy();
