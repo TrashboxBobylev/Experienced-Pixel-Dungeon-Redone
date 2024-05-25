@@ -71,7 +71,7 @@ public class Kunai extends MissileWeapon {
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
 				//deals 60% toward max to max on surprise, instead of min to max.
 				long diff = max() - min();
-				long damage = augment.damageFactor(Dungeon.NormalLongRange(
+				long damage = augment.damageFactor(Char.combatRoll(
 						min() + Math.round(diff*0.6f),
 						max()));
 				int exStr = hero.STR() - STRReq();
