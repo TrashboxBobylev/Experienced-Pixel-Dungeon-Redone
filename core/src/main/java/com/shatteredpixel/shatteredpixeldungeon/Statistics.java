@@ -226,6 +226,7 @@ public class Statistics {
 		totalQuestScore = bundle.getInt( TOT_QUEST );
 		winMultiplier   = bundle.getFloat( WIN_MULT );
 		chalMultiplier  = bundle.getFloat( CHAL_MULT );
+		cycleMultiplier = bundle.getFloat( CYCLE_MULT);
 		totalScore      = bundle.getLong( TOTAL_SCORE );
 		
 		upgradesUsed    = bundle.getInt( UPGRADES );
