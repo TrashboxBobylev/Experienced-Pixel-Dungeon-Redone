@@ -512,6 +512,9 @@ public class Dungeon {
 	}
 
 	public static boolean interfloorTeleportAllowed(){
+		if (Dungeon.branch == BRANCH_ARENA || Dungeon.branch == BRANCH_BLACK)
+			//no
+			return false;
 		if (Dungeon.level.locked
 				|| Dungeon.level instanceof MiningLevel
 				|| (Dungeon.hero != null && Dungeon.hero.belongings.getItem(Amulet.class) != null)){
