@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 public class BlackPsycheChest extends Item {
     {
-        image = ItemSpriteSheet.EBONY_CHEST;
+        image = ItemSpriteSheet.DARK_CHEST;
         cursed = true;
         cursedKnown = true;
         stackable = true;

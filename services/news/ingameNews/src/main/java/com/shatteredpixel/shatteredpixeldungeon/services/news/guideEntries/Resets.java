@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 public class Resets extends NewsArticle {
     {
         title = Messages.get(this, "title");
-        icon = "ITEM: 39";
+        icon = "ITEM: 41";
         summary = Messages.get(this, "summary");
     }
 }
