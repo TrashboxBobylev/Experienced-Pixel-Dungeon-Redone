@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 
 public class TelekineticGrab extends TargetedSpell {
 
@@ -88,25 +89,27 @@ public class TelekineticGrab extends TargetedSpell {
 
 		} else if (Dungeon.level.heaps.get(bolt.collisionPos) != null){
 
-			Heap h = Dungeon.level.heaps.get(bolt.collisionPos);
+			for (int n : PathFinder.NEIGHBOURS9){
+				int cell = bolt.collisionPos + n;
 
-			if (h.type != Heap.Type.HEAP){
-				GLog.w(Messages.get(this, "cant_grab"));
-				h.sprite.drop();
-				return;
-			}
+				Heap h = Dungeon.level.heaps.get(cell);
 
-			while (!h.isEmpty()) {
-				Item item = h.peek();
-				if (item.doPickUp(hero, h.pos)) {
-					h.pickUp();
-					hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
-					GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
-
-				} else {
+				if (h.type != Heap.Type.HEAP){
 					GLog.w(Messages.get(this, "cant_grab"));
 					h.sprite.drop();
-					return;
+					continue;
+				}
+
+				while (!h.isEmpty()) {
+					Item item = h.peek();
+					if (item.doPickUp(hero, h.pos)) {
+						h.pickUp();
+						hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
+						GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
+					} else {
+						GLog.w(Messages.get(this, "cant_grab"));
+						h.sprite.drop();
+                    }
 				}
 			}
 
