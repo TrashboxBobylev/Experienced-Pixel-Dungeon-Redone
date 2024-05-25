@@ -170,7 +170,7 @@ public enum Rankings {
 
 		if (Dungeon.initialVersion > 453){
 			Statistics.progressScore = Dungeon.hero.lvl * Statistics.deepestFloor * 25;
-			Statistics.progressScore = Math.min(Statistics.progressScore, 250_000);
+			Statistics.progressScore = Math.min(Statistics.progressScore, 600_000);
 
 			if (Statistics.heldItemValue == 0) {
 				for (Item i : Dungeon.hero.belongings) {
@@ -181,8 +181,8 @@ public enum Rankings {
 					}
 				}
 			}
-			Statistics.treasureScore = Statistics.goldCollected + Statistics.heldItemValue;
-			Statistics.treasureScore = Math.min(Statistics.treasureScore, 100_000);
+			Statistics.treasureScore = (Statistics.goldCollected + Statistics.heldItemValue) / 1000;
+			Statistics.treasureScore = Math.min(Statistics.treasureScore, 1_000_000);
 
 			Statistics.exploreScore = 0;
 			int scorePerFloor = Statistics.floorsExplored.size * 50;
