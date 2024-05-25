@@ -386,7 +386,7 @@ public class Badges {
 			badge = Badge.GOLD_COLLECTED_4;
 			local.add( badge );
 		}
-		if (!local.contains( Badge.GOLD_COLLECTED_5 ) && Statistics.goldCollected >= 15_000) {
+		if (!local.contains( Badge.GOLD_COLLECTED_5 ) && Statistics.goldCollected >= 500000) {
 			if (badge != null) unlock(badge);
 			badge = Badge.GOLD_COLLECTED_5;
 			local.add( badge );
