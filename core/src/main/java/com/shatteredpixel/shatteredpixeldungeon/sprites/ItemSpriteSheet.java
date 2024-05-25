@@ -792,6 +792,7 @@ public class ItemSpriteSheet {
 	public static final int OSMIRIDIUM = QUEST+10;
 	public static final int ENDERIUM = QUEST+11;
 	public static final int ENERGITE = QUEST+12;
+	public static final int SKULL = QUEST+10;
 	static{
 		assignItemRect(DUST,    12, 11);
 		assignItemRect(CANDLE,  12, 12);
@@ -805,6 +806,7 @@ public class ItemSpriteSheet {
 		assignItemRect(OSMIRIDIUM,   10, 11);
 		assignItemRect(ENDERIUM,    9, 10);
 		assignItemRect(ENERGITE,    12, 14);
+		assignItemRect(SKULL, 16, 11);
 	}
 
 	private static final int BAGS       =                                   xy(1, 31);  //16 slots
