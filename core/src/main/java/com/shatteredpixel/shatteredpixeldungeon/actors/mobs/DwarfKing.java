@@ -110,13 +110,13 @@ public class DwarfKing extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(71, 83);
-            case 2: return Random.NormalIntRange(297, 455);
-            case 3: return Random.NormalIntRange(2000, 2800);
-            case 4: return Random.NormalIntRange(90000, 250000);
-			case 5: return Random.NormalIntRange(2600000, 8000000);
+            case 1: return Char.combatRoll(71, 83);
+            case 2: return Char.combatRoll(297, 455);
+            case 3: return Char.combatRoll(2000, 2800);
+            case 4: return Char.combatRoll(90000, 250000);
+			case 5: return Char.combatRoll(2600000, 8000000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	@Override
@@ -132,15 +132,15 @@ public class DwarfKing extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(38, 65);
-            case 2: return Random.NormalIntRange(140, 295);
-            case 3: return Random.NormalIntRange(1100, 1980);
-            case 4: return Random.NormalIntRange(90000, 170000);
-			case 5: return Random.NormalIntRange(3200000, 6500000);
+            case 1: return Char.combatRoll(38, 65);
+            case 2: return Char.combatRoll(140, 295);
+            case 3: return Char.combatRoll(1100, 1980);
+            case 4: return Char.combatRoll(90000, 170000);
+			case 5: return Char.combatRoll(3200000, 6500000);
         }
-		return Random.NormalIntRange(0, 10);
+		return Char.combatRoll(0, 10);
 	}
 
 	private int phase = 1;
@@ -517,7 +517,7 @@ public class DwarfKing extends Mob {
 		super.damage(dmg, src);
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null && !isImmune(src.getClass())){
+		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/5f);
 			else                                                    lock.addTime(dmg/3f);
 		}
@@ -743,7 +743,7 @@ public class DwarfKing extends Mob {
 					}
 				} else {
 					Char ch = Actor.findChar(pos);
-					ch.damage(Random.NormalIntRange(20, 40) + Dungeon.escalatingDepth(), this);
+					ch.damage(Char.combatRoll(20, 40) + Dungeon.escalatingDepth(), this);
 					if (((DwarfKing)target).phase == 2){
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
 							target.damage(target.HT/18, new KingDamager());

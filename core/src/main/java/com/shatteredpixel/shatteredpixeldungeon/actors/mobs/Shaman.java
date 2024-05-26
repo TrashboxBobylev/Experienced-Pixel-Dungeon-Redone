@@ -82,13 +82,13 @@ public abstract class Shaman extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(43, 58);
-            case 2: return Random.NormalIntRange(235, 265);
-            case 3: return Random.NormalIntRange(880, 1200);
-            case 4: return Random.NormalIntRange(18000, 27500);
-			case 5: return Random.NormalIntRange(1500000, 2250000);
+            case 1: return Char.combatRoll(43, 58);
+            case 2: return Char.combatRoll(235, 265);
+            case 3: return Char.combatRoll(880, 1200);
+            case 4: return Char.combatRoll(18000, 27500);
+			case 5: return Char.combatRoll(1500000, 2250000);
         }
-		return Random.NormalIntRange( 5, 10 );
+		return Char.combatRoll( 5, 10 );
 	}
 	
 	@Override
@@ -104,15 +104,15 @@ public abstract class Shaman extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(18, 36);
-            case 2: return Random.NormalIntRange(70, 198);
-            case 3: return Random.NormalIntRange(450, 790);
-            case 4: return Random.NormalIntRange(10000, 26000);
-			case 5: return Random.NormalIntRange(850000, 1450000);
+            case 1: return Char.combatRoll(18, 36);
+            case 2: return Char.combatRoll(70, 198);
+            case 3: return Char.combatRoll(450, 790);
+            case 4: return Char.combatRoll(10000, 26000);
+			case 5: return Char.combatRoll(850000, 1450000);
         }
-		return Random.NormalIntRange(0, 6);
+		return Char.combatRoll(0, 6);
 	}
 
 	@Override
@@ -168,13 +168,13 @@ public abstract class Shaman extends Mob {
 				if (enemy == Dungeon.hero) Sample.INSTANCE.play( Assets.Sounds.DEBUFF );
 			}
 			
-			long dmg = Random.NormalIntRange( 6, 15 );
+			long dmg = Char.combatRoll( 6, 15 );
             switch (Dungeon.cycle) {
-                case 1: dmg = Random.NormalIntRange(48, 62); break;
-                case 2: dmg = Random.NormalIntRange(250, 324); break;
-                case 3: dmg = Random.NormalIntRange(895, 1200); break;
-                case 4: dmg = Random.NormalIntRange(17000, 26000); break;
-				case 5: dmg = Random.NormalIntRange(1400000, 2150000); break;
+                case 1: dmg = Char.combatRoll(48, 62); break;
+                case 2: dmg = Char.combatRoll(250, 324); break;
+                case 3: dmg = Char.combatRoll(895, 1200); break;
+                case 4: dmg = Char.combatRoll(17000, 26000); break;
+				case 5: dmg = Char.combatRoll(1400000, 2150000); break;
             }
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 			enemy.damage( dmg, new EarthenBolt() );

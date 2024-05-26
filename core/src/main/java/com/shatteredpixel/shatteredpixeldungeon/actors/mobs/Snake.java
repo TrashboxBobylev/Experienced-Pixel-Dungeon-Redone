@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SnakeSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.Random;
 
 public class Snake extends Mob {
 	
@@ -82,13 +81,13 @@ public class Snake extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(21, 36);
-            case 2: return Random.NormalIntRange(120, 160);
-            case 3: return Random.NormalIntRange(498, 621);
-            case 4: return Random.NormalIntRange(3900, 5780);
-            case 5: return Random.NormalIntRange(370000, 525000);
+            case 1: return Char.combatRoll(21, 36);
+            case 2: return Char.combatRoll(120, 160);
+            case 3: return Char.combatRoll(498, 621);
+            case 4: return Char.combatRoll(3900, 5780);
+            case 5: return Char.combatRoll(370000, 525000);
         }
-		return Random.NormalIntRange( 1, 4 );
+		return Char.combatRoll( 1, 4 );
 	}
 	
 	@Override

@@ -136,6 +136,15 @@ public class Greatsword extends MeleeWeapon {
 	}
 
     @Override
+    public String abilityInfo() {
+        if (levelKnown){
+            return Messages.get(this, "ability_desc", augment.damageFactor(Math.round(min()*0.5d)), augment.damageFactor(Math.round(max()*0.5d)));
+        } else {
+            return Messages.get(this, "typical_ability_desc", augment.damageFactor(Math.round(min(0)*0.5d)), augment.damageFactor(Math.round(max(0)*0.5d)));
+        }
+    }
+
+    @Override
     public long proc(Char attacker, Char defender, long damage) {
         for (int i : PathFinder.NEIGHBOURS9){
 

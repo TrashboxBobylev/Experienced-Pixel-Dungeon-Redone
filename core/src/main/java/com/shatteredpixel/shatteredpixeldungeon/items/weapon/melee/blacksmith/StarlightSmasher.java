@@ -55,11 +55,11 @@ public class StarlightSmasher extends BlacksmithWeapon {
     {
         image = ItemSpriteSheet.STARHAMMER;
         hitSound = Assets.Sounds.HIT_CRUSH;
-        hitSoundPitch = 4f;
+        hitSoundPitch = 0.5f;
         usesTargeting = true;
 
         ACC = 1.30f; //30% boost to accuracy
-        DLY = 2.5f;
+        DLY = 2f;
     }
 
     public boolean starlight_power = false;
@@ -77,8 +77,8 @@ public class StarlightSmasher extends BlacksmithWeapon {
     @Override
     public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
-        Buff.affect(attacker, Paralysis.class, Random.Int(1, 5)
-                * (Math.round((1f/((speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
+        Buff.affect(attacker, Paralysis.class, Random.Int(1, 4)
+                * (Math.round((1f/(1d + (speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
         Buff.affect(defender, Paralysis.class, Random.Int(2, 4));
         if (!starlight_power){
             starlight_power = true;

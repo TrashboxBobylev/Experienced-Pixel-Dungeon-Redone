@@ -57,13 +57,13 @@ public class Flail extends MeleeWeapon {
 				lvl*Math.round(2d*(tier()+1));  //+10 per level, up from +6
 	}
 
-	private static double spinBonus = 1f;
+	private static long spinBoost = 0;
 
 	@Override
 	public long damageRoll(Char owner) {
-		long dmg = Math.round(super.damageRoll(owner) * spinBonus);
-		if (spinBonus > 1f) Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
-		spinBonus = 1f;
+		long dmg = super.damageRoll(owner) + spinBoost;
+		if (spinBoost > 0) Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG);
+		spinBoost = 0;
 		return dmg;
 	}
 
@@ -84,10 +84,12 @@ public class Flail extends MeleeWeapon {
 			});
 			//we detach and calculate bonus here in case the attack misses (e.g. vs. monks)
 			spin.detach();
-			spinBonus = 1f + (spin.spins/3f);
+			//+(6+2*lvl) damage per spin, roughly +30% base damage, +45% scaling
+			// so +90% base dmg, +135% scaling at 3 spins
+			spinBoost = spin.spins * augment.damageFactor(6 + 2*buffedLvl());
 			return Float.POSITIVE_INFINITY;
 		} else {
-			spinBonus = 1f;
+			spinBoost = 0;
 			return super.accuracyFactor(owner, target);
 		}
 	}
@@ -97,7 +99,7 @@ public class Flail extends MeleeWeapon {
 		if (Dungeon.hero.buff(SpinAbilityTracker.class) != null){
 			return 0;
 		} else {
-			return 2;
+			return 1;
 		}
 	}
 
@@ -123,6 +125,16 @@ public class Flail extends MeleeWeapon {
 		BuffIndicator.refreshHero();
 
 		afterAbilityUsed(hero);
+	}
+
+	@Override
+	public String abilityInfo() {
+		long dmgBoost = levelKnown ? 6 + 2*buffedLvl() : 6;
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(dmgBoost));
+		} else {
+			return Messages.get(this, "typical_ability_desc", augment.damageFactor(dmgBoost));
+		}
 	}
 
 	public static class SpinAbilityTracker extends FlavourBuff {

@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
-import com.watabou.utils.Random;
 
 public class Gnoll extends Mob {
 	
@@ -76,13 +75,13 @@ public class Gnoll extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(28, 40);
-            case 2: return Random.NormalIntRange(130, 167);
-            case 3: return Random.NormalIntRange(512, 644);
-            case 4: return Random.NormalIntRange(4000, 7000);
-            case 5: return Random.NormalIntRange(400000, 575000);
+            case 1: return Char.combatRoll(28, 40);
+            case 2: return Char.combatRoll(130, 167);
+            case 3: return Char.combatRoll(512, 644);
+            case 4: return Char.combatRoll(4000, 7000);
+            case 5: return Char.combatRoll(400000, 575000);
         }
-		return Random.NormalIntRange( 1, 6 );
+		return Char.combatRoll( 1, 6 );
 	}
 	
 	@Override
@@ -98,14 +97,14 @@ public class Gnoll extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(6, 17);
-            case 2: return Random.NormalIntRange(69, 130);
-            case 3: return Random.NormalIntRange(275, 500);
-            case 4: return Random.NormalIntRange(3000, 6000);
-            case 5: return Random.NormalIntRange(375000, 525000);
+            case 1: return Char.combatRoll(6, 17);
+            case 2: return Char.combatRoll(69, 130);
+            case 3: return Char.combatRoll(275, 500);
+            case 4: return Char.combatRoll(3000, 6000);
+            case 5: return Char.combatRoll(375000, 525000);
         }
-		return Random.NormalIntRange(0, 2);
+		return Char.combatRoll(0, 2);
 	}
 }

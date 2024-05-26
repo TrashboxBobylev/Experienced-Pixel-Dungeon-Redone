@@ -36,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Skeleton extends Mob {
 	
@@ -87,13 +86,13 @@ public class Skeleton extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(34, 50);
-            case 2: return Random.NormalIntRange(180, 231);
-            case 3: return Random.NormalIntRange(600, 850);
-            case 4: return Random.NormalIntRange(8000, 14000);
-			case 5: return Random.NormalIntRange(525000, 1100000);
+            case 1: return Char.combatRoll(34, 50);
+            case 2: return Char.combatRoll(180, 231);
+            case 3: return Char.combatRoll(600, 850);
+            case 4: return Char.combatRoll(8000, 14000);
+			case 5: return Char.combatRoll(525000, 1100000);
         }
-		return Random.NormalIntRange( 2, 10 );
+		return Char.combatRoll( 2, 10 );
 	}
 	
 	@Override
@@ -154,15 +153,15 @@ public class Skeleton extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(10, 24);
-            case 2: return Random.NormalIntRange(95, 170);
-            case 3: return Random.NormalIntRange(360, 625);
-            case 4: return Random.NormalIntRange(5000, 10000);
-			case 5: return Random.NormalIntRange(55000, 700000);
+            case 1: return Char.combatRoll(10, 24);
+            case 2: return Char.combatRoll(95, 170);
+            case 3: return Char.combatRoll(360, 625);
+            case 4: return Char.combatRoll(5000, 10000);
+			case 5: return Char.combatRoll(55000, 700000);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 
 }

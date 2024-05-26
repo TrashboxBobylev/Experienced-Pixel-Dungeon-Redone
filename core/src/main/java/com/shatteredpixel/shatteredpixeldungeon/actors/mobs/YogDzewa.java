@@ -24,7 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
@@ -94,6 +96,7 @@ public class YogDzewa extends Mob {
 				EXP = 20000000000L;
 				break;
         }
+		properties.add(Property.STATIC);
 	}
 
 	private int phase = 0;
@@ -270,13 +273,13 @@ public class YogDzewa extends Mob {
 					}
 
 					if (hit( this, ch, true )) {
-						int dmg = Random.NormalIntRange(20, 30);
+						long dmg = Char.combatRoll(20, 30);
 						switch (Dungeon.cycle){
-							case 1: dmg = Random.NormalIntRange(120, 175); break;
-							case 2: dmg = Random.NormalIntRange(370, 502); break;
-							case 3: dmg = Random.NormalIntRange(2650, 4000); break;
-							case 4: dmg = Random.NormalIntRange(179000, 320000); break;
-							case 5: dmg = Random.NormalIntRange(6400000, 10000000); break;
+							case 1: dmg = Char.combatRoll(120, 175); break;
+							case 2: dmg = Char.combatRoll(370, 502); break;
+							case 3: dmg = Char.combatRoll(2650, 4000); break;
+							case 4: dmg = Char.combatRoll(179000, 320000); break;
+							case 5: dmg = Char.combatRoll(6400000, 10000000); break;
 						}
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
 							ch.damage(dmg*25000L, new Eye.DeathGaze());
@@ -463,7 +466,7 @@ public class YogDzewa extends Mob {
 		phaseTransition();
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null){
+		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/3f);
 			else                                                    lock.addTime(dmgTaken/2f);
 		}
@@ -505,9 +508,12 @@ public class YogDzewa extends Mob {
 	public void updateVisibility( Level level ){
 		int viewDistance = 4;
 		if (phase > 1 && isAlive()){
-			viewDistance = 4 - (phase-1);
+			viewDistance = Math.max(4 - (phase-1), 1);
 		}
-		level.viewDistance = (int)GameMath.gate(1, viewDistance, level.viewDistance);
+		if (Dungeon.isChallenged(Challenges.DARKNESS)) {
+			viewDistance = Math.min(viewDistance, 2);
+		}
+		level.viewDistance = viewDistance;
 		if (Dungeon.hero != null) {
 			if (Dungeon.hero.buff(Light.class) == null) {
 				Dungeon.hero.viewDistance = level.viewDistance;
@@ -537,7 +543,7 @@ public class YogDzewa extends Mob {
 	@Override
 	public void aggro(Char ch) {
 		for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
-			if (Dungeon.level.distance(pos, mob.pos) <= 4 &&
+			if (mob != ch && Dungeon.level.distance(pos, mob.pos) <= 4 &&
 					(mob instanceof Larva || mob instanceof YogRipper || mob instanceof YogEye || mob instanceof YogScorpio)) {
 				mob.aggro(ch);
 			}
@@ -629,17 +635,6 @@ public class YogDzewa extends Mob {
 		}
 
 		return desc;
-	}
-
-	{
-		immunities.add( Dread.class );
-		immunities.add( Terror.class );
-		immunities.add( Amok.class );
-		immunities.add( Charm.class );
-		immunities.add( Sleep.class );
-		immunities.add( Vertigo.class );
-		immunities.add( Frost.class );
-		immunities.add( Paralysis.class );
 	}
 
 	private static final String PHASE = "phase";
@@ -759,23 +754,23 @@ public class YogDzewa extends Mob {
 		@Override
 		public long damageRoll() {
             switch (Dungeon.cycle) {
-                case 1: return Random.NormalIntRange(70, 91);
-                case 2: return Random.NormalIntRange(325, 440);
-                case 3: return Random.NormalIntRange(2500, 4000);
-                case 4: return Random.NormalIntRange(360000, 460000);
-				case 5: return Random.NormalIntRange(6000000, 9000000);
+                case 1: return Char.combatRoll(70, 91);
+                case 2: return Char.combatRoll(325, 440);
+                case 3: return Char.combatRoll(2500, 4000);
+                case 4: return Char.combatRoll(360000, 460000);
+				case 5: return Char.combatRoll(6000000, 9000000);
             }
-			return Random.NormalIntRange( 15, 25 );
+			return Char.combatRoll( 15, 25 );
 		}
 
 		@Override
-		public int cycledDrRoll() {
+		public long cycledDrRoll() {
             switch (Dungeon.cycle){
-                case 1: return Random.NormalIntRange(40, 63);
-                case 2: return Random.NormalIntRange(125, 248);
-                case 3: return Random.NormalIntRange(1600, 2800);
+                case 1: return Char.combatRoll(40, 63);
+                case 2: return Char.combatRoll(125, 248);
+                case 3: return Char.combatRoll(1600, 2800);
             }
-			return Random.NormalIntRange(0, 4);
+			return Char.combatRoll(0, 4);
 		}
 
 		@Override

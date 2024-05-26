@@ -39,6 +39,8 @@ public class RespawnBooster extends Spell{
 
     {
         image = ItemSpriteSheet.RESPAWN;
+
+        talentChance = 1/(float) Recipe.OUT_QUANTITY;
     }
 
     @Override
@@ -64,20 +66,26 @@ public class RespawnBooster extends Spell{
 
     @Override
     public long value() {
-        //prices of ingredients, divided by output quantity
-        return Math.round(quantity * ((50 + 43.333333f + 40)));
+        return (long)(60 * (quantity/(float) Recipe.OUT_QUANTITY));
+    }
+
+    @Override
+    public long energyVal() {
+        return (long)(12 * (quantity/(float) Recipe.OUT_QUANTITY));
     }
 
     public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
+        private static final int OUT_QUANTITY = 1;
+
         {
-            inputs =  new Class[]{PotionOfExperience.class, CurseInfusion.class, ArcaneCatalyst.class};
+            inputs =  new Class[]{PotionOfExperience.class, CurseInfusion.class};
             inQuantity = new int[]{1, 1, 1};
 
-            cost = 24;
+            cost = 33;
 
             output = RespawnBooster.class;
-            outQuantity = 1;
+            outQuantity = OUT_QUANTITY;
         }
 
     }

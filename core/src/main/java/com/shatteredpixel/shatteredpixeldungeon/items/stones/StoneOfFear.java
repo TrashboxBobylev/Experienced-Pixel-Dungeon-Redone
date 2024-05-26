@@ -46,7 +46,7 @@ public class StoneOfFear extends Runestone {
 
 		Char ch = Actor.findChar( cell );
 
-		if (ch != null){
+		if (ch != null && ch.alignment != Char.Alignment.ALLY ){
 			Buff.affect( ch, Terror.class, Terror.DURATION ).object = curUser.id();
 		}
 

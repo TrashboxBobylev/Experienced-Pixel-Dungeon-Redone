@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -40,11 +39,11 @@ public class WarHammer extends MeleeWeapon {
 	{
 		image = ItemSpriteSheet.WAR_HAMMER;
 		hitSound = Assets.Sounds.HIT_CRUSH;
-		hitSoundPitch = 4f;
+		hitSoundPitch = 0.5f;
 
 		internalTier = tier = 5;
 		ACC = 1.20f; //20% boost to accuracy
-        DLY = 2.5f;
+        DLY = 2f;
 	}
 
 	@Override
@@ -65,24 +64,27 @@ public class WarHammer extends MeleeWeapon {
 	}
 
 	@Override
-	protected int baseChargeUse(Hero hero, Char target){
-		if (target == null || (target instanceof Mob && ((Mob) target).surprisedBy(hero))) {
-			return 1;
-		} else {
-			return 2;
-		}
+	protected void duelistAbility(Hero hero, Integer target) {
+		//+(6+1.5*lvl) damage, roughly +40% base dmg, +45% scaling
+		long dmgBoost = augment.damageFactor(tier()*10L + buffedLvl()*tier()*12);
+		Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
-		Mace.heavyBlowAbility(hero, target, 1.30f, this);
+	public String abilityInfo() {
+		long dmgBoost = levelKnown ? tier()*10L + buffedLvl()*tier()*12 : tier()*10L;
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+		} else {
+			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+		}
 	}
 
 	@Override
     public long proc(Char attacker, Char defender, long damage) {
         attacker.sprite.centerEmitter().start( Speck.factory( Speck.STAR ), 0.05f, 10 );
-        Buff.affect(attacker, Paralysis.class, Random.Int(1, 4)
-				* (Math.round((1f/((speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
+        Buff.affect(attacker, Paralysis.class, Random.Int(1, 3)
+				* (Math.round((1f/(1d + (speedMultiplier(attacker) - 1d) * 0.75f))*100))/100f);
         Buff.affect(defender, Paralysis.class, Random.Int(1, 3));
         return super.proc(attacker, defender, damage);
     }

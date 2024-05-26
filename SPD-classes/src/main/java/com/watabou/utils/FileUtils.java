@@ -85,6 +85,8 @@ public class FileUtils {
 		for (FileHandle file : dir.list()){
 			if (file.isDirectory()){
 				foundTemp = cleanTempFiles(dirName + file.name()) || foundTemp;
+			} else if (file.length() == 0) {
+				file.delete();
 			} else {
 				if (file.name().endsWith(".tmp")){
 					FileHandle temp = file;

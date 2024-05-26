@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -201,7 +202,7 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 
 										curUser.spendAndNext(1f);
 
-										if (!anonymous){
+										if (!anonymous && Random.Float() < talentChance){
 											Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
 										}
 									}

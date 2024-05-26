@@ -143,6 +143,9 @@ public class BlackMimicLevel extends Level {
 		Painter.fill(this, 15, 0, 3, 3, Terrain.EXIT);
 
 		int exitCell = 16 + 2*width();
+		LevelTransition exit = new LevelTransition(this, entrance, LevelTransition.Type.BRANCH_ENTRANCE, 25, Dungeon.BRANCH_NORMAL, LevelTransition.Type.REGULAR_EXIT);
+		exit.set(14, 0, 18, 2);
+		transitions.add(exit);
 
 		CustomTilemap customVisuals = new CityEntrance();
 		customVisuals.setRect(0, 0, width(), 11);

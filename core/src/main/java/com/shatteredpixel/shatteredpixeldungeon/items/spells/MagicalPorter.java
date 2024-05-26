@@ -36,7 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 public class MagicalPorter extends InventorySpell {
 	
 	{
-		image = ItemSpriteSheet.MAGIC_PORTER;
+		image = ItemSpriteSheet.MAGIC_INFUSE;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class MagicalPorter extends InventorySpell {
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
-			inputs =  new Class[]{OverloadBeacon.class, ArcaneCatalyst.class};
+			inputs =  new Class[]{OverloadBeacon.class};
 			inQuantity = new int[]{1, 1};
 			
 			cost = 4;

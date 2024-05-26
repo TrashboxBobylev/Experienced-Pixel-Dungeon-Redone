@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.utils.Random;
 
 public class CapeOfThorns extends Artifact {
 
@@ -103,7 +102,7 @@ public class CapeOfThorns extends Artifact {
 			}
 
 			if (cooldown != 0){
-				long deflected = Random.NormalLongRange(0, damage);
+				long deflected = Char.combatRoll(0, damage);
 				damage -= deflected;
 
 				if (attacker != null && Dungeon.level.adjacent(attacker.pos, defender.pos)) {

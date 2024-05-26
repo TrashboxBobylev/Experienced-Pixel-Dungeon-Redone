@@ -27,7 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -87,18 +88,19 @@ public class DemonSpawner extends Mob {
 				EXP = 425000000;
 				break;
         }
+		properties.add(Property.STATIC);
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(48, 73);
-            case 2: return Random.NormalIntRange(185, 365);
-            case 3: return Random.NormalIntRange(1800, 3120);
-            case 4: return Random.NormalIntRange(130000, 200000);
-			case 5: return Random.NormalIntRange(8000000, 14500000);
+            case 1: return Char.combatRoll(48, 73);
+            case 2: return Char.combatRoll(185, 365);
+            case 3: return Char.combatRoll(1800, 3120);
+            case 4: return Char.combatRoll(130000, 200000);
+			case 5: return Char.combatRoll(8000000, 14500000);
         }
-		return Random.NormalIntRange(0, 12);
+		return Char.combatRoll(0, 12);
 	}
 
 	@Override
@@ -207,12 +209,4 @@ public class DemonSpawner extends Mob {
 		spawnRecorded = bundle.getBoolean(SPAWN_RECORDED);
 	}
 
-	{
-		immunities.add( Paralysis.class );
-		immunities.add( Amok.class );
-		immunities.add( Sleep.class );
-		immunities.add( Dread.class );
-		immunities.add( Terror.class );
-		immunities.add( Vertigo.class );
-	}
 }

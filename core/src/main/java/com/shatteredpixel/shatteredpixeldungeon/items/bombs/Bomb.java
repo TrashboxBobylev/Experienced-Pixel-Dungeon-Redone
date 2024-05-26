@@ -187,7 +187,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				long dmg = damageRoll();
+				long dmg = Char.combatRoll(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -216,7 +216,7 @@ public class Bomb extends Item {
 	}
 
 	public static long damageRoll() {
-		long dmg = (Dungeon.NormalLongRange(minDamage(), maxDamage()));
+		long dmg = (Char.combatRoll(minDamage(), maxDamage()));
 		if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 			dmg *= 2.5f;
 		}

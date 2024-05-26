@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -77,6 +78,26 @@ public class PsycheChest extends Item {
     }
 
     @Override
+    public String desc() {
+        return Messages.get(this, "desc", neededExp());
+    }
+
+    public static long neededExp(){
+        long neededExp = 100;
+        switch (Dungeon.cycle){
+            case 1: neededExp = 200; break;
+            case 2: neededExp = 1250; break;
+            case 3: neededExp = 11750; break;
+            case 4: neededExp = 75000; break;
+            case 5: neededExp = 500000; break;
+        }
+        if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
+            neededExp *= 2.5f;
+        }
+        return neededExp;
+    }
+
+    @Override
     public void execute( Hero hero, String action ) {
 
         super.execute( hero, action );
@@ -89,7 +110,7 @@ public class PsycheChest extends Item {
             hero.grinding = false;
             GLog.w( Messages.get(this, "deactivated") );
         }
-        if (action.contains(AC_RESET) && (hero.HP > hero.HT / 2)){
+        if (action.contains(AC_RESET) && (hero.HP > hero.HT * 0.55d)){
             switch (Dungeon.depth){
                 case 2: case 3: case 4:
                     for (Mob m: Dungeon.level.mobs){
@@ -132,8 +153,8 @@ public class PsycheChest extends Item {
                 }
             }
             InterlevelScene.mode = InterlevelScene.Mode.RESET;
-            if (hero.HP > hero.HT / 2) hero.HP -= Math.round(hero.HT * 0.55d);
-            Dungeon.resetDamage *= 1.16d;
+            if (hero.HP > hero.HT * 0.55d) hero.HP -= Math.round(hero.HT * 0.55d);
+            Dungeon.resetDamage *= 1.12d;
             Game.switchScene(InterlevelScene.class);
         } else if (action.contains(AC_RESET) && (hero.HP < Math.round(hero.HT * 0.55d))){
             GLog.w( Messages.get(this, "no_reset") );

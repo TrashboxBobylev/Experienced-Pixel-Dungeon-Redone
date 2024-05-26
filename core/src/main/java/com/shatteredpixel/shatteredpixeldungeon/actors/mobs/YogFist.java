@@ -168,7 +168,7 @@ public abstract class YogFist extends Mob {
 		long dmgTaken = preHP - HP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (dmgTaken > 0 && lock != null){
+		if (dmgTaken > 0 && lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/4f);
 			else                                                    lock.addTime(dmgTaken/2f);
 		}
@@ -196,25 +196,25 @@ public abstract class YogFist extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(86, 121);
-            case 2: return Random.NormalIntRange(375, 580);
-            case 3: return Random.NormalIntRange(2800, 4500);
-            case 4: return Random.NormalIntRange(350000, 460000);
-			case 5: return Random.NormalIntRange(6000000, 12500000);
+            case 1: return Char.combatRoll(86, 121);
+            case 2: return Char.combatRoll(375, 580);
+            case 3: return Char.combatRoll(2800, 4500);
+            case 4: return Char.combatRoll(350000, 460000);
+			case 5: return Char.combatRoll(6000000, 12500000);
         }
-		return Random.NormalIntRange( 18, 36 );
+		return Char.combatRoll( 18, 36 );
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(50, 89);
-            case 2: return Random.NormalIntRange(250, 430);
-            case 3: return Random.NormalIntRange(1750, 3200);
-            case 4: return Random.NormalIntRange(370000, 480000);
-			case 5: return Random.NormalIntRange(8000000, 16500000);
+            case 1: return Char.combatRoll(50, 89);
+            case 2: return Char.combatRoll(250, 430);
+            case 3: return Char.combatRoll(1750, 3200);
+            case 4: return Char.combatRoll(370000, 480000);
+			case 5: return Char.combatRoll(8000000, 16500000);
         }
-		return Random.NormalIntRange(0, 15);
+		return Char.combatRoll(0, 15);
 	}
 
 	{
@@ -487,13 +487,13 @@ public abstract class YogFist extends Mob {
 		@Override
 		public long damageRoll() {
             switch (Dungeon.cycle) {
-                case 1: return Random.NormalIntRange(121, 145);
-                case 2: return Random.NormalIntRange(489, 675);
-                case 3: return Random.NormalIntRange(3100, 5412);
-                case 4: return Random.NormalIntRange(435000, 540000);
-				case 5: return Random.NormalIntRange(8500000, 17500000);
+                case 1: return Char.combatRoll(121, 145);
+                case 2: return Char.combatRoll(489, 675);
+                case 3: return Char.combatRoll(3100, 5412);
+                case 4: return Char.combatRoll(435000, 540000);
+				case 5: return Char.combatRoll(8500000, 17500000);
             }
-			return Random.NormalIntRange( 22, 44 );
+			return Char.combatRoll( 22, 44 );
 		}
 
 		@Override
@@ -543,13 +543,13 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-                int dmg = Random.NormalIntRange(10, 20);
+                long dmg = Char.combatRoll(10, 20);
                 switch (Dungeon.cycle){
-                    case 1: dmg = Random.NormalIntRange(90, 131); break;
-                    case 2: dmg = Random.NormalIntRange(200, 389); break;
-                    case 3: dmg = Random.NormalIntRange(2300, 3000); break;
-                    case 4: dmg = Random.NormalIntRange(170000, 250000); break;
-					case 5: dmg = Random.NormalIntRange(3250000, 7200000); break;
+                    case 1: dmg = Char.combatRoll(90, 131); break;
+                    case 2: dmg = Char.combatRoll(200, 389); break;
+                    case 3: dmg = Char.combatRoll(2300, 3000); break;
+                    case 4: dmg = Char.combatRoll(170000, 250000); break;
+					case 5: dmg = Char.combatRoll(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
@@ -617,13 +617,13 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-                int dmg = Random.NormalIntRange(10, 20);
+                long dmg = Char.combatRoll(10, 20);
                 switch (Dungeon.cycle){
-                    case 1: dmg = Random.NormalIntRange(90, 131); break;
-                    case 2: dmg = Random.NormalIntRange(200, 389); break;
-                    case 3: dmg = Random.NormalIntRange(2300, 3000); break;
-                    case 4: dmg = Random.NormalIntRange(175000, 250000); break;
-					case 5: dmg = Random.NormalIntRange(3250000, 7200000); break;
+                    case 1: dmg = Char.combatRoll(90, 131); break;
+                    case 2: dmg = Char.combatRoll(200, 389); break;
+                    case 3: dmg = Char.combatRoll(2300, 3000); break;
+                    case 4: dmg = Char.combatRoll(175000, 250000); break;
+					case 5: dmg = Char.combatRoll(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new DarkBolt() );
 

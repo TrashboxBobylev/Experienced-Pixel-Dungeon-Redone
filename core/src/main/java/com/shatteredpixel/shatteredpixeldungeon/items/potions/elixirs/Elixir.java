@@ -35,4 +35,14 @@ public abstract class Elixir extends Potion {
 	public boolean isKnown() {
 		return true;
 	}
+
+	@Override
+	public long value() {
+		return quantity * 60;
+	}
+
+	@Override
+	public long energyVal() {
+		return quantity * 12;
+	}
 }

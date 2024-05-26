@@ -113,13 +113,13 @@ public class CrystalGuardian extends Mob{
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Random.NormalIntRange(60, 70);
-			case 2: return Random.NormalIntRange(280, 350);
-			case 3: return Random.NormalIntRange(1300, 1475);
-			case 4: return Random.NormalIntRange(20000, 45000);
-			case 5: return Random.NormalIntRange(2200000, 3800000);
+			case 1: return Char.combatRoll(60, 70);
+			case 2: return Char.combatRoll(280, 350);
+			case 3: return Char.combatRoll(1300, 1475);
+			case 4: return Char.combatRoll(20000, 45000);
+			case 5: return Char.combatRoll(2200000, 3800000);
 		}
-		return Random.NormalIntRange( 10, 16 );
+		return Char.combatRoll( 10, 16 );
 	}
 
 	@Override
@@ -147,15 +147,15 @@ public class CrystalGuardian extends Mob{
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Random.NormalIntRange(30, 60);
-			case 2: return Random.NormalIntRange(100, 270);
-			case 3: return Random.NormalIntRange(570, 1300);
-			case 4: return Random.NormalIntRange(16000, 42000);
-			case 5: return Random.NormalIntRange(2500000, 4000000);
+			case 1: return Char.combatRoll(30, 60);
+			case 2: return Char.combatRoll(100, 270);
+			case 3: return Char.combatRoll(570, 1300);
+			case 4: return Char.combatRoll(16000, 42000);
+			case 5: return Char.combatRoll(2500000, 4000000);
 		}
-		return Random.NormalIntRange(0, 10);
+		return Char.combatRoll(0, 10);
 	}
 
 	@Override

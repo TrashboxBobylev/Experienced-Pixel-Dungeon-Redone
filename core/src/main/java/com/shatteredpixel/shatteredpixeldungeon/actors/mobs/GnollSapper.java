@@ -124,13 +124,13 @@ public class GnollSapper extends Mob {
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Random.NormalIntRange(24, 36);
-			case 2: return Random.NormalIntRange(120, 145);
-			case 3: return Random.NormalIntRange(480, 615);
-			case 4: return Random.NormalIntRange(3700, 6000);
-			case 5: return Random.NormalIntRange(400000, 1000000);
+			case 1: return Char.combatRoll(24, 36);
+			case 2: return Char.combatRoll(120, 145);
+			case 3: return Char.combatRoll(480, 615);
+			case 4: return Char.combatRoll(3700, 6000);
+			case 5: return Char.combatRoll(400000, 1000000);
 		}
-		return Random.NormalIntRange( 1, 6 );
+		return Char.combatRoll( 1, 6 );
 	}
 
 	@Override
@@ -152,15 +152,15 @@ public class GnollSapper extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Random.NormalIntRange(20, 35);
-			case 2: return Random.NormalIntRange(70, 200);
-			case 3: return Random.NormalIntRange(445, 715);
-			case 4: return Random.NormalIntRange(13500, 28000);
-			case 5: return Random.NormalIntRange(1400000, 1750000);
+			case 1: return Char.combatRoll(20, 35);
+			case 2: return Char.combatRoll(70, 200);
+			case 3: return Char.combatRoll(445, 715);
+			case 4: return Char.combatRoll(13500, 28000);
+			case 5: return Char.combatRoll(1400000, 1750000);
 		}
-		return Random.NormalIntRange(0, 6);
+		return Char.combatRoll(0, 6);
 	}
 
 	@Override
@@ -205,6 +205,12 @@ public class GnollSapper extends Mob {
 				return super.act(enemyInFOV, justAlerted);
 			} else {
 				enemySeen = true;
+
+				if (getPartner() != null
+						&& getPartner() instanceof Mob
+						&& ((Mob) getPartner()).alignment != alignment){
+					losePartner();
+				}
 
 				if (Actor.findById(partnerID) != null
 						&& Dungeon.level.distance(pos, enemy.pos) <= 3){

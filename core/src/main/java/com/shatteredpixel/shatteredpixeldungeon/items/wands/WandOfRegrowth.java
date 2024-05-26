@@ -397,6 +397,7 @@ public class WandOfRegrowth extends Wand {
 		{
 			alignment = Alignment.NEUTRAL;
 			properties.add(Property.IMMOVABLE);
+			properties.add(Property.STATIC);
 
 			spriteClass = LotusSprite.class;
 
@@ -415,7 +416,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		public float seedPreservation(){
-			return 0.40f + 0.04f*wandLvl;
+			return Math.min( 1f, 0.40f + 0.04f*wandLvl );
 		}
 
 		@Override
@@ -458,13 +459,6 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		{
-			immunities.add( Paralysis.class );
-			immunities.add( Amok.class );
-			immunities.add( Sleep.class );
-			immunities.add( Terror.class );
-			immunities.add( Dread.class );
-			immunities.add( Vertigo.class );
-			immunities.add( AllyBuff.class );
 			immunities.add( Doom.class );
 		}
 

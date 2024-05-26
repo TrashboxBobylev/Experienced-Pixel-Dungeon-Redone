@@ -110,7 +110,7 @@ public class BlackMimic extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		return (int) Random.NormalLongRange(
 				Math.round(Dungeon.hero.lvl/3f*Math.pow(12, Dungeon.cycle)),
 				Math.round(Dungeon.hero.lvl*Math.pow(12, Dungeon.cycle)));

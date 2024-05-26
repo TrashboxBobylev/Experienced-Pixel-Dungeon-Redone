@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
@@ -47,7 +46,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PrismaticSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class PrismaticImage extends NPC {
 	
@@ -146,7 +144,7 @@ public class PrismaticImage extends NPC {
 		deathTimer = bundle.getInt( TIMER );
 	}
 	
-	public void duplicate( Hero hero, int HP ) {
+	public void duplicate( Hero hero, long HP ) {
 		this.hero = hero;
 		heroID = this.hero.id();
 		this.HP = HP;
@@ -156,9 +154,9 @@ public class PrismaticImage extends NPC {
 	@Override
 	public long damageRoll() {
 		if (hero != null) {
-			return Dungeon.NormalIntRange( 2 + hero.lvl/4, 4 + hero.lvl/2 );
+			return Char.combatRoll( 2 + hero.lvl/4, 4 + hero.lvl/2 );
 		} else {
-			return Random.NormalIntRange( 2, 4 );
+			return Char.combatRoll( 2, 4 );
 		}
 	}
 	

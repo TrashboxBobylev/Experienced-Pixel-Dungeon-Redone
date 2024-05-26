@@ -62,6 +62,6 @@ public class PotionOfStrength extends Potion {
 
 	@Override
 	public long energyVal() {
-		return isKnown() ? 8 * quantity : super.energyVal();
+		return isKnown() ? 10 * quantity : super.energyVal();
 	}
 }

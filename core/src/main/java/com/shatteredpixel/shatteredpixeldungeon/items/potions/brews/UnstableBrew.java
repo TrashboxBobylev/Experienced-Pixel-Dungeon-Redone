@@ -22,14 +22,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.potions;
+package com.shatteredpixel.shatteredpixeldungeon.items.potions.brews;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
@@ -38,42 +49,69 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AlchemicalCatalyst extends Potion {
-	
+public class UnstableBrew extends Brew {
+
 	{
-		image = ItemSpriteSheet.POTION_CATALYST;
-		
+		image = ItemSpriteSheet.BREW_UNSTABLE;
 	}
-	
+
+	@Override
+	public ArrayList<String> actions(Hero hero) {
+		ArrayList<String> actions = super.actions(hero);
+		actions.add(AC_DRINK);
+		return actions;
+	}
+
+	@Override
+	public String defaultAction() {
+		return AC_CHOOSE;
+	}
+
 	private static HashMap<Class<? extends Potion>, Float> potionChances = new HashMap<>();
-	static{
-		potionChances.put(PotionOfHealing.class,        3f);
-		potionChances.put(PotionOfMindVision.class,     2f);
-		potionChances.put(PotionOfFrost.class,          2f);
-		potionChances.put(PotionOfLiquidFlame.class,    2f);
-		potionChances.put(PotionOfToxicGas.class,       2f);
-		potionChances.put(PotionOfHaste.class,          2f);
-		potionChances.put(PotionOfInvisibility.class,   2f);
-		potionChances.put(PotionOfLevitation.class,     2f);
-		potionChances.put(PotionOfParalyticGas.class,   2f);
-		potionChances.put(PotionOfPurity.class,         2f);
-		potionChances.put(PotionOfExperience.class,     1f);
+	static {
+		potionChances.put(PotionOfHealing.class, 3f);
+		potionChances.put(PotionOfMindVision.class, 2f);
+		potionChances.put(PotionOfFrost.class, 2f);
+		potionChances.put(PotionOfLiquidFlame.class, 2f);
+		potionChances.put(PotionOfToxicGas.class, 2f);
+		potionChances.put(PotionOfHaste.class, 2f);
+		potionChances.put(PotionOfInvisibility.class, 2f);
+		potionChances.put(PotionOfLevitation.class, 2f);
+		potionChances.put(PotionOfParalyticGas.class, 2f);
+		potionChances.put(PotionOfPurity.class, 2f);
+		potionChances.put(PotionOfExperience.class, 1f);
 	}
 	
 	@Override
 	public void apply(Hero hero) {
-		Potion p = Reflection.newInstance(Random.chances(potionChances));
 		//Don't allow this to roll healing in pharma
-		while (Dungeon.isChallenged(Challenges.NO_HEALING) && p instanceof PotionOfHealing){
+		if (Dungeon.isChallenged(Challenges.NO_HEALING)){
+			potionChances.put(PotionOfHealing.class, 0f);
+		}
+
+		Potion p = Reflection.newInstance(Random.chances(potionChances));
+
+		//reroll the potion once if it wasn't a good potion to drink
+		if (mustThrowPots.contains(p.getClass())){
 			p = Reflection.newInstance(Random.chances(potionChances));
 		}
+
 		p.anonymize();
 		p.apply(hero);
+
+		if (Dungeon.isChallenged(Challenges.NO_HEALING)){
+			potionChances.put(PotionOfHealing.class, 3f);
+		}
 	}
 	
 	@Override
 	public void shatter(int cell) {
 		Potion p = Reflection.newInstance(Dungeon.chances(potionChances));
+
+		//reroll the potion once if it wasn't a good potion to throw
+		if (!mustThrowPots.contains(p.getClass()) && !canThrowPots.contains(p.getClass())){
+			p = Reflection.newInstance(Random.chances(potionChances));
+		}
 		p.anonymize();
 		curItem = p;
 		p.shatter(cell);
@@ -83,11 +121,12 @@ public class AlchemicalCatalyst extends Potion {
 	public boolean isKnown() {
 		return true;
 	}
-	
+
+	//lower values, as it's cheaper to make
 	@Override
 	public long value() {
 		return 40 * quantity;
-}
+	}
 
 	@Override
 	public long energyVal() {
@@ -99,36 +138,29 @@ public class AlchemicalCatalyst extends Potion {
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {
 			boolean potion = false;
-			boolean secondary = false;
-			
+			boolean seed = false;
+
 			for (Item i : ingredients){
-				if (i instanceof Plant.Seed || i instanceof Runestone){
-					secondary = true;
-				//if it is a regular or exotic potion
+				if (i instanceof Plant.Seed) {
+					seed = true;
+					//if it is a regular or exotic potion
 				} else if (ExoticPotion.regToExo.containsKey(i.getClass())
 						|| ExoticPotion.regToExo.containsValue(i.getClass())) {
 					potion = true;
 				}
 			}
-			
-			return potion && secondary;
+
+			return potion && seed;
 		}
-		
+
 		@Override
 		public long cost(ArrayList<Item> ingredients) {
-			for (Item i : ingredients){
-				if (i instanceof Plant.Seed){
-					return 0;
-				} else if (i instanceof Runestone){
-					return 1;
-				}
-			}
-			return 0;
+			return 1;
 		}
-		
+
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
-			
+
 			for (Item i : ingredients){
 				i.quantity(i.quantity()-1);
 			}
@@ -138,7 +170,7 @@ public class AlchemicalCatalyst extends Potion {
 		
 		@Override
 		public Item sampleOutput(ArrayList<Item> ingredients) {
-			return new AlchemicalCatalyst();
+			return new UnstableBrew();
 		}
 	}
 	

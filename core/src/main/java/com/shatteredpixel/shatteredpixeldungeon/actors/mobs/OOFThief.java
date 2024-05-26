@@ -102,12 +102,12 @@ public class OOFThief extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(53, 70);
-            case 2: return Random.NormalIntRange(255, 320);
-            case 3: return Random.NormalIntRange(905, 1455);
-            case 4: return Random.NormalIntRange(14300, 21500);
+            case 1: return Char.combatRoll(53, 70);
+            case 2: return Char.combatRoll(255, 320);
+            case 3: return Char.combatRoll(905, 1455);
+            case 4: return Char.combatRoll(14300, 21500);
         }
-		return Random.NormalIntRange( 8, 14 );
+		return Char.combatRoll( 8, 14 );
 	}
 
 	@Override
@@ -147,14 +147,14 @@ public class OOFThief extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(15, 40);
-            case 2: return Random.NormalIntRange(110, 250);
-            case 3: return Random.NormalIntRange(575, 1100);
-            case 4: return Random.NormalIntRange(15000, 24000);
+            case 1: return Char.combatRoll(15, 40);
+            case 2: return Char.combatRoll(110, 250);
+            case 3: return Char.combatRoll(575, 1100);
+            case 4: return Char.combatRoll(15000, 24000);
         }
-		return Random.NormalIntRange(4, 8);
+		return Char.combatRoll(4, 8);
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class OOFThief extends Mob {
 		return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
 	}
 
-	private static final int STEAL_COUNT = 3;
+	private static final int STEAL_COUNT = 4;
 
 	@Override
 	public long attackProc( Char enemy, long damage ) {

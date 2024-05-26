@@ -167,10 +167,10 @@ public class WndSettings extends WndTabbed {
 			protected void createChildren() {
 				super.createChildren();
 				switch(Messages.lang().status()){
-					case UNFINISHED:
+					case X_UNFINISH:
 						icon.hardlight(1.5f, 0, 0);
 						break;
-					case UNREVIEWED:
+					case __UNREVIEW:
 						icon.hardlight(1.5f, 0.75f, 0f);
 						break;
 				}
@@ -246,7 +246,11 @@ public class WndSettings extends WndTabbed {
 			}
 			add(chkFullscreen);
 
-			if (DeviceCompat.isAndroid() && PixelScene.maxScreenZoom >= 2) {
+			//power saver is being slowly phased out, only show it on old (4.3-) android devices
+			// this is being phased out as the setting is useless on all but very old devices anyway
+			// and support is going to be dropped for 4.3- in the forseeable future
+			if (DeviceCompat.isAndroid() && PixelScene.maxScreenZoom >= 2
+				&& (SPDSettings.powerSaver() || !DeviceCompat.supportsFullScreen())) {
 				chkSaver = new CheckBox(Messages.get(this, "saver")) {
 					@Override
 					protected void onClick() {
@@ -1105,13 +1109,13 @@ public class WndSettings extends WndTabbed {
 			txtLangInfo = PixelScene.renderTextBlock(6);
 			String info = "_" + Messages.titleCase(currLang.nativeName()) + "_ - ";
 			if (currLang == Languages.ENGLISH) info += "This is the source language, written by the developer.";
-			else if (currLang.status() == Languages.Status._COMPLETE_) info += Messages.get(this, "completed");
-			else if (currLang.status() == Languages.Status.UNREVIEWED) info += Messages.get(this, "unreviewed");
-			else if (currLang.status() == Languages.Status.UNFINISHED) info += Messages.get(this, "unfinished");
+			else if (currLang.status() == Languages.Status.O_COMPLETE) info += Messages.get(this, "completed");
+			else if (currLang.status() == Languages.Status.__UNREVIEW) info += Messages.get(this, "unreviewed");
+			else if (currLang.status() == Languages.Status.X_UNFINISH) info += Messages.get(this, "unfinished");
 			txtLangInfo.text(info);
 
-			if (currLang.status() == Languages.Status.UNREVIEWED) txtLangInfo.setHightlighting(true, CharSprite.WARNING);
-			else if (currLang.status() == Languages.Status.UNFINISHED) txtLangInfo.setHightlighting(true, CharSprite.NEGATIVE);
+			if (currLang.status() == Languages.Status.__UNREVIEW) txtLangInfo.setHightlighting(true, CharSprite.WARNING);
+			else if (currLang.status() == Languages.Status.X_UNFINISH) txtLangInfo.setHightlighting(true, CharSprite.NEGATIVE);
 			add(txtLangInfo);
 
 			sep2 = new ColorBlock(1, 1, 0xFF000000);
@@ -1143,10 +1147,10 @@ public class WndSettings extends WndTabbed {
 					btn.textColor(TITLE_COLOR);
 				} else {
 					switch (langs.get(i).status()) {
-						case UNFINISHED:
+						case X_UNFINISH:
 							btn.textColor(0x888888);
 							break;
-						case UNREVIEWED:
+						case __UNREVIEW:
 							btn.textColor(0xBBBBBB);
 							break;
 					}

@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollGuardSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class GnollGuard extends Mob {
 
@@ -110,22 +109,22 @@ public class GnollGuard extends Mob {
 	public long damageRoll() {
 		if (enemy != null && !Dungeon.level.adjacent(pos, enemy.pos)){
 			switch (Dungeon.cycle) {
-				case 1: return Random.NormalIntRange(68, 80);
-				case 2: return Random.NormalIntRange(285, 390);
-				case 3: return Random.NormalIntRange(1400, 1610);
-				case 4: return Random.NormalIntRange(26000, 60000);
-				case 5: return Random.NormalIntRange(3000000, 4400000);
+				case 1: return Char.combatRoll(68, 80);
+				case 2: return Char.combatRoll(285, 390);
+				case 3: return Char.combatRoll(1400, 1610);
+				case 4: return Char.combatRoll(26000, 60000);
+				case 5: return Char.combatRoll(3000000, 4400000);
 			}
-			return Random.NormalIntRange( 16, 22 );
+			return Char.combatRoll( 16, 22 );
 		} else {
 			switch (Dungeon.cycle) {
-				case 1: return Random.NormalIntRange(45, 55);
-				case 2: return Random.NormalIntRange(225, 275);
-				case 3: return Random.NormalIntRange(850, 1000);
-				case 4: return Random.NormalIntRange(16500, 22500);
-				case 5: return Random.NormalIntRange(1750000, 2650000);
+				case 1: return Char.combatRoll(45, 55);
+				case 2: return Char.combatRoll(225, 275);
+				case 3: return Char.combatRoll(850, 1000);
+				case 4: return Char.combatRoll(16500, 22500);
+				case 5: return Char.combatRoll(1750000, 2650000);
 			}
-			return Random.NormalIntRange( 6, 12 );
+			return Char.combatRoll( 6, 12 );
 		}
 	}
 
@@ -151,15 +150,15 @@ public class GnollGuard extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Random.NormalIntRange(22, 41);
-			case 2: return Random.NormalIntRange(85, 230);
-			case 3: return Random.NormalIntRange(495, 880);
-			case 4: return Random.NormalIntRange(15000, 32000);
-			case 5: return Random.NormalIntRange(1650000, 1800000);
+			case 1: return Char.combatRoll(22, 41);
+			case 2: return Char.combatRoll(85, 230);
+			case 3: return Char.combatRoll(495, 880);
+			case 4: return Char.combatRoll(15000, 32000);
+			case 5: return Char.combatRoll(1650000, 1800000);
 		}
-		return Random.NormalIntRange(0, 6);
+		return Char.combatRoll(0, 6);
 	}
 
 	@Override

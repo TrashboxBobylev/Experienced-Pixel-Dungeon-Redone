@@ -115,7 +115,7 @@ public class WndBlacksmith extends Window {
 		pickaxe.enable(Blacksmith.Quest.pickaxe != null && Blacksmith.Quest.favor >= pickaxeCost);
 		buttons.add(pickaxe);
 
-		int reforgecost = (int) (200 * Math.pow(1.5, Blacksmith.Quest.reforges));
+		int reforgecost = (int) (100 * Math.pow(1.5, Blacksmith.Quest.reforges));
 		RedButton reforge = new RedButton(Messages.get(this, "reforge", reforgecost), 6){
 			@Override
 			protected void onClick() {
@@ -125,7 +125,7 @@ public class WndBlacksmith extends Window {
 		reforge.enable(Blacksmith.Quest.favor >= reforgecost);
 		buttons.add(reforge);
 
-		int hardenCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.hardens));
+		int hardenCost = (int) (400 * Math.pow(1.5, Blacksmith.Quest.hardens));
 		RedButton harden = new RedButton(Messages.get(this, "harden", hardenCost), 6){
 			@Override
 			protected void onClick() {
@@ -135,7 +135,7 @@ public class WndBlacksmith extends Window {
 		harden.enable(Blacksmith.Quest.favor >= hardenCost);
 		buttons.add(harden);
 
-		int upgradeCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.upgrades));
+		int upgradeCost = (int) (400 * Math.pow(1.5, Blacksmith.Quest.upgrades));
 		RedButton upgrade = new RedButton(Messages.get(this, "upgrade", upgradeCost), 6){
 			@Override
 			protected void onClick() {
@@ -398,7 +398,7 @@ public class WndBlacksmith extends Window {
 					((Armor) item).glyphHardened = true;
 				}
 
-				int hardenCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.reforges));
+				int hardenCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.hardens));
 				Blacksmith.Quest.favor -= hardenCost;
 				Blacksmith.Quest.hardens++;
 
@@ -437,7 +437,7 @@ public class WndBlacksmith extends Window {
 		@Override
 		public void onSelect(Item item) {
 			if (item != null) {
-				int upgradeCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.reforges));
+				int upgradeCost = (int) (500 * Math.pow(1.5, Blacksmith.Quest.upgrades));
 				Blacksmith.Quest.favor -= upgradeCost;
 				Blacksmith.Quest.upgrades++;
 
@@ -524,6 +524,13 @@ public class WndBlacksmith extends Window {
 					@Override
 					protected void onClick() {
 						RewardWindow.this.hide();
+
+						if (item instanceof Weapon && Blacksmith.Quest.smithEnchant != null){
+							((Weapon) item).enchant(Blacksmith.Quest.smithEnchant);
+						} else if (item instanceof Armor && Blacksmith.Quest.smithGlyph != null){
+							((Armor) item).inscribe(Blacksmith.Quest.smithGlyph);
+						}
+
 						item.identify(false);
 						Sample.INSTANCE.play(Assets.Sounds.EVOKE);
 						Item.evoke( Dungeon.hero );

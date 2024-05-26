@@ -47,6 +47,8 @@ public class CurseInfusion extends InventorySpell {
 	
 	{
 		image = ItemSpriteSheet.CURSE_INFUSE;
+
+		talentChance = 1/(float)Recipe.OUT_QUANTITY;
 	}
 
 	@Override
@@ -98,12 +100,18 @@ public class CurseInfusion extends InventorySpell {
 	
 	@Override
 	public long value() {
-		//prices of ingredients, divided by output quantity, rounds down
-		return (int)((30 + 50) * (quantity/3f));
+		return (long)(60 * (quantity/(float)Recipe.OUT_QUANTITY));
+	}
+
+	@Override
+	public long energyVal() {
+		return (long)(12 * (quantity/(float)Recipe.OUT_QUANTITY));
 	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
-		
+
+		private static final int OUT_QUANTITY = 4;
+
 		{
 			inputs =  new Class[]{ScrollOfRemoveCurse.class, MetalShard.class};
 			inQuantity = new int[]{1, 1};
@@ -111,7 +119,7 @@ public class CurseInfusion extends InventorySpell {
 			cost = 6;
 			
 			output = CurseInfusion.class;
-			outQuantity = 4;
+			outQuantity = OUT_QUANTITY;
 		}
 		
 	}

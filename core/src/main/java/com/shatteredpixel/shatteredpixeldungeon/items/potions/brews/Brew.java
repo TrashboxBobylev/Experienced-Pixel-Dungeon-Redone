@@ -57,4 +57,14 @@ public abstract class Brew extends Potion {
 		return true;
 	}
 
+	@Override
+	public long value() {
+		return quantity * 60;
+	}
+
+	@Override
+	public long energyVal() {
+		return quantity * 12;
+	}
+
 }

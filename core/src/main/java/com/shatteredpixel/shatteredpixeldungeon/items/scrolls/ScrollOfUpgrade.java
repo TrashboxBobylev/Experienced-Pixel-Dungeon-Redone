@@ -222,7 +222,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 	@Override
 	public long energyVal() {
-		return isKnown() ? 8 * quantity : super.energyVal();
+		return isKnown() ? 10 * quantity : super.energyVal();
 	}
 
 	protected WndBag.ItemSelector itemSelector2 = new WndBag.ItemSelector() {

@@ -53,12 +53,22 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class WandOfTransfusion extends Wand {
+public class WandOfTransfusion extends DamageWand {
 
 	{
 		image = ItemSpriteSheet.WAND_TRANSFUSION;
 
 		collisionProperties = Ballistica.PROJECTILE;
+	}
+
+	@Override
+	public long min(long level) {
+		return 3 + level;
+	}
+
+	@Override
+	public long max(long level) {
+		return 6 + 2*level;
 	}
 
 	private boolean freeCharge = false;
@@ -184,9 +194,9 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl
 	public String statsDesc() {
 		long selfDMG = Math.round(Dungeon.hero.HT*0.05d);
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", selfDMG, selfDMG + 3*buffedLvl(), 5+buffedLvl(), 3+buffedLvl()/2, 6+ buffedLvl()) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
+			return Messages.get(this, "stats_desc", selfDMG, selfDMG + 3*buffedLvl(), 5+buffedLvl(), min(), max()) + "\n\n" + Messages.get(Wand.class, "charges", curCharges, maxCharges);
 		else
-			return Messages.get(this, "stats_desc", selfDMG, selfDMG, 5, 3, 6);
+			return Messages.get(this, "stats_desc", selfDMG, selfDMG, 5, min(0), max(0));
 	}
 
 	private static final String FREECHARGE = "freecharge";

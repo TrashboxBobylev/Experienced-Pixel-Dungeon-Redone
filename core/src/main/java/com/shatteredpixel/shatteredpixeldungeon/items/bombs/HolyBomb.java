@@ -71,7 +71,7 @@ public class HolyBomb extends Bomb {
 				ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10 );
 				
 				//bomb deals an additional 50% damage to unholy enemies in a 5x5 range
-				long damage = Math.round(Dungeon.NormalLongRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2L ) * 0.5d*Dungeon.fireDamage);
+				long damage = Math.round(Char.combatRoll( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ) * 0.5f);
 				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 					damage *= 2.5f;
 				}

@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
@@ -111,7 +112,7 @@ public abstract class Char extends Actor {
 	public boolean rooted		= false;
 	public boolean flying		= false;
 	public int invisible		= 0;
-	
+
 	//these are relative to the hero
 	public enum Alignment{
 		ENEMY,
@@ -349,7 +350,10 @@ public abstract class Char extends Actor {
 				dmg = damageRoll();
 			}
 
-			dmg = Math.round(dmg*dmgMulti);
+			dmg = dmg*dmgMulti;
+
+			//flat damage bonus is affected by multipliers
+			dmg += dmgBonus;
 
 			Berserk berserk = buff(Berserk.class);
 			if (berserk != null) dmg = berserk.damageFactor(dmg);
@@ -363,9 +367,6 @@ public abstract class Char extends Actor {
 			}
 
 			dmg *= AscensionChallenge.statModifier(this);
-
-			//flat damage bonus is applied after positive multipliers, but before negative ones
-			dmg += dmgBonus;
 
 			//friendly endure
 			Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
@@ -552,7 +553,17 @@ public abstract class Char extends Actor {
 
 		return (acuRoll * accMulti) >= defRoll;
 	}
-	
+
+	//used for damage and blocking calculations, normally just calls NormalIntRange
+	// but may be affected by things that specifically impact combat number ranges
+	public static long combatRoll(long min, long max ){
+		if (Random.Float() < ThirteenLeafClover.combatDistributionInverseChance()){
+			return ThirteenLeafClover.invCombatRoll(min, max);
+		} else {
+			return Dungeon.NormalLongRange(min, max);
+		}
+	}
+
 	public int attackSkill( Char target ) {
 		return 0;
 	}
@@ -568,7 +579,7 @@ public abstract class Char extends Actor {
 	public long drRoll() {
 		long dr = 0;
 
-		dr += Random.NormalLongRange( 0 , Barkskin.currentLevel(this) );
+		dr += combatRoll( 0 , Barkskin.currentLevel(this) );
 
 		return dr;
 	}
@@ -640,10 +651,6 @@ public abstract class Char extends Actor {
 			return;
 		}
 
-		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
-			dmg = (long) Math.ceil(dmg * buff.damageTakenFactor());
-		}
-
 		if (!(src instanceof LifeLink) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);
 			for (LifeLink link : links.toArray(new LifeLink[0])){
@@ -689,20 +696,7 @@ public abstract class Char extends Actor {
 			dmg *= 1.25d;
 		}
 		if (this.buff(Longsword.HolyExpEffect.class) != null){
-			dmg *= Math.pow(1.08d, buff(Longsword.HolyExpEffect.class).stacks);
-		}
-
-		Class<?> srcClass = src.getClass();
-		if (isImmune( srcClass )) {
-			dmg = 0;
-		} else {
-			dmg = Math.round( dmg * (double)resist( srcClass ));
-		}
-		
-		//TODO improve this when I have proper damage source logic
-		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
-			dmg -= Random.NormalLongRange(0, buff(ArcaneArmor.class).level());
-			if (dmg < 0) dmg = 0;
+			dmg *= Math.pow(1.14d, buff(Longsword.HolyExpEffect.class).stacks);
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
@@ -717,11 +711,28 @@ public abstract class Char extends Actor {
 				b = new Bleeding();
 			}
 			b.announced = false;
-			b.set(dmg*buff(Sickle.HarvestBleedTracker.class).bleedFactor, Sickle.HarvestBleedTracker.class);
+			b.set(dmg, Sickle.HarvestBleedTracker.class);
 			b.attachTo(this);
 			sprite.showStatus(CharSprite.WARNING, Messages.titleCase(b.name()) + " " + (int)b.level());
 			buff(Sickle.HarvestBleedTracker.class).detach();
 			return;
+		}
+
+		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			dmg = (long) Math.ceil(dmg * buff.damageTakenFactor());
+		}
+
+		Class<?> srcClass = src.getClass();
+		if (isImmune( srcClass )) {
+			dmg = 0;
+		} else {
+			dmg = Math.round( dmg * (double)resist( srcClass ));
+		}
+
+		//TODO improve this when I have proper damage source logic
+		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
+			dmg -= combatRoll(0, buff(ArcaneArmor.class).level());
+			if (dmg < 0) dmg = 0;
 		}
 
 		if (buff( Paralysis.class ) != null) {
@@ -745,6 +756,12 @@ public abstract class Char extends Actor {
 		}
 		shielded -= dmg;
 		HP -= dmg;
+
+		if (HP > 0 && shielded > 0 && shielding() == 0){
+			if (this instanceof Hero && ((Hero) this).hasTalent(Talent.PROVOKED_ANGER)){
+				Buff.affect(this, Talent.ProvokedAngerTracker.class, 5f);
+			}
+		}
 
 		if (HP > 0 && buff(Grim.GrimTracker.class) != null){
 
@@ -794,7 +811,7 @@ public abstract class Char extends Actor {
 
 			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
 			if (src instanceof Burning || src instanceof FiringSnapper) icon = FloatingText.BURNING;
-			if (src instanceof Chill || src instanceof Frost)        icon = FloatingText.FROST;
+			if (src instanceof Chill || src instanceof Frost)           icon = FloatingText.FROST;
 			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
 			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
 			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
@@ -880,6 +897,7 @@ public abstract class Char extends Actor {
 		NO_ARMOR_PHYSICAL_SOURCES.add(GnollRockfallTrap.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(DwarfKing.KingDamager.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(DwarfKing.Summoning.class);
+		NO_ARMOR_PHYSICAL_SOURCES.add(LifeLink.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(Chasm.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(WandOfBlastWave.Knockback.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(Heap.class); //damage from wraiths attempting to spawn from heaps
@@ -1200,11 +1218,17 @@ public abstract class Char extends Actor {
 				new HashSet<Class>( Arrays.asList(Frost.class, Chill.class))),
 		ACIDIC ( new HashSet<Class>( Arrays.asList(Corrosion.class)),
 				new HashSet<Class>( Arrays.asList(Ooze.class))),
-		ELECTRIC ( new HashSet<Class>( Arrays.asList(WandOfLightning.class, Shocking.class, Potential.class, Electricity.class, ShockingDart.class, Elemental.ShockElemental.class )),
+		ELECTRIC ( new HashSet<Class>( Arrays.asList(WandOfLightning.class, Shocking.class, Potential.class,
+										Electricity.class, ShockingDart.class, Elemental.ShockElemental.class )),
 				new HashSet<Class>()),
 		LARGE,
-		IMMOVABLE;
-		
+		IMMOVABLE ( new HashSet<Class>(),
+				new HashSet<Class>( Arrays.asList(Vertigo.class) )),
+		//A character that acts in an unchanging manner. immune to AI state debuffs or stuns/slows
+		STATIC( new HashSet<Class>(),
+				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class, Terror.class, Amok.class, Charm.class, Sleep.class,
+									Paralysis.class, Frost.class, Chill.class, Slow.class, Speed.class) ));
+
 		private HashSet<Class> resistances;
 		private HashSet<Class> immunities;
 		

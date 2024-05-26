@@ -27,13 +27,13 @@ package com.shatteredpixel.shatteredpixeldungeon.messages;
 import java.util.Locale;
 
 public enum Languages {
-	ENGLISH("english",      "",   Status._COMPLETE_,   null, null),
-	CHINESE("中文",         "zh", Status._COMPLETE_, new String[]{"Chronie_Lynn_Iwa", "Jinkeloid(zdx00793)", "endlesssolitude", "catand"}, new String[]{"931451545", "Budding", "Fatir", "Fishbone", "Hcat", "HoofBumpBlurryface", "Horr_lski", "Lery", "Lyn_0401", "Lyx0527", "Ooooscar", "RainSlide", "ShatteredFlameBlast", "SpaceAnchor", "Teller", "hmdzl001", "leo", "tempest102", "户方狸奴", "catand"});
+	ENGLISH("english",      "",   Status.O_COMPLETE,   null, null),
+	CHINESE("中文",         "zh", Status.O_COMPLETE, new String[]{"Chronie_Lynn_Iwa", "Jinkeloid(zdx00793)", "endlesssolitude", "catand"}, new String[]{"931451545", "Budding", "Fatir", "Fishbone", "Hcat", "HoofBumpBlurryface", "Horr_lski", "Lery", "Lyn_0401", "Lyx0527", "Ooooscar", "RainSlide", "ShatteredFlameBlast", "SpaceAnchor", "Teller", "hmdzl001", "leo", "tempest102", "户方狸奴", "catand"});
 	public enum Status{
 		//below 80% translated languages are not added or removed
-		UNFINISHED, //80-99% translated
-		UNREVIEWED, //100% translated
-		_COMPLETE_  //100% reviewed
+		X_UNFINISH, //unfinished, ~80-99% translated
+		__UNREVIEW, //unreviewed, but 100% translated
+		O_COMPLETE, //complete, 100% reviewed
 	}
 
 	private String name;

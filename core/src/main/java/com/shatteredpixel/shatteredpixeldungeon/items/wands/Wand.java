@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -336,9 +337,9 @@ public abstract class Wand extends Item {
 				lvl = Degrade.reduceLevel(lvl);
 			}
 
-			if (charger.target.buff(ScrollEmpower.class) != null){
-				lvl += 2;
-			}
+//			if (charger.target.buff(ScrollEmpower.class) != null){
+//				lvl += 2;
+//			}
 
 			if (curCharges == 1 && charger.target instanceof Hero && ((Hero)charger.target).hasTalent(Talent.DESPERATE_POWER)){
 				lvl += ((Hero)charger.target).pointsInTalent(Talent.DESPERATE_POWER);
@@ -440,18 +441,15 @@ public abstract class Wand extends Item {
 				&& charger != null && charger.target == Dungeon.hero
 				&& !Dungeon.hero.belongings.contains(this)) {
 
-			//if the wand is owned by the hero, but not in their inventory, it must be in the staff
-			if (!Dungeon.hero.belongings.contains(this)) {
-				if (curCharges == 0 && Dungeon.hero.hasTalent(Talent.BACKUP_BARRIER)) {
-					//grants 3/5 shielding
-					Buff.affect(Dungeon.hero, Barrier.class).setShield(1 + 2 * Dungeon.hero.pointsInTalent(Talent.BACKUP_BARRIER));
-				}
-				if (Dungeon.hero.isSubclass(HeroSubClass.BATTLEMAGE)) {
 					Buff.prolong(Dungeon.hero, Talent.EmpoweredStrikeTracker.class, 10f);
 				}
 
+		if (Dungeon.hero.hasTalent(Talent.LINGERING_MAGIC)
+				&& charger != null && charger.target == Dungeon.hero){
+
+			Buff.affect(Dungeon.hero, Talent.LingeringMagicTracker.class, 5f);
 			}
-		}
+
 		Invisibility.dispel();
 
 		if (curUser.isClass(HeroClass.MAGE)) levelKnown = true;
@@ -683,9 +681,21 @@ public abstract class Wand extends Item {
 						curWand.fx(shot, new Callback() {
 							public void call() {
 								curWand.onZap(shot);
-								curWand.wandUsed();
+								if (Random.Float() < WondrousResin.extraCurseEffectChance()){
+									CursedWand.cursedZap(curWand,
+											curUser,
+											new Ballistica(curUser.pos, target, Ballistica.MAGIC_BOLT), new Callback() {
+												@Override
+												public void call() {
+													curWand.wandUsed();
+												}
+											});
+								} else {
+									curWand.wandUsed();
+								}
 							}
 						});
+
 					}
 					curWand.cursedKnown = true;
 					
@@ -773,7 +783,10 @@ public abstract class Wand extends Item {
 					curCharges++;
 					partialCharge--;
 				}
-				curCharges = Math.min(curCharges, maxCharges);
+				if (curCharges >= maxCharges){
+					partialCharge = 0;
+					curCharges = maxCharges;
+				}
 				updateQuickslot();
 			}
 		}

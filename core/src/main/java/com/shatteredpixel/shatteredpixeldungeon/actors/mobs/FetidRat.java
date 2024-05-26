@@ -76,12 +76,12 @@ public class FetidRat extends Rat {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(8, 20);
-            case 2: return Random.NormalIntRange(60, 125);
+            case 1: return Char.combatRoll(8, 20);
+            case 2: return Char.combatRoll(60, 125);
         }
-		return Random.NormalIntRange(0, 2);
+		return Char.combatRoll(0, 2);
 	}
 
 	@Override

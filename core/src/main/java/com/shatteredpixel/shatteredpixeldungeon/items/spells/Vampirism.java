@@ -43,6 +43,8 @@ public class Vampirism extends TargetedSpell{
 
     {
         image = ItemSpriteSheet.VAMPIRISM;
+
+        talentChance = 1/(float) Recipe.OUT_QUANTITY;
     }
 
     @Override
@@ -68,20 +70,26 @@ public class Vampirism extends TargetedSpell{
 
     @Override
     public long value() {
-        //prices of ingredients, divided by output quantity
-        return Math.round(quantity * ((30 + 43.333333f+ 40) / 3f));
+        return (long)(60 * (quantity/(float) Recipe.OUT_QUANTITY));
+    }
+
+    @Override
+    public long energyVal() {
+        return (long)(12 * (quantity/(float) Recipe.OUT_QUANTITY));
     }
 
     public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
+        private static final int OUT_QUANTITY = 3;
+
         {
-            inputs =  new Class[]{PotionOfHealing.class, CurseInfusion.class, ArcaneCatalyst.class};
+            inputs =  new Class[]{PotionOfHealing.class, CurseInfusion.class};
             inQuantity = new int[]{1, 1, 1};
 
-            cost = 8;
+            cost = 17;
 
             output = Vampirism.class;
-            outQuantity = 3;
+            outQuantity = OUT_QUANTITY;
         }
 
     }

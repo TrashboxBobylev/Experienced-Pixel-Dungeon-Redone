@@ -138,6 +138,15 @@ public class Gauntlet extends MeleeWeapon {
 				afterAbilityUsed(hero);
 			}
 		});
+    }
+
+	@Override
+	public String abilityInfo() {
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(Math.round(min()*0.6d)), augment.damageFactor(Math.round(max()*0.6d)));
+		} else {
+			return Messages.get(this, "typical_ability_desc", augment.damageFactor(Math.round(min(0)*0.6d)), augment.damageFactor(Math.round(max(0)*0.6d)));
+		}
 	}
 
 }

@@ -79,13 +79,13 @@ public class Slime extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(32, 38);
-            case 2: return Random.NormalIntRange(164, 189);
-            case 3: return Random.NormalIntRange(560, 740);
-            case 4: return Random.NormalIntRange(7000, 9000);
-			case 5: return Random.NormalIntRange(475000, 635000);
+            case 1: return Char.combatRoll(32, 38);
+            case 2: return Char.combatRoll(164, 189);
+            case 3: return Char.combatRoll(560, 740);
+            case 4: return Char.combatRoll(7000, 9000);
+			case 5: return Char.combatRoll(475000, 635000);
         }
-	    return Random.NormalIntRange( 2, 5 );
+	    return Char.combatRoll( 2, 5 );
 	}
 	
 	@Override

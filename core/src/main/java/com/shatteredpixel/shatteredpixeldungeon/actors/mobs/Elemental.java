@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -102,16 +103,16 @@ public abstract class Elemental extends Mob {
 	public long damageRoll() {
 		if (!summonedALly) {
 			switch (Dungeon.cycle) {
-				case 1: return Random.NormalIntRange(64, 83);
-				case 2: return Random.NormalIntRange(291, 434);
-				case 3: return Random.NormalIntRange(1650, 2100);
-				case 4: return Random.NormalIntRange(30000, 85000);
-				case 5: return Random.NormalIntRange(3000000, 7000000);
+				case 1: return Char.combatRoll(64, 83);
+				case 2: return Char.combatRoll(291, 434);
+				case 3: return Char.combatRoll(1650, 2100);
+				case 4: return Char.combatRoll(30000, 85000);
+				case 5: return Char.combatRoll(3000000, 7000000);
 			}
-			return Random.NormalIntRange( 16, 26 );
+			return Char.combatRoll( 16, 26 );
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-			return Random.NormalIntRange(6*regionScale, 15 + 10*regionScale);
+			return Char.combatRoll(6*regionScale, 15 + 10*regionScale);
 		}
 	}
 	
@@ -141,15 +142,15 @@ public abstract class Elemental extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(24, 50);
-            case 2: return Random.NormalIntRange(121, 243);
-            case 3: return Random.NormalIntRange(700, 1321);
-            case 4: return Random.NormalIntRange(22000, 64000);
-			case 5: return Random.NormalIntRange(2200000, 4250000);
+            case 1: return Char.combatRoll(24, 50);
+            case 2: return Char.combatRoll(121, 243);
+            case 3: return Char.combatRoll(700, 1321);
+            case 4: return Char.combatRoll(22000, 64000);
+			case 5: return Char.combatRoll(2200000, 4250000);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 	
 	protected int rangedCooldown = Random.NormalIntRange( 3, 5 );
@@ -224,7 +225,7 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() )) {
-			damage( Random.NormalLongRange( HT/2, HT * 3/5 ), buff );
+			damage( Char.combatRoll( HT/2, HT * 3/5 ), buff );
 			return false;
 		} else {
 			return super.add( buff );
@@ -310,7 +311,10 @@ public abstract class Elemental extends Mob {
 
 		@Override
 		protected boolean act() {
-			if (targetingPos != -1){
+			//fire a charged attack instead of any other action, as long as it is possible to do so
+			if (targetingPos != -1 && state == HUNTING){
+				//account for bolt hitting walls, in case position suddenly changed
+				targetingPos = new Ballistica( pos, targetingPos, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET ).collisionPos;
 				if (sprite != null && (sprite.visible || Dungeon.level.heroFOV[targetingPos])) {
 					sprite.zap( targetingPos );
 					return false;
@@ -319,6 +323,11 @@ public abstract class Elemental extends Mob {
 					return true;
 				}
 			} else {
+
+				if (state != HUNTING){
+					targetingPos = -1;
+				}
+
 				return super.act();
 			}
 		}
@@ -369,8 +378,15 @@ public abstract class Elemental extends Mob {
 
 
 			} else {
-				rangedCooldown = 1;
-				return super.doAttack(enemy);
+
+				if (sprite != null && (sprite.visible || Dungeon.level.heroFOV[targetingPos])) {
+					sprite.zap( targetingPos );
+					return false;
+				} else {
+					zap();
+					return true;
+				}
+
 			}
 		}
 
@@ -415,7 +431,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public long damageRoll() {
 			if (!summonedALly) {
-				return Random.NormalIntRange(10, 12);
+				return combatRoll(10, 12);
 			} else {
 				return super.damageRoll();
 			}
@@ -545,7 +561,7 @@ public abstract class Elemental extends Mob {
 			}
 			
 			for (Char ch : affected) {
-				ch.damage( Math.round( damage * 0.4f ), Shocking.class );
+				ch.damage( Math.round( damage * 0.4f ), new Shocking() );
 				if (ch == Dungeon.hero && !ch.isAlive()){
 					Dungeon.fail(this);
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
@@ -593,7 +609,8 @@ public abstract class Elemental extends Mob {
 	}
 	
 	public static Class<? extends Elemental> random(){
-		if (Random.Int( 10 ) == 0){
+		float altChance = 1/50f * RatSkull.exoticChanceMultiplier();
+		if (Random.Float() < altChance){
 			return ChaosElemental.class;
 		}
 		

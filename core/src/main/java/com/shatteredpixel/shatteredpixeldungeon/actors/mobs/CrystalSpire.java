@@ -81,6 +81,7 @@ public class CrystalSpire extends Mob {
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.BOSS);
 		properties.add(Property.INORGANIC);
+		properties.add(Property.STATIC);
 	}
 
 	private float abilityCooldown;
@@ -129,13 +130,13 @@ public class CrystalSpire extends Mob {
 				Char ch = Actor.findChar(i);
 
 				if (ch != null && !(ch instanceof CrystalWisp || ch instanceof CrystalSpire)){
-					int dmg = Random.NormalIntRange(12, 30);
+					long dmg = Char.combatRoll(12, 30);
 					switch (Dungeon.cycle) {
-						case 1: dmg = Random.NormalIntRange(96, 124); break;
-						case 2: dmg = Random.NormalIntRange(500, 648); break;
-						case 3: dmg = Random.NormalIntRange(1790, 2400); break;
-						case 4: dmg = Random.NormalIntRange(34000, 52000); break;
-						case 5: dmg = Random.NormalIntRange(4000000, 4900000); break;
+						case 1: dmg = Char.combatRoll(96, 124); break;
+						case 2: dmg = Char.combatRoll(500, 648); break;
+						case 3: dmg = Char.combatRoll(1790, 2400); break;
+						case 4: dmg = Char.combatRoll(34000, 52000); break;
+						case 5: dmg = Char.combatRoll(4000000, 4900000); break;
 					}
 
 					//guardians are hit harder by the attack
@@ -525,13 +526,6 @@ public class CrystalSpire extends Mob {
 
 	{
 		immunities.add( Blindness.class );
-
-		immunities.add( Paralysis.class );
-		immunities.add( Amok.class );
-		immunities.add( Sleep.class );
-		immunities.add( Terror.class );
-		immunities.add( Dread.class );
-		immunities.add( Vertigo.class );
 	}
 
 }

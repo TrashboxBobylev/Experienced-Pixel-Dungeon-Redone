@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.BruteSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class Brute extends Mob {
 	
@@ -88,24 +87,24 @@ public class Brute extends Mob {
 	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return buff(BruteRage.class) != null ?
-                    Random.NormalIntRange( 70, 123 ) :
-                    Random.NormalIntRange( 58, 70 );
+                    Char.combatRoll( 70, 123 ) :
+                    Char.combatRoll( 58, 70 );
             case 2: return buff(BruteRage.class) != null ?
-                    Random.NormalIntRange( 340, 541 ) :
-                    Random.NormalIntRange( 240, 368 );
+                    Char.combatRoll( 340, 541 ) :
+                    Char.combatRoll( 240, 368 );
             case 3: return buff(BruteRage.class) != null ?
-                    Random.NormalIntRange( 1200, 1640 ) :
-                    Random.NormalIntRange(900, 1340);
+                    Char.combatRoll( 1200, 1640 ) :
+                    Char.combatRoll(900, 1340);
             case 4: return buff(BruteRage.class) != null ?
-                    Random.NormalIntRange( 30000, 64000 ) :
-                    Random.NormalIntRange(16500, 40000);
+                    Char.combatRoll( 30000, 64000 ) :
+                    Char.combatRoll(16500, 40000);
 			case 5: return buff(BruteRage.class) != null ?
-					Random.NormalIntRange(2250000, 3500000) :
-					Random.NormalIntRange(1650000, 2500000);
+					Char.combatRoll(2250000, 3500000) :
+					Char.combatRoll(1650000, 2500000);
         }
 		return buff(BruteRage.class) != null ?
-			Random.NormalIntRange( 15, 40 ) :
-			Random.NormalIntRange( 5, 25 );
+			Char.combatRoll( 15, 40 ) :
+			Char.combatRoll( 5, 25 );
 	}
 	
 	@Override
@@ -121,15 +120,15 @@ public class Brute extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(20, 39);
-            case 2: return Random.NormalIntRange(120, 231);
-            case 3: return Random.NormalIntRange(500, 890);
-            case 4: return Random.NormalIntRange(10000, 22000);
-			case 5: return Random.NormalIntRange(750000, 1450000);
+            case 1: return Char.combatRoll(20, 39);
+            case 2: return Char.combatRoll(120, 231);
+            case 3: return Char.combatRoll(500, 890);
+            case 4: return Char.combatRoll(10000, 22000);
+			case 5: return Char.combatRoll(750000, 1450000);
         }
-		return Random.NormalIntRange(0, 8);
+		return Char.combatRoll(0, 8);
 	}
 
 	@Override

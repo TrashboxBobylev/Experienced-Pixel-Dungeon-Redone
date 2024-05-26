@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
@@ -119,7 +120,8 @@ public class MasterThievesArmband extends Artifact {
 				Char ch = Actor.findChar(target);
 				if (ch instanceof Shopkeeper){
 					GLog.w( Messages.get(MasterThievesArmband.class, "steal_shopkeeper") );
-				} else if (ch.alignment != Char.Alignment.ENEMY){
+				} else if (ch.alignment != Char.Alignment.ENEMY
+						&& !(ch instanceof Mimic && ch.alignment == Char.Alignment.NEUTRAL)){
 					GLog.w( Messages.get(MasterThievesArmband.class, "no_target") );
 				} else if (ch instanceof Mob) {
 					curUser.busy();
@@ -213,15 +215,18 @@ public class MasterThievesArmband extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
-		partialCharge += 0.1f * amount;
-		partialCharge = Math.min(partialCharge, chargeCap - charge);
-		while (partialCharge >= 1f){
-			charge++;
-			partialCharge--;
-			updateQuickslot();
-			if (charge == chargeCap){
-				GLog.p( Messages.get(MasterThievesArmband.class, "full") );
+		if (charge < chargeCap) {
+			partialCharge += 0.1f * amount;
+			while (partialCharge >= 1f) {
+				charge++;
+				partialCharge--;
 			}
+			if (charge >= chargeCap) {
+				GLog.p(Messages.get(MasterThievesArmband.class, "full"));
+				partialCharge = 0;
+				charge = chargeCap;
+			}
+			updateQuickslot();
 		}
 	}
 
@@ -298,6 +303,7 @@ public class MasterThievesArmband extends Artifact {
 					GLog.p(Messages.get(MasterThievesArmband.class, "level_up"));
 					upgrade();
 				}
+				updateQuickslot();
 				return true;
 			}
 		}

@@ -29,12 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RotHeartSprite;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class RotHeart extends Mob {
 
@@ -64,6 +63,7 @@ public class RotHeart extends Mob {
                 break;
 
         }
+		properties.add(Property.STATIC);
 	}
 
 	@Override
@@ -141,22 +141,16 @@ public class RotHeart extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(8, 28);
-            case 2: return Random.NormalIntRange(100, 184);
+            case 1: return Char.combatRoll(8, 28);
+            case 2: return Char.combatRoll(100, 184);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 	
 	{
-		immunities.add( Paralysis.class );
-		immunities.add( Amok.class );
-		immunities.add( Sleep.class );
 		immunities.add( ToxicGas.class );
-		immunities.add( Terror.class );
-		immunities.add( Dread.class );
-		immunities.add( Vertigo.class );
 	}
 
 }

@@ -85,13 +85,13 @@ public class Spinner extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(58, 73);
-            case 2: return Random.NormalIntRange(260, 371);
-            case 3: return Random.NormalIntRange(1200, 1468);
-            case 4: return Random.NormalIntRange(18000, 50000);
-			case 5: return Random.NormalIntRange(2000000, 4200000);
+            case 1: return Char.combatRoll(58, 73);
+            case 2: return Char.combatRoll(260, 371);
+            case 3: return Char.combatRoll(1200, 1468);
+            case 4: return Char.combatRoll(18000, 50000);
+			case 5: return Char.combatRoll(2000000, 4200000);
         }
-		return Random.NormalIntRange(10, 20);
+		return Char.combatRoll(10, 20);
 	}
 
 	@Override
@@ -107,15 +107,15 @@ public class Spinner extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(20, 39);
-            case 2: return Random.NormalIntRange(80, 219);
-            case 3: return Random.NormalIntRange(480, 840);
-            case 4: return Random.NormalIntRange(13000, 30000);
-			case 5: return Random.NormalIntRange(1220000, 2000000);
+            case 1: return Char.combatRoll(20, 39);
+            case 2: return Char.combatRoll(80, 219);
+            case 3: return Char.combatRoll(480, 840);
+            case 4: return Char.combatRoll(13000, 30000);
+			case 5: return Char.combatRoll(1220000, 2000000);
         }
-		return Random.NormalIntRange(0, 6);
+		return Char.combatRoll(0, 6);
 	}
 
 	private int webCoolDown = 0;

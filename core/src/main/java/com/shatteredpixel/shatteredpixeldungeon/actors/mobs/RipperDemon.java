@@ -39,7 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RipperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.*;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
 
 public class RipperDemon extends Mob {
 
@@ -96,13 +99,13 @@ public class RipperDemon extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(79, 91);
-            case 2: return Random.NormalIntRange(270, 440);
-            case 3: return Random.NormalIntRange(2100, 2800);
-            case 4: return Random.NormalIntRange(65000, 180000);
-			case 5: return Random.NormalIntRange(3400000, 8000000);
+            case 1: return Char.combatRoll(79, 91);
+            case 2: return Char.combatRoll(270, 440);
+            case 3: return Char.combatRoll(2100, 2800);
+            case 4: return Char.combatRoll(65000, 180000);
+			case 5: return Char.combatRoll(3400000, 8000000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	@Override
@@ -123,15 +126,15 @@ public class RipperDemon extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(34, 64);
-            case 2: return Random.NormalIntRange(100, 217);
-            case 3: return Random.NormalIntRange(1200, 2100);
-            case 4: return Random.NormalIntRange(90000, 140000);
-			case 5: return Random.NormalIntRange(4500000, 8000000);
+            case 1: return Char.combatRoll(34, 64);
+            case 2: return Char.combatRoll(100, 217);
+            case 3: return Char.combatRoll(1200, 2100);
+            case 4: return Char.combatRoll(90000, 140000);
+			case 5: return Char.combatRoll(4500000, 8000000);
         }
-		return Random.NormalIntRange(0, 4);
+		return Char.combatRoll(0, 4);
 	}
 
 	private static final String LAST_ENEMY_POS = "last_enemy_pos";
@@ -188,7 +191,7 @@ public class RipperDemon extends Mob {
 
 			if (leapPos != -1){
 
-				leapCooldown = Random.NormalIntRange(2, 4);
+				leapCooldown = Char.combatRoll(2, 4);
 
 				if (rooted){
 					leapPos = -1;

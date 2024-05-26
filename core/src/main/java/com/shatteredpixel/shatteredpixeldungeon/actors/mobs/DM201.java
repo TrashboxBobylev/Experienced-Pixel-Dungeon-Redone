@@ -73,13 +73,13 @@ public class DM201 extends DM200 {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(69, 91);
-            case 2: return Random.NormalIntRange(321, 412);
-            case 3: return Random.NormalIntRange(1400, 1794);
-            case 4: return Random.NormalIntRange(40000, 75000);
-			case 5: return Random.NormalIntRange(4000000, 7600000);
+            case 1: return Char.combatRoll(69, 91);
+            case 2: return Char.combatRoll(321, 412);
+            case 3: return Char.combatRoll(1400, 1794);
+            case 4: return Char.combatRoll(40000, 75000);
+			case 5: return Char.combatRoll(4000000, 7600000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	private boolean threatened = false;

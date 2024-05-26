@@ -103,13 +103,13 @@ public class DM300 extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(67, 86);
-            case 2: return Random.NormalIntRange(340, 445);
-            case 3: return Random.NormalIntRange(1500, 1943);
-            case 4: return Random.NormalIntRange(47000, 84000);
-			case 5: return Random.NormalIntRange(4500000, 6500000);
+            case 1: return Char.combatRoll(67, 86);
+            case 2: return Char.combatRoll(340, 445);
+            case 3: return Char.combatRoll(1500, 1943);
+            case 4: return Char.combatRoll(47000, 84000);
+			case 5: return Char.combatRoll(4500000, 6500000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Char.combatRoll( 15, 25 );
 	}
 
 	@Override
@@ -125,15 +125,15 @@ public class DM300 extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(38, 53);
-            case 2: return Random.NormalIntRange(120, 275);
-            case 3: return Random.NormalIntRange(562, 1310);
-            case 4: return Random.NormalIntRange(19000, 45000);
-			case 5: return Random.NormalIntRange(2250000, 3500000);
+            case 1: return Char.combatRoll(38, 53);
+            case 2: return Char.combatRoll(120, 275);
+            case 3: return Char.combatRoll(562, 1310);
+            case 4: return Char.combatRoll(19000, 45000);
+			case 5: return Char.combatRoll(2250000, 3500000);
         }
-		return Random.NormalIntRange(0, 10);
+		return Char.combatRoll(0, 10);
 	}
 
 	public int pylonsActivated = 0;
@@ -508,7 +508,7 @@ public class DM300 extends Mob {
 		long dmgTaken = preHP - HP;
 		if (dmgTaken > 0) {
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-			if (lock != null && !isImmune(src.getClass())){
+			if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 				if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/2f);
 				else                                                    lock.addTime(dmgTaken);
 			}
@@ -521,7 +521,7 @@ public class DM300 extends Mob {
 			threshold = HT / 3 * (2 - pylonsActivated);
 		}
 
-		if (HP < threshold){
+		if (HP <= threshold && threshold > 0){
 			HP = threshold;
 			supercharge();
 		}

@@ -125,9 +125,9 @@ public class Goo extends Mob {
 				Statistics.qualifiedForBossChallengeBadge = false;
 				Statistics.bossScores[0] -= 100;
 			}
-			return Random.NormalIntRange( min*3, max*3 );
+			return Char.combatRoll( min*3, max*3 );
 		} else {
-			return Random.NormalIntRange( min, max );
+			return Char.combatRoll( min, max );
 		}
 	}
 
@@ -163,14 +163,14 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(8, 15);
-            case 2: return Random.NormalIntRange(130, 178);
-            case 3: return Random.NormalIntRange(330, 600);
-            case 4: return Random.NormalIntRange(5000, 10000);
+            case 1: return Char.combatRoll(8, 15);
+            case 2: return Char.combatRoll(130, 178);
+            case 3: return Char.combatRoll(330, 600);
+            case 4: return Char.combatRoll(5000, 10000);
         }
-		return Random.NormalIntRange(0, 2);
+		return Char.combatRoll(0, 2);
 	}
 
 	@Override
@@ -348,7 +348,7 @@ public class Goo extends Mob {
 			yell(Messages.get(this, "gluuurp"));
 		}
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null){
+		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
 			else                                                    lock.addTime(dmg*1.5f);
 		}

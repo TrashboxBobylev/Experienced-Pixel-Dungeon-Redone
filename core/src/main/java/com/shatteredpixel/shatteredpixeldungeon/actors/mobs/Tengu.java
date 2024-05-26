@@ -113,13 +113,13 @@ public class Tengu extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(42, 60);
-            case 2: return Random.NormalIntRange(225, 312);
-            case 3: return Random.NormalIntRange(750, 1000);
-            case 4: return Random.NormalIntRange(14000, 23000);
-			case 5: return Random.NormalIntRange(1000000, 2250000);
+            case 1: return Char.combatRoll(42, 60);
+            case 2: return Char.combatRoll(225, 312);
+            case 3: return Char.combatRoll(750, 1000);
+            case 4: return Char.combatRoll(14000, 23000);
+			case 5: return Char.combatRoll(1000000, 2250000);
         }
-		return Random.NormalIntRange( 6, 12 );
+		return Char.combatRoll( 6, 12 );
 	}
 	
 	@Override
@@ -147,15 +147,15 @@ public class Tengu extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(10, 24);
-            case 2: return Random.NormalIntRange(80, 195);
-            case 3: return Random.NormalIntRange(400, 800);
-            case 4: return Random.NormalIntRange(8000, 14000);
-			case 5: return Random.NormalIntRange(460000, 950000);
+            case 1: return Char.combatRoll(10, 24);
+            case 2: return Char.combatRoll(80, 195);
+            case 3: return Char.combatRoll(400, 800);
+            case 4: return Char.combatRoll(8000, 14000);
+			case 5: return Char.combatRoll(460000, 950000);
         }
-		return Random.NormalIntRange(0, 5);
+		return Char.combatRoll(0, 5);
 	}
 
 	boolean loading = false;
@@ -193,7 +193,7 @@ public class Tengu extends Mob {
 		dmg = beforeHitHP - HP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (lock != null) {
+		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(2*dmg/3f);
 			else                                                    lock.addTime(dmg);
 		}
@@ -671,7 +671,7 @@ public class Tengu extends Mob {
 					if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof Tengu)) {
-							int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
+							long dmg = Char.combatRoll(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
 							dmg -= ch.drRoll();
 
 							if (dmg > 0) {

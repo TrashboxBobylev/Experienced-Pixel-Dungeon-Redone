@@ -112,13 +112,13 @@ public class Eye extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(86, 106);
-            case 2: return Random.NormalIntRange(360, 487);
-            case 3: return Random.NormalIntRange(2600, 3641);
-            case 4: return Random.NormalIntRange(179000, 290000);
-			case 5: return Random.NormalIntRange(5750000, 9000000);
+            case 1: return Char.combatRoll(86, 106);
+            case 2: return Char.combatRoll(360, 487);
+            case 3: return Char.combatRoll(2600, 3641);
+            case 4: return Char.combatRoll(179000, 290000);
+			case 5: return Char.combatRoll(5750000, 9000000);
         }
-		return Random.NormalIntRange(20, 30);
+		return Char.combatRoll(20, 30);
 	}
 
 	@Override
@@ -134,15 +134,15 @@ public class Eye extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(40, 74);
-            case 2: return Random.NormalIntRange(178, 334);
-            case 3: return Random.NormalIntRange(1750, 2800);
-            case 4: return Random.NormalIntRange(200000, 300000);
-			case 5: return Random.NormalIntRange(6000000, 12500000);
+            case 1: return Char.combatRoll(40, 74);
+            case 2: return Char.combatRoll(178, 334);
+            case 3: return Char.combatRoll(1750, 2800);
+            case 4: return Char.combatRoll(200000, 300000);
+			case 5: return Char.combatRoll(6000000, 12500000);
         }
-		return Random.NormalIntRange(0, 10);
+		return Char.combatRoll(0, 10);
 	}
 	
 	private Ballistica beam;
@@ -247,13 +247,13 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-                long dmg = Random.NormalIntRange(30, 50);
+                long dmg = Char.combatRoll(30, 50);
                 switch (Dungeon.cycle){
-                    case 1: dmg = Random.NormalIntRange(168, 231); break;
-                    case 2: dmg = Random.NormalIntRange(510, 824); break;
-                    case 3: dmg = Random.NormalIntRange(3750, 5200); break;
-                    case 4: dmg = Random.NormalIntRange(200000, 560000); break;
-					case 5: dmg = Random.NormalIntRange(8000000, 12500000); break;
+                    case 1: dmg = Char.combatRoll(168, 231); break;
+                    case 2: dmg = Char.combatRoll(510, 824); break;
+                    case 3: dmg = Char.combatRoll(3750, 5200); break;
+                    case 4: dmg = Char.combatRoll(200000, 560000); break;
+					case 5: dmg = Char.combatRoll(8000000, 12500000); break;
                 }
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
                 ch.damage(dmg, new DeathGaze() );

@@ -104,13 +104,13 @@ public class CrystalWisp extends Mob{
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Random.NormalIntRange(50, 55);
-			case 2: return Random.NormalIntRange(240, 275);
-			case 3: return Random.NormalIntRange(800, 900);
-			case 4: return Random.NormalIntRange(14000, 18500);
-			case 5: return Random.NormalIntRange(1100000, 1800000);
+			case 1: return Char.combatRoll(50, 55);
+			case 2: return Char.combatRoll(240, 275);
+			case 3: return Char.combatRoll(800, 900);
+			case 4: return Char.combatRoll(14000, 18500);
+			case 5: return Char.combatRoll(1100000, 1800000);
 		}
-		return Random.NormalIntRange( 5, 10 );
+		return Char.combatRoll( 5, 10 );
 	}
 
 	@Override
@@ -126,15 +126,15 @@ public class CrystalWisp extends Mob{
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Random.NormalIntRange(13, 28);
-			case 2: return Random.NormalIntRange(70, 170);
-			case 3: return Random.NormalIntRange(500, 700);
-			case 4: return Random.NormalIntRange(8000, 16000);
-			case 5: return Random.NormalIntRange(650000, 1250000);
+			case 1: return Char.combatRoll(13, 28);
+			case 2: return Char.combatRoll(70, 170);
+			case 3: return Char.combatRoll(500, 700);
+			case 4: return Char.combatRoll(8000, 16000);
+			case 5: return Char.combatRoll(650000, 1250000);
 		}
-		return Random.NormalIntRange(0, 4);
+		return Char.combatRoll(0, 4);
 	}
 
 	@Override
@@ -172,13 +172,13 @@ public class CrystalWisp extends Mob{
 		Char enemy = this.enemy;
 		if (hit( this, enemy, true )) {
 
-			int dmg = Random.NormalIntRange( 5, 10 );
+			long dmg = Char.combatRoll( 5, 10 );
 			switch (Dungeon.cycle) {
-				case 1: dmg = Random.NormalIntRange(50, 55); break;
-				case 2: dmg = Random.NormalIntRange(240, 275); break;
-				case 3: dmg = Random.NormalIntRange(800, 900); break;
-				case 4: dmg = Random.NormalIntRange(14000, 18500); break;
-				case 5: dmg = Random.NormalIntRange(1100000, 1800000); break;
+				case 1: dmg = Char.combatRoll(50, 55); break;
+				case 2: dmg = Char.combatRoll(240, 275); break;
+				case 3: dmg = Char.combatRoll(800, 900); break;
+				case 4: dmg = Char.combatRoll(14000, 18500); break;
+				case 5: dmg = Char.combatRoll(1100000, 1800000); break;
 			}
 			enemy.damage( dmg, new LightBeam() );
 

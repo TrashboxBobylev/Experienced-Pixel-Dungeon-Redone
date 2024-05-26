@@ -105,13 +105,13 @@ public class Swarm extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(25, 31);
-            case 2: return Random.NormalIntRange(129, 176);
-            case 3: return Random.NormalIntRange(525, 667);
-            case 4: return Random.NormalIntRange(5000, 9000);
-			case 5: return Random.NormalIntRange(475000, 975000);
+            case 1: return Char.combatRoll(25, 31);
+            case 2: return Char.combatRoll(129, 176);
+            case 3: return Char.combatRoll(525, 667);
+            case 4: return Char.combatRoll(5000, 9000);
+			case 5: return Char.combatRoll(475000, 975000);
         }
-		return Random.NormalIntRange( 1, 4 );
+		return Char.combatRoll( 1, 4 );
 	}
 	
 	@Override

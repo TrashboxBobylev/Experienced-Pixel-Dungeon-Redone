@@ -295,10 +295,22 @@ public class Hero extends Char {
 	}
 
 	public boolean hasTalent( Talent talent ){
+		if (talent == Talent.MYSTICAL_CHARGE && subClass == HeroSubClass.BATTLEMAGE) return true;
+		if (talent == Talent.SHARED_UPGRADES && subClass == HeroSubClass.SNIPER) return true;
+		if (talent == Talent.INSCRIBED_POWER && heroClass == HeroClass.MAGE) return true;
+		if (talent == Talent.SWIFT_EQUIP && heroClass == HeroClass.DUELIST) return true;
 		return pointsInTalent(talent) > 0;
 	}
 
 	public int pointsInTalent( Talent talent ){
+		if (talent == Talent.ENHANCED_COMBO && subClass == HeroSubClass.GLADIATOR) return 3;
+		if (talent == Talent.ENRAGED_CATALYST && subClass == HeroSubClass.BERSERKER) return 4;
+		if (talent == Talent.EMPOWERED_STRIKE && subClass == HeroSubClass.BATTLEMAGE) return 6;
+		if (talent == Talent.SPEEDY_STEALTH && subClass == HeroSubClass.FREERUNNER) return 3;
+		if (talent == Talent.VARIED_CHARGE && subClass == HeroSubClass.CHAMPION) return 6;
+		if (talent == Talent.INSCRIBED_POWER && heroClass == HeroClass.MAGE) return 2;
+		if (talent == Talent.HEIGHTENED_SENSES && heroClass == HeroClass.HUNTRESS) return 2;
+		if (talent == Talent.WEAPON_RECHARGING && heroClass == HeroClass.DUELIST) return 2;
 		for (LinkedHashMap<Talent, Integer> tier : talents){
 			for (Talent f : tier.keySet()){
 				if (f == talent) return tier.get(f);
@@ -429,7 +441,7 @@ public class Hero extends Char {
 		}
 
 		if (buff(Scimitar.SwordDance.class) != null){
-			accuracy *= 1.25f;
+			accuracy *= 1.50f;
 		}
 
 		if (!RingOfForce.fightingUnarmed(this)) {
@@ -495,8 +507,8 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 
 		if (buff(RoundShield.GuardTracker.class) != null){
-			buff(RoundShield.GuardTracker.class).detach();
-			shieldDamage(lvl);
+			buff(RoundShield.GuardTracker.class).hasBlocked = true;
+			BuffIndicator.refreshHero();
 			Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			return Messages.get(RoundShield.GuardTracker.class, "guarded");
 		}
@@ -517,7 +529,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		long dr = super.drRoll();
 
 		if (belongings.armor() != null) {
-			long armDr = Dungeon.NormalLongRange( belongings.armor().DRMin(), belongings.armor().DRMax());
+			long armDr = Char.combatRoll( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
 				armDr -= 2*(belongings.armor().STRReq() - STR());
 			}
@@ -525,7 +537,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
-			long wepDr = Dungeon.NormalLongRange( 0 , belongings.weapon().defenseFactor( this ) );
+			long wepDr = Char.combatRoll( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
 				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
 			}
@@ -1132,7 +1144,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 		}
 	}
 
-	public boolean actMine(HeroAction.Mine action){
+	private boolean actMine(HeroAction.Mine action){
 		if (Dungeon.level.adjacent(pos, action.dst)){
 			path = null;
 			if ((Dungeon.level.map[action.dst] == Terrain.WALL
@@ -1282,7 +1294,13 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		enemy = action.target;
 
-		if (enemy.isAlive() && canAttack( enemy ) && !isCharmedBy( enemy ) && enemy.invisible == 0) {
+		if (isCharmedBy( enemy )){
+			GLog.w( Messages.get(Charm.class, "cant_attack"));
+			ready();
+			return false;
+		}
+
+		if (enemy.isAlive() && canAttack( enemy ) && enemy.invisible == 0) {
 
 			if (heroClass != HeroClass.DUELIST
 					&& hasTalent(Talent.AGGRESSIVE_BARRIER)
@@ -1549,8 +1567,10 @@ if (buff(RoundShield.GuardTracker.class) != null){
 					newMob = true;
 				}
 
-				if (!mindVisionEnemies.contains(m) && QuickSlotButton.autoAim(m) != -1){
-					if (target == null){
+				//only do a simple check for mind visioned enemies, better performance
+				if ((!mindVisionEnemies.contains(m) && QuickSlotButton.autoAim(m) != -1)
+						|| (mindVisionEnemies.contains(m) && new Ballistica( pos, m.pos, Ballistica.PROJECTILE ).collisionPos == m.pos)) {
+					if (target == null) {
 						target = m;
 					} else if (distance(target) > distance(m)) {
 						target = m;
@@ -1842,17 +1862,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 			}
 		}
 
-		long neededExp = 100;
-		switch (Dungeon.cycle){
-			case 1: neededExp = 200; break;
-			case 2: neededExp = 1250; break;
-			case 3: neededExp = 11750; break;
-			case 4: neededExp = 75000; break;
-			case 5: neededExp = 500000; break;
-		}
-		if (Dungeon.isChallenged(Challenges.NO_SCROLLS)){
-			neededExp *= 2.5f;
-		}
+		long neededExp = PsycheChest.neededExp();
 
         if (totalExp >= neededExp && grinding){
 			int souCount = 0;
@@ -2179,18 +2189,6 @@ if (buff(RoundShield.GuardTracker.class) != null){
 
 		if (hit && isClass(HeroClass.DUELIST) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
-		}
-
-		RingOfForce.BrawlersStance brawlStance = buff(RingOfForce.BrawlersStance.class);
-		if (brawlStance != null && brawlStance.hitsLeft() > 0){
-			MeleeWeapon.Charger charger = Buff.affect(this, MeleeWeapon.Charger.class);
-			charger.partialCharge -= RingOfForce.BrawlersStance.HIT_CHARGE_USE;
-			while (charger.partialCharge < 0) {
-				charger.charges--;
-				charger.partialCharge++;
-			}
-			BuffIndicator.refreshHero();
-			Item.updateQuickslot();
 		}
 
 		curAction = null;

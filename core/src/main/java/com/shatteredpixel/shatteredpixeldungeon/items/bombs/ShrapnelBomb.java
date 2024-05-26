@@ -53,7 +53,7 @@ public class ShrapnelBomb extends Bomb {
 		
 		boolean[] FOV = new boolean[Dungeon.level.length()];
 		Point c = Dungeon.level.cellToPoint(cell);
-		ShadowCaster.castShadow(c.x, c.y, FOV, Dungeon.level.losBlocking, 8);
+		ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, 8);
 		
 		ArrayList<Char> affected = new ArrayList<>();
 		
@@ -71,7 +71,7 @@ public class ShrapnelBomb extends Bomb {
 		
 		for (Char ch : affected){
 			//regular bomb damage, which falls off at a rate of 5% per tile of distance
-			long damage = Math.round(Dungeon.NormalLongRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2L )*Dungeon.fireDamage);
+			long damage = Math.round(Char.combatRoll( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ));
 			if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 				damage *= 2.5f;
 			}

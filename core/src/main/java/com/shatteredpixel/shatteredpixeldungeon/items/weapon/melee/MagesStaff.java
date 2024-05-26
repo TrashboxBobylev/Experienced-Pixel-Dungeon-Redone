@@ -120,6 +120,16 @@ public class MagesStaff extends MeleeWeapon {
 	}
 
 	@Override
+	public String abilityInfo() {
+		long dmgBoost = levelKnown ? 3+buffedLvl() : 3;
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+		} else {
+			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+		}
+	}
+
+	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add(AC_IMBUE);
@@ -196,7 +206,7 @@ public class MagesStaff extends MeleeWeapon {
 		}
 
 		if (empoweredStrike != null){
-			empoweredStrike.detach();
+			if (!empoweredStrike.delayedDetach) empoweredStrike.detach();
 			if (!(defender instanceof Mob) || !((Mob) defender).surprisedBy(attacker)){
 				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 			}

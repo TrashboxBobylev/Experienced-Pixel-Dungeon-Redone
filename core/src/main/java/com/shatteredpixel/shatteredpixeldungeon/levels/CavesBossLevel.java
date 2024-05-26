@@ -419,6 +419,7 @@ public class CavesBossLevel extends Level {
 			case Terrain.WATER:
 				return super.tileDesc( tile ) + "\n\n" + Messages.get(CavesBossLevel.class, "water_desc");
 			case Terrain.ENTRANCE:
+			case Terrain.ENTRANCE_SP:
 				return Messages.get(CavesLevel.class, "entrance_desc");
 			case Terrain.EXIT:
 				//city exit is used
@@ -821,7 +822,7 @@ public class CavesBossLevel extends Level {
 						if (ch != null && !(ch instanceof DM300) && !ch.flying) {
 							Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
 							ch.damage(
-									Random.NormalIntRange(6, 12) + Dungeon.escalatingDepth()*2, new Electricity());
+									Char.combatRoll(6, 12) + Dungeon.escalatingDepth()*2, new Electricity());
 							ch.sprite.flash();
 
 							if (ch == Dungeon.hero){

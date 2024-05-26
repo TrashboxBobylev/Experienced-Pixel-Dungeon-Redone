@@ -74,7 +74,7 @@ public class ShockBomb extends Bomb {
 			int power = 16 - 4*Dungeon.level.distance(ch.pos, cell);
 			if (power > 0){
 				//32% to 8% regular bomb damage
-				long damage = Math.round(Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + 2L*Dungeon.scalingDepth()) * (power/50f)*Dungeon.fireDamage);
+				long damage = Math.round(Char.combatRoll(5 + Dungeon.scalingDepth(), 10 + 2*Dungeon.scalingDepth()) * (power/50f));
 				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 					damage *= 2.5f;
 				}

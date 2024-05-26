@@ -44,8 +44,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArm
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
@@ -86,7 +89,7 @@ public abstract class Mob extends Char {
     }
 
 	private static final String	TXT_DIED	= "You hear something died in the distance";
-	
+
 	protected static final String TXT_NOTICE1	= "?!";
 	protected static final String TXT_RAGE		= "#$%^";
 	protected static final String TXT_EXP		= "%+dEXP";
@@ -718,7 +721,7 @@ public abstract class Mob extends Char {
 				(float)(1f + (Dungeon.resetDamage() - 1d) * 0.65f);
 	}
 
-	public int cycledDrRoll(){
+	public long cycledDrRoll(){
 		switch (Dungeon.cycle){
 			default: return 0;
 			case 1: return 0;
@@ -835,7 +838,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (buff(Longsword.HolyExpEffect.class) != null){
-			EXP = Math.round(EXP * Math.pow(1.15f, buff(Longsword.HolyExpEffect.class).stacks));
+			EXP = Math.round(EXP * Math.pow(1.25f, buff(Longsword.HolyExpEffect.class).stacks));
 		}
 
 		if (this.buff(Overload.class) != null) {
@@ -964,6 +967,16 @@ public abstract class Mob extends Char {
 			item = Generator.randomUsingDefaults( (Generator.Category)loot );
 
 		} else if (loot instanceof Class<?>) {
+
+			if (ExoticPotion.regToExo.containsKey(loot)){
+				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
+					return Generator.random(ExoticPotion.regToExo.get(loot));
+				}
+			} else if (ExoticScroll.regToExo.containsKey(loot)){
+				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
+					return Generator.random(ExoticScroll.regToExo.get(loot));
+				}
+			}
 
 			item = Generator.random( (Class<? extends Item>)loot );
 

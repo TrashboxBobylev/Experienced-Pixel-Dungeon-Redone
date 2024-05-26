@@ -85,13 +85,13 @@ public class Monk extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(62, 78);
-            case 2: return Random.NormalIntRange(270, 400);
-            case 3: return Random.NormalIntRange(1700, 2240);
-            case 4: return Random.NormalIntRange(40000, 100000);
-			case 5: return Random.NormalIntRange(3100000, 7750000);
+            case 1: return Char.combatRoll(62, 78);
+            case 2: return Char.combatRoll(270, 400);
+            case 3: return Char.combatRoll(1700, 2240);
+            case 4: return Char.combatRoll(40000, 100000);
+			case 5: return Char.combatRoll(3100000, 7750000);
         }
-		return Random.NormalIntRange( 12, 25 );
+		return Char.combatRoll( 12, 25 );
 	}
 	
 	@Override
@@ -112,15 +112,15 @@ public class Monk extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(20, 30);
-            case 2: return Random.NormalIntRange(60, 193);
-            case 3: return Random.NormalIntRange(700, 1000);
-            case 4: return Random.NormalIntRange(26000, 73000);
-			case 5: return Random.NormalIntRange(2700000, 5150000);
+            case 1: return Char.combatRoll(20, 30);
+            case 2: return Char.combatRoll(60, 193);
+            case 3: return Char.combatRoll(700, 1000);
+            case 4: return Char.combatRoll(26000, 73000);
+			case 5: return Char.combatRoll(2700000, 5150000);
         }
-		return Random.NormalIntRange(0, 2);
+		return Char.combatRoll(0, 2);
 	}
 	
 	@Override

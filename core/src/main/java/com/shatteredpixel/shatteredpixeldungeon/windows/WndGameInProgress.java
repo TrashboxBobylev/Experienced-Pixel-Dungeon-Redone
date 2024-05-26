@@ -97,7 +97,11 @@ public class WndGameInProgress extends Window {
 		
 		pos += GAP;
 		statSlot( Messages.get(this, "gold"), info.goldCollected );
-		statSlot( Messages.get(this, "depth"), info.maxDepth );
+		if (info.cycle != 0){
+			statSlot(Messages.get(this, "depth"), (info.maxDepth) + " " + Messages.get(this, "cycle", info.cycle));
+		} else {
+			statSlot(Messages.get(this, "depth"), info.maxDepth);
+		}
 		if (info.daily) {
 			if (info.dailyReplay) {
 				statSlot(Messages.get(this, "replay_for"), "_" + info.customSeed + "_");

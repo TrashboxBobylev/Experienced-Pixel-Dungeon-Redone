@@ -147,13 +147,13 @@ public class GnollGeomancer extends Mob {
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Random.NormalIntRange(35, 45);
-			case 2: return Random.NormalIntRange(155, 175);
-			case 3: return Random.NormalIntRange(564, 670);
-			case 4: return Random.NormalIntRange(4650, 6900);
-			case 5: return Random.NormalIntRange(700000, 1150000);
+			case 1: return Char.combatRoll(35, 45);
+			case 2: return Char.combatRoll(155, 175);
+			case 3: return Char.combatRoll(564, 670);
+			case 4: return Char.combatRoll(4650, 6900);
+			case 5: return Char.combatRoll(700000, 1150000);
 		}
-		return Random.NormalIntRange( 3, 6 );
+		return Char.combatRoll( 3, 6 );
 	}
 
 	@Override
@@ -169,15 +169,15 @@ public class GnollGeomancer extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Random.NormalIntRange(30, 45);
-			case 2: return Random.NormalIntRange(100, 265);
-			case 3: return Random.NormalIntRange(570, 950);
-			case 4: return Random.NormalIntRange(17000, 38000);
-			case 5: return Random.NormalIntRange(1625000, 3000000);
+			case 1: return Char.combatRoll(30, 45);
+			case 2: return Char.combatRoll(100, 265);
+			case 3: return Char.combatRoll(570, 950);
+			case 4: return Char.combatRoll(17000, 38000);
+			case 5: return Char.combatRoll(1625000, 3000000);
 		}
-		return Random.NormalIntRange(0, 6);
+		return Char.combatRoll(0, 6);
 	}
 
 	@Override
@@ -722,13 +722,13 @@ public class GnollGeomancer extends Mob {
 						}
 
 						if (ch != null && !(ch instanceof GnollGeomancer)){
-							long dmg = Random.NormalIntRange(6, 12);
+							long dmg = Char.combatRoll(6, 12);
 							switch (Dungeon.cycle) {
-								case 1: dmg = Random.NormalIntRange(48, 72); break;
-								case 2: dmg = Random.NormalIntRange(240, 295); break;
-								case 3: dmg = Random.NormalIntRange(960, 1250); break;
-								case 4: dmg = Random.NormalIntRange(7400, 13000); break;
-								case 5: dmg =  Random.NormalIntRange(175000, 800000); break;
+								case 1: dmg = Char.combatRoll(48, 72); break;
+								case 2: dmg = Char.combatRoll(240, 295); break;
+								case 3: dmg = Char.combatRoll(960, 1250); break;
+								case 4: dmg = Char.combatRoll(7400, 13000); break;
+								case 5: dmg =  Char.combatRoll(175000, 800000); break;
 							}
 							ch.damage(dmg, new GnollGeomancer.Boulder());
 
@@ -833,13 +833,13 @@ public class GnollGeomancer extends Mob {
 
 		@Override
 		public void affectChar(Char ch) {
-			long dmg = Random.NormalIntRange(6, 12);
+			long dmg = Char.combatRoll(6, 12);
 			switch (Dungeon.cycle) {
-				case 1: dmg = Random.NormalIntRange(48, 72); break;
-				case 2: dmg = Random.NormalIntRange(240, 295); break;
-				case 3: dmg = Random.NormalIntRange(960, 1250); break;
-				case 4: dmg = Random.NormalIntRange(7400, 13000); break;
-				case 5: dmg =  Random.NormalIntRange(175000, 800000); break;
+				case 1: dmg = Char.combatRoll(48, 72); break;
+				case 2: dmg = Char.combatRoll(240, 295); break;
+				case 3: dmg = Char.combatRoll(960, 1250); break;
+				case 4: dmg = Char.combatRoll(7400, 13000); break;
+				case 5: dmg =  Char.combatRoll(175000, 800000); break;
 			}
 			ch.damage(dmg, this);
 			if (ch.isAlive()) {
@@ -852,7 +852,9 @@ public class GnollGeomancer extends Mob {
 
 		@Override
 		public void affectCell(int cell) {
-			if (Dungeon.level.map[cell] != Terrain.EMPTY_SP && Random.Int(3) == 0) {
+			if (Dungeon.level.map[cell] != Terrain.EMPTY_SP
+					&& !Dungeon.level.adjacent(cell, Dungeon.level.entrance())
+					&& Random.Int(3) == 0) {
 				Level.set(cell, Terrain.MINE_BOULDER);
 				GameScene.updateMap(cell);
 			}

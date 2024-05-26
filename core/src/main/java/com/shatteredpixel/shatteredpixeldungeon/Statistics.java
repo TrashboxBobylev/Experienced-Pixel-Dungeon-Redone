@@ -209,8 +209,8 @@ public class Statistics {
 		ankhsUsed		= bundle.getInt( ANKHS );
 
 		progressScore   = bundle.getInt( PROG_SCORE );
-		heldItemValue   = bundle.getInt( ITEM_VAL );
-		treasureScore   = bundle.getInt( TRES_SCORE );
+		heldItemValue   = bundle.getLong( ITEM_VAL );
+		treasureScore   = bundle.getLong( TRES_SCORE );
 		floorsExplored.clear();
 		for (int i = 1; i < 26; i++){
 			if (bundle.contains( FLR_EXPL+i )){
@@ -226,7 +226,8 @@ public class Statistics {
 		totalQuestScore = bundle.getInt( TOT_QUEST );
 		winMultiplier   = bundle.getFloat( WIN_MULT );
 		chalMultiplier  = bundle.getFloat( CHAL_MULT );
-		totalScore      = bundle.getInt( TOTAL_SCORE );
+		cycleMultiplier = bundle.getFloat( CYCLE_MULT);
+		totalScore      = bundle.getLong( TOTAL_SCORE );
 		
 		upgradesUsed    = bundle.getInt( UPGRADES );
 		sneakAttacks    = bundle.getInt( SNEAKS );

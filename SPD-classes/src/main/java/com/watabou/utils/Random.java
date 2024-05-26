@@ -92,6 +92,11 @@ public class Random {
 		return min + ((Float(max - min) + Float(max - min))/2f);
 	}
 
+	//returns a uniformly distributed int in the range [-2^31, 2^31)
+	public static synchronized int Int() {
+		return generators.peek().nextInt();
+	}
+
 	//returns a uniformly distributed double in the range [0, 1)
 	public static synchronized double Double() {
 		return generators.peek().nextDouble();
@@ -129,8 +134,20 @@ public class Random {
 	}
 
 	//returns a triangularly distributed int in the range [min, max]
+	//this makes results more likely as they get closer to the middle of the range
 	public static int NormalIntRange( int min, int max ) {
 		return min + (int)((Float() + Float()) * (max - min + 1) / 2f);
+	}
+
+	//returns an inverse triangularly distributed int in the range [min, max]
+	//this makes results more likely as they get further from the middle of the range
+	public static int InvNormalIntRange( int min, int max ){
+		float roll1 = Float(), roll2 = Float();
+		if (Math.abs(roll1-0.5f) >= Math.abs(roll2-0.5f)){
+			return min + (int)(roll1*(max - min + 1));
+		} else {
+			return min + (int)(roll2*(max - min + 1));
+		}
 	}
 
 	//returns a uniformly distributed long in the range [-2^63, 2^63)
@@ -138,10 +155,11 @@ public class Random {
 		return generators.peek().nextLong();
 	}
 
-	//returns a uniformly distributed long in the range [0, max)
+	//returns a mostly uniformly distributed long in the range [0, max)
 	public static long Long( long max ) {
 		long result = Long();
 		if (result < 0) result += Long.MAX_VALUE;
+		//modulo isn't perfect, but as long as max is reasonably below 2^63 it's close enough
 		return result % max;
 	}
 
@@ -157,6 +175,17 @@ public class Random {
 	//returns a triangularly distributed int in the range [min, max]
 	public static long NormalLongRange( long min, long max ) {
 		return min + (int)((Float() + Float()) * (max - min + 1) / 2f);
+	}
+
+	//returns an inverse triangularly distributed int in the range [min, max]
+	//this makes results more likely as they get further from the middle of the range
+	public static long InvNormalLongRange( long min, long max ){
+		float roll1 = Float(), roll2 = Float();
+		if (Math.abs(roll1-0.5f) >= Math.abs(roll2-0.5f)){
+			return min + (int)(roll1*(max - min + 1));
+		} else {
+			return min + (int)(roll2*(max - min + 1));
+		}
 	}
 
 	//returns an index from chances, the probability of each index is the weight values in changes

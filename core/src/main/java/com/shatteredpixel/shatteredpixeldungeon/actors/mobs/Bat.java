@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.watabou.utils.Random;
 
 public class Bat extends Mob {
 
@@ -81,13 +80,13 @@ public class Bat extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(50, 65);
-            case 2: return Random.NormalIntRange(240, 312);
-            case 3: return Random.NormalIntRange(800, 1100);
-            case 4: return Random.NormalIntRange(14000, 25000);
-			case 5: return Random.NormalIntRange(1000000, 2150000);
+            case 1: return Char.combatRoll(50, 65);
+            case 2: return Char.combatRoll(240, 312);
+            case 3: return Char.combatRoll(800, 1100);
+            case 4: return Char.combatRoll(14000, 25000);
+			case 5: return Char.combatRoll(1000000, 2150000);
         }
-		return Random.NormalIntRange( 5, 18 );
+		return Char.combatRoll( 5, 18 );
 	}
 	
 	@Override
@@ -103,15 +102,15 @@ public class Bat extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(13, 28);
-            case 2: return Random.NormalIntRange(70, 170);
-            case 3: return Random.NormalIntRange(500, 700);
-            case 4: return Random.NormalIntRange(8000, 16000);
-			case 5: return Random.NormalIntRange(650000, 1250000);
+            case 1: return Char.combatRoll(13, 28);
+            case 2: return Char.combatRoll(70, 170);
+            case 3: return Char.combatRoll(500, 700);
+            case 4: return Char.combatRoll(8000, 16000);
+			case 5: return Char.combatRoll(650000, 1250000);
         }
-		return Random.NormalIntRange(0, 4);
+		return Char.combatRoll(0, 4);
 	}
 	
 	@Override

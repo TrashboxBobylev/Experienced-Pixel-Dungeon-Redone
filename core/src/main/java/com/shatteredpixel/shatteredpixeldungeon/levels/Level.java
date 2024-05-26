@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
@@ -187,17 +188,19 @@ public abstract class Level implements Bundlable {
 				Dungeon.LimitedDrops.ARCANE_STYLI.count++;
 				addItemToSpawn( new Stylus() );
 			}
-			//one scroll of transmutation is guaranteed to spawn somewhere on chapter 2-4
-			int enchChapter = (int)((Dungeon.seed / 10) % 3) + 1;
-			if ( Dungeon.depth / 5 == enchChapter &&
-					Dungeon.seed % 4 + 1 == Dungeon.depth % 5){
+			if ( Dungeon.enchStoneNeeded() ){
+				Dungeon.LimitedDrops.ENCH_STONE.drop();
 				addItemToSpawn( new StoneOfEnchantment() );
 			}
-			
-			if ( Dungeon.depth == ((Dungeon.seed % 3) + 1)){
+			if ( Dungeon.intStoneNeeded() ){
+				Dungeon.LimitedDrops.INT_STONE.drop();
 				addItemToSpawn( new StoneOfIntuition() );
 			}
-			
+			if ( Dungeon.trinketCataNeeded() ){
+				Dungeon.LimitedDrops.TRINKET_CATA.drop();
+				addItemToSpawn( new TrinketCatalyst());
+			}
+
 			if (Dungeon.depth > 1) {
 				//50% chance of getting a level feeling
 				//~7.15% chance for each feeling
@@ -226,6 +229,15 @@ public abstract class Level implements Bundlable {
 					case 6:
 						feeling = Feeling.SECRETS;
 						break;
+					default:
+						//if-else statements are fine here as only one chance can be above 0 at a time
+						if (Random.Float() < MossyClump.overrideNormalLevelChance()){
+							feeling = MossyClump.getNextFeeling();
+						} else if (Random.Float() < TrapMechanism.overrideNormalLevelChance()) {
+							feeling = TrapMechanism.getNextFeeling();
+						} else {
+							feeling = Feeling.NONE;
+						}
 				}
 			}
 		}
@@ -474,7 +486,9 @@ if (bundle.contains( "respawner" )){
 		for (LevelTransition transition : transitions){
 			//if we don't specify a type, prefer to return any entrance
 			if (type == null &&
-					(transition.type == LevelTransition.Type.REGULAR_ENTRANCE || transition.type == LevelTransition.Type.SURFACE)){
+					(transition.type == LevelTransition.Type.REGULAR_ENTRANCE
+							|| transition.type == LevelTransition.Type.BRANCH_ENTRANCE
+							|| transition.type == LevelTransition.Type.SURFACE)){
 				return transition;
 			} else if (transition.type == type){
 				return transition;
@@ -668,20 +682,21 @@ if (bundle.contains( "respawner" )){
 	}
 
 	public float respawnCooldown(){
-		float respawn_timer = Dungeon.getRespawnTimer();
+		float cooldown;
 		if (Statistics.amuletObtained){
 			if (Dungeon.depth == 1){
 				//very fast spawns on floor 1! 0/2/4/6/8/10/12, etc.
-				return (Dungeon.level.mobCount()) * (respawn_timer / 25f);
+				cooldown = (Dungeon.level.mobCount()) * (Dungeon.getRespawnTimer() / 25f);
 			} else {
 				//respawn time is 5/5/10/15/20/25/25, etc.
-				return Math.round(GameMath.gate( respawn_timer/10f, Dungeon.level.mobCount() * (TIME_TO_RESPAWN / 10f), TIME_TO_RESPAWN / 2f));
+				cooldown = Math.round(GameMath.gate( Dungeon.getRespawnTimer()/10f, Dungeon.level.mobCount() * (Dungeon.getRespawnTimer() / 10f), Dungeon.getRespawnTimer() / 2f));
 			}
 		} else if (Dungeon.level.feeling == Feeling.DARK){
-			return 2* respawn_timer /3f;
+			cooldown = 2* Dungeon.getRespawnTimer() /3f;
 		} else {
-			return respawn_timer;
+			cooldown = TIME_TO_RESPAWN;
 		}
+		return cooldown / DimensionalSundial.spawnMultiplierAtCurrentTime();
 	}
 
 	public boolean spawnMob(int disLimit){
@@ -748,6 +763,14 @@ if (bundle.contains( "respawner" )){
 			return null;
 
 		if (match == null){
+			//if we have a trinket catalyst, always return that first
+			for (Item item : itemsToSpawn){
+				if (item instanceof TrinketCatalyst){
+					itemsToSpawn.remove(item);
+					return item;
+				}
+			}
+
 			Item item = Random.element(itemsToSpawn);
 			itemsToSpawn.remove(item);
 			return item;
@@ -1235,11 +1258,14 @@ if (bundle.contains( "respawner" )){
 			if (blocking == null){
 				blocking = Dungeon.level.losBlocking;
 			}
+
+			float viewDist = c.viewDistance;
+			if (c instanceof Hero){
+				viewDist *= 1f + 0.25f*((Hero) c).pointsInTalent(Talent.FARSIGHT);
+				viewDist *= EyeOfNewt.visionRangeMultiplier();
+			}
 			
-			int viewDist = c.viewDistance;
-			if (c instanceof Hero && ((Hero) c).isSubclass(HeroSubClass.SNIPER)) viewDist *= 1.5f;
-			
-			ShadowCaster.castShadow( cx, cy, fieldOfView, blocking, viewDist );
+			ShadowCaster.castShadow( cx, cy, width(), fieldOfView, blocking, Math.round(viewDist) );
 		} else {
 			BArray.setFalse(fieldOfView);
 		}
@@ -1301,20 +1327,34 @@ if (bundle.contains( "respawner" )){
 			}
 
 			Dungeon.hero.mindVisionEnemies.clear();
+			boolean stealthyMimics = MimicTooth.stealthyMimics();
 			if (c.buff( MindVision.class ) != null) {
 				for (Mob mob : mobs) {
+					if (stealthyMimics && mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL){
+						continue;
+					}
 					for (int i : PathFinder.NEIGHBOURS9) {
 						heroMindFov[mob.pos + i] = true;
 					}
 				}
-			} else if (Dungeon.hero.heroClass == HeroClass.HUNTRESS) {
-				Hero h = (Hero) c;
-				int range = 3;
-				for (Mob mob : mobs) {
-					int p = mob.pos;
-					if (!fieldOfView[p] && distance(c.pos, p) <= range) {
-						for (int i : PathFinder.NEIGHBOURS9) {
-							heroMindFov[mob.pos + i] = true;
+			} else {
+
+				int mindVisRange = 0;
+				if (((Hero) c).hasTalent(Talent.HEIGHTENED_SENSES)){
+					mindVisRange = 1+((Hero) c).pointsInTalent(Talent.HEIGHTENED_SENSES);
+				}
+				mindVisRange = Math.max(mindVisRange, EyeOfNewt.mindVisionRange());
+
+				if (mindVisRange >= 1) {
+					for (Mob mob : mobs) {
+						if (stealthyMimics && mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL) {
+							continue;
+						}
+						int p = mob.pos;
+						if (!fieldOfView[p] && distance(c.pos, p) <= mindVisRange) {
+							for (int i : PathFinder.NEIGHBOURS9) {
+								heroMindFov[mob.pos + i] = true;
+							}
 						}
 					}
 				}
@@ -1442,6 +1482,7 @@ if (bundle.contains( "respawner" )){
 			case Terrain.OPEN_DOOR:
 				return Messages.get(Level.class, "open_door_name");
 			case Terrain.ENTRANCE:
+			case Terrain.ENTRANCE_SP:
 				return Messages.get(Level.class, "entrace_name");
 			case Terrain.EXIT:
 				return Messages.get(Level.class, "exit_name");
@@ -1489,6 +1530,7 @@ if (bundle.contains( "respawner" )){
 			case Terrain.WATER:
 				return Messages.get(Level.class, "water_desc");
 			case Terrain.ENTRANCE:
+			case Terrain.ENTRANCE_SP:
 				return Messages.get(Level.class, "entrance_desc");
 			case Terrain.EXIT:
 			case Terrain.UNLOCKED_EXIT:

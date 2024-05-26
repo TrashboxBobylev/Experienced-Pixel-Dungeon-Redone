@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.GuardSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
-import com.watabou.utils.Random;
 
 public class Guard extends Mob {
 
@@ -95,13 +94,13 @@ public class Guard extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(40, 57);
-            case 2: return Random.NormalIntRange(200, 278);
-            case 3: return Random.NormalIntRange(725, 987);
-            case 4: return Random.NormalIntRange(11000, 18000);
-			case 5: return Random.NormalIntRange(700000, 1600000);
+            case 1: return Char.combatRoll(40, 57);
+            case 2: return Char.combatRoll(200, 278);
+            case 3: return Char.combatRoll(725, 987);
+            case 4: return Char.combatRoll(11000, 18000);
+			case 5: return Char.combatRoll(700000, 1600000);
         }
-		return Random.NormalIntRange(4, 12);
+		return Char.combatRoll(4, 12);
 	}
 
 	private boolean chain(int target){
@@ -180,15 +179,15 @@ public class Guard extends Mob {
 	}
 
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(15, 30);
-            case 2: return Random.NormalIntRange(120, 198);
-            case 3: return Random.NormalIntRange(500, 780);
-            case 4: return Random.NormalIntRange(9000, 13000);
-			case 5: return Random.NormalIntRange(450000, 925000);
+            case 1: return Char.combatRoll(15, 30);
+            case 2: return Char.combatRoll(120, 198);
+            case 3: return Char.combatRoll(500, 780);
+            case 4: return Char.combatRoll(9000, 13000);
+			case 5: return Char.combatRoll(450000, 925000);
         }
-		return Random.NormalIntRange(0, 7);
+		return Char.combatRoll(0, 7);
 	}
 
 	@Override

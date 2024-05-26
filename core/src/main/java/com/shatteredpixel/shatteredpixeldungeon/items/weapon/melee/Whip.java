@@ -111,6 +111,8 @@ public class Whip extends MeleeWeapon {
 			@Override
 			public void call() {
 				beforeAbilityUsed(hero, finalClosest);
+				//+(2+0.5*lvl) damage, roughly +20% base damage, +25% scaling
+				long dmgBoost = augment.damageFactor(2 + Math.round(0.5d*buffedLvl()));
 				for (Char ch : targets) {
 					hero.attack(ch, 0.8f, 0, 1f);
 					if (!ch.isAlive()){
@@ -125,4 +127,13 @@ public class Whip extends MeleeWeapon {
 		});
 	}
 
+	@Override
+	public String abilityInfo() {
+		int dmgBoost = levelKnown ? 2 + Math.round(0.5f*buffedLvl()) : 2;
+		if (levelKnown){
+			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+		} else {
+			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+		}
+	}
 }

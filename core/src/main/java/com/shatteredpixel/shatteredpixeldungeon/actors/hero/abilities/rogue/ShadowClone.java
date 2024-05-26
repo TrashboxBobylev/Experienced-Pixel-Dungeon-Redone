@@ -205,7 +205,7 @@ public class ShadowClone extends ArmorAbility {
 
 		@Override
 		public long damageRoll() {
-			long damage = Random.NormalIntRange(10, 20);
+			long damage = Char.combatRoll(10, 20);
 			long heroDamage = Dungeon.hero.damageRoll();
 			heroDamage /= Dungeon.hero.attackDelay(); //normalize hero damage based on atk speed
 			heroDamage = Math.round(0.08f * Dungeon.hero.pointsInTalent(Talent.SHADOW_BLADE) * heroDamage);

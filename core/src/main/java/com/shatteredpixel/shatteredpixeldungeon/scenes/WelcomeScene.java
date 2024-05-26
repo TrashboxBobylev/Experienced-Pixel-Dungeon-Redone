@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
 import com.watabou.noosa.Game;
 import com.watabou.utils.FileUtils;
@@ -92,6 +93,10 @@ public class WelcomeScene extends PixelScene {
 				Game.reportException( new RuntimeException("Rankings Updating Failed!",e));
 			}
 			Dungeon.daily = Dungeon.dailyReplay = false;
+
+			if (previousVersion <= ShatteredPixelDungeon.v2_3_2){
+				Document.ADVENTURERS_GUIDE.findPage(Document.GUIDE_ALCHEMY);
+			}
 
 			Badges.saveGlobal(true);
 			Journal.saveGlobal(true);

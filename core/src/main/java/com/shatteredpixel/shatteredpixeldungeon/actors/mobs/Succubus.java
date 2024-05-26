@@ -101,13 +101,13 @@ public class Succubus extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(80, 101);
-            case 2: return Random.NormalIntRange(420, 533);
-            case 3: return Random.NormalIntRange(2300, 3170);
-            case 4: return Random.NormalIntRange(170000, 250000);
-			case 5: return Random.NormalIntRange(7000000, 10000000);
+            case 1: return Char.combatRoll(80, 101);
+            case 2: return Char.combatRoll(420, 533);
+            case 3: return Char.combatRoll(2300, 3170);
+            case 4: return Char.combatRoll(170000, 250000);
+			case 5: return Char.combatRoll(7000000, 10000000);
         }
-		return Random.NormalIntRange( 25, 30 );
+		return Char.combatRoll( 25, 30 );
 	}
 	
 	@Override
@@ -209,15 +209,15 @@ public class Succubus extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(40, 63);
-            case 2: return Random.NormalIntRange(150, 300);
-            case 3: return Random.NormalIntRange(1500, 2400);
-            case 4: return Random.NormalIntRange(135000, 190000);
-			case 5: return Random.NormalIntRange(4750000, 8500000);
+            case 1: return Char.combatRoll(40, 63);
+            case 2: return Char.combatRoll(150, 300);
+            case 3: return Char.combatRoll(1500, 2400);
+            case 4: return Char.combatRoll(135000, 190000);
+			case 5: return Char.combatRoll(4750000, 8500000);
         }
-		return Random.NormalIntRange(0, 10);
+		return Char.combatRoll(0, 10);
 	}
 
 	@Override

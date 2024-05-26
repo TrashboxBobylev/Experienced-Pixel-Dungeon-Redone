@@ -91,13 +91,13 @@ public class Golem extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Random.NormalIntRange(69, 96);
-            case 2: return Random.NormalIntRange(300, 519);
-            case 3: return Random.NormalIntRange(1900, 2650);
-            case 4: return Random.NormalIntRange(65000, 180000);
-			case 5: return Random.NormalIntRange(6000000, 9000000);
+            case 1: return Char.combatRoll(69, 96);
+            case 2: return Char.combatRoll(300, 519);
+            case 3: return Char.combatRoll(1900, 2650);
+            case 4: return Char.combatRoll(65000, 180000);
+			case 5: return Char.combatRoll(6000000, 9000000);
         }
-		return Random.NormalIntRange( 25, 30 );
+		return Char.combatRoll( 25, 30 );
 	}
 	
 	@Override
@@ -113,15 +113,15 @@ public class Golem extends Mob {
 	}
 	
 	@Override
-	public int cycledDrRoll() {
+	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(40, 68);
-            case 2: return Random.NormalIntRange(160, 333);
-            case 3: return Random.NormalIntRange(1100, 1800);
-            case 4: return Random.NormalIntRange(70000, 125000);
-			case 5: return Random.NormalIntRange(3900000, 7000000);
+            case 1: return Char.combatRoll(40, 68);
+            case 2: return Char.combatRoll(160, 333);
+            case 3: return Char.combatRoll(1100, 1800);
+            case 4: return Char.combatRoll(70000, 125000);
+			case 5: return Char.combatRoll(3900000, 7000000);
         }
-		return Random.NormalIntRange(0, 12);
+		return Char.combatRoll(0, 12);
 	}
 
 	@Override

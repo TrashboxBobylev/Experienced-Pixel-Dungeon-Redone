@@ -36,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.traits.PreparationAllowed;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.utils.Random;
 
 public class FantasmalStabber extends BlacksmithWeapon implements PreparationAllowed {
     {
@@ -84,7 +83,7 @@ public class FantasmalStabber extends BlacksmithWeapon implements PreparationAll
             if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
                 //deals 50% toward max to max on surprise, instead of min to max.
                 long diff = max() - min();
-                long damage = augment.damageFactor(Random.NormalLongRange(
+                long damage = augment.damageFactor(Char.combatRoll(
                         min() + Math.round(diff*0.50f),
                         max()));
                 int exStr = hero.STR() - STRReq();
@@ -108,6 +107,6 @@ public class FantasmalStabber extends BlacksmithWeapon implements PreparationAll
 
     @Override
     protected void duelistAbility(Hero hero, Integer target) {
-        Dagger.sneakAbility(hero, target, 10, this);
+        Dagger.sneakAbility(hero, target, 10, 2,this);
     }
 }

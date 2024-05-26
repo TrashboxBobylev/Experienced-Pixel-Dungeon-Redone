@@ -139,10 +139,16 @@ abstract public class ClassArmor extends Armor {
 		if (armor.seal != null) {
 			classArmor.seal = armor.seal;
 		}
+		classArmor.glyphHardened = armor.glyphHardened;
 		classArmor.cursed = armor.cursed;
 		classArmor.curseInfusionBonus = armor.curseInfusionBonus;
 		classArmor.masteryPotionBonus = armor.masteryPotionBonus;
-		classArmor.identify();
+		if (armor.levelKnown && armor.cursedKnown) {
+			classArmor.identify();
+		} else {
+			classArmor.levelKnown = armor.levelKnown;
+			classArmor.cursedKnown = true;
+		}
 
 		classArmor.charge = 50;
 		
@@ -289,7 +295,12 @@ abstract public class ClassArmor extends Armor {
 									inscribe(armor.glyph);
 								}
 
-								identify();
+								if (armor.levelKnown && armor.cursedKnown) {
+									identify();
+								} else {
+									levelKnown = armor.levelKnown;
+									cursedKnown = true;
+								}
 
 								GLog.p( Messages.get(ClassArmor.class, "transfer_complete") );
 								hero.sprite.operate(hero.pos);
@@ -324,12 +335,7 @@ abstract public class ClassArmor extends Armor {
 
 		return desc;
 	}
-	
-	@Override
-	public boolean isIdentified() {
-		return true;
-	}
-	
+
 	@Override
 	public long value() {
 		return 0;

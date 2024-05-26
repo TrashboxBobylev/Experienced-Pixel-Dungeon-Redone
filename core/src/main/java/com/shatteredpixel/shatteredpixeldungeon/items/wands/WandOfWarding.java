@@ -299,7 +299,7 @@ public class WandOfWarding extends Wand {
 		public long drRoll() {
 			long dr = super.drRoll();
 			if (tier > 3){
-				return dr + Math.round(Random.NormalIntRange(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
+				return dr + Math.round(Char.combatRoll(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
 			} else {
 				return dr;
 			}

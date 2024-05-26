@@ -186,7 +186,12 @@ public class SmokeBomb extends ArmorAbility {
 
 		@Override
 		public long drRoll() {
-			return 0;
+			long dr = super.drRoll();
+
+			dr += Char.combatRoll(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
+					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
+
+			return dr;
 		}
 
 		{

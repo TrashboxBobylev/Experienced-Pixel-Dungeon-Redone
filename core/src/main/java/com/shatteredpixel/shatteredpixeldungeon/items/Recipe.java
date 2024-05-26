@@ -27,20 +27,17 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -161,48 +158,49 @@ public abstract class Recipe {
 		new ExoticPotion.PotionToExotic(),
 		new ExoticScroll.ScrollToExotic(),
 		new ArcaneResin.Recipe(),
-		new Alchemize.Recipe(),
-		new StewedMeat.oneMeat()
+		new BlizzardBrew.Recipe(),
+		new InfernalBrew.Recipe(),
+		new AquaBrew.Recipe(),
+		new ShockingBrew.Recipe(),
+		new ElixirOfDragonsBlood.Recipe(),
+		new ElixirOfIcyTouch.Recipe(),
+		new ElixirOfToxicEssence.Recipe(),
+		new ElixirOfMight.Recipe(),
+		new ElixirOfFeatherFall.Recipe(),
+//		new MagicalInfusion.Recipe(),
+		new BeaconOfReturning.Recipe(),
+		new PhaseShift.Recipe(),
+		new Recycle.Recipe(),
+		new TelekineticGrab.Recipe(),
+		new SummonElemental.Recipe(),
+		new StewedMeat.oneMeat(),
+		new TrinketCatalyst.Recipe(),
+		new Trinket.UpgradeTrinket()
 	};
 	
 	private static Recipe[] twoIngredientRecipes = new Recipe[]{
 		new Blandfruit.CookFruit(),
 		new Bomb.EnhanceBomb(),
-		new AlchemicalCatalyst.Recipe(),
-		new ArcaneCatalyst.Recipe(),
+		new UnstableBrew.Recipe(),
+		new CausticBrew.Recipe(),
 		new ElixirOfArcaneArmor.Recipe(),
 		new ElixirOfAquaticRejuvenation.Recipe(),
-		new ElixirOfDragonsBlood.Recipe(),
-		new ElixirOfIcyTouch.Recipe(),
-		new ElixirOfMight.Recipe(),
 		new ElixirOfHoneyedHealing.Recipe(),
-		new ElixirOfToxicEssence.Recipe(),
-		new BlizzardBrew.Recipe(),
-		new InfernalBrew.Recipe(),
-		new ShockingBrew.Recipe(),
-		new CausticBrew.Recipe(),
-		new AquaBlast.Recipe(),
-		new BeaconOfReturning.Recipe(),
+		new UnstableSpell.Recipe(),
+		new Alchemize.Recipe(),
 		new CurseInfusion.Recipe(),
-		new FeatherFall.Recipe(),
-		new MagicalPorter.Recipe(),
-		new PhaseShift.Recipe(),
 		new ReclaimTrap.Recipe(),
-		new Recycle.Recipe(),
 		new WildEnergy.Recipe(),
-		new TelekineticGrab.Recipe(),
-		new SummonElemental.Recipe(),
-		new CheeseChunk.oneMeat(),
-		new StewedMeat.twoMeat()
+		new StewedMeat.twoMeat(),
+		new FireBooster.Recipe(),
+		new RespawnBooster.Recipe(),
+		new Vampirism.Recipe()
 	};
 	
 	private static Recipe[] threeIngredientRecipes = new Recipe[]{
 		new Potion.SeedToPotion(),
 		new StewedMeat.threeMeat(),
 		new MeatPie.Recipe(),
-        new Vampirism.Recipe(),
-        new RespawnBooster.Recipe(),
-        new FireBooster.Recipe(),
 		new WandOfEarthblast.Recipe()
 	};
 	
