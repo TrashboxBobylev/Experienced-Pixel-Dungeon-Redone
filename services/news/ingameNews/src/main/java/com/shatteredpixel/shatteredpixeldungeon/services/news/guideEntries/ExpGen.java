@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 public class ExpGen extends NewsArticle {
     {
         title = Messages.get(this, "title");
-        icon = "ITEM: 426";
+        icon = "ITEM: 430";
         summary = Messages.get(this, "summary");
     }
 }
