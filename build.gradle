@@ -17,7 +17,7 @@ allprojects {
         appPackageName = 'com.trashboxbobylev.experiencedpixeldungeon.redone'
 
         appVersionCode = 510
-        appVersionName = 'ExpPD-2.18'
+        appVersionName = 'ExpPD-2.18.0'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
