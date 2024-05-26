@@ -46,6 +46,7 @@ public class Hook extends NPC {
     {
         spriteClass = HookSprite.class;
         properties.add(Property.IMMOVABLE);
+        properties.add(Property.STATIC);
     }
 
     @Override
