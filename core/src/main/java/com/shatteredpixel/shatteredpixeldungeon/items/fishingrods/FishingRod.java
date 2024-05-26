@@ -137,7 +137,7 @@ public abstract class FishingRod extends Item {
                         hook.tries = fishingStrength();
                         hook.power = (int) fishingPower();
                         GameScene.add(hook);
-                        ScrollOfTeleportation.appear(hook, target);
+                        ScrollOfTeleportation.appear(hook, hooking.collisionPos);
                         defaultAction = AC_UNCAST;
                     }
                 });
