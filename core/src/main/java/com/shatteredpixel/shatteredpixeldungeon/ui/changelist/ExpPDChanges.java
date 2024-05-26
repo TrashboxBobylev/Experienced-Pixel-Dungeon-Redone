@@ -62,7 +62,60 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.17.2", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.18", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released May 26th, 2024\n" +
+                            "_-_ 45 days after Experienced Pixel Dungeon 2.17.2"));
+            changes.addButton( new ChangeButton(Icons.SHPX.get(), "ShPD content",
+                "Implemented Shattered's 2.4.1, with following additions:\n\n" +
+                        "_-_ Combat rolls use 64-bit numbers, both normal and inversed normal.\n" +
+                        "_-_ Changed Experienced's alchemy items to fit for alchemy overhaul.\n" +
+                        "_-_ Changed Experienced's new and changed weapons to fit for duelist overhaul.\n" +
+                        "_-_ Black Mimic and related content is now called Darkened Mimic to account for Shattered's addition of ebony mimics.\n" +
+                        "_-_ Experienced's Rat Skull is now called Remorphed Rat Skull to account for Shattered's addition of rat skull trinket."));
+            changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                    "_-_ Buffed war hammers:\n" +
+                            "   _-_ increased attack speed from 0.4 to 0.5\n" +
+                            "   _-_ changed pitch to have intended effect\n" +
+                            "   _-_ reduced attacker's max paralysis duration by 1 turn\n" +
+                            "_-_ Changed OOF Thieves:\n" +
+                            "   _-_ decreased stealing counter constant from 3 to 4 (should steal slower now)\n" +
+                            "   _-_ added a tip on how to recover stolen items\n" +
+                            "_-_ Reduced upgrade scaling on Sai and Scimitar duelist abilities by 99.6%\n" +
+                            "_-_ Reduced amount of weapon charges used by Blacksmith weapons from 3 to 2\n" +
+                            "_-_ Increased amount of gold given by Scroll of Midas by ~3x\n" +
+                            "_-_ Reduced Fate Lock's stat increase modifier from 1.16x to 1.12x\n" +
+                            "_-_ Decreased amount of rerolls on burning Lucky Bags from 3 to 2\n" +
+                            "_-_ Telekinetic Grab now grabs stuff in 3x3"
+            ));
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Inter-level teleports are no longer allowed in Experienced's subworlds\n" +
+                            "_-_ Tweaked desktop inventory:\n" +
+                            "   _-_ gold and energy are now at the bottom to give them more space\n" +
+                            "   _-_ added button for Incredibly Cheesy Cheest\n" +
+                            "_-_ Tweaked score multipliers:\n" +
+                            "   _-_ increased max progression score from 250k to 600k\n" +
+                            "   _-_ treasure score is now divided by 1000, but increased max treasure score from 100k to 1000k\n" +
+                            "_-_ Cycles can now be seen on save loading screen\n" +
+                            "_-_ The \"city\" entrance in Darkened Mimic's arena now leads up as well"
+            ));
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed fishing hook going inside walls instead of ground\n" +
+                            "_-_ Fixed grandmaster gold collecting badge to be properly larger than preceding badges\n" +
+                            "_-_ Fixed Broken Enderium Blade and Energite Bottle costing nothing\n" +
+                            "_-_ Fixed Scroll of Midas affecting fishing hook\n" +
+                            "_-_ Fixed run statistics saving as 64-bit numbers, but loading as 32-bit numbers\n" +
+                            "_-_ Fixed treasure bags using as much turns as picking up all items in them individually\n" +
+                            "_-_ Fixed cycle's score multiplier not being loaded in rankings after the first time\n" +
+                            "_-_ Fixed fate lock taking more HP than asked by code and pseudo-killing player\n" +
+                            "_-_ Fixed war hammers stunning player for infinite amount of time\n" +
+                            "_-_ Fixed prices for all Blacksmith's rewards only scaling from amount of reforges"
+            ));
+
+
+            changes = new ChangeInfo("ExpPD-2.17.2", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
