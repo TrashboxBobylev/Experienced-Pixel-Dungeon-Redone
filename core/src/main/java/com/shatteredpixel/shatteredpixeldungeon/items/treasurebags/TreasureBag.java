@@ -75,6 +75,7 @@ public abstract class TreasureBag extends Item {
                     if (!item.doPickUp(hero, hero.pos, 0f)) {
                         Dungeon.level.drop(item, hero.pos).sprite.drop();
                     } else {
+                        hero.spend(-Item.TIME_TO_PICK_UP);
                         GLog.i(Messages.get(Hero.class, "you_now_have", item.name()));
                     }
                 }
