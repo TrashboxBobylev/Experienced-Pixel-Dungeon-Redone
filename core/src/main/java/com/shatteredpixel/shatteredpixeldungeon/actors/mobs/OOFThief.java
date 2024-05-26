@@ -192,7 +192,7 @@ public class OOFThief extends Mob {
 		return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
 	}
 
-	private static final int STEAL_COUNT = 3;
+	private static final int STEAL_COUNT = 4;
 
 	@Override
 	public long attackProc( Char enemy, long damage ) {
