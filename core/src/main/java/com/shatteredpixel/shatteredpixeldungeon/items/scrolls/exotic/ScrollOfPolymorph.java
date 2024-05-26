@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -54,7 +55,7 @@ public class ScrollOfPolymorph extends ExoticScroll {
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
 			if (mob.alignment != ALLY && Dungeon.level.heroFOV[mob.pos]) {
 				if (!mob.properties().contains(Char.Property.BOSS)
-						&& !mob.properties().contains(Char.Property.MINIBOSS)){
+						&& !mob.properties().contains(Char.Property.MINIBOSS) && !(mob instanceof Hook)){
 
 					mob.EXP = 0;
 					mob.alignment = ALLY;
