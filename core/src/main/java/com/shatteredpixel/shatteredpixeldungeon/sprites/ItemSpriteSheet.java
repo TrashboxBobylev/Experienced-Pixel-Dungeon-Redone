@@ -792,7 +792,7 @@ public class ItemSpriteSheet {
 	public static final int OSMIRIDIUM = QUEST+10;
 	public static final int ENDERIUM = QUEST+11;
 	public static final int ENERGITE = QUEST+12;
-	public static final int SKULL = QUEST+10;
+	public static final int SKULL = QUEST+0;
 	static{
 		assignItemRect(DUST,    12, 11);
 		assignItemRect(CANDLE,  12, 12);
