@@ -80,7 +80,7 @@ public class RespawnBooster extends Spell{
 
         {
             inputs =  new Class[]{PotionOfExperience.class, CurseInfusion.class};
-            inQuantity = new int[]{1, 1, 1};
+            inQuantity = new int[]{1, 1};
 
             cost = 33;
 
