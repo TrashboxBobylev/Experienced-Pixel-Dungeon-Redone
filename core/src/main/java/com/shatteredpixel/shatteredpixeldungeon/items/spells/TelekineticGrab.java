@@ -93,23 +93,25 @@ public class TelekineticGrab extends TargetedSpell {
 				int cell = bolt.collisionPos + n;
 
 				Heap h = Dungeon.level.heaps.get(cell);
+				if (h != null) {
 
-				if (h.type != Heap.Type.HEAP){
-					GLog.w(Messages.get(this, "cant_grab"));
-					h.sprite.drop();
-					continue;
-				}
-
-				while (!h.isEmpty()) {
-					Item item = h.peek();
-					if (item.doPickUp(hero, h.pos)) {
-						h.pickUp();
-						hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
-						GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
-					} else {
+					if (h.type != Heap.Type.HEAP) {
 						GLog.w(Messages.get(this, "cant_grab"));
 						h.sprite.drop();
-                    }
+						continue;
+					}
+
+					while (!h.isEmpty()) {
+						Item item = h.peek();
+						if (item.doPickUp(hero, h.pos)) {
+							h.pickUp();
+							hero.spend(-Item.TIME_TO_PICK_UP); //casting the spell already takes a turn
+							GLog.i(Messages.capitalize(Messages.get(hero, "you_now_have", item.name())));
+						} else {
+							GLog.w(Messages.get(this, "cant_grab"));
+							h.sprite.drop();
+						}
+					}
 				}
 			}
 
