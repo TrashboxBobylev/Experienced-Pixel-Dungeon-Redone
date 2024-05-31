@@ -702,7 +702,7 @@ public class ItemSpriteSheet {
 	static{
 		assignItemRect(PHASE_SHIFT,     12, 11);
 		assignItemRect(TELE_GRAB,       12, 11);
-		assignItemRect(WILD_ENERGY,      8, 16);
+		assignItemRect(WILD_ENERGY,     12, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
 
         assignItemRect(RESPAWN,         11, 11);
