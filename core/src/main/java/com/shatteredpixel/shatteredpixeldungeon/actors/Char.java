@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
@@ -722,6 +723,12 @@ public abstract class Char extends Actor {
 			dmg = (long) Math.ceil(dmg * buff.damageTakenFactor());
 		}
 
+		if (this instanceof Hero && Dungeon.isChallenged(Challenges.NO_ARMOR)){
+			LolEffect lol = Buff.affect(this, LolEffect.class);
+			lol.stacks++;
+			dmg = (long) Math.ceil(dmg * Math.pow(lol.stacks, 1.005));
+		}
+
 		Class<?> srcClass = src.getClass();
 		if (isImmune( srcClass )) {
 			dmg = 0;
@@ -903,6 +910,25 @@ public abstract class Char extends Actor {
 		NO_ARMOR_PHYSICAL_SOURCES.add(Heap.class); //damage from wraiths attempting to spawn from heaps
 		NO_ARMOR_PHYSICAL_SOURCES.add(Necromancer.SummoningBlockDamage.class);
 		NO_ARMOR_PHYSICAL_SOURCES.add(DriedRose.GhostHero.NoRoseDamage.class);
+	}
+
+	public static class LolEffect extends Buff {
+
+		public int stacks = 0;
+
+		public static String STACKS = "stacks";
+
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(STACKS, stacks);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			stacks = bundle.getInt(STACKS);
+		}
 	}
 
 	public void destroy() {
