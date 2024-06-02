@@ -66,6 +66,31 @@ public class ExpPDChanges {
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released June 02nd, 2024\n" +
+                            "_-_ 7 days after Experienced Pixel Dungeon 2.18"));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Increased refined lucky bag's chance from \"35%\" to \"60%\"\n" +
+                            "_-_ Increased Vampiric enchantment's healing by 4x and chance by 2x\n" +
+                            "_-_ Tweaked health bars to properly support 64-bit numbers\n" +
+                            "_-_ Significantly increased damage and protection stats of equipment in cycles, again\n" +
+                            "_-_ Added a new thing for Faith is my Armor"));
+
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed mob HP being capped at 32-bit limit\n" +
+                            "_-_ Fixed Ring of Tenacity being missing\n" +
+                            "_-_ Fixed incorrect item sprites from last update\n" +
+                            "_-_ Fixed crashes from Exotic Crystals trinket generating incorrect versions of scrolls\n" +
+                            "_-_ Fixed crash with Telekinetic Grab's lack of validity checks\n" +
+                            "_-_ Fixed Regrowth Slasher's ghosts being possible to cleanse\n" +
+                            "_-_ Fixed Experienced's spells not being possible to create\n" +
+                            "_-_ Fixed Cheese Chunk not being possible to create"));
+
+
+            changes = new ChangeInfo("ExpPD-2.18", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
                     "_-_ Released May 26th, 2024\n" +
                             "_-_ 45 days after Experienced Pixel Dungeon 2.17.2"));
             changes.addButton( new ChangeButton(Icons.SHPX.get(), "ShPD content",
