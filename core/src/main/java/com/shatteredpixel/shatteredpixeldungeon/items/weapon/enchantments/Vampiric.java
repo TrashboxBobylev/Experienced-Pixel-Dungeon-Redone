@@ -39,9 +39,9 @@ public class Vampiric extends Weapon.Enchantment {
 	@Override
 	public long proc( Weapon weapon, Char attacker, Char defender, long damage ) {
 		
-		//chance to heal scales from 5%-30% based on missing HP
+		//chance to heal scales from 10%-60% based on missing HP
 		double missingPercent = (attacker.HT - attacker.HP) / (double)attacker.HT;
-		double healChance = 0.05f + .25f*missingPercent;
+		double healChance = 0.1f + .5f*missingPercent;
 
 		healChance *= procChanceMultiplier(attacker);
 		
@@ -49,8 +49,8 @@ public class Vampiric extends Weapon.Enchantment {
 
 			double powerMulti = Math.max(1f, healChance);
 			
-			//heals for 50% of damage dealt
-			long healAmt = Math.round(damage * 0.5f * powerMulti);
+			//heals for 200% of damage dealt
+			long healAmt = Math.round(damage * 2f * powerMulti);
 			healAmt = Math.min( healAmt, attacker.HT - attacker.HP );
 			
 			if (healAmt > 0 && attacker.isAlive()) {
