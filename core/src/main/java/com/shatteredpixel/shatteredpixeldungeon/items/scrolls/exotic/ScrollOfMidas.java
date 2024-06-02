@@ -39,7 +39,7 @@ import com.watabou.utils.Random;
 
 import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Alignment.ALLY;
 
-public class ScrollOfPolymorph extends ExoticScroll {
+public class ScrollOfMidas extends ExoticScroll {
 	
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_METAMORPH;

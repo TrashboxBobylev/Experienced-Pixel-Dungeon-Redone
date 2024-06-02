@@ -59,7 +59,7 @@ public class BurntBag extends TreasureBag {
             if (lol > worstRoll) worstRoll = lol;
         }
 
-        if (worstRoll <= 0.35f)
+        if (worstRoll <= 0.60f)
             return new IdealBag();
         else
             return new BurntBag();

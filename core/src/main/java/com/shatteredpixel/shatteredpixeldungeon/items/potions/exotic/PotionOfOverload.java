@@ -27,7 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class PotionOfHolyFuror extends ExoticPotion {
+public class PotionOfOverload extends ExoticPotion {
 	
 	{
 		icon = ItemSpriteSheet.Icons.POTION_DIVINE;

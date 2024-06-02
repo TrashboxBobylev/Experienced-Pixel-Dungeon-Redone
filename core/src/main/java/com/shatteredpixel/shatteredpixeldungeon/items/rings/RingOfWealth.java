@@ -37,10 +37,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfOverload;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMidas;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.AlchemyBag;
@@ -91,11 +91,12 @@ public class RingOfWealth extends Ring {
 				do {
 					i = genConsumableDrop(level - 1);
 				} while (Challenges.isItemBlocked(i));
+				i.quantity(i.quantity()*2);
 				if (Dungeon.hero.perks.contains(Perks.Perk.FISHING_PRO) && Random.Int(4) == 0) i.quantity(i.quantity()*2);
 				drops.add(i);
 				dropsToRare--;
 			}
-			triesToDrop += Random.NormalIntRange(0, 20);
+			triesToDrop += Random.NormalIntRange(0, 15);
 		}
 		
 		return drops;
@@ -197,9 +198,9 @@ public class RingOfWealth extends Ring {
 			case 1:
 				return new StoneOfEnchantment();
 			case 2:
-				return Random.Float() < ExoticCrystals.consumableExoticChance() ? new PotionOfDivineInspiration() : new PotionOfExperience();
+				return Random.Float() < ExoticCrystals.consumableExoticChance() ? new PotionOfOverload() : new PotionOfExperience();
 			case 3:
-				return Random.Float() < ExoticCrystals.consumableExoticChance() ? new ScrollOfMetamorphosis() : new ScrollOfTransmutation();
+				return Random.Float() < ExoticCrystals.consumableExoticChance() ? new ScrollOfMidas() : new ScrollOfTransmutation();
             case 4:
                 return new AlchemyBag();
 		}

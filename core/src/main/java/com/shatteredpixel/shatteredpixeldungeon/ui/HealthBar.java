@@ -40,8 +40,8 @@ public class HealthBar extends Component {
 	private ColorBlock Shld;
 	private ColorBlock Hp;
 	
-	private float health;
-	private float shield;
+	private double health;
+	private double shield;
 	
 	@Override
 	protected void createChildren() {
@@ -68,24 +68,24 @@ public class HealthBar extends Component {
 		//logic here rounds up to the nearest pixel
 		float pixelWidth = width;
 		if (camera() != null) pixelWidth *= camera().zoom;
-		Shld.size( width * (float)Math.ceil(shield * pixelWidth)/pixelWidth, height );
-		Hp.size( width * (float)Math.ceil(health * pixelWidth)/pixelWidth, height );
+		Shld.size( (float)(width * Math.ceil(shield * pixelWidth)/pixelWidth), height );
+		Hp.size( (float)(width * Math.ceil(health * pixelWidth)/pixelWidth), height );
 	}
 	
-	public void level( float value ) {
+	public void level( double value ) {
 		level( value, 0f );
 	}
 
-	public void level( float health, float shield ){
+	public void level( double health, double shield ){
 		this.health = health;
 		this.shield = shield;
 		layout();
 	}
 
 	public void level(Char c){
-		float health = c.HP;
-		float shield = c.shielding();
-		float max = Math.max(health+shield, c.HT);
+		double health = c.HP;
+		double shield = c.shielding();
+		double max = Math.max(health+shield, c.HT);
 
 		level(health/max, (health+shield)/max);
 	}

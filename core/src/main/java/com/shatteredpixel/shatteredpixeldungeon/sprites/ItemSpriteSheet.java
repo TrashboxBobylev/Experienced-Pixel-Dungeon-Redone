@@ -702,7 +702,7 @@ public class ItemSpriteSheet {
 	static{
 		assignItemRect(PHASE_SHIFT,     12, 11);
 		assignItemRect(TELE_GRAB,       12, 11);
-		assignItemRect(WILD_ENERGY,      8, 16);
+		assignItemRect(WILD_ENERGY,     12, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
 
         assignItemRect(RESPAWN,         11, 11);
@@ -792,7 +792,7 @@ public class ItemSpriteSheet {
 	public static final int OSMIRIDIUM = QUEST+10;
 	public static final int ENDERIUM = QUEST+11;
 	public static final int ENERGITE = QUEST+12;
-	public static final int SKULL = QUEST+10;
+	public static final int SKULL = QUEST+0;
 	static{
 		assignItemRect(DUST,    12, 11);
 		assignItemRect(CANDLE,  12, 12);

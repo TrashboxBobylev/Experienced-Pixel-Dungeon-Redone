@@ -68,7 +68,7 @@ public class FireBooster extends Spell {
 
         {
             inputs =  new Class[]{PotionOfLiquidFlame.class, ScrollOfUpgrade.class};
-            inQuantity = new int[]{1, 1, 1};
+            inQuantity = new int[]{1, 1};
 
             cost = 29;
 

@@ -121,7 +121,7 @@ public abstract class Mob extends Char {
 	protected void onAdd(){
 		if (firstAdded) {
 			//modify health for ascension challenge if applicable, only on first add
-			float percent = HP / (float) HT;
+			double percent = HP / (double) HT;
 			HT = Math.round(HT * AscensionChallenge.statModifier(this));
 			HP = Math.round(HT * percent);
 			firstAdded = false;
