@@ -41,8 +41,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
@@ -377,16 +377,16 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 			case 0:
 				return tier;
 			case 1:
-				return tier+5;
+				return tier+10;
 			case 2:
-				return Math.round(tier*3f);
+				return Math.round(tier*6.5f);
 			case 3:
-				return Math.round((tier+12)*5f);
+				return Math.round((tier+20)*8f);
 			case 4:
-				return Math.round((tier+30)*8f);
+				return Math.round((tier*10+75)*21f);
 			case 5:
 			default:
-				return Math.round((tier+150)*15f);
+				return Math.round((tier*55+850)*150f);
 		}
 	}
 
