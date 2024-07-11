@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -151,7 +152,8 @@ public class Greatsword extends MeleeWeapon {
             if (!Dungeon.level.solid[attacker.pos + i]
                     && !Dungeon.level.pit[attacker.pos + i]
                     && Actor.findChar(attacker.pos + i) == null
-                    && attacker == Dungeon.hero) {
+                    && (attacker == Dungeon.hero || attacker instanceof DriedRose.GhostHero)
+                    && Dungeon.Int(2) == 0) {
 
                 GuardianKnight guardianKnight = new GuardianKnight();
                 Greatsword copy = new Greatsword();
@@ -208,7 +210,7 @@ public class Greatsword extends MeleeWeapon {
             @Override
             public boolean act() {
                 if (target.isAlive()) {
-                    float regen = 1f / (target.HT / 150f);
+                    float regen = 1f / (target.HT / 250f);
                     if (target.HP > 0) {
                         partialHP += regen;
                         if (partialHP >= 1){
