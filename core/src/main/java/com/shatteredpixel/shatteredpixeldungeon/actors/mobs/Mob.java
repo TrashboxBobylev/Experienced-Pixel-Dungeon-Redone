@@ -717,8 +717,7 @@ public abstract class Mob extends Char {
 
 	@Override
 	public float speed() {
-		return super.speed() * AscensionChallenge.enemySpeedModifier(this) *
-				(float)(1f + (Dungeon.resetDamage() - 1d) * 0.65f);
+		return super.speed() * AscensionChallenge.enemySpeedModifier(this);
 	}
 
 	public long cycledDrRoll(){
