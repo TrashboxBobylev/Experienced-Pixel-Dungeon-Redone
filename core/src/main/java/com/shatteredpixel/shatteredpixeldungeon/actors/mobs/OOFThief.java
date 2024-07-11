@@ -137,6 +137,7 @@ public class OOFThief extends Mob {
 	@Override
 	public Item createLoot() {
 		Dungeon.LimitedDrops.OOF_DROP.count++;
+		Dungeon.hero.earnExp(Math.round(Dungeon.hero.maxExp()*Math.pow(25, Dungeon.cycle+1)), getClass());
 		return super.createLoot();
 	}
 

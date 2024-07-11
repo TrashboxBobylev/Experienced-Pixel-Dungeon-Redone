@@ -453,7 +453,7 @@ if (bundle.contains( "respawner" )){
 		}
 
 		Mob m = Reflection.newInstance(mobsToSpawn.remove(0));
-		if (Dungeon.cycle > 0 && Random.Int(2222) == 0)
+		if (Dungeon.cycle > 0 && Random.Int(222222) == 0)
 			m = Reflection.newInstance(OOFThief.class);
 		ChampionEnemy.rollForChampion(m);
 		return m;
