@@ -79,6 +79,10 @@ public class OOFThief extends Mob {
                 HP = HT = 10000000;
                 defenseSkill = 4500;
                 break;
+			case 5:
+				HP = HT = 1850000000;
+				defenseSkill = 120000;
+				break;
         }
 	}
 
@@ -106,6 +110,7 @@ public class OOFThief extends Mob {
             case 2: return Char.combatRoll(255, 320);
             case 3: return Char.combatRoll(905, 1455);
             case 4: return Char.combatRoll(14300, 21500);
+			case 5: return Char.combatRoll(400000, 850000);
         }
 		return Char.combatRoll( 8, 14 );
 	}
@@ -142,6 +147,7 @@ public class OOFThief extends Mob {
             case 2: return 375;
             case 3: return 1000;
             case 4: return 4222;
+			case 5: return 60575;
         }
 		return 18;
 	}
@@ -153,6 +159,7 @@ public class OOFThief extends Mob {
             case 2: return Char.combatRoll(110, 250);
             case 3: return Char.combatRoll(575, 1100);
             case 4: return Char.combatRoll(15000, 24000);
+			case 5: return Char.combatRoll(75500, 955000);
         }
 		return Char.combatRoll(4, 8);
 	}
