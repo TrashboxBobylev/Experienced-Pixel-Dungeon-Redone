@@ -33,7 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -57,8 +57,8 @@ public class OOFThief extends Mob {
 		EXP = 0;
 		maxLvl = 11;
 
-		loot = BiggerGambleBag.class;
-		lootChance = 0.5f; //initially, see lootChance()
+		loot = IdealBag.class;
+		lootChance = 1f; //initially, see lootChance()
 
 		properties.add(Property.UNDEAD);
 
