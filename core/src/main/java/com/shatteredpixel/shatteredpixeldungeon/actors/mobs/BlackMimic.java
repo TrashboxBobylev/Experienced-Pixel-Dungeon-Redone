@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -69,7 +70,7 @@ public class BlackMimic extends Mob {
 		//TODO improved sprite
 		spriteClass = MimicSprite.Black.class;
 
-		HP = HT = 900 + Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle));
+		HP = HT = 900 + Math.round(Dungeon.hero.lvl*32*Math.pow(7, Dungeon.cycle));
 		EXP = 2000;
 		defenseSkill = 20 + Dungeon.hero.lvl / 3 * 2;
 
@@ -100,20 +101,20 @@ public class BlackMimic extends Mob {
 	@Override
 	public long damageRoll() {
 		return Random.NormalLongRange(
-				Math.round(Dungeon.hero.lvl/2f*Math.pow(12, Dungeon.cycle)),
-				Math.round(Dungeon.hero.lvl*15*Math.pow(12, Dungeon.cycle)) );
+				Math.round(Dungeon.hero.lvl*4*Math.pow(7, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*32*Math.pow(7, Dungeon.cycle)) );
 	}
 
 	@Override
 	public int attackSkill( Char target ) {
-		return 20 + Math.round(Dungeon.hero.lvl * 1.25f);
+		return 30 + Math.round(Dungeon.hero.lvl * 1.25f);
 	}
 
 	@Override
 	public long cycledDrRoll() {
-		return (int) Random.NormalLongRange(
-				Math.round(Dungeon.hero.lvl/3f*Math.pow(12, Dungeon.cycle)),
-				Math.round(Dungeon.hero.lvl*Math.pow(12, Dungeon.cycle)));
+		return Random.NormalLongRange(
+				Math.round(Dungeon.hero.lvl*0.8d*Math.pow(7, Dungeon.cycle)),
+				Math.round(Dungeon.hero.lvl*2.25d*Math.pow(7, Dungeon.cycle)));
 	}
 
 	public int pylonsActivated = 0;
@@ -218,9 +219,10 @@ public class BlackMimic extends Mob {
 
 					if (fieldOfView[enemy.pos] && turnsSinceLastAbility >= MIN_COOLDOWN){
 
-						lastAbility = GAS;
+						lastAbility = Random.oneOf(GAS, SUMMON);
 						turnsSinceLastAbility = 0;
-						spend(TICK);
+						if (!Dungeon.isChallenged(Challenges.STRONGER_BOSSES))
+							spend(TICK);
 
 						if (!isCopy)
 							GLog.w(Messages.get(this, "vent"));
@@ -258,6 +260,7 @@ public class BlackMimic extends Mob {
 
 						turnsSinceLastAbility = 0;
 						abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
+						abilityCooldown = Math.max(0, abilityCooldown - pylonsActivated*2);
 
 						if (lastAbility == GAS) {
 							if (!isCopy)
@@ -294,11 +297,17 @@ public class BlackMimic extends Mob {
                         } else if (lastAbility == SUMMON) {
 							if (!isCopy)
                             	GLog.w(Messages.get(this, "summon"));
-                            DistortionTrap trap = new DistortionTrap();
-                            do {
-                                trap.pos = Dungeon.level.pointToCell(Random.element(mainArena.getPoints()));
-                            } while (!Dungeon.level.openSpace[trap.pos] || Dungeon.level.map[trap.pos] == Terrain.EMPTY_SP);
-                            trap.activate();
+							int summonAmount = 1;
+							if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+								summonAmount = Random.Int(1, 3);
+							}
+							for (int i = 0; i < summonAmount; i++) {
+								DistortionTrap trap = new DistortionTrap();
+								do {
+									trap.pos = Dungeon.level.pointToCell(Random.element(mainArena.getPoints()));
+								} while (!Dungeon.level.openSpace[trap.pos] || Dungeon.level.map[trap.pos] == Terrain.EMPTY_SP);
+								trap.activate();
+							}
 
                             return true;
                         } else {
@@ -507,7 +516,7 @@ public class BlackMimic extends Mob {
 					return true;
 				}
 			};
-			Actor.addDelayed(a, Math.min(target.cooldown(), 3*TICK));
+			Actor.addDelayed(a, Math.min(target.cooldown(), 2*TICK));
 		}
 
 	}
@@ -516,6 +525,10 @@ public class BlackMimic extends Mob {
 
 	@Override
 	public void damage(long dmg, Object src) {
+		switch (pylonsActivated){
+			case 1: dmg *= 0.66d; break;
+			case 2: dmg *= 0.33d; break;
+		}
 		super.damage(dmg, src);
 		if (isInvulnerable(src.getClass())){
 			return;
@@ -548,7 +561,7 @@ public class BlackMimic extends Mob {
 		((BlackMimicLevel)Dungeon.level).activatePylon();
 		pylonsActivated++;
 
-		spend(3f);
+		spend(1f);
 		yell(Messages.get(this, "charging"));
 		sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 		chargeAnnounced = false;
@@ -609,6 +622,16 @@ public class BlackMimic extends Mob {
 			}
 
 			yell(Messages.get(this, "defeated"));
+
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					Music.INSTANCE.fadeOut(0.25f, new Callback() {
+						@Override
+						public void call() {}
+					});
+				}
+			});
 		}
 	}
 
