@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -74,6 +75,11 @@ public class SuperPickaxe extends Item {
     }
 
     @Override
+    public float castDelay(Char user, int dst) {
+        return super.castDelay(user, dst)*2;
+    }
+
+    @Override
     public void cast(Hero user, int dst) {
         final int cell = throwPos( user, dst );
         user.sprite.zap( cell );
@@ -84,10 +90,10 @@ public class SuperPickaxe extends Item {
         Char enemy = Actor.findChar( cell );
         QuickSlotButton.target(enemy);
 
-        if (Dungeon.level.insideMap(cell)) {
-            final float delay = castDelay(user, dst);
-            final Item item = this;
+        final float delay = castDelay(user, dst);
+        final Item item = this;
 
+        if (Dungeon.level.insideMap(cell)) {
             if (enemy != null && new Ballistica( user.pos, enemy.pos, Ballistica.PROJECTILE ).collisionPos == enemy.pos) {
                 ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
                         reset(user.sprite,
@@ -122,37 +128,41 @@ public class SuperPickaxe extends Item {
                                     }
                                 });
             } else {
+                int resultCell = Dungeon.level.heroFOV[cell] ? cell : (new Ballistica( user.pos, cell, Ballistica.PROJECTILE ).collisionPos);
                 ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
                         reset(user.sprite,
-                                cell,
+                                resultCell,
                                 item,
                                 new Callback() {
                                     @Override
                                     public void call() {
                                         curUser = user;
                                         boolean success = false;
-                                        if (cell != Dungeon.level.entrance && cell != Dungeon.level.exit
-                                                && !Dungeon.level.openSpace[cell]){
-                                            int tile = Dungeon.level.map[cell];
-                                            Level.set(cell, Terrain.EMPTY);
-                                            if (new Ballistica( user.pos, cell, Ballistica.PROJECTILE ).collisionPos ==
-                                                cell) {
+                                        if (resultCell != Dungeon.level.entrance && resultCell != Dungeon.level.exit
+                                                && !Dungeon.level.openSpace[resultCell]){
+                                            int tile = Dungeon.level.map[resultCell];
+                                            Level.set(resultCell, Terrain.EMPTY);
+                                            if (Dungeon.level.heroFOV[resultCell]) {
                                                 success = true;
                                                 Dungeon.level.buildFlagMaps();
                                                 Dungeon.level.cleanWalls();
                                                 GameScene.updateMap();
-                                                CellEmitter.bottom(cell).burst(Speck.factory(Speck.ROCK), 4);
+                                                CellEmitter.bottom(resultCell).burst(Speck.factory(Speck.ROCK), 4);
                                                 Sample.INSTANCE.play(Assets.Sounds.ROCKS);
                                                 Camera.main.shake(3, 0.7f);
                                             } else {
-                                                Level.set(cell, tile);
+                                                Level.set(resultCell, tile);
                                             }
+                                        }
+                                        Trap t = Dungeon.level.traps.get(resultCell);
+                                        if (t != null && t.active && t.visible) {
+                                            t.trigger();
                                         }
                                         user.spendAndNext(delay);
                                         if (!success){
                                             Sample.INSTANCE.play(Assets.Sounds.MISS);
                                             ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
-                                                    reset(cell,
+                                                    reset(resultCell,
                                                             user.pos,
                                                             item, new Callback() {
                                                                 @Override
@@ -164,6 +174,27 @@ public class SuperPickaxe extends Item {
                                     }
                                 });
             }
+        } else {
+            int missCell = new Ballistica( user.pos, cell, Ballistica.PROJECTILE ).collisionPos;
+            ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                    reset(user.sprite,
+                            missCell,
+                            item, new Callback() {
+                                @Override
+                                public void call() {
+                                    user.spendAndNext(delay);
+                                    Sample.INSTANCE.play(Assets.Sounds.MISS);
+                                    ((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
+                                            reset(missCell,
+                                                    user.pos,
+                                                    item, new Callback() {
+                                                        @Override
+                                                        public void call() {
+
+                                                        }
+                                                    });
+                                }
+                            });
         }
     }
 }
