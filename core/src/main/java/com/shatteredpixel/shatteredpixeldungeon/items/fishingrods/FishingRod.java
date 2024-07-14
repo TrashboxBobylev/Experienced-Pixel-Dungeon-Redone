@@ -170,7 +170,7 @@ public abstract class FishingRod extends Item {
     @Override
     public Item upgrade() {
         super.upgrade();
-        bonusFishingStr = (int) Math.min(Integer.MAX_VALUE, level() / 5);
+        bonusFishingStr = (int) Math.min(15000, level() / 5);
         return this;
     }
 
