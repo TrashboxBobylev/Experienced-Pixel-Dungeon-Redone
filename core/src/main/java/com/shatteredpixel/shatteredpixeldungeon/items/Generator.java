@@ -523,7 +523,7 @@ public class Generator {
 	}
 
 	public static Item random( Category cat ) {
-		if (Dungeon.Int(150) == 0 &&
+		if (Random.Int(135) == 0 &&
 			cat != Category.WAND &&
 			cat != Category.WEAPON &&
 			!Arrays.asList(wepTiers).contains(cat) &&
