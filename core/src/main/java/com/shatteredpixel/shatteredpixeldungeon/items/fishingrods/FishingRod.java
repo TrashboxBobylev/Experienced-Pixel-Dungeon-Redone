@@ -157,6 +157,17 @@ public abstract class FishingRod extends Item {
     };
 
     @Override
+    public void onDetach() {
+        hook = false;
+        defaultAction = AC_CAST;
+        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+            if (Dungeon.level.heroFOV[mob.pos] && mob instanceof Hook) {
+                mob.die(new Doom());
+            }
+        }
+    }
+
+    @Override
     public Item upgrade() {
         super.upgrade();
         bonusFishingStr = (int) Math.min(Integer.MAX_VALUE, level() / 5);
