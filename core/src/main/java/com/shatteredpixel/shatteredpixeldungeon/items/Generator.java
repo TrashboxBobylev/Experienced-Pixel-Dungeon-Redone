@@ -526,6 +526,7 @@ public class Generator {
 		if (Random.Int(135) == 0 &&
 			cat != Category.WAND &&
 			cat != Category.WEAPON &&
+			cat != Category.TRINKET &&
 			!Arrays.asList(wepTiers).contains(cat) &&
 			!Arrays.asList(misTiers).contains(cat) &&
 			cat != Category.RING) {
