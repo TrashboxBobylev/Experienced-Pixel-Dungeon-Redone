@@ -147,27 +147,28 @@ public class Greatsword extends MeleeWeapon {
 
     @Override
     public long proc(Char attacker, Char defender, long damage) {
-        for (int i : PathFinder.NEIGHBOURS9){
+        if (Random.Float() >= 0.5f) {
+            for (int i : PathFinder.NEIGHBOURS9) {
 
-            if (!Dungeon.level.solid[attacker.pos + i]
-                    && !Dungeon.level.pit[attacker.pos + i]
-                    && Actor.findChar(attacker.pos + i) == null
-                    && (attacker == Dungeon.hero || attacker instanceof DriedRose.GhostHero)
-                    && Dungeon.Int(2) == 0) {
+                if (!Dungeon.level.solid[attacker.pos + i]
+                        && !Dungeon.level.pit[attacker.pos + i]
+                        && Actor.findChar(attacker.pos + i) == null
+                        && (attacker == Dungeon.hero || attacker instanceof DriedRose.GhostHero)) {
 
-                GuardianKnight guardianKnight = new GuardianKnight();
-                Greatsword copy = new Greatsword();
-                copy.level(level());
-                copy.enchant(enchantment);
-                copy.augment = augment;
-                guardianKnight.weapon = copy;
-                guardianKnight.pos = attacker.pos + i;
-                guardianKnight.aggro(defender);
-                GameScene.add(guardianKnight);
-                Dungeon.level.occupyCell(guardianKnight);
+                    GuardianKnight guardianKnight = new GuardianKnight();
+                    Greatsword copy = new Greatsword();
+                    copy.level(level());
+                    copy.enchant(enchantment);
+                    copy.augment = augment;
+                    guardianKnight.weapon = copy;
+                    guardianKnight.pos = attacker.pos + i;
+                    guardianKnight.aggro(defender);
+                    GameScene.add(guardianKnight);
+                    Dungeon.level.occupyCell(guardianKnight);
 
-                CellEmitter.get(guardianKnight.pos).burst(Speck.factory(Speck.EVOKE), 4);
-                break;
+                    CellEmitter.get(guardianKnight.pos).burst(Speck.factory(Speck.EVOKE), 4);
+                    break;
+                }
             }
         }
         return super.proc(attacker, defender, damage);
