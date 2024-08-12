@@ -122,7 +122,8 @@ public class ExpPDChanges {
                         "_-_ Gauntlet's duelist ability now only plays animation once\n" +
                         "_-_ Telekinetic Grab now stops at first item, that is impossible to pick up\n" +
                         "_-_ Added Battlemage's description for unstable wand\n" +
-                        "_-_ Fishing rods now retract their hooks, if they disappear from inventory by any means\n"));
+                        "_-_ Fishing rods now retract their hooks, if they disappear from inventory by any means\n" +
+                        "_-_ Added issue tracker button to feedback screen"));
 
             changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
                 "_-_ Fixed crash with fishing rod's hook having to disappear during descending\n" +
@@ -132,7 +133,8 @@ public class ExpPDChanges {
                         "_-_ Fixed missile weapons stacking even if their levels are different\n" +
                         "_-_ Fixed dupe glitch with extracting X*Y upgrades out of Y +X missiles\n" +
                         "_-_ Fixed Scroll of Midas being non-consumable\n" +
-                        "_-_ Fixed Potion of Overload and Scroll of Midas having no name or description"));
+                        "_-_ Fixed Potion of Overload and Scroll of Midas having no name or description\n" +
+                        "_-_ Fixed Blacksmith consuming double favor on reforging, than intended"));
 
             changes = new ChangeInfo("ExpPD-2.18.1", true, "");
             changes.hardlight(Window.TITLE_COLOR);
