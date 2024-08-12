@@ -62,7 +62,7 @@ public class Mace extends MeleeWeapon {
     @Override
     public long proc(Char attacker, Char defender, long damage) {
 	    if (attacker == Dungeon.hero && defender != null) {
-			WandOfDisintegration wand = ((WandOfDisintegration)(new WandOfDisintegration().upgrade(level())));
+			WandOfDisintegration wand = ((WandOfDisintegration)(new WandOfDisintegration().upgrade(Math.round(level()*Math.pow(3, Dungeon.cycle)))));
 			curUser = Dungeon.hero;
 	    	wand.fx(
 	    		new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_SOLID),

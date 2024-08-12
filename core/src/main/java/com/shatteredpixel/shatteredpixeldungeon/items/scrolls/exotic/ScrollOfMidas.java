@@ -47,6 +47,8 @@ public class ScrollOfMidas extends ExoticScroll {
 	
 	@Override
 	public void doRead() {
+
+		detach(curUser.belongings.backpack);
 		
 		new Flare( 5, 32 ).color( 0xFFFFFF, true ).show( curUser.sprite, 2f );
 		Sample.INSTANCE.play( Assets.Sounds.READ );

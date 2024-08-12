@@ -110,6 +110,7 @@ public class TelekineticGrab extends TargetedSpell {
 						} else {
 							GLog.w(Messages.get(this, "cant_grab"));
 							h.sprite.drop();
+							break;
 						}
 					}
 				}

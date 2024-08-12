@@ -125,10 +125,8 @@ public class Gauntlet extends MeleeWeapon {
 					}
 				}
 
-				for (int i = 0; i < 4; i++) {
-					hero.sprite.parent.addToFront(new Lightning(arcs, null));
-					Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
-				}
+				hero.sprite.parent.addToFront(new Lightning(arcs, null));
+				Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
 
 				Invisibility.dispel();
 				hero.spendAndNext(hero.attackDelay());

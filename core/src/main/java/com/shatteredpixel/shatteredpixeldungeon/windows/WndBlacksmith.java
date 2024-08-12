@@ -307,7 +307,7 @@ public class WndBlacksmith extends Window {
 					Badges.validateItemLevelAquired( first );
 					Item.updateQuickslot();
 
-					Blacksmith.Quest.favor -= (int) (200 * Math.pow(1.5, Blacksmith.Quest.reforges));
+					Blacksmith.Quest.favor -= (int) (100 * Math.pow(1.5, Blacksmith.Quest.reforges));
 					Blacksmith.Quest.reforges++;
 
 					if (!Blacksmith.Quest.rewardsAvailable()){

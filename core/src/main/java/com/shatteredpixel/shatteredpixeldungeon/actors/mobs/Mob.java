@@ -698,16 +698,16 @@ public abstract class Mob extends Char {
 			
 			//physical damage that doesn't come from the hero is less effective
 			if (enemy != Dungeon.hero){
-				restoration = Math.round(restoration * 0.4f*Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/3f);
+				restoration = Math.round(restoration * 0.4d*Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/3d);
 			}
 			if (restoration > 0) {
 				if (Dungeon.hero.subClass == HeroSubClass.WARLOCK)
 					Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*1.5f);
 
 				if (Dungeon.hero.HP < Dungeon.hero.HT) {
-					int heal = (int)Math.ceil(restoration * 0.4f);
+					long heal = (long)Math.ceil(restoration * 0.4d);
 					Dungeon.hero.HP = Math.min(Dungeon.hero.HT, Dungeon.hero.HP + heal);
-					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
+					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(heal), FloatingText.HEALING);
 				}
 			}
 		}
@@ -717,8 +717,7 @@ public abstract class Mob extends Char {
 
 	@Override
 	public float speed() {
-		return super.speed() * AscensionChallenge.enemySpeedModifier(this) *
-				(float)(1f + (Dungeon.resetDamage() - 1d) * 0.65f);
+		return super.speed() * AscensionChallenge.enemySpeedModifier(this);
 	}
 
 	public long cycledDrRoll(){
@@ -1312,7 +1311,7 @@ public abstract class Mob extends Char {
 			}
 
 			if (mob instanceof Hook){
-                mob.die(new com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom());
+                mob.destroy();
                 for (Item it : Dungeon.hero.belongings.backpack){
                     if (it instanceof FishingRod){
                         ((FishingRod) it).hook = false;

@@ -51,7 +51,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Whip;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.StarlightSmasher;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.*;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.BlacksmithSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MimicSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.OofSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
@@ -62,7 +67,76 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.18", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.18.2", true, "");
+            changes.hardlight(Window.TITLE_COLOR);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released August 12th, 2024\n" +
+                            "_-_ 71 days after Experienced Pixel Dungeon 2.18.1"));
+
+            changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                    "_-_ Changed Greatsword:\n" +
+                            "   _-_ decreased the chance to spawn stone knight from 100% to 50%\n" +
+                            "   _-_ increased the timespan of knights from 150 to 250 turns\n" +
+                            "   _-_ now can be used by ghost\n" +
+                            "_-_ Changed OOF Thieves:\n" +
+                            "   _-_ added cycle 5 stats\n" +
+                            "   _-_ now spawns 100x less frequently (and 25x less frequently), but gives a lot of level ups, the amount of which scales with cycling\n" +
+                            "   _-_ now drops ideal bags at 100% initial chance instead of big lucky bags at 50% initial chance\n" +
+                            "_-_ Mace's disintegration beam now scales with cycling\n" +
+                            "_-_ Capped Ethereal Chains' regeneration at 1 charge per turn\n" +
+                            "_-_ Changed equipment drops from fishing:\n" +
+                            "   _-_ changed the modifier from 12 to 6^(cycle+1)\n" +
+                            "   _-_ are no longer capped at 2 billion upgrades\n" +
+                            "_-_ Limited bonus fishing strength at 15000\n" +
+                            "_-_ Reduced Fate Lock's stat increase modifier from 1.12x to 1.045x and removed speed boost\n" +
+                            "_-_ Tweaked Throwing Mining Tool:\n" +
+                            "   _-_ travels slightly slower and costs 2 turns to throw instead of 1\n" +
+                            "   _-_ now only mines tiles visible in hero's FOV, otherwise shows the visual of hero throwing returning tool in direction of tile\n" +
+                            "   _-_ no longer stunlocks player if trying to hit coords outside the map\n" +
+                            "   _-_ now can trigger traps\n" +
+                            "_-_ Changed Elixir of Luck's droprate:\n" +
+                            "   _-_ increased \"chance\" from 1/150 to 1/135\n" +
+                            "   _-_ is no longer affected by luck"
+            ));
+
+            changes.addButton(new ChangeButton(new Image(new MimicSprite.Black()), "Darkened Mimic",
+                "_-_ Tweaked the cycle stat scaling from 12 to 7, but increased base stat modifier by 75%-125%\n" +
+                        "_-_ Now has 33% damage reduction with one pylon down and 67% damage reduction with two pylons down\n" +
+                        "_-_ Reduced supercharge warning time from 3 turns to 1\n" +
+                        "_-_ Ability cooldown decreases by 2 turns with each pylon down\n" +
+                        "_-_ Reduced max spare time on crushing rocks attack\n" +
+                        "_-_ Out-of-reach attack can be now either corrosive gas or monsters\n" +
+                        "_-_ With Badder Bosses challenge:\n" +
+                        "   _-_ increased summon amount from 1x to 1x-3x\n" +
+                        "   _-_ can use out-of-reach attack instantly\n" +
+                        "_-_ Music fades out to nothing after being defeated"
+            ));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                "_-_ Changed refined lucky bag's chance from \"35%\" to 8.33%\n" +
+                        "_-_ Tweaked Soul Mark's healing to properly support 64-bit numbers\n" +
+                        "_-_ Tweaked Chalice of Blood's healing to properly support 64-bit numbers\n" +
+                        "_-_ Tweaked Retribution/Psionic Blast scrolls to properly support 64-bit numbers\n" +
+                        "_-_ OOF Thief now spawns 100x less frequently (and 25x less frequently), but gives a lot of level ups, the amount of which scales with cycling\n" +
+                        "_-_ Gauntlet's duelist ability now only plays animation once\n" +
+                        "_-_ Telekinetic Grab now stops at first item, that is impossible to pick up\n" +
+                        "_-_ Added Battlemage's description for unstable wand\n" +
+                        "_-_ Fishing rods now retract their hooks, if they disappear from inventory by any means\n" +
+                        "_-_ Added issue tracker button to feedback screen"));
+
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                "_-_ Fixed crash with fishing rod's hook having to disappear during descending\n" +
+                        "_-_ Fixed crash with Elixir of Luck being in trinket creation set\n" +
+                        "_-_ Fixed slime's equipment drops\n" +
+                        "_-_ Fixed crashes with Clay trying to damage NPCs or mobs that cannot be damaged or debuffed\n" +
+                        "_-_ Fixed missile weapons stacking even if their levels are different\n" +
+                        "_-_ Fixed dupe glitch with extracting X*Y upgrades out of Y +X missiles\n" +
+                        "_-_ Fixed Scroll of Midas being non-consumable\n" +
+                        "_-_ Fixed Potion of Overload and Scroll of Midas having no name or description\n" +
+                        "_-_ Fixed Blacksmith consuming double favor on reforging, than intended"));
+
+            changes = new ChangeInfo("ExpPD-2.18.1", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
@@ -85,7 +159,6 @@ public class ExpPDChanges {
                             "_-_ Fixed Regrowth Slasher's ghosts being possible to cleanse\n" +
                             "_-_ Fixed Experienced's spells not being possible to create\n" +
                             "_-_ Fixed Cheese Chunk not being possible to create"));
-
 
             changes = new ChangeInfo("ExpPD-2.18", true, "");
             changes.hardlight(Window.TITLE_COLOR);

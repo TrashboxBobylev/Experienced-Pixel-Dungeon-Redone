@@ -170,7 +170,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 				|| item instanceof TenguSprite.TenguShuriken){
 			speed *= 1.5f;
 		} else if (item instanceof SuperPickaxe){
-			speed *= 3f;
+			speed *= 2.5f;
 		} else if (item instanceof StarlightSmasher && ((StarlightSmasher) item).starlight_power){
 			speed *= 1.75f;
 		}

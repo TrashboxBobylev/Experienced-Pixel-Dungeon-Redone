@@ -182,7 +182,13 @@ public class Bestiary {
 						Scorpio.class, Scorpio.class, Scorpio.class));
             case 28:
                 //every unique and dangerous enemy
-                    return new ArrayList<>(Arrays.asList(Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class, Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class, OOFThief.class));
+					ArrayList<Class<? extends Mob>> enemies = new ArrayList<>();
+
+					for (int i = 0; i < 50; i++)
+						enemies.addAll(Arrays.asList(Crab.class, Guard.class, DM100.class, Shaman.random(), Spinner.class, Elemental.random(), Warlock.class, Golem.class, RipperDemon.class, Scorpio.class));
+					enemies.add(OOFThief.class);
+
+					return enemies;
 		}
 		
 	}

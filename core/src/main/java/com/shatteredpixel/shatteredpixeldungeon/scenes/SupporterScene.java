@@ -27,7 +27,12 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.ui.*;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.NinePatch;
@@ -83,6 +88,19 @@ public class SupporterScene extends PixelScene {
 		link.setSize(elementWidth, BTN_HEIGHT);
 		add(link);
 
+		StyledButton link2 = new StyledButton(Chrome.Type.GREY_BUTTON_TR, Messages.get(this, "issues_link")){
+			@Override
+			protected void onClick() {
+				super.onClick();
+				String link = "https://github.com/TrashboxBobylev/Experienced-Pixel-Dungeon-Redone/issues";
+				ShatteredPixelDungeon.platform.openURI(link);
+			}
+		};
+		link2.icon(Icons.get(Icons.CHANGES));
+		link2.textColor(Window.TITLE_COLOR);
+		link2.setSize(elementWidth, BTN_HEIGHT);
+		add(link2);
+
 		float elementHeight = msg.height() + BTN_HEIGHT + GAP;
 
 		float top = 16 + (h - 16 - elementHeight)/2f;
@@ -93,6 +111,9 @@ public class SupporterScene extends PixelScene {
 
 		link.setPos(left, msg.bottom()+GAP);
 		align(link);
+
+		link2.setPos(left, link.bottom()+GAP);
+		align(link2);
 
 	}
 

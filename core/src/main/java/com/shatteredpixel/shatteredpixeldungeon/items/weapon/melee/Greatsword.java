@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -146,26 +147,28 @@ public class Greatsword extends MeleeWeapon {
 
     @Override
     public long proc(Char attacker, Char defender, long damage) {
-        for (int i : PathFinder.NEIGHBOURS9){
+        if (Random.Float() >= 0.5f) {
+            for (int i : PathFinder.NEIGHBOURS9) {
 
-            if (!Dungeon.level.solid[attacker.pos + i]
-                    && !Dungeon.level.pit[attacker.pos + i]
-                    && Actor.findChar(attacker.pos + i) == null
-                    && attacker == Dungeon.hero) {
+                if (!Dungeon.level.solid[attacker.pos + i]
+                        && !Dungeon.level.pit[attacker.pos + i]
+                        && Actor.findChar(attacker.pos + i) == null
+                        && (attacker == Dungeon.hero || attacker instanceof DriedRose.GhostHero)) {
 
-                GuardianKnight guardianKnight = new GuardianKnight();
-                Greatsword copy = new Greatsword();
-                copy.level(level());
-                copy.enchant(enchantment);
-                copy.augment = augment;
-                guardianKnight.weapon = copy;
-                guardianKnight.pos = attacker.pos + i;
-                guardianKnight.aggro(defender);
-                GameScene.add(guardianKnight);
-                Dungeon.level.occupyCell(guardianKnight);
+                    GuardianKnight guardianKnight = new GuardianKnight();
+                    Greatsword copy = new Greatsword();
+                    copy.level(level());
+                    copy.enchant(enchantment);
+                    copy.augment = augment;
+                    guardianKnight.weapon = copy;
+                    guardianKnight.pos = attacker.pos + i;
+                    guardianKnight.aggro(defender);
+                    GameScene.add(guardianKnight);
+                    Dungeon.level.occupyCell(guardianKnight);
 
-                CellEmitter.get(guardianKnight.pos).burst(Speck.factory(Speck.EVOKE), 4);
-                break;
+                    CellEmitter.get(guardianKnight.pos).burst(Speck.factory(Speck.EVOKE), 4);
+                    break;
+                }
             }
         }
         return super.proc(attacker, defender, damage);
@@ -208,7 +211,7 @@ public class Greatsword extends MeleeWeapon {
             @Override
             public boolean act() {
                 if (target.isAlive()) {
-                    float regen = 1f / (target.HT / 150f);
+                    float regen = 1f / (target.HT / 250f);
                     if (target.HP > 0) {
                         partialHP += regen;
                         if (partialHP >= 1){
