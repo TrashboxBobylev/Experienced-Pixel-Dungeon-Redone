@@ -74,9 +74,7 @@ public class Tengu extends Mob {
 		defenseSkill = 15;
 		
 		HUNTING = new Hunting();
-		
-		flying = true; //doesn't literally fly, but he is fleet-of-foot enough to avoid hazards
-		
+
 		properties.add(Property.BOSS);
 		
 		viewDistance = 12;
@@ -119,7 +117,7 @@ public class Tengu extends Mob {
             case 4: return Char.combatRoll(14000, 23000);
 			case 5: return Char.combatRoll(1000000, 2250000);
         }
-		return Char.combatRoll( 6, 12 );
+		return Random.NormalIntRange( 6, 12 );
 	}
 	
 	@Override
@@ -393,6 +391,7 @@ public class Tengu extends Mob {
 	}
 	
 	{
+		immunities.add( Roots.class );
 		immunities.add( Blindness.class );
 		immunities.add( Dread.class );
 		immunities.add( Terror.class );
@@ -671,7 +670,7 @@ public class Tengu extends Mob {
 					if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof Tengu)) {
-							long dmg = Char.combatRoll(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
+							long dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
 							dmg -= ch.drRoll();
 
 							if (dmg > 0) {

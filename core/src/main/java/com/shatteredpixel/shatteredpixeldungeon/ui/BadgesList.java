@@ -45,7 +45,7 @@ public class BadgesList extends ScrollPane {
 		
 		for (Badges.Badge badge : Badges.filterReplacedBadges( global )) {
 			
-			if (badge.image == -1) {
+			if (badge.type == Badges.BadgeType.HIDDEN) {
 				continue;
 			}
 			
@@ -123,7 +123,7 @@ public class BadgesList extends ScrollPane {
 		public boolean onClick( float x, float y ) {
 			if (inside( x, y )) {
 				Sample.INSTANCE.play( Assets.Sounds.CLICK, 0.7f, 0.7f, 1.2f );
-				Game.scene().add( new WndBadge( badge, true ) );
+				Game.scene().addToFront( new WndBadge( badge, true ) );
 				return true;
 			} else {
 				return false;

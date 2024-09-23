@@ -90,7 +90,7 @@ public class WndRanking extends WndTabbed {
 
 		if (Dungeon.hero != null) {
 			Icons[] icons =
-					{Icons.RANKINGS, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_ON};
+					{Icons.RANKINGS, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_COLOR};
 			Group[] pages =
 					{new StatsTab(), new ItemsTab(), new BadgesTab(), null};
 

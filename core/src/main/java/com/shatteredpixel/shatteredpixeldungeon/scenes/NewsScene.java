@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.services.news.NewsArticle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
+import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
@@ -66,10 +67,10 @@ public class NewsScene extends PixelScene {
 		btnExit.setPos(w - btnExit.width(), 0);
 		add(btnExit);
 
-		RenderedTextBlock title = PixelScene.renderTextBlock(Messages.get(this, "title"), 9);
-		title.hardlight(Window.TITLE_COLOR);
+		IconTitle title = new IconTitle( Icons.NEWS.get(), Messages.get(this, "title"));
+		title.setSize(200, 0);
 		title.setPos(
-				(w - title.width()) / 2f,
+				(w - title.reqWidth()) / 2f,
 				(20 - title.height()) / 2f
 		);
 		align(title);

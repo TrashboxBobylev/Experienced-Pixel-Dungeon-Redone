@@ -45,6 +45,7 @@ import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import static com.watabou.utils.Reflection.newInstance;
 
@@ -177,8 +178,9 @@ public class SmokeBomb extends ArmorAbility {
 
 			alignment = Alignment.ALLY;
 
-			// TODO isn't it kinda weird that the two variants have the same HP?
-			HP = HT = 20;
+			HT = 20;
+			if (Dungeon.hero != null) HT *= Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT);
+			HP = HT;
 		}
 
 		protected Talent talent = Talent.BODY_REPLACEMENT;
@@ -188,7 +190,7 @@ public class SmokeBomb extends ArmorAbility {
 		public long drRoll() {
 			long dr = super.drRoll();
 
-			dr += Char.combatRoll(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
+			dr += Random.NormalIntRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
 					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
 
 			return dr;

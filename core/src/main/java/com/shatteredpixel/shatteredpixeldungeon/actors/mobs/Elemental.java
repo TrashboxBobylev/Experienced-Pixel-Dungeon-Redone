@@ -105,14 +105,14 @@ public abstract class Elemental extends Mob {
 			switch (Dungeon.cycle) {
 				case 1: return Char.combatRoll(64, 83);
 				case 2: return Char.combatRoll(291, 434);
-				case 3: return Char.combatRoll(1650, 2100);
+				case 3: return Random.NormalIntRange(1650, 2100);
 				case 4: return Char.combatRoll(30000, 85000);
 				case 5: return Char.combatRoll(3000000, 7000000);
 			}
 			return Char.combatRoll( 16, 26 );
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-			return Char.combatRoll(6*regionScale, 15 + 10*regionScale);
+			return Random.NormalIntRange(6*regionScale, 15 + 10*regionScale);
 		}
 	}
 	
@@ -163,7 +163,13 @@ public abstract class Elemental extends Mob {
 		
 		return super.act();
 	}
-	
+
+	@Override
+	public void die(Object cause) {
+		flying = false;
+		super.die(cause);
+	}
+
 	@Override
 	protected boolean canAttack( Char enemy ) {
 		if (super.canAttack(enemy)){
@@ -225,7 +231,7 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() )) {
-			damage( Char.combatRoll( HT/2, HT * 3/5 ), buff );
+			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), buff );
 			return false;
 		} else {
 			return super.add( buff );
@@ -431,7 +437,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public long damageRoll() {
 			if (!summonedALly) {
-				return combatRoll(10, 12);
+				return Random.NormalIntRange(10, 12);
 			} else {
 				return super.damageRoll();
 			}
@@ -599,12 +605,38 @@ public abstract class Elemental extends Mob {
 		
 		@Override
 		protected void meleeProc( Char enemy, long damage ) {
-			CursedWand.cursedEffect(null, this, enemy);
+			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);
+			//TODO shortcutting the fx seems fine for now but may cause problems with new cursed effects
+			//of course, not shortcutting it means actor ordering issues =S
+			CursedWand.randomValidEffect(null, this, aim, false).effect(null, this, aim, false);
 		}
-		
+
+		@Override
+		protected void zap() {
+			spend( 1f );
+
+			Invisibility.dispel(this);
+			Char enemy = this.enemy;
+			//skips accuracy check, always hits
+			rangedProc( enemy );
+
+			rangedCooldown = Random.NormalIntRange( 3, 5 );
+		}
+
+		@Override
+		public void onZapComplete() {
+			zap();
+			//next(); triggers after wand effect
+		}
+
 		@Override
 		protected void rangedProc( Char enemy ) {
-			CursedWand.cursedEffect(null, this, enemy);
+			CursedWand.cursedZap(null, this, new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET), new Callback() {
+				@Override
+				public void call() {
+					next();
+				}
+			});
 		}
 	}
 	

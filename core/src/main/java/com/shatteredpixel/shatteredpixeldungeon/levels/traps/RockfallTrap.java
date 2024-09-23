@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -41,6 +42,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -96,7 +98,7 @@ public class RockfallTrap extends Trap {
 			Char ch = Actor.findChar( cell );
 
 			if (ch != null && ch.isAlive()){
-				long damage = Char.combatRoll(5+Dungeon.escalatingDepth(), 10+Dungeon.escalatingDepth()*2);
+				long damage = Random.NormalIntRange(5+Dungeon.escalatingDepth(), 10+Dungeon.escalatingDepth()*2);
 				damage -= ch.drRoll();
 				ch.damage( Math.max(damage, 0) , this);
 
@@ -105,6 +107,7 @@ public class RockfallTrap extends Trap {
 				if (!ch.isAlive() && ch == Dungeon.hero){
 					Dungeon.fail( this );
 					GLog.n( Messages.get(this, "ondeath") );
+					if (reclaimed) Badges.validateDeathFromFriendlyMagic();
 				}
 			}
 		}

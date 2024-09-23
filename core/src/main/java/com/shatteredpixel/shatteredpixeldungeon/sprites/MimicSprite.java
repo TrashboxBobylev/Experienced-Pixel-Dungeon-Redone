@@ -31,7 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DM300;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
@@ -96,12 +96,12 @@ public class MimicSprite extends MobSprite {
 	public void linkVisuals(Char ch) {
 		super.linkVisuals(ch);
 		if (ch.alignment == Char.Alignment.NEUTRAL) {
-			hideMimic();
+			hideMimic(ch);
 		}
 	}
 
-	public void hideMimic(){
-		if (MimicTooth.stealthyMimics()){
+	public void hideMimic(Char ch){
+		if (ch instanceof Mimic && ((Mimic) ch).stealthy()){
 			play(advancedHiding);
 		} else {
 			play(hiding);
@@ -260,9 +260,17 @@ public class MimicSprite extends MobSprite {
 		}
 
 		@Override
-		public void hideMimic() {
-			super.hideMimic();
+		public void hideMimic(Char ch) {
+			super.hideMimic(ch);
 			alpha(0.2f);
+		}
+
+		@Override
+		public void resetColor() {
+			super.resetColor();
+			if (curAnim == advancedHiding){
+				alpha(0.2f);
+			}
 		}
 
 		@Override

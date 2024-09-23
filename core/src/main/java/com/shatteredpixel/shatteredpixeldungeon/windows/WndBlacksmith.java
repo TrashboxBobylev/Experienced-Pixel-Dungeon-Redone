@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -59,7 +60,7 @@ import java.util.ArrayList;
 public class WndBlacksmith extends Window {
 
 	private static final int WIDTH_P = 120;
-	private static final int WIDTH_L = 160;
+	private static final int WIDTH_L = 180;
 
 	private static final int GAP  = 2;
 
@@ -460,6 +461,8 @@ public class WndBlacksmith extends Window {
 				if (!Blacksmith.Quest.rewardsAvailable()){
 					Notes.remove( Notes.Landmark.TROLL );
 				}
+
+				Catalog.countUse(item.getClass());
 			}
 		}
 	}

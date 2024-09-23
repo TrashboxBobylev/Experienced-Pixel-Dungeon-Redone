@@ -55,10 +55,6 @@ public class CorpseDust extends Item {
 		unique = true;
 	}
 
-	@Override
-	public ArrayList<String> actions(Hero hero) {
-		return new ArrayList<>(); //yup, no dropping this one
-	}
 
 	@Override
 	public boolean isUpgradable() {
@@ -136,6 +132,9 @@ public class CorpseDust extends Item {
 					Wraith.spawnAt(Random.element(candidates), DustWraith.class);
 					Sample.INSTANCE.play(Assets.Sounds.CURSED);
 					spawnPower -= powerNeeded;
+				} else {
+					//prevents excessive spawn power buildup
+					spawnPower = Math.min(spawnPower, 2*wraiths);
 				}
 			}
 

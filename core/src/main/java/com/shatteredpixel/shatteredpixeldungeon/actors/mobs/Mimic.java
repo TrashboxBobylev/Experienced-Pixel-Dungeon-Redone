@@ -68,15 +68,19 @@ public class Mimic extends Mob {
 	}
 	
 	public ArrayList<Item> items;
-	
+
+	private boolean stealthy = false;
+
 	private static final String LEVEL	= "level";
 	private static final String ITEMS	= "items";
-	
+	private static final String STEALTHY= "stealthy";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
 		if (items != null) bundle.put( ITEMS, items );
 		bundle.put( LEVEL, level );
+		bundle.put( STEALTHY, stealthy );
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -87,6 +91,7 @@ public class Mimic extends Mob {
 		}
 		level = bundle.getInt( LEVEL );
 		adjustStats(level);
+		stealthy = bundle.getBoolean(STEALTHY);
 		super.restoreFromBundle(bundle);
 		if (state != PASSIVE && alignment == Alignment.NEUTRAL){
 			alignment = Alignment.ENEMY;
@@ -145,7 +150,7 @@ public class Mimic extends Mob {
 	@Override
 	public CharSprite sprite() {
 		MimicSprite sprite = (MimicSprite) super.sprite();
-		if (alignment == Alignment.NEUTRAL) sprite.hideMimic();
+		if (alignment == Alignment.NEUTRAL) sprite.hideMimic(this);
 		return sprite;
 	}
 
@@ -218,18 +223,23 @@ public class Mimic extends Mob {
 		}
 	}
 
+	//stealthy mimics have changes to visual behaviour that make them much harder to detect
+	public boolean stealthy(){
+		return stealthy;
+	}
+
 	@Override
 	public long damageRoll() {
 		if (alignment == Alignment.NEUTRAL){
-			return Char.combatRoll( 2 + 2*level, 2 + 2*level);
+			return Random.NormalIntRange( 2 + 2*level, 2 + 2*level);
 		} else {
-			return Char.combatRoll( 1 + level, 2 + 2*level);
+			return Random.NormalIntRange( 1 + level, 2 + 2*level);
 		}
 	}
 
 	@Override
 	public long drRoll() {
-		return super.drRoll() + Char.combatRoll(0, 1 + level/2);
+		return super.drRoll() + Random.NormalIntRange(0, 1 + level/2);
 	}
 
 	@Override
@@ -312,6 +322,10 @@ public class Mimic extends Mob {
 		//generate an extra reward for killing the mimic
 		m.generatePrize(useDecks);
 
+		if (MimicTooth.stealthyMimics()){
+			m.stealthy = true;
+		}
+
 		return m;
 	}
 
@@ -337,6 +351,11 @@ public class Mimic extends Mob {
 			}
 		} while (reward == null || Challenges.isItemBlocked(reward));
 		items.add(reward);
+
+		if (MimicTooth.stealthyMimics()){
+			//add an extra random item if player has a mimic tooth
+			items.add(Generator.randomUsingDefaults());
+		}
 	}
 
 }

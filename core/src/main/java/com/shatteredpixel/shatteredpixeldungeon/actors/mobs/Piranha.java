@@ -32,7 +32,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PiranhaSprite;
@@ -69,7 +71,10 @@ public class Piranha extends Mob {
 	@Override
 	protected boolean act() {
 		
-		if (!Dungeon.level.water[pos]) {
+		if (!Dungeon.level.water[pos] || flying) {
+			if (sprite != null && buff(Levitation.class) != null){
+				sprite.emitter().burst(Speck.factory( Speck.JET ), 10);
+			}
 			dieOnLand();
 			return true;
 		} else {
@@ -79,7 +84,7 @@ public class Piranha extends Mob {
 	
 	@Override
 	public long damageRoll() {
-		return Char.combatRoll( Dungeon.escalatingDepth(), 4 + Dungeon.escalatingDepth() * 2 );
+		return Random.NormalIntRange( Dungeon.escalatingDepth(), 4 + Dungeon.escalatingDepth() * 2 );
 	}
 	
 	@Override
@@ -89,7 +94,7 @@ public class Piranha extends Mob {
 	
 	@Override
 	public long drRoll() {
-		return super.drRoll() + Char.combatRoll(0, Dungeon.escalatingDepth());
+		return super.drRoll() + Random.NormalIntRange(0, Dungeon.escalatingDepth());
 	}
 
 	@Override

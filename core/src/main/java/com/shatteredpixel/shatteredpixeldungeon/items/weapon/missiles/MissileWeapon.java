@@ -73,7 +73,11 @@ abstract public class MissileWeapon extends Weapon {
 
 	@Override
 	public long min() {
-		return Math.max(0, min( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
+		if (Dungeon.hero != null){
+			return Math.max(0, min(buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero)));
+		} else {
+			return Math.max(0 , min( buffedLvl() ));
+		}
 	}
 	
 	@Override
@@ -84,7 +88,11 @@ abstract public class MissileWeapon extends Weapon {
 	
 	@Override
 	public long max() {
-		return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
+		if (Dungeon.hero != null){
+			return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
+		} else {
+			return Math.max(0 , max( buffedLvl() ));
+		}
 	}
 	
 	@Override
@@ -323,14 +331,14 @@ abstract public class MissileWeapon extends Weapon {
 		float usages = baseUses * (float)(Math.pow(3, level()));
 
 		//+50%/75% durability
-		if (Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){
+		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){
 			usages *= 1.25f + (0.25f*Dungeon.hero.pointsInTalent(Talent.DURABLE_PROJECTILES));
 		}
 		if (holster) {
 			usages *= MagicalHolster.HOLSTER_DURABILITY_FACTOR;
 		}
 
-		usages *= RingOfSharpshooting.durabilityMultiplier( Dungeon.hero );
+		if (Dungeon.hero != null) usages *= RingOfSharpshooting.durabilityMultiplier( Dungeon.hero );
 
 		//at 100 uses, items just last forever.
 		if (usages >= 100f) return 0;
@@ -378,7 +386,7 @@ abstract public class MissileWeapon extends Weapon {
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
 			if (exStr > 0) {
-				damage += Char.combatRoll( 0, exStr );
+				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
 				if (((Hero) owner).subClass == HeroSubClass.FREERUNNER)
@@ -445,7 +453,7 @@ abstract public class MissileWeapon extends Weapon {
 	@Override
 	public String info() {
 
-		String info = desc();
+		String info = super.info();
 		
 		info += "\n\n" + Messages.get( MissileWeapon.class, "stats",
 				tier,
@@ -453,10 +461,12 @@ abstract public class MissileWeapon extends Weapon {
 				augment.damageFactor(max()),
 				STRReq());
 
-		if (STRReq() > Dungeon.hero.STR()) {
-			info += " " + Messages.get(Weapon.class, "too_heavy");
-		} else if (Dungeon.hero.STR() > STRReq()){
-			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+		if (Dungeon.hero != null) {
+			if (STRReq() > Dungeon.hero.STR()) {
+				info += " " + Messages.get(Weapon.class, "too_heavy");
+			} else if (Dungeon.hero.STR() > STRReq()) {
+				info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+			}
 		}
 
 		if (enchantment != null && (cursedKnown || !enchantment.curse())){

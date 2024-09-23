@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 public class Rat extends Mob {
 
@@ -37,7 +38,7 @@ public class Rat extends Mob {
 		
 		HP = HT = 8;
 		defenseSkill = 2;
-		
+
 		maxLvl = 5;
 
 		switch (Dungeon.cycle){
@@ -87,7 +88,7 @@ public class Rat extends Mob {
             case 4: return Char.combatRoll(3200, 5000);
 			case 5: return Char.combatRoll(345000, 485000);
         }
-        return Char.combatRoll(1, 4);
+        return Random.NormalIntRange(1, 4);
 	}
 	
 	@Override
@@ -105,13 +106,13 @@ public class Rat extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(5, 15);
-            case 2: return Char.combatRoll(60, 100);
-            case 3: return Char.combatRoll(250, 434);
-            case 4: return Char.combatRoll(2000, 4500);
-			case 5: return Char.combatRoll(325000, 450000);
+            case 1: return Random.NormalIntRange(5, 15);
+            case 2: return Random.NormalIntRange(60, 100);
+            case 3: return Random.NormalIntRange(250, 434);
+            case 4: return Random.NormalIntRange(2000, 4500);
+			case 5: return Random.NormalIntRange(325000, 450000);
         }
-		return Char.combatRoll(0, 1);
+		return Random.NormalIntRange(0, 1);
 	}
 
 	private static final String RAT_ALLY = "rat_ally";

@@ -216,13 +216,9 @@ public class Dungeon {
 	public static boolean dailyReplay;
 	public static String customSeedText = "";
 	public static long seed;
-	
-	public static void init() {
 
-		initialVersion = version = Game.versionCode;
-		challenges = SPDSettings.challenges();
-		mobsToChampion = -1;
-
+	//we initialize the seed separately so that things like interlevelscene can access it early
+	public static void initSeed(){
 		if (daily) {
 			//Ensures that daily seeds are not in the range of user-enterable seeds
 			seed = SPDSettings.lastDaily() + DungeonSeed.TOTAL_SEEDS;
@@ -236,6 +232,13 @@ public class Dungeon {
 			customSeedText = "";
 			seed = DungeonSeed.randomSeed();
 		}
+	}
+
+	public static void init() {
+
+		initialVersion = version = Game.versionCode;
+		challenges = SPDSettings.challenges();
+		mobsToChampion = -1;
 
 		Actor.clear();
 		Actor.resetNextID();
@@ -531,10 +534,9 @@ public class Dungeon {
 			if (t != null) pos = t.cell();
 		}
 
-		//Place hero at the entrance if they are out of the map (often used for pox = -1)
-		// or if they are in solid terrain (except in the mining level, where that happens normally)
-		if (pos < 0 || pos >= level.length()
-				|| (!(level instanceof MiningLevel) && !level.passable[pos] && !level.avoid[pos])){
+		//Place hero at the entrance if they are out of the map (often used for pos = -1)
+		// or if they are in invalid terrain terrain (except in the mining level, where that happens normally)
+		if (pos < 0 || pos >= level.length() || level.invalidHeroPos(pos)){
 			pos = level.getTransition(null).cell();
 		}
 		
@@ -700,13 +702,8 @@ public class Dungeon {
 		return false;
 	}
 
-	// 1/4
-	// 3/4 * 1/3 = 3/12 = 1/4
-	// 3/4 * 2/3 * 1/2 = 6/24 = 1/4
-	// 1/4
-
 	private static final String INIT_VER	= "init_ver";
-	private static final String VERSION		= "version";
+	public  static final String VERSION		= "version";
 	private static final String SEED		= "seed";
 	private static final String CUSTOM_SEED	= "custom_seed";
 	private static final String DAILY	    = "daily";
@@ -1094,10 +1091,9 @@ public class Dungeon {
 
 		GameScene.updateFog(l, t, width, height);
 
-		boolean stealthyMimics = MimicTooth.stealthyMimics();
 		if (hero.buff(MindVision.class) != null){
 			for (Mob m : level.mobs.toArray(new Mob[0])){
-				if (stealthyMimics && m instanceof Mimic && m.alignment == Char.Alignment.NEUTRAL){
+				if (m instanceof Mimic && m.alignment == Char.Alignment.NEUTRAL && ((Mimic) m).stealthy()){
 					continue;
 				}
 

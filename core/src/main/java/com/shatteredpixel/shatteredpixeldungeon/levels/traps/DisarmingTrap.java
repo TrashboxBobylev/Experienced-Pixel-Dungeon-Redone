@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
@@ -98,7 +97,6 @@ public class DisarmingTrap extends Trap{
 
 				hero.belongings.weapon = null;
 				Dungeon.quickslot.clearItem(weapon);
-				ActionIndicator.refresh();
 				weapon.updateQuickslot();
 
 				Dungeon.level.drop(weapon, cell).seen = true;

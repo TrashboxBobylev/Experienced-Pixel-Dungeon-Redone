@@ -83,13 +83,16 @@ public class Ghost extends NPC {
 	}
 
 	@Override
+	public Notes.Landmark landmark() {
+		return Notes.Landmark.GHOST;
+	}
+
+	@Override
 	protected boolean act() {
 		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
 			die(null);
+			Notes.remove( landmark() );
 			return true;
-		}
-		if (Dungeon.level.heroFOV[pos] && !Quest.completed()){
-			Notes.add( Notes.Landmark.GHOST );
 		}
 		return super.act();
 	}
@@ -305,7 +308,7 @@ public class Ghost extends NPC {
 				Ghost ghost = new Ghost();
 				do {
 					ghost.pos = level.pointToCell(room.random());
-				} while (ghost.pos == -1 || ghost.pos == level.exit());
+				} while (ghost.pos == -1 || level.solid[ghost.pos] || ghost.pos == level.exit());
 				level.mobs.add( ghost );
 				
 				spawned = true;
@@ -356,10 +359,14 @@ public class Ghost extends NPC {
                 armor.tier += Dungeon.cycle * 5;
 
 				// 20% base chance to be enchanted, stored separately so status isn't revealed early
+				//we generate first so that the outcome doesn't affect the number of RNG rolls
+				enchant = Weapon.Enchantment.random();
+				glyph = Armor.Glyph.random();
+
 				float enchantRoll = Random.Float();
-				if (enchantRoll < 0.2f * ParchmentScrap.enchantChanceMultiplier()){
-					enchant = Weapon.Enchantment.random();
-					glyph = Armor.Glyph.random();
+				if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
+					enchant = null;
+					glyph = null;
 				}
 
 				PsycheChest.questDepth = -1;

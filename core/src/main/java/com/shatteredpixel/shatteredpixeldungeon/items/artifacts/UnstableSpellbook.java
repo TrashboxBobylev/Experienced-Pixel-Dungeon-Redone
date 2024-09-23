@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -80,7 +81,7 @@ public class UnstableSpellbook extends Artifact {
 		super();
 
 		Class<?>[] scrollClasses = Generator.Category.SCROLL.classes;
-		float[] probs = Generator.Category.SCROLL.defaultProbs.clone(); //array of primitives, clone gives deep copy.
+		float[] probs = Generator.Category.SCROLL.defaultProbsTotal.clone(); //array of primitives, clone gives deep copy.
 		int i = Random.chances(probs);
 
 		while (i != -1){
@@ -351,6 +352,7 @@ public class UnstableSpellbook extends Artifact {
 						item.detach(hero.belongings.backpack);
 
 						upgrade();
+						Catalog.countUse(UnstableSpellbook.class);
 						GLog.i( Messages.get(UnstableSpellbook.class, "infuse_scroll") );
 						return;
 					}

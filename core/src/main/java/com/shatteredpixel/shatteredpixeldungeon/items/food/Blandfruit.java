@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.*;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant.Seed;
@@ -190,6 +191,7 @@ public class Blandfruit extends Food {
 				potionAttrib instanceof PotionOfLevitation ||
 				potionAttrib instanceof PotionOfPurity) {
 
+			Catalog.countUse(getClass());
 			potionAttrib.shatter( cell );
 			Dungeon.level.drop(new Chunks(), cell).sprite.drop();
 			

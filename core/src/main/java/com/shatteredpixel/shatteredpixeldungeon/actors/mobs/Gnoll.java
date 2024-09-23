@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
+import com.watabou.utils.Random;
 
 public class Gnoll extends Mob {
 	
@@ -81,7 +82,7 @@ public class Gnoll extends Mob {
             case 4: return Char.combatRoll(4000, 7000);
             case 5: return Char.combatRoll(400000, 575000);
         }
-		return Char.combatRoll( 1, 6 );
+		return Random.NormalIntRange( 1, 6 );
 	}
 	
 	@Override

@@ -103,7 +103,7 @@ public class Ghoul extends Mob {
             case 4: return Char.combatRoll(23000, 71000);
 			case 5: return Char.combatRoll(2750000, 6500000);
         }
-		return Char.combatRoll( 16, 22 );
+		return Random.NormalIntRange( 16, 22 );
 	}
 
 	@Override

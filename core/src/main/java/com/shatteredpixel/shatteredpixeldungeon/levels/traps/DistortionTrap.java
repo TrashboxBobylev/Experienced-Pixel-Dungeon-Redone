@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -100,7 +101,7 @@ public class DistortionTrap extends Trap{
 					do {
 						floor = Random.Int(25);
 					} while( Dungeon.bossLevel(floor));
-					mob = Reflection.newInstance(Bestiary.getMobRotation(floor).get(0));
+					mob = Reflection.newInstance(MobSpawner.getMobRotation(floor).get(0));
 					break;
 				case 2:
 					switch (2){
@@ -144,6 +145,8 @@ public class DistortionTrap extends Trap{
 			if ((t = Dungeon.level.traps.get(mob.pos)) != null && t.active){
 				if (t.disarmedByActivation) t.disarm();
 				t.reveal();
+				Bestiary.setSeen(t.getClass());
+				Bestiary.countEncounter(t.getClass());
 				t.activate();
 			}
 			ScrollOfTeleportation.appear(mob, mob.pos);

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CreativeGloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -207,24 +208,6 @@ public class YogDzewa extends Mob {
 			if (Dungeon.level.heroFOV[pos]) {
 				notice();
 			}
-		}
-
-		if (phase == 4 && findFist() == null){
-			yell(Messages.get(this, "hope"));
-			summonCooldown = -15; //summon a burst of minions!
-			phase = 5;
-			BossHealthBar.bleed(true);
-			Game.runOnRenderThread(new Callback() {
-				@Override
-				public void call() {
-					Music.INSTANCE.fadeOut(0.5f, new Callback() {
-						@Override
-						public void call() {
-							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
-						}
-					});
-				}
-			});
 		}
 
 		long healingTarget = Dungeon.hero.HT / 15;
@@ -412,6 +395,28 @@ public class YogDzewa extends Mob {
 		return true;
 	}
 
+	public void processFistDeath(){
+		//normally Yog has no logic when a fist dies specifically
+		//but the very last fist to die does trigger the final phase
+		if (phase == 4 && findFist() == null){
+			yell(Messages.get(this, "hope"));
+			summonCooldown = -15; //summon a burst of minions!
+			phase = 5;
+			BossHealthBar.bleed(true);
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					Music.INSTANCE.fadeOut(0.5f, new Callback() {
+						@Override
+						public void call() {
+							Music.INSTANCE.play(Assets.Music.HALLS_BOSS_FINALE, true);
+						}
+					});
+				}
+			});
+		}
+	}
+
 	@Override
 	public boolean isAlive() {
 		return super.isAlive() || phase != 5;
@@ -573,11 +578,13 @@ public class YogDzewa extends Mob {
 	@Override
 	public void die( Object cause ) {
 
+		Bestiary.skipCountingEncounters = true;
 		for (Mob mob : (Iterable<Mob>)Dungeon.level.mobs.clone()) {
 			if (mob instanceof Larva || mob instanceof YogRipper || mob instanceof YogEye || mob instanceof YogScorpio) {
 				mob.die( cause );
 			}
 		}
+		Bestiary.skipCountingEncounters = false;
 
 		updateVisibility(Dungeon.level);
 
@@ -760,7 +767,7 @@ public class YogDzewa extends Mob {
                 case 4: return Char.combatRoll(360000, 460000);
 				case 5: return Char.combatRoll(6000000, 9000000);
             }
-			return Char.combatRoll( 15, 25 );
+			return Random.NormalIntRange( 15, 25 );
 		}
 
 		@Override

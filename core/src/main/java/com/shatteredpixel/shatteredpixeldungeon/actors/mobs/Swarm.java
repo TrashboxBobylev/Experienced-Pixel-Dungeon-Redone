@@ -101,7 +101,13 @@ public class Swarm extends Mob {
 		generation = bundle.getInt( GENERATION );
 		if (generation > 0) EXP = 0;
 	}
-	
+
+	@Override
+	public void die(Object cause) {
+		flying = false;
+		super.die(cause);
+	}
+
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
@@ -111,7 +117,7 @@ public class Swarm extends Mob {
             case 4: return Char.combatRoll(5000, 9000);
 			case 5: return Char.combatRoll(475000, 975000);
         }
-		return Char.combatRoll( 1, 4 );
+		return Random.NormalIntRange( 1, 4 );
 	}
 	
 	@Override

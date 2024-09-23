@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM100Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 
 public class DM100 extends Mob implements Callback {
 
@@ -96,7 +97,7 @@ public class DM100 extends Mob implements Callback {
             case 4: return Char.combatRoll(10000, 16800);
 			case 5: return Char.combatRoll(665000, 1450000);
         }
-		return Char.combatRoll( 2, 8 );
+		return Random.NormalIntRange( 2, 8 );
 	}
 	
 	@Override
@@ -146,7 +147,7 @@ public class DM100 extends Mob implements Callback {
 
 			Invisibility.dispel(this);
 			if (hit( this, enemy, true )) {
-				long dmg = Char.combatRoll(3, 10);
+				long dmg = Random.NormalIntRange(3, 10);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
                 switch (Dungeon.cycle){
                     case 1: dmg = Char.combatRoll(32, 48); break;

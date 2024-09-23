@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollGuardSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 public class GnollGuard extends Mob {
 
@@ -115,7 +116,7 @@ public class GnollGuard extends Mob {
 				case 4: return Char.combatRoll(26000, 60000);
 				case 5: return Char.combatRoll(3000000, 4400000);
 			}
-			return Char.combatRoll( 16, 22 );
+			return Random.NormalIntRange( 16, 22 );
 		} else {
 			switch (Dungeon.cycle) {
 				case 1: return Char.combatRoll(45, 55);
@@ -124,7 +125,7 @@ public class GnollGuard extends Mob {
 				case 4: return Char.combatRoll(16500, 22500);
 				case 5: return Char.combatRoll(1750000, 2650000);
 			}
-			return Char.combatRoll( 6, 12 );
+			return Random.NormalIntRange( 6, 12 );
 		}
 	}
 

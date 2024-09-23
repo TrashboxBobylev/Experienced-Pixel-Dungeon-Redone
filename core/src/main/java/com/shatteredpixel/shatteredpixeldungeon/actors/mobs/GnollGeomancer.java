@@ -153,7 +153,7 @@ public class GnollGeomancer extends Mob {
 			case 4: return Char.combatRoll(4650, 6900);
 			case 5: return Char.combatRoll(700000, 1150000);
 		}
-		return Char.combatRoll( 3, 6 );
+		return Random.NormalIntRange( 3, 6 );
 	}
 
 	@Override

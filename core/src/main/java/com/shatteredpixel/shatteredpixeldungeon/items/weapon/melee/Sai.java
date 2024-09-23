@@ -132,6 +132,10 @@ public class Sai extends MeleeWeapon {
 		}
 	}
 
+	public String upgradeAbilityStat(int level){
+		return "+" + augment.damageFactor(3 + Math.round(0.67f*level));
+	}
+
 	public static void comboStrikeAbility(Hero hero, Integer target, float multiPerHit, long boostPerHit, MeleeWeapon wep){
 		if (target == null) {
 			return;

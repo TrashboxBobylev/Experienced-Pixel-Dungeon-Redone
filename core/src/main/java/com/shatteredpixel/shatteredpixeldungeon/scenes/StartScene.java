@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.*;
+import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGameInProgress;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Camera;
@@ -68,10 +69,10 @@ public class StartScene extends PixelScene {
 		btnExit.setPos( w - btnExit.width(), 0 );
 		add( btnExit );
 		
-		RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 9);
-		title.hardlight(Window.TITLE_COLOR);
+		IconTitle title = new IconTitle( Icons.ENTER.get(), Messages.get(this, "title"));
+		title.setSize(200, 0);
 		title.setPos(
-				(w - title.width()) / 2f,
+				(w - title.reqWidth()) / 2f,
 				(20 - title.height()) / 2f
 		);
 		align(title);
@@ -133,7 +134,7 @@ public class StartScene extends PixelScene {
 		private BitmapText level;
 		private Image cycleIcon;
 		private BitmapText cycle;
-		
+
 		private int slot;
 		private boolean newGame;
 		
@@ -189,7 +190,7 @@ public class StartScene extends PixelScene {
 						cycle = new BitmapText(PixelScene.pixelFont);
 						add(cycle);
 					}
-					
+
 					classIcon = new Image(Icons.get(info.heroClass));
 					add(classIcon);
 					level = new BitmapText(PixelScene.pixelFont);
@@ -210,7 +211,7 @@ public class StartScene extends PixelScene {
 					cycle.text(Integer.toString(info.cycle));
 					cycle.measure();
 				}
-				
+
 				if (info.challenges > 0){
 					name.hardlight(Window.TITLE_COLOR);
 					depth.hardlight(Window.TITLE_COLOR);
@@ -286,7 +287,7 @@ public class StartScene extends PixelScene {
 					cycle.y = cycleIcon.y + (cycleIcon.height() - cycle.height()) / 2f + 1;
 					align(cycle);
 				}
-				
+
 			} else {
 				name.setPos(
 						x + (width - name.width())/2f,

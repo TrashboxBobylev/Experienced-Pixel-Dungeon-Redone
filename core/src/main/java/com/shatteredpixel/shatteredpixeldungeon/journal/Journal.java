@@ -50,6 +50,7 @@ public class Journal {
 		}
 		
 		Catalog.restore( bundle );
+		Bestiary.restore( bundle );
 		Document.restore( bundle );
 		
 		loaded = true;
@@ -70,6 +71,7 @@ public class Journal {
 		Bundle bundle = new Bundle();
 		
 		Catalog.store(bundle);
+		Bestiary.store(bundle);
 		Document.store(bundle);
 		
 		try {

@@ -47,16 +47,8 @@ public abstract class WellWater extends Blob {
 				if (Dungeon.level.insideMap(cell)) {
 					off[cell] = cur[cell];
 					volume += off[cell];
-					if (off[cell] > 0 && Dungeon.level.visited[cell]) {
-						seen = true;
-					}
 				}
 			}
-		}
-		if (seen){
-			Notes.add(record());
-		} else {
-			Notes.remove(record());
 		}
 	}
 	
@@ -66,7 +58,7 @@ public abstract class WellWater extends Blob {
 		
 		if (pos == Dungeon.hero.pos && affectHero( Dungeon.hero )) {
 			
-			cur[pos] = 0;
+			clear(pos);
 			return true;
 			
 		} else if ((heap = Dungeon.level.heaps.get( pos )) != null) {
@@ -88,7 +80,7 @@ public abstract class WellWater extends Blob {
 				}
 				
 				heap.sprite.link();
-				cur[pos] = 0;
+				clear(pos);
 				
 				return true;
 				
@@ -115,8 +107,6 @@ public abstract class WellWater extends Blob {
 	
 	protected abstract Item affectItem( Item item, int pos );
 	
-	protected abstract Notes.Landmark record();
-	
 	public static void affectCell( int cell ) {
 		
 		Class<?>[] waters = {WaterOfHealth.class, WaterOfAwareness.class};
@@ -130,6 +120,21 @@ public abstract class WellWater extends Blob {
 				
 				Level.set( cell, Terrain.EMPTY_WELL );
 				GameScene.updateMap( cell );
+
+				if (water.landmark() != null) {
+					if (water.volume <= 0) {
+						Notes.remove(water.landmark());
+					} else {
+						boolean removing = true;
+						for (int i = 0; i < water.cur.length; i++){
+							if (water.cur[i] > 0 && Dungeon.level.visited[i]){
+								removing = false;
+								break;
+							}
+						}
+						if (removing) Notes.remove(water.landmark());
+					}
+				}
 				
 				return;
 			}

@@ -130,7 +130,7 @@ public class GnollSapper extends Mob {
 			case 4: return Char.combatRoll(3700, 6000);
 			case 5: return Char.combatRoll(400000, 1000000);
 		}
-		return Char.combatRoll( 1, 6 );
+		return Random.NormalIntRange( 1, 6 );
 	}
 
 	@Override

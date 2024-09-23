@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -90,19 +91,21 @@ public class UnstableSpell extends Spell {
 		
 		Scroll s = Reflection.newInstance(Dungeon.chances(scrollChances));
 
-		boolean enemy = hero.visibleEnemies() != 0;
-
-		//reroll the scroll once if there is an enemy and it is a non-combat scroll
-		// or if there is no enemy and it is a combat scroll
-		if (enemy && nonCombatScrolls.contains(s.getClass())){
-			s = Reflection.newInstance(Random.chances(scrollChances));
-		} else if (!enemy && combatScrolls.contains(s.getClass())){
-			s = Reflection.newInstance(Random.chances(scrollChances));
+		//reroll the scroll until it is relevant for the situation (whether there are visible enemies)
+		if (hero.visibleEnemies() == 0){
+			while (combatScrolls.contains(s.getClass())){
+				s = Reflection.newInstance(Random.chances(scrollChances));
+			}
+		} else {
+			while (nonCombatScrolls.contains(s.getClass())){
+				s = Reflection.newInstance(Random.chances(scrollChances));
+			}
 		}
 		s.anonymize();
 		curItem = s;
 		s.doRead();
 
+		Catalog.countUse(getClass());
 		if (Random.Float() < talentChance){
 			Talent.onScrollUsed(curUser, curUser.pos, talentFactor);
 		}

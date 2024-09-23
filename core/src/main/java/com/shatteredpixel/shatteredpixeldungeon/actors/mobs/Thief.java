@@ -118,7 +118,7 @@ public class Thief extends Mob {
             case 4: return Char.combatRoll(9500, 14000);
 			case 5: return Char.combatRoll(600000, 1070000);
         }
-		return Char.combatRoll( 1, 10 );
+		return Random.NormalIntRange( 1, 10 );
 	}
 
 	@Override

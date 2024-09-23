@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
@@ -164,11 +165,11 @@ public class Ratmogrify extends ArmorAbility {
 			CellEmitter.get(rat.pos).burst(Speck.factory(Speck.WOOL), 4);
 			Sample.INSTANCE.play(Assets.Sounds.PUFF);
 
-			Dungeon.level.occupyCell(rat);
-
-			//for rare cases where a buff was keeping a mob alive (e.g. gnoll brutes)
+			//for rare cases where a buff was keeping a mob alive (e.g. gnoll brute rage)
 			if (!rat.isAlive()){
 				rat.die(this);
+			} else {
+				Dungeon.level.occupyCell(rat);
 			}
 		}
 
@@ -261,6 +262,8 @@ public class Ratmogrify extends ArmorAbility {
 			allied = true;
 			alignment = Alignment.ALLY;
 			timeLeft = Float.POSITIVE_INFINITY;
+			Bestiary.setSeen(original.getClass());
+			Bestiary.countEncounter(original.getClass());
 		}
 
 		public int attackSkill(Char target) {
@@ -289,6 +292,15 @@ public class Ratmogrify extends ArmorAbility {
 		public void rollToDropLoot() {
 			original.pos = pos;
 			original.rollToDropLoot();
+		}
+
+		@Override
+		public void destroy() {
+			super.destroy();
+			if (alignment == Alignment.ENEMY && original != null) {
+				Bestiary.setSeen(original.getClass());
+				Bestiary.countEncounter(original.getClass());
+			}
 		}
 
 		@Override

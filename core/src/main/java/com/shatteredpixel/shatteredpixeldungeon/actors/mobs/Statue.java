@@ -89,15 +89,7 @@ public class Statue extends Mob {
 		super.restoreFromBundle( bundle );
 		weapon = (Weapon)bundle.get( WEAPON );
 	}
-	
-	@Override
-	protected boolean act() {
-		if (levelGenStatue && Dungeon.level.visited[pos]) {
-			Notes.add( Notes.Landmark.STATUE );
-		}
-		return super.act();
-	}
-	
+
 	@Override
 	public long damageRoll() {
 		return (int) weapon.damageRoll(this);
@@ -169,11 +161,16 @@ public class Statue extends Mob {
         }
 		super.die( cause );
 	}
-	
+
+	@Override
+	public Notes.Landmark landmark() {
+		return levelGenStatue ? Notes.Landmark.STATUE : null;
+	}
+
 	@Override
 	public void destroy() {
-		if (levelGenStatue) {
-			Notes.remove( Notes.Landmark.STATUE );
+		if (landmark() != null) {
+			Notes.remove( landmark() );
 		}
 		super.destroy();
 	}
@@ -185,13 +182,16 @@ public class Statue extends Mob {
 
 	@Override
 	public boolean reset() {
-		state = PASSIVE;
 		return true;
 	}
 
 	@Override
 	public String description() {
-		return Messages.get(this, "desc", weapon.name());
+		String desc = Messages.get(this, "desc");
+		if (weapon != null){
+			desc += "\n\n" + Messages.get(this, "desc_weapon", weapon.name());
+		}
+		return desc;
 	}
 	
 	{

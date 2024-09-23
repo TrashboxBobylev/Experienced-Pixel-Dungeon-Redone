@@ -70,6 +70,11 @@ public class WarHammer extends MeleeWeapon {
 		Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);
 	}
 
+	public String upgradeAbilityStat(int level){
+		int dmgBoost = 6 + Math.round(1.5f*level);
+		return augment.damageFactor(min(level)+dmgBoost) + "-" + augment.damageFactor(max(level)+dmgBoost);
+	}
+
 	@Override
 	public String abilityInfo() {
 		long dmgBoost = levelKnown ? tier()*10L + buffedLvl()*tier()*12 : tier()*10L;

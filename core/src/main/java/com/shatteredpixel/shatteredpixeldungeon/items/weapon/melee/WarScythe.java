@@ -48,21 +48,26 @@ public class WarScythe extends MeleeWeapon {
         return Messages.get(this, "prompt");
     }
 
-    @Override
-    protected void duelistAbility(Hero hero, Integer target) {
-        //replaces damage with 22.5+3.5*lvl bleed, exactly 100% avg damage.
-		long bleedAmt = augment.damageFactor(Math.round(22.5d + 3.5d*buffedLvl()));
+	@Override
+	protected void duelistAbility(Hero hero, Integer target) {
+		//replaces damage with 30+4.5*lvl bleed, roughly 133% avg base dmg, 129% avg scaling
+		long bleedAmt = augment.damageFactor(Math.round(30f + 4.5f*buffedLvl()));
 		Sickle.harvestAbility(hero, target, 0f, bleedAmt, this);
 	}
 
 	@Override
 	public String abilityInfo() {
-		long bleedAmt = levelKnown ? Math.round(22.5d + 3.5d*buffedLvl()) : 23;
+		long bleedAmt = levelKnown ? Math.round(30f + 4.5f*buffedLvl()) : 30;
 		if (levelKnown){
 			return Messages.get(this, "ability_desc", augment.damageFactor(bleedAmt));
 		} else {
 			return Messages.get(this, "typical_ability_desc", bleedAmt);
 		}
     }
+
+	@Override
+	public String upgradeAbilityStat(int level) {
+		return Integer.toString(augment.damageFactor(Math.round(30f + 4.5f*level)));
+	}
 
 }

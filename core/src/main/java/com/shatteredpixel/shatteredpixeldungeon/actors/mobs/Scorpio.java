@@ -93,7 +93,7 @@ public class Scorpio extends Mob {
             case 4: return Char.combatRoll(324000, 410000);
 			case 5: return Char.combatRoll(7000000, 11000000);
         }
-		return Char.combatRoll( 30, 40 );
+		return Random.NormalIntRange( 30, 40 );
 	}
 	
 	@Override

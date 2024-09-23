@@ -118,7 +118,7 @@ public class Eye extends Mob {
             case 4: return Char.combatRoll(179000, 290000);
 			case 5: return Char.combatRoll(5750000, 9000000);
         }
-		return Char.combatRoll(20, 30);
+		return Random.NormalIntRange(20, 30);
 	}
 
 	@Override
@@ -217,7 +217,13 @@ public class Eye extends Mob {
 		if (beamCharged) dmg /= 4;
 		super.damage(dmg, src);
 	}
-	
+
+	@Override
+	public void die(Object cause) {
+		flying = false;
+		super.die(cause);
+	}
+
 	//used so resistances can differentiate between melee and magical attacks
 	public static class DeathGaze{}
 
@@ -247,7 +253,7 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-                long dmg = Char.combatRoll(30, 50);
+                long dmg = Random.NormalIntRange(30, 50);
                 switch (Dungeon.cycle){
                     case 1: dmg = Char.combatRoll(168, 231); break;
                     case 2: dmg = Char.combatRoll(510, 824); break;

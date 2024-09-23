@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -133,7 +134,7 @@ public class CrystalSpire extends Mob {
 					long dmg = Char.combatRoll(12, 30);
 					switch (Dungeon.cycle) {
 						case 1: dmg = Char.combatRoll(96, 124); break;
-						case 2: dmg = Char.combatRoll(500, 648); break;
+						case 2: dmg = Random.NormalIntRange(500, 648); break;
 						case 3: dmg = Char.combatRoll(1790, 2400); break;
 						case 4: dmg = Char.combatRoll(34000, 52000); break;
 						case 5: dmg = Char.combatRoll(4000000, 4900000); break;
@@ -353,6 +354,9 @@ public class CrystalSpire extends Mob {
 						PixelScene.shake( 3, 0.7f );
 						Blacksmith.Quest.beatBoss();
 
+						Bestiary.setSeen(CrystalSpire.class);
+						Bestiary.countEncounter(CrystalSpire.class);
+
 						if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
 							fieldOfView = new boolean[Dungeon.level.length()];
 							Dungeon.level.updateFieldOfView( CrystalSpire.this, fieldOfView );
@@ -366,6 +370,7 @@ public class CrystalSpire extends Mob {
 							}
 						}
 
+						Bestiary.skipCountingEncounters = true;
 						for (Char ch : Actor.chars()){
 							if (fieldOfView[ch.pos]) {
 								if (ch instanceof CrystalGuardian) {
@@ -376,6 +381,7 @@ public class CrystalSpire extends Mob {
 								}
 							}
 						}
+						Bestiary.skipCountingEncounters = false;
 
 					}
 

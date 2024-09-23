@@ -45,9 +45,11 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WindParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.*;
@@ -87,7 +89,15 @@ public abstract class Level implements Bundlable {
 		DARK,
 		LARGE,
 		TRAPS,
-		SECRETS
+		SECRETS;
+
+		public String title(){
+			return Messages.get(this, name()+"_title");
+		}
+
+		public String desc() {
+			return Messages.get(this, name()+"_desc");
+		}
 	}
 
 	protected int width;
@@ -216,8 +226,7 @@ public abstract class Level implements Bundlable {
 						break;
 					case 3:
 						feeling = Feeling.DARK;
-						addItemToSpawn(new Torch());
-						viewDistance = Math.round(viewDistance/2f);
+						viewDistance = Math.round(5*viewDistance/8f);
 						break;
 					case 4:
 						feeling = Feeling.LARGE;
@@ -381,8 +390,9 @@ public abstract class Level implements Bundlable {
 		}
 
 		feeling = bundle.getEnum( FEELING, Feeling.class );
-		if (feeling == Feeling.DARK)
-			viewDistance = Math.round(viewDistance/2f);
+		if (feeling == Feeling.DARK) {
+			viewDistance = Math.round(5 * viewDistance / 8f);
+		}
 
 		if (bundle.contains( "mobs_to_spawn" )) {
 			for (Class<? extends Mob> mob : bundle.getClassArray("mobs_to_spawn")) {
@@ -390,7 +400,7 @@ public abstract class Level implements Bundlable {
 			}
 		}
 if (bundle.contains( "respawner" )){
-			respawner = (Respawner) bundle.get("respawner");
+			respawner = (MobSpawner) bundle.get("respawner");
 		}
 		buildFlagMaps();
 		cleanWalls();
@@ -449,7 +459,7 @@ if (bundle.contains( "respawner" )){
 	
 	public Mob createMob() {
 		if (mobsToSpawn == null || mobsToSpawn.isEmpty()) {
-			mobsToSpawn = Bestiary.getMobRotation(Dungeon.depth);
+			mobsToSpawn = MobSpawner.getMobRotation(Dungeon.depth);
 		}
 
 		Mob m = Reflection.newInstance(mobsToSpawn.remove(0));
@@ -533,9 +543,11 @@ if (bundle.contains( "respawner" )){
 		Swiftthistle.TimeBubble timeBubble = Dungeon.hero.buff(Swiftthistle.TimeBubble.class);
 		if (timeBubble != null) timeBubble.disarmPresses();
 
-		//iron stomach does not persist through chasm falling
+		//iron stomach and challenge arena do not persist between floors
 		Talent.WarriorFoodImmunity foodImmune = Dungeon.hero.buff(Talent.WarriorFoodImmunity.class);
 		if (foodImmune != null) foodImmune.detach();
+		ScrollOfChallenge.ChallengeArena arena = Dungeon.hero.buff(ScrollOfChallenge.ChallengeArena.class);
+		if (arena != null) arena.detach();
 
 		//spend the hero's partial turns,  so the hero cannot take partial turns between floors
 		Dungeon.hero.spendToWhole();
@@ -566,7 +578,14 @@ if (bundle.contains( "respawner" )){
 	public ArrayList<Item> getItemsToPreserveFromSealedResurrect(){
 		ArrayList<Item> items = new ArrayList<>();
 		for (Heap h : heaps.valueList()){
-			if (h.type == Heap.Type.HEAP) items.addAll(h.items);
+			if (h.type == Heap.Type.HEAP) {
+				for (Item i : h.items){
+					if (i instanceof Bomb){
+						((Bomb) i).fuse = null;
+					}
+					items.add(i);
+				}
+			}
 		}
 		for (Mob m : mobs){
 			for (PinCushion b : m.buffs(PinCushion.class)){
@@ -632,7 +651,7 @@ if (bundle.contains( "respawner" )){
 		return null;
 	}
 
-	private Respawner respawner;
+	private MobSpawner respawner;
 
 	public Respawner respawner(){
 		return new Respawner();
@@ -640,7 +659,7 @@ if (bundle.contains( "respawner" )){
 
 	public Actor addRespawner() {
 		if (respawner == null){
-			respawner = respawner();
+			respawner = new MobSpawner();
 			Actor.addDelayed(respawner, respawnCooldown());
 		} else {
 			Actor.add(respawner);
@@ -649,36 +668,6 @@ if (bundle.contains( "respawner" )){
 			}
 		}
 		return respawner;
-	}
-
-	public static class Respawner extends Actor {
-		{
-			actPriority = BUFF_PRIO; //as if it were a buff.
-		}
-
-		@Override
-		protected boolean act() {
-
-			if (Dungeon.level.mobCount() < Dungeon.level.mobLimit()) {
-
-				if (Dungeon.level.spawnMob(12)){
-					spend(Dungeon.level.respawnCooldown());
-				} else {
-					//try again in 1 turn
-					spend(TICK);
-				}
-
-			} else {
-				spend(Dungeon.level.respawnCooldown());
-			}
-
-			return true;
-		}
-
-		protected void resetCooldown(){
-			spend(-cooldown());
-			spend(Dungeon.level.respawnCooldown());
-		}
 	}
 
 	public float respawnCooldown(){
@@ -1079,6 +1068,16 @@ if (bundle.contains( "respawner" )){
 
 		if (!ch.flying){
 
+			//we call act here instead of detach in case the debuffs haven't managed to deal dmg once yet
+			if (map[ch.pos] == Terrain.WATER){
+				if (ch.buff(Burning.class) != null){
+					ch.buff(Burning.class).act();
+				}
+				if (ch.buff(Ooze.class) != null){
+					ch.buff(Ooze.class).act();
+				}
+			}
+
 			if ( (map[ch.pos] == Terrain.GRASS || map[ch.pos] == Terrain.EMBERS)
 					&& ch == Dungeon.hero && Dungeon.hero.heroClass == HeroClass.HUNTRESS
 					&& ch.buff(Talent.RejuvenatingStepsCooldown.class) == null){
@@ -1216,7 +1215,7 @@ if (bundle.contains( "respawner" )){
 		int cy = c.pos / width();
 		
 		boolean sighted = c.buff( Blindness.class ) == null && c.buff( Shadows.class ) == null
-						&& c.buff( TimekeepersHourglass.timeStasis.class ) == null && c.isAlive();
+						&& c.isAlive();
 		if (sighted) {
 			boolean[] blocking = null;
 
@@ -1327,10 +1326,9 @@ if (bundle.contains( "respawner" )){
 			}
 
 			Dungeon.hero.mindVisionEnemies.clear();
-			boolean stealthyMimics = MimicTooth.stealthyMimics();
 			if (c.buff( MindVision.class ) != null) {
 				for (Mob mob : mobs) {
-					if (stealthyMimics && mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL){
+					if (mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL&& ((Mimic) mob).stealthy()){
 						continue;
 					}
 					for (int i : PathFinder.NEIGHBOURS9) {
@@ -1347,7 +1345,7 @@ if (bundle.contains( "respawner" )){
 
 				if (mindVisRange >= 1) {
 					for (Mob mob : mobs) {
-						if (stealthyMimics && mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL) {
+						if (mob instanceof Mimic && mob.alignment == Char.Alignment.NEUTRAL&& ((Mimic) mob).stealthy()){
 							continue;
 						}
 						int p = mob.pos;
@@ -1440,6 +1438,11 @@ if (bundle.contains( "respawner" )){
 		int bx = b % width();
 		int by = b / width();
 		return (float)Math.sqrt(Math.pow(Math.abs( ax - bx ), 2) + Math.pow(Math.abs( ay - by ), 2));
+	}
+
+	//usually just if a cell is solid, but other cases exist too
+	public boolean invalidHeroPos( int tile ){
+		return !passable[tile] && !avoid[tile];
 	}
 
 	//returns true if the input is a valid tile within the level

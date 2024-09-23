@@ -38,13 +38,17 @@ public class MossyClump extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//5 -> 20(25) -> 25(50) -> 30(80)
-		return 20+5*(int)level();
+		//6 -> 15(21) -> 20(41) -> 25(66)
+		return 15+5*(int)level();
 	}
 
 	@Override
-	public String desc() {
-		return Messages.get(this, "desc", (int)(100*overrideNormalLevelChance((int)buffedLvl())));
+	public String statsDesc() {
+		if (isIdentified()){
+			return Messages.get(this, "stats_desc", (int)(100*overrideNormalLevelChance((int)buffedLvl())));
+		} else {
+			return Messages.get(this, "typical_stats_desc", (int)(100*overrideNormalLevelChance(0)));
+		}
 	}
 
 	public static float overrideNormalLevelChance(){

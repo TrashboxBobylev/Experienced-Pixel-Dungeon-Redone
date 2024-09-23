@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -197,6 +198,16 @@ public class WandOfWarding extends Wand {
 			return Messages.get(this, "stats_desc", 2);
 	}
 
+	@Override
+	public String upgradeStat1(int level) {
+		return 2+level + "-" + (8+4*level);
+	}
+
+	@Override
+	public String upgradeStat2(int level) {
+		return Integer.toString(level+2);
+	}
+
 	public static class Ward extends NPC {
 
 		public int tier = 1;
@@ -246,6 +257,10 @@ public class WandOfWarding extends Wand {
 					break;
 			}
 
+			if (Actor.chars().contains(this) && tier >= 3){
+				Bestiary.setSeen(WardSentry.class);
+			}
+
 			if (tier < 6){
 				tier++;
 				viewDistance++;
@@ -257,6 +272,9 @@ public class WandOfWarding extends Wand {
 			}
 
 		}
+
+		//this class is used so that wards and sentries can have two entries in the Bestiary
+		public static class WardSentry extends Ward{};
 
 		public void wandHeal( long wandLevel ){
 			wandHeal( wandLevel, 1f );
@@ -299,7 +317,7 @@ public class WandOfWarding extends Wand {
 		public long drRoll() {
 			long dr = super.drRoll();
 			if (tier > 3){
-				return dr + Math.round(Char.combatRoll(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
+				return dr + Math.round(Random.NormalIntRange(0, 3 + Dungeon.scalingDepth()/2) / (7f - tier));
 			} else {
 				return dr;
 			}
@@ -326,7 +344,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			long dmg = (long) (Random.NormalLongRange( 2 + wandLevel, 8 + 4*wandLevel )*(1+ Dungeon.hero.lvl/150f));
+			long dmg = Hero.heroDamageIntRange( 2 + wandLevel, 8 + 4*wandLevel );
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){
@@ -426,7 +444,16 @@ public class WandOfWarding extends Wand {
 
 		@Override
 		public String description() {
-			return Messages.get(this, "desc_" + tier, 2+wandLevel, 8 + 4*wandLevel, tier );
+			if (!Actor.chars().contains(this)){
+				//for viewing in the journal
+				if (tier < 4){
+					return Messages.get(this, "desc_generic_ward");
+				} else {
+					return Messages.get(this, "desc_generic_sentry");
+				}
+			} else {
+				return Messages.get(this, "desc_" + tier, 2 + wandLevel, 8 + 4 * wandLevel, tier);
+			}
 		}
 		
 		{

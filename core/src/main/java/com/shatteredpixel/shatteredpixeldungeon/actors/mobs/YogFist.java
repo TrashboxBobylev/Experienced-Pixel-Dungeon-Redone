@@ -174,6 +174,16 @@ public abstract class YogFist extends Mob {
 		}
 	}
 
+	@Override
+	public void die(Object cause) {
+		super.die(cause);
+		for ( Char c : Actor.chars() ){
+			if (c instanceof YogDzewa){
+				((YogDzewa) c).processFistDeath();
+			}
+		}
+	}
+
 	protected abstract void zap();
 
 	public void onZapComplete(){
@@ -202,7 +212,7 @@ public abstract class YogFist extends Mob {
             case 4: return Char.combatRoll(350000, 460000);
 			case 5: return Char.combatRoll(6000000, 12500000);
         }
-		return Char.combatRoll( 18, 36 );
+		return Random.NormalIntRange( 18, 36 );
 	}
 
 	@Override
@@ -493,7 +503,7 @@ public abstract class YogFist extends Mob {
                 case 4: return Char.combatRoll(435000, 540000);
 				case 5: return Char.combatRoll(8500000, 17500000);
             }
-			return Char.combatRoll( 22, 44 );
+			return Random.NormalIntRange( 22, 44 );
 		}
 
 		@Override

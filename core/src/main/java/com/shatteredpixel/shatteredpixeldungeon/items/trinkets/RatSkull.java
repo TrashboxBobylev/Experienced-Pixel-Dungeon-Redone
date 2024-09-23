@@ -32,13 +32,17 @@ public class RatSkull extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//5 -> 8(13) -> 10(23) -> 12(35)
+		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*(int)level();
 	}
 
 	@Override
-	public String desc() {
-		return Messages.get(this, "desc", (int)(exoticChanceMultiplier((int)buffedLvl())));
+	public String statsDesc() {
+		if (isIdentified()){
+			return Messages.get(this, "stats_desc", (int)(exoticChanceMultiplier((int)buffedLvl())));
+		} else {
+			return Messages.get(this, "typical_stats_desc", (int)(exoticChanceMultiplier(0)));
+		}
 	}
 
 	public static float exoticChanceMultiplier(){

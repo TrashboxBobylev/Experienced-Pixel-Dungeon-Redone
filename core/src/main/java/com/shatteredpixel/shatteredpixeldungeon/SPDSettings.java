@@ -231,6 +231,7 @@ public static void systemFont(boolean value){
 	public static final String KEY_INTRO		= "intro";
 
 	public static final String KEY_SUPPORT_NAGGED= "support_nagged";
+public static final String KEY_VICTORY_NAGGED= "victory_nagged";
 
 	public static void intro( boolean value ) {
 		put( KEY_INTRO, value );
@@ -278,6 +279,14 @@ public static void systemFont(boolean value){
 
 	public static boolean supportNagged() {
 		return getBoolean(KEY_SUPPORT_NAGGED, false);
+	}
+
+	public static void victoryNagged( boolean value ) {
+		put( KEY_VICTORY_NAGGED, value );
+	}
+
+	public static boolean victoryNagged() {
+		return getBoolean(KEY_VICTORY_NAGGED, false);
 	}
 
 	//Input
@@ -433,7 +442,7 @@ public static void playMusicInBackground( boolean value ){
 	public static final String KEY_WINDOW_WIDTH     = "window_width";
 	public static final String KEY_WINDOW_HEIGHT    = "window_height";
 	public static final String KEY_WINDOW_MAXIMIZED = "window_maximized";
-
+public static final String KEY_FULLSCREEN_MONITOR = "fullscreen_monitor";
 	public static void windowResolution( Point p ){
 		put(KEY_WINDOW_WIDTH, p.x);
 		put(KEY_WINDOW_HEIGHT, p.y);
@@ -452,5 +461,13 @@ public static void playMusicInBackground( boolean value ){
 
 	public static boolean windowMaximized(){
 		return getBoolean( KEY_WINDOW_MAXIMIZED, false );
+	}
+
+	public static void fulLScreenMonitor( int value ){
+		put( KEY_FULLSCREEN_MONITOR, value);
+	}
+
+	public static int fulLScreenMonitor(){
+		return getInt( KEY_FULLSCREEN_MONITOR, 0 );
 	}
 }

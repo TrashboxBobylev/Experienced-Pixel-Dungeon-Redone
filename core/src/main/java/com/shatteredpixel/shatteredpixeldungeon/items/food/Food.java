@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -75,6 +76,7 @@ public class Food extends Item {
 		if (action.equals( AC_EAT )) {
 			
 			detach( hero.belongings.backpack );
+			Catalog.countUse(getClass());
 			
 			satisfy(hero);
 			GLog.i( Messages.get(this, "eat_msg") );

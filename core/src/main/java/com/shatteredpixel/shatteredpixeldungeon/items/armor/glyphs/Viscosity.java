@@ -126,17 +126,11 @@ public class Viscosity extends Glyph {
 			damage = bundle.getLong( DAMAGE );
 		}
 		
-		@Override
-		public boolean attachTo( Char target ) {
-			if (super.attachTo( target )) {
-				postpone( TICK );
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
 		public void prolong( long damage ) {
+			if (this.damage == 0){
+				//wait 1 turn before damaging if this is freshly applied
+				postpone(TICK);
+			}
 			this.damage += damage;
 		}
 		
