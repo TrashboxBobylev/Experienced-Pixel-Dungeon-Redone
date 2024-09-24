@@ -80,7 +80,7 @@ public class Spear extends MeleeWeapon {
 		}
 	}
 
-	public String upgradeAbilityStat(int level){
+	public String upgradeAbilityStat(long level){
 		int dmgBoost = 9 + Math.round(2f*level);
 		return augment.damageFactor(min(level)+dmgBoost) + "-" + augment.damageFactor(max(level)+dmgBoost);
 	}

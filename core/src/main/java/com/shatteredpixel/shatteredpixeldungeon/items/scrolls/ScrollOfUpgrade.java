@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -50,10 +49,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndUpgrade;
 import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndUpgrade;
 
 public class ScrollOfUpgrade extends InventoryScroll {
 
@@ -144,13 +143,6 @@ public class ScrollOfUpgrade extends InventoryScroll {
 		GameScene.selectItem(itemSelector);
 	}
 
-	public Item upgradeItem( Item item ){
-		upgrade( curUser );
-
-		upgradeItem(item);
-		Talent.onUpgradeScrollUsed( Dungeon.hero );
-	}
-
 	private void upgradeItem(Item item) {
 		Degrade.detach( curUser, Degrade.class );
 
@@ -215,8 +207,6 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 		Catalog.countUse(item.getClass());
 		Catalog.countUse(ScrollOfUpgrade.class);
-
-		return item;
 	}
 
 	public static void upgrade( Hero hero ) {

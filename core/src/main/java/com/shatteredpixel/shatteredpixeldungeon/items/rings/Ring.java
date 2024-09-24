@@ -219,15 +219,15 @@ public class Ring extends KindofMisc {
 		return "";
 	}
 
-	public String upgradeStat1(int level){
+	public String upgradeStat1(long level){
 		return null;
 	}
 
-	public String upgradeStat2(int level){
+	public String upgradeStat2(long level){
 		return null;
 	}
 
-	public String upgradeStat3(int level){
+	public String upgradeStat3(long level){
 		return null;
 	}
 	

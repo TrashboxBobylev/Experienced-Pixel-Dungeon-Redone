@@ -74,7 +74,7 @@ public abstract class DamageWand extends Wand{
 	}
 
 	@Override
-	public String upgradeStat1(int level) {
+	public String upgradeStat1(long level) {
 		return min(level) + "-" + max(level);
 	}
 }

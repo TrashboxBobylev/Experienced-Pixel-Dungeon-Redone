@@ -59,7 +59,7 @@ public class Glaive extends MeleeWeapon {
 		Spear.spikeAbility(hero, target, 1, dmgBoost, this);
 	}
 
-	public String upgradeAbilityStat(int level){
+	public String upgradeAbilityStat(long level){
 		int dmgBoost = 12 + Math.round(2.5f*level);
 		return augment.damageFactor(min(level)+dmgBoost) + "-" + augment.damageFactor(max(level)+dmgBoost);
 	}

@@ -142,12 +142,12 @@ public class WandOfPrismaticLight extends DamageWand {
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		return Messages.decimalFormat("#", 100*(1-(3/(float)(5+level)))) + "%";
 	}
 
 	@Override
-	public String upgradeStat3(int level) {
+	public String upgradeStat3(long level) {
 		if (Dungeon.isChallenged(Challenges.DARKNESS)){
 			return Integer.toString(2 + level);
 		} else {

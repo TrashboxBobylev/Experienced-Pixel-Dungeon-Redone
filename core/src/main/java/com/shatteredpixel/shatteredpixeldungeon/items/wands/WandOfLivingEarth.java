@@ -48,7 +48,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.*;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.ColorMath;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class WandOfLivingEarth extends DamageWand {
 	
@@ -184,12 +188,12 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		return Integer.toString(16 + 8*level);
 	}
 
 	@Override
-	public String upgradeStat3(int level) {
+	public String upgradeStat3(long level) {
 		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
 			return level + "-" + (2+level);
 		} else {

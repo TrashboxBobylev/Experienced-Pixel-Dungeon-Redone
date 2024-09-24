@@ -137,7 +137,7 @@ public class Flail extends MeleeWeapon {
 		}
 	}
 
-	public String upgradeAbilityStat(int level){
+	public String upgradeAbilityStat(long level){
 		return "+" + augment.damageFactor(8 + 2*level);
 	}
 

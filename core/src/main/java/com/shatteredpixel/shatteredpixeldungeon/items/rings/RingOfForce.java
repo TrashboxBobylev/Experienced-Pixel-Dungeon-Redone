@@ -135,20 +135,20 @@ public class RingOfForce extends Ring {
 	}
 
 	@Override
-	public String upgradeStat1(int level) {
+	public String upgradeStat1(long level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
 		float tier = tier(Dungeon.hero != null ? Dungeon.hero.STR() : 10);
 		return min(level+1, tier) + "-" + max(level+1, tier);
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
 		return Integer.toString(level+1);
 	}
 
 	@Override
-	public String upgradeStat3(int level) {
+	public String upgradeStat3(long level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
 		if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.DUELIST){
 			float tier = tier(Dungeon.hero != null ? Dungeon.hero.STR() : 10);

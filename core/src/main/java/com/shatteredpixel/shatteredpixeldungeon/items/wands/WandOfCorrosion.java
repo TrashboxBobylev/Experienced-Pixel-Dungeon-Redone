@@ -128,12 +128,12 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public String upgradeStat1(int level) {
+	public String upgradeStat1(long level) {
 		return Integer.toString(level+2);
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		return Messages.decimalFormat("#.##x", 1+.2f*level);
 	}
 }

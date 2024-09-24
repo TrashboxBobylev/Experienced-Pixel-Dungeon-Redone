@@ -79,7 +79,7 @@ public class WndUpgrade extends Window {
 		title.setRect(0, 0, WIDTH, 0);
 		add(title);
 
-		int quantity = upgrader.quantity();
+		long quantity = upgrader.quantity();
 		Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
 
 		if (moreUpgradeItem != null && moreUpgradeItem != upgrader){
@@ -98,8 +98,8 @@ public class WndUpgrade extends Window {
 
 		// *** Computing current and next level to display ***
 
-		int levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;
-		int levelTo = levelFrom + 1;
+		long levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;
+		long levelTo = levelFrom + 1;
 
 		if (toUpgrade instanceof Wand && ((Wand) toUpgrade).resinBonus > 0){
 			levelTo--;
@@ -237,8 +237,8 @@ public class WndUpgrade extends Window {
 					bottom);
 		} else if (toUpgrade instanceof Armor) {
 			bottom = fillFields(Messages.get(this, "weight"),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelFrom))),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelTo))),
+					Long.toString((((Armor) toUpgrade).STRReq(levelFrom))),
+					Long.toString((((Armor) toUpgrade).STRReq(levelTo))),
 					bottom);
 		}
 
@@ -283,10 +283,10 @@ public class WndUpgrade extends Window {
 
 		//max charges
 		if (wand instanceof Wand){
-			int chargeboost = levelFrom + (toUpgrade instanceof MagesStaff ? 1 : 0);
+			long chargeboost = levelFrom + (toUpgrade instanceof MagesStaff ? 1 : 0);
 			bottom = fillFields(Messages.get(this, "charges"),
-					Integer.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost)),
-					Integer.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost + 1)),
+					Long.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost)),
+					Long.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost + 1)),
 					bottom);
 		}
 

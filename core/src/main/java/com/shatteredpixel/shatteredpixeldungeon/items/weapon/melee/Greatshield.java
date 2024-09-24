@@ -48,12 +48,12 @@ public class Greatshield extends MeleeWeapon {
 		return DRMax();
 	}
 
-	public int DRMax(){
+	public long DRMax(){
 		return DRMax(buffedLvl());
 	}
 
 	//6 extra defence, plus 2 per level
-	public int DRMax(int lvl){
+	public long DRMax(long lvl){
 		return (tier()+1)+(tier()-2)*lvl;
 	}
 	
@@ -80,7 +80,7 @@ public class Greatshield extends MeleeWeapon {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
-		return Integer.toString(3 + level);
+	public String upgradeAbilityStat(long level) {
+		return Long.toString(3 + level);
 	}
 }

@@ -220,17 +220,17 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public String upgradeStat1(int level) {
+	public String upgradeStat1(long level) {
 		return (1+level) + "-" + (2+2*level);
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		return (2+2*level) + "-" + 2*(4+2*level);
 	}
 
 	@Override
-	public String upgradeStat3(int level) {
+	public String upgradeStat3(long level) {
 		return (3+3*level) + "-" + 3*(6+2*level);
 	}
 

@@ -204,12 +204,12 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public String upgradeStat1(int level) {
+	public String upgradeStat1(long level) {
 		return 2+level + "-" + (8+4*level);
 	}
 
 	@Override
-	public String upgradeStat2(int level) {
+	public String upgradeStat2(long level) {
 		return Integer.toString(level+2);
 	}
 

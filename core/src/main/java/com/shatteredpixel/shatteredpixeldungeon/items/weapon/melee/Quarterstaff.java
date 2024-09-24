@@ -74,7 +74,7 @@ public class Quarterstaff extends MeleeWeapon {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
+	public String upgradeAbilityStat(long level) {
 		return Integer.toString(4+level);
 	}
 

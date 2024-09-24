@@ -57,12 +57,12 @@ public class RoundShield extends MeleeWeapon {
 		return DRMax();
 	}
 
-	public int DRMax(){
+	public long DRMax(){
 		return DRMax(buffedLvl());
 	}
 
 	//4 extra defence, plus 1 per level
-	public int DRMax(int lvl){
+	public long DRMax(long lvl){
 		return (tier()+1)+(tier()-1)*lvl;
 	}
 	
@@ -89,8 +89,8 @@ public class RoundShield extends MeleeWeapon {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
-		return Integer.toString(5 + level);
+	public String upgradeAbilityStat(long level) {
+		return Long.toString(5 + level);
 	}
 
 	public static void guardAbility(Hero hero, long duration, MeleeWeapon wep){

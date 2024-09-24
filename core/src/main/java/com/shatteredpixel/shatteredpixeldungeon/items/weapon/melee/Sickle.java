@@ -76,7 +76,7 @@ public class Sickle extends MeleeWeapon {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
+	public String upgradeAbilityStat(long level) {
 		return Integer.toString(augment.damageFactor(Math.round(15f + 2.5f*level)));
 	}
 

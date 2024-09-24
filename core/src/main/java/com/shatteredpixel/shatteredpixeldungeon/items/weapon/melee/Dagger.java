@@ -106,7 +106,7 @@ public class Dagger extends MeleeWeapon {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
+	public String upgradeAbilityStat(long level) {
 		return Integer.toString(2+level);
 	}
 

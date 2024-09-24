@@ -132,7 +132,7 @@ public class Sai extends MeleeWeapon {
 		}
 	}
 
-	public String upgradeAbilityStat(int level){
+	public String upgradeAbilityStat(long level){
 		return "+" + augment.damageFactor(3 + Math.round(0.67f*level));
 	}
 

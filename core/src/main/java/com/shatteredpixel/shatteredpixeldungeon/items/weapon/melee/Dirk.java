@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -94,7 +93,7 @@ public class Dirk extends MeleeWeapon implements PreparationAllowed {
 	}
 
 	@Override
-	public String upgradeAbilityStat(int level) {
+	public String upgradeAbilityStat(long level) {
 		return Integer.toString(2+level);
 	}
 
