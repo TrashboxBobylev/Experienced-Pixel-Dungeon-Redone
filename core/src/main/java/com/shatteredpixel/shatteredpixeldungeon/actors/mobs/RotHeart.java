@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RotHeartSprite;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class RotHeart extends Mob {
 
@@ -147,10 +146,10 @@ public class RotHeart extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(8, 28);
-            case 2: return Char.combatRoll(100, 184);
+            case 1: return Dungeon.NormalLongRange(8, 28);
+            case 2: return Dungeon.NormalLongRange(100, 184);
         }
-		return Char.combatRoll(0, 5);
+		return Dungeon.NormalLongRange(0, 5);
 	}
 	
 	{

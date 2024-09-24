@@ -31,7 +31,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
-import com.shatteredpixel.shatteredpixeldungeon.effects.*;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
@@ -49,7 +53,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.*;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -147,10 +155,10 @@ public class GnollGeomancer extends Mob {
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Char.combatRoll(35, 45);
-			case 2: return Char.combatRoll(155, 175);
-			case 3: return Char.combatRoll(564, 670);
-			case 4: return Char.combatRoll(4650, 6900);
+			case 1: return Dungeon.NormalLongRange(35, 45);
+			case 2: return Dungeon.NormalLongRange(155, 175);
+			case 3: return Dungeon.NormalLongRange(564, 670);
+			case 4: return Dungeon.NormalLongRange(4650, 6900);
 			case 5: return Char.combatRoll(700000, 1150000);
 		}
 		return Random.NormalIntRange( 3, 6 );

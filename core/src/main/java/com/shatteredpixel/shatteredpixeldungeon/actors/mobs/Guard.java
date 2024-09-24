@@ -95,11 +95,11 @@ public class Guard extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(40, 57);
-            case 2: return Char.combatRoll(200, 278);
-            case 3: return Char.combatRoll(725, 987);
-            case 4: return Char.combatRoll(11000, 18000);
-			case 5: return Char.combatRoll(700000, 1600000);
+            case 1: return Dungeon.NormalLongRange(40, 57);
+            case 2: return Dungeon.NormalLongRange(200, 278);
+            case 3: return Dungeon.NormalLongRange(725, 987);
+            case 4: return Dungeon.NormalLongRange(11000, 18000);
+			case 5: return Dungeon.NormalLongRange(700000, 1600000);
         }
 		return Random.NormalIntRange(4, 12);
 	}
@@ -182,13 +182,13 @@ public class Guard extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(15, 30);
-            case 2: return Char.combatRoll(120, 198);
-            case 3: return Char.combatRoll(500, 780);
-            case 4: return Char.combatRoll(9000, 13000);
-			case 5: return Char.combatRoll(450000, 925000);
+            case 1: return Dungeon.NormalLongRange(15, 30);
+            case 2: return Dungeon.NormalLongRange(120, 198);
+            case 3: return Dungeon.NormalLongRange(500, 780);
+            case 4: return Dungeon.NormalLongRange(9000, 13000);
+			case 5: return Dungeon.NormalLongRange(450000, 925000);
         }
-		return Char.combatRoll(0, 7);
+		return Dungeon.NormalLongRange(0, 7);
 	}
 
 	@Override

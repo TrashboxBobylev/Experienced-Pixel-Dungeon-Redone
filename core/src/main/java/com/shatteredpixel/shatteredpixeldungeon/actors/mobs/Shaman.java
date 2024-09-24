@@ -28,7 +28,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -82,11 +87,11 @@ public abstract class Shaman extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(43, 58);
-            case 2: return Char.combatRoll(235, 265);
-            case 3: return Char.combatRoll(880, 1200);
-            case 4: return Char.combatRoll(18000, 27500);
-			case 5: return Char.combatRoll(1500000, 2250000);
+            case 1: return Dungeon.NormalLongRange(43, 58);
+            case 2: return Dungeon.NormalLongRange(235, 265);
+            case 3: return Dungeon.NormalLongRange(880, 1200);
+            case 4: return Dungeon.NormalLongRange(18000, 27500);
+			case 5: return Dungeon.NormalLongRange(1500000, 2250000);
         }
 		return Random.NormalIntRange( 5, 10 );
 	}
@@ -106,13 +111,13 @@ public abstract class Shaman extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(18, 36);
-            case 2: return Char.combatRoll(70, 198);
-            case 3: return Char.combatRoll(450, 790);
-            case 4: return Char.combatRoll(10000, 26000);
-			case 5: return Char.combatRoll(850000, 1450000);
+            case 1: return Dungeon.NormalLongRange(18, 36);
+            case 2: return Dungeon.NormalLongRange(70, 198);
+            case 3: return Dungeon.NormalLongRange(450, 790);
+            case 4: return Dungeon.NormalLongRange(10000, 26000);
+			case 5: return Dungeon.NormalLongRange(850000, 1450000);
         }
-		return Char.combatRoll(0, 6);
+		return Dungeon.NormalLongRange(0, 6);
 	}
 
 	@Override
@@ -170,7 +175,7 @@ public abstract class Shaman extends Mob {
 			
 			long dmg = Random.NormalIntRange( 6, 15 );
             switch (Dungeon.cycle) {
-                case 1: dmg = Char.combatRoll(48, 62); break;
+                case 1: dmg = Dungeon.NormalLongRange(48, 62); break;
                 case 2: dmg = Char.combatRoll(250, 324); break;
                 case 3: dmg = Char.combatRoll(895, 1200); break;
                 case 4: dmg = Char.combatRoll(17000, 26000); break;

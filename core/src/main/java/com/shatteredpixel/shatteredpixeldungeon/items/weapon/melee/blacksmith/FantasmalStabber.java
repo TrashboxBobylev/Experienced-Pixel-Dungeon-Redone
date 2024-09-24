@@ -83,7 +83,7 @@ public class FantasmalStabber extends BlacksmithWeapon implements PreparationAll
             if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
                 //deals 50% toward max to max on surprise, instead of min to max.
                 long diff = max() - min();
-                long damage = augment.damageFactor(Char.combatRoll(
+                long damage = augment.damageFactor(Dungeon.NormalLongRange(
                         min() + Math.round(diff*0.50f),
                         max()));
                 int exStr = hero.STR() - STRReq();

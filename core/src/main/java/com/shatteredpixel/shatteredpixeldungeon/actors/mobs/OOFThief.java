@@ -106,13 +106,13 @@ public class OOFThief extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(53, 70);
-            case 2: return Char.combatRoll(255, 320);
-            case 3: return Char.combatRoll(905, 1455);
-            case 4: return Char.combatRoll(14300, 21500);
-			case 5: return Char.combatRoll(400000, 850000);
+            case 1: return Dungeon.NormalLongRange(53, 70);
+            case 2: return Dungeon.NormalLongRange(255, 320);
+            case 3: return Dungeon.NormalLongRange(905, 1455);
+            case 4: return Dungeon.NormalLongRange(14300, 21500);
+			case 5: return Dungeon.NormalLongRange(400000, 850000);
         }
-		return Char.combatRoll( 8, 14 );
+		return Dungeon.NormalLongRange( 8, 14 );
 	}
 
 	@Override
@@ -156,13 +156,13 @@ public class OOFThief extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(15, 40);
-            case 2: return Char.combatRoll(110, 250);
-            case 3: return Char.combatRoll(575, 1100);
-            case 4: return Char.combatRoll(15000, 24000);
-			case 5: return Char.combatRoll(75500, 955000);
+            case 1: return Dungeon.NormalLongRange(15, 40);
+            case 2: return Dungeon.NormalLongRange(110, 250);
+            case 3: return Dungeon.NormalLongRange(575, 1100);
+            case 4: return Dungeon.NormalLongRange(15000, 24000);
+			case 5: return Dungeon.NormalLongRange(75500, 955000);
         }
-		return Char.combatRoll(4, 8);
+		return Dungeon.NormalLongRange(4, 8);
 	}
 
 	@Override

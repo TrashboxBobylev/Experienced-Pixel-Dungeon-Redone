@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SeniorSprite;
 import com.watabou.utils.Random;
@@ -50,11 +49,11 @@ public class Senior extends Monk {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(71, 83);
-            case 2: return Char.combatRoll(313, 431);
-            case 3: return Char.combatRoll(1800, 2340);
-            case 4: return Char.combatRoll(60000, 100000);
-			case 5: return Char.combatRoll(4000000, 7900000);
+            case 1: return Dungeon.NormalLongRange(71, 83);
+            case 2: return Dungeon.NormalLongRange(313, 431);
+            case 3: return Dungeon.NormalLongRange(1800, 2340);
+            case 4: return Dungeon.NormalLongRange(60000, 100000);
+			case 5: return Dungeon.NormalLongRange(4000000, 7900000);
         }
 		return Random.NormalIntRange( 16, 25 );
 	}

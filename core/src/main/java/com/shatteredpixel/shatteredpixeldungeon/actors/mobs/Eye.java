@@ -112,7 +112,7 @@ public class Eye extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(86, 106);
+            case 1: return Dungeon.NormalLongRange(86, 106);
             case 2: return Char.combatRoll(360, 487);
             case 3: return Char.combatRoll(2600, 3641);
             case 4: return Char.combatRoll(179000, 290000);

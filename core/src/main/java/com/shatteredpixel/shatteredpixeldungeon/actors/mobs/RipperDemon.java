@@ -43,6 +43,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class RipperDemon extends Mob {
 
@@ -99,11 +100,11 @@ public class RipperDemon extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(79, 91);
-            case 2: return Char.combatRoll(270, 440);
-            case 3: return Char.combatRoll(2100, 2800);
-            case 4: return Char.combatRoll(65000, 180000);
-			case 5: return Char.combatRoll(3400000, 8000000);
+            case 1: return Dungeon.NormalLongRange(79, 91);
+            case 2: return Dungeon.NormalLongRange(270, 440);
+            case 3: return Dungeon.NormalLongRange(2100, 2800);
+            case 4: return Dungeon.NormalLongRange(65000, 180000);
+			case 5: return Dungeon.NormalLongRange(3400000, 8000000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -128,9 +129,9 @@ public class RipperDemon extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(34, 64);
-            case 2: return Char.combatRoll(100, 217);
-            case 3: return Char.combatRoll(1200, 2100);
+            case 1: return Dungeon.NormalLongRange(34, 64);
+            case 2: return Dungeon.NormalLongRange(100, 217);
+            case 3: return Dungeon.NormalLongRange(1200, 2100);
             case 4: return Char.combatRoll(90000, 140000);
 			case 5: return Char.combatRoll(4500000, 8000000);
         }

@@ -24,15 +24,30 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.*;
+import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
@@ -59,7 +74,13 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.utils.*;
+import com.watabou.utils.BArray;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.PointF;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -111,11 +132,11 @@ public class Tengu extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(42, 60);
-            case 2: return Char.combatRoll(225, 312);
-            case 3: return Char.combatRoll(750, 1000);
-            case 4: return Char.combatRoll(14000, 23000);
-			case 5: return Char.combatRoll(1000000, 2250000);
+            case 1: return Dungeon.NormalLongRange(42, 60);
+            case 2: return Dungeon.NormalLongRange(225, 312);
+            case 3: return Dungeon.NormalLongRange(750, 1000);
+            case 4: return Dungeon.NormalLongRange(14000, 23000);
+			case 5: return Dungeon.NormalLongRange(1000000, 2250000);
         }
 		return Random.NormalIntRange( 6, 12 );
 	}
@@ -147,13 +168,13 @@ public class Tengu extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(10, 24);
-            case 2: return Char.combatRoll(80, 195);
-            case 3: return Char.combatRoll(400, 800);
-            case 4: return Char.combatRoll(8000, 14000);
-			case 5: return Char.combatRoll(460000, 950000);
+            case 1: return Dungeon.NormalLongRange(10, 24);
+            case 2: return Dungeon.NormalLongRange(80, 195);
+            case 3: return Dungeon.NormalLongRange(400, 800);
+            case 4: return Dungeon.NormalLongRange(8000, 14000);
+			case 5: return Dungeon.NormalLongRange(460000, 950000);
         }
-		return Char.combatRoll(0, 5);
+		return Dungeon.NormalLongRange(0, 5);
 	}
 
 	boolean loading = false;
