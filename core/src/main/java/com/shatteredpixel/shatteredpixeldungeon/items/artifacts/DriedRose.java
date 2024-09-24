@@ -30,7 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -66,7 +71,11 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.ItemButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.*;
+import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoItem;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -628,7 +637,7 @@ public class DriedRose extends Artifact {
 			if (rose != null && rose.weapon != null){
 				dmg += rose.weapon.damageRoll(this);
 			} else {
-				dmg += Random.NormalIntRange(0, 5);
+				dmg += Dungeon.NormalLongRange(0, 5);
 			}
 			
 			return dmg;
@@ -714,10 +723,10 @@ public class DriedRose extends Artifact {
 		public long drRoll() {
 			long dr = super.drRoll();
 			if (rose != null && rose.armor != null){
-				dr += Random.NormalIntRange( rose.armor.DRMin(), rose.armor.DRMax());
+				dr += Dungeon.NormalLongRange( rose.armor.DRMin(), rose.armor.DRMax());
 			}
 			if (rose != null && rose.weapon != null){
-				dr += Random.NormalIntRange( 0, rose.weapon.defenseFactor( this ));
+				dr += Dungeon.NormalLongRange( 0, rose.weapon.defenseFactor( this ));
 			}
 			return dr;
 		}

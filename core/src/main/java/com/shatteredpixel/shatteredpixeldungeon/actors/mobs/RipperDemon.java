@@ -43,7 +43,6 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class RipperDemon extends Mob {
 
@@ -106,7 +105,7 @@ public class RipperDemon extends Mob {
             case 4: return Dungeon.NormalLongRange(65000, 180000);
 			case 5: return Dungeon.NormalLongRange(3400000, 8000000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Dungeon.NormalLongRange( 15, 25 );
 	}
 
 	@Override

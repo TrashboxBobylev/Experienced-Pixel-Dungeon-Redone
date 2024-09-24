@@ -103,7 +103,7 @@ public class Ghoul extends Mob {
             case 4: return Dungeon.NormalLongRange(23000, 71000);
 			case 5: return Dungeon.NormalLongRange(2750000, 6500000);
         }
-		return Random.NormalIntRange( 16, 22 );
+		return Dungeon.NormalLongRange( 16, 22 );
 	}
 
 	@Override

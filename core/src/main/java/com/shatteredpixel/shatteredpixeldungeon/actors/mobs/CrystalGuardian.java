@@ -120,7 +120,7 @@ public class CrystalGuardian extends Mob{
 			case 4: return Dungeon.NormalLongRange(20000, 45000);
 			case 5: return Dungeon.NormalLongRange(2200000, 3800000);
 		}
-		return Random.NormalIntRange( 10, 16 );
+		return Dungeon.NormalLongRange( 10, 16 );
 	}
 
 	@Override

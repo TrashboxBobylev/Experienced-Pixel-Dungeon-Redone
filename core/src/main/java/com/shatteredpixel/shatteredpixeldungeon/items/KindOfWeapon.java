@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -42,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 abstract public class KindOfWeapon extends EquipableItem {
 
@@ -240,7 +238,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 		if (owner instanceof Hero){
 			return Hero.heroDamageIntRange(min(), max());
 		} else {
-			return Random.NormalIntRange(min(), max());
+			return Dungeon.NormalLongRange(min(), max());
 		}
 	}
 	

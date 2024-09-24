@@ -138,7 +138,7 @@ public class Tengu extends Mob {
             case 4: return Dungeon.NormalLongRange(14000, 23000);
 			case 5: return Dungeon.NormalLongRange(1000000, 2250000);
         }
-		return Random.NormalIntRange( 6, 12 );
+		return Dungeon.NormalLongRange( 6, 12 );
 	}
 	
 	@Override
@@ -691,7 +691,7 @@ public class Tengu extends Mob {
 					if (PathFinder.distance[cell] < Integer.MAX_VALUE) {
 						Char ch = Actor.findChar(cell);
 						if (ch != null && !(ch instanceof Tengu)) {
-							long dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
+							long dmg = Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth() * 2);
 							dmg -= ch.drRoll();
 
 							if (dmg > 0) {

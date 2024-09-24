@@ -780,7 +780,7 @@ public class YogDzewa extends Mob {
                 case 4: return Dungeon.NormalLongRange(360000, 460000);
 				case 5: return Dungeon.NormalLongRange(6000000, 9000000);
             }
-			return Random.NormalIntRange( 15, 25 );
+			return Dungeon.NormalLongRange( 15, 25 );
 		}
 
 		@Override

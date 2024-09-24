@@ -129,7 +129,7 @@ public class DwarfKing extends Mob {
             case 4: return Dungeon.NormalLongRange(90000, 250000);
 			case 5: return Dungeon.NormalLongRange(2600000, 8000000);
         }
-		return Random.NormalIntRange( 15, 25 );
+		return Dungeon.NormalLongRange( 15, 25 );
 	}
 
 	@Override
@@ -758,7 +758,7 @@ public class DwarfKing extends Mob {
 					}
 				} else {
 					Char ch = Actor.findChar(pos);
-					ch.damage(Random.NormalIntRange(20, 40) + Dungeon.escalatingDepth(), this);
+					ch.damage(Dungeon.NormalLongRange(20, 40) + Dungeon.escalatingDepth(), this);
 					if (((DwarfKing)target).phase == 2){
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
 							target.damage(target.HT/18, new KingDamager());

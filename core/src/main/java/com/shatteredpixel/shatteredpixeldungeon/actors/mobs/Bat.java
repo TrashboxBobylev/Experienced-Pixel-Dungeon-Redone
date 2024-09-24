@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.watabou.utils.Random;
 
 public class Bat extends Mob {
 
@@ -87,7 +86,7 @@ public class Bat extends Mob {
             case 4: return Dungeon.NormalLongRange(14000, 25000);
 			case 5: return Dungeon.NormalLongRange(1000000, 2150000);
         }
-		return Random.NormalIntRange( 5, 18 );
+		return Dungeon.NormalLongRange( 5, 18 );
 	}
 	
 	@Override

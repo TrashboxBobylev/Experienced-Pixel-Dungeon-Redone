@@ -231,15 +231,15 @@ public class Mimic extends Mob {
 	@Override
 	public long damageRoll() {
 		if (alignment == Alignment.NEUTRAL){
-			return Random.NormalIntRange( 2 + 2*level, 2 + 2*level);
+			return Dungeon.NormalLongRange( 2 + 2*level, 2 + 2*level);
 		} else {
-			return Random.NormalIntRange( 1 + level, 2 + 2*level);
+			return Dungeon.NormalLongRange( 1 + level, 2 + 2*level);
 		}
 	}
 
 	@Override
 	public long drRoll() {
-		return super.drRoll() + Random.NormalIntRange(0, 1 + level/2);
+		return super.drRoll() + Dungeon.NormalLongRange(0, 1 + level/2);
 	}
 
 	@Override

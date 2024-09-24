@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
@@ -46,7 +47,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PrismaticSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class PrismaticImage extends NPC {
 	
@@ -155,9 +155,9 @@ public class PrismaticImage extends NPC {
 	@Override
 	public long damageRoll() {
 		if (hero != null) {
-			return Random.NormalIntRange( 2 + hero.lvl/4, 4 + hero.lvl/2 );
+			return Dungeon.NormalLongRange( 2 + hero.lvl/4, 4 + hero.lvl/2 );
 		} else {
-			return Random.NormalIntRange( 2, 4 );
+			return Dungeon.NormalLongRange( 2, 4 );
 		}
 	}
 	

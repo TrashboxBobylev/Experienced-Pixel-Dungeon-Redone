@@ -83,7 +83,7 @@ public class Notes {
 
 		public Visual secondIcon() { return null; }
 
-		public int quantity() { return 1; }
+		public long quantity() { return 1; }
 
 		protected abstract int order();
 
@@ -302,7 +302,7 @@ public class Notes {
 		@Override
 		public Visual secondIcon() {
 			if (quantity() > 1){
-				BitmapText text = new BitmapText(Integer.toString(quantity()), PixelScene.pixelFont);
+				BitmapText text = new BitmapText(Long.toString(quantity()), PixelScene.pixelFont);
 				text.measure();
 				return text;
 			} else {

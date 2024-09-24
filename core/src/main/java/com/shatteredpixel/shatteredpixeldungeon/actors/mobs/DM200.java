@@ -94,7 +94,7 @@ public class DM200 extends Mob {
             case 4: return Dungeon.NormalLongRange(20000, 60000);
 			case 5: return Dungeon.NormalLongRange(2500000, 5000000);
         }
-		return Random.NormalIntRange( 10, 25 );
+		return Dungeon.NormalLongRange( 10, 25 );
 	}
 
 	@Override

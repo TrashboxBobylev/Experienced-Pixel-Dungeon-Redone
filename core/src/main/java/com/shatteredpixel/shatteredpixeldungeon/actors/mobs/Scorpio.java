@@ -93,7 +93,7 @@ public class Scorpio extends Mob {
             case 4: return Dungeon.NormalLongRange(324000, 410000);
 			case 5: return Dungeon.NormalLongRange(7000000, 11000000);
         }
-		return Random.NormalIntRange( 30, 40 );
+		return Dungeon.NormalLongRange( 30, 40 );
 	}
 	
 	@Override

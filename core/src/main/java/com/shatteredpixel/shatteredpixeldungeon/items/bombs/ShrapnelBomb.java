@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Point;
-import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -72,7 +71,7 @@ public class ShrapnelBomb extends Bomb {
 		
 		for (Char ch : affected){
 			//regular bomb damage, which falls off at a rate of 5% per tile of distance
-			long damage = Math.round(Random.NormalIntRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ));
+			long damage = Math.round(Dungeon.NormalLongRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ));
 			if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 				damage *= 2.5f;
 			}

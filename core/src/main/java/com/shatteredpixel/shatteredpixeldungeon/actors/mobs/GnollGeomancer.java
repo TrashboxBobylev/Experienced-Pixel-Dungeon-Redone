@@ -161,7 +161,7 @@ public class GnollGeomancer extends Mob {
 			case 4: return Dungeon.NormalLongRange(4650, 6900);
 			case 5: return Dungeon.NormalLongRange(700000, 1150000);
 		}
-		return Random.NormalIntRange( 3, 6 );
+		return Dungeon.NormalLongRange( 3, 6 );
 	}
 
 	@Override

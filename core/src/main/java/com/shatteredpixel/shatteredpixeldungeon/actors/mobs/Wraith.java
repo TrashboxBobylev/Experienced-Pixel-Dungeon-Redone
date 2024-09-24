@@ -77,7 +77,7 @@ public class Wraith extends Mob {
 	
 	@Override
 	public long damageRoll() {
-		return Random.NormalIntRange( 1 + level/2, 2 + level );
+		return Dungeon.NormalLongRange( 1 + level/2, 2 + level );
 	}
 	
 	@Override

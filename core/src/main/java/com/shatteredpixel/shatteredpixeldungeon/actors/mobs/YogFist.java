@@ -223,7 +223,7 @@ public abstract class YogFist extends Mob {
             case 4: return Dungeon.NormalLongRange(350000, 460000);
 			case 5: return Dungeon.NormalLongRange(6000000, 12500000);
         }
-		return Random.NormalIntRange( 18, 36 );
+		return Dungeon.NormalLongRange( 18, 36 );
 	}
 
 	@Override
@@ -514,7 +514,7 @@ public abstract class YogFist extends Mob {
                 case 4: return Dungeon.NormalLongRange(435000, 540000);
 				case 5: return Dungeon.NormalLongRange(8500000, 17500000);
             }
-			return Random.NormalIntRange( 22, 44 );
+			return Dungeon.NormalLongRange( 22, 44 );
 		}
 
 		@Override

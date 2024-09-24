@@ -95,7 +95,7 @@ public class Spinner extends Mob {
             case 4: return Dungeon.NormalLongRange(18000, 50000);
 			case 5: return Dungeon.NormalLongRange(2000000, 4200000);
         }
-		return Random.NormalIntRange(10, 20);
+		return Dungeon.NormalLongRange(10, 20);
 	}
 
 	@Override

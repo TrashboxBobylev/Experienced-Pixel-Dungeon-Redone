@@ -121,7 +121,7 @@ public class Swarm extends Mob {
             case 4: return Dungeon.NormalLongRange(5000, 9000);
 			case 5: return Dungeon.NormalLongRange(475000, 975000);
         }
-		return Random.NormalIntRange( 1, 4 );
+		return Dungeon.NormalLongRange( 1, 4 );
 	}
 	
 	@Override

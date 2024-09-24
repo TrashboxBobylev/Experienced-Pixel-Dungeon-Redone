@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.BruteSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.Random;
 
 public class Brute extends Mob {
 	
@@ -103,8 +102,8 @@ public class Brute extends Mob {
 					Dungeon.NormalLongRange(1650000, 2500000);
         }
 		return buff(BruteRage.class) != null ?
-				Random.NormalIntRange( 15, 40 ) :
-				Random.NormalIntRange( 5, 25 );
+				Dungeon.NormalLongRange( 15, 40 ) :
+				Dungeon.NormalLongRange( 5, 25 );
 	}
 	
 	@Override

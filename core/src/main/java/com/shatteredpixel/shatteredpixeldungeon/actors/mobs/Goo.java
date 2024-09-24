@@ -125,7 +125,7 @@ public class Goo extends Mob {
 				Statistics.qualifiedForBossChallengeBadge = false;
 				Statistics.bossScores[0] -= 100;
 			}
-			return Random.NormalIntRange( min*3, max*3 );
+			return Dungeon.NormalLongRange( min*3, max*3 );
 		} else {
 			return Random.NormalIntRange( min, max );
 		}

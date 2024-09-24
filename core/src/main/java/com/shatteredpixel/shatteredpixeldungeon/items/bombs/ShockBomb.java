@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -75,7 +74,7 @@ public class ShockBomb extends Bomb {
 			int power = 16 - 4*Dungeon.level.distance(ch.pos, cell);
 			if (power > 0){
 				//32% to 8% regular bomb damage
-				long damage = Math.round(Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + 2*Dungeon.scalingDepth()) * (power/50f));
+				long damage = Math.round(Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + 2*Dungeon.scalingDepth()) * (power/50f));
 				if (Dungeon.hero.heroClass == HeroClass.ROGUE){
 					damage *= 2.5f;
 				}

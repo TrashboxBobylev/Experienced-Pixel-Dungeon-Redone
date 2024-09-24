@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
-import com.watabou.utils.Random;
 
 public class Gnoll extends Mob {
 	
@@ -82,7 +81,7 @@ public class Gnoll extends Mob {
             case 4: return Dungeon.NormalLongRange(4000, 7000);
             case 5: return Dungeon.NormalLongRange(400000, 575000);
         }
-		return Random.NormalIntRange( 1, 6 );
+		return Dungeon.NormalLongRange( 1, 6 );
 	}
 	
 	@Override

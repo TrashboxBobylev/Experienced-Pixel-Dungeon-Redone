@@ -97,7 +97,7 @@ public class Golem extends Mob {
             case 4: return Dungeon.NormalLongRange(65000, 180000);
 			case 5: return Dungeon.NormalLongRange(6000000, 9000000);
         }
-		return Random.NormalIntRange( 25, 30 );
+		return Dungeon.NormalLongRange( 25, 30 );
 	}
 	
 	@Override

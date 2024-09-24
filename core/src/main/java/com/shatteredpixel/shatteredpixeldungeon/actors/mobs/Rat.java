@@ -88,7 +88,7 @@ public class Rat extends Mob {
             case 4: return Dungeon.NormalLongRange(3200, 5000);
 			case 5: return Dungeon.NormalLongRange(345000, 485000);
         }
-        return Random.NormalIntRange(1, 4);
+        return Dungeon.NormalLongRange(1, 4);
 	}
 	
 	@Override
@@ -106,10 +106,10 @@ public class Rat extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Random.NormalIntRange(5, 15);
-            case 2: return Random.NormalIntRange(60, 100);
-            case 3: return Random.NormalIntRange(250, 434);
-            case 4: return Random.NormalIntRange(2000, 4500);
+            case 1: return Dungeon.NormalLongRange(5, 15);
+            case 2: return Dungeon.NormalLongRange(60, 100);
+            case 3: return Dungeon.NormalLongRange(250, 434);
+            case 4: return Dungeon.NormalLongRange(2000, 4500);
 			case 5: return Random.NormalIntRange(325000, 450000);
         }
 		return Random.NormalIntRange(0, 1);

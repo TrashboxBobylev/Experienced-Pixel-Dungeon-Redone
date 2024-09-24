@@ -118,7 +118,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Tipp
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 
 //For items, but includes a few item-like effects, such as enchantments
 public enum Catalog {
@@ -152,7 +155,7 @@ public enum Catalog {
 	//tracks whether an item has been collected while identified
 	private final LinkedHashMap<Class<?>, Boolean> seen = new LinkedHashMap<>();
 	//tracks upgrades spent for equipment, uses for consumables
-	private final LinkedHashMap<Class<?>, Integer> useCount = new LinkedHashMap<>();
+	private final LinkedHashMap<Class<?>, Long> useCount = new LinkedHashMap<>();
 	
 	public Collection<Class<?>> items(){
 		return seen.keySet();
@@ -162,7 +165,7 @@ public enum Catalog {
 	private void addItems( Class<?>... items){
 		for (Class<?> item : items){
 			seen.put(item, false);
-			useCount.put(item, 0);
+			useCount.put(item, 0L);
 		}
 	}
 
@@ -322,7 +325,7 @@ public enum Catalog {
 		Badges.validateCatalogBadges();
 	}
 
-	public static int useCount(Class<?> cls){
+	public static long useCount(Class<?> cls){
 		for (Catalog cat : values()) {
 			if (cat.useCount.containsKey(cls)) {
 				return cat.useCount.get(cls);
@@ -335,12 +338,12 @@ public enum Catalog {
 		countUses(cls, 1);
 	}
 
-	public static void countUses(Class<?> cls, int uses){
+	public static void countUses(Class<?> cls, long uses){
 		for (Catalog cat : values()) {
-			if (cat.useCount.containsKey(cls) && cat.useCount.get(cls) != Integer.MAX_VALUE) {
+			if (cat.useCount.containsKey(cls) && cat.useCount.get(cls) != Long.MAX_VALUE) {
 				cat.useCount.put(cls, cat.useCount.get(cls)+uses);
 				if (cat.useCount.get(cls) < -1_000_000_000){ //to catch cases of overflow
-					cat.useCount.put(cls, Integer.MAX_VALUE);
+					cat.useCount.put(cls, Long.MAX_VALUE);
 				}
 				Journal.saveNeeded = true;
 			}
@@ -355,7 +358,7 @@ public enum Catalog {
 
 		ArrayList<Class<?>> classes = new ArrayList<>();
 		ArrayList<Boolean> seen = new ArrayList<>();
-		ArrayList<Integer> uses = new ArrayList<>();
+		ArrayList<Long> uses = new ArrayList<>();
 		
 		for (Catalog cat : values()) {
 			for (Class<?> item : cat.items()) {
@@ -369,7 +372,7 @@ public enum Catalog {
 
 		Class<?>[] storeCls = new Class[classes.size()];
 		boolean[] storeSeen = new boolean[seen.size()];
-		int[] storeUses = new int[uses.size()];
+		long[] storeUses = new long[uses.size()];
 
 		for (int i = 0; i < storeCls.length; i++){
 			storeCls[i] = classes.get(i);
@@ -411,7 +414,7 @@ public enum Catalog {
 		if (bundle.contains(CATALOG_CLASSES)){
 			Class<?>[] classes = bundle.getClassArray(CATALOG_CLASSES);
 			boolean[] seen = bundle.getBooleanArray(CATALOG_SEEN);
-			int[] uses = bundle.getIntArray(CATALOG_USES);
+			long[] uses = bundle.getLongArray(CATALOG_USES);
 
 			for (int i = 0; i < classes.length; i++){
 				for (Catalog cat : values()) {

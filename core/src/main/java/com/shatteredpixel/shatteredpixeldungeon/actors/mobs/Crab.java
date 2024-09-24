@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrabSprite;
-import com.watabou.utils.Random;
 
 public class Crab extends Mob {
 
@@ -83,7 +82,7 @@ public class Crab extends Mob {
             case 4: return Dungeon.NormalLongRange(6000, 10000);
             case 5: return Dungeon.NormalLongRange(450000, 675000);
         }
-		return Random.NormalIntRange( 1, 7 );
+		return Dungeon.NormalLongRange( 1, 7 );
 	}
 	
 	@Override

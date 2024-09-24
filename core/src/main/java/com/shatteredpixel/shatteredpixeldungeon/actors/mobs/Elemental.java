@@ -113,14 +113,14 @@ public abstract class Elemental extends Mob {
 			switch (Dungeon.cycle) {
 				case 1: return Dungeon.NormalLongRange(64, 83);
 				case 2: return Dungeon.NormalLongRange(291, 434);
-				case 3: return Random.NormalIntRange(1650, 2100);
+				case 3: return Dungeon.NormalLongRange(1650, 2100);
 				case 4: return Dungeon.NormalLongRange(30000, 85000);
 				case 5: return Dungeon.NormalLongRange(3000000, 7000000);
 			}
 			return Dungeon.NormalLongRange( 16, 26 );
 		} else {
 			int regionScale = Math.max(2, (1 + Dungeon.scalingDepth()/5));
-			return Random.NormalIntRange(6*regionScale, 15 + 10*regionScale);
+			return Dungeon.NormalLongRange(6*regionScale, 15 + 10*regionScale);
 		}
 	}
 	
@@ -239,7 +239,7 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() )) {
-			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), buff );
+			damage( Dungeon.NormalLongRange( HT/2, HT * 3/5 ), buff );
 			return false;
 		} else {
 			return super.add( buff );
@@ -445,7 +445,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		public long damageRoll() {
 			if (!summonedALly) {
-				return Random.NormalIntRange(10, 12);
+				return Dungeon.NormalLongRange(10, 12);
 			} else {
 				return super.damageRoll();
 			}

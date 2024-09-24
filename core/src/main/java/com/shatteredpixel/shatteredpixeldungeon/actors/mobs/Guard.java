@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.GuardSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
-import com.watabou.utils.Random;
 
 public class Guard extends Mob {
 
@@ -101,7 +100,7 @@ public class Guard extends Mob {
             case 4: return Dungeon.NormalLongRange(11000, 18000);
 			case 5: return Dungeon.NormalLongRange(700000, 1600000);
         }
-		return Random.NormalIntRange(4, 12);
+		return Dungeon.NormalLongRange(4, 12);
 	}
 
 	private boolean chain(int target){

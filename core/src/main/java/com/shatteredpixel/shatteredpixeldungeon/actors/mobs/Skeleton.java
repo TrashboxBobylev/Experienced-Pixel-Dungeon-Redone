@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.SkeletonSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 public class Skeleton extends Mob {
 	
@@ -95,7 +94,7 @@ public class Skeleton extends Mob {
             case 4: return Dungeon.NormalLongRange(8000, 14000);
 			case 5: return Dungeon.NormalLongRange(525000, 1100000);
         }
-		return Random.NormalIntRange( 2, 10 );
+		return Dungeon.NormalLongRange( 2, 10 );
 	}
 	
 	@Override
@@ -117,14 +116,14 @@ public class Skeleton extends Mob {
 
 				WandOfLivingEarth.RockArmor rockArmor = ch.buff(WandOfLivingEarth.RockArmor.class);
 				if (rockArmor != null) {
-					int preDmg = damage;
+					long preDmg = damage;
 					damage = rockArmor.absorb(damage);
 					damage *= Math.round(damage/(float)preDmg); //apply the % reduction twice
 				}
 
 				Earthroot.Armor armor = ch.buff( Earthroot.Armor.class );
 				if (damage > 0 && armor != null) {
-					int preDmg = damage;
+					long preDmg = damage;
 					damage = armor.absorb( damage );
 					damage -= (preDmg - damage); //apply the flat reduction twice
 				}

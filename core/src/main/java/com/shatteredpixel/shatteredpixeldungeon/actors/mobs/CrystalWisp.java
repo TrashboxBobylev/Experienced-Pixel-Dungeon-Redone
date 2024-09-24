@@ -110,7 +110,7 @@ public class CrystalWisp extends Mob{
 			case 4: return Dungeon.NormalLongRange(14000, 18500);
 			case 5: return Dungeon.NormalLongRange(1100000, 1800000);
 		}
-		return Random.NormalIntRange( 5, 10 );
+		return Dungeon.NormalLongRange( 5, 10 );
 	}
 
 	@Override
