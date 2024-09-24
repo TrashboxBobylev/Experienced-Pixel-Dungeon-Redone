@@ -294,8 +294,8 @@ public class WndUpgrade extends Window {
 		if (wand instanceof Wand){
 			long chargeboost = levelFrom + (toUpgrade instanceof MagesStaff ? 1 : 0);
 			bottom = fillFields(Messages.get(this, "charges"),
-					Long.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost)),
-					Long.toString(Math.min(10, ((Wand) wand).initialCharges() + chargeboost + 1)),
+					Long.toString(((Wand) wand).initialCharges() + chargeboost),
+					Long.toString(((Wand) wand).initialCharges() + chargeboost + amount),
 					bottom);
 		}
 
