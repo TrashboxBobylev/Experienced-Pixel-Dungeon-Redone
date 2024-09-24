@@ -753,7 +753,7 @@ public class ExpPDChanges {
                         "_-_ 3 days after Experienced Pixel Dungeon 2.11.1\n" +
                         "\n" +
                         "Dev commentary will be added here in the future."));
-        changes.addButton( new ChangeButton(Icons.get(Icons.CHALLENGE_ON), "Other Changes",
+        changes.addButton( new ChangeButton(Icons.get(Icons.CHALLENGE_COLOR), "Other Changes",
                 "Tweaked some challenges:" +
                         "_-_ Food is only 10% as effective instead of 33% (On Diet)\n" +
                         "_-_ Mobs do not sleep and will not fight for you (Swarm Intelligence)\n" +
