@@ -201,13 +201,13 @@ curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Long.toString(5+buffedLvl
 
 	@Override
 	public String upgradeStat1(long level) {
-		int selfDMG = Dungeon.hero != null ? Math.round(Dungeon.hero.HT*0.05f): 1;
-		return Integer.toString(selfDMG + 3*level);
+		long selfDMG = Dungeon.hero != null ? Math.round(Dungeon.hero.HT*0.05f): 1;
+		return Long.toString(selfDMG + 3*level);
 	}
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(5 + level);
+		return Long.toString(5 + level);
 	}
 
 	@Override

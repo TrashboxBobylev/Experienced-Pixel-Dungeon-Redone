@@ -143,7 +143,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 		GameScene.selectItem(itemSelector);
 	}
 
-	private void upgradeItem(Item item) {
+	public Item upgradeItem(Item item) {
 		Degrade.detach( curUser, Degrade.class );
 
 		//logic for telling the user when item properties change from upgrades
@@ -207,6 +207,8 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 		Catalog.countUse(item.getClass());
 		Catalog.countUse(ScrollOfUpgrade.class);
+
+		return item;
 	}
 
 	public static void upgrade( Hero hero ) {

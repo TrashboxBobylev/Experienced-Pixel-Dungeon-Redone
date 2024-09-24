@@ -210,7 +210,7 @@ public class WandOfWarding extends Wand {
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(level+2);
+		return Long.toString(level+2);
 	}
 
 	public static class Ward extends NPC {

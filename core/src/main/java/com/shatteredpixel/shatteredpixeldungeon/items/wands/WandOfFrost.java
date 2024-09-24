@@ -114,7 +114,7 @@ public class WandOfFrost extends DamageWand {
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(2 + level);
+		return Long.toString(2 + level);
 	}
 
 	@Override

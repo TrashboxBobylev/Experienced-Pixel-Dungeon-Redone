@@ -189,7 +189,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(16 + 8*level);
+		return Long.toString(16 + 8*level);
 	}
 
 	@Override

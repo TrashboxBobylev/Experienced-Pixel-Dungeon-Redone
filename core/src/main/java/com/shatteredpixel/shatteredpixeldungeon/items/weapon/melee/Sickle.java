@@ -77,7 +77,7 @@ public class Sickle extends MeleeWeapon {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(augment.damageFactor(Math.round(15f + 2.5f*level)));
+		return Long.toString(augment.damageFactor(Math.round(15f + 2.5f*level)));
 	}
 
 	public static void harvestAbility(Hero hero, Integer target, float bleedMulti, long bleedBoost, MeleeWeapon wep){

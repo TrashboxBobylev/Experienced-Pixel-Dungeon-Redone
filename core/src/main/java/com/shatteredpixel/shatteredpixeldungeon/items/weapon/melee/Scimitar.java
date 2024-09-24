@@ -70,7 +70,7 @@ public class Scimitar extends MeleeWeapon {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(4+level);
+		return Long.toString(4+level);
 	}
 
 	public static class SwordDance extends FlavourBuff {

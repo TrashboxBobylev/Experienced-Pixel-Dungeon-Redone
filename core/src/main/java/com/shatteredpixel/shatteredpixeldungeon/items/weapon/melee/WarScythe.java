@@ -67,7 +67,7 @@ public class WarScythe extends MeleeWeapon {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(augment.damageFactor(Math.round(30f + 4.5f*level)));
+		return Long.toString(augment.damageFactor(Math.round(30f + 4.5f*level)));
 	}
 
 }

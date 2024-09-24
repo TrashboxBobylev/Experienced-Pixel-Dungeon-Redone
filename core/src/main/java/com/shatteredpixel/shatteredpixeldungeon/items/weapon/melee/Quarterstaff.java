@@ -75,7 +75,7 @@ public class Quarterstaff extends MeleeWeapon {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(4+level);
+		return Long.toString(4+level);
 	}
 
 	public static class DefensiveStance extends FlavourBuff {

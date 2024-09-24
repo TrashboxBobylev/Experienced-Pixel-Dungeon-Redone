@@ -203,11 +203,11 @@ public class WandOfRegrowth extends Wand {
 
 	}
 
-	private int chargeLimit( int heroLvl ){
+	private int chargeLimit(long heroLvl ){
 		return chargeLimit(  heroLvl, level() );
 	}
 
-	private int chargeLimit( int heroLvl, int wndLvl ){
+	private int chargeLimit(long heroLvl, long wndLvl ){
 		if (wndLvl >= 10){
 			return Integer.MAX_VALUE;
 		} else {
@@ -307,7 +307,7 @@ public class WandOfRegrowth extends Wand {
 		if (level >= 10){
 			return "∞";
 		} else {
-			return Integer.toString(chargeLimit(Dungeon.hero.lvl, level));
+			return Long.toString(chargeLimit(Dungeon.hero.lvl, level));
 		}
 	}
 

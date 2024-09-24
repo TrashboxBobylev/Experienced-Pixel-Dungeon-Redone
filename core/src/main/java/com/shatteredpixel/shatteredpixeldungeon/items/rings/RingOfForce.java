@@ -144,7 +144,7 @@ public class RingOfForce extends Ring {
 	@Override
 	public String upgradeStat2(long level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Integer.toString(level+1);
+		return Long.toString(level+1);
 	}
 
 	@Override

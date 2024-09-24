@@ -223,7 +223,7 @@ public class WandOfBlastWave extends DamageWand {
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(3 + level);
+		return Long.toString(3 + level);
 	}
 
 	@Override

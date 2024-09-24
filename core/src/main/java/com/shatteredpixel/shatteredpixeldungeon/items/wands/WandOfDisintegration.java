@@ -141,7 +141,7 @@ public class WandOfDisintegration extends DamageWand {
 
 	@Override
 	public String upgradeStat2(long level) {
-		return Integer.toString(6 + level*2);
+		return Long.toString(6 + level*2);
 	}
 
 	@Override

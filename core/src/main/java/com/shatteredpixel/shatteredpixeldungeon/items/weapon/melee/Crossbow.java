@@ -85,8 +85,8 @@ public class Crossbow extends MeleeWeapon {
 	}
 
 	@Override
-	public int proc(Char attacker, Char defender, int damage) {
-		int dmg = super.proc(attacker, defender, damage);
+	public long proc(Char attacker, Char defender, long damage) {
+		long dmg = super.proc(attacker, defender, damage);
 
 		//stronger elastic effect
 		if (attacker.buff(ChargedShot.class) != null && !(curItem instanceof Dart)){
@@ -137,7 +137,7 @@ public class Crossbow extends MeleeWeapon {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(3 + level);
+		return Long.toString(3 + level);
 	}
 
 	public static class ChargedShot extends Buff{

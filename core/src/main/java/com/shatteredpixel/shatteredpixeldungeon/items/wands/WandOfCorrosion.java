@@ -129,7 +129,7 @@ public class WandOfCorrosion extends Wand {
 
 	@Override
 	public String upgradeStat1(long level) {
-		return Integer.toString(level+2);
+		return Long.toString(level+2);
 	}
 
 	@Override

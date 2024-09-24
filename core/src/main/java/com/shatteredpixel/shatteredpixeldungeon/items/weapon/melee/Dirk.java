@@ -94,7 +94,7 @@ public class Dirk extends MeleeWeapon implements PreparationAllowed {
 
 	@Override
 	public String upgradeAbilityStat(long level) {
-		return Integer.toString(2+level);
+		return Long.toString(2+level);
 	}
 
 }
