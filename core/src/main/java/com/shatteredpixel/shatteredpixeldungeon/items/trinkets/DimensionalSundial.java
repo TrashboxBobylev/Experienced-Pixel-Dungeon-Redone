@@ -35,7 +35,7 @@ public class DimensionalSundial extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*level();
 	}
@@ -45,7 +45,7 @@ public class DimensionalSundial extends Trinket {
 		if (isIdentified()){
 			return Messages.get(this,
 					"stats_desc",
-					(int)(100*(1f - enemySpawnMultiplierDaytime(buffedLvl()))),
+					(int)(100*(1f - enemySpawnMultiplierDaytime((int)buffedLvl()))),
 					(int)(100*(enemySpawnMultiplierNighttime((int)buffedLvl())-1f)));
 		} else {
 			return Messages.get(this, "typical_stats_desc",

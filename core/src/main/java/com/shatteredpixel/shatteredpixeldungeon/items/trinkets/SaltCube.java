@@ -31,7 +31,7 @@ public class SaltCube extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*level();
 	}
@@ -41,13 +41,13 @@ public class SaltCube extends Trinket {
 		if (isIdentified()){
 			return Messages.get(this,
 					"stats_desc",
-					Messages.decimalFormat("#.##", 100*((1f/hungerGainMultiplier(buffedLvl()))-1f)),
-					Messages.decimalFormat("#.##", 100*(1f-healthRegenMultiplier(buffedLvl()))));
+					Messages.decimalFormat("#.##", 100*((1f/hungerGainMultiplier((int)buffedLvl()))-1f)),
+					Messages.decimalFormat("#.##", 100*(1f-healthRegenMultiplier((int)buffedLvl()))));
 		} else {
 			return Messages.get(this,
 					"typical_stats_desc",
-					Messages.decimalFormat("#.##", 100*((1f/hungerGainMultiplier(buffedLvl()))-1f)),
-					Messages.decimalFormat("#.##", 100*(1f-healthRegenMultiplier(buffedLvl()))));
+					Messages.decimalFormat("#.##", 100*((1f/hungerGainMultiplier((int)buffedLvl()))-1f)),
+					Messages.decimalFormat("#.##", 100*(1f-healthRegenMultiplier((int)buffedLvl()))));
 		}
 	}
 

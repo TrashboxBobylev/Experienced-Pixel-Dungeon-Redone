@@ -53,7 +53,7 @@ public class ShardOfOblivion extends Trinket {
 	public static final String AC_IDENTIFY = "IDENTIFY";
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*level();
 	}

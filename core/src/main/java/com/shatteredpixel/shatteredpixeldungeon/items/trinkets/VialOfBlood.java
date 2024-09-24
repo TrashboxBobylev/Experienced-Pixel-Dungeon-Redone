@@ -32,7 +32,7 @@ public class VialOfBlood extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*level();
 	}
@@ -42,13 +42,13 @@ public class VialOfBlood extends Trinket {
 		if (isIdentified()){
 			return Messages.get(this,
 					"stats_desc",
-					Messages.decimalFormat("#.##", 100*(totalHealMultiplier(buffedLvl())-1f)),
-					Integer.toString(maxHealPerTurn(buffedLvl())));
+					Messages.decimalFormat("#.##", 100*(totalHealMultiplier((int)buffedLvl())-1f)),
+					Integer.toString(maxHealPerTurn((int)buffedLvl())));
 		} else {
 			return Messages.get(this,
 					"typical_stats_desc",
-					Messages.decimalFormat("#.##", 100*(totalHealMultiplier(buffedLvl())-1f)),
-					Integer.toString(maxHealPerTurn(buffedLvl())));
+					Messages.decimalFormat("#.##", 100*(totalHealMultiplier((int)buffedLvl())-1f)),
+					Integer.toString(maxHealPerTurn((int)buffedLvl())));
 		}
 	}
 

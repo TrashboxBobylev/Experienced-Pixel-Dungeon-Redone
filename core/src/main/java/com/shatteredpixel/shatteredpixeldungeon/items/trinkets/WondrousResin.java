@@ -31,9 +31,9 @@ public class WondrousResin extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 10(16) -> 15(31) -> 20(51)
-		return 10+5*(int)level();
+		return 10+5*level();
 	}
 
 	@Override

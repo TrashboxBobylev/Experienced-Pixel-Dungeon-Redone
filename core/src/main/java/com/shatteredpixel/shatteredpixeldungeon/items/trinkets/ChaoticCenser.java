@@ -60,7 +60,7 @@ public class ChaoticCenser extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
 		return 6+2*level();
 	}
@@ -68,7 +68,7 @@ public class ChaoticCenser extends Trinket {
 	@Override
 	public String statsDesc() {
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", averageTurnsUntilGas(buffedLvl()));
+			return Messages.get(this, "stats_desc", averageTurnsUntilGas((int)buffedLvl()));
 		} else {
 			return Messages.get(this, "stats_desc", averageTurnsUntilGas(0));
 		}

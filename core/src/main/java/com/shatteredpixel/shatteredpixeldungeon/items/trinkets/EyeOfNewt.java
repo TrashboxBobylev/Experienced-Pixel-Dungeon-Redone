@@ -31,9 +31,9 @@ public class EyeOfNewt extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 8(14) -> 10(24) -> 12(36)
-		return 6+2*(int)level();
+		return 6+2*level();
 	}
 
 	@Override

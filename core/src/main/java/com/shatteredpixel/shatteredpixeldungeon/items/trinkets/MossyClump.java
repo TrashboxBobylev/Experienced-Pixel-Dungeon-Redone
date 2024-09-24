@@ -37,9 +37,9 @@ public class MossyClump extends Trinket {
 	}
 
 	@Override
-	protected int upgradeEnergyCost() {
+	protected long upgradeEnergyCost() {
 		//6 -> 15(21) -> 20(41) -> 25(66)
-		return 15+5*(int)level();
+		return 15+5*level();
 	}
 
 	@Override

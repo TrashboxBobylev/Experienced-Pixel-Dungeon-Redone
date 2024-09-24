@@ -29,9 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
-import com.watabou.utils.Bundle;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
+import com.watabou.utils.Bundle;
 
 public class Regeneration extends Buff {
 	
@@ -77,6 +77,7 @@ public class Regeneration extends Buff {
 			if (Dungeon.hero.heroClass == HeroClass.WARRIOR){
 				regen /= 2;
 			}
+			regen /= SaltCube.healthRegenMultiplier();
 			regen = 1d / regen;
 
 			//if other trinkets ever get buffs like this should probably make the buff attaching
@@ -104,20 +105,7 @@ public class Regeneration extends Buff {
 				}
 			}
 
-			ChaliceOfBlood.chaliceRegen regenBuff = Dungeon.hero.buff( ChaliceOfBlood.chaliceRegen.class);
-
-			float delay = REGENERATION_DELAY;
-			if (regenBuff != null && target.buff(MagicImmune.class) == null) {
-				if (regenBuff.isCursed()) {
-					delay *= 1.5f;
-				} else {
-					//15% boost at +0, scaling to a 500% boost at +10
-					delay -= 1.33f + regenBuff.itemLevel()*0.667f;
-					delay /= RingOfEnergy.artifactChargeMultiplier(target);
-				}
-			}
-			delay /= SaltCube.healthRegenMultiplier();
-			spend( delay );
+			spend( TICK );
 			
 		} else {
 			
