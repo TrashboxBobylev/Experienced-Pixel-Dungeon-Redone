@@ -818,7 +818,7 @@ public class CursedWand {
 						Char ch = Actor.findChar(i);
 						Burning burning = Buff.affect(ch, Burning.class);
 						burning.reignite(ch);
-						int dmg = Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+						long dmg = Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
 						ch.damage(dmg, burning);
 					}
 					if (Dungeon.level.flamable[i]){
@@ -898,7 +898,7 @@ public class CursedWand {
 					continue;
 				} else {
 
-					int dmg = Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+					long dmg = Dungeon.NormalLongRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
 					switch (Random.Int(5)){
 						case 0: default:
 							Burning burning = Buff.affect(ch, Burning.class);
