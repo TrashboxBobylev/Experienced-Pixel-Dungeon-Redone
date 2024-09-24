@@ -168,7 +168,6 @@ public class Shopkeeper extends NPC {
 		} else if (turnsSinceHarmed >= 1) {
 			flee();
 		}
-		return true;
 	}
 	
 	public void flee() {
@@ -177,11 +176,11 @@ public class Shopkeeper extends NPC {
 		Notes.remove( landmark() );
 		GLog.newLine();
 		GLog.n(Messages.get(this, "flee"));
-if (sprite != null) {
-		sprite.killAndErase();
-		CellEmitter.get( pos ).burst( ElmoParticle.FACTORY, 6 );
+		if (sprite != null) {
+				sprite.killAndErase();
+				CellEmitter.get( pos ).burst( ElmoParticle.FACTORY, 6 );
 
-}
+		}
 	}
 	
 	@Override
