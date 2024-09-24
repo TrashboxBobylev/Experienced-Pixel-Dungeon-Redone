@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -50,7 +49,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUpgrade;
-import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
 
@@ -137,13 +135,13 @@ public class ScrollOfUpgrade extends InventoryScroll {
 
 	}
 
-	public void reShowSelector(boolean force){
+	public void reShowSelector(boolean force, boolean multiUpgrade){
 		identifiedByUse = force;
 		curItem = this;
-		GameScene.selectItem(itemSelector);
+		GameScene.selectItem(multiUpgrade ? itemSelector2 : itemSelector);
 	}
 
-	public Item upgradeItem(Item item) {
+	public Item upgradeItem(Item item, long amount) {
 		Degrade.detach( curUser, Degrade.class );
 
 		//logic for telling the user when item properties change from upgrades
@@ -155,7 +153,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			boolean hadCursedEnchant = w.hasCurseEnchant();
 			boolean hadGoodEnchant = w.hasGoodEnchant();
 
-			item = w.upgrade();
+			item = w.upgrade(amount);
 
 			if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
 				removeCurse( Dungeon.hero );
@@ -175,7 +173,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			boolean hadCursedGlyph = a.hasCurseGlyph();
 			boolean hadGoodGlyph = a.hasGoodGlyph();
 
-			item = a.upgrade();
+			item = a.upgrade(amount);
 
 			if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
 				removeCurse( Dungeon.hero );
@@ -191,22 +189,22 @@ public class ScrollOfUpgrade extends InventoryScroll {
 		} else if (item instanceof Wand || item instanceof Ring) {
 			boolean wasCursed = item.cursed;
 
-			item = item.upgrade();
+			item = item.upgrade(amount);
 
 			if (item.cursedKnown && wasCursed && !item.cursed){
 				removeCurse( Dungeon.hero );
 			}
 
 		} else {
-			item = item.upgrade();
+			item = item.upgrade(amount);
 		}
 
 		Badges.validateItemLevelAquired(item);
-		Statistics.upgradesUsed++;
+		Statistics.upgradesUsed += amount;
 		Badges.validateMageUnlock();
 
 		Catalog.countUse(item.getClass());
-		Catalog.countUse(ScrollOfUpgrade.class);
+		Catalog.countUses(ScrollOfUpgrade.class, amount);
 
 		return item;
 	}
@@ -262,52 +260,7 @@ public class ScrollOfUpgrade extends InventoryScroll {
 			}
 
 			if (item != null) {
-				// time for some copypaste
-				Degrade.detach( curUser, Degrade.class );
-
-				if (item instanceof Weapon){
-					Weapon w = (Weapon) item;
-					boolean wasCursed = w.cursed;
-					boolean hadCursedEnchant = w.hasCurseEnchant();
-
-					w.upgrade(curItem.quantity());
-
-					if (w.cursedKnown && hadCursedEnchant && !w.hasCurseEnchant()){
-						removeCurse( Dungeon.hero );
-					} else if (w.cursedKnown && wasCursed && !w.cursed){
-						weakenCurse( Dungeon.hero );
-					}
-
-				} else if (item instanceof Armor){
-					Armor a = (Armor) item;
-					boolean wasCursed = a.cursed;
-					boolean hadCursedGlyph = a.hasCurseGlyph();
-
-					a.upgrade(curItem.quantity());
-
-					if (a.cursedKnown && hadCursedGlyph && !a.hasCurseGlyph()){
-						removeCurse( Dungeon.hero );
-					} else if (a.cursedKnown && wasCursed && !a.cursed){
-						weakenCurse( Dungeon.hero );
-					}
-
-				} else if (item instanceof Wand || item instanceof Ring) {
-					boolean wasCursed = item.cursed;
-
-					item.upgrade(curItem.quantity());
-
-					if (item.cursedKnown && wasCursed && !item.cursed){
-						removeCurse( Dungeon.hero );
-					}
-				} else {
-					item.upgrade(curItem.quantity());
-				}
-				((InventoryScroll)curItem).readAnimation();
-
-				Sample.INSTANCE.play( Assets.Sounds.READ );
-				Badges.validateItemLevelAquired(item);
-				Statistics.upgradesUsed += curItem.quantity();
-				Badges.validateMageUnlock();
+				GameScene.show(new WndUpgrade(curItem, item, identifiedByUse, curItem.quantity()));
 
 			} else if (identifiedByUse && !((Scroll)curItem).anonymous) {
 

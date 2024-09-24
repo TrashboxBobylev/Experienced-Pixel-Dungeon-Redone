@@ -49,37 +49,44 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Reflection;
 
 public class WndUpgrade extends Window {
 
-	private static final int WIDTH = 120;
+	private static final int WIDTH = 180;
 
-	private static final float COL_1 = WIDTH/4f;
-	private static final float COL_2 = 5*WIDTH/8f;
-	private static final float COL_3 = 7*WIDTH/8f;
+	private static final float COL_1 = WIDTH/6f;
+	private static final float COL_2 = 3*WIDTH/6f;
+	private static final float COL_3 = 5*WIDTH/6f;
 
 	private static final int GAP	= 2;
 	private static final int ITEMSLOT_SIZE = 18;
 
 	private Item upgrader;
 	private boolean force;
+	private long amount;
 
 	private RedButton btnUpgrade;
 	private RedButton btnCancel;
 
 	public WndUpgrade( Item upgrader, Item toUpgrade, boolean force){
+		this(upgrader, toUpgrade, force, 1);
+	}
+
+	public WndUpgrade( Item upgrader, Item toUpgrade, boolean force, long amount){
 
 		this.upgrader = upgrader;
 		this.force = force;
+		this.amount = amount;
 
 		IconTitle title = new IconTitle( new ItemSprite(upgrader), Messages.get(this, "title") );
 
 		title.setRect(0, 0, WIDTH, 0);
 		add(title);
 
-		long quantity = upgrader.quantity();
+		long quantity = Math.max(amount, upgrader.quantity());
 		Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
 
 		if (moreUpgradeItem != null && moreUpgradeItem != upgrader){
@@ -99,7 +106,7 @@ public class WndUpgrade extends Window {
 		// *** Computing current and next level to display ***
 
 		long levelFrom = toUpgrade.isIdentified() ? toUpgrade.level() : 0;
-		long levelTo = levelFrom + 1;
+		long levelTo = levelFrom + amount;
 
 		if (toUpgrade instanceof Wand && ((Wand) toUpgrade).resinBonus > 0){
 			levelTo--;
@@ -110,7 +117,7 @@ public class WndUpgrade extends Window {
 				|| (toUpgrade instanceof Wand && ((Wand) toUpgrade).curseInfusionBonus);
 
 		if (curseInfused){
-			if (toUpgrade.trueLevel()/6 < (toUpgrade.trueLevel()+1)/6){
+			if (toUpgrade.trueLevel()/6 < (toUpgrade.trueLevel()+amount)/6){
 				//new level bracket for curse infusion bonus
 				levelTo++;
 			}
@@ -180,11 +187,13 @@ public class WndUpgrade extends Window {
 			t2.hardlight(ItemSlot.UPGRADED);
 		}
 		t1.measure();
+		scaleDown(t1, 0.012f*(63 - Long.numberOfLeadingZeros(levelFrom)));
 		t1.x = COL_2 + ITEMSLOT_SIZE/2f - t1.width();
 		t1.y = bg1.y + ITEMSLOT_SIZE - t1.baseLine() - 1;
 		add(t1);
 
 		t2.measure();
+		scaleDown(t2, 0.012f*(63 - Long.numberOfLeadingZeros(levelTo)));
 		t2.x = COL_3 + ITEMSLOT_SIZE/2f - t2.width();
 		t2.y = bg2.y + ITEMSLOT_SIZE - t2.baseLine() - 1;
 		add(t2);
@@ -317,13 +326,13 @@ public class WndUpgrade extends Window {
 		//visual separators for each column
 		ColorBlock sep = new ColorBlock(1, 1, 0xFF222222);
 		sep.size(1, bottom - message.bottom());
-		sep.x = WIDTH/2f;
+		sep.x = WIDTH/3f;
 		sep.y = message.bottom() + GAP;
 		add(sep);
 
 		sep = new ColorBlock(1, 1, 0xFF222222);
 		sep.size(1, bottom - message.bottom());
-		sep.x = 3*WIDTH/4f;
+		sep.x = 2*WIDTH/3f;
 		sep.y = message.bottom() + GAP;
 		add(sep);
 
@@ -350,6 +359,7 @@ public class WndUpgrade extends Window {
 				} else {
 					lossChance = Math.min(100, 10 * (int) Math.pow(2, levelFrom - 4));
 				}
+				lossChance = -1;
 
 				if (lossChance >= 10) {
 					String warn;
@@ -405,20 +415,25 @@ public class WndUpgrade extends Window {
 				Item upgraded = toUpgrade;
 				if (upgrader instanceof ScrollOfUpgrade){
 					((ScrollOfUpgrade) upgrader).readAnimation();
-					upgraded = ((ScrollOfUpgrade) upgrader).upgradeItem(toUpgrade);
+					upgraded = ((ScrollOfUpgrade) upgrader).upgradeItem(toUpgrade, amount);
 					Sample.INSTANCE.play( Assets.Sounds.READ );
 				} else if (upgrader instanceof MagicalInfusion){
 					((MagicalInfusion) upgrader).useAnimation();
 					upgraded = ((MagicalInfusion) upgrader).upgradeItem(toUpgrade);
 				}
 
-				if (!force) upgrader.detach(Dungeon.hero.belongings.backpack);
+				if (!force) {
+					if (upgrader.quantity() <= amount)
+						upgrader.detach(Dungeon.hero.belongings.backpack);
+					else
+						upgrader.quantity(upgrader.quantity()-amount);
+				}
 				Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
 
 				hide();
 
 				if (moreUpgradeItem != null && toUpgrade.isUpgradable()){
-					GameScene.show(new WndUpgrade(moreUpgradeItem, upgraded, false));
+					GameScene.show(new WndUpgrade(moreUpgradeItem, upgraded, false, Math.min(moreUpgradeItem.quantity(), amount)));
 				}
 			}
 		};
@@ -431,7 +446,7 @@ public class WndUpgrade extends Window {
 				super.onClick();
 				hide();
 				if (upgrader instanceof ScrollOfUpgrade) {
-					((ScrollOfUpgrade) upgrader).reShowSelector(force);
+					((ScrollOfUpgrade) upgrader).reShowSelector(force, amount > 1);
 				} else if (upgrader instanceof MagicalInfusion){
 					((MagicalInfusion)upgrader).reShowSelector();
 				}
@@ -464,9 +479,17 @@ public class WndUpgrade extends Window {
 	public void onBackPressed() {
 		super.onBackPressed();
 		if (upgrader instanceof ScrollOfUpgrade) {
-			((ScrollOfUpgrade) upgrader).reShowSelector(force);
+			((ScrollOfUpgrade) upgrader).reShowSelector(force, amount > 1);
 		} else if (upgrader instanceof MagicalInfusion){
 			((MagicalInfusion)upgrader).reShowSelector();
+		}
+	}
+
+	private static void scaleDown(Visual numberText, float scaling){
+		if (numberText.width > ITEMSLOT_SIZE){
+			numberText.scale.set(PixelScene.align(1f - scaling));
+		} else {
+			numberText.scale.set(1f);
 		}
 	}
 
@@ -478,19 +501,19 @@ public class WndUpgrade extends Window {
 			msg2 = msg2.replace('-', '~');
 		}
 
-		RenderedTextBlock ttl = PixelScene.renderTextBlock(6);
+		RenderedTextBlock ttl = PixelScene.renderTextBlock(5);
 		ttl.align(RenderedTextBlock.CENTER_ALIGN);
 		ttl.text(title, WIDTH/2);
 		ttl.setPos(COL_1 - ttl.width() / 2f, bottom + GAP);
 		PixelScene.align(ttl);
 		add(ttl);
 
-		RenderedTextBlock m1 = PixelScene.renderTextBlock(msg1, 6);
+		RenderedTextBlock m1 = PixelScene.renderTextBlock(msg1, 5);
 		m1.setPos(COL_2 - m1.width() / 2f, ttl.top());
 		PixelScene.align(m1);
 		add(m1);
 
-		RenderedTextBlock m2 = PixelScene.renderTextBlock(msg2, 6);
+		RenderedTextBlock m2 = PixelScene.renderTextBlock(msg2, 5);
 		m2.setPos(COL_3 - m2.width() / 2f, ttl.top());
 		PixelScene.align(m2);
 		add(m2);
