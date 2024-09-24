@@ -172,7 +172,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 119, 0, 16, 16 ) );
 				break;
 			case BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN:
-				icon.frame( icon.texture.uvRectBySize( 139, 0, 18, 18 ) );
+				icon.frame( icon.texture.uvRectBySize( 238, 110, 18, 18 ) );
 				break;
 
 			case JOURNAL:
@@ -234,9 +234,6 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 240, 16, 13, 10 ) );
 				break;
 
-			case TARGET:
-				icon.frame( icon.texture.uvRectBySize( 0, 32, 16, 16 ) );
-				break;
 			case INFO:
 				icon.frame( icon.texture.uvRectBySize( 16, 32, 14, 14 ) );
 				break;
@@ -293,7 +290,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 80, 48, 13, 16 ) );
 				break;
 			case FINAL_MIMIC:
-				icon.frame( icon.texture.uvRectBySize( 192, 80, 9, 8 ) );
+				icon.frame( icon.texture.uvRectBySize( 208, 112, 9, 8 ) );
 				break;
 			case ALCHEMY:
 				icon.frame( icon.texture.uvRectBySize( 96, 48, 16, 16 ) );
@@ -327,7 +324,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 112, 64, 15, 16 ) );
 				break;
 			case CHEESY_CHEEST:
-				icon.frame( icon.texture.uvRectBySize( 201, 75, 10, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 227, 80, 10, 10 ) );
 				break;
 
 			case TARGET:
@@ -413,7 +410,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 216, 80, 10, 10 ) );
 				break;
 			case CYCLE_COUNT:
-				icon.frame( icon.texture.uvRectBySize( 118, 64, 9, 10 ) );
+				icon.frame( icon.texture.uvRectBySize( 224, 112, 9, 10 ) );
 				break;
 
 			case LIBGDX:
