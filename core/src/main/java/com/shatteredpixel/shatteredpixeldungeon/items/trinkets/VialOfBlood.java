@@ -43,12 +43,12 @@ public class VialOfBlood extends Trinket {
 			return Messages.get(this,
 					"stats_desc",
 					Messages.decimalFormat("#.##", 100*(totalHealMultiplier((int)buffedLvl())-1f)),
-					Integer.toString(maxHealPerTurn((int)buffedLvl())));
+					Long.toString(maxHealPerTurn((int)buffedLvl())));
 		} else {
 			return Messages.get(this,
 					"typical_stats_desc",
 					Messages.decimalFormat("#.##", 100*(totalHealMultiplier((int)buffedLvl())-1f)),
-					Integer.toString(maxHealPerTurn((int)buffedLvl())));
+					Long.toString(maxHealPerTurn((int)buffedLvl())));
 		}
 	}
 
@@ -68,12 +68,12 @@ public class VialOfBlood extends Trinket {
 		}
 	}
 
-	public static int maxHealPerTurn(){
+	public static long maxHealPerTurn(){
 		return maxHealPerTurn(trinketLevel(VialOfBlood.class));
 	}
 
-	public static int maxHealPerTurn(int level){
-		int maxHP = Dungeon.hero == null ? 20 : Dungeon.hero.HT;
+	public static long maxHealPerTurn(int level){
+		long maxHP = Dungeon.hero == null ? 20 : Dungeon.hero.HT;
 		if (level == -1){
 			return maxHP;
 		} else {

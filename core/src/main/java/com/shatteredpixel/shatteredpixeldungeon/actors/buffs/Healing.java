@@ -77,7 +77,7 @@ public class Healing extends Buff {
 	}
 	
 	private long healingThisTick(){
-		int heal = (long)GameMath.gate(1d,
+		long heal = (long)GameMath.gate(1d,
 				Math.round(healingLeft * percentHealPerTick * 1d) + flatHealPerTick,
 				healingLeft);
 		if (healingLimited && heal > VialOfBlood.maxHealPerTurn()){
