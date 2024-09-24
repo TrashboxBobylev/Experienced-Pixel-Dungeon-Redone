@@ -727,7 +727,7 @@ if (buff(RoundShield.GuardTracker.class) != null){
 	}
 
 	//damage rolls that come from the hero can have their RNG influenced
-	public static long heroDamageIntRange(int min, int max ){
+	public static long heroDamageIntRange(long min, long max ){
 		if (Random.Float() < ThirteenLeafClover.combatDistributionInverseChance()){
 			return ThirteenLeafClover.invCombatRoll(min, max);
 		} else {
