@@ -159,7 +159,7 @@ public class GnollGeomancer extends Mob {
 			case 2: return Dungeon.NormalLongRange(155, 175);
 			case 3: return Dungeon.NormalLongRange(564, 670);
 			case 4: return Dungeon.NormalLongRange(4650, 6900);
-			case 5: return Char.combatRoll(700000, 1150000);
+			case 5: return Dungeon.NormalLongRange(700000, 1150000);
 		}
 		return Random.NormalIntRange( 3, 6 );
 	}
@@ -179,13 +179,13 @@ public class GnollGeomancer extends Mob {
 	@Override
 	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Char.combatRoll(30, 45);
-			case 2: return Char.combatRoll(100, 265);
-			case 3: return Char.combatRoll(570, 950);
-			case 4: return Char.combatRoll(17000, 38000);
-			case 5: return Char.combatRoll(1625000, 3000000);
+			case 1: return Dungeon.NormalLongRange(30, 45);
+			case 2: return Dungeon.NormalLongRange(100, 265);
+			case 3: return Dungeon.NormalLongRange(570, 950);
+			case 4: return Dungeon.NormalLongRange(17000, 38000);
+			case 5: return Dungeon.NormalLongRange(1625000, 3000000);
 		}
-		return Char.combatRoll(0, 6);
+		return Dungeon.NormalLongRange(0, 6);
 	}
 
 	@Override
@@ -730,13 +730,13 @@ public class GnollGeomancer extends Mob {
 						}
 
 						if (ch != null && !(ch instanceof GnollGeomancer)){
-							long dmg = Char.combatRoll(6, 12);
+							long dmg = Dungeon.NormalLongRange(6, 12);
 							switch (Dungeon.cycle) {
-								case 1: dmg = Char.combatRoll(48, 72); break;
-								case 2: dmg = Char.combatRoll(240, 295); break;
-								case 3: dmg = Char.combatRoll(960, 1250); break;
-								case 4: dmg = Char.combatRoll(7400, 13000); break;
-								case 5: dmg =  Char.combatRoll(175000, 800000); break;
+								case 1: dmg = Dungeon.NormalLongRange(48, 72); break;
+								case 2: dmg = Dungeon.NormalLongRange(240, 295); break;
+								case 3: dmg = Dungeon.NormalLongRange(960, 1250); break;
+								case 4: dmg = Dungeon.NormalLongRange(7400, 13000); break;
+								case 5: dmg =  Dungeon.NormalLongRange(175000, 800000); break;
 							}
 							ch.damage(dmg, new GnollGeomancer.Boulder());
 
@@ -841,13 +841,13 @@ public class GnollGeomancer extends Mob {
 
 		@Override
 		public void affectChar(Char ch) {
-			long dmg = Char.combatRoll(6, 12);
+			long dmg = Dungeon.NormalLongRange(6, 12);
 			switch (Dungeon.cycle) {
-				case 1: dmg = Char.combatRoll(48, 72); break;
-				case 2: dmg = Char.combatRoll(240, 295); break;
-				case 3: dmg = Char.combatRoll(960, 1250); break;
-				case 4: dmg = Char.combatRoll(7400, 13000); break;
-				case 5: dmg =  Char.combatRoll(175000, 800000); break;
+				case 1: dmg = Dungeon.NormalLongRange(48, 72); break;
+				case 2: dmg = Dungeon.NormalLongRange(240, 295); break;
+				case 3: dmg = Dungeon.NormalLongRange(960, 1250); break;
+				case 4: dmg = Dungeon.NormalLongRange(7400, 13000); break;
+				case 5: dmg =  Dungeon.NormalLongRange(175000, 800000); break;
 			}
 			ch.damage(dmg, this);
 			if (ch.isAlive()) {

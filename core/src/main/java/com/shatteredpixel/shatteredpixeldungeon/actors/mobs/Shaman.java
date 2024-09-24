@@ -176,10 +176,10 @@ public abstract class Shaman extends Mob {
 			long dmg = Random.NormalIntRange( 6, 15 );
             switch (Dungeon.cycle) {
                 case 1: dmg = Dungeon.NormalLongRange(48, 62); break;
-                case 2: dmg = Char.combatRoll(250, 324); break;
-                case 3: dmg = Char.combatRoll(895, 1200); break;
-                case 4: dmg = Char.combatRoll(17000, 26000); break;
-				case 5: dmg = Char.combatRoll(1400000, 2150000); break;
+                case 2: dmg = Dungeon.NormalLongRange(250, 324); break;
+                case 3: dmg = Dungeon.NormalLongRange(895, 1200); break;
+                case 4: dmg = Dungeon.NormalLongRange(17000, 26000); break;
+				case 5: dmg = Dungeon.NormalLongRange(1400000, 2150000); break;
             }
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 			enemy.damage( dmg, new EarthenBolt() );

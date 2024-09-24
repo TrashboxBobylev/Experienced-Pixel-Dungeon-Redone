@@ -29,8 +29,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Bones;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Overload;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RageShield;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MobSpawner;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
@@ -248,7 +253,7 @@ public class ArenaLevel extends Level {
 	public static class ArenaCounter extends CounterBuff {}
 	
 	@Override
-	public Respawner respawner() {
+	public MobSpawner spawner() {
         return new ArenaRespawner();
     }
 
@@ -311,7 +316,7 @@ public class ArenaLevel extends Level {
 		return visuals;
 	}
 
-	public static class ArenaRespawner extends Respawner {
+	public static class ArenaRespawner extends MobSpawner {
 
 		{
 			actPriority = BUFF_PRIO; //as if it were a buff.

@@ -25,7 +25,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -42,7 +47,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CrystalSpireSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.*;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -131,13 +140,13 @@ public class CrystalSpire extends Mob {
 				Char ch = Actor.findChar(i);
 
 				if (ch != null && !(ch instanceof CrystalWisp || ch instanceof CrystalSpire)){
-					long dmg = Char.combatRoll(12, 30);
+					long dmg = Dungeon.NormalLongRange(12, 30);
 					switch (Dungeon.cycle) {
-						case 1: dmg = Char.combatRoll(96, 124); break;
-						case 2: dmg = Random.NormalIntRange(500, 648); break;
-						case 3: dmg = Char.combatRoll(1790, 2400); break;
-						case 4: dmg = Char.combatRoll(34000, 52000); break;
-						case 5: dmg = Char.combatRoll(4000000, 4900000); break;
+						case 1: dmg = Dungeon.NormalLongRange(96, 124); break;
+						case 2: dmg = Dungeon.NormalLongRange(500, 648); break;
+						case 3: dmg = Dungeon.NormalLongRange(1790, 2400); break;
+						case 4: dmg = Dungeon.NormalLongRange(34000, 52000); break;
+						case 5: dmg = Dungeon.NormalLongRange(4000000, 4900000); break;
 					}
 
 					//guardians are hit harder by the attack

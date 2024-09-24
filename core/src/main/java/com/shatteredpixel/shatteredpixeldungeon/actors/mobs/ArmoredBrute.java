@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -50,13 +49,13 @@ public class ArmoredBrute extends Brute {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(30, 58);
-            case 2: return Char.combatRoll(160, 280);
-            case 3: return Char.combatRoll(570, 1000);
-            case 4: return Char.combatRoll(19000, 30000);
-			case 5: return Char.combatRoll(1250000, 1750000);
+            case 1: return Dungeon.NormalLongRange(30, 58);
+            case 2: return Dungeon.NormalLongRange(160, 280);
+            case 3: return Dungeon.NormalLongRange(570, 1000);
+            case 4: return Dungeon.NormalLongRange(19000, 30000);
+			case 5: return Dungeon.NormalLongRange(1250000, 1750000);
         }
-		return Char.combatRoll(6, 10);
+		return Dungeon.NormalLongRange(6, 10);
 	}
 	
 	@Override

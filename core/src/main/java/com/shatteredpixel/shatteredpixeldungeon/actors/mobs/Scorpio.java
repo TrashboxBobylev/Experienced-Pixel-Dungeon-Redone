@@ -87,11 +87,11 @@ public class Scorpio extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(100, 123);
-            case 2: return Char.combatRoll(450, 564);
-            case 3: return Char.combatRoll(2780, 4350);
-            case 4: return Char.combatRoll(324000, 410000);
-			case 5: return Char.combatRoll(7000000, 11000000);
+            case 1: return Dungeon.NormalLongRange(100, 123);
+            case 2: return Dungeon.NormalLongRange(450, 564);
+            case 3: return Dungeon.NormalLongRange(2780, 4350);
+            case 4: return Dungeon.NormalLongRange(324000, 410000);
+			case 5: return Dungeon.NormalLongRange(7000000, 11000000);
         }
 		return Random.NormalIntRange( 30, 40 );
 	}
@@ -111,13 +111,13 @@ public class Scorpio extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(50, 89);
-            case 2: return Char.combatRoll(240, 400);
-            case 3: return Char.combatRoll(1750, 3200);
-            case 4: return Char.combatRoll(300000, 400000);
-			case 5: return Char.combatRoll(10000000, 18000000);
+            case 1: return Dungeon.NormalLongRange(50, 89);
+            case 2: return Dungeon.NormalLongRange(240, 400);
+            case 3: return Dungeon.NormalLongRange(1750, 3200);
+            case 4: return Dungeon.NormalLongRange(300000, 400000);
+			case 5: return Dungeon.NormalLongRange(10000000, 18000000);
         }
-		return Char.combatRoll(0, 16);
+		return Dungeon.NormalLongRange(0, 16);
 	}
 	
 	@Override

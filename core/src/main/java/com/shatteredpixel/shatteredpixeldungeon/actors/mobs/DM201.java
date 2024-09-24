@@ -73,11 +73,11 @@ public class DM201 extends DM200 {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(69, 91);
-            case 2: return Char.combatRoll(321, 412);
-            case 3: return Char.combatRoll(1400, 1794);
-            case 4: return Char.combatRoll(40000, 75000);
-			case 5: return Char.combatRoll(4000000, 7600000);
+            case 1: return Dungeon.NormalLongRange(69, 91);
+            case 2: return Dungeon.NormalLongRange(321, 412);
+            case 3: return Dungeon.NormalLongRange(1400, 1794);
+            case 4: return Dungeon.NormalLongRange(40000, 75000);
+			case 5: return Dungeon.NormalLongRange(4000000, 7600000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}

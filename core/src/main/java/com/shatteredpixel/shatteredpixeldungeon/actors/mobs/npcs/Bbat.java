@@ -68,11 +68,11 @@ public class Bbat extends Mob {
     @Override
     public long damageRoll() {
         if (Dungeon.hero.isSubclass(HeroSubClass.ASSASSIN)){
-            long i = Char.combatRoll(0, level * 2L);
+            long i = Dungeon.NormalLongRange(0, level * 2L);
             if (enemy.buff(Marked.class) != null) i *= enemy.buff(Marked.class).bonusDamage();
             return i;
         }
-        return Char.combatRoll( level, 1 + level * 2L );
+        return Dungeon.NormalLongRange( level, 1 + level * 2L );
     }
 
     @Override

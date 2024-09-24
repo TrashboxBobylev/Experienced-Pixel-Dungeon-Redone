@@ -26,8 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -188,7 +188,7 @@ public class OOFThief extends Mob {
 
 	protected void triggerEnrage(){
 		HP = 1;
-		Buff.affect(this, AnkhInvulnerability.class, 3f);
+		Buff.affect(this, Invulnerability.class, 3f);
 		if (Dungeon.level.heroFOV[pos]) {
 			SpellSprite.show( this, SpellSprite.BERSERK);
 		}
@@ -197,7 +197,7 @@ public class OOFThief extends Mob {
 
 	@Override
 	public boolean isInvulnerable(Class effect) {
-		return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
+		return super.isInvulnerable(effect) || buff(Invulnerability.class) != null;
 	}
 
 	private static final int STEAL_COUNT = 4;

@@ -27,7 +27,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -111,11 +115,11 @@ public class Swarm extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(25, 31);
-            case 2: return Char.combatRoll(129, 176);
-            case 3: return Char.combatRoll(525, 667);
-            case 4: return Char.combatRoll(5000, 9000);
-			case 5: return Char.combatRoll(475000, 975000);
+            case 1: return Dungeon.NormalLongRange(25, 31);
+            case 2: return Dungeon.NormalLongRange(129, 176);
+            case 3: return Dungeon.NormalLongRange(525, 667);
+            case 4: return Dungeon.NormalLongRange(5000, 9000);
+			case 5: return Dungeon.NormalLongRange(475000, 975000);
         }
 		return Random.NormalIntRange( 1, 4 );
 	}

@@ -112,11 +112,11 @@ public class Thief extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(32, 47);
-            case 2: return Char.combatRoll(160, 208);
-            case 3: return Char.combatRoll(550, 901);
-            case 4: return Char.combatRoll(9500, 14000);
-			case 5: return Char.combatRoll(600000, 1070000);
+            case 1: return Dungeon.NormalLongRange(32, 47);
+            case 2: return Dungeon.NormalLongRange(160, 208);
+            case 3: return Dungeon.NormalLongRange(550, 901);
+            case 4: return Dungeon.NormalLongRange(9500, 14000);
+			case 5: return Dungeon.NormalLongRange(600000, 1070000);
         }
 		return Random.NormalIntRange( 1, 10 );
 	}
@@ -165,13 +165,13 @@ public class Thief extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(8, 20);
-            case 2: return Char.combatRoll(60, 137);
-            case 3: return Char.combatRoll(380, 625);
-            case 4: return Char.combatRoll(5000, 10000);
-			case 5: return Char.combatRoll(56000, 720000);
+            case 1: return Dungeon.NormalLongRange(8, 20);
+            case 2: return Dungeon.NormalLongRange(60, 137);
+            case 3: return Dungeon.NormalLongRange(380, 625);
+            case 4: return Dungeon.NormalLongRange(5000, 10000);
+			case 5: return Dungeon.NormalLongRange(56000, 720000);
         }
-		return Char.combatRoll(0, 3);
+		return Dungeon.NormalLongRange(0, 3);
 	}
 
 	@Override

@@ -124,10 +124,10 @@ public class DwarfKing extends Mob {
 	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return Dungeon.NormalLongRange(71, 83);
-            case 2: return Char.combatRoll(297, 455);
-            case 3: return Char.combatRoll(2000, 2800);
-            case 4: return Char.combatRoll(90000, 250000);
-			case 5: return Char.combatRoll(2600000, 8000000);
+            case 2: return Dungeon.NormalLongRange(297, 455);
+            case 3: return Dungeon.NormalLongRange(2000, 2800);
+            case 4: return Dungeon.NormalLongRange(90000, 250000);
+			case 5: return Dungeon.NormalLongRange(2600000, 8000000);
         }
 		return Random.NormalIntRange( 15, 25 );
 	}
@@ -147,13 +147,13 @@ public class DwarfKing extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(38, 65);
-            case 2: return Char.combatRoll(140, 295);
-            case 3: return Char.combatRoll(1100, 1980);
-            case 4: return Char.combatRoll(90000, 170000);
-			case 5: return Char.combatRoll(3200000, 6500000);
+            case 1: return Dungeon.NormalLongRange(38, 65);
+            case 2: return Dungeon.NormalLongRange(140, 295);
+            case 3: return Dungeon.NormalLongRange(1100, 1980);
+            case 4: return Dungeon.NormalLongRange(90000, 170000);
+			case 5: return Dungeon.NormalLongRange(3200000, 6500000);
         }
-		return Char.combatRoll(0, 10);
+		return Dungeon.NormalLongRange(0, 10);
 	}
 
 	private int phase = 1;

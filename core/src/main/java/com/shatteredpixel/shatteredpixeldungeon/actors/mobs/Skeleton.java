@@ -89,11 +89,11 @@ public class Skeleton extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(34, 50);
-            case 2: return Char.combatRoll(180, 231);
-            case 3: return Char.combatRoll(600, 850);
-            case 4: return Char.combatRoll(8000, 14000);
-			case 5: return Char.combatRoll(525000, 1100000);
+            case 1: return Dungeon.NormalLongRange(34, 50);
+            case 2: return Dungeon.NormalLongRange(180, 231);
+            case 3: return Dungeon.NormalLongRange(600, 850);
+            case 4: return Dungeon.NormalLongRange(8000, 14000);
+			case 5: return Dungeon.NormalLongRange(525000, 1100000);
         }
 		return Random.NormalIntRange( 2, 10 );
 	}
@@ -176,13 +176,13 @@ public class Skeleton extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(10, 24);
-            case 2: return Char.combatRoll(95, 170);
-            case 3: return Char.combatRoll(360, 625);
-            case 4: return Char.combatRoll(5000, 10000);
-			case 5: return Char.combatRoll(55000, 700000);
+            case 1: return Dungeon.NormalLongRange(10, 24);
+            case 2: return Dungeon.NormalLongRange(95, 170);
+            case 3: return Dungeon.NormalLongRange(360, 625);
+            case 4: return Dungeon.NormalLongRange(5000, 10000);
+			case 5: return Dungeon.NormalLongRange(55000, 700000);
         }
-		return Char.combatRoll(0, 5);
+		return Dungeon.NormalLongRange(0, 5);
 	}
 
 }

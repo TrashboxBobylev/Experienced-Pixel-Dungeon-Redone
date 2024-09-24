@@ -88,11 +88,11 @@ public class DM200 extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(60, 79);
-            case 2: return Char.combatRoll(280, 395);
-            case 3: return Char.combatRoll(1300, 1631);
-            case 4: return Char.combatRoll(20000, 60000);
-			case 5: return Char.combatRoll(2500000, 5000000);
+            case 1: return Dungeon.NormalLongRange(60, 79);
+            case 2: return Dungeon.NormalLongRange(280, 395);
+            case 3: return Dungeon.NormalLongRange(1300, 1631);
+            case 4: return Dungeon.NormalLongRange(20000, 60000);
+			case 5: return Dungeon.NormalLongRange(2500000, 5000000);
         }
 		return Random.NormalIntRange( 10, 25 );
 	}
@@ -112,13 +112,13 @@ public class DM200 extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(30, 47);
-            case 2: return Char.combatRoll(100, 241);
-            case 3: return Char.combatRoll(570, 1000);
-            case 4: return Char.combatRoll(16000, 36000);
-			case 5: return Char.combatRoll(1900000, 2500000);
+            case 1: return Dungeon.NormalLongRange(30, 47);
+            case 2: return Dungeon.NormalLongRange(100, 241);
+            case 3: return Dungeon.NormalLongRange(570, 1000);
+            case 4: return Dungeon.NormalLongRange(16000, 36000);
+			case 5: return Dungeon.NormalLongRange(1900000, 2500000);
         }
-		return Char.combatRoll(0, 8);
+		return Dungeon.NormalLongRange(0, 8);
 	}
 
 	@Override

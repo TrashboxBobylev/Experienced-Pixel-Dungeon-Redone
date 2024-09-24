@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -94,13 +93,13 @@ public class DemonSpawner extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(48, 73);
-            case 2: return Char.combatRoll(185, 365);
-            case 3: return Char.combatRoll(1800, 3120);
-            case 4: return Char.combatRoll(130000, 200000);
-			case 5: return Char.combatRoll(8000000, 14500000);
+            case 1: return Dungeon.NormalLongRange(48, 73);
+            case 2: return Dungeon.NormalLongRange(185, 365);
+            case 3: return Dungeon.NormalLongRange(1800, 3120);
+            case 4: return Dungeon.NormalLongRange(130000, 200000);
+			case 5: return Dungeon.NormalLongRange(8000000, 14500000);
         }
-		return Char.combatRoll(0, 12);
+		return Dungeon.NormalLongRange(0, 12);
 	}
 
 	@Override

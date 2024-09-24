@@ -30,7 +30,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -206,11 +217,11 @@ public abstract class YogFist extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(86, 121);
-            case 2: return Char.combatRoll(375, 580);
-            case 3: return Char.combatRoll(2800, 4500);
-            case 4: return Char.combatRoll(350000, 460000);
-			case 5: return Char.combatRoll(6000000, 12500000);
+            case 1: return Dungeon.NormalLongRange(86, 121);
+            case 2: return Dungeon.NormalLongRange(375, 580);
+            case 3: return Dungeon.NormalLongRange(2800, 4500);
+            case 4: return Dungeon.NormalLongRange(350000, 460000);
+			case 5: return Dungeon.NormalLongRange(6000000, 12500000);
         }
 		return Random.NormalIntRange( 18, 36 );
 	}
@@ -218,13 +229,13 @@ public abstract class YogFist extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(50, 89);
-            case 2: return Char.combatRoll(250, 430);
-            case 3: return Char.combatRoll(1750, 3200);
-            case 4: return Char.combatRoll(370000, 480000);
-			case 5: return Char.combatRoll(8000000, 16500000);
+            case 1: return Dungeon.NormalLongRange(50, 89);
+            case 2: return Dungeon.NormalLongRange(250, 430);
+            case 3: return Dungeon.NormalLongRange(1750, 3200);
+            case 4: return Dungeon.NormalLongRange(370000, 480000);
+			case 5: return Dungeon.NormalLongRange(8000000, 16500000);
         }
-		return Char.combatRoll(0, 15);
+		return Dungeon.NormalLongRange(0, 15);
 	}
 
 	{
@@ -497,11 +508,11 @@ public abstract class YogFist extends Mob {
 		@Override
 		public long damageRoll() {
             switch (Dungeon.cycle) {
-                case 1: return Char.combatRoll(121, 145);
-                case 2: return Char.combatRoll(489, 675);
-                case 3: return Char.combatRoll(3100, 5412);
-                case 4: return Char.combatRoll(435000, 540000);
-				case 5: return Char.combatRoll(8500000, 17500000);
+                case 1: return Dungeon.NormalLongRange(121, 145);
+                case 2: return Dungeon.NormalLongRange(489, 675);
+                case 3: return Dungeon.NormalLongRange(3100, 5412);
+                case 4: return Dungeon.NormalLongRange(435000, 540000);
+				case 5: return Dungeon.NormalLongRange(8500000, 17500000);
             }
 			return Random.NormalIntRange( 22, 44 );
 		}
@@ -553,13 +564,13 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-                long dmg = Char.combatRoll(10, 20);
+                long dmg = Dungeon.NormalLongRange(10, 20);
                 switch (Dungeon.cycle){
-                    case 1: dmg = Char.combatRoll(90, 131); break;
-                    case 2: dmg = Char.combatRoll(200, 389); break;
-                    case 3: dmg = Char.combatRoll(2300, 3000); break;
-                    case 4: dmg = Char.combatRoll(170000, 250000); break;
-					case 5: dmg = Char.combatRoll(3250000, 7200000); break;
+                    case 1: dmg = Dungeon.NormalLongRange(90, 131); break;
+                    case 2: dmg = Dungeon.NormalLongRange(200, 389); break;
+                    case 3: dmg = Dungeon.NormalLongRange(2300, 3000); break;
+                    case 4: dmg = Dungeon.NormalLongRange(170000, 250000); break;
+					case 5: dmg = Dungeon.NormalLongRange(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new LightBeam() );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
@@ -627,13 +638,13 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-                long dmg = Char.combatRoll(10, 20);
+                long dmg = Dungeon.NormalLongRange(10, 20);
                 switch (Dungeon.cycle){
-                    case 1: dmg = Char.combatRoll(90, 131); break;
-                    case 2: dmg = Char.combatRoll(200, 389); break;
-                    case 3: dmg = Char.combatRoll(2300, 3000); break;
-                    case 4: dmg = Char.combatRoll(175000, 250000); break;
-					case 5: dmg = Char.combatRoll(3250000, 7200000); break;
+                    case 1: dmg = Dungeon.NormalLongRange(90, 131); break;
+                    case 2: dmg = Dungeon.NormalLongRange(200, 389); break;
+                    case 3: dmg = Dungeon.NormalLongRange(2300, 3000); break;
+                    case 4: dmg = Dungeon.NormalLongRange(175000, 250000); break;
+					case 5: dmg = Dungeon.NormalLongRange(3250000, 7200000); break;
                 }
                 enemy.damage(dmg, new DarkBolt() );
 

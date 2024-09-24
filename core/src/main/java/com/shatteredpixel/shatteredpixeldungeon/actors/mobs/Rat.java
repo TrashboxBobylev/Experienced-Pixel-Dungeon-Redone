@@ -82,11 +82,11 @@ public class Rat extends Mob {
 	@Override
 	public long damageRoll() {
 	    switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(25, 31);
-            case 2: return Char.combatRoll(110, 145);
-            case 3: return Char.combatRoll(475, 589);
-            case 4: return Char.combatRoll(3200, 5000);
-			case 5: return Char.combatRoll(345000, 485000);
+            case 1: return Dungeon.NormalLongRange(25, 31);
+            case 2: return Dungeon.NormalLongRange(110, 145);
+            case 3: return Dungeon.NormalLongRange(475, 589);
+            case 4: return Dungeon.NormalLongRange(3200, 5000);
+			case 5: return Dungeon.NormalLongRange(345000, 485000);
         }
         return Random.NormalIntRange(1, 4);
 	}

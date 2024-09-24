@@ -132,10 +132,10 @@ public class RipperDemon extends Mob {
             case 1: return Dungeon.NormalLongRange(34, 64);
             case 2: return Dungeon.NormalLongRange(100, 217);
             case 3: return Dungeon.NormalLongRange(1200, 2100);
-            case 4: return Char.combatRoll(90000, 140000);
-			case 5: return Char.combatRoll(4500000, 8000000);
+            case 4: return Dungeon.NormalLongRange(90000, 140000);
+			case 5: return Dungeon.NormalLongRange(4500000, 8000000);
         }
-		return Char.combatRoll(0, 4);
+		return Dungeon.NormalLongRange(0, 4);
 	}
 
 	private static final String LAST_ENEMY_POS = "last_enemy_pos";
@@ -192,7 +192,7 @@ public class RipperDemon extends Mob {
 
 			if (leapPos != -1){
 
-				leapCooldown = Char.combatRoll(2, 4);
+				leapCooldown = Dungeon.NormalLongRange(2, 4);
 
 				if (rooted){
 					leapPos = -1;

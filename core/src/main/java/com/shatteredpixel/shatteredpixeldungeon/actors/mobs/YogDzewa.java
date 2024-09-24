@@ -21,14 +21,22 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
-import com.shatteredpixel.shatteredpixeldungeon.effects.*;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
@@ -47,7 +55,12 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
-import com.watabou.utils.*;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -256,13 +269,13 @@ public class YogDzewa extends Mob {
 					}
 
 					if (hit( this, ch, true )) {
-						long dmg = Char.combatRoll(20, 30);
+						long dmg = Dungeon.NormalLongRange(20, 30);
 						switch (Dungeon.cycle){
-							case 1: dmg = Char.combatRoll(120, 175); break;
-							case 2: dmg = Char.combatRoll(370, 502); break;
-							case 3: dmg = Char.combatRoll(2650, 4000); break;
-							case 4: dmg = Char.combatRoll(179000, 320000); break;
-							case 5: dmg = Char.combatRoll(6400000, 10000000); break;
+							case 1: dmg = Dungeon.NormalLongRange(120, 175); break;
+							case 2: dmg = Dungeon.NormalLongRange(370, 502); break;
+							case 3: dmg = Dungeon.NormalLongRange(2650, 4000); break;
+							case 4: dmg = Dungeon.NormalLongRange(179000, 320000); break;
+							case 5: dmg = Dungeon.NormalLongRange(6400000, 10000000); break;
 						}
 						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
 							ch.damage(dmg*25000L, new Eye.DeathGaze());
@@ -761,11 +774,11 @@ public class YogDzewa extends Mob {
 		@Override
 		public long damageRoll() {
             switch (Dungeon.cycle) {
-                case 1: return Char.combatRoll(70, 91);
-                case 2: return Char.combatRoll(325, 440);
-                case 3: return Char.combatRoll(2500, 4000);
-                case 4: return Char.combatRoll(360000, 460000);
-				case 5: return Char.combatRoll(6000000, 9000000);
+                case 1: return Dungeon.NormalLongRange(70, 91);
+                case 2: return Dungeon.NormalLongRange(325, 440);
+                case 3: return Dungeon.NormalLongRange(2500, 4000);
+                case 4: return Dungeon.NormalLongRange(360000, 460000);
+				case 5: return Dungeon.NormalLongRange(6000000, 9000000);
             }
 			return Random.NormalIntRange( 15, 25 );
 		}
@@ -773,11 +786,11 @@ public class YogDzewa extends Mob {
 		@Override
 		public long cycledDrRoll() {
             switch (Dungeon.cycle){
-                case 1: return Char.combatRoll(40, 63);
-                case 2: return Char.combatRoll(125, 248);
-                case 3: return Char.combatRoll(1600, 2800);
+                case 1: return Dungeon.NormalLongRange(40, 63);
+                case 2: return Dungeon.NormalLongRange(125, 248);
+                case 3: return Dungeon.NormalLongRange(1600, 2800);
             }
-			return Char.combatRoll(0, 4);
+			return Dungeon.NormalLongRange(0, 4);
 		}
 
 		@Override

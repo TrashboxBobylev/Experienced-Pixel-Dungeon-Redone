@@ -165,12 +165,12 @@ public class Goo extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(8, 15);
-            case 2: return Char.combatRoll(130, 178);
-            case 3: return Char.combatRoll(330, 600);
-            case 4: return Char.combatRoll(5000, 10000);
+            case 1: return Dungeon.NormalLongRange(8, 15);
+            case 2: return Dungeon.NormalLongRange(130, 178);
+            case 3: return Dungeon.NormalLongRange(330, 600);
+            case 4: return Dungeon.NormalLongRange(5000, 10000);
         }
-		return Char.combatRoll(0, 2);
+		return Dungeon.NormalLongRange(0, 2);
 	}
 
 	@Override

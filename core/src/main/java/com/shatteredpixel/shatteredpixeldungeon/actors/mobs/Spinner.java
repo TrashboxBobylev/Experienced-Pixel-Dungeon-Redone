@@ -28,7 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -85,11 +89,11 @@ public class Spinner extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(58, 73);
-            case 2: return Char.combatRoll(260, 371);
-            case 3: return Char.combatRoll(1200, 1468);
-            case 4: return Char.combatRoll(18000, 50000);
-			case 5: return Char.combatRoll(2000000, 4200000);
+            case 1: return Dungeon.NormalLongRange(58, 73);
+            case 2: return Dungeon.NormalLongRange(260, 371);
+            case 3: return Dungeon.NormalLongRange(1200, 1468);
+            case 4: return Dungeon.NormalLongRange(18000, 50000);
+			case 5: return Dungeon.NormalLongRange(2000000, 4200000);
         }
 		return Random.NormalIntRange(10, 20);
 	}
@@ -109,13 +113,13 @@ public class Spinner extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(20, 39);
-            case 2: return Char.combatRoll(80, 219);
-            case 3: return Char.combatRoll(480, 840);
-            case 4: return Char.combatRoll(13000, 30000);
-			case 5: return Char.combatRoll(1220000, 2000000);
+            case 1: return Dungeon.NormalLongRange(20, 39);
+            case 2: return Dungeon.NormalLongRange(80, 219);
+            case 3: return Dungeon.NormalLongRange(480, 840);
+            case 4: return Dungeon.NormalLongRange(13000, 30000);
+			case 5: return Dungeon.NormalLongRange(1220000, 2000000);
         }
-		return Char.combatRoll(0, 6);
+		return Dungeon.NormalLongRange(0, 6);
 	}
 
 	private int webCoolDown = 0;

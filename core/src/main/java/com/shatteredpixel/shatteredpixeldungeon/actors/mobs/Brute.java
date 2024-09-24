@@ -87,20 +87,20 @@ public class Brute extends Mob {
 	public long damageRoll() {
         switch (Dungeon.cycle) {
             case 1: return buff(BruteRage.class) != null ?
-                    Char.combatRoll( 70, 123 ) :
-                    Char.combatRoll( 58, 70 );
+                    Dungeon.NormalLongRange( 70, 123 ) :
+                    Dungeon.NormalLongRange( 58, 70 );
             case 2: return buff(BruteRage.class) != null ?
-                    Char.combatRoll( 340, 541 ) :
-                    Char.combatRoll( 240, 368 );
+                    Dungeon.NormalLongRange( 340, 541 ) :
+                    Dungeon.NormalLongRange( 240, 368 );
             case 3: return buff(BruteRage.class) != null ?
-                    Char.combatRoll( 1200, 1640 ) :
-                    Char.combatRoll(900, 1340);
+                    Dungeon.NormalLongRange( 1200, 1640 ) :
+                    Dungeon.NormalLongRange(900, 1340);
             case 4: return buff(BruteRage.class) != null ?
-                    Char.combatRoll( 30000, 64000 ) :
-                    Char.combatRoll(16500, 40000);
+                    Dungeon.NormalLongRange( 30000, 64000 ) :
+                    Dungeon.NormalLongRange(16500, 40000);
 			case 5: return buff(BruteRage.class) != null ?
-					Char.combatRoll(2250000, 3500000) :
-					Char.combatRoll(1650000, 2500000);
+					Dungeon.NormalLongRange(2250000, 3500000) :
+					Dungeon.NormalLongRange(1650000, 2500000);
         }
 		return buff(BruteRage.class) != null ?
 				Random.NormalIntRange( 15, 40 ) :
@@ -122,13 +122,13 @@ public class Brute extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(20, 39);
-            case 2: return Char.combatRoll(120, 231);
-            case 3: return Char.combatRoll(500, 890);
-            case 4: return Char.combatRoll(10000, 22000);
-			case 5: return Char.combatRoll(750000, 1450000);
+            case 1: return Dungeon.NormalLongRange(20, 39);
+            case 2: return Dungeon.NormalLongRange(120, 231);
+            case 3: return Dungeon.NormalLongRange(500, 890);
+            case 4: return Dungeon.NormalLongRange(10000, 22000);
+			case 5: return Dungeon.NormalLongRange(750000, 1450000);
         }
-		return Char.combatRoll(0, 8);
+		return Dungeon.NormalLongRange(0, 8);
 	}
 
 	@Override

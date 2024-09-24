@@ -112,8 +112,8 @@ public class RotLasher extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(45, 63);
-            case 2: return Char.combatRoll(250, 324);
+            case 1: return Dungeon.NormalLongRange(45, 63);
+            case 2: return Dungeon.NormalLongRange(250, 324);
         }
 		return Random.NormalIntRange(10, 20);
 	}
@@ -130,10 +130,10 @@ public class RotLasher extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(14, 34);
-            case 2: return Char.combatRoll(140, 234);
+            case 1: return Dungeon.NormalLongRange(14, 34);
+            case 2: return Dungeon.NormalLongRange(140, 234);
         }
-		return Char.combatRoll(0, 8);
+		return Dungeon.NormalLongRange(0, 8);
 	}
 	
 	{

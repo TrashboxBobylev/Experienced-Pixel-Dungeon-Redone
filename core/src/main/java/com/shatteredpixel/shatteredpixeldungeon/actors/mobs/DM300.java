@@ -152,10 +152,10 @@ public class DM300 extends Mob {
             case 1: return Dungeon.NormalLongRange(38, 53);
             case 2: return Dungeon.NormalLongRange(120, 275);
             case 3: return Dungeon.NormalLongRange(562, 1310);
-            case 4: return Char.combatRoll(19000, 45000);
-			case 5: return Char.combatRoll(2250000, 3500000);
+            case 4: return Dungeon.NormalLongRange(19000, 45000);
+			case 5: return Dungeon.NormalLongRange(2250000, 3500000);
         }
-		return Char.combatRoll(0, 10);
+		return Dungeon.NormalLongRange(0, 10);
 	}
 
 	public int pylonsActivated = 0;

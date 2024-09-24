@@ -104,11 +104,11 @@ public class CrystalWisp extends Mob{
 	@Override
 	public long damageRoll() {
 		switch (Dungeon.cycle) {
-			case 1: return Char.combatRoll(50, 55);
-			case 2: return Char.combatRoll(240, 275);
-			case 3: return Char.combatRoll(800, 900);
-			case 4: return Char.combatRoll(14000, 18500);
-			case 5: return Char.combatRoll(1100000, 1800000);
+			case 1: return Dungeon.NormalLongRange(50, 55);
+			case 2: return Dungeon.NormalLongRange(240, 275);
+			case 3: return Dungeon.NormalLongRange(800, 900);
+			case 4: return Dungeon.NormalLongRange(14000, 18500);
+			case 5: return Dungeon.NormalLongRange(1100000, 1800000);
 		}
 		return Random.NormalIntRange( 5, 10 );
 	}
@@ -128,13 +128,13 @@ public class CrystalWisp extends Mob{
 	@Override
 	public long cycledDrRoll() {
 		switch (Dungeon.cycle){
-			case 1: return Char.combatRoll(13, 28);
-			case 2: return Char.combatRoll(70, 170);
-			case 3: return Char.combatRoll(500, 700);
-			case 4: return Char.combatRoll(8000, 16000);
-			case 5: return Char.combatRoll(650000, 1250000);
+			case 1: return Dungeon.NormalLongRange(13, 28);
+			case 2: return Dungeon.NormalLongRange(70, 170);
+			case 3: return Dungeon.NormalLongRange(500, 700);
+			case 4: return Dungeon.NormalLongRange(8000, 16000);
+			case 5: return Dungeon.NormalLongRange(650000, 1250000);
 		}
-		return Char.combatRoll(0, 4);
+		return Dungeon.NormalLongRange(0, 4);
 	}
 
 	@Override
@@ -180,11 +180,11 @@ public class CrystalWisp extends Mob{
 
 			long dmg = Random.NormalIntRange( 5, 10 );
 			switch (Dungeon.cycle) {
-				case 1: dmg = Char.combatRoll(50, 55); break;
-				case 2: dmg = Char.combatRoll(240, 275); break;
-				case 3: dmg = Char.combatRoll(800, 900); break;
-				case 4: dmg = Char.combatRoll(14000, 18500); break;
-				case 5: dmg = Char.combatRoll(1100000, 1800000); break;
+				case 1: dmg = Dungeon.NormalLongRange(50, 55); break;
+				case 2: dmg = Dungeon.NormalLongRange(240, 275); break;
+				case 3: dmg = Dungeon.NormalLongRange(800, 900); break;
+				case 4: dmg = Dungeon.NormalLongRange(14000, 18500); break;
+				case 5: dmg = Dungeon.NormalLongRange(1100000, 1800000); break;
 			}
 			enemy.damage( dmg, new LightBeam() );
 

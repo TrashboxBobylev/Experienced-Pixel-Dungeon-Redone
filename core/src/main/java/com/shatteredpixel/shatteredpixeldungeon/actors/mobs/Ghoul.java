@@ -97,11 +97,11 @@ public class Ghoul extends Mob {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(64, 79);
-            case 2: return Char.combatRoll(276, 400);
-            case 3: return Char.combatRoll(1500, 1821);
-            case 4: return Char.combatRoll(23000, 71000);
-			case 5: return Char.combatRoll(2750000, 6500000);
+            case 1: return Dungeon.NormalLongRange(64, 79);
+            case 2: return Dungeon.NormalLongRange(276, 400);
+            case 3: return Dungeon.NormalLongRange(1500, 1821);
+            case 4: return Dungeon.NormalLongRange(23000, 71000);
+			case 5: return Dungeon.NormalLongRange(2750000, 6500000);
         }
 		return Random.NormalIntRange( 16, 22 );
 	}
@@ -121,13 +121,13 @@ public class Ghoul extends Mob {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(22, 43);
-            case 2: return Char.combatRoll(100, 211);
-            case 3: return Char.combatRoll(621, 1111);
-            case 4: return Char.combatRoll(18000, 46000);
-			case 5: return Char.combatRoll(1600000, 3200000);
+            case 1: return Dungeon.NormalLongRange(22, 43);
+            case 2: return Dungeon.NormalLongRange(100, 211);
+            case 3: return Dungeon.NormalLongRange(621, 1111);
+            case 4: return Dungeon.NormalLongRange(18000, 46000);
+			case 5: return Dungeon.NormalLongRange(1600000, 3200000);
         }
-		return Char.combatRoll(0, 4);
+		return Dungeon.NormalLongRange(0, 4);
 	}
 
 	@Override

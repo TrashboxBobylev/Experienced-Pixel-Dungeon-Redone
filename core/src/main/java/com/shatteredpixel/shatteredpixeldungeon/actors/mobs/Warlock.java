@@ -93,11 +93,11 @@ public class Warlock extends Mob implements Callback {
 	@Override
 	public long damageRoll() {
         switch (Dungeon.cycle) {
-            case 1: return Char.combatRoll(60, 74);
-            case 2: return Char.combatRoll(240, 389);
-            case 3: return Char.combatRoll(1800, 2300);
-            case 4: return Char.combatRoll(40000, 110000);
-			case 5: return Char.combatRoll(2400000, 5000000);
+            case 1: return Dungeon.NormalLongRange(60, 74);
+            case 2: return Dungeon.NormalLongRange(240, 389);
+            case 3: return Dungeon.NormalLongRange(1800, 2300);
+            case 4: return Dungeon.NormalLongRange(40000, 110000);
+			case 5: return Dungeon.NormalLongRange(2400000, 5000000);
         }
 		return Random.NormalIntRange( 12, 18 );
 	}
@@ -117,13 +117,13 @@ public class Warlock extends Mob implements Callback {
 	@Override
 	public long cycledDrRoll() {
         switch (Dungeon.cycle){
-            case 1: return Char.combatRoll(30, 59);
-            case 2: return Char.combatRoll(112, 276);
-            case 3: return Char.combatRoll(900, 1600);
-            case 4: return Char.combatRoll(40000, 96000);
-			case 5: return Char.combatRoll(3400000, 5750000);
+            case 1: return Dungeon.NormalLongRange(30, 59);
+            case 2: return Dungeon.NormalLongRange(112, 276);
+            case 3: return Dungeon.NormalLongRange(900, 1600);
+            case 4: return Dungeon.NormalLongRange(40000, 96000);
+			case 5: return Dungeon.NormalLongRange(3400000, 5750000);
         }
-		return Char.combatRoll(0, 8);
+		return Dungeon.NormalLongRange(0, 8);
 	}
 	
 	@Override
@@ -168,11 +168,11 @@ public class Warlock extends Mob implements Callback {
 			
 			long dmg = Random.NormalIntRange( 12, 18 );
             switch (Dungeon.cycle) {
-                case 1: dmg = Char.combatRoll(64, 83); break;
-                case 2: dmg = Char.combatRoll(276, 400); break;
-                case 3: dmg = Char.combatRoll(1400, 1621); break;
-                case 4: dmg = Char.combatRoll(45000, 130000); break;
-				case 5: dmg = Char.combatRoll(2500000, 5100000); break;
+                case 1: dmg = Dungeon.NormalLongRange(64, 83); break;
+                case 2: dmg = Dungeon.NormalLongRange(276, 400); break;
+                case 3: dmg = Dungeon.NormalLongRange(1400, 1621); break;
+                case 4: dmg = Dungeon.NormalLongRange(45000, 130000); break;
+				case 5: dmg = Dungeon.NormalLongRange(2500000, 5100000); break;
             }
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 			enemy.damage( dmg, new DarkBolt() );
