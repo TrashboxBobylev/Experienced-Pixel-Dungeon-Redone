@@ -249,6 +249,7 @@ public class AlchemistsToolkit extends Artifact {
 			//This means that energy absorbed into the kit is recovered in 5 hero levels
 			float chargeGain = (2 + level()) * levelPortion;
 			chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+			chargeGain = Math.min(2000000000, chargeGain);
 				partialCharge += chargeGain;
 
 			//charge is in increments of 1 energy.
