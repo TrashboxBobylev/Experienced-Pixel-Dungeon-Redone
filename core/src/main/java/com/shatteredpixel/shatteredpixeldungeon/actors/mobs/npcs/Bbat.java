@@ -177,7 +177,7 @@ public class Bbat extends Mob {
                     if (target != Dungeon.hero.pos) {
                         spend(1 / speed());
                     } else {
-                        spend(1 / 100f);
+                        spend(1 / 25f);
                     }
                     return moveSprite( oldPos, pos );
                 } else {
