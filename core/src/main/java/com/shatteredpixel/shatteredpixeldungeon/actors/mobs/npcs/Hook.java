@@ -41,7 +41,7 @@ public class Hook extends NPC {
     public int tries;
     public ArrayList<Item> items = new ArrayList<>();
     public int tier = 1;
-    public int power = 0;
+    public long power = 0;
 
     {
         spriteClass = HookSprite.class;
@@ -63,7 +63,7 @@ public class Hook extends NPC {
         super.restoreFromBundle(bundle);
         tries = bundle.getInt("tries");
         tier = bundle.getInt("tier");
-        power = bundle.getInt("power");
+        power = bundle.getLong("power");
         items = new ArrayList<>((Collection<Item>) ((Collection<?>) bundle.getCollection("items")));
     }
 

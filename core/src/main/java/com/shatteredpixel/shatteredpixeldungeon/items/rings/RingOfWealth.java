@@ -62,7 +62,7 @@ public class RingOfWealth extends Ring {
 
     public static float triesToDrop = Float.MIN_VALUE;
     public static int dropsToRare = Integer.MIN_VALUE;
-    public static int level = 0;
+    public static long level = 0;
 	
 	public static ArrayList<Item> tryForBonusDrop(int tries){
 
@@ -206,7 +206,7 @@ public class RingOfWealth extends Ring {
 		}
 	}
 
-	private static Item genEquipmentDrop( int level ){
+	private static Item genEquipmentDrop(long level ){
 		Item result;
 		int floorset = (Dungeon.depth)/5;
 		switch (Random.Int(5)){

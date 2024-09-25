@@ -64,13 +64,13 @@ public abstract class FishingRod extends Item {
         return actions;
     }
 
-    public float amplifier = 1f;
+    public double amplifier = 1f;
     public int baseFishingStr = 1;
     public int bonusFishingStr = 0;
     public int tier;
     public boolean hook;
 
-    public float fishingPower(){
+    public double fishingPower(){
         return level()*amplifier;
     }
 
@@ -135,7 +135,7 @@ public abstract class FishingRod extends Item {
                         Hook hook = new Hook();
                         hook.tier = tier;
                         hook.tries = fishingStrength();
-                        hook.power = (int) fishingPower();
+                        hook.power = (long) fishingPower();
                         GameScene.add(hook);
                         ScrollOfTeleportation.appear(hook, hooking.collisionPos);
                         defaultAction = AC_UNCAST;
