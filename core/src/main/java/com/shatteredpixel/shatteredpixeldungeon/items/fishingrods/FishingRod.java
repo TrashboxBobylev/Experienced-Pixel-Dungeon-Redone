@@ -200,6 +200,14 @@ public abstract class FishingRod extends Item {
         return level();
     }
 
+    public String upgradeStat1(long level){
+        return Long.toString(Math.round(level*amplifier*100)) + '%';
+    }
+
+    public String upgradeStat2(long level){
+        return Long.toString(baseFishingStr + Math.min(15000, level/5));
+    }
+
     @Override
     public String desc() {
         String desc = super.desc();

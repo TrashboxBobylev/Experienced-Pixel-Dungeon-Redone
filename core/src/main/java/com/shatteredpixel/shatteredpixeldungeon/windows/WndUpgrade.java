@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.FishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
@@ -248,6 +249,18 @@ public class WndUpgrade extends Window {
 			bottom = fillFields(Messages.get(this, "weight"),
 					Long.toString((((Armor) toUpgrade).STRReq(levelFrom))),
 					Long.toString((((Armor) toUpgrade).STRReq(levelTo))),
+					bottom);
+		}
+
+		//fishing efficiency
+		if (toUpgrade instanceof FishingRod){
+			bottom = fillFields(Messages.get(toUpgrade, "upgrade_fishing_efficiency"),
+					((FishingRod) toUpgrade).upgradeStat1(levelFrom),
+					((FishingRod) toUpgrade).upgradeStat1(levelTo),
+					bottom);
+			bottom = fillFields(Messages.get(toUpgrade, "upgrade_fishing_fortune"),
+					((FishingRod) toUpgrade).upgradeStat2(levelFrom),
+					((FishingRod) toUpgrade).upgradeStat2(levelTo),
 					bottom);
 		}
 
