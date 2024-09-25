@@ -422,16 +422,16 @@ public class Armor extends EquipableItem implements EquipableItem.Tierable {
 			case 0:
 				return tier;
 			case 1:
-				return tier+10;
+				return tier+8;
 			case 2:
-				return Math.round(tier*6.5f);
+				return Math.round(tier*4f);
 			case 3:
-				return Math.round((tier+20)*8f);
+				return Math.round((tier+20)*5f);
 			case 4:
-				return Math.round((tier*10+75)*21f);
+				return Math.round((tier*10+75)*15f);
 			case 5:
 			default:
-				return Math.round((tier*55+850)*150f);
+				return Math.round((tier*55+850)*95f);
 		}
 	}
 
