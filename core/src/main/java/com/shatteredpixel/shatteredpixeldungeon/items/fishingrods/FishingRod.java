@@ -71,7 +71,7 @@ public abstract class FishingRod extends Item {
     public boolean hook;
 
     public double fishingPower(){
-        return level()*amplifier;
+        return (level()+1)*amplifier;
     }
 
     public int fishingStrength(){
@@ -201,7 +201,7 @@ public abstract class FishingRod extends Item {
     }
 
     public String upgradeStat1(long level){
-        return Long.toString(Math.round(level*amplifier*100)) + '%';
+        return Long.toString(Math.round((level+1)*amplifier*100)) + '%';
     }
 
     public String upgradeStat2(long level){
