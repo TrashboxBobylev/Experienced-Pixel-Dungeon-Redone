@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -124,6 +125,8 @@ public class SuperPickaxe extends Item {
 
                                                                 }
                                                             });
+                                        } else {
+                                            Catalog.countUse(getClass());
                                         }
                                     }
                                 });
@@ -170,6 +173,8 @@ public class SuperPickaxe extends Item {
 
                                                                 }
                                                             });
+                                        } else {
+                                            Catalog.countUse(getClass());
                                         }
                                     }
                                 });

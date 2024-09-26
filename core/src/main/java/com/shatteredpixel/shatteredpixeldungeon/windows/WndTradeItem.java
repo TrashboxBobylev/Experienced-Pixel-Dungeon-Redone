@@ -240,8 +240,13 @@ public class WndTradeItem extends WndInfoItem {
 		new Gold( item.value() ).doPickUp( hero );
 
 		if (shop != null){
-			if (item instanceof IdealBag.Plutonium)
+			if (item instanceof IdealBag.Plutonium) {
 				shop.flee();
+				Catalog.countUse(item.getClass());
+			}
+			if (item instanceof IdealBag.BrokenEnderiumBlade || item instanceof IdealBag.EnergyBottle){
+				Catalog.countUse(item.getClass());
+			}
 			shop.buybackItems.add(item);
 			while (shop.buybackItems.size() > Shopkeeper.MAX_BUYBACK_HISTORY){
 				shop.buybackItems.remove(0);

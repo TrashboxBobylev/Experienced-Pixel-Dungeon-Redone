@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SacrificialParticle;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -67,6 +68,7 @@ public class OverloadBeacon extends Item {
         super.execute(hero, action);
 
         if (action.equals(AC_USE)) {
+            Catalog.countUse(getClass());
             detach( hero.belongings.backpack );
             Sample.INSTANCE.play( Assets.Sounds.BEACON );
             Sample.INSTANCE.play( Assets.Sounds.BURNING );

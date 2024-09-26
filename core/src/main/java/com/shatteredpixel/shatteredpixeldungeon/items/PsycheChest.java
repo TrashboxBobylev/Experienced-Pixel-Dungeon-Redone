@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -156,6 +157,7 @@ public class PsycheChest extends Item {
             if (hero.HP > hero.HT * 0.55d) hero.HP -= Math.round(hero.HT * 0.55d);
             Dungeon.resetDamage *= 1.045d;
             Game.switchScene(InterlevelScene.class);
+            Catalog.countUse(getClass());
         } else if (action.contains(AC_RESET) && (hero.HP < Math.round(hero.HT * 0.55d))){
             GLog.w( Messages.get(this, "no_reset") );
         }

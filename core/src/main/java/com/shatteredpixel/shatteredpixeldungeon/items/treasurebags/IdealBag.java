@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Spell;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blocking;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -159,6 +160,7 @@ public class IdealBag extends TreasureBag {
             Buff.affect(curUser, OsmirdiumShield.class, OsmirdiumShield.DURATION);
             Sample.INSTANCE.play( Assets.Sounds.READ );
             Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
+            Catalog.countUse(getClass());
             detach( curUser.belongings.backpack );
         }
     }

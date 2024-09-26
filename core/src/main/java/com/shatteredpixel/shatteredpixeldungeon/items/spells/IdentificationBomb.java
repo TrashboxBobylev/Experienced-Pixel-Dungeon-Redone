@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfDivination;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -59,6 +60,7 @@ public class IdentificationBomb extends Spell {
         GameScene.flash( 0x8000A0FF );
         GLog.i(Messages.get(IdentificationBomb.class, "blast"));
         CellEmitter.center(hero.pos).burst(BlastParticle.FACTORY, 100);
+        Catalog.countUse(getClass());
 
         int destroyedItems = 0;
         ArrayList<Item> toDestroy = new ArrayList<>();
