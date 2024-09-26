@@ -24,10 +24,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.TextureFilm;
 
 public class PrismaticSprite extends MirrorSprite {
 
@@ -46,22 +48,38 @@ public class PrismaticSprite extends MirrorSprite {
 	}
 	
 	public void updateArmor( int tier ) {
-		CharSprite ref = Dungeon.hero.sprite;
+        if (Dungeon.hero != null) {
+            CharSprite ref = Dungeon.hero.sprite;
 
-		idle = ref.idle.clone();
+            idle = ref.idle.clone();
 
-		run = ref.run.clone();
-		if(Dungeon.hero.heroClass == HeroClass.RAT_KING) run.delay = 0.1f; // this is the actual delay, and on another mob it doesn't make sense to not do this.
+            run = ref.run.clone();
+            if(Dungeon.hero.heroClass == HeroClass.RAT_KING) run.delay = 0.1f; // this is the actual delay, and on another mob it doesn't make sense to not do this.
 
-		attack = ref.attack.clone();
+            attack = ref.attack.clone();
 
-		// a hack to get the first frame, which should be the first idle frame.
-		die = ref.idle.clone();
-		die.frames(ref.idle.frames[0]);
-		die.delay = ref.die.delay;
-		die.looped = ref.die.looped;
+            // a hack to get the first frame, which should be the first idle frame.
+            die = ref.idle.clone();
+            die.frames(ref.idle.frames[0]);
+            die.delay = ref.die.delay;
+            die.looped = ref.die.looped;
+        }  else {
+			TextureFilm film = new TextureFilm( HeroSprite.tiers(Assets.Sprites.ROGUE, 15), tier, 12, 15 );
 
-		idle();
+			idle = new Animation( 1, true );
+			idle.frames( film, 0, 0, 0, 1, 0, 0, 1, 1 );
+
+			run = new Animation( 20, true );
+			run.frames( film, 2, 3, 4, 5, 6, 7 );
+
+			die = new Animation( 20, false );
+			die.frames( film, 0 );
+
+			attack = new Animation( 15, false );
+			attack.frames( film, 13, 14, 15, 0 );
+		}
+
+        idle();
 	}
 	
 	@Override

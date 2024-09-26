@@ -370,7 +370,7 @@ public class ShadowClone extends ArmorAbility {
 
 			texture( HeroClass.ROGUE.spritesheet() );
 
-			TextureFilm film = new TextureFilm( ((HeroSprite)(Dungeon.hero.sprite)).tiers(), 6, 12, 15 );
+			TextureFilm film = new TextureFilm( Dungeon.hero != null ? ((HeroSprite)(Dungeon.hero.sprite)).tiers() : HeroSprite.tiers(Assets.Sprites.ROGUE, 15), 6, 12, 15 );
 
 			idle = new Animation( 1, true );
 			idle.frames( film, 0, 0, 0, 1, 0, 0, 1, 1 );
