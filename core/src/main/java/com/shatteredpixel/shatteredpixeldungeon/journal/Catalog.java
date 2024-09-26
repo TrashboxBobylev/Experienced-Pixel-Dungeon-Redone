@@ -38,9 +38,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
+import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.CheeseCheest;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
@@ -56,9 +58,17 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.RegrowthBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ShockBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ShrapnelBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.WoollyBomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.AvaritiaFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.BasicFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.ChaosFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.GoldenFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.NeutroniumFishingRod;
+import com.shatteredpixel.shatteredpixeldungeon.items.fishingrods.SpiritualFishingRod;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Cheese;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.CheeseChunk;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
@@ -71,6 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.KeyToTruth;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
@@ -93,7 +104,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.KingBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.RatSkull;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.RustyShield;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.SuperPickaxe;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguBomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.TenguShuriken;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BowFragment;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenHilt;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenStaff;
@@ -103,17 +120,37 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScrol
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.FireBooster;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.IdentificationBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.PhaseShift;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.ReclaimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.RespawnBooster;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.SummonElemental;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.TelekineticGrab;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.WildEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.AlchemyBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BiggerGambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.BurntBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.DKTreasureBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.DM300TreasureBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GooTreasureBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.QualityBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.TenguTreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.CreativeGloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.FantasmalStabber;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.FiringSnapper;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.GleamingStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.RegrowingSlasher;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.blacksmith.StarlightSmasher;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Clayball;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Bundle;
@@ -136,6 +173,7 @@ public enum Catalog {
 	RINGS,
 	ARTIFACTS,
 	TRINKETS,
+	FISHING_RODS,
 	MISC_EQUIPMENT,
 
 	//CONSUMABLES
@@ -150,6 +188,7 @@ public enum Catalog {
 	TIPPED_DARTS,
 	BREWS_ELIXIRS,
 	SPELLS,
+	LOOT_BAGS,
 	MISC_CONSUMABLES;
 
 	//tracks whether an item has been collected while identified
@@ -192,6 +231,8 @@ public enum Catalog {
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T3.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T4.classes);
 		MELEE_WEAPONS.addItems(Generator.Category.WEP_T5.classes);
+		MELEE_WEAPONS.addItems(StarlightSmasher.class, FiringSnapper.class, RegrowingSlasher.class,
+				GleamingStaff.class, FantasmalStabber.class);
 
 		ARMOR.addItems(Generator.Category.ARMOR.classes);
 
@@ -219,8 +260,12 @@ public enum Catalog {
 
 		TRINKETS.addItems(Generator.Category.TRINKET.classes);
 
+		FISHING_RODS.addItems(BasicFishingRod.class, GoldenFishingRod.class, NeutroniumFishingRod.class,
+				AvaritiaFishingRod.class, ChaosFishingRod.class, SpiritualFishingRod.class);
+
 		MISC_EQUIPMENT.addItems(BrokenSeal.class, SpiritBow.class, Waterskin.class, VelvetPouch.class,
-				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, Amulet.class);
+				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, Amulet.class,
+				CheeseCheest.class);
 
 
 
@@ -234,14 +279,15 @@ public enum Catalog {
 
 		FOOD.addItems( Food.class, Pasty.class, MysteryMeat.class, ChargrilledMeat.class,
 				StewedMeat.class, FrozenCarpaccio.class, SmallRation.class, Berry.class,
-				SupplyRation.class, Blandfruit.class, PhantomMeat.class, MeatPie.class );
+				SupplyRation.class, Blandfruit.class, PhantomMeat.class, MeatPie.class,
+				Cheese.class, CheeseChunk.class );
 
 		EXOTIC_POTIONS.addItems(ExoticPotion.exoToReg.keySet().toArray(new Class[0]));
 
 		EXOTIC_SCROLLS.addItems(ExoticScroll.exoToReg.keySet().toArray(new Class[0]));
 
 		BOMBS.addItems( Bomb.class, FrostBomb.class, Firebomb.class, Flashbang.class, RegrowthBomb.class,
-				WoollyBomb.class, Noisemaker.class, ShockBomb.class, HolyBomb.class, ArcaneBomb.class, ShrapnelBomb.class);
+				WoollyBomb.class, Noisemaker.class, ShockBomb.class, HolyBomb.class, ArcaneBomb.class, ShrapnelBomb.class, IdentificationBomb.class);
 
 		TIPPED_DARTS.addItems(TippedDart.types.values().toArray(new Class[0]));
 
@@ -251,16 +297,24 @@ public enum Catalog {
 				ElixirOfIcyTouch.class, ElixirOfToxicEssence.class, ElixirOfMight.class, ElixirOfFeatherFall.class);
 
 		SPELLS.addItems( UnstableSpell.class, WildEnergy.class, TelekineticGrab.class, PhaseShift.class,
-				Alchemize.class, CurseInfusion.class, MagicalInfusion.class, Recycle.class,
-				ReclaimTrap.class, SummonElemental.class, BeaconOfReturning.class);
+				Alchemize.class, CurseInfusion.class, /*MagicalInfusion.class,*/ Recycle.class,
+				ReclaimTrap.class, SummonElemental.class, BeaconOfReturning.class, FireBooster.class,
+				Vampirism.class, RespawnBooster.class);
+
+		LOOT_BAGS.addItems(GambleBag.class, BiggerGambleBag.class, QualityBag.class, AlchemyBag.class,
+				GooTreasureBag.class, RatSkull.class, TenguTreasureBag.class, TenguShuriken.class, TenguBomb.class,
+				DM300TreasureBag.class, RustyShield.class, SuperPickaxe.class, DKTreasureBag.class, KingBlade.class,
+				BurntBag.class, IdealBag.class, IdealBag.Plutonium.class, IdealBag.BrokenEnderiumBlade.class,
+				IdealBag.EnergyBottle.class, IdealBag.OsmiridiumPlate.class);
 
 		MISC_CONSUMABLES.addItems( Gold.class, EnergyCrystal.class, Dewdrop.class,
 				IronKey.class, GoldenKey.class, CrystalKey.class, SkeletonKey.class,
 				TrinketCatalyst.class, Stylus.class, Torch.class, Honeypot.class, Ankh.class,
 				CorpseDust.class, Embers.class, CeremonialCandle.class, DarkGold.class, DwarfToken.class,
 				GooBlob.class, TengusMask.class, MetalShard.class, KingsCrown.class,
-				LiquidMetal.class, ArcaneResin.class,
-				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class);
+				LiquidMetal.class, ArcaneResin.class, TicketToArena.class,
+				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class,
+				CreativeGloves.class, Clayball.class, KeyToTruth.class);
 
 	}
 
@@ -287,6 +341,7 @@ public enum Catalog {
 		equipmentCatalogs.add(RINGS);
 		equipmentCatalogs.add(ARTIFACTS);
 		equipmentCatalogs.add(TRINKETS);
+		equipmentCatalogs.add(FISHING_RODS);
 		equipmentCatalogs.add(MISC_EQUIPMENT);
 	}
 
@@ -303,6 +358,7 @@ public enum Catalog {
 		consumableCatalogs.add(TIPPED_DARTS);
 		consumableCatalogs.add(BREWS_ELIXIRS);
 		consumableCatalogs.add(SPELLS);
+		consumableCatalogs.add(LOOT_BAGS);
 		consumableCatalogs.add(MISC_CONSUMABLES);
 	}
 

@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bandit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.BlackMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Brute;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.CausticSlime;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
@@ -63,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.OOFThief;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.PhantomPiranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
@@ -88,8 +90,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Bbat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Hook;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
@@ -215,7 +219,7 @@ public enum Bestiary {
 				Tengu.class,
 				Pylon.class, DM300.class,
 				DwarfKing.class,
-				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class);
+				YogDzewa.Larva.class, YogFist.BurningFist.class, YogFist.SoiledFist.class, YogFist.RottingFist.class, YogFist.RustedFist.class,YogFist.BrightFist.class, YogFist.DarkFist.class, YogDzewa.class, BlackMimic.class);
 
 		UNIVERSAL.addEntities(Wraith.class, Piranha.class, Mimic.class, GoldenMimic.class, EbonyMimic.class, Statue.class, GuardianTrap.Guardian.class, SentryRoom.Sentry.class);
 
@@ -224,7 +228,7 @@ public enum Bestiary {
 				ArmoredBrute.class, DM201.class,
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,
-				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class);
+				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class, OOFThief.class);
 
 		QUEST.addEntities(FetidRat.class, GnollTrickster.class, GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,
@@ -235,7 +239,7 @@ public enum Bestiary {
 		ALLY.addEntities(MirrorImage.class, PrismaticImage.class,
 				DriedRose.GhostHero.class,
 				WandOfWarding.Ward.class, WandOfWarding.Ward.WardSentry.class, WandOfLivingEarth.EarthGuardian.class,
-				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class);
+				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class, Bbat.class, Hook.class);
 
 		TRAP.addEntities(WornDartTrap.class, PoisonDartTrap.class, DisintegrationTrap.class, GatewayTrap.class,
 				ChillingTrap.class, BurningTrap.class, ShockingTrap.class, AlarmTrap.class, GrippingTrap.class, TeleportationTrap.class, OozeTrap.class,

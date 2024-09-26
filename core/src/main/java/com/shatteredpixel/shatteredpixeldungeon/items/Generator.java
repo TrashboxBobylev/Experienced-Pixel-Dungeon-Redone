@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MageArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.RatKingArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.RogueArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.WarriorArmor;
@@ -132,6 +133,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfEarthblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
@@ -140,6 +142,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfUnstable;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.AssassinsBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BattleAxe;
@@ -404,8 +407,11 @@ public class Generator {
 					WandOfWarding.class,
 					WandOfTransfusion.class,
 					WandOfCorruption.class,
-					WandOfRegrowth.class };
-			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
+					WandOfRegrowth.class,
+					WandOfUnstable.class,
+					WandOfEarthblast.class
+			};
+			WAND.defaultProbs = new float[]{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0 };
 			WAND.probs = WAND.defaultProbs.clone();
 			
 			//see generator.randomWeapon
@@ -480,9 +486,10 @@ public class Generator {
 					MageArmor.class,
 					RogueArmor.class,
 					HuntressArmor.class,
-					DuelistArmor.class
+					DuelistArmor.class,
+					RatKingArmor.class
 			};
-			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 };
 			
 			//see Generator.randomMissile
 			MISSILE.classes = new Class<?>[]{};
