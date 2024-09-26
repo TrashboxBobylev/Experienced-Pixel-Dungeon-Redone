@@ -177,13 +177,13 @@ public enum Bestiary {
 	//tracks whether an entity has been encountered
 	private final LinkedHashMap<Class<?>, Boolean> seen = new LinkedHashMap<>();
 	//tracks enemy kills, trap activations, plant tramples, or just sets to 1 for seen on allies
-	private final LinkedHashMap<Class<?>, Integer> encounterCount = new LinkedHashMap<>();
+	private final LinkedHashMap<Class<?>, Long> encounterCount = new LinkedHashMap<>();
 
 	//should only be used when initializing
 	private void addEntities(Class<?>... classes ){
 		for (Class<?> cls : classes){
 			seen.put(cls, false);
-			encounterCount.put(cls, 0);
+			encounterCount.put(cls, 0L);
 		}
 	}
 
@@ -299,7 +299,7 @@ public enum Bestiary {
 		Badges.validateCatalogBadges();
 	}
 
-	public static int encounterCount(Class<?> cls) {
+	public static long encounterCount(Class<?> cls) {
 		for (Bestiary cat : values()) {
 			if (cat.encounterCount.containsKey(cls)) {
 				return cat.encounterCount.get(cls);
@@ -315,7 +315,7 @@ public enum Bestiary {
 		countEncounters(cls, 1);
 	}
 
-	public static void countEncounters(Class<?> cls, int encounters){
+	public static void countEncounters(Class<?> cls, long encounters){
 		if (skipCountingEncounters){
 			return;
 		}
@@ -326,7 +326,7 @@ public enum Bestiary {
 			if (cat.encounterCount.containsKey(cls) && cat.encounterCount.get(cls) != Integer.MAX_VALUE){
 				cat.encounterCount.put(cls, cat.encounterCount.get(cls)+encounters);
 				if (cat.encounterCount.get(cls) < -1_000_000_000){ //to catch cases of overflow
-					cat.encounterCount.put(cls, Integer.MAX_VALUE);
+					cat.encounterCount.put(cls, 2_000_000_000_000L);
 				}
 				Journal.saveNeeded = true;
 			}
@@ -341,7 +341,7 @@ public enum Bestiary {
 
 		ArrayList<Class<?>> classes = new ArrayList<>();
 		ArrayList<Boolean> seen = new ArrayList<>();
-		ArrayList<Integer> encounters = new ArrayList<>();
+		ArrayList<Long> encounters = new ArrayList<>();
 
 		for (Bestiary cat : values()) {
 			for (Class<?> entity : cat.entities()) {
@@ -355,7 +355,7 @@ public enum Bestiary {
 
 		Class<?>[] storeCls = new Class[classes.size()];
 		boolean[] storeSeen = new boolean[seen.size()];
-		int[] storeEncounters = new int[encounters.size()];
+		long[] storeEncounters = new long[encounters.size()];
 
 		for (int i = 0; i < storeCls.length; i++){
 			storeCls[i] = classes.get(i);
@@ -376,7 +376,7 @@ public enum Bestiary {
 				&& bundle.contains(BESTIARY_ENCOUNTERS)){
 			Class<?>[] classes = bundle.getClassArray(BESTIARY_CLASSES);
 			boolean[] seen = bundle.getBooleanArray(BESTIARY_SEEN);
-			int[] encounters = bundle.getIntArray(BESTIARY_ENCOUNTERS);
+			long[] encounters = bundle.getLongArray(BESTIARY_ENCOUNTERS);
 
 			for (int i = 0; i < classes.length; i++){
 				for (Bestiary cat : values()){
