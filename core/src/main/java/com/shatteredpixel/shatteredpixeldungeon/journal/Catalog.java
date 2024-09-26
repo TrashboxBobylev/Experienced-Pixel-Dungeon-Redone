@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
+import com.shatteredpixel.shatteredpixeldungeon.items.OverloadBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.TicketToArena;
@@ -303,7 +304,7 @@ public enum Catalog {
 
 		LOOT_BAGS.addItems(GambleBag.class, BiggerGambleBag.class, QualityBag.class, AlchemyBag.class,
 				GooTreasureBag.class, RatSkull.class, TenguTreasureBag.class, TenguShuriken.class, TenguBomb.class,
-				DM300TreasureBag.class, RustyShield.class, SuperPickaxe.class, DKTreasureBag.class, KingBlade.class,
+				DM300TreasureBag.class, RustyShield.class, SuperPickaxe.class, DKTreasureBag.class, KingBlade.class, OverloadBeacon.class,
 				BurntBag.class, IdealBag.class, IdealBag.Plutonium.class, IdealBag.BrokenEnderiumBlade.class,
 				IdealBag.EnergyBottle.class, IdealBag.OsmiridiumPlate.class);
 
