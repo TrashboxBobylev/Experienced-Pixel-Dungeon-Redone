@@ -185,7 +185,7 @@ public class SmokeBomb extends ArmorAbility {
 
 			alignment = Alignment.ALLY;
 
-			HT = 20;
+			HT = 80;
 			if (Dungeon.hero != null) HT *= Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT);
 			HP = HT;
 		}
@@ -199,6 +199,7 @@ public class SmokeBomb extends ArmorAbility {
 
 			dr += Dungeon.NormalLongRange(Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT),
 					3*Dungeon.hero.pointsInTalent(Talent.BODY_REPLACEMENT));
+			dr += Dungeon.NormalLongRange(4, 12);
 
 			return dr;
 		}
