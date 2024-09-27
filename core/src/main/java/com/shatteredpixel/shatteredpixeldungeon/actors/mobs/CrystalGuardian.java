@@ -167,7 +167,8 @@ public class CrystalGuardian extends Mob{
 	@Override
 	public long defenseProc(Char enemy, long damage) {
 		if (recovering){
-			sprite.showStatus(CharSprite.NEGATIVE, Long.toString(damage));
+			if (sprite != null)
+				sprite.showStatus(CharSprite.NEGATIVE, Long.toString(damage));
 			HP = Math.max(1, HP-damage);
 			damage = -1;
 		}
