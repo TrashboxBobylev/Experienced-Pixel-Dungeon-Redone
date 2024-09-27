@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Point;
-import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
@@ -99,11 +98,13 @@ public class Clayball extends MissileWeapon {
 		}
 
 		for (Char target : targets){
-			if (target != Dungeon.hero && target.add(Reflection.newInstance(Viscosity.DeferedDamage.class)) != false) {
+			if (target != Dungeon.hero) {
 				Viscosity.DeferedDamage dmg = Buff.affect(target, Viscosity.DeferedDamage.class);
-				dmg.prolong(target.HT*10);
-				if (target instanceof Slime || target instanceof DemonSpawner || target instanceof YogFist.RustedFist || target instanceof YogFist.RottingFist) dmg.prolong(target.HT*100);
-				dmg.act();
+				if (dmg != null) {
+					dmg.prolong(target.HT * 10);
+					if (target instanceof Slime || target instanceof DemonSpawner || target instanceof YogFist.RustedFist || target instanceof YogFist.RottingFist)
+						dmg.prolong(target.HT * 100);
+				}
 			}
 			if (target == Dungeon.hero && !target.isAlive()){
 				Dungeon.fail(getClass());
