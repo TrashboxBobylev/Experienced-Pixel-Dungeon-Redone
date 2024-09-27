@@ -101,7 +101,7 @@ public class LootIndicator extends Tag {
 					heap.type == Heap.Type.SKELETON ? ItemSlot.SKELETON :
 					heap.type == Heap.Type.REMAINS ? ItemSlot.REMAINS :
 					heap.peek();
-				if (item != lastItem || item.quantity() != lastQuantity) {
+				if (item != null && (item != lastItem || item.quantity() != lastQuantity)) {
 					lastItem = item;
 					lastQuantity = item.quantity();
 					
