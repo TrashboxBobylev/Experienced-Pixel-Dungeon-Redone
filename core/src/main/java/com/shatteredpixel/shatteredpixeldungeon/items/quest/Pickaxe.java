@@ -88,8 +88,8 @@ public class Pickaxe extends MeleeWeapon {
 
 	@Override
 	public long max(long lvl) {
-		return  12*(tier+1) +    //36 base, up from 24
-				lvl*(tier);   //+2, down from +3
+		return  12*(tier()+1) +    //36 base, up from 24
+				lvl*(tier());   //+2, down from +3
 	}
 
 	@Override
