@@ -261,8 +261,7 @@ public class Artifact extends KindofMisc {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
 		exp = bundle.getInt( EXP );
-		if (chargeCap > 0)  charge = Math.min( chargeCap, bundle.getLong( CHARGE ));
-		else                charge = bundle.getLong( CHARGE );
+		charge = bundle.getLong( CHARGE );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
 	}
 }
