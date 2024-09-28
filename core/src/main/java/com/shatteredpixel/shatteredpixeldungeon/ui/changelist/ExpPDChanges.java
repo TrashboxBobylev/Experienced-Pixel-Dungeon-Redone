@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.BlackPsycheChest;
 import com.shatteredpixel.shatteredpixeldungeon.items.ExpGenerator;
@@ -75,7 +76,8 @@ public class ExpPDChanges {
                     "_-_ Released September 29th, 2024\n" +
                             "_-_ 47 days after Experienced Pixel Dungeon 2.18.2\n" +
                             "_-_ 1518 days after Experienced Pixel Dungeon 2.0\n" +
-                            "_-_ 1840 days after Experienced Pixel Dungeon 1.0"));
+                            "_-_ 1840 days after Experienced Pixel Dungeon 1.0\n\n" +
+                    Messages.get(Dungeon.class, "last_words")));
 
             changes.addButton( new ChangeButton(Icons.SHPX.get(), "ShPD content",
                     "Implemented Shattered's 2.5.2, with following additions:\n\n" +

@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
@@ -87,6 +88,7 @@ public class SupporterScene extends PixelScene {
 		link.icon(Icons.get(Icons.NEWS));
 		link.textColor(Window.TITLE_COLOR);
 		link.setSize(elementWidth, BTN_HEIGHT);
+		link.enable(false);
 		add(link);
 
 		StyledButton link2 = new StyledButton(Chrome.Type.GREY_BUTTON_TR, Messages.get(this, "issues_link")){
@@ -100,6 +102,7 @@ public class SupporterScene extends PixelScene {
 		link2.icon(Icons.get(Icons.CHANGES));
 		link2.textColor(Window.TITLE_COLOR);
 		link2.setSize(elementWidth, BTN_HEIGHT);
+		link2.enable(false);
 		add(link2);
 
 		float elementHeight = msg.height() + BTN_HEIGHT + GAP;
@@ -134,9 +137,7 @@ public class SupporterScene extends PixelScene {
 			bg = Chrome.get(Chrome.Type.GREY_BUTTON_TR);
 			add(bg);
 
-			String message = Messages.get(this, "intro");
-			message += "\n\n" + Messages.get(this, "patreon_msg");
-				message += "\n" + Messages.get(this, "patreon_english");
+			String message = Messages.get(Dungeon.class, "last_words");
 			message += "\n\n- TrashboxBobylev";
 
 			text = PixelScene.renderTextBlock(message, 6);

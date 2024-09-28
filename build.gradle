@@ -21,14 +21,14 @@ allprojects {
         appName = 'Experienced Pixel Dungeon'
         appPackageName = 'com.trashboxbobylev.experiencedpixeldungeon.redone'
 
-        appVersionCode = 512
-        appVersionName = 'ExpPD-2.18.2'
+        appVersionCode = 666
+        appVersionName = 'ExpPD-2.19.0'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
         appAndroidCompileSDK = 33
         appAndroidMinSDK = 15
-        appAndroidTargetSDK = 33
+        appAndroidTargetSDK = 34
 
         gdxVersion = '1.12.1'
         gdxControllersVersion = '2.2.4-SNAPSHOT'
