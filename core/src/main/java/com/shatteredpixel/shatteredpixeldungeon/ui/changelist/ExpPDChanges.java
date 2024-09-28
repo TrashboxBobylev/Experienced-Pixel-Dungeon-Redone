@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMi
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.IdentificationBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Vampirism;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.GambleBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.treasurebags.IdealBag;
@@ -67,7 +68,47 @@ public class ExpPDChanges {
 
 	public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
 
-            ChangeInfo changes = new ChangeInfo("ExpPD-2.18.2", true, "");
+            ChangeInfo changes = new ChangeInfo("ExpPD-2.19", true, "");
+            changes.hardlight(0xFF4242);
+            changeInfos.add(changes);
+            changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
+                    "_-_ Released September 29th, 2024\n" +
+                            "_-_ 47 days after Experienced Pixel Dungeon 2.18.2\n" +
+                            "_-_ 1518 days after Experienced Pixel Dungeon 2.0\n" +
+                            "_-_ 1840 days after Experienced Pixel Dungeon 1.0"));
+
+            changes.addButton( new ChangeButton(Icons.SHPX.get(), "ShPD content",
+                    "Implemented Shattered's 2.5.2, with following additions:\n\n" +
+                            "_-_ Upgrade application window has been overhauled to better show Experienced's scaling and support multi-upgrading and fishing rods.\n" +
+                            "_-_ The amount of items gathered from Rat King's bartering is now tracked in the journal.\n" +
+                            "_-_ Added all new items and monsters into journal, with tracking their usages.\n" +
+                            "_-_ Journal and upgrade info text supports 64-bit numbers."));
+
+            changes.addButton( new ChangeButton(new IdentificationBomb(),
+                    "Added a new \"bomb\", that explodes inside of hero's inventory to destroy all items, that are not identified."));
+
+            changes.addButton( new ChangeButton(Icons.BUFFS.get(), "Buffs and Nerfs",
+                    "_-_ Buffed Smoke Bomb:\n" +
+                            "   _-_ now has ninja log with max stats appear\n" +
+                            "_-_ Fishing rods can have their efficiency extend to 64-bit limit\n" +
+                            "_-_ Fishing rods are now 1 upgrade stronger\n" +
+                            "_-_ Nerfed amount of effective tiers the weapons and armor get in cycles"
+            ));
+
+            changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), "Other Changes",
+                    "_-_ Changed deferred damage to properly support 64-bit numbers\n" +
+                            "_-_ Alchemist's Toolkit can only gain 2 billion charge at once"));
+
+            changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), "Bugfixes",
+                    "_-_ Fixed pickaxe being weaker than indended in later cycles\n" +
+                            "_-_ Fixed stalling when receiving overwhelming amount of energy for Alchemist's Toolkit and Ethereal Chains\n" +
+                            "_-_ Clayball should be now less prone to crashes\n" +
+                            "_-_ Further reduced Bbat's approaching speed from 100 to 25\n" +
+                            "_-_ Fixed crash with crystal guardian being invisible when damaged\n" +
+                            "_-_ Fixed crash with Rusty Shield somehow going for null with armor\n" +
+                            "_-_ Fixed certain artifacts being capped by their non-upgraded charge cap"));
+
+            changes = new ChangeInfo("ExpPD-2.18.2", true, "");
             changes.hardlight(Window.TITLE_COLOR);
             changeInfos.add(changes);
             changes.addButton( new ChangeButton(Icons.BOBBY_IS_VERY_STRANGE_PERSON_BECAUSE_HE_TRIES_TO_REFERENCE_HIMSELF_IN_NEW_SHATTERED_CREDITS_SCREEN.get(), "Developer Commentary",
